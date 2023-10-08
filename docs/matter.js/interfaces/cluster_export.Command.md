@@ -16,6 +16,7 @@
 
 ### Properties
 
+- [invokeAcl](cluster_export.Command.md#invokeacl)
 - [isConditional](cluster_export.Command.md#isconditional)
 - [mandatoryIf](cluster_export.Command.md#mandatoryif)
 - [optional](cluster_export.Command.md#optional)
@@ -24,8 +25,19 @@
 - [requestSchema](cluster_export.Command.md#requestschema)
 - [responseId](cluster_export.Command.md#responseid)
 - [responseSchema](cluster_export.Command.md#responseschema)
+- [timed](cluster_export.Command.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:604
+
+___
 
 ### isConditional
 
@@ -33,7 +45,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:572](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L572)
+packages/matter.js/src/cluster/Cluster.ts:606
 
 ___
 
@@ -43,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:573](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L573)
+packages/matter.js/src/cluster/Cluster.ts:607
 
 ___
 
@@ -53,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:567](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L567)
+packages/matter.js/src/cluster/Cluster.ts:599
 
 ___
 
@@ -63,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:574](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L574)
+packages/matter.js/src/cluster/Cluster.ts:608
 
 ___
 
@@ -73,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:568](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L568)
+packages/matter.js/src/cluster/Cluster.ts:600
 
 ___
 
@@ -83,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:569](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L569)
+packages/matter.js/src/cluster/Cluster.ts:601
 
 ___
 
@@ -93,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:570](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L570)
+packages/matter.js/src/cluster/Cluster.ts:602
 
 ___
 
@@ -103,4 +115,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:571](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L571)
+packages/matter.js/src/cluster/Cluster.ts:603
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:605

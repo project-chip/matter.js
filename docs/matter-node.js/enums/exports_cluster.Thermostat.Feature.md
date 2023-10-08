@@ -34,7 +34,7 @@ Supports a System Mode of Auto
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:535
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:536
 
 ___
 
@@ -48,7 +48,7 @@ Thermostat is capable of managing a cooling device
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:511
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:512
 
 ___
 
@@ -62,7 +62,7 @@ Thermostat is capable of managing a heating device
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:505
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:506
 
 ___
 
@@ -76,7 +76,7 @@ Thermostat does not expose the LocalTemperature Value in the LocalTemperature at
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:541
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:542
 
 ___
 
@@ -90,7 +90,7 @@ Supports Occupied and Unoccupied setpoints
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:517
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:518
 
 ___
 
@@ -104,7 +104,7 @@ Supports remote configuration of a weekly schedule of setpoint transitions
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:523
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:524
 
 ___
 
@@ -118,4 +118,4 @@ Supports configurable setback (or span)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:529
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:530

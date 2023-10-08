@@ -43,7 +43,7 @@ Commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:173](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L173)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:163
 
 ___
 
@@ -59,7 +59,7 @@ The lock operates normally. All interfaces are enabled.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:148](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L148)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:138
 
 ___
 
@@ -76,7 +76,7 @@ validation (e.g. a lock for a business during work hours).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:181](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L181)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:171
 
 ___
 
@@ -94,7 +94,7 @@ users, presumably inside the property, will have control over the entrance.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:164](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L164)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:154
 
 ___
 
@@ -110,4 +110,4 @@ Only remote interaction is enabled. The keypad shall only be operable by the mas
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:155](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L155)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:145

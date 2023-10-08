@@ -24,7 +24,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `reachableChanged`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `capabilityMinima`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `dataModelRevision`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `location`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `productId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md), `any`\> ; `vendorName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `reachableChanged`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``40`` ; `name`: ``"BasicInformation"`` ; `revision`: ``2``  }\>
 
 Basic Information
 
@@ -38,13 +38,13 @@ MatterCoreSpecificationV1_1 § 11.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:120
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:121
 
 ___
 
 ### TlvCapabilityMinimaStruct
 
-• `Const` **TlvCapabilityMinimaStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCapabilityMinimaStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This structure provides constant values related to overall global capabilities of this Node, that are not
 cluster-specific.
@@ -55,13 +55,13 @@ MatterCoreSpecificationV1_1 § 11.1.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:16
 
 ___
 
 ### TlvLeaveEvent
 
-• `Const` **TlvLeaveEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLeaveEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BasicInformation leave event
 
@@ -71,23 +71,23 @@ MatterCoreSpecificationV1_1 § 11.1.6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:90
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:91
 
 ___
 
 ### TlvProductAppearanceStruct
 
-• `Const` **TlvProductAppearanceStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvProductAppearanceStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:67
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:68
 
 ___
 
 ### TlvReachableChangedEvent
 
-• `Const` **TlvReachableChangedEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvReachableChangedEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BasicInformation reachableChanged event
 
@@ -97,13 +97,13 @@ MatterCoreSpecificationV1_1 § 11.1.6.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:103
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:104
 
 ___
 
 ### TlvStartUpEvent
 
-• `Const` **TlvStartUpEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvStartUpEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BasicInformation startUp event
 
@@ -113,4 +113,4 @@ MatterCoreSpecificationV1_1 § 11.1.6.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BasicInformationCluster.d.ts:76
+packages/matter.js/dist/esm/cluster/definitions/BasicInformationCluster.d.ts:77

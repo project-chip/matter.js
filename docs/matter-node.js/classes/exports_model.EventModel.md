@@ -116,7 +116,7 @@ this class.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/EventModel.d.ts:13
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:13
 
 ## Properties
 
@@ -134,7 +134,7 @@ EventElement.byteSize
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:16
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:16
 
 ___
 
@@ -152,7 +152,7 @@ EventElement.default
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:17
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:17
 
 ___
 
@@ -170,7 +170,7 @@ EventElement.description
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:20
+packages/matter.js/dist/esm/model/models/Model.d.ts:20
 
 ___
 
@@ -188,7 +188,7 @@ EventElement.details
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:21
+packages/matter.js/dist/esm/model/models/Model.d.ts:21
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:23
+packages/matter.js/dist/esm/model/models/Model.d.ts:23
 
 ___
 
@@ -222,7 +222,7 @@ EventElement.global
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:27
+packages/matter.js/dist/esm/model/models/Model.d.ts:27
 
 ___
 
@@ -240,7 +240,7 @@ EventElement.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/EventModel.d.ts:11
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:11
 
 ___
 
@@ -256,7 +256,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:19
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:19
 
 ___
 
@@ -272,7 +272,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:31
+packages/matter.js/dist/esm/model/models/Model.d.ts:31
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:18
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:18
 
 ___
 
@@ -304,7 +304,7 @@ EventElement.name
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:18
+packages/matter.js/dist/esm/model/models/Model.d.ts:18
 
 ___
 
@@ -318,7 +318,7 @@ EventElement.priority
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/EventModel.d.ts:12
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:12
 
 ___
 
@@ -336,7 +336,7 @@ EventElement.tag
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/EventModel.d.ts:10
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:10
 
 ___
 
@@ -354,7 +354,7 @@ EventElement.type
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:19
+packages/matter.js/dist/esm/model/models/Model.d.ts:19
 
 ___
 
@@ -372,7 +372,7 @@ EventElement.xref
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:22
+packages/matter.js/dist/esm/model/models/Model.d.ts:22
 
 ___
 
@@ -382,7 +382,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/EventModel.d.ts:14
+packages/matter.js/dist/esm/model/models/EventModel.d.ts:14
 
 ___
 
@@ -402,7 +402,7 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:77
+packages/matter.js/dist/esm/model/models/Model.d.ts:77
 
 ## Accessors
 
@@ -424,7 +424,7 @@ ValueModel.access
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:28
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:28
 
 • `set` **access**(`definition`): `void`
 
@@ -448,7 +448,7 @@ ValueModel.access
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:29
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:29
 
 ___
 
@@ -469,7 +469,7 @@ ValueModel.allowedBaseTags
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:79
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:79
 
 ___
 
@@ -489,7 +489,7 @@ ValueModel.base
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:74
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:74
 
 ___
 
@@ -513,7 +513,7 @@ ValueModel.children
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:20
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:20
 
 • `set` **children**(`children`): `void`
 
@@ -539,7 +539,7 @@ ValueModel.children
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:21
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:21
 
 ___
 
@@ -561,7 +561,7 @@ ValueModel.conformance
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:25
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:25
 
 • `set` **conformance**(`definition`): `void`
 
@@ -585,7 +585,7 @@ ValueModel.conformance
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:26
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:26
 
 ___
 
@@ -607,7 +607,7 @@ ValueModel.constraint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:22
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:22
 
 • `set` **constraint**(`definition`): `void`
 
@@ -631,7 +631,7 @@ ValueModel.constraint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:23
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:23
 
 ___
 
@@ -651,7 +651,7 @@ ValueModel.definingModel
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:66
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:66
 
 ___
 
@@ -671,7 +671,7 @@ ValueModel.deprecated
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:91
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:91
 
 ___
 
@@ -691,7 +691,7 @@ ValueModel.directMetatype
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:62
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:62
 
 ___
 
@@ -711,7 +711,7 @@ ValueModel.disallowed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:95
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:95
 
 ___
 
@@ -729,7 +729,7 @@ ValueModel.effectiveAccess
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:30
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:30
 
 ___
 
@@ -747,7 +747,7 @@ ValueModel.effectiveConformance
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:27
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:27
 
 ___
 
@@ -765,7 +765,7 @@ ValueModel.effectiveConstraint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:24
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:24
 
 ___
 
@@ -787,7 +787,7 @@ ValueModel.effectiveDefault
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:58
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:58
 
 ___
 
@@ -807,7 +807,7 @@ ValueModel.effectiveId
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:60
+packages/matter.js/dist/esm/model/models/Model.d.ts:60
 
 ___
 
@@ -827,7 +827,7 @@ ValueModel.effectiveMetatype
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:52
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:52
 
 ___
 
@@ -845,7 +845,7 @@ ValueModel.effectiveQuality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:33
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:33
 
 ___
 
@@ -865,7 +865,7 @@ ValueModel.effectiveType
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:48
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:48
 
 ___
 
@@ -885,7 +885,7 @@ ValueModel.effectiveXref
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:104
+packages/matter.js/dist/esm/model/models/Model.d.ts:104
 
 ___
 
@@ -906,7 +906,7 @@ ValueModel.elements
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:56
+packages/matter.js/dist/esm/model/models/Model.d.ts:56
 
 ___
 
@@ -927,7 +927,7 @@ ValueModel.globalBase
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:100
+packages/matter.js/dist/esm/model/models/Model.d.ts:100
 
 ___
 
@@ -948,7 +948,7 @@ ValueModel.key
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:65
+packages/matter.js/dist/esm/model/models/Model.d.ts:65
 
 ___
 
@@ -968,7 +968,7 @@ ValueModel.listEntry
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:70
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:70
 
 ___
 
@@ -989,7 +989,7 @@ ValueModel.mandatory
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:104
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:104
 
 ___
 
@@ -1009,7 +1009,7 @@ ValueModel.members
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:83
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:83
 
 ___
 
@@ -1031,7 +1031,7 @@ ValueModel.metabase
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:39
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:39
 
 ___
 
@@ -1051,7 +1051,7 @@ ValueModel.nullable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:99
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:99
 
 ___
 
@@ -1071,7 +1071,7 @@ ValueModel.overridesShadow
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:108
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:108
 
 ___
 
@@ -1092,7 +1092,7 @@ ValueModel.parent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:50
+packages/matter.js/dist/esm/model/models/Model.d.ts:50
 
 • `set` **parent**(`parent`): `void`
 
@@ -1112,7 +1112,7 @@ ValueModel.parent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:51
+packages/matter.js/dist/esm/model/models/Model.d.ts:51
 
 ___
 
@@ -1132,7 +1132,7 @@ ValueModel.path
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:45
+packages/matter.js/dist/esm/model/models/Model.d.ts:45
 
 ___
 
@@ -1153,7 +1153,7 @@ ValueModel.primitiveBase
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:44
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:44
 
 ___
 
@@ -1175,7 +1175,7 @@ ValueModel.quality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:31
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:31
 
 • `set` **quality**(`definition`): `void`
 
@@ -1199,7 +1199,7 @@ ValueModel.quality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:32
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:32
 
 ___
 
@@ -1220,7 +1220,7 @@ ValueModel.shadow
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:95
+packages/matter.js/dist/esm/model/models/Model.d.ts:95
 
 ___
 
@@ -1240,7 +1240,7 @@ ValueModel.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:41
+packages/matter.js/dist/esm/model/models/Model.d.ts:41
 
 ___
 
@@ -1260,7 +1260,7 @@ ValueModel.validationAspects
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:87
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:87
 
 ## Methods
 
@@ -1286,7 +1286,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:112
+packages/matter.js/dist/esm/model/models/Model.d.ts:112
 
 ___
 
@@ -1300,7 +1300,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -1318,7 +1318,7 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:122
+packages/matter.js/dist/esm/model/models/Model.d.ts:122
 
 ___
 
@@ -1344,7 +1344,7 @@ Search the inheritance chain for a bitmap field defining a specific bit.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:112
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:112
 
 ___
 
@@ -1371,7 +1371,7 @@ Record a validation error for this model.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:138
+packages/matter.js/dist/esm/model/models/Model.d.ts:138
 
 ___
 
@@ -1385,7 +1385,7 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -1404,7 +1404,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:126
+packages/matter.js/dist/esm/model/models/Model.d.ts:126
 
 ___
 
@@ -1430,7 +1430,7 @@ Does this model derive from another?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:162
+packages/matter.js/dist/esm/model/models/Model.d.ts:162
 
 ___
 
@@ -1456,7 +1456,7 @@ Check identity of element by name or ID.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:134
+packages/matter.js/dist/esm/model/models/Model.d.ts:134
 
 ___
 
@@ -1483,7 +1483,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:158
+packages/matter.js/dist/esm/model/models/Model.d.ts:158
 
 ___
 
@@ -1497,7 +1497,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -1515,7 +1515,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:130
+packages/matter.js/dist/esm/model/models/Model.d.ts:130
 
 ___
 
@@ -1541,7 +1541,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:154
+packages/matter.js/dist/esm/model/models/Model.d.ts:154
 
 ___
 
@@ -1561,7 +1561,7 @@ Convert model to JSON.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:142
+packages/matter.js/dist/esm/model/models/Model.d.ts:142
 
 ___
 
@@ -1581,7 +1581,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ValueModel.d.ts:113
+packages/matter.js/dist/esm/model/models/ValueModel.d.ts:113
 
 ___
 
@@ -1607,7 +1607,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:150
+packages/matter.js/dist/esm/model/models/Model.d.ts:150
 
 ___
 
@@ -1633,4 +1633,4 @@ Create a model for an element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:116
+packages/matter.js/dist/esm/model/models/Model.d.ts:116

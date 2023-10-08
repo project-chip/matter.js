@@ -30,7 +30,7 @@ General groupings of Matter types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:12
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:12
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:19
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:19
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:14
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:14
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:13
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:13
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:18
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:18
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:22
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:22
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:15
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:15
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:17
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:17
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:16
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:16
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:20
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:20
 
 ___
 
@@ -130,4 +130,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:21
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:21

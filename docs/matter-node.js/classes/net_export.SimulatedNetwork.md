@@ -35,7 +35,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:12
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:12
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:14
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:14
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:11
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:11
 
 ## Methods
 
@@ -85,7 +85,7 @@ packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:13
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:13
 
 ___
 
@@ -109,4 +109,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:15
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:15

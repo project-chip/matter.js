@@ -28,4 +28,4 @@ Multicast query for identification state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:181](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L181)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:173

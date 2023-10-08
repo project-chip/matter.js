@@ -31,7 +31,7 @@ e.g., Light is turned on/off once.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:84](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L84)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:76
 
 ___
 
@@ -43,7 +43,7 @@ e.g., Light is turned on/off over 1 second and repeated 15 times.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:89](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L89)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:81
 
 ___
 
@@ -56,7 +56,7 @@ e.g., Colored light turns orange for 8 seconds; non-colored light switches to th
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:100](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L100)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:92
 
 ___
 
@@ -69,7 +69,7 @@ above), first complete the current 1s breathe effect and then terminate the effe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:106](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L106)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:98
 
 ___
 
@@ -81,7 +81,7 @@ e.g., Colored light turns green for 1 second; non-colored light flashes twice.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:94](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L94)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:86
 
 ___
 
@@ -93,4 +93,4 @@ Terminate the effect as soon as possible.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:111](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L111)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:103

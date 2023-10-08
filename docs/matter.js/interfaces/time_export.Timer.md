@@ -25,7 +25,7 @@ Is true if this timer is running.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L54)
+packages/matter.js/src/time/Time.ts:54
 
 ## Methods
 
@@ -41,7 +41,7 @@ Starts this timer, chainable.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L57)
+packages/matter.js/src/time/Time.ts:57
 
 ___
 
@@ -57,4 +57,4 @@ Stops this timer, chainable.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L60)
+packages/matter.js/src/time/Time.ts:60

@@ -26,4 +26,4 @@ British Thermal Unit per Hour
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:414](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L414)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:404

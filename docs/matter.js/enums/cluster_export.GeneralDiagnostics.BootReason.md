@@ -30,7 +30,7 @@ The Node has rebooted as the result of a brown-out of the Node’s power supply.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:149](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L149)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:150
 
 ___
 
@@ -42,7 +42,7 @@ The Node has rebooted as the result of a hardware watchdog timer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L159)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:160
 
 ___
 
@@ -54,7 +54,7 @@ The Node has booted as the result of physical interaction with the device result
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:144](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L144)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:145
 
 ___
 
@@ -66,7 +66,7 @@ The Node has rebooted as the result of a software initiated reboot.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:169](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L169)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:170
 
 ___
 
@@ -78,7 +78,7 @@ The Node has rebooted as the result of a completed software update.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:164](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L164)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:165
 
 ___
 
@@ -90,7 +90,7 @@ The Node has rebooted as the result of a software watchdog timer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:154](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L154)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:155
 
 ___
 
@@ -102,4 +102,4 @@ The Node is unable to identify the Power-On reason as one of the other provided 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L139)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:140

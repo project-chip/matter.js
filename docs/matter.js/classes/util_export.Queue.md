@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L15)
+packages/matter.js/src/util/Queue.ts:17
 
 ___
 
@@ -66,10 +66,11 @@ ___
 | :------ | :------ |
 | `rejecter` | (`reason`: `any`) => `void` |
 | `resolver` | (`data`: `T`) => `void` |
+| `timeoutTimer?` | [`Timer`](../interfaces/time_export.Timer.md) |
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L14)
+packages/matter.js/src/util/Queue.ts:16
 
 ___
 
@@ -79,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L13)
+packages/matter.js/src/util/Queue.ts:15
 
 ## Methods
 
@@ -93,13 +94,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L38)
+packages/matter.js/src/util/Queue.ts:46
 
 ___
 
 ### read
 
-▸ **read**(): `Promise`<`T`\>
+▸ **read**(`timeoutMs?`): `Promise`<`T`\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `timeoutMs` | `number` | `60_000` |
 
 #### Returns
 
@@ -111,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L17)
+packages/matter.js/src/util/Queue.ts:19
 
 ___
 
@@ -135,4 +142,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Queue.ts#L28)
+packages/matter.js/src/util/Queue.ts:35

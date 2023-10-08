@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `configurationList`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `id`: ``66`` ; `name`: ``"ProxyConfiguration"`` ; `revision`: ``1``  }\>
 
 Proxy Configuration
 
@@ -27,13 +27,13 @@ MatterCoreSpecificationV1_1 § 9.15.14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ProxyConfigurationCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/ProxyConfigurationCluster.d.ts:34
 
 ___
 
 ### TlvConfigurationStruct
 
-• `Const` **TlvConfigurationStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvConfigurationStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 ProxyAllNodes
 
@@ -51,4 +51,4 @@ MatterCoreSpecificationV1_1 § 9.15.14.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ProxyConfigurationCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/ProxyConfigurationCluster.d.ts:23

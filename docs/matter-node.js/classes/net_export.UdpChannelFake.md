@@ -45,7 +45,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:17
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:17
 
 ## Properties
 
@@ -55,7 +55,7 @@ packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:12
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:12
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:16
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:16
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:11
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:11
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:14
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:14
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:15
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:15
 
 ## Methods
 
@@ -113,7 +113,7 @@ packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:20
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:20
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:18
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:18
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:19
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:19
 
 ___
 
@@ -184,4 +184,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/UdpChannelFake.d.ts:13
+packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:13

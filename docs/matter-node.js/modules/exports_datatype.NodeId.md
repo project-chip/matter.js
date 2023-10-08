@@ -30,7 +30,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:19
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:19
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:18
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:18
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:17
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:17

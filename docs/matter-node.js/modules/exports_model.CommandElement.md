@@ -27,7 +27,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:22
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:20
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:20
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:21
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:21
 
 ## Variables
 
@@ -49,6 +49,6 @@ packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:20
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:20
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:21
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:21

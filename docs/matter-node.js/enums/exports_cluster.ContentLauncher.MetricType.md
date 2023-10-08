@@ -33,7 +33,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.9.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ContentLauncherCluster.d.ts:44
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:45
 
 ___
 
@@ -49,4 +49,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.7.5.9.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ContentLauncherCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:35

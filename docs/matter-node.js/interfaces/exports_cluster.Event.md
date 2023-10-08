@@ -21,6 +21,7 @@
 - [optional](exports_cluster.Event.md#optional)
 - [optionalIf](exports_cluster.Event.md#optionalif)
 - [priority](exports_cluster.Event.md#priority)
+- [readAcl](exports_cluster.Event.md#readacl)
 - [schema](exports_cluster.Event.md#schema)
 - [unknown](exports_cluster.Event.md#unknown)
 
@@ -32,7 +33,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:152
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:164
 
 ___
 
@@ -42,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:156
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:169
 
 ___
 
@@ -52,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:158
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:171
 
 ___
 
@@ -62,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:155
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:167
 
 ___
 
@@ -72,7 +73,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:157
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:170
 
 ___
 
@@ -82,7 +83,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:154
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:166
+
+___
+
+### readAcl
+
+• **readAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:168
 
 ___
 
@@ -92,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:153
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:165
 
 ___
 
@@ -102,4 +113,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:159
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:172

@@ -12,7 +12,6 @@ Constructor options for the CommissioningController class
 
 - [commissioningOptions](export.CommissioningControllerOptions.md#commissioningoptions)
 - [delayedPairing](export.CommissioningControllerOptions.md#delayedpairing)
-- [disableIpv4](export.CommissioningControllerOptions.md#disableipv4)
 - [listeningAddressIpv4](export.CommissioningControllerOptions.md#listeningaddressipv4)
 - [listeningAddressIpv6](export.CommissioningControllerOptions.md#listeningaddressipv6)
 - [localPort](export.CommissioningControllerOptions.md#localport)
@@ -32,7 +31,7 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:25
+packages/matter.js/dist/esm/CommissioningController.d.ts:26
 
 ___
 
@@ -42,17 +41,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:18
-
-___
-
-### disableIpv4
-
-• `Optional` `Readonly` **disableIpv4**: `boolean`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/CommissioningController.d.ts:15
+packages/matter.js/dist/esm/CommissioningController.d.ts:19
 
 ___
 
@@ -62,7 +51,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:16
+packages/matter.js/dist/esm/CommissioningController.d.ts:17
 
 ___
 
@@ -72,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:17
+packages/matter.js/dist/esm/CommissioningController.d.ts:18
 
 ___
 
@@ -82,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:14
+packages/matter.js/dist/esm/CommissioningController.d.ts:16
 
 ___
 
@@ -92,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:23
+packages/matter.js/dist/esm/CommissioningController.d.ts:24
 
 ___
 
@@ -102,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:22
+packages/matter.js/dist/esm/CommissioningController.d.ts:23
 
 ___
 
@@ -112,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:13
+packages/matter.js/dist/esm/CommissioningController.d.ts:15
 
 ___
 
@@ -122,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:24
+packages/matter.js/dist/esm/CommissioningController.d.ts:25
 
 ___
 
@@ -132,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:19
+packages/matter.js/dist/esm/CommissioningController.d.ts:20
 
 ___
 
@@ -142,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:21
+packages/matter.js/dist/esm/CommissioningController.d.ts:22
 
 ___
 
@@ -152,4 +141,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningController.d.ts:20
+packages/matter.js/dist/esm/CommissioningController.d.ts:21

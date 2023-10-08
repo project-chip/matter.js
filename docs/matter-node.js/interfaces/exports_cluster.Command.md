@@ -16,6 +16,7 @@
 
 ### Properties
 
+- [invokeAcl](exports_cluster.Command.md#invokeacl)
 - [isConditional](exports_cluster.Command.md#isconditional)
 - [mandatoryIf](exports_cluster.Command.md#mandatoryif)
 - [optional](exports_cluster.Command.md#optional)
@@ -24,8 +25,19 @@
 - [requestSchema](exports_cluster.Command.md#requestschema)
 - [responseId](exports_cluster.Command.md#responseid)
 - [responseSchema](exports_cluster.Command.md#responseschema)
+- [timed](exports_cluster.Command.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:129
+
+___
 
 ### isConditional
 
@@ -33,7 +45,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:127
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:131
 
 ___
 
@@ -43,7 +55,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:128
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:132
 
 ___
 
@@ -53,7 +65,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:122
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:124
 
 ___
 
@@ -63,7 +75,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:129
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:133
 
 ___
 
@@ -73,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:123
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:125
 
 ___
 
@@ -83,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:124
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:126
 
 ___
 
@@ -93,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:125
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:127
 
 ___
 
@@ -103,4 +115,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:126
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:128
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:130

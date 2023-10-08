@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:55
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:66
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:54
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:65

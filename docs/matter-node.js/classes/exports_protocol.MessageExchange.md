@@ -41,14 +41,20 @@
 - [sentMessageAckSuccess](exports_protocol.MessageExchange.md#sentmessageacksuccess)
 - [sentMessageToAck](exports_protocol.MessageExchange.md#sentmessagetoack)
 - [session](exports_protocol.MessageExchange.md#session)
+- [timedInteractionTimer](exports_protocol.MessageExchange.md#timedinteractiontimer)
 
 ### Methods
 
+- [clearTimedInteraction](exports_protocol.MessageExchange.md#cleartimedinteraction)
 - [close](exports_protocol.MessageExchange.md#close)
 - [destroy](exports_protocol.MessageExchange.md#destroy)
+- [hasActiveTimedInteraction](exports_protocol.MessageExchange.md#hasactivetimedinteraction)
+- [hasExpiredTimedInteraction](exports_protocol.MessageExchange.md#hasexpiredtimedinteraction)
+- [hasTimedInteraction](exports_protocol.MessageExchange.md#hastimedinteraction)
 - [nextMessage](exports_protocol.MessageExchange.md#nextmessage)
 - [onMessageReceived](exports_protocol.MessageExchange.md#onmessagereceived)
 - [send](exports_protocol.MessageExchange.md#send)
+- [startTimedInteraction](exports_protocol.MessageExchange.md#starttimedinteraction)
 - [waitFor](exports_protocol.MessageExchange.md#waitfor)
 - [fromInitialMessage](exports_protocol.MessageExchange.md#frominitialmessage)
 - [initiate](exports_protocol.MessageExchange.md#initiate)
@@ -82,7 +88,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:41
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:57
 
 ## Properties
 
@@ -92,7 +98,7 @@ packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:41
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:31
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:46
 
 ___
 
@@ -102,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:20
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:35
 
 ___
 
@@ -112,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:28
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:43
 
 ___
 
@@ -122,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:51
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:72
 
 ___
 
@@ -132,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:40
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:55
 
 ___
 
@@ -142,7 +148,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:26
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:41
 
 ___
 
@@ -156,7 +162,7 @@ MatterCoreSpecificationV1_0, section 4.11.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:47
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:63
 
 ___
 
@@ -166,7 +172,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:32
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:47
 
 ___
 
@@ -176,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:22
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:37
 
 ___
 
@@ -186,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:21
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:36
 
 ___
 
@@ -196,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:34
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:49
 
 ___
 
@@ -206,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:24
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:39
 
 ___
 
@@ -216,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:25
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:40
 
 ___
 
@@ -226,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:23
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:38
 
 ___
 
@@ -236,7 +242,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:27
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:42
 
 ___
 
@@ -246,7 +252,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:35
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:50
 
 ___
 
@@ -256,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:33
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:48
 
 ___
 
@@ -266,7 +272,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:39
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:54
 
 ___
 
@@ -276,7 +282,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:48
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:64
 
 ___
 
@@ -286,7 +292,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:38
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:53
 
 ___
 
@@ -296,7 +302,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:37
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:52
 
 ___
 
@@ -306,7 +312,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:36
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:51
 
 ___
 
@@ -316,9 +322,33 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:19
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:34
+
+___
+
+### timedInteractionTimer
+
+• `Private` **timedInteractionTimer**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:56
 
 ## Methods
+
+### clearTimedInteraction
+
+▸ **clearTimedInteraction**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:67
+
+___
 
 ### close
 
@@ -330,7 +360,7 @@ packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:50
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:71
 
 ___
 
@@ -344,7 +374,49 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:49
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:65
+
+___
+
+### hasActiveTimedInteraction
+
+▸ **hasActiveTimedInteraction**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:69
+
+___
+
+### hasExpiredTimedInteraction
+
+▸ **hasExpiredTimedInteraction**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:70
+
+___
+
+### hasTimedInteraction
+
+▸ **hasTimedInteraction**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:68
 
 ___
 
@@ -358,7 +430,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:44
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:60
 
 ___
 
@@ -378,13 +450,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:42
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:58
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`, `expectAckOnly?`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -392,7 +464,7 @@ ___
 | :------ | :------ |
 | `messageType` | `number` |
 | `payload` | `Uint8Array` |
-| `expectAckOnly?` | `boolean` |
+| `options?` | [`ExchangeSendOptions`](../modules/exports_protocol.md#exchangesendoptions) |
 
 #### Returns
 
@@ -400,19 +472,40 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:43
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:59
+
+___
+
+### startTimedInteraction
+
+▸ **startTimedInteraction**(`timeoutMs`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `timeoutMs` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:66
 
 ___
 
 ### waitFor
 
-▸ **waitFor**(`messageType`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+▸ **waitFor**(`messageType`, `timeoutMs?`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `messageType` | `number` |
+| `timeoutMs?` | `number` |
 
 #### Returns
 
@@ -420,7 +513,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:45
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:61
 
 ___
 
@@ -449,7 +542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:29
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:44
 
 ___
 
@@ -479,4 +572,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:30
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:45

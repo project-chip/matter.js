@@ -29,7 +29,7 @@ The type of output, expressed as an enum, with the following values:
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L38)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:30
 
 ___
 
@@ -41,7 +41,7 @@ HDMI
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L36)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:28
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L40)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:32
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L41)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:33
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L39)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:31
 
 ___
 
@@ -81,4 +81,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L42)
+packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:34

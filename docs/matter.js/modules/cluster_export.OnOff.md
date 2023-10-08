@@ -30,7 +30,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.OnOff.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `levelControlForLighting`: ``true``  } ? typeof [`LevelControlForLightingComponent`](cluster_export.OnOff.md#levelcontrolforlightingcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.OnOff.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `levelControlForLighting`: ``true``  } ? typeof [`LevelControlForLightingComponent`](cluster_export.OnOff.md#levelcontrolforlightingcomponent) : {}
 
 #### Type parameters
 
@@ -40,25 +40,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:317](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L317)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:305
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  }, { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  } ; `commands`: { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``6`` = 0x6; `name`: ``"OnOff"`` = "OnOff"; `revision`: ``4`` = 4 }\>
 
 These elements and properties are present in all OnOff clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:145](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L145)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:130
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.OnOff.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: { `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``6`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"OnOff"`` ; `revision`: ``4`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  } ; `commands`: { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``6`` = 0x6; `name`: ``"OnOff"`` = "OnOff"; `revision`: ``4`` = 4 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.OnOff.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 On/Off
 
@@ -72,13 +72,13 @@ OnOffCluster supports optional features that you can enable with the OnOffCluste
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:298](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L298)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:283
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `globalSceneControl`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>\> ; `offWaitTime`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\>\> ; `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `onTime`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\>\> ; `startUpOnOff`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`StartUpOnOff`](../enums/cluster_export.OnOff.StartUpOnOff.md), `any`\>\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `offWithEffect`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`OnOffEffectIdentifier`](../enums/cluster_export.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>\> ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `onWithRecallGlobalScene`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>\> ; `onWithTimedOff`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>, `void`, `any`\>\> ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `globalSceneControl`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `offWaitTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `onTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `startUpOnOff`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`StartUpOnOff`](../enums/cluster_export.OnOff.StartUpOnOff.md), `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `commands`: { `off`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `offWithEffect`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`OnOffEffectIdentifier`](../enums/cluster_export.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `on`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `onWithTimedOff`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>, `void`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `toggle`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``6`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"OnOff"`` = Cluster.name; `revision`: ``4`` = Cluster.revision }\>
 
 This cluster supports all OnOff features. It may support illegal feature combinations.
 
@@ -87,19 +87,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:329](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L329)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:317
 
 ___
 
 ### LevelControlForLightingComponent
 
-• `Const` **LevelControlForLightingComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `globalSceneControl`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> ; `onTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> ; `startUpOnOff`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`StartUpOnOff`](../enums/cluster_export.OnOff.StartUpOnOff.md), `any`\>  }, { `offWithEffect`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`OnOffEffectIdentifier`](../enums/cluster_export.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **LevelControlForLightingComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `globalSceneControl`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> ; `onTime`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> ; `startUpOnOff`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`StartUpOnOff`](../enums/cluster_export.OnOff.StartUpOnOff.md), `any`\>  } ; `commands`: { `offWithEffect`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `effectIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`OnOffEffectIdentifier`](../enums/cluster_export.OnOff.OnOffEffectIdentifier.md)\> ; `effectVariant`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>, `void`, `any`\>  }  }\>
 
 A OnOffCluster supports these elements if it supports feature LevelControlForLighting.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:196](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L196)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:181
 
 ___
 
@@ -122,7 +122,7 @@ The value of OnOff.onOffControl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L92)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:77
 
 ___
 
@@ -138,13 +138,13 @@ Input to the OnOff offWithEffect command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:66](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L66)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:51
 
 ___
 
 ### TlvOnWithTimedOffRequest
 
-• `Const` **TlvOnWithTimedOffRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>
+• `Const` **TlvOnWithTimedOffRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `offWaitTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `onOffControl`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `acceptOnlyWhenOn`: [`BitFlag`](schema_export.md#bitflag-1) ; `reserved`: [`BitField`](schema_export.md#bitfield-1)  }\>\> ; `onTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>
 
 Input to the OnOff onWithTimedOff command
 
@@ -154,4 +154,4 @@ Input to the OnOff onWithTimedOff command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:99](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L99)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:84

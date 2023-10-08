@@ -96,7 +96,7 @@ the corresponding element type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:163
+packages/matter.js/dist/esm/model/models/Model.d.ts:163
 
 ## Properties
 
@@ -106,7 +106,7 @@ packages/matter.js/dist/cjs/model/models/Model.d.ts:163
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:36
+packages/matter.js/dist/esm/model/models/Model.d.ts:36
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:37
+packages/matter.js/dist/esm/model/models/Model.d.ts:37
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:20
+packages/matter.js/dist/esm/model/models/Model.d.ts:20
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:21
+packages/matter.js/dist/esm/model/models/Model.d.ts:21
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:23
+packages/matter.js/dist/esm/model/models/Model.d.ts:23
 
 ___
 
@@ -158,7 +158,7 @@ Flag set on elements loaded from Globals.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:27
+packages/matter.js/dist/esm/model/models/Model.d.ts:27
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:17
+packages/matter.js/dist/esm/model/models/Model.d.ts:17
 
 ___
 
@@ -180,7 +180,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:35
+packages/matter.js/dist/esm/model/models/Model.d.ts:35
 
 ___
 
@@ -192,7 +192,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:31
+packages/matter.js/dist/esm/model/models/Model.d.ts:31
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:18
+packages/matter.js/dist/esm/model/models/Model.d.ts:18
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:16
+packages/matter.js/dist/esm/model/models/Model.d.ts:16
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:19
+packages/matter.js/dist/esm/model/models/Model.d.ts:19
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:22
+packages/matter.js/dist/esm/model/models/Model.d.ts:22
 
 ___
 
@@ -248,7 +248,7 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:77
+packages/matter.js/dist/esm/model/models/Model.d.ts:77
 
 ## Accessors
 
@@ -264,7 +264,7 @@ The set of tags from which this model may derive.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:108
+packages/matter.js/dist/esm/model/models/Model.d.ts:108
 
 ___
 
@@ -280,7 +280,7 @@ Get a Model for my base type, if any.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:90
+packages/matter.js/dist/esm/model/models/Model.d.ts:90
 
 ___
 
@@ -296,7 +296,7 @@ Children of models are always models.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:69
+packages/matter.js/dist/esm/model/models/Model.d.ts:69
 
 • `set` **children**(`children`): `void`
 
@@ -314,7 +314,7 @@ Children can be added as models or elements.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:73
+packages/matter.js/dist/esm/model/models/Model.d.ts:73
 
 ___
 
@@ -330,7 +330,7 @@ Allows subclasses to pull a working ID from an alternate source.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:60
+packages/matter.js/dist/esm/model/models/Model.d.ts:60
 
 ___
 
@@ -349,7 +349,7 @@ Does not recurse so only returns the direct base type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:86
+packages/matter.js/dist/esm/model/models/Model.d.ts:86
 
 ___
 
@@ -365,7 +365,7 @@ A local or parent xref.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:104
+packages/matter.js/dist/esm/model/models/Model.d.ts:104
 
 ___
 
@@ -382,7 +382,7 @@ added as elements.  For JavaScript this is identical to children().
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:56
+packages/matter.js/dist/esm/model/models/Model.d.ts:56
 
 ___
 
@@ -399,7 +399,7 @@ specific than the base primitive type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:100
+packages/matter.js/dist/esm/model/models/Model.d.ts:100
 
 ___
 
@@ -416,7 +416,7 @@ the effective ID but some models require a generated identifier.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:65
+packages/matter.js/dist/esm/model/models/Model.d.ts:65
 
 ___
 
@@ -433,7 +433,7 @@ this element's definition.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:50
+packages/matter.js/dist/esm/model/models/Model.d.ts:50
 
 • `set` **parent**(`parent`): `void`
 
@@ -449,7 +449,7 @@ packages/matter.js/dist/cjs/model/models/Model.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:51
+packages/matter.js/dist/esm/model/models/Model.d.ts:51
 
 ___
 
@@ -465,7 +465,7 @@ The full path ("." delimited) in the Matter tree.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:45
+packages/matter.js/dist/esm/model/models/Model.d.ts:45
 
 ___
 
@@ -482,7 +482,7 @@ inheritance hierarchy that I override.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:95
+packages/matter.js/dist/esm/model/models/Model.d.ts:95
 
 ___
 
@@ -498,7 +498,7 @@ Did validation find errors?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:41
+packages/matter.js/dist/esm/model/models/Model.d.ts:41
 
 ## Methods
 
@@ -520,7 +520,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:112
+packages/matter.js/dist/esm/model/models/Model.d.ts:112
 
 ___
 
@@ -534,7 +534,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -548,7 +548,7 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:122
+packages/matter.js/dist/esm/model/models/Model.d.ts:122
 
 ___
 
@@ -571,7 +571,7 @@ Record a validation error for this model.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:138
+packages/matter.js/dist/esm/model/models/Model.d.ts:138
 
 ___
 
@@ -585,7 +585,7 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -600,7 +600,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:126
+packages/matter.js/dist/esm/model/models/Model.d.ts:126
 
 ___
 
@@ -622,7 +622,7 @@ Does this model derive from another?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:162
+packages/matter.js/dist/esm/model/models/Model.d.ts:162
 
 ___
 
@@ -644,7 +644,7 @@ Check identity of element by name or ID.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:134
+packages/matter.js/dist/esm/model/models/Model.d.ts:134
 
 ___
 
@@ -667,7 +667,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:158
+packages/matter.js/dist/esm/model/models/Model.d.ts:158
 
 ___
 
@@ -681,7 +681,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -695,7 +695,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:130
+packages/matter.js/dist/esm/model/models/Model.d.ts:130
 
 ___
 
@@ -717,7 +717,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:154
+packages/matter.js/dist/esm/model/models/Model.d.ts:154
 
 ___
 
@@ -733,7 +733,7 @@ Convert model to JSON.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:142
+packages/matter.js/dist/esm/model/models/Model.d.ts:142
 
 ___
 
@@ -749,7 +749,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:146
+packages/matter.js/dist/esm/model/models/Model.d.ts:146
 
 ___
 
@@ -771,7 +771,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:150
+packages/matter.js/dist/esm/model/models/Model.d.ts:150
 
 ___
 
@@ -793,4 +793,4 @@ Create a model for an element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:116
+packages/matter.js/dist/esm/model/models/Model.d.ts:116

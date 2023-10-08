@@ -29,7 +29,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StringifyTools.ts#L47)
+packages/matter.js/src/storage/StringifyTools.ts:47
 
 ## Functions
 
@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StringifyTools.ts#L82)
+packages/matter.js/src/storage/StringifyTools.ts:82
 
 ___
 
@@ -70,4 +70,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StringifyTools.ts#L55)
+packages/matter.js/src/storage/StringifyTools.ts:55

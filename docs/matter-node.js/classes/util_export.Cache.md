@@ -39,6 +39,7 @@ SPDX-License-Identifier: Apache-2.0
 - [clear](util_export.Cache.md#clear)
 - [close](util_export.Cache.md#close)
 - [get](util_export.Cache.md#get)
+- [keys](util_export.Cache.md#keys)
 
 ## Constructors
 
@@ -62,7 +63,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:15
+packages/matter.js/dist/esm/util/Cache.d.ts:15
 
 ## Properties
 
@@ -72,7 +73,7 @@ packages/matter.js/dist/cjs/util/Cache.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:17
+packages/matter.js/dist/esm/util/Cache.d.ts:18
 
 ___
 
@@ -82,7 +83,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:10
+packages/matter.js/dist/esm/util/Cache.d.ts:10
 
 ___
 
@@ -92,7 +93,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:20
+packages/matter.js/dist/esm/util/Cache.d.ts:21
 
 ___
 
@@ -102,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:11
+packages/matter.js/dist/esm/util/Cache.d.ts:11
 
 ___
 
@@ -112,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:9
+packages/matter.js/dist/esm/util/Cache.d.ts:9
 
 ___
 
@@ -122,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:14
+packages/matter.js/dist/esm/util/Cache.d.ts:14
 
 ___
 
@@ -132,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:13
+packages/matter.js/dist/esm/util/Cache.d.ts:13
 
 ___
 
@@ -142,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:12
+packages/matter.js/dist/esm/util/Cache.d.ts:12
 
 ## Methods
 
@@ -156,7 +157,7 @@ packages/matter.js/dist/cjs/util/Cache.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:18
+packages/matter.js/dist/esm/util/Cache.d.ts:19
 
 ___
 
@@ -170,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:19
+packages/matter.js/dist/esm/util/Cache.d.ts:20
 
 ___
 
@@ -190,4 +191,18 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Cache.d.ts:16
+packages/matter.js/dist/esm/util/Cache.d.ts:16
+
+___
+
+### keys
+
+▸ **keys**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Cache.d.ts:17

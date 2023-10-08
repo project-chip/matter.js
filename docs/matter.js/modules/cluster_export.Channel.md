@@ -35,7 +35,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.Channel.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `channelList`: ``true``  } ? typeof [`ChannelListComponent`](cluster_export.Channel.md#channellistcomponent) : {} & `SF` extends { `lineupInfo`: ``true``  } ? typeof [`LineupInfoComponent`](cluster_export.Channel.md#lineupinfocomponent) : {} & `SF` extends { `channelList`: ``true``  } \| { `lineupInfo`: ``true``  } ? typeof [`ChannelListOrLineupInfoComponent`](cluster_export.Channel.md#channellistorlineupinfocomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.Channel.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `channelList`: ``true``  } ? typeof [`ChannelListComponent`](cluster_export.Channel.md#channellistcomponent) : {} & `SF` extends { `lineupInfo`: ``true``  } ? typeof [`LineupInfoComponent`](cluster_export.Channel.md#lineupinfocomponent) : {} & `SF` extends { `channelList`: ``true``  } \| { `lineupInfo`: ``true``  } ? typeof [`ChannelListOrLineupInfoComponent`](cluster_export.Channel.md#channellistorlineupinfocomponent) : {}
 
 #### Type parameters
 
@@ -45,49 +45,49 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:367](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L367)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:363
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  }, { `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  } ; `commands`: { `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `features`: { `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1284`` = 0x504; `name`: ``"Channel"`` = "Channel"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all Channel clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:234](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L234)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:220
 
 ___
 
 ### ChannelListComponent
 
-• `Const` **ChannelListComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `channelList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>[], `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **ChannelListComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `channelList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>[], `any`\>  }  }\>
 
 A ChannelCluster supports these elements if it supports feature ChannelList.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:291](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L291)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:277
 
 ___
 
 ### ChannelListOrLineupInfoComponent
 
-• `Const` **ChannelListOrLineupInfoComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), { `changeChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `match`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.Channel.Status.md)\>  }\>, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **ChannelListOrLineupInfoComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `commands`: { `changeChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `match`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.Channel.Status.md)\>  }\>, `any`\>  }  }\>
 
 A ChannelCluster supports these elements if it supports features ChannelList or LineupInfo.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:319](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L319)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:305
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Channel.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `events`: {} ; `features`: { `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``1284`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"Channel"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  } ; `commands`: { `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `features`: { `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1284`` = 0x504; `name`: ``"Channel"`` = "Channel"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Channel.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Channel
 
@@ -101,13 +101,13 @@ ChannelCluster supports optional features that you can enable with the ChannelCl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:346](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L346)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:332
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `channelList`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>[], `any`\>\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `lineup`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Attribute`](cluster_export.md#attribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `lineupInfoType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Mso`](../enums/cluster_export.Channel.LineupInfoType.md#mso)\> ; `lineupName`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `operatorName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `postalCode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `changeChannel`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `match`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.Channel.Status.md)\>  }\>, `any`\>\> ; `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `channelList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>[], `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentChannel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `affiliateCallSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `callSign`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `lineup`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `lineupInfoType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Mso`](../enums/cluster_export.Channel.LineupInfoType.md#mso)\> ; `lineupName`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `operatorName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `postalCode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `commands`: { `changeChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `match`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.Channel.Status.md)\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `changeChannelByNumber`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `majorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `minorNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `skipChannel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `count`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `features`: { `channelList`: [`BitFlag`](schema_export.md#bitflag-1) ; `lineupInfo`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``1284`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"Channel"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all Channel features. It may support illegal feature combinations.
 
@@ -116,19 +116,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:383](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L383)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:379
 
 ___
 
 ### LineupInfoComponent
 
-• `Const` **LineupInfoComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `lineup`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `lineupInfoType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Mso`](../enums/cluster_export.Channel.LineupInfoType.md#mso)\> ; `lineupName`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `operatorName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `postalCode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **LineupInfoComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `lineup`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`TypeFromFields`](tlv_export.md#typefromfields)<{ `lineupInfoType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Mso`](../enums/cluster_export.Channel.LineupInfoType.md#mso)\> ; `lineupName`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `operatorName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `postalCode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\>  }\>, `any`\>  }  }\>
 
 A ChannelCluster supports these elements if it supports feature LineupInfo.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:305](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L305)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:291
 
 ___
 
@@ -144,7 +144,7 @@ Input to the Channel changeChannelByNumber command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:89](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L89)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:75
 
 ___
 
@@ -160,7 +160,7 @@ Input to the Channel changeChannel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:160](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L160)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:146
 
 ___
 
@@ -176,7 +176,7 @@ This command shall be generated in response to a ChangeChannel command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:194](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L194)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:180
 
 ___
 
@@ -195,7 +195,7 @@ other formats which can map into these numeric values.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L42)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:28
 
 ___
 
@@ -212,7 +212,7 @@ LineupName, and PostalCode MUST uniquely identify a lineup.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:136](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L136)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:122
 
 ___
 
@@ -228,4 +228,4 @@ Input to the Channel skipChannel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:110](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L110)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:96

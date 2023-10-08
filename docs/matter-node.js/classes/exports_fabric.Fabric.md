@@ -23,7 +23,7 @@
 - [operationalId](exports_fabric.Fabric.md#operationalid)
 - [operationalIdentityProtectionKey](exports_fabric.Fabric.md#operationalidentityprotectionkey)
 - [persistCallback](exports_fabric.Fabric.md#persistcallback)
-- [removeCallback](exports_fabric.Fabric.md#removecallback)
+- [removeCallbacks](exports_fabric.Fabric.md#removecallbacks)
 - [rootCert](exports_fabric.Fabric.md#rootcert)
 - [rootNodeId](exports_fabric.Fabric.md#rootnodeid)
 - [rootPublicKey](exports_fabric.Fabric.md#rootpublickey)
@@ -33,7 +33,9 @@
 
 ### Methods
 
+- [addRemoveCallback](exports_fabric.Fabric.md#addremovecallback)
 - [addSession](exports_fabric.Fabric.md#addsession)
+- [deleteRemoveCallback](exports_fabric.Fabric.md#deleteremovecallback)
 - [deleteScopedClusterData](exports_fabric.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](exports_fabric.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](exports_fabric.Fabric.md#getdestinationid)
@@ -42,12 +44,12 @@
 - [getScopedClusterDataKeys](exports_fabric.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](exports_fabric.Fabric.md#getscopedclusterdatavalue)
 - [hasScopedClusterDataValue](exports_fabric.Fabric.md#hasscopedclusterdatavalue)
+- [matchesFabricIdAndRootPublicKey](exports_fabric.Fabric.md#matchesfabricidandrootpublickey)
 - [persist](exports_fabric.Fabric.md#persist)
 - [remove](exports_fabric.Fabric.md#remove)
 - [removeSession](exports_fabric.Fabric.md#removesession)
 - [setLabel](exports_fabric.Fabric.md#setlabel)
 - [setPersistCallback](exports_fabric.Fabric.md#setpersistcallback)
-- [setRemoveCallback](exports_fabric.Fabric.md#setremovecallback)
 - [setScopedClusterDataValue](exports_fabric.Fabric.md#setscopedclusterdatavalue)
 - [sign](exports_fabric.Fabric.md#sign)
 - [toStorageObject](exports_fabric.Fabric.md#tostorageobject)
@@ -82,7 +84,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:51
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ## Properties
 
@@ -92,7 +94,7 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:51
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:34
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:34
 
 ___
 
@@ -102,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:33
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:33
 
 ___
 
@@ -112,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:42
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:42
 
 ___
 
@@ -122,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:44
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:44
 
 ___
 
@@ -132,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:39
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:39
 
 ___
 
@@ -142,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:46
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:46
 
 ___
 
@@ -152,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:35
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:35
 
 ___
 
@@ -162,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:45
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:45
 
 ___
 
@@ -172,7 +174,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:37
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:37
 
 ___
 
@@ -182,7 +184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:43
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:43
 
 ___
 
@@ -192,17 +194,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:50
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ___
 
-### removeCallback
+### removeCallbacks
 
-• `Private` **removeCallback**: `any`
+• `Private` **removeCallbacks**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:49
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:49
 
 ___
 
@@ -212,7 +214,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:41
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:41
 
 ___
 
@@ -222,7 +224,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:36
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:36
 
 ___
 
@@ -232,7 +234,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:38
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:38
 
 ___
 
@@ -242,7 +244,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:40
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:40
 
 ___
 
@@ -252,7 +254,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:48
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -262,9 +264,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:47
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:47
 
 ## Methods
+
+### addRemoveCallback
+
+▸ **addRemoveCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:62
+
+___
 
 ### addSession
 
@@ -282,7 +304,27 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:47
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:59
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:60
+
+___
+
+### deleteRemoveCallback
+
+▸ **deleteRemoveCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ___
 
@@ -302,7 +344,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:69
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
@@ -323,7 +365,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:67
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:69
 
 ___
 
@@ -344,7 +386,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:58
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:59
 
 ___
 
@@ -366,7 +408,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:71
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:73
 
 ___
 
@@ -380,7 +422,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:55
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ___
 
@@ -400,7 +442,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:70
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:72
 
 ___
 
@@ -427,7 +469,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:65
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ___
 
@@ -448,7 +490,28 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:68
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:70
+
+___
+
+### matchesFabricIdAndRootPublicKey
+
+▸ **matchesFabricIdAndRootPublicKey**(`fabricId`, `rootPublicKey`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
+| `rootPublicKey` | `Uint8Array` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -462,7 +525,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:64
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ___
 
@@ -476,7 +539,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:63
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:65
 
 ___
 
@@ -496,7 +559,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:60
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -516,7 +579,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:54
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ___
 
@@ -536,27 +599,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:62
-
-___
-
-### setRemoveCallback
-
-▸ **setRemoveCallback**(`callback`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `callback` | () => `void` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:61
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:64
 
 ___
 
@@ -584,7 +627,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:66
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -604,7 +647,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:56
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:56
 
 ___
 
@@ -618,7 +661,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:52
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -639,7 +682,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:57
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -659,4 +702,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:53
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:53

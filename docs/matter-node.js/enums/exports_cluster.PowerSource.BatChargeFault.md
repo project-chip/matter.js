@@ -34,7 +34,7 @@ The Node detects the ambient temperature is below the nominal range for this bat
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:648
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:649
 
 ___
 
@@ -46,7 +46,7 @@ The Node detects the ambient temperature is above the nominal range for this bat
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:644
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:645
 
 ___
 
@@ -58,7 +58,7 @@ The Node detects this battery source is not present.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:660
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:661
 
 ___
 
@@ -70,7 +70,7 @@ The Node detects this battery source is over voltage.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:664
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:665
 
 ___
 
@@ -82,7 +82,7 @@ The Node detects the temperature of this battery source is below the nominal ran
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:656
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:657
 
 ___
 
@@ -94,7 +94,7 @@ The Node detects the temperature of this battery source is above the nominal ran
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:652
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:653
 
 ___
 
@@ -106,7 +106,7 @@ The Node detects this battery source is under voltage.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:668
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:669
 
 ___
 
@@ -118,7 +118,7 @@ The Node detects the charger for this battery source is over voltage.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:672
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:673
 
 ___
 
@@ -130,7 +130,7 @@ The Node detects the charger for this battery source is under voltage.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:676
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:677
 
 ___
 
@@ -142,7 +142,7 @@ The Node detects a charging safety timeout for this battery source.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:680
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:681
 
 ___
 
@@ -154,4 +154,4 @@ The Node detects an unspecified fault on this battery source.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:640
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:641

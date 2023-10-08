@@ -31,7 +31,7 @@ WiFiInterfaceScanResultStruct.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:219](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L219)
+packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:203
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:224](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L224)
+packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:208
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:229](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L229)
+packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:213
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:239](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L239)
+packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:223
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:234](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L234)
+packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:218

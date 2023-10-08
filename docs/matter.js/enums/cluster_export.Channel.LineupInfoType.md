@@ -24,4 +24,4 @@ MultiSystemOperator
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:127](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L127)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:113

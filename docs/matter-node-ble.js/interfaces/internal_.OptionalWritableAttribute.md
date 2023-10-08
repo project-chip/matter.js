@@ -34,6 +34,7 @@
 - [readAcl](internal_.OptionalWritableAttribute.md#readacl)
 - [scene](internal_.OptionalWritableAttribute.md#scene)
 - [schema](internal_.OptionalWritableAttribute.md#schema)
+- [timed](internal_.OptionalWritableAttribute.md#timed)
 - [unknown](internal_.OptionalWritableAttribute.md#unknown)
 - [writable](internal_.OptionalWritableAttribute.md#writable)
 - [writeAcl](internal_.OptionalWritableAttribute.md#writeacl)
@@ -50,7 +51,7 @@ OptionalAttribute.default
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:37
+matter.js/dist/cjs/cluster/Cluster.d.ts:38
 
 ___
 
@@ -64,7 +65,7 @@ OptionalAttribute.fabricScoped
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:34
+matter.js/dist/cjs/cluster/Cluster.d.ts:35
 
 ___
 
@@ -78,7 +79,7 @@ OptionalAttribute.fixed
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:33
+matter.js/dist/cjs/cluster/Cluster.d.ts:34
 
 ___
 
@@ -106,7 +107,7 @@ OptionalAttribute.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:38
+matter.js/dist/cjs/cluster/Cluster.d.ts:39
 
 ___
 
@@ -120,7 +121,7 @@ OptionalAttribute.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:40
+matter.js/dist/cjs/cluster/Cluster.d.ts:41
 
 ___
 
@@ -134,7 +135,7 @@ OptionalAttribute.omitChanges
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:35
+matter.js/dist/cjs/cluster/Cluster.d.ts:36
 
 ___
 
@@ -148,7 +149,7 @@ OptionalAttribute.optional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:44
+matter.js/dist/cjs/cluster/Cluster.d.ts:45
 
 ___
 
@@ -162,7 +163,7 @@ OptionalAttribute.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:39
+matter.js/dist/cjs/cluster/Cluster.d.ts:40
 
 ___
 
@@ -222,6 +223,20 @@ matter.js/dist/cjs/cluster/Cluster.d.ts:27
 
 ___
 
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+OptionalAttribute.timed
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:33
+
+___
+
 ### unknown
 
 • **unknown**: `boolean`
@@ -232,7 +247,7 @@ OptionalAttribute.unknown
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:41
+matter.js/dist/cjs/cluster/Cluster.d.ts:42
 
 ___
 
@@ -246,7 +261,7 @@ OptionalAttribute.writable
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:53
+matter.js/dist/cjs/cluster/Cluster.d.ts:54
 
 ___
 
@@ -260,4 +275,4 @@ OptionalAttribute.writeAcl
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:36
+matter.js/dist/cjs/cluster/Cluster.d.ts:37

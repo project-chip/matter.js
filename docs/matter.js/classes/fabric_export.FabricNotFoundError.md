@@ -36,4 +36,4 @@ Specific Error for when a fabric is not found.
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
+node_modules/typescript/lib/lib.es5.d.ts:1073

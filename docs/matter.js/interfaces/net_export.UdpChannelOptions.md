@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpChannel.ts#L13)
+packages/matter.js/src/net/UdpChannel.ts:13
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpChannel.ts#L11)
+packages/matter.js/src/net/UdpChannel.ts:11
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpChannel.ts#L14)
+packages/matter.js/src/net/UdpChannel.ts:14
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpChannel.ts#L12)
+packages/matter.js/src/net/UdpChannel.ts:12

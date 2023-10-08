@@ -27,7 +27,7 @@ The battery is replaceable by an authorized factory technician.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:119
 
 ___
 
@@ -39,7 +39,7 @@ The battery is not replaceable.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:110
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:111
 
 ___
 
@@ -51,7 +51,7 @@ The replaceability is unspecified or unknown.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:106
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:107
 
 ___
 
@@ -63,4 +63,4 @@ The battery is replaceable by the user or customer.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:115

@@ -31,7 +31,7 @@ Indicates support for asynchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L35)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:36
 
 ___
 
@@ -43,7 +43,7 @@ Indicates support for synchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L30)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:31
 
 ___
 
@@ -55,7 +55,7 @@ Indicates support for HTTPS.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L40)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:41
 
 ___
 
@@ -67,4 +67,4 @@ Indicates support for vendor specific protocol.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L45)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:46

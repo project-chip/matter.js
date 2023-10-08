@@ -52,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:12
+packages/matter.js/dist/esm/util/Queue.d.ts:12
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:11
+packages/matter.js/dist/esm/util/Queue.d.ts:11
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:10
+packages/matter.js/dist/esm/util/Queue.d.ts:10
 
 ## Methods
 
@@ -86,13 +86,19 @@ packages/matter.js/dist/cjs/util/Queue.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:15
+packages/matter.js/dist/esm/util/Queue.d.ts:15
 
 ___
 
 ### read
 
-▸ **read**(): `Promise`<`T`\>
+▸ **read**(`timeoutMs?`): `Promise`<`T`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `timeoutMs?` | `number` |
 
 #### Returns
 
@@ -104,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:13
+packages/matter.js/dist/esm/util/Queue.d.ts:13
 
 ___
 
@@ -128,4 +134,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Queue.d.ts:14
+packages/matter.js/dist/esm/util/Queue.d.ts:14

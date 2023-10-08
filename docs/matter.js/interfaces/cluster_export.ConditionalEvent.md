@@ -27,6 +27,7 @@
 - [optional](cluster_export.ConditionalEvent.md#optional)
 - [optionalIf](cluster_export.ConditionalEvent.md#optionalif)
 - [priority](cluster_export.ConditionalEvent.md#priority)
+- [readAcl](cluster_export.ConditionalEvent.md#readacl)
 - [schema](cluster_export.ConditionalEvent.md#schema)
 - [unknown](cluster_export.ConditionalEvent.md#unknown)
 
@@ -42,7 +43,7 @@ OptionalEvent.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:659](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L659)
+packages/matter.js/src/cluster/Cluster.ts:714
 
 ___
 
@@ -56,7 +57,7 @@ OptionalEvent.isConditional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:683](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L683)
+packages/matter.js/src/cluster/Cluster.ts:743
 
 ___
 
@@ -70,7 +71,7 @@ OptionalEvent.mandatoryIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:665](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L665)
+packages/matter.js/src/cluster/Cluster.ts:721
 
 ___
 
@@ -84,7 +85,7 @@ OptionalEvent.optional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:679](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L679)
+packages/matter.js/src/cluster/Cluster.ts:739
 
 ___
 
@@ -98,7 +99,7 @@ OptionalEvent.optionalIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:664](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L664)
+packages/matter.js/src/cluster/Cluster.ts:720
 
 ___
 
@@ -112,7 +113,21 @@ OptionalEvent.priority
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:661](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L661)
+packages/matter.js/src/cluster/Cluster.ts:716
+
+___
+
+### readAcl
+
+• **readAcl**: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Inherited from
+
+OptionalEvent.readAcl
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:718
 
 ___
 
@@ -126,7 +141,7 @@ OptionalEvent.schema
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:660](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L660)
+packages/matter.js/src/cluster/Cluster.ts:715
 
 ___
 
@@ -140,4 +155,4 @@ OptionalEvent.unknown
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:666](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L666)
+packages/matter.js/src/cluster/Cluster.ts:722

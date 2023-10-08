@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/BtpCodec.ts#L22)
+packages/matter.js/src/codec/BtpCodec.ts:22
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/BtpCodec.ts#L21)
+packages/matter.js/src/codec/BtpCodec.ts:21
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/BtpCodec.ts#L23)
+packages/matter.js/src/codec/BtpCodec.ts:23

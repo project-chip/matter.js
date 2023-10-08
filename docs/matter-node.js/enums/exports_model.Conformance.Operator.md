@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:95
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:95
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:96
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:96
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:91
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:91
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:97
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:97
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:99
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:99
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:98
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:98
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:100
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:100
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:92
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:92
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:90
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:90
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:93
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:93
 
 ___
 
@@ -128,4 +128,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:94
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:94

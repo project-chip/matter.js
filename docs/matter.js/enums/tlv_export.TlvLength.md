@@ -23,7 +23,7 @@ Byte length of the encoded value or length.
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:49](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L49)
+packages/matter.js/src/tlv/TlvCodec.ts:49
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L48)
+packages/matter.js/src/tlv/TlvCodec.ts:48
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L46)
+packages/matter.js/src/tlv/TlvCodec.ts:46
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L47)
+packages/matter.js/src/tlv/TlvCodec.ts:47

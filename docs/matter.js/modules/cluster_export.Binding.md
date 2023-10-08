@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `binding`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, {}, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `binding`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `id`: ``30`` = 0x1e; `name`: ``"Binding"`` = "Binding"; `revision`: ``1`` = 1 }\>
 
 Binding
 
@@ -54,7 +54,7 @@ binding target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:93](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L93)
+packages/matter.js/src/cluster/definitions/BindingCluster.ts:94
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L23)
+packages/matter.js/src/cluster/definitions/BindingCluster.ts:24

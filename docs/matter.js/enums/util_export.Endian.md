@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/ByteArray.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L76)
+packages/matter.js/src/util/ByteArray.ts:79
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/ByteArray.ts:75](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L75)
+packages/matter.js/src/util/ByteArray.ts:78

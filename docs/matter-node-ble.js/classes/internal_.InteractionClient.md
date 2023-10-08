@@ -35,6 +35,7 @@
 - [getMultipleAttributesAndEvents](internal_.InteractionClient.md#getmultipleattributesandevents)
 - [getMultipleEvents](internal_.InteractionClient.md#getmultipleevents)
 - [invoke](internal_.InteractionClient.md#invoke)
+- [invokeWithSuppressedResponse](internal_.InteractionClient.md#invokewithsuppressedresponse)
 - [setAttribute](internal_.InteractionClient.md#setattribute)
 - [setMultipleAttributes](internal_.InteractionClient.md#setmultipleattributes)
 - [subscribeAllAttributesAndEvents](internal_.InteractionClient.md#subscribeallattributesandevents)
@@ -56,7 +57,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:42
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:41
 
 ## Properties
 
@@ -66,7 +67,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:42
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:38
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:37
 
 ___
 
@@ -76,7 +77,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:135
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:134
 
 ___
 
@@ -86,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:41
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:40
 
 ___
 
@@ -96,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:40
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:39
 
 ___
 
@@ -106,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:39
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:38
 
 ___
 
@@ -116,7 +117,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:219
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:244
 
 ## Accessors
 
@@ -130,13 +131,13 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:219
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:220
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:245
 
 ## Methods
 
 ### getAllAttributes
 
-▸ **getAllAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[]\>
+▸ **getAllAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Parameters
 
@@ -148,17 +149,17 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:220
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[]\>
+`Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:43
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:42
 
 ___
 
 ### getAllAttributesAndEvents
 
-▸ **getAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
@@ -171,11 +172,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:55
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:54
 
 ___
 
@@ -197,7 +198,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:51
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:50
 
 ___
 
@@ -209,7 +210,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -228,7 +229,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:111
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:110
 
 ___
 
@@ -240,7 +241,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -259,7 +260,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:118
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:117
 
 ___
 
@@ -272,7 +273,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`, `E`\> |
+| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`\> |
 
 #### Parameters
 
@@ -291,13 +292,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:128
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:127
 
 ___
 
 ### getMultipleAttributes
 
-▸ **getMultipleAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[]\>
+▸ **getMultipleAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Parameters
 
@@ -310,17 +311,17 @@ ___
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[]\>
+`Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:67
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:66
 
 ___
 
 ### getMultipleAttributesAndEvents
 
-▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
@@ -335,11 +336,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:89
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:88
 
 ___
 
@@ -362,32 +363,32 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:80
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:79
 
 ___
 
 ### invoke
 
-▸ **invoke**<`C`\>(`endpointId`, `clusterId`, `request`, `id`, `requestSchema`, `_responseId`, `responseSchema`, `optional`): `Promise`<[`ResponseType`](../modules/internal_.md#responsetype)<`C`\>\>
+▸ **invoke**<`C`\>(`options`): `Promise`<[`ResponseType`](../modules/internal_.md#responsetype)<`C`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/internal_.md#command)<`any`, `any`, `any`, `C`\> |
+| `C` | extends [`Command`](../modules/internal_.md#command)<`any`, `any`, `any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
-| `clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
-| `request` | [`RequestType`](../modules/internal_.md#requesttype)<`C`\> |
-| `id` | [`CommandId`](../modules/internal_.md#commandid) |
-| `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)<[`RequestType`](../modules/internal_.md#requesttype)<`C`\>\> |
-| `_responseId` | [`CommandId`](../modules/internal_.md#commandid) |
-| `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)<[`ResponseType`](../modules/internal_.md#responsetype)<`C`\>\> |
-| `optional` | `boolean` |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
+| `options.command` | `C` |
+| `options.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
+| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)<`C`\> |
+| `options.timedRequestTimeoutMs?` | `number` |
+| `options.useExtendedFailSafeMessageResponseTimeout?` | `boolean` |
 
 #### Returns
 
@@ -395,13 +396,45 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:218
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:227
+
+___
+
+### invokeWithSuppressedResponse
+
+▸ **invokeWithSuppressedResponse**<`C`\>(`options`): `Promise`<`void`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `C` | extends [`Command`](../modules/internal_.md#command)<`any`, `any`, `any`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
+| `options.command` | `C` |
+| `options.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
+| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)<`C`\> |
+| `options.timedRequestTimeoutMs?` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:236
 
 ___
 
 ### setAttribute
 
-▸ **setAttribute**<`T`\>(`attributeData`): `Promise`<`void`\>
+▸ **setAttribute**<`T`\>(`options`): `Promise`<`void`\>
 
 #### Type parameters
 
@@ -413,12 +446,16 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `attributeData` | `Object` |
-| `attributeData.attribute` | [`Attribute`](../modules/internal_.md#attribute)<`T`, `any`\> |
-| `attributeData.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
-| `attributeData.dataVersion?` | `number` |
-| `attributeData.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
-| `attributeData.value` | `T` |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.attributeData` | `Object` |
+| `options.attributeData.attribute` | [`Attribute`](../modules/internal_.md#attribute)<`T`, `any`\> |
+| `options.attributeData.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
+| `options.attributeData.dataVersion?` | `number` |
+| `options.attributeData.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
+| `options.attributeData.value` | `T` |
+| `options.suppressResponse?` | `boolean` |
+| `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
@@ -426,19 +463,23 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:136
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:135
 
 ___
 
 ### setMultipleAttributes
 
-▸ **setMultipleAttributes**(`attributes`): `Promise`<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
+▸ **setMultipleAttributes**(`options`): `Promise`<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `attributes` | { `attribute`: [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `value`: `any`  }[] |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.attributes` | { `attribute`: [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `value`: `any`  }[] |
+| `options.suppressResponse?` | `boolean` |
+| `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
@@ -446,20 +487,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:143
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:147
 
 ___
 
 ### subscribeAllAttributesAndEvents
 
-▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>) => `void` |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>) => `void` |
 | `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
 | `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>) => `void` |
@@ -471,11 +512,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:172
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:181
 
 ___
 
@@ -487,7 +528,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -510,7 +551,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:150
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:159
 
 ___
 
@@ -523,7 +564,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`, `E`\> |
+| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`\> |
 
 #### Parameters
 
@@ -546,20 +587,20 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:161
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:170
 
 ___
 
 ### subscribeMultipleAttributesAndEvents
 
-▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>) => `void` |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>) => `void` |
 | `options.attributes` | { `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
 | `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
 | `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
@@ -572,8 +613,8 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/internal_.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:190
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:199

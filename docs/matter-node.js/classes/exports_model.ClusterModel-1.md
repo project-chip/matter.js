@@ -93,7 +93,7 @@ the corresponding element type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:28
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:28
 
 ## Properties
 
@@ -103,7 +103,7 @@ packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:16
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:16
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:20
+packages/matter.js/dist/esm/model/models/Model.d.ts:20
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:21
+packages/matter.js/dist/esm/model/models/Model.d.ts:21
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:23
+packages/matter.js/dist/esm/model/models/Model.d.ts:23
 
 ___
 
@@ -161,7 +161,7 @@ Flag set on elements loaded from Globals.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:27
+packages/matter.js/dist/esm/model/models/Model.d.ts:27
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:15
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:15
 
 ___
 
@@ -191,7 +191,7 @@ Indicates that an element defines a datatype.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:35
+packages/matter.js/dist/esm/model/models/Model.d.ts:35
 
 ___
 
@@ -207,7 +207,7 @@ Indicates that an element may have type definitions as children.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:17
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:17
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:18
+packages/matter.js/dist/esm/model/models/Model.d.ts:18
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:18
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:18
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:14
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:14
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:19
+packages/matter.js/dist/esm/model/models/Model.d.ts:19
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:22
+packages/matter.js/dist/esm/model/models/Model.d.ts:22
 
 ___
 
@@ -293,7 +293,7 @@ Factory support.  Populated by derivatives upon definition.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:77
+packages/matter.js/dist/esm/model/models/Model.d.ts:77
 
 ## Accessors
 
@@ -313,7 +313,7 @@ Model.allowedBaseTags
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:108
+packages/matter.js/dist/esm/model/models/Model.d.ts:108
 
 ___
 
@@ -327,7 +327,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:19
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:19
 
 ___
 
@@ -347,7 +347,7 @@ Model.base
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:90
+packages/matter.js/dist/esm/model/models/Model.d.ts:90
 
 ___
 
@@ -367,7 +367,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:26
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:26
 
 • `set` **children**(`children`): `void`
 
@@ -389,7 +389,7 @@ Model.children
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:27
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:27
 
 ___
 
@@ -403,7 +403,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:20
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:20
 
 ___
 
@@ -417,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:22
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:22
 
 ___
 
@@ -437,7 +437,7 @@ Model.effectiveId
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:60
+packages/matter.js/dist/esm/model/models/Model.d.ts:60
 
 ___
 
@@ -460,7 +460,7 @@ Model.effectiveType
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:86
+packages/matter.js/dist/esm/model/models/Model.d.ts:86
 
 ___
 
@@ -480,7 +480,7 @@ Model.effectiveXref
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:104
+packages/matter.js/dist/esm/model/models/Model.d.ts:104
 
 ___
 
@@ -501,7 +501,7 @@ Model.elements
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:56
+packages/matter.js/dist/esm/model/models/Model.d.ts:56
 
 ___
 
@@ -515,7 +515,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:21
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:21
 
 ___
 
@@ -529,7 +529,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:25
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:25
 
 ___
 
@@ -543,7 +543,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:24
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:24
 
 ___
 
@@ -564,7 +564,7 @@ Model.globalBase
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:100
+packages/matter.js/dist/esm/model/models/Model.d.ts:100
 
 ___
 
@@ -585,7 +585,7 @@ Model.key
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:65
+packages/matter.js/dist/esm/model/models/Model.d.ts:65
 
 ___
 
@@ -606,7 +606,7 @@ Model.parent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:50
+packages/matter.js/dist/esm/model/models/Model.d.ts:50
 
 • `set` **parent**(`parent`): `void`
 
@@ -626,7 +626,7 @@ Model.parent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:51
+packages/matter.js/dist/esm/model/models/Model.d.ts:51
 
 ___
 
@@ -646,7 +646,7 @@ Model.path
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:45
+packages/matter.js/dist/esm/model/models/Model.d.ts:45
 
 ___
 
@@ -660,7 +660,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:23
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:23
 
 ___
 
@@ -681,7 +681,7 @@ Model.shadow
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:95
+packages/matter.js/dist/esm/model/models/Model.d.ts:95
 
 ___
 
@@ -701,7 +701,7 @@ Model.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:41
+packages/matter.js/dist/esm/model/models/Model.d.ts:41
 
 ## Methods
 
@@ -727,7 +727,7 @@ Add a child.  children.push works too but only accepts models.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:112
+packages/matter.js/dist/esm/model/models/Model.d.ts:112
 
 ___
 
@@ -741,7 +741,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -759,7 +759,7 @@ Retrieve all models of a specific element type from local scope.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:122
+packages/matter.js/dist/esm/model/models/Model.d.ts:122
 
 ___
 
@@ -786,7 +786,7 @@ Record a validation error for this model.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:138
+packages/matter.js/dist/esm/model/models/Model.d.ts:138
 
 ___
 
@@ -800,7 +800,7 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -819,7 +819,7 @@ Retrieve a specific model by ID or name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:126
+packages/matter.js/dist/esm/model/models/Model.d.ts:126
 
 ___
 
@@ -845,7 +845,7 @@ Does this model derive from another?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:162
+packages/matter.js/dist/esm/model/models/Model.d.ts:162
 
 ___
 
@@ -871,7 +871,7 @@ Check identity of element by name or ID.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:134
+packages/matter.js/dist/esm/model/models/Model.d.ts:134
 
 ___
 
@@ -898,7 +898,7 @@ Search the inheritance chain for a child property.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:158
+packages/matter.js/dist/esm/model/models/Model.d.ts:158
 
 ___
 
@@ -912,7 +912,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Model`](exports_model.Model-1.md)<`T`\> |
+| `T` | extends [`Model`](exports_model.Model-1.md) |
 
 #### Parameters
 
@@ -930,7 +930,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:130
+packages/matter.js/dist/esm/model/models/Model.d.ts:130
 
 ___
 
@@ -956,7 +956,7 @@ Find all children that reference a specific type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:154
+packages/matter.js/dist/esm/model/models/Model.d.ts:154
 
 ___
 
@@ -976,7 +976,7 @@ Convert model to JSON.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:142
+packages/matter.js/dist/esm/model/models/Model.d.ts:142
 
 ___
 
@@ -996,7 +996,7 @@ Convert to non-class structure.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:146
+packages/matter.js/dist/esm/model/models/Model.d.ts:146
 
 ___
 
@@ -1022,7 +1022,7 @@ Apply a function to all tree elements.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:150
+packages/matter.js/dist/esm/model/models/Model.d.ts:150
 
 ___
 
@@ -1048,4 +1048,4 @@ Create a model for an element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:116
+packages/matter.js/dist/esm/model/models/Model.d.ts:116

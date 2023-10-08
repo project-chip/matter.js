@@ -46,6 +46,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 - [getInitialData](protocol_export.ControllerCommissioner.md#getinitialdata)
 - [initializeCommissioningSteps](protocol_export.ControllerCommissioner.md#initializecommissioningsteps)
 - [reconnectWithDevice](protocol_export.ControllerCommissioner.md#reconnectwithdevice)
+- [resetFailsafeTimer](protocol_export.ControllerCommissioner.md#resetfailsafetimer)
 - [setCommissioningStepResult](protocol_export.ControllerCommissioner.md#setcommissioningstepresult)
 - [sortSteps](protocol_export.ControllerCommissioner.md#sortsteps)
 - [synchronizeTime](protocol_export.ControllerCommissioner.md#synchronizetime)
@@ -69,7 +70,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L139)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:140
 
 ## Properties
 
@@ -79,7 +80,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:141](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L141)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:142
 
 ___
 
@@ -89,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:131](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L131)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:132
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:136](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L136)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:137
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:133](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L133)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:134
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:143](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L143)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:144
 
 ___
 
@@ -129,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:132](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L132)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:133
 
 ___
 
@@ -139,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:130](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L130)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:131
 
 ___
 
@@ -149,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:129](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L129)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:130
 
 ___
 
@@ -159,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:142](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L142)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:143
 
 ___
 
@@ -169,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:137](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L137)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:138
 
 ___
 
@@ -179,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:140](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L140)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:141
 
 ___
 
@@ -189,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:135](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L135)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:136
 
 ___
 
@@ -199,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:134](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L134)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:135
 
 ___
 
@@ -223,7 +224,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:144](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L144)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:145
 
 ## Methods
 
@@ -245,7 +246,7 @@ invoking the ArmFailSafe command.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:428](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L428)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:445
 
 ___
 
@@ -270,7 +271,7 @@ the Commissionee using the AddTrustedRootCertificate and AddNOC commands.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:589](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L589)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:633
 
 ___
 
@@ -290,7 +291,7 @@ the commissioning process.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:961](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L961)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:1040
 
 ___
 
@@ -310,7 +311,7 @@ its desired access control policies.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:627](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L627)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:680
 
 ___
 
@@ -324,7 +325,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:799](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L799)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:864
 
 ___
 
@@ -338,7 +339,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:678](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L678)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:731
 
 ___
 
@@ -359,7 +360,7 @@ The regulatory information is configured using SetRegulatoryConfig (see Section 
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:460](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L460)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:489
 
 ___
 
@@ -377,7 +378,7 @@ Commissioner SHALL establish the authenticity of the Commissionee as a certified
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:545](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L545)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:580
 
 ___
 
@@ -400,7 +401,7 @@ Helper method to check for errorCode/debugTest responses and throw error on fail
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:343](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L343)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:360
 
 ___
 
@@ -419,7 +420,7 @@ action is allowed to take 30s at minimum based on specs)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:278](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L278)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:279
 
 ___
 
@@ -453,7 +454,7 @@ Helper method to create ClusterClients. If not feature specific and for the Root
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:153](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L153)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:154
 
 ___
 
@@ -474,7 +475,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:338](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L338)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:355
 
 ___
 
@@ -490,7 +491,7 @@ Initial Step to receive some common data used by other steps
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:356](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L356)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:373
 
 ___
 
@@ -506,7 +507,7 @@ Initialize commissioning steps and add them in the default order
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:184](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L184)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:185
 
 ___
 
@@ -527,7 +528,21 @@ the Commissioner itself, or another Node to which the Commissioner has delegated
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:942](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L942)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:1021
+
+___
+
+### resetFailsafeTimer
+
+▸ `Private` **resetFailsafeTimer**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/protocol/ControllerCommissioner.ts:469
 
 ___
 
@@ -548,7 +563,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:334](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L334)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:351
 
 ___
 
@@ -562,7 +577,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:327](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L327)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:344
 
 ___
 
@@ -583,7 +598,7 @@ command (see Section 11.16.9.1, “SetUtcTime Command”) while timezone and DST
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:526](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L526)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:561
 
 ___
 
@@ -608,4 +623,4 @@ command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissi
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:648](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L648)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:701

@@ -6,7 +6,7 @@
 
 ### Namespaces
 
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject&quot;](internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject&quot;](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 - [FabricIndex](internal_.FabricIndex.md)
 - [NodeId](internal_.NodeId.md)
 
@@ -14,10 +14,12 @@
 
 - [AccessLevel](../enums/internal_.AccessLevel.md)
 - [BitRangeType](../enums/internal_.BitRangeType.md)
+- [CommissioningWindowStatus](../enums/internal_.CommissioningWindowStatus.md)
 - [CurveType](../enums/internal_.CurveType.md)
 - [DeviceClasses](../enums/internal_.DeviceClasses.md)
 - [EventPriority](../enums/internal_.EventPriority.md)
 - [KeyType](../enums/internal_.KeyType.md)
+- [ProtocolStatusCode](../enums/internal_.ProtocolStatusCode.md)
 - [RegulatoryLocationType](../enums/internal_.RegulatoryLocationType.md)
 - [SessionType](../enums/internal_.SessionType.md)
 - [StatusCode](../enums/internal_.StatusCode.md)
@@ -60,7 +62,9 @@
 - [ExchangeManager](../classes/internal_.ExchangeManager.md)
 - [ExchangeProvider](../classes/internal_.ExchangeProvider.md)
 - [Fabric](../classes/internal_.Fabric.md)
+- [FabricBuilder](../classes/internal_.FabricBuilder.md)
 - [FabricScopedAttributeServer](../classes/internal_.FabricScopedAttributeServer.md)
+- [FailSafeManager](../classes/internal_.FailSafeManager.md)
 - [FixedAttributeServer](../classes/internal_.FixedAttributeServer.md)
 - [InteractionClient](../classes/internal_.InteractionClient.md)
 - [InteractionEndpointStructure](../classes/internal_.InteractionEndpointStructure.md)
@@ -72,8 +76,11 @@
 - [MessageCounter](../classes/internal_.MessageCounter.md)
 - [MessageExchange](../classes/internal_.MessageExchange.md)
 - [NobleBleClient](../classes/internal_.NobleBleClient.md)
+- [PaseServer](../classes/internal_.PaseServer.md)
+- [PaseServerMessenger](../classes/internal_.PaseServerMessenger.md)
 - [RootCertificateManager](../classes/internal_.RootCertificateManager.md)
 - [Schema](../classes/internal_.Schema.md)
+- [SecureChannelMessenger](../classes/internal_.SecureChannelMessenger.md)
 - [SecureSession](../classes/internal_.SecureSession.md)
 - [SessionManager](../classes/internal_.SessionManager.md)
 - [Storage](../classes/internal_.Storage.md)
@@ -93,14 +100,15 @@
 - [Channel](../interfaces/internal_.Channel.md)
 - [Cluster](../interfaces/internal_.Cluster.md)
 - [Command](../interfaces/internal_.Command.md)
+- [CommandOptions](../interfaces/internal_.CommandOptions.md)
 - [CommandPath](../interfaces/internal_.CommandPath.md)
 - [CommandWithPath](../interfaces/internal_.CommandWithPath.md)
 - [Commands](../interfaces/internal_.Commands.md)
-- [DecodedAttributeReportValue](../interfaces/internal_.DecodedAttributeReportValue.md)
 - [DeviceTypeDefinition](../interfaces/internal_.DeviceTypeDefinition.md)
 - [EndpointOptions](../interfaces/internal_.EndpointOptions.md)
 - [Event](../interfaces/internal_.Event.md)
 - [EventData](../interfaces/internal_.EventData.md)
+- [EventOptions](../interfaces/internal_.EventOptions.md)
 - [EventPath](../interfaces/internal_.EventPath.md)
 - [EventStorageData](../interfaces/internal_.EventStorageData.md)
 - [EventWithPath](../interfaces/internal_.EventWithPath.md)
@@ -124,6 +132,7 @@
 - [Packet](../interfaces/internal_.Packet.md)
 - [PacketHeader](../interfaces/internal_.PacketHeader.md)
 - [PayloadHeader](../interfaces/internal_.PayloadHeader.md)
+- [PbkdfParameters](../interfaces/internal_.PbkdfParameters.md)
 - [ProtocolHandler](../interfaces/internal_.ProtocolHandler.md)
 - [ResumptionRecord](../interfaces/internal_.ResumptionRecord.md)
 - [Scanner](../interfaces/internal_.Scanner.md)
@@ -137,9 +146,12 @@
 
 ### Type Aliases
 
+- [AnyAttributeServer](internal_.md#anyattributeserver)
 - [AttributeClients](internal_.md#attributeclients)
+- [AttributeDataPayload](internal_.md#attributedatapayload)
 - [AttributeId](internal_.md#attributeid)
 - [AttributeJsType](internal_.md#attributejstype)
+- [AttributeReportPayload](internal_.md#attributereportpayload)
 - [AttributeServers](internal_.md#attributeservers)
 - [BinaryKeyPair](internal_.md#binarykeypair)
 - [BitField](internal_.md#bitfield)
@@ -171,13 +183,18 @@
 - [CommissioningModeInstanceData](internal_.md#commissioningmodeinstancedata)
 - [CommissioningOptions](internal_.md#commissioningoptions)
 - [ConditionalFeatureList](internal_.md#conditionalfeaturelist)
+- [DataReportPayload](internal_.md#datareportpayload)
+- [DecodedAttributeReportValue](internal_.md#decodedattributereportvalue)
 - [DecodedEventData](internal_.md#decodedeventdata)
 - [DecodedEventReportValue](internal_.md#decodedeventreportvalue)
 - [DeviceTypeId](internal_.md#devicetypeid)
 - [EndpointNumber](internal_.md#endpointnumber)
 - [EventClients](internal_.md#eventclients)
+- [EventDataPayload](internal_.md#eventdatapayload)
 - [EventId](internal_.md#eventid)
+- [EventReportPayload](internal_.md#eventreportpayload)
 - [EventType](internal_.md#eventtype)
+- [ExchangeSendOptions](internal_.md#exchangesendoptions)
 - [FabricId](internal_.md#fabricid)
 - [FabricIndex](internal_.md#fabricindex)
 - [FabricJsonObject](internal_.md#fabricjsonobject)
@@ -231,7 +248,12 @@
 
 - [ByteArray](internal_.md#bytearray-1)
 - [PairingHintBitmap](internal_.md#pairinghintbitmap)
+- [TlvAttributeReport](internal_.md#tlvattributereport)
+- [TlvAttributeReportData](internal_.md#tlvattributereportdata)
+- [TlvDataReport](internal_.md#tlvdatareport)
+- [TlvEventData](internal_.md#tlveventdata)
 - [TlvEventFilter](internal_.md#tlveventfilter)
+- [TlvEventReport](internal_.md#tlveventreport)
 
 ### Functions
 
@@ -431,6 +453,22 @@ matter.js/dist/cjs/tlv/TlvCodec.d.ts:19
 
 ## Type Aliases
 
+### AnyAttributeServer
+
+Ƭ **AnyAttributeServer**<`T`\>: [`AttributeServer`](../classes/internal_.AttributeServer.md)<`T`\> \| [`FabricScopedAttributeServer`](../classes/internal_.FabricScopedAttributeServer.md)<`T`\> \| [`FixedAttributeServer`](../classes/internal_.FixedAttributeServer.md)<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:22
+
+___
+
 ### AttributeClients
 
 Ƭ **AttributeClients**<`F`, `A`\>: [`Merge`](internal_.md#merge)<[`Merge`](internal_.md#merge)<{ [P in MandatoryAttributeNames<A\>]: AttributeClient<AttributeJsType<A[P]\>\> }, { [P in OptionalAttributeNames<A\>]: AttributeClient<AttributeJsType<A[P]\> \| undefined\> }\>, { [P in GlobalAttributeNames<F\>]: AttributeClient<AttributeJsType<GlobalAttributes<F\>[P]\>\> }\>
@@ -445,6 +483,18 @@ matter.js/dist/cjs/tlv/TlvCodec.d.ts:19
 #### Defined in
 
 matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:19
+
+___
+
+### AttributeDataPayload
+
+Ƭ **AttributeDataPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvAttributeReportData`](internal_.md#tlvattributereportdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`any`\>  }
+
+Type for TlvAttributeReportData where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:12
 
 ___
 
@@ -478,7 +528,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:82
+matter.js/dist/cjs/cluster/Cluster.d.ts:83
+
+___
+
+### AttributeReportPayload
+
+Ƭ **AttributeReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvAttributeReport`](internal_.md#tlvattributereport)\>, ``"attributeData"``\> & { `attributeData?`: [`AttributeDataPayload`](internal_.md#attributedatapayload)  }
+
+Type for TlvAttributeReport where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:8
 
 ___
 
@@ -702,7 +764,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:33
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:43
 
 ___
 
@@ -718,7 +780,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:50
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:60
 
 ___
 
@@ -734,7 +796,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:44
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:54
 
 ___
 
@@ -750,7 +812,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:47
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:57
 
 ___
 
@@ -766,7 +828,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:56
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:66
 
 ___
 
@@ -782,7 +844,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:62
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:72
 
 ___
 
@@ -798,7 +860,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:59
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:69
 
 ___
 
@@ -814,7 +876,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:36
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:46
 
 ___
 
@@ -835,7 +897,7 @@ Strongly typed interface of a cluster client
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:67
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:77
 
 ___
 
@@ -871,7 +933,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:142
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:149
 
 ___
 
@@ -905,7 +967,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:53
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:63
 
 ___
 
@@ -945,7 +1007,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+matter-node-ble.js/src/ble/BleScanner.ts:30
 
 ___
 
@@ -1046,6 +1108,49 @@ ___
 #### Defined in
 
 matter.js/dist/cjs/cluster/Cluster.d.ts:24
+
+___
+
+### DataReportPayload
+
+Ƭ **DataReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvDataReport`](internal_.md#tlvdatareport)\>, ``"attributeReports"`` \| ``"eventReports"``\> & { `attributeReportsPayload?`: [`AttributeReportPayload`](internal_.md#attributereportpayload)[] ; `eventReportsPayload?`: [`EventReportPayload`](internal_.md#eventreportpayload)[]  }
+
+Type for TlvDataReport where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:26
+
+___
+
+### DecodedAttributeReportValue
+
+Ƭ **DecodedAttributeReportValue**<`T`\>: `Object`
+
+Represents a fully qualified and decoded attribute value from a received DataReport
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `path` | { `attributeId`: [`AttributeId`](internal_.md#attributeid) ; `attributeName`: `string` ; `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber) ; `nodeId?`: [`NodeId`](internal_.md#nodeid)  } |
+| `path.attributeId` | [`AttributeId`](internal_.md#attributeid) |
+| `path.attributeName` | `string` |
+| `path.clusterId` | [`ClusterId`](internal_.md#clusterid) |
+| `path.endpointId` | [`EndpointNumber`](internal_.md#endpointnumber) |
+| `path.nodeId?` | [`NodeId`](internal_.md#nodeid) |
+| `value` | `T` |
+| `version` | `number` |
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:13
 
 ___
 
@@ -1157,6 +1262,18 @@ matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:26
 
 ___
 
+### EventDataPayload
+
+Ƭ **EventDataPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventData`](internal_.md#tlveventdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`any`\>  }
+
+Type for TlvEventData where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:21
+
+___
+
 ### EventId
 
 Ƭ **EventId**: [`Branded`](internal_.md#branded)<`number`, ``"EventId"``\>
@@ -1175,6 +1292,18 @@ matter.js/dist/cjs/datatype/EventId.d.ts:13
 
 ___
 
+### EventReportPayload
+
+Ƭ **EventReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventReport`](internal_.md#tlveventreport)\>, ``"eventData"``\> & { `eventData?`: [`EventDataPayload`](internal_.md#eventdatapayload)  }
+
+Type for TlvEventReport where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:17
+
+___
+
 ### EventType
 
 Ƭ **EventType**<`T`\>: `T` extends [`OptionalEvent`](internal_.md#optionalevent)<infer EventT, `any`\> ? `EventT` : `T` extends [`Event`](internal_.md#event)<infer EventT, `any`\> ? `EventT` : `never`
@@ -1187,7 +1316,25 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:178
+matter.js/dist/cjs/cluster/Cluster.d.ts:194
+
+___
+
+### ExchangeSendOptions
+
+Ƭ **ExchangeSendOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `expectAckOnly?` | `boolean` | The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned then this is handled as error. |
+| `minimumResponseTimeoutMs?` | `number` | Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four resubmissions are always done regardless of what is specified here. The logic will check if the timeout is reached after each resubmission, so it is not checked exact at the given timeout. |
+| `requiresAck?` | `boolean` | Allows to specify if the send message requires to be acknowledged by the receiver or not. |
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/MessageExchange.d.ts:18
 
 ___
 
@@ -1277,7 +1424,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:102
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:109
 
 ___
 
@@ -1293,7 +1440,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:108
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:115
 
 ___
 
@@ -1309,7 +1456,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:32
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:42
 
 ___
 
@@ -1325,7 +1472,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:119
+matter.js/dist/cjs/cluster/Cluster.d.ts:121
 
 ___
 
@@ -1335,7 +1482,7 @@ ___
 
 **`See`**
 
-MatterCoreSpecificationV1_0 § 7.13
+MatterCoreSpecificationV1_1 § 7.13
 
 #### Type parameters
 
@@ -1356,9 +1503,9 @@ MatterCoreSpecificationV1_0 § 7.13
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:195
+matter.js/dist/cjs/cluster/Cluster.d.ts:211
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:209
+matter.js/dist/cjs/cluster/Cluster.d.ts:225
 
 ___
 
@@ -1399,7 +1546,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:113
+matter.js/dist/cjs/cluster/Cluster.d.ts:115
 
 ___
 
@@ -1433,7 +1580,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:179
+matter.js/dist/cjs/cluster/Cluster.d.ts:195
 
 ___
 
@@ -1507,7 +1654,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:105
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:112
 
 ___
 
@@ -1523,7 +1670,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:116
+matter.js/dist/cjs/cluster/Cluster.d.ts:118
 
 ___
 
@@ -1555,7 +1702,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:182
+matter.js/dist/cjs/cluster/Cluster.d.ts:198
 
 ___
 
@@ -1606,7 +1753,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:138
+matter.js/dist/cjs/cluster/Cluster.d.ts:142
 
 ___
 
@@ -1622,7 +1769,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:137
+matter.js/dist/cjs/cluster/Cluster.d.ts:141
 
 ___
 
@@ -1688,7 +1835,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:109
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:116
 
 ___
 
@@ -1704,7 +1851,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:116
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:123
 
 ___
 
@@ -1720,7 +1867,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:121
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:128
 
 ___
 
@@ -1736,13 +1883,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:131
+matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:138
 
 ___
 
 ### SignatureFromCommandSpec
 
-Ƭ **SignatureFromCommandSpec**<`C`\>: (`request`: [`RequestType`](internal_.md#requesttype)<`C`\>) => `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
+Ƭ **SignatureFromCommandSpec**<`C`\>: (`request`: [`RequestType`](internal_.md#requesttype)<`C`\>, `options?`: { `asTimedRequest?`: `boolean` ; `timedRequestTimeoutMs?`: `number` ; `useExtendedFailSafeMessageResponseTimeout?`: `boolean`  }) => `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
 
 #### Type parameters
 
@@ -1752,13 +1899,17 @@ ___
 
 #### Type declaration
 
-▸ (`request`): `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
+▸ (`request`, `options?`): `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `request` | [`RequestType`](internal_.md#requesttype)<`C`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`RequestType`](internal_.md#requesttype)<`C`\> | - |
+| `options?` | `Object` | - |
+| `options.asTimedRequest?` | `boolean` | Send this command as a timed request also when not required. Default timeout are 10 seconds. |
+| `options.timedRequestTimeoutMs?` | `number` | Override the request timeout when the command is sent as times request. Default are 10s. |
+| `options.useExtendedFailSafeMessageResponseTimeout?` | `boolean` | Use the extended fail-safe message response timeout of 30 seconds. Use this for all commands executed during an activated FailSafe context! |
 
 ##### Returns
 
@@ -2043,7 +2194,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:39
+matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:49
 
 ## Variables
 
@@ -2094,9 +2245,61 @@ matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:9
 
 ___
 
+### TlvAttributeReport
+
+• `Const` **TlvAttributeReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+
+**`See`**
+
+MatterCoreSpecificationV1_0, section 10.5.5
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:137
+
+___
+
+### TlvAttributeReportData
+
+• `Const` **TlvAttributeReportData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:124
+
+___
+
+### TlvDataReport
+
+• `Const` **TlvDataReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+
+**`See`**
+
+MatterCoreSpecificationV1_0, section 10.6.3
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:298
+
+___
+
+### TlvEventData
+
+• `Const` **TlvEventData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+
+**`See`**
+
+MatterCoreSpecificationV1_0, section 10.5.9
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:55
+
+___
+
 ### TlvEventFilter
 
-• `Const` **TlvEventFilter**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventFilter**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2105,6 +2308,20 @@ MatterCoreSpecificationV1_0, section 10.5.6
 #### Defined in
 
 matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:72
+
+___
+
+### TlvEventReport
+
+• `Const` **TlvEventReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+
+**`See`**
+
+MatterCoreSpecificationV1_0, section 10.5.10
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:180
 
 ## Functions
 
@@ -2134,7 +2351,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:72
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:95
+matter.js/dist/cjs/cluster/Cluster.d.ts:97
 
 ___
 
@@ -2290,7 +2507,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:221
+matter.js/dist/cjs/cluster/Cluster.d.ts:237
 
 ___
 
@@ -2316,7 +2533,7 @@ ___
 
 ### Command
 
-▸ **Command**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`): [`Command`](internal_.md#command)<`RequestT`, `ResponseT`, `F`\>
+▸ **Command**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`Command`](internal_.md#command)<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -2334,6 +2551,7 @@ ___
 | `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\> |
 | `responseId` | `number` |
 | `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\> |
+| `«destructured»` | [`CommandOptions`](../interfaces/internal_.CommandOptions.md) |
 
 #### Returns
 
@@ -2341,7 +2559,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:143
+matter.js/dist/cjs/cluster/Cluster.d.ts:151
 
 ___
 
@@ -2437,7 +2655,7 @@ ___
 
 ### Event
 
-▸ **Event**<`T`, `F`\>(`id`, `priority`, `schema`): [`Event`](internal_.md#event)<`T`, `F`\>
+▸ **Event**<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`Event`](internal_.md#event)<`T`, `F`\>
 
 #### Type parameters
 
@@ -2453,6 +2671,7 @@ ___
 | `id` | `number` |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
 | `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
+| `«destructured»` | [`EventOptions`](../interfaces/internal_.EventOptions.md) |
 
 #### Returns
 
@@ -2460,7 +2679,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:174
+matter.js/dist/cjs/cluster/Cluster.d.ts:190
 
 ___
 
@@ -2550,7 +2769,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:101
+matter.js/dist/cjs/cluster/Cluster.d.ts:103
 
 ___
 
@@ -2580,7 +2799,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:105
+matter.js/dist/cjs/cluster/Cluster.d.ts:107
 
 ___
 
@@ -2606,7 +2825,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:209
+matter.js/dist/cjs/cluster/Cluster.d.ts:225
 
 ___
 
@@ -2726,13 +2945,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:96
+matter.js/dist/cjs/cluster/Cluster.d.ts:98
 
 ___
 
 ### OptionalCommand
 
-▸ **OptionalCommand**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`): [`OptionalCommand`](internal_.md#optionalcommand)<`RequestT`, `ResponseT`, `F`\>
+▸ **OptionalCommand**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`OptionalCommand`](internal_.md#optionalcommand)<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -2750,6 +2969,7 @@ ___
 | `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\> |
 | `responseId` | `number` |
 | `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\> |
+| `«destructured»` | [`CommandOptions`](../interfaces/internal_.CommandOptions.md) |
 
 #### Returns
 
@@ -2757,13 +2977,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:144
+matter.js/dist/cjs/cluster/Cluster.d.ts:152
 
 ___
 
 ### OptionalEvent
 
-▸ **OptionalEvent**<`T`, `F`\>(`id`, `priority`, `schema`): [`OptionalEvent`](internal_.md#optionalevent)<`T`, `F`\>
+▸ **OptionalEvent**<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`OptionalEvent`](internal_.md#optionalevent)<`T`, `F`\>
 
 #### Type parameters
 
@@ -2779,6 +2999,7 @@ ___
 | `id` | `number` |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
 | `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
+| `«destructured»` | [`EventOptions`](../interfaces/internal_.EventOptions.md) |
 
 #### Returns
 
@@ -2786,7 +3007,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:175
+matter.js/dist/cjs/cluster/Cluster.d.ts:191
 
 ___
 
@@ -2816,7 +3037,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:107
+matter.js/dist/cjs/cluster/Cluster.d.ts:109
 
 ___
 
@@ -2846,7 +3067,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:99
+matter.js/dist/cjs/cluster/Cluster.d.ts:101
 
 ___
 
@@ -2876,7 +3097,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:103
+matter.js/dist/cjs/cluster/Cluster.d.ts:105
 
 ___
 
@@ -2926,7 +3147,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:98
+matter.js/dist/cjs/cluster/Cluster.d.ts:100
 
 ___
 
@@ -2956,4 +3177,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:102
+matter.js/dist/cjs/cluster/Cluster.d.ts:104

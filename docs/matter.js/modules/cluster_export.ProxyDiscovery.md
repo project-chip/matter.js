@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{}, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `proxyDiscoverRequest`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `proxyDiscoverRequest`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``67`` = 0x43; `name`: ``"ProxyDiscovery"`` = "ProxyDiscovery"; `revision`: ``1`` = 1 }\>
 
 Proxy Discovery
 
@@ -28,4 +28,4 @@ Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the ove
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L23)
+packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:24

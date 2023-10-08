@@ -17,11 +17,14 @@
 ### Properties
 
 - [L](session_export.PaseServer.md#l)
+- [pairingErrors](session_export.PaseServer.md#pairingerrors)
+- [pairingTimer](session_export.PaseServer.md#pairingtimer)
 - [pbkdfParameters](session_export.PaseServer.md#pbkdfparameters)
 - [w0](session_export.PaseServer.md#w0)
 
 ### Methods
 
+- [cancelPairing](session_export.PaseServer.md#cancelpairing)
 - [getId](session_export.PaseServer.md#getid)
 - [handlePairingRequest](session_export.PaseServer.md#handlepairingrequest)
 - [onNewExchange](session_export.PaseServer.md#onnewexchange)
@@ -44,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L34)
+packages/matter.js/src/session/pase/PaseServer.ts:44
 
 ## Properties
 
@@ -54,7 +57,27 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L36)
+packages/matter.js/src/session/pase/PaseServer.ts:46
+
+___
+
+### pairingErrors
+
+• `Private` **pairingErrors**: `number` = `0`
+
+#### Defined in
+
+packages/matter.js/src/session/pase/PaseServer.ts:31
+
+___
+
+### pairingTimer
+
+• `Private` **pairingTimer**: `undefined` \| [`Timer`](../interfaces/time_export.Timer.md)
+
+#### Defined in
+
+packages/matter.js/src/session/pase/PaseServer.ts:30
 
 ___
 
@@ -64,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L37)
+packages/matter.js/src/session/pase/PaseServer.ts:47
 
 ___
 
@@ -74,9 +97,30 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L35)
+packages/matter.js/src/session/pase/PaseServer.ts:45
 
 ## Methods
+
+### cancelPairing
+
+▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `messenger` | [`PaseServerMessenger`](session_export.PaseServerMessenger.md) | `undefined` |
+| `sendError` | `boolean` | `true` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/session/pase/PaseServer.ts:149
+
+___
 
 ### getId
 
@@ -92,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L40)
+packages/matter.js/src/session/pase/PaseServer.ts:50
 
 ___
 
@@ -113,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L54)
+packages/matter.js/src/session/pase/PaseServer.ts:74
 
 ___
 
@@ -137,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L44)
+packages/matter.js/src/session/pase/PaseServer.ts:54
 
 ___
 
@@ -158,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L23)
+packages/matter.js/src/session/pase/PaseServer.ts:33
 
 ___
 
@@ -179,4 +223,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/pase/PaseServer.ts#L28)
+packages/matter.js/src/session/pase/PaseServer.ts:38

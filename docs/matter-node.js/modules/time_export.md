@@ -7,7 +7,6 @@
 ### Classes
 
 - [Time](../classes/time_export.Time.md)
-- [TimeFake](../classes/time_export.TimeFake.md)
 - [TimeNode](../classes/time_export.TimeNode.md)
 
 ### Interfaces
@@ -22,15 +21,15 @@
 
 ### TimerCallback
 
-Ƭ **TimerCallback**: () => `Promise`<`any`\> \| `any`
+Ƭ **TimerCallback**: () => `any`
 
 #### Type declaration
 
-▸ (): `Promise`<`any`\> \| `any`
+▸ (): `any`
 
 ##### Returns
 
-`Promise`<`any`\> \| `any`
+`any`
 
 **`License`**
 
@@ -39,4 +38,4 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:6
+packages/matter.js/dist/esm/time/Time.d.ts:6

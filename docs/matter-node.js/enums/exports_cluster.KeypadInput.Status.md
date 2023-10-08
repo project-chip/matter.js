@@ -26,7 +26,7 @@ Command failed: Requested key code is invalid in the context of the responder’
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:126
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:127
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:118
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:119
 
 ___
 
@@ -50,4 +50,4 @@ Command failed: Key code is not supported.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:122
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:123

@@ -40,26 +40,26 @@
 | Name | Type |
 | :------ | :------ |
 | `network` | [`Network`](net_export.Network.md) |
-| `broadcastAddressIpv4` | `string` |
+| `broadcastAddressIpv4` | `undefined` \| `string` |
 | `broadcastAddressIpv6` | `string` |
 | `broadcastPort` | `number` |
-| `serverIpv4` | [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
+| `serverIpv4` | `undefined` \| [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
 | `serverIpv6` | [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
 | `netInterface` | `undefined` \| `string` |
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L48)
+packages/matter.js/src/net/UdpMulticastServer.ts:50
 
 ## Properties
 
 ### broadcastAddressIpv4
 
-• `Private` `Readonly` **broadcastAddressIpv4**: `string`
+• `Private` `Readonly` **broadcastAddressIpv4**: `undefined` \| `string`
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L50)
+packages/matter.js/src/net/UdpMulticastServer.ts:52
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L51)
+packages/matter.js/src/net/UdpMulticastServer.ts:53
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L42)
+packages/matter.js/src/net/UdpMulticastServer.ts:44
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L52)
+packages/matter.js/src/net/UdpMulticastServer.ts:54
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L55)
+packages/matter.js/src/net/UdpMulticastServer.ts:57
 
 ___
 
@@ -109,17 +109,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:49](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L49)
+packages/matter.js/src/net/UdpMulticastServer.ts:51
 
 ___
 
 ### serverIpv4
 
-• `Private` `Readonly` **serverIpv4**: [`UdpChannel`](../interfaces/net_export.UdpChannel.md)
+• `Private` `Readonly` **serverIpv4**: `undefined` \| [`UdpChannel`](../interfaces/net_export.UdpChannel.md)
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L53)
+packages/matter.js/src/net/UdpMulticastServer.ts:55
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L54)
+packages/matter.js/src/net/UdpMulticastServer.ts:56
 
 ## Methods
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:101](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L101)
+packages/matter.js/src/net/UdpMulticastServer.ts:116
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:93](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L93)
+packages/matter.js/src/net/UdpMulticastServer.ts:108
 
 ___
 
@@ -184,13 +184,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L58)
+packages/matter.js/src/net/UdpMulticastServer.ts:60
 
 ___
 
 ### send
 
-▸ **send**(`message`, `netInterface?`): `Promise`<`void`\>
+▸ **send**(`message`, `netInterface?`, `uniCastTarget?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -198,6 +198,7 @@ ___
 | :------ | :------ |
 | `message` | `Uint8Array` |
 | `netInterface?` | `string` |
+| `uniCastTarget?` | `string` |
 
 #### Returns
 
@@ -205,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:67](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L67)
+packages/matter.js/src/net/UdpMulticastServer.ts:69
 
 ___
 
@@ -225,4 +226,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpMulticastServer.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/UdpMulticastServer.ts#L24)
+packages/matter.js/src/net/UdpMulticastServer.ts:24

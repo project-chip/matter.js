@@ -32,7 +32,7 @@ Absolute positioning is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:362](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L362)
+packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:352
 
 ___
 
@@ -46,7 +46,7 @@ Lift Control and behavior for lifting/sliding window coverings
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:341](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L341)
+packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:331
 
 ___
 
@@ -60,7 +60,7 @@ Position Aware lift control is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:355](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L355)
+packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:345
 
 ___
 
@@ -74,7 +74,7 @@ Position Aware tilt control is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:369](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L369)
+packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:359
 
 ___
 
@@ -88,4 +88,4 @@ Tilt Control and behavior for tilting window coverings
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:348](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L348)
+packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:338

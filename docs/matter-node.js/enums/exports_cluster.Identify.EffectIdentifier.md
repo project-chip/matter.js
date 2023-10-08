@@ -31,7 +31,7 @@ e.g., Light is turned on/off once.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:56
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:57
 
 ___
 
@@ -43,7 +43,7 @@ e.g., Light is turned on/off over 1 second and repeated 15 times.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:60
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:61
 
 ___
 
@@ -56,7 +56,7 @@ e.g., Colored light turns orange for 8 seconds; non-colored light switches to th
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:69
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:70
 
 ___
 
@@ -69,7 +69,7 @@ above), first complete the current 1s breathe effect and then terminate the effe
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:75
 
 ___
 
@@ -81,7 +81,7 @@ e.g., Colored light turns green for 1 second; non-colored light flashes twice.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:64
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:65
 
 ___
 
@@ -93,4 +93,4 @@ Terminate the effect as soon as possible.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:79

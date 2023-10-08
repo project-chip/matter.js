@@ -24,7 +24,7 @@
 
 ### pair
 
-▸ **pair**(`client`, `exchange`, `setupPin`): `Promise`<`any`\>
+▸ **pair**(`client`, `exchange`, `setupPin`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -36,8 +36,8 @@
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseClient.d.ts:9
+packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:9

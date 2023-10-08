@@ -47,6 +47,7 @@
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH](crypto_export.md#crypto_symmetric_key_length)
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH\_BITS](crypto_export.md#crypto_symmetric_key_length_bits)
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH\_BYTES](crypto_export.md#crypto_symmetric_key_length_bytes)
+- [ec](crypto_export.md#ec)
 
 ### Functions
 
@@ -70,7 +71,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Key.ts#L60)
+packages/matter.js/src/crypto/Key.ts:60
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L20)
+packages/matter.js/src/crypto/Crypto.ts:20
 
 ## Variables
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L19)
+packages/matter.js/src/crypto/CryptoConstants.ts:19
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L20)
+packages/matter.js/src/crypto/CryptoConstants.ts:20
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L21)
+packages/matter.js/src/crypto/CryptoConstants.ts:21
 
 ___
 
@@ -120,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L18)
+packages/matter.js/src/crypto/Crypto.ts:18
 
 ___
 
@@ -130,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L16)
+packages/matter.js/src/crypto/Crypto.ts:16
 
 ___
 
@@ -140,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L17)
+packages/matter.js/src/crypto/Crypto.ts:17
 
 ___
 
@@ -150,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L14)
+packages/matter.js/src/crypto/Crypto.ts:14
 
 ___
 
@@ -164,7 +165,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L10)
+packages/matter.js/src/crypto/CryptoConstants.ts:10
 
 ___
 
@@ -174,7 +175,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L11)
+packages/matter.js/src/crypto/CryptoConstants.ts:11
 
 ___
 
@@ -184,7 +185,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L15)
+packages/matter.js/src/crypto/Crypto.ts:15
 
 ___
 
@@ -194,7 +195,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L15)
+packages/matter.js/src/crypto/CryptoConstants.ts:15
 
 ___
 
@@ -208,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L14)
+packages/matter.js/src/crypto/CryptoConstants.ts:14
 
 ___
 
@@ -218,7 +219,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L12)
+packages/matter.js/src/crypto/CryptoConstants.ts:12
 
 ___
 
@@ -228,7 +229,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L13)
+packages/matter.js/src/crypto/Crypto.ts:13
 
 ___
 
@@ -238,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Crypto.ts#L19)
+packages/matter.js/src/crypto/Crypto.ts:19
 
 ___
 
@@ -252,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L17)
+packages/matter.js/src/crypto/CryptoConstants.ts:17
 
 ___
 
@@ -262,7 +263,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/CryptoConstants.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/CryptoConstants.ts#L18)
+packages/matter.js/src/crypto/CryptoConstants.ts:18
+
+___
+
+### ec
+
+• **ec**: typeof `ec`
+
+#### Defined in
+
+packages/matter.js/src/crypto/Crypto.ts:125
 
 ## Functions
 
@@ -284,7 +295,7 @@ Generic key factory.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:452](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Key.ts#L452)
+packages/matter.js/src/crypto/Key.ts:452
 
 ___
 
@@ -307,7 +318,7 @@ Private key factory.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:556](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Key.ts#L556)
+packages/matter.js/src/crypto/Key.ts:556
 
 ___
 
@@ -330,7 +341,7 @@ Public key factory.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:575](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Key.ts#L575)
+packages/matter.js/src/crypto/Key.ts:575
 
 ___
 
@@ -353,4 +364,4 @@ Symmetric key factory.
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Key.ts:586](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/crypto/Key.ts#L586)
+packages/matter.js/src/crypto/Key.ts:586

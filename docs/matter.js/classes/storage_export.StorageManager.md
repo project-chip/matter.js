@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L13)
+packages/matter.js/src/storage/StorageManager.ts:13
 
 ## Properties
 
@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L11)
+packages/matter.js/src/storage/StorageManager.ts:11
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L13)
+packages/matter.js/src/storage/StorageManager.ts:13
 
 ## Methods
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L20)
+packages/matter.js/src/storage/StorageManager.ts:20
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L24)
+packages/matter.js/src/storage/StorageManager.ts:24
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageManager.ts#L15)
+packages/matter.js/src/storage/StorageManager.ts:15

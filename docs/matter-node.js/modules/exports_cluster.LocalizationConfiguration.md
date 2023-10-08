@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `activeLocale`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`[], `any`\>  } ; `id`: ``43`` ; `name`: ``"LocalizationConfiguration"`` ; `revision`: ``1``  }\>
 
 Localization Configuration
 
@@ -32,4 +32,4 @@ MatterCoreSpecificationV1_1 § 11.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/LocalizationConfigurationCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/LocalizationConfigurationCluster.d.ts:23

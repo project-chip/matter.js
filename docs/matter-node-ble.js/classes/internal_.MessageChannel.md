@@ -28,6 +28,7 @@ SPDX-License-Identifier: Apache-2.0
 ### Properties
 
 - [channel](internal_.MessageChannel.md#channel)
+- [closeCallback](internal_.MessageChannel.md#closecallback)
 - [session](internal_.MessageChannel.md#session)
 
 ### Accessors
@@ -43,7 +44,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new MessageChannel**<`ContextT`\>(`channel`, `session`)
+• **new MessageChannel**<`ContextT`\>(`channel`, `session`, `closeCallback?`)
 
 #### Type parameters
 
@@ -57,10 +58,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/internal_.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/internal_.Session.md)<`ContextT`\> |
+| `closeCallback?` | () => `void` |
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
+matter.js/dist/cjs/protocol/ExchangeManager.d.ts:22
 
 ## Properties
 
@@ -71,6 +73,16 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
 #### Defined in
 
 matter.js/dist/cjs/protocol/ExchangeManager.d.ts:19
+
+___
+
+### closeCallback
+
+• `Private` `Optional` `Readonly` **closeCallback**: `any`
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
 
 ___
 
@@ -98,7 +110,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
+matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
 
 ## Methods
 
@@ -116,7 +128,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
+matter.js/dist/cjs/protocol/ExchangeManager.d.ts:25
 
 ___
 
@@ -140,4 +152,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:22
+matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23

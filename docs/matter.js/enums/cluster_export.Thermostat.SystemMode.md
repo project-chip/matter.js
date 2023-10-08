@@ -34,7 +34,7 @@ Demand is generated for either Cooling or Heating, as required
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:114](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L114)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:104
 
 ___
 
@@ -46,7 +46,7 @@ Demand is only generated for Cooling
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L119)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:109
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:137](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L137)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:127
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:129](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L129)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:119
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:136](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L136)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:126
 
 ___
 
@@ -90,7 +90,7 @@ Demand is only generated for Heating
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:124](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L124)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:114
 
 ___
 
@@ -102,7 +102,7 @@ The Thermostat does not generate demand for Cooling or Heating
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L109)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:99
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:134](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L134)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:124
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:138](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L138)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:128

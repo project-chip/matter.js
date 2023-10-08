@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:100
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:127
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:101
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:128
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:102
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:129
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:87
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:114
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:93
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:120
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:92
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:119
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:99
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:126
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:85
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:112
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:113
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:140
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:86
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:113
 
 ___
 
@@ -157,4 +157,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:94
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:121

@@ -33,7 +33,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Stream.d.ts:10
+packages/matter.js/dist/esm/util/Stream.d.ts:12
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Stream.d.ts:11
+packages/matter.js/dist/esm/util/Stream.d.ts:13

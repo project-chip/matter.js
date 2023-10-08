@@ -15,11 +15,15 @@ by reusing MDNS scanner and broadcaster
 
 ### Properties
 
-- [mdnsAnnounceInterface](export.MatterServer.md#mdnsannounceinterface)
 - [mdnsBroadcaster](export.MatterServer.md#mdnsbroadcaster)
 - [mdnsScanner](export.MatterServer.md#mdnsscanner)
 - [nodes](export.MatterServer.md#nodes)
+- [options](export.MatterServer.md#options)
 - [storageManager](export.MatterServer.md#storagemanager)
+
+### Accessors
+
+- [ipv4Disabled](export.MatterServer.md#ipv4disabled)
 
 ### Methods
 
@@ -33,7 +37,7 @@ by reusing MDNS scanner and broadcaster
 
 ### constructor
 
-• **new MatterServer**(`storageManager`, `mdnsAnnounceInterface?`)
+• **new MatterServer**(`storageManager`, `options?`)
 
 Create a new Matter server instance
 
@@ -42,26 +46,13 @@ Create a new Matter server instance
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `storageManager` | [`StorageManager`](storage_export.StorageManager.md) | Storage manager instance to use for all nodes |
-| `mdnsAnnounceInterface?` | `string` | Optional interface to use for MDNS announcements. If not provided announcements will be sent from all network interfaces |
+| `options?` | [`MatterServerOptions`](../modules/export.md#matterserveroptions) | Optional MatterServer options |
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L42)
+packages/matter.js/src/MatterServer.ts:51
 
 ## Properties
-
-### mdnsAnnounceInterface
-
-• `Private` `Optional` **mdnsAnnounceInterface**: `string`
-
-Optional interface to use for MDNS announcements. If not provided announcements will
-                             be sent from all network interfaces
-
-#### Defined in
-
-[packages/matter.js/src/MatterServer.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L44)
-
-___
 
 ### mdnsBroadcaster
 
@@ -69,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:33](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L33)
+packages/matter.js/src/MatterServer.ts:43
 
 ___
 
@@ -79,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:32](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L32)
+packages/matter.js/src/MatterServer.ts:42
 
 ___
 
@@ -89,19 +80,45 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L30)
+packages/matter.js/src/MatterServer.ts:40
+
+___
+
+### options
+
+• `Private` `Optional` `Readonly` **options**: [`MatterServerOptions`](../modules/export.md#matterserveroptions)
+
+Optional MatterServer options
+
+#### Defined in
+
+packages/matter.js/src/MatterServer.ts:53
 
 ___
 
 ### storageManager
 
-• `Private` **storageManager**: [`StorageManager`](storage_export.StorageManager.md)
+• `Private` `Readonly` **storageManager**: [`StorageManager`](storage_export.StorageManager.md)
 
 Storage manager instance to use for all nodes
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L43)
+packages/matter.js/src/MatterServer.ts:52
+
+## Accessors
+
+### ipv4Disabled
+
+• `get` **ipv4Disabled**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/src/MatterServer.ts:56
 
 ## Methods
 
@@ -124,7 +141,7 @@ Add a Controller node to the server
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:77](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L77)
+packages/matter.js/src/MatterServer.ts:90
 
 ___
 
@@ -147,7 +164,7 @@ Add a CommissioningServer node to the server
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L53)
+packages/matter.js/src/MatterServer.ts:66
 
 ___
 
@@ -163,7 +180,7 @@ Close the server and all nodes
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:115](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L115)
+packages/matter.js/src/MatterServer.ts:132
 
 ___
 
@@ -183,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:103](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L103)
+packages/matter.js/src/MatterServer.ts:119
 
 ___
 
@@ -200,4 +217,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:89](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L89)
+packages/matter.js/src/MatterServer.ts:102

@@ -40,7 +40,7 @@ Verhoeff algorithm to compute a checksum.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/Verhoeff.d.ts:13
+packages/matter.js/dist/esm/math/Verhoeff.d.ts:13
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/Verhoeff.d.ts:12
+packages/matter.js/dist/esm/math/Verhoeff.d.ts:12
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/Verhoeff.d.ts:14
+packages/matter.js/dist/esm/math/Verhoeff.d.ts:14
 
 ## Methods
 
@@ -80,4 +80,4 @@ packages/matter.js/dist/cjs/math/Verhoeff.d.ts:14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/math/Verhoeff.d.ts:15
+packages/matter.js/dist/esm/math/Verhoeff.d.ts:15

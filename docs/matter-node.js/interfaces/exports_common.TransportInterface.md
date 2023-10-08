@@ -32,7 +32,7 @@ It can not open new connections.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/TransportInterface.d.ts:17
+packages/matter.js/dist/esm/common/TransportInterface.d.ts:17
 
 ___
 
@@ -52,4 +52,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/TransportInterface.d.ts:16
+packages/matter.js/dist/esm/common/TransportInterface.d.ts:16

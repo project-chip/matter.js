@@ -42,7 +42,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.NetworkCommissioning.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `wiFiNetworkInterface`: ``true``  } \| { `threadNetworkInterface`: ``true``  } ? typeof [`WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#wifinetworkinterfaceorthreadnetworkinterfacecomponent) : {} & `SF` extends { `wiFiNetworkInterface`: ``true``  } ? typeof [`WiFiNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#wifinetworkinterfacecomponent) : {} & `SF` extends { `threadNetworkInterface`: ``true``  } ? typeof [`ThreadNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#threadnetworkinterfacecomponent) : {} & `SF` extends { `threadNetworkInterface`: ``true`` ; `wiFiNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``true`` ; `wiFiNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``true`` ; `threadNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``false`` ; `threadNetworkInterface`: ``false`` ; `wiFiNetworkInterface`: ``false``  } ? `never` : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.NetworkCommissioning.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `wiFiNetworkInterface`: ``true``  } \| { `threadNetworkInterface`: ``true``  } ? typeof [`WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#wifinetworkinterfaceorthreadnetworkinterfacecomponent) : {} & `SF` extends { `wiFiNetworkInterface`: ``true``  } ? typeof [`WiFiNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#wifinetworkinterfacecomponent) : {} & `SF` extends { `threadNetworkInterface`: ``true``  } ? typeof [`ThreadNetworkInterfaceComponent`](exports_cluster.NetworkCommissioning.md#threadnetworkinterfacecomponent) : {} & `SF` extends { `threadNetworkInterface`: ``true`` ; `wiFiNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``true`` ; `wiFiNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``true`` ; `threadNetworkInterface`: ``true``  } ? `never` : {} & `SF` extends { `ethernetNetworkInterface`: ``false`` ; `threadNetworkInterface`: ``false`` ; `wiFiNetworkInterface`: ``false``  } ? `never` : {}
 
 #### Type parameters
 
@@ -52,25 +52,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:1508
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1691
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `interfaceEnabled`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `lastConnectErrorValue`: [`Attribute`](exports_cluster.md#attribute)<`number` \| ``null``, `any`\> ; `lastNetworkId`: [`Attribute`](exports_cluster.md#attribute)<`Uint8Array` \| ``null``, `any`\> ; `lastNetworkingStatus`: [`Attribute`](exports_cluster.md#attribute)<[`NetworkCommissioningStatus`](../enums/exports_cluster.NetworkCommissioning.NetworkCommissioningStatus.md) \| ``null``, `any`\> ; `maxNetworks`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `networks`: [`Attribute`](exports_cluster.md#attribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)[], `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `interfaceEnabled`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `lastConnectErrorValue`: [`Attribute`](exports_cluster.md#attribute)<`number` \| ``null``, `any`\> ; `lastNetworkId`: [`Attribute`](exports_cluster.md#attribute)<`Uint8Array` \| ``null``, `any`\> ; `lastNetworkingStatus`: [`Attribute`](exports_cluster.md#attribute)<[`NetworkCommissioningStatus`](../enums/exports_cluster.NetworkCommissioning.NetworkCommissioningStatus.md) \| ``null``, `any`\> ; `maxNetworks`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `networks`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `features`: { `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``49`` ; `name`: ``"NetworkCommissioning"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all NetworkCommissioning clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:604
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:605
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.NetworkCommissioning.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: { `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"NetworkCommissioning"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `interfaceEnabled`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `lastConnectErrorValue`: [`Attribute`](exports_cluster.md#attribute)<`number` \| ``null``, `any`\> ; `lastNetworkId`: [`Attribute`](exports_cluster.md#attribute)<`Uint8Array` \| ``null``, `any`\> ; `lastNetworkingStatus`: [`Attribute`](exports_cluster.md#attribute)<[`NetworkCommissioningStatus`](../enums/exports_cluster.NetworkCommissioning.NetworkCommissioningStatus.md) \| ``null``, `any`\> ; `maxNetworks`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `networks`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `features`: { `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``49`` ; `name`: ``"NetworkCommissioning"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.NetworkCommissioning.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Network Commissioning
 
@@ -97,13 +97,13 @@ MatterCoreSpecificationV1_1 § 11.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:1302
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1316
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `addOrUpdateThreadNetwork`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `addOrUpdateWiFiNetwork`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `connectNetwork`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `removeNetwork`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `reorderNetwork`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `scanNetworks`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\>  }, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](exports_cluster.md#attribute)<`number`, `never`\> ; `connectMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `eventList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](exports_cluster.md#attribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `interfaceEnabled`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `lastConnectErrorValue`: [`Attribute`](exports_cluster.md#attribute)<`number` \| ``null``, `any`\> ; `lastNetworkId`: [`Attribute`](exports_cluster.md#attribute)<`Uint8Array` \| ``null``, `any`\> ; `lastNetworkingStatus`: [`Attribute`](exports_cluster.md#attribute)<[`NetworkCommissioningStatus`](../enums/exports_cluster.NetworkCommissioning.NetworkCommissioningStatus.md) \| ``null``, `any`\> ; `maxNetworks`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `networks`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `scanMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: { `addOrUpdateThreadNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `addOrUpdateWiFiNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `connectNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `removeNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `reorderNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `scanNetworks`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: { `ethernetNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `threadNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wiFiNetworkInterface`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``49`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"NetworkCommissioning"`` ; `revision`: ``1``  }\>
 
 This cluster supports all NetworkCommissioning features. It may support illegal feature combinations.
 
@@ -112,25 +112,25 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:1538
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1721
 
 ___
 
 ### ThreadNetworkInterfaceComponent
 
-• `Const` **ThreadNetworkInterfaceComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `addOrUpdateThreadNetwork`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **ThreadNetworkInterfaceComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `addOrUpdateThreadNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
 
 A NetworkCommissioningCluster supports these elements if it supports feature ThreadNetworkInterface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:1234
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1246
 
 ___
 
 ### TlvAddOrUpdateThreadNetworkRequest
 
-• `Const` **TlvAddOrUpdateThreadNetworkRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAddOrUpdateThreadNetworkRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning addOrUpdateThreadNetwork command
 
@@ -140,13 +140,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:561
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:562
 
 ___
 
 ### TlvAddOrUpdateWiFiNetworkRequest
 
-• `Const` **TlvAddOrUpdateWiFiNetworkRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAddOrUpdateWiFiNetworkRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
 
@@ -156,13 +156,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:512
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:513
 
 ___
 
 ### TlvConnectNetworkRequest
 
-• `Const` **TlvConnectNetworkRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvConnectNetworkRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning connectNetwork command
 
@@ -172,13 +172,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:432
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:433
 
 ___
 
 ### TlvConnectNetworkResponse
 
-• `Const` **TlvConnectNetworkResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvConnectNetworkResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Before generating a ConnectNetworkResponse, the server shall:
 
@@ -217,13 +217,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:470
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:471
 
 ___
 
 ### TlvNetworkConfigResponse
 
-• `Const` **TlvNetworkConfigResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNetworkConfigResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This response command relates status information for some commands which require it as their response command.
 See each individual cluster server command for the situations that may cause a NetworkingStatus different than
@@ -258,13 +258,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:415
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:416
 
 ___
 
 ### TlvNetworkInfoStruct
 
-• `Const` **TlvNetworkInfoStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNetworkInfoStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
 
@@ -274,13 +274,13 @@ MatterCoreSpecificationV1_1 § 11.8.5.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:16
 
 ___
 
 ### TlvRemoveNetworkRequest
 
-• `Const` **TlvRemoveNetworkRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvRemoveNetworkRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning removeNetwork command
 
@@ -290,13 +290,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:381
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:382
 
 ___
 
 ### TlvReorderNetworkRequest
 
-• `Const` **TlvReorderNetworkRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvReorderNetworkRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning reorderNetwork command
 
@@ -306,13 +306,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:502
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:503
 
 ___
 
 ### TlvScanNetworksRequest
 
-• `Const` **TlvScanNetworksRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvScanNetworksRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the NetworkCommissioning scanNetworks command
 
@@ -322,13 +322,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:115
 
 ___
 
 ### TlvScanNetworksResponse
 
-• `Const` **TlvScanNetworksResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvScanNetworksResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This command shall contain the status of the last ScanNetworks command, and the associated scan results if the
 operation was successful.
@@ -344,13 +344,13 @@ MatterCoreSpecificationV1_1 § 11.8.7.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:264
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:265
 
 ___
 
 ### TlvThreadInterfaceScanResultStruct
 
-• `Const` **TlvThreadInterfaceScanResultStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvThreadInterfaceScanResultStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 ThreadInterfaceScanResultStruct represents a single Thread network scan result.
 
@@ -360,13 +360,13 @@ MatterCoreSpecificationV1_1 § 11.8.5.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:238
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:239
 
 ___
 
 ### TlvWiFiInterfaceScanResultStruct
 
-• `Const` **TlvWiFiInterfaceScanResultStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvWiFiInterfaceScanResultStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
 
@@ -376,32 +376,32 @@ MatterCoreSpecificationV1_1 § 11.8.5.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:193
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:194
 
 ___
 
 ### WiFiNetworkInterfaceComponent
 
-• `Const` **WiFiNetworkInterfaceComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `addOrUpdateWiFiNetwork`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **WiFiNetworkInterfaceComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `addOrUpdateWiFiNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
 
 A NetworkCommissioningCluster supports these elements if it supports feature WiFiNetworkInterface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:1157
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1167
 
 ___
 
 ### WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent
 
-• `Const` **WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `connectMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `scanMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `connectNetwork`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `removeNetwork`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `reorderNetwork`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `scanNetworks`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `connectMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `scanMaxTimeSeconds`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `connectNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `removeNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `reorderNetwork`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `scanNetworks`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
 
 A NetworkCommissioningCluster supports these elements if it supports features WiFiNetworkInterface or
 ThreadNetworkInterface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:757
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:764
 
 ___
 
@@ -428,4 +428,4 @@ MatterCoreSpecificationV1_1 § 11.8.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:138
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:139

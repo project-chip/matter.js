@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:33
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:33
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:35
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:35
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:34
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:34

@@ -38,6 +38,7 @@
 - [WrapCommandHandler](exports_device.md#wrapcommandhandler)
 - [getClusterInitialAttributeValues](exports_device.md#getclusterinitialattributevalues)
 - [getDeviceTypeDefinitionByCode](exports_device.md#getdevicetypedefinitionbycode)
+- [logEndpoint](exports_device.md#logendpoint)
 
 ## Variables
 
@@ -51,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:74
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:74
 
 ## Functions
 
@@ -81,7 +82,7 @@ packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:74
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:62
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:62
 
 ___
 
@@ -101,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:77
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:77
 
 ___
 
@@ -116,7 +117,7 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`, `C`\> |
+| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -131,7 +132,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:23
+packages/matter.js/dist/esm/device/Device.d.ts:23
 
 ___
 
@@ -165,7 +166,7 @@ for multiple clusters
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:27
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:27
 
 ___
 
@@ -185,4 +186,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DeviceTypes.d.ts:78
+packages/matter.js/dist/esm/device/DeviceTypes.d.ts:78
+
+___
+
+### logEndpoint
+
+▸ **logEndpoint**(`endpoint`, `options?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpoint` | [`Endpoint`](../classes/exports_device.Endpoint.md) |
+| `options?` | [`EndpointLoggingOptions`](export._internal_.md#endpointloggingoptions) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/EndpointStructureLogger.d.ts:29

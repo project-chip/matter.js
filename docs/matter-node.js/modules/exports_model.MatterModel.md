@@ -18,4 +18,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/MatterModel.d.ts:45
+packages/matter.js/dist/esm/model/models/MatterModel.d.ts:45

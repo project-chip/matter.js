@@ -49,7 +49,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:199
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:227
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:202
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:230
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:196
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:224
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:203
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:231
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:195
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:223
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:198
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:226
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:197
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:225
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:194
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:222
 
 ___
 
@@ -213,7 +213,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:201
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:229
 
 ___
 
@@ -233,4 +233,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:200
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:228

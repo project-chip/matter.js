@@ -67,9 +67,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/AttributeId.d.ts:14
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/AttributeId.d.ts:13
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:13
 
 ___
 
@@ -86,9 +86,9 @@ MatterCoreSpecificationV1_0 § 7.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/ClusterId.d.ts:15
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
-packages/matter.js/dist/cjs/datatype/ClusterId.d.ts:14
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:14
 
 ___
 
@@ -104,9 +104,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/CommandId.d.ts:14
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/CommandId.d.ts:13
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:13
 
 ___
 
@@ -122,9 +122,9 @@ MatterCoreSpecificationV1_0 § 7.15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:14
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:13
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:13
 
 ___
 
@@ -140,9 +140,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EndpointNumber.d.ts:14
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/EndpointNumber.d.ts:13
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
 
 ___
 
@@ -158,9 +158,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.17
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EventId.d.ts:14
+packages/matter.js/dist/esm/datatype/EventId.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/EventId.d.ts:13
+packages/matter.js/dist/esm/datatype/EventId.d.ts:13
 
 ___
 
@@ -177,9 +177,9 @@ MatterCoreSpecificationV1_0 § 2.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricId.d.ts:15
+packages/matter.js/dist/esm/datatype/FabricId.d.ts:15
 
-packages/matter.js/dist/cjs/datatype/FabricId.d.ts:14
+packages/matter.js/dist/esm/datatype/FabricId.d.ts:14
 
 ___
 
@@ -200,11 +200,11 @@ MatterCoreSpecificationV1_0 § 7.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricIndex.d.ts:19
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:19
 
-packages/matter.js/dist/cjs/datatype/FabricIndex.d.ts:18
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:18
 
-packages/matter.js/dist/cjs/datatype/FabricIndex.d.ts:20
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:20
 
 ___
 
@@ -227,9 +227,9 @@ MatterCoreSpecificationV1_0 § 2.5.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/GroupId.d.ts:21
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:21
 
-packages/matter.js/dist/cjs/datatype/GroupId.d.ts:20
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:20
 
 ___
 
@@ -246,11 +246,11 @@ MatterCoreSpecificationV1_0 § 2.5.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:15
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:15
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:14
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:14
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:16
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:16
 
 ___
 
@@ -267,7 +267,7 @@ MatterCoreSpecificationV1_0 § 6.6.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/SubjectId.d.ts:13
+packages/matter.js/dist/esm/datatype/SubjectId.d.ts:13
 
 ___
 
@@ -285,9 +285,9 @@ MatterCoreSpecificationV1_0 § 2.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/VendorId.d.ts:16
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:16
 
-packages/matter.js/dist/cjs/datatype/VendorId.d.ts:15
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:15
 
 ## Variables
 
@@ -299,7 +299,7 @@ Tlv schema for an Attribute Id.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/AttributeId.d.ts:16
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:16
 
 ___
 
@@ -311,7 +311,7 @@ Tlv schema for a cluster Id.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/ClusterId.d.ts:17
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:17
 
 ___
 
@@ -323,7 +323,7 @@ Tlv schema for an Command Id.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/CommandId.d.ts:16
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:16
 
 ___
 
@@ -335,7 +335,7 @@ Tlv schema for a Device type ID.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:16
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:16
 
 ___
 
@@ -347,7 +347,7 @@ Tlv schema for an Endpoint number.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EndpointNumber.d.ts:16
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:16
 
 ___
 
@@ -359,7 +359,7 @@ Tlv schema for an Event Id.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EventId.d.ts:16
+packages/matter.js/dist/esm/datatype/EventId.d.ts:16
 
 ___
 
@@ -371,7 +371,7 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricId.d.ts:17
+packages/matter.js/dist/esm/datatype/FabricId.d.ts:17
 
 ___
 
@@ -383,7 +383,7 @@ Tlv Schema for a Fabric Index.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricIndex.d.ts:25
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:25
 
 ___
 
@@ -395,7 +395,7 @@ Tlv Schema for a Group Id.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/GroupId.d.ts:23
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:23
 
 ___
 
@@ -407,19 +407,19 @@ Tlv schema for a Node Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:22
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:22
 
 ___
 
 ### TlvSubjectId
 
-• `Const` **TlvSubjectId**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvWrapper"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvWrapper_.md)
+• `Const` **TlvSubjectId**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
 
 Tlv schema for a Subject Id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/SubjectId.d.ts:15
+packages/matter.js/dist/esm/datatype/SubjectId.d.ts:15
 
 ___
 
@@ -431,7 +431,7 @@ Data model for a Vendor Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/VendorId.d.ts:18
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:18
 
 ## Functions
 
@@ -451,7 +451,7 @@ packages/matter.js/dist/cjs/datatype/VendorId.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/AttributeId.d.ts:14
+packages/matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
 ___
 
@@ -471,7 +471,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/ClusterId.d.ts:15
+packages/matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
 ___
 
@@ -491,7 +491,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/CommandId.d.ts:14
+packages/matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 ___
 
@@ -511,7 +511,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:14
+packages/matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
 ___
 
@@ -531,7 +531,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EndpointNumber.d.ts:14
+packages/matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
 ___
 
@@ -551,7 +551,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/EventId.d.ts:14
+packages/matter.js/dist/esm/datatype/EventId.d.ts:14
 
 ___
 
@@ -571,7 +571,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricId.d.ts:15
+packages/matter.js/dist/esm/datatype/FabricId.d.ts:15
 
 ___
 
@@ -591,7 +591,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/FabricIndex.d.ts:19
+packages/matter.js/dist/esm/datatype/FabricIndex.d.ts:19
 
 ___
 
@@ -611,7 +611,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/GroupId.d.ts:21
+packages/matter.js/dist/esm/datatype/GroupId.d.ts:21
 
 ___
 
@@ -631,7 +631,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/NodeId.d.ts:15
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:15
 
 ___
 
@@ -651,4 +651,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/datatype/VendorId.d.ts:16
+packages/matter.js/dist/esm/datatype/VendorId.d.ts:16

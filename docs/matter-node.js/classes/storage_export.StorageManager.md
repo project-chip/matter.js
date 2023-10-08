@@ -35,7 +35,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:11
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:11
 
 ## Properties
 
@@ -45,7 +45,7 @@ packages/matter.js/dist/cjs/storage/StorageManager.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:10
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:10
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:9
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:9
 
 ## Methods
 
@@ -69,7 +69,7 @@ packages/matter.js/dist/cjs/storage/StorageManager.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:13
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:13
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:14
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:14
 
 ___
 
@@ -103,4 +103,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageManager.d.ts:12
+packages/matter.js/dist/esm/storage/StorageManager.d.ts:12

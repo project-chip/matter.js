@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [getUIntByteLength](exports_tlv.TlvCodec.md#getuintbytelength)
 - [parseTypeLength](exports_tlv.TlvCodec.md#parsetypelength)
 - [readTag](exports_tlv.TlvCodec.md#readtag)
 - [writeUInt](exports_tlv.TlvCodec.md#writeuint)
@@ -19,6 +20,8 @@
 ### Methods
 
 - [getIntTlvLength](exports_tlv.TlvCodec.md#getinttlvlength)
+- [getPrimitiveByteLength](exports_tlv.TlvCodec.md#getprimitivebytelength)
+- [getTagByteLength](exports_tlv.TlvCodec.md#gettagbytelength)
 - [getUIntTlvLength](exports_tlv.TlvCodec.md#getuinttlvlength)
 - [readPrimitive](exports_tlv.TlvCodec.md#readprimitive)
 - [readTagType](exports_tlv.TlvCodec.md#readtagtype)
@@ -33,13 +36,23 @@
 
 ## Properties
 
+### getUIntByteLength
+
+▪ `Static` `Private` **getUIntByteLength**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:100
+
+___
+
 ### parseTypeLength
 
 ▪ `Static` `Private` **parseTypeLength**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:92
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:92
 
 ___
 
@@ -49,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:91
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:91
 
 ___
 
@@ -59,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:97
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:99
 
 ## Methods
 
@@ -79,7 +92,54 @@ packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:97
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:85
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:85
+
+___
+
+### getPrimitiveByteLength
+
+▸ `Static` **getPrimitiveByteLength**<`T`\>(`typeLength`, `value`): `number`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`TlvTypeLength`](../modules/exports_tlv.md#tlvtypelength) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `typeLength` | `T` |
+| `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`[``"type"``]] |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:98
+
+___
+
+### getTagByteLength
+
+▸ `Static` **getTagByteLength**(`tag?`): ``2`` \| ``1`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
+
+#### Returns
+
+``2`` \| ``1`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:96
 
 ___
 
@@ -99,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:84
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:84
 
 ___
 
@@ -127,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:93
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:93
 
 ___
 
@@ -156,7 +216,7 @@ MatterCoreSpecificationV1_0 § A.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:87
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:87
 
 ___
 
@@ -184,7 +244,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:96
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:97
 
 ___
 
@@ -210,4 +270,4 @@ MatterCoreSpecificationV1_0 § A.7 & A.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:95
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:95

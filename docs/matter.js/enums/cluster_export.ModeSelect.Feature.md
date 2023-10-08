@@ -28,4 +28,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:123](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L123)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:114

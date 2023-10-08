@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L92)
+packages/matter.js/src/cluster/server/ScenesServer.ts:91
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L45)
+packages/matter.js/src/cluster/server/ScenesServer.ts:44
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L83)
+packages/matter.js/src/cluster/server/ScenesServer.ts:82
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:121](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L121)
+packages/matter.js/src/cluster/server/ScenesServer.ts:120
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L112)
+packages/matter.js/src/cluster/server/ScenesServer.ts:111
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L98)
+packages/matter.js/src/cluster/server/ScenesServer.ts:97
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L55)
+packages/matter.js/src/cluster/server/ScenesServer.ts:54
 
 ___
 
@@ -201,4 +201,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L63)
+packages/matter.js/src/cluster/server/ScenesServer.ts:62

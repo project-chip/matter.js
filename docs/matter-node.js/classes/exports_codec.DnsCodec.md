@@ -47,7 +47,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:66
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:77
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:65
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:76
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:61
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:72
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:59
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:70
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:60
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:71
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:62
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:73
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:63
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:74
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:64
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:75
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:70
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:81
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:71
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:82
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:74
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:85
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:69
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:80
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:73
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:84
 
 ___
 
@@ -177,13 +177,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:72
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:83
 
 ## Methods
 
 ### decode
 
-▸ `Static` **decode**(`message`): `undefined` \| [`DnsMessage`](../interfaces/exports_codec.DnsMessage.md)
+▸ `Static` **decode**(`message`): `undefined` \| [`DnsMessage`](../modules/exports_codec.md#dnsmessage)
 
 #### Parameters
 
@@ -193,11 +193,11 @@ packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:72
 
 #### Returns
 
-`undefined` \| [`DnsMessage`](../interfaces/exports_codec.DnsMessage.md)
+`undefined` \| [`DnsMessage`](../modules/exports_codec.md#dnsmessage)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:58
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:69
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | `Partial`<[`DnsMessage`](../interfaces/exports_codec.DnsMessage.md)\> |
+| `«destructured»` | `Partial`<[`DnsMessagePartiallyPreEncoded`](../modules/exports_codec.md#dnsmessagepartiallypreencoded)\> |
 
 #### Returns
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:67
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:78
 
 ___
 
@@ -229,7 +229,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`any`\> |
+| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\> |
 
 #### Returns
 
@@ -237,4 +237,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DnsCodec.d.ts:68
+packages/matter.js/dist/esm/codec/DnsCodec.d.ts:79

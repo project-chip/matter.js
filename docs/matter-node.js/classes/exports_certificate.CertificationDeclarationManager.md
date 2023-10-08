@@ -39,4 +39,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificationDeclarationManager.d.ts:3
+packages/matter.js/dist/esm/certificate/CertificationDeclarationManager.d.ts:3

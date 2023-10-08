@@ -34,18 +34,19 @@
 - [BtpPacketPayload](../interfaces/codec_export.BtpPacketPayload.md)
 - [DecodedBtpPacket](../interfaces/codec_export.DecodedBtpPacket.md)
 - [DecodedBtpPacketPayload](../interfaces/codec_export.DecodedBtpPacketPayload.md)
-- [DnsMessage](../interfaces/codec_export.DnsMessage.md)
-- [DnsQuery](../interfaces/codec_export.DnsQuery.md)
-- [DnsRecord](../interfaces/codec_export.DnsRecord.md)
 - [Message](../interfaces/codec_export.Message.md)
 - [Packet](../interfaces/codec_export.Packet.md)
 - [PacketHeader](../interfaces/codec_export.PacketHeader.md)
 - [PayloadHeader](../interfaces/codec_export.PayloadHeader.md)
-- [SrvRecordValue](../interfaces/codec_export.SrvRecordValue.md)
 
 ### Type Aliases
 
 - [DerNode](codec_export.md#dernode)
+- [DnsMessage](codec_export.md#dnsmessage)
+- [DnsMessagePartiallyPreEncoded](codec_export.md#dnsmessagepartiallypreencoded)
+- [DnsQuery](codec_export.md#dnsquery)
+- [DnsRecord](codec_export.md#dnsrecord)
+- [SrvRecordValue](codec_export.md#srvrecordvalue)
 
 ### Variables
 
@@ -55,6 +56,7 @@
 - [EcdsaWithSHA256\_X962](codec_export.md#ecdsawithsha256_x962)
 - [KeyUsage\_Signature\_ContentCommited\_X509](codec_export.md#keyusage_signature_contentcommited_x509)
 - [KeyUsage\_Signature\_X509](codec_export.md#keyusage_signature_x509)
+- [MAX\_MDNS\_MESSAGE\_SIZE](codec_export.md#max_mdns_message_size)
 - [OBJECT\_ID\_KEY](codec_export.md#object_id_key)
 - [SHA256\_CMS](codec_export.md#sha256_cms)
 - [TAG\_ID\_KEY](codec_export.md#tag_id_key)
@@ -97,7 +99,103 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L55)
+packages/matter.js/src/codec/DerCodec.ts:55
+
+___
+
+### DnsMessage
+
+Ƭ **DnsMessage**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `additionalRecords` | [`DnsRecord`](codec_export.md#dnsrecord)<`any`\>[] |
+| `answers` | [`DnsRecord`](codec_export.md#dnsrecord)<`any`\>[] |
+| `authorities` | [`DnsRecord`](codec_export.md#dnsrecord)<`any`\>[] |
+| `messageType` | [`DnsMessageType`](../enums/codec_export.DnsMessageType.md) |
+| `queries` | [`DnsQuery`](codec_export.md#dnsquery)[] |
+| `transactionId` | `number` |
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:88
+
+___
+
+### DnsMessagePartiallyPreEncoded
+
+Ƭ **DnsMessagePartiallyPreEncoded**: `Omit`<[`DnsMessage`](codec_export.md#dnsmessage), ``"answers"`` \| ``"additionalRecords"``\> & { `additionalRecords`: ([`DnsRecord`](codec_export.md#dnsrecord)<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[] ; `answers`: ([`DnsRecord`](codec_export.md#dnsrecord)<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[]  }
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:97
+
+___
+
+### DnsQuery
+
+Ƭ **DnsQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `name` | `string` |
+| `recordClass` | [`DnsRecordClass`](../enums/codec_export.DnsRecordClass.md) |
+| `recordType` | [`DnsRecordType`](../enums/codec_export.DnsRecordType.md) |
+| `uniCastResponse?` | `boolean` |
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:72
+
+___
+
+### DnsRecord
+
+Ƭ **DnsRecord**<`T`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `flushCache?` | `boolean` |
+| `name` | `string` |
+| `recordClass` | [`DnsRecordClass`](../enums/codec_export.DnsRecordClass.md) |
+| `recordType` | [`DnsRecordType`](../enums/codec_export.DnsRecordType.md) |
+| `ttl` | `number` |
+| `value` | `T` |
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:79
+
+___
+
+### SrvRecordValue
+
+Ƭ **SrvRecordValue**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `port` | `number` |
+| `priority` | `number` |
+| `target` | `string` |
+| `weight` | `number` |
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:65
 
 ## Variables
 
@@ -107,7 +205,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L14)
+packages/matter.js/src/codec/DerCodec.ts:14
 
 ___
 
@@ -117,7 +215,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L12)
+packages/matter.js/src/codec/DerCodec.ts:12
 
 ___
 
@@ -127,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L13)
+packages/matter.js/src/codec/DerCodec.ts:13
 
 ___
 
@@ -137,7 +235,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:207](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L207)
+packages/matter.js/src/codec/DerCodec.ts:207
 
 ___
 
@@ -147,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:228](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L228)
+packages/matter.js/src/codec/DerCodec.ts:228
 
 ___
 
@@ -157,7 +255,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:224](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L224)
+packages/matter.js/src/codec/DerCodec.ts:224
+
+___
+
+### MAX\_MDNS\_MESSAGE\_SIZE
+
+• `Const` **MAX\_MDNS\_MESSAGE\_SIZE**: ``1232``
+
+The maximum MDNS message size to usually fit into one UDP network MTU packet. Data are split into multiple messages
+when needed.
+
+#### Defined in
+
+packages/matter.js/src/codec/DnsCodec.ts:17
 
 ___
 
@@ -167,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L10)
+packages/matter.js/src/codec/DerCodec.ts:10
 
 ___
 
@@ -177,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:208](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L208)
+packages/matter.js/src/codec/DerCodec.ts:208
 
 ___
 
@@ -187,49 +298,53 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L11)
+packages/matter.js/src/codec/DerCodec.ts:11
 
 ## Functions
 
 ### AAAARecord
 
-▸ **AAAARecord**(`name`, `ip`): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+▸ **AAAARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `ip` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `name` | `string` | `undefined` |
+| `ip` | `string` | `undefined` |
+| `ttl` | `number` | `120` |
+| `flushCache` | `boolean` | `false` |
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+[`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:27](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L27)
+packages/matter.js/src/codec/DnsCodec.ts:35
 
 ___
 
 ### ARecord
 
-▸ **ARecord**(`name`, `ip`): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+▸ **ARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `ip` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `name` | `string` | `undefined` |
+| `ip` | `string` | `undefined` |
+| `ttl` | `number` | `120` |
+| `flushCache` | `boolean` | `false` |
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+[`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L20)
+packages/matter.js/src/codec/DnsCodec.ts:27
 
 ___
 
@@ -249,7 +364,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:212](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L212)
+packages/matter.js/src/codec/DerCodec.ts:212
 
 ___
 
@@ -269,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:214](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L214)
+packages/matter.js/src/codec/DerCodec.ts:214
 
 ___
 
@@ -296,7 +411,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L41)
+packages/matter.js/src/codec/DerCodec.ts:41
 
 ___
 
@@ -322,7 +437,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L46)
+packages/matter.js/src/codec/DerCodec.ts:46
 
 ___
 
@@ -348,7 +463,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L50)
+packages/matter.js/src/codec/DerCodec.ts:50
 
 ___
 
@@ -369,7 +484,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L40)
+packages/matter.js/src/codec/DerCodec.ts:40
 
 ___
 
@@ -391,7 +506,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:216](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L216)
+packages/matter.js/src/codec/DerCodec.ts:216
 
 ___
 
@@ -416,7 +531,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L36)
+packages/matter.js/src/codec/DerCodec.ts:36
 
 ___
 
@@ -436,7 +551,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:209](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L209)
+packages/matter.js/src/codec/DerCodec.ts:209
 
 ___
 
@@ -456,7 +571,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:232](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L232)
+packages/matter.js/src/codec/DerCodec.ts:232
 
 ___
 
@@ -476,28 +591,30 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:233](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L233)
+packages/matter.js/src/codec/DerCodec.ts:233
 
 ___
 
 ### PtrRecord
 
-▸ **PtrRecord**(`name`, `ptr`): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+▸ **PtrRecord**(`name`, `ptr`, `ttl?`, `flushCache?`): [`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `ptr` | `string` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `name` | `string` | `undefined` |
+| `ptr` | `string` | `undefined` |
+| `ttl` | `number` | `120` |
+| `flushCache` | `boolean` | `false` |
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`\>
+[`DnsRecord`](codec_export.md#dnsrecord)<`string`\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L13)
+packages/matter.js/src/codec/DnsCodec.ts:19
 
 ___
 
@@ -531,28 +648,30 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:200](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L200)
+packages/matter.js/src/codec/DerCodec.ts:200
 
 ___
 
 ### SrvRecord
 
-▸ **SrvRecord**(`name`, `srv`): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<[`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)\>
+▸ **SrvRecord**(`name`, `srv`, `ttl?`, `flushCache?`): [`DnsRecord`](codec_export.md#dnsrecord)<[`SrvRecordValue`](codec_export.md#srvrecordvalue)\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `srv` | [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md) |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `name` | `string` | `undefined` |
+| `srv` | [`SrvRecordValue`](codec_export.md#srvrecordvalue) | `undefined` |
+| `ttl` | `number` | `120` |
+| `flushCache` | `boolean` | `false` |
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<[`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)\>
+[`DnsRecord`](codec_export.md#dnsrecord)<[`SrvRecordValue`](codec_export.md#srvrecordvalue)\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L41)
+packages/matter.js/src/codec/DnsCodec.ts:51
 
 ___
 
@@ -572,25 +691,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:210](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DerCodec.ts#L210)
+packages/matter.js/src/codec/DerCodec.ts:210
 
 ___
 
 ### TxtRecord
 
-▸ **TxtRecord**(`name`, `entries`): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`[]\>
+▸ **TxtRecord**(`name`, `entries`, `ttl?`, `flushCache?`): [`DnsRecord`](codec_export.md#dnsrecord)<`string`[]\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `entries` | `string`[] |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `name` | `string` | `undefined` |
+| `entries` | `string`[] | `undefined` |
+| `ttl` | `number` | `120` |
+| `flushCache` | `boolean` | `false` |
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`string`[]\>
+[`DnsRecord`](codec_export.md#dnsrecord)<`string`[]\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L34)
+packages/matter.js/src/codec/DnsCodec.ts:43

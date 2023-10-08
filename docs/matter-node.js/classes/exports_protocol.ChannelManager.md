@@ -14,11 +14,13 @@
 
 - [channels](exports_protocol.ChannelManager.md#channels)
 - [getChannelKey](exports_protocol.ChannelManager.md#getchannelkey)
+- [paseChannels](exports_protocol.ChannelManager.md#pasechannels)
 
 ### Methods
 
 - [close](exports_protocol.ChannelManager.md#close)
 - [getChannel](exports_protocol.ChannelManager.md#getchannel)
+- [getChannelForSession](exports_protocol.ChannelManager.md#getchannelforsession)
 - [getOrCreateChannel](exports_protocol.ChannelManager.md#getorcreatechannel)
 - [removeChannel](exports_protocol.ChannelManager.md#removechannel)
 - [setChannel](exports_protocol.ChannelManager.md#setchannel)
@@ -37,7 +39,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:16
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:16
 
 ___
 
@@ -47,7 +49,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:18
+
+___
+
+### paseChannels
+
+• `Private` `Readonly` **paseChannels**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 ## Methods
 
@@ -61,7 +73,7 @@ packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:22
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:24
 
 ___
 
@@ -82,7 +94,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:19
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:20
+
+___
+
+### getChannelForSession
+
+▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)<`any`\> |
+
+#### Returns
+
+`undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:21
 
 ___
 
@@ -103,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:21
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:23
 
 ___
 
@@ -124,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:20
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:22
 
 ___
 
@@ -146,4 +178,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ChannelManager.d.ts:18
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:19

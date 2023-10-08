@@ -61,7 +61,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+packages/matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:47
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:47
 
 ___
 
@@ -111,7 +111,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:9
+packages/matter.js/dist/esm/schema/Schema.d.ts:9
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:46
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:46
 
 ___
 
@@ -161,4 +161,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:15
+packages/matter.js/dist/esm/schema/Schema.d.ts:15

@@ -20,13 +20,7 @@
 
 ### constructor
 
-• **new BtpService**(`bleServer`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `bleServer` | [`BlenoBleServer`](internal_.BlenoBleServer.md) |
+• **new BtpService**()
 
 #### Overrides
 
@@ -34,4 +28,4 @@ Bleno.PrimaryService.constructor
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L98)
+matter-node-ble.js/src/ble/BlenoBleServer.ts:105

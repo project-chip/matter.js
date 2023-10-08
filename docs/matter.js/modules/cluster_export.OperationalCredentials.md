@@ -33,7 +33,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `commissionedFabrics`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `currentFabricIndex`: [`Attribute`](cluster_export.md#attribute)<[`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `fabrics`: [`FabricScopedAttribute`](cluster_export.md#fabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricId`](datatype_export.md#fabricid)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `rootPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\>  }\>[], `any`\> ; `nocs`: [`FabricScopedAttribute`](cluster_export.md#fabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `icac`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `Uint8Array`\> ; `noc`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>[], `any`\> ; `supportedFabrics`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `trustedRootCertificates`: [`Attribute`](cluster_export.md#attribute)<`Uint8Array`[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `addNoc`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `adminVendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\> ; `caseAdminSubject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `icacValue`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `ipkValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `nocValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `addTrustedRootCertificate`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `rootCaCertificate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `attestationRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationNonce`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationElements`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `attestationSignature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `certificateChainRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `certificateType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CertificateChainType`](../enums/cluster_export.OperationalCredentials.CertificateChainType.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `certificate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `csrRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `csrNonce`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `isForUpdateNoc`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationSignature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `nocsrElements`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `removeFabric`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `updateFabricLabel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `updateNoc`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `icacValue`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `nocValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `commissionedFabrics`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `currentFabricIndex`: [`Attribute`](cluster_export.md#attribute)<[`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `fabrics`: [`FabricScopedAttribute`](cluster_export.md#fabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricId`](datatype_export.md#fabricid)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `rootPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\>  }\>[], `any`\> ; `nocs`: [`FabricScopedAttribute`](cluster_export.md#fabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `icac`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `Uint8Array`\> ; `noc`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>[], `any`\> ; `supportedFabrics`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `trustedRootCertificates`: [`Attribute`](cluster_export.md#attribute)<`Uint8Array`[], `any`\>  } ; `commands`: { `addNoc`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `adminVendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\> ; `caseAdminSubject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `icacValue`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `ipkValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `nocValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `addTrustedRootCertificate`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `rootCaCertificate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `attestationRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationNonce`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationElements`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `attestationSignature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `certificateChainRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `certificateType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CertificateChainType`](../enums/cluster_export.OperationalCredentials.CertificateChainType.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `certificate`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `csrRequest`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `csrNonce`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `isForUpdateNoc`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `attestationSignature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `nocsrElements`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `any`\> ; `removeFabric`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `updateFabricLabel`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\> ; `updateNoc`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `icacValue`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `nocValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\>, `any`\>  } ; `id`: ``62`` = 0x3e; `name`: ``"OperationalCredentials"`` = "OperationalCredentials"; `revision`: ``1`` = 1 }\>
 
 Operational Credentials
 
@@ -46,7 +46,7 @@ the associated Fabrics.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:515](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L515)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:515
 
 ___
 
@@ -62,7 +62,7 @@ Input to the OperationalCredentials addNoc command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:234](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L234)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:234
 
 ___
 
@@ -78,7 +78,7 @@ Input to the OperationalCredentials addTrustedRootCertificate command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:503](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L503)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:503
 
 ___
 
@@ -94,7 +94,7 @@ Input to the OperationalCredentials attestationRequest command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:122](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L122)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:122
 
 ___
 
@@ -115,7 +115,7 @@ See Section F.2, “Device Attestation Response test vector” for an example co
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:136](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L136)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:136
 
 ___
 
@@ -131,7 +131,7 @@ Input to the OperationalCredentials certificateChainRequest command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:176](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L176)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:176
 
 ___
 
@@ -147,7 +147,7 @@ This command shall be generated in response to a CertificateChainRequest command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:185](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L185)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:185
 
 ___
 
@@ -163,7 +163,7 @@ Input to the OperationalCredentials csrRequest command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:200](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L200)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:200
 
 ___
 
@@ -184,7 +184,7 @@ See Section F.3, “Node Operational CSR Response test vector” for an example 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:215](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L215)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:215
 
 ___
 
@@ -200,7 +200,7 @@ This structure encodes a Fabric Reference for a fabric within which a given Node
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L65)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:65
 
 ___
 
@@ -219,7 +219,7 @@ TrustedRootCertificates attribute of the Node Operational Credentials cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L40)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:40
 
 ___
 
@@ -245,7 +245,7 @@ It provides status information about the success or failure of those commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:444](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L444)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:444
 
 ___
 
@@ -261,7 +261,7 @@ Input to the OperationalCredentials removeFabric command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:496](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L496)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:496
 
 ___
 
@@ -277,7 +277,7 @@ Input to the OperationalCredentials updateFabricLabel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:486](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L486)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:486
 
 ___
 
@@ -293,4 +293,4 @@ Input to the OperationalCredentials updateNoc command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:475](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L475)
+packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:475

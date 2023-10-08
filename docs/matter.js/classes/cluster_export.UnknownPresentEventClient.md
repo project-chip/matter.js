@@ -57,7 +57,7 @@ but the contained event is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L41)
+packages/matter.js/src/cluster/client/EventClient.ts:41
 
 ## Properties
 
@@ -71,7 +71,7 @@ but the contained event is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L45)
+packages/matter.js/src/cluster/client/EventClient.ts:45
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L44)
+packages/matter.js/src/cluster/client/EventClient.ts:44
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L42)
+packages/matter.js/src/cluster/client/EventClient.ts:42
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L39)
+packages/matter.js/src/cluster/client/EventClient.ts:39
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L43)
+packages/matter.js/src/cluster/client/EventClient.ts:43
 
 ## Methods
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L90)
+packages/matter.js/src/cluster/client/EventClient.ts:90
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L51)
+packages/matter.js/src/cluster/client/EventClient.ts:51
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:94](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L94)
+packages/matter.js/src/cluster/client/EventClient.ts:94
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:64](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L64)
+packages/matter.js/src/cluster/client/EventClient.ts:64
 
 ___
 
@@ -252,4 +252,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:84](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/EventClient.ts#L84)
+packages/matter.js/src/cluster/client/EventClient.ts:84

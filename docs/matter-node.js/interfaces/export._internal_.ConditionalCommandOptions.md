@@ -10,14 +10,36 @@
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
+## Hierarchy
+
+- [`CommandOptions`](export._internal_.CommandOptions.md)
+
+  ↳ **`ConditionalCommandOptions`**
+
 ## Table of contents
 
 ### Properties
 
+- [invokeAcl](export._internal_.ConditionalCommandOptions.md#invokeacl)
 - [mandatoryIf](export._internal_.ConditionalCommandOptions.md#mandatoryif)
 - [optionalIf](export._internal_.ConditionalCommandOptions.md#optionalif)
+- [timed](export._internal_.ConditionalCommandOptions.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• `Optional` **invokeAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+[CommandOptions](export._internal_.CommandOptions.md).[invokeAcl](export._internal_.CommandOptions.md#invokeacl)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:144
+
+___
 
 ### mandatoryIf
 
@@ -25,7 +47,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:141
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:149
 
 ___
 
@@ -35,4 +57,18 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:140
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:148
+
+___
+
+### timed
+
+• `Optional` **timed**: `boolean`
+
+#### Inherited from
+
+[CommandOptions](export._internal_.CommandOptions.md).[timed](export._internal_.CommandOptions.md#timed)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:145

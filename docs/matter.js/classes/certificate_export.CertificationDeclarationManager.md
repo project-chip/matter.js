@@ -39,4 +39,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificationDeclarationManager.ts#L34)
+packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34

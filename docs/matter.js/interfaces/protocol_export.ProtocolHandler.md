@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
+packages/matter.js/src/protocol/ProtocolHandler.ts:11
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)
+packages/matter.js/src/protocol/ProtocolHandler.ts:12

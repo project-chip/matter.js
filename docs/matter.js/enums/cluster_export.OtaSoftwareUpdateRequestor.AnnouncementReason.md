@@ -26,7 +26,7 @@ An OTA Provider is announcing its presence.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:100](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L100)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:100
 
 ___
 
@@ -39,7 +39,7 @@ be available.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:106](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L106)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:106
 
 ___
 
@@ -52,4 +52,4 @@ be available, which contains an update that needs to be applied urgently.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L112)
+packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:112

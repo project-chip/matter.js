@@ -36,7 +36,7 @@ Quality properties that apply to device types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:116
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:116
 
 ___
 
@@ -49,7 +49,7 @@ specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:135
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:135
 
 ___
 
@@ -61,7 +61,7 @@ Quality values that apply to attributes.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:103
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:103
 
 ___
 
@@ -73,7 +73,7 @@ Quality values that apply to attribute data.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:85
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:85
 
 ___
 
@@ -91,7 +91,7 @@ Quality values that apply to data fields.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:74
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:74
 
 ___
 
@@ -103,7 +103,7 @@ Various ways to define quality.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:38
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:38
 
 ___
 
@@ -115,7 +115,7 @@ Quality values that apply to device types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:125
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:125
 
 ___
 
@@ -127,7 +127,7 @@ Valid "other quality" flags.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:66
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:66
 
 ## Variables
 
@@ -139,4 +139,4 @@ Runtime version of QualityFlag.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:70
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:70

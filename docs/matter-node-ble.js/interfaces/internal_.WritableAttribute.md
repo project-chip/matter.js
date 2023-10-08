@@ -34,6 +34,7 @@
 - [readAcl](internal_.WritableAttribute.md#readacl)
 - [scene](internal_.WritableAttribute.md#scene)
 - [schema](internal_.WritableAttribute.md#schema)
+- [timed](internal_.WritableAttribute.md#timed)
 - [unknown](internal_.WritableAttribute.md#unknown)
 - [writable](internal_.WritableAttribute.md#writable)
 - [writeAcl](internal_.WritableAttribute.md#writeacl)
@@ -50,7 +51,7 @@ Attribute.default
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:37
+matter.js/dist/cjs/cluster/Cluster.d.ts:38
 
 ___
 
@@ -64,7 +65,7 @@ Attribute.fabricScoped
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:34
+matter.js/dist/cjs/cluster/Cluster.d.ts:35
 
 ___
 
@@ -78,7 +79,7 @@ Attribute.fixed
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:33
+matter.js/dist/cjs/cluster/Cluster.d.ts:34
 
 ___
 
@@ -106,7 +107,7 @@ Attribute.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:38
+matter.js/dist/cjs/cluster/Cluster.d.ts:39
 
 ___
 
@@ -120,7 +121,7 @@ Attribute.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:40
+matter.js/dist/cjs/cluster/Cluster.d.ts:41
 
 ___
 
@@ -134,7 +135,7 @@ Attribute.omitChanges
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:35
+matter.js/dist/cjs/cluster/Cluster.d.ts:36
 
 ___
 
@@ -162,7 +163,7 @@ Attribute.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:39
+matter.js/dist/cjs/cluster/Cluster.d.ts:40
 
 ___
 
@@ -222,6 +223,20 @@ matter.js/dist/cjs/cluster/Cluster.d.ts:27
 
 ___
 
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+Attribute.timed
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:33
+
+___
+
 ### unknown
 
 • **unknown**: `boolean`
@@ -232,7 +247,7 @@ Attribute.unknown
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:41
+matter.js/dist/cjs/cluster/Cluster.d.ts:42
 
 ___
 
@@ -246,7 +261,7 @@ Attribute.writable
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:50
+matter.js/dist/cjs/cluster/Cluster.d.ts:51
 
 ___
 
@@ -260,4 +275,4 @@ Attribute.writeAcl
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:36
+matter.js/dist/cjs/cluster/Cluster.d.ts:37

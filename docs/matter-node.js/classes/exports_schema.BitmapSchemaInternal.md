@@ -61,7 +61,7 @@ Define a schema to encode / decode convert type T to type E.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:43
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:43
 
 ## Properties
 
@@ -71,7 +71,7 @@ packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:43
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:41
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:41
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:42
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:42
 
 ## Methods
 
@@ -108,7 +108,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+packages/matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:50
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:50
 
 ___
 
@@ -159,7 +159,7 @@ provided, rest is unset.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:48
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:48
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:49
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:49
 
 ___
 
@@ -209,4 +209,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:15
+packages/matter.js/dist/esm/schema/Schema.d.ts:15

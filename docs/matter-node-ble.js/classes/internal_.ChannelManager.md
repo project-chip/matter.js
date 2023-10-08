@@ -14,11 +14,13 @@
 
 - [channels](internal_.ChannelManager.md#channels)
 - [getChannelKey](internal_.ChannelManager.md#getchannelkey)
+- [paseChannels](internal_.ChannelManager.md#pasechannels)
 
 ### Methods
 
 - [close](internal_.ChannelManager.md#close)
 - [getChannel](internal_.ChannelManager.md#getchannel)
+- [getChannelForSession](internal_.ChannelManager.md#getchannelforsession)
 - [getOrCreateChannel](internal_.ChannelManager.md#getorcreatechannel)
 - [removeChannel](internal_.ChannelManager.md#removechannel)
 - [setChannel](internal_.ChannelManager.md#setchannel)
@@ -47,6 +49,16 @@ ___
 
 #### Defined in
 
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:18
+
+___
+
+### paseChannels
+
+• `Private` `Readonly` **paseChannels**: `any`
+
+#### Defined in
+
 matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 
 ## Methods
@@ -61,7 +73,7 @@ matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:22
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:24
 
 ___
 
@@ -82,7 +94,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:19
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:20
+
+___
+
+### getChannelForSession
+
+▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | [`Session`](../interfaces/internal_.Session.md)<`any`\> |
+
+#### Returns
+
+`undefined` \| [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:21
 
 ___
 
@@ -103,7 +135,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:21
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:23
 
 ___
 
@@ -124,7 +156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:20
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:22
 
 ___
 
@@ -146,4 +178,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:18
+matter.js/dist/cjs/protocol/ChannelManager.d.ts:19

@@ -22,6 +22,7 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ### Properties
 
+- [ipv4Disabled](export.MatterNode.md#ipv4disabled)
 - [rootEndpoint](export.MatterNode.md#rootendpoint)
 
 ### Methods
@@ -47,13 +48,23 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ## Properties
 
+### ipv4Disabled
+
+• **ipv4Disabled**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterNode.d.ts:20
+
+___
+
 ### rootEndpoint
 
 • `Protected` `Readonly` **rootEndpoint**: [`RootEndpoint`](exports_device.RootEndpoint.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:19
+packages/matter.js/dist/esm/MatterNode.d.ts:19
 
 ## Methods
 
@@ -75,7 +86,7 @@ Add a child endpoint to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:54
+packages/matter.js/dist/esm/MatterNode.d.ts:55
 
 ___
 
@@ -106,7 +117,7 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:37
+packages/matter.js/dist/esm/MatterNode.d.ts:38
 
 ___
 
@@ -135,7 +146,7 @@ Add a cluster to the root endpoint. This is mainly used internally and not neede
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:25
+packages/matter.js/dist/esm/MatterNode.d.ts:26
 
 ___
 
@@ -149,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:62
+packages/matter.js/dist/esm/MatterNode.d.ts:63
 
 ___
 
@@ -171,7 +182,7 @@ Get a child endpoint from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:61
+packages/matter.js/dist/esm/MatterNode.d.ts:62
 
 ___
 
@@ -185,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:63
+packages/matter.js/dist/esm/MatterNode.d.ts:64
 
 ___
 
@@ -217,7 +228,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:43
+packages/matter.js/dist/esm/MatterNode.d.ts:44
 
 ___
 
@@ -249,7 +260,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:31
+packages/matter.js/dist/esm/MatterNode.d.ts:32
 
 ___
 
@@ -265,7 +276,7 @@ Get the root endpoint of the node.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:47
+packages/matter.js/dist/esm/MatterNode.d.ts:48
 
 ___
 
@@ -285,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:65
+packages/matter.js/dist/esm/MatterNode.d.ts:66
 
 ___
 
@@ -305,7 +316,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:66
+packages/matter.js/dist/esm/MatterNode.d.ts:67
 
 ___
 
@@ -319,4 +330,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterNode.d.ts:64
+packages/matter.js/dist/esm/MatterNode.d.ts:65

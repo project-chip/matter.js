@@ -43,6 +43,7 @@
 - [getNodeId](internal_.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](internal_.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](internal_.UnsecureSession.md#getpeersessionid)
+- [isPase](internal_.UnsecureSession.md#ispase)
 - [isPeerActive](internal_.UnsecureSession.md#ispeeractive)
 - [isSecure](internal_.UnsecureSession.md#issecure)
 - [notifyActivity](internal_.UnsecureSession.md#notifyactivity)
@@ -106,7 +107,7 @@ matter.js/dist/cjs/session/UnsecureSession.d.ts:13
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:22
+matter.js/dist/cjs/session/UnsecureSession.d.ts:23
 
 ## Methods
 
@@ -130,13 +131,19 @@ matter.js/dist/cjs/session/UnsecureSession.d.ts:22
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:18
+matter.js/dist/cjs/session/UnsecureSession.d.ts:19
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -148,7 +155,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:33
+matter.js/dist/cjs/session/UnsecureSession.d.ts:34
 
 ___
 
@@ -172,13 +179,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:19
+matter.js/dist/cjs/session/UnsecureSession.d.ts:20
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -190,7 +203,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:34
+matter.js/dist/cjs/session/UnsecureSession.d.ts:35
 
 ___
 
@@ -208,7 +221,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:35
+matter.js/dist/cjs/session/UnsecureSession.d.ts:36
 
 ___
 
@@ -222,7 +235,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:20
+matter.js/dist/cjs/session/UnsecureSession.d.ts:21
 
 ___
 
@@ -240,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:28
+matter.js/dist/cjs/session/UnsecureSession.d.ts:29
 
 ___
 
@@ -258,7 +271,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:29
+matter.js/dist/cjs/session/UnsecureSession.d.ts:30
 
 ___
 
@@ -282,7 +295,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:23
+matter.js/dist/cjs/session/UnsecureSession.d.ts:24
 
 ___
 
@@ -300,7 +313,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:31
+matter.js/dist/cjs/session/UnsecureSession.d.ts:32
 
 ___
 
@@ -318,7 +331,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:32
+matter.js/dist/cjs/session/UnsecureSession.d.ts:33
 
 ___
 
@@ -336,7 +349,25 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:30
+matter.js/dist/cjs/session/UnsecureSession.d.ts:31
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+[Session](../interfaces/internal_.Session.md).[isPase](../interfaces/internal_.Session.md#ispase)
+
+#### Defined in
+
+matter.js/dist/cjs/session/UnsecureSession.d.ts:16
 
 ___
 
@@ -354,7 +385,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:17
+matter.js/dist/cjs/session/UnsecureSession.d.ts:18
 
 ___
 
@@ -396,7 +427,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:16
+matter.js/dist/cjs/session/UnsecureSession.d.ts:17
 
 ___
 
@@ -416,4 +447,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/UnsecureSession.d.ts:21
+matter.js/dist/cjs/session/UnsecureSession.d.ts:22

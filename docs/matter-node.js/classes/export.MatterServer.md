@@ -15,12 +15,16 @@ by reusing MDNS scanner and broadcaster
 
 ### Properties
 
-- [mdnsAnnounceInterface](export.MatterServer.md#mdnsannounceinterface)
 - [mdnsBroadcaster](export.MatterServer.md#mdnsbroadcaster)
 - [mdnsScanner](export.MatterServer.md#mdnsscanner)
 - [nodes](export.MatterServer.md#nodes)
+- [options](export.MatterServer.md#options)
 - [prepareNode](export.MatterServer.md#preparenode)
 - [storageManager](export.MatterServer.md#storagemanager)
+
+### Accessors
+
+- [ipv4Disabled](export.MatterServer.md#ipv4disabled)
 
 ### Methods
 
@@ -33,7 +37,7 @@ by reusing MDNS scanner and broadcaster
 
 ### constructor
 
-• **new MatterServer**(`storageManager`, `mdnsAnnounceInterface?`)
+• **new MatterServer**(`storageManager`, `options?`)
 
 Create a new Matter server instance
 
@@ -42,23 +46,13 @@ Create a new Matter server instance
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `storageManager` | [`StorageManager`](storage_export.StorageManager.md) | Storage manager instance to use for all nodes |
-| `mdnsAnnounceInterface?` | `string` | Optional interface to use for MDNS announcements. If not provided announcements will be sent from all network interfaces |
+| `options?` | [`MatterServerOptions`](../modules/export.md#matterserveroptions) | Optional MatterServer options |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:30
+packages/matter.js/dist/esm/MatterServer.d.ts:37
 
 ## Properties
-
-### mdnsAnnounceInterface
-
-• `Private` `Optional` **mdnsAnnounceInterface**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/MatterServer.d.ts:19
-
-___
 
 ### mdnsBroadcaster
 
@@ -66,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:22
+packages/matter.js/dist/esm/MatterServer.d.ts:30
 
 ___
 
@@ -76,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:21
+packages/matter.js/dist/esm/MatterServer.d.ts:29
 
 ___
 
@@ -86,7 +80,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:20
+packages/matter.js/dist/esm/MatterServer.d.ts:28
+
+___
+
+### options
+
+• `Private` `Optional` `Readonly` **options**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:27
 
 ___
 
@@ -96,17 +100,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:50
+packages/matter.js/dist/esm/MatterServer.d.ts:58
 
 ___
 
 ### storageManager
 
-• `Private` **storageManager**: `any`
+• `Private` `Readonly` **storageManager**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:18
+packages/matter.js/dist/esm/MatterServer.d.ts:26
+
+## Accessors
+
+### ipv4Disabled
+
+• `get` **ipv4Disabled**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:38
 
 ## Methods
 
@@ -129,7 +147,7 @@ Add a Controller node to the server
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:44
+packages/matter.js/dist/esm/MatterServer.d.ts:52
 
 ___
 
@@ -152,7 +170,7 @@ Add a CommissioningServer node to the server
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:37
+packages/matter.js/dist/esm/MatterServer.d.ts:45
 
 ___
 
@@ -168,7 +186,7 @@ Close the server and all nodes
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:54
+packages/matter.js/dist/esm/MatterServer.d.ts:62
 
 ___
 
@@ -185,4 +203,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/MatterServer.d.ts:49
+packages/matter.js/dist/esm/MatterServer.d.ts:57

@@ -30,7 +30,7 @@ as base types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:80
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:80
 
 ___
 
@@ -46,7 +46,7 @@ A pool of datatype definitions indexed by name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:67
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:67
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:54
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:54
 
 ___
 
@@ -68,4 +68,4 @@ Valid sizes for ints.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:73
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:73

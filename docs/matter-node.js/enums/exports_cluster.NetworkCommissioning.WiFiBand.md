@@ -31,7 +31,7 @@ MatterCoreSpecificationV1_1 § 11.8.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:170
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:171
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:174
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:175
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:178
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:179
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:186
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:187
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/NetworkCommissioningCluster.d.ts:182
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:183

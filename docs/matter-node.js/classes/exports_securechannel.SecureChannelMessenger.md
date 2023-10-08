@@ -40,6 +40,7 @@
 - [nextMessage](exports_securechannel.SecureChannelMessenger.md#nextmessage)
 - [nextMessageDecoded](exports_securechannel.SecureChannelMessenger.md#nextmessagedecoded)
 - [send](exports_securechannel.SecureChannelMessenger.md#send)
+- [sendCloseSession](exports_securechannel.SecureChannelMessenger.md#sendclosesession)
 - [sendError](exports_securechannel.SecureChannelMessenger.md#senderror)
 - [sendSuccess](exports_securechannel.SecureChannelMessenger.md#sendsuccess)
 - [throwIfErrorStatusReport](exports_securechannel.SecureChannelMessenger.md#throwiferrorstatusreport)
@@ -65,7 +66,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:19
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:19
 
 ## Properties
 
@@ -75,7 +76,7 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:18
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:18
 
 ___
 
@@ -85,7 +86,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:28
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:29
 
 ## Methods
 
@@ -99,7 +100,7 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:27
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:28
 
 ___
 
@@ -113,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:26
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:27
 
 ___
 
@@ -133,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:20
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:20
 
 ___
 
@@ -160,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:21
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:21
 
 ___
 
@@ -188,13 +189,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:23
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:23
 
 ___
 
-### sendError
+### sendCloseSession
 
-▸ **sendError**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`<`void`\>
 
 #### Returns
 
@@ -202,7 +203,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:24
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:26
+
+___
+
+### sendError
+
+▸ **sendError**(`code`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `code` | [`ProtocolStatusCode`](../enums/exports_securechannel.ProtocolStatusCode.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:24
 
 ___
 
@@ -216,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:25
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:25
 
 ___
 
@@ -236,7 +257,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:29
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:30
 
 ___
 
@@ -250,4 +271,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:22
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:22

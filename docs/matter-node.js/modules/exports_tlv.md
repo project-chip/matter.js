@@ -100,7 +100,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:17
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:17
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:23
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:23
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:24
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:24
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:18
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:18
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:23
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:23
 
 ___
 
@@ -190,7 +190,7 @@ MatterCoreSpecificationV1_0 § A.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:79
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:79
 
 ___
 
@@ -218,7 +218,7 @@ Converts [TlvType](../enums/exports_tlv.TlvType.md) to the js primitive type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:65
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:65
 
 ___
 
@@ -230,7 +230,7 @@ Type and length or value, when applicable.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvCodec.d.ts:35
+packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:35
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:34
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:34
 
 ___
 
@@ -264,7 +264,7 @@ Type defined by the TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:43
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:43
 
 ## Variables
 
@@ -274,7 +274,7 @@ packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:43
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvAny.d.ts:20
+packages/matter.js/dist/esm/tlv/TlvAny.d.ts:21
 
 ___
 
@@ -286,7 +286,7 @@ Boolean TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvBoolean.d.ts:19
+packages/matter.js/dist/esm/tlv/TlvBoolean.d.ts:19
 
 ___
 
@@ -298,7 +298,7 @@ ByteString TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:29
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:29
 
 ___
 
@@ -308,7 +308,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:38
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:38
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:53
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:53
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:52
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:52
 
 ___
 
@@ -340,7 +340,7 @@ Unsigned integer TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:37
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:37
 
 ___
 
@@ -350,7 +350,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:38
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:38
 
 ___
 
@@ -360,7 +360,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:40
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:40
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:41
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:41
 
 ___
 
@@ -380,7 +380,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:42
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:42
 
 ___
 
@@ -390,7 +390,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:39
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:39
 
 ___
 
@@ -417,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:33
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:33
 
 ___
 
@@ -429,7 +429,7 @@ Void TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNoArguments.d.ts:16
+packages/matter.js/dist/esm/tlv/TlvNoArguments.d.ts:16
 
 ___
 
@@ -439,7 +439,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:50
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:50
 
 ___
 
@@ -449,7 +449,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:51
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:51
 
 ___
 
@@ -459,7 +459,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:54
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:54
 
 ___
 
@@ -471,7 +471,7 @@ String TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:31
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:31
 
 ___
 
@@ -483,7 +483,7 @@ String TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:37
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:37
 
 ___
 
@@ -495,7 +495,7 @@ String TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:33
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:33
 
 ___
 
@@ -507,7 +507,7 @@ String TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:35
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:35
 
 ___
 
@@ -517,7 +517,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:56
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:56
 
 ___
 
@@ -527,7 +527,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:55
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:55
 
 ___
 
@@ -537,7 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:44
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:44
 
 ___
 
@@ -547,7 +547,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:45
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:45
 
 ___
 
@@ -557,7 +557,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:46
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:46
 
 ___
 
@@ -567,7 +567,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:47
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:47
 
 ___
 
@@ -577,7 +577,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:43
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:43
 
 ___
 
@@ -589,7 +589,7 @@ Void TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvVoid.d.ts:18
+packages/matter.js/dist/esm/tlv/TlvVoid.d.ts:18
 
 ## Functions
 
@@ -618,13 +618,13 @@ Array TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:37
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:37
 
 ___
 
 ### TlvBitmap
 
-▸ **TlvBitmap**<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`T`\>, `number`\>
+▸ **TlvBitmap**<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
 
 #### Type parameters
 
@@ -641,11 +641,11 @@ ___
 
 #### Returns
 
-[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`T`\>, `number`\>
+[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:49
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:49
 
 ___
 
@@ -665,7 +665,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNumber.d.ts:48
+packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:48
 
 ___
 
@@ -697,7 +697,7 @@ to the value being empty.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:60
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:60
 
 ___
 
@@ -725,7 +725,7 @@ List TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:54
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:54
 
 ___
 
@@ -753,7 +753,7 @@ Nullable TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNullable.d.ts:23
+packages/matter.js/dist/esm/tlv/TlvNullable.d.ts:23
 
 ___
 
@@ -781,7 +781,7 @@ Object TLV schema.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:52
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:52
 
 ___
 
@@ -810,4 +810,4 @@ Object TLV optional field.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:62
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:62

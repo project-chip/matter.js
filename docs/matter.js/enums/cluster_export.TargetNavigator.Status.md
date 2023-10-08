@@ -26,7 +26,7 @@ Target request is not allowed in current state.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L78)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:79
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L68)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:69
 
 ___
 
@@ -50,4 +50,4 @@ Requested target was not found in the TargetList
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:73](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L73)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:74

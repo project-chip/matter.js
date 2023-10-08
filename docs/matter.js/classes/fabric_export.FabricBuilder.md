@@ -17,6 +17,7 @@
 - [identityProtectionKey](fabric_export.FabricBuilder.md#identityprotectionkey)
 - [intermediateCACert](fabric_export.FabricBuilder.md#intermediatecacert)
 - [keyPair](fabric_export.FabricBuilder.md#keypair)
+- [label](fabric_export.FabricBuilder.md#label)
 - [nodeId](fabric_export.FabricBuilder.md#nodeid)
 - [operationalCert](fabric_export.FabricBuilder.md#operationalcert)
 - [rootCert](fabric_export.FabricBuilder.md#rootcert)
@@ -28,7 +29,13 @@
 
 - [build](fabric_export.FabricBuilder.md#build)
 - [createCertificateSigningRequest](fabric_export.FabricBuilder.md#createcertificatesigningrequest)
+- [getFabricId](fabric_export.FabricBuilder.md#getfabricid)
+- [getFabricIndex](fabric_export.FabricBuilder.md#getfabricindex)
+- [getNodeId](fabric_export.FabricBuilder.md#getnodeid)
 - [getPublicKey](fabric_export.FabricBuilder.md#getpublickey)
+- [hasRootCert](fabric_export.FabricBuilder.md#hasrootcert)
+- [initializeFromFabricForUpdate](fabric_export.FabricBuilder.md#initializefromfabricforupdate)
+- [matchesToFabric](fabric_export.FabricBuilder.md#matchestofabric)
 - [setIdentityProtectionKey](fabric_export.FabricBuilder.md#setidentityprotectionkey)
 - [setIntermediateCACert](fabric_export.FabricBuilder.md#setintermediatecacert)
 - [setOperationalCert](fabric_export.FabricBuilder.md#setoperationalcert)
@@ -40,17 +47,7 @@
 
 ### constructor
 
-• **new FabricBuilder**(`fabricIndex`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `fabricIndex` | [`FabricIndex`](../modules/datatype_export.md#fabricindex) |
-
-#### Defined in
-
-[packages/matter.js/src/fabric/Fabric.ts:233](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L233)
+• **new FabricBuilder**()
 
 ## Properties
 
@@ -60,17 +57,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:227](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L227)
+packages/matter.js/src/fabric/Fabric.ts:241
 
 ___
 
 ### fabricIndex
 
-• `Private` `Readonly` **fabricIndex**: [`FabricIndex`](../modules/datatype_export.md#fabricindex)
+• `Private` `Optional` **fabricIndex**: [`FabricIndex`](../modules/datatype_export.md#fabricindex)
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:233](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L233)
+packages/matter.js/src/fabric/Fabric.ts:246
 
 ___
 
@@ -80,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:231](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L231)
+packages/matter.js/src/fabric/Fabric.ts:245
 
 ___
 
@@ -90,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:225](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L225)
+packages/matter.js/src/fabric/Fabric.ts:239
 
 ___
 
@@ -100,7 +97,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:222](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L222)
+packages/matter.js/src/fabric/Fabric.ts:236
+
+___
+
+### label
+
+• `Private` **label**: `string` = `""`
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:247
 
 ___
 
@@ -110,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:228](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L228)
+packages/matter.js/src/fabric/Fabric.ts:242
 
 ___
 
@@ -120,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:226](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L226)
+packages/matter.js/src/fabric/Fabric.ts:240
 
 ___
 
@@ -130,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:224](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L224)
+packages/matter.js/src/fabric/Fabric.ts:238
 
 ___
 
@@ -140,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:229](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L229)
+packages/matter.js/src/fabric/Fabric.ts:243
 
 ___
 
@@ -150,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:230](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L230)
+packages/matter.js/src/fabric/Fabric.ts:244
 
 ___
 
@@ -160,13 +167,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:223](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L223)
+packages/matter.js/src/fabric/Fabric.ts:237
 
 ## Methods
 
 ### build
 
-▸ **build**(): `Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+▸ **build**(`fabricIndex`): `Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricIndex` | [`FabricIndex`](../modules/datatype_export.md#fabricindex) |
 
 #### Returns
 
@@ -174,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:279](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L279)
+packages/matter.js/src/fabric/Fabric.ts:326
 
 ___
 
@@ -188,7 +201,49 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:239](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L239)
+packages/matter.js/src/fabric/Fabric.ts:257
+
+___
+
+### getFabricId
+
+▸ **getFabricId**(): `undefined` \| [`FabricId`](../modules/datatype_export.md#fabricid)
+
+#### Returns
+
+`undefined` \| [`FabricId`](../modules/datatype_export.md#fabricid)
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:322
+
+___
+
+### getFabricIndex
+
+▸ **getFabricIndex**(): `undefined` \| [`FabricIndex`](../modules/datatype_export.md#fabricindex)
+
+#### Returns
+
+`undefined` \| [`FabricIndex`](../modules/datatype_export.md#fabricindex)
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:253
+
+___
+
+### getNodeId
+
+▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Returns
+
+`undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:318
 
 ___
 
@@ -202,7 +257,61 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:235](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L235)
+packages/matter.js/src/fabric/Fabric.ts:249
+
+___
+
+### hasRootCert
+
+▸ **hasRootCert**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:267
+
+___
+
+### initializeFromFabricForUpdate
+
+▸ **initializeFromFabricForUpdate**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](fabric_export.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:302
+
+___
+
+### matchesToFabric
+
+▸ **matchesToFabric**(`fabric`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](fabric_export.Fabric.md) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/src/fabric/Fabric.ts:311
 
 ___
 
@@ -222,7 +331,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:274](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L274)
+packages/matter.js/src/fabric/Fabric.ts:297
 
 ___
 
@@ -242,7 +351,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:259](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L259)
+packages/matter.js/src/fabric/Fabric.ts:282
 
 ___
 
@@ -262,7 +371,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:249](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L249)
+packages/matter.js/src/fabric/Fabric.ts:271
 
 ___
 
@@ -282,7 +391,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:243](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L243)
+packages/matter.js/src/fabric/Fabric.ts:261
 
 ___
 
@@ -302,7 +411,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:269](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L269)
+packages/matter.js/src/fabric/Fabric.ts:292
 
 ___
 
@@ -322,4 +431,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:264](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/Fabric.ts#L264)
+packages/matter.js/src/fabric/Fabric.ts:287

@@ -30,7 +30,7 @@ transmission of packets on the ethernet interface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:73
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:74
 
 ___
 
@@ -44,4 +44,4 @@ Node makes available the counts for the number of received and transmitted packe
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:67

@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L39)
+packages/matter.js/src/cluster/server/GroupsServer.ts:37
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L55)
+packages/matter.js/src/cluster/server/GroupsServer.ts:53
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L47)
+packages/matter.js/src/cluster/server/GroupsServer.ts:45
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L76)
+packages/matter.js/src/cluster/server/GroupsServer.ts:74
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:62](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L62)
+packages/matter.js/src/cluster/server/GroupsServer.ts:60
 
 ___
 
@@ -154,4 +154,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/GroupsServer.ts#L26)
+packages/matter.js/src/cluster/server/GroupsServer.ts:24

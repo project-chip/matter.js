@@ -25,7 +25,7 @@ Indicates AC current
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:39
 
 ___
 
@@ -37,4 +37,4 @@ Indicates DC current
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:43

@@ -33,7 +33,7 @@ Door ajar
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:301](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L301)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:291
 
 ___
 
@@ -45,7 +45,7 @@ Forced Door Open under Door Locked Condition
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:296](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L296)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:286
 
 ___
 
@@ -57,7 +57,7 @@ Force User SOS alarm
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:306](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L306)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:296
 
 ___
 
@@ -69,7 +69,7 @@ Tamper Alarm - front escutcheon removed from main
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:291](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L291)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:281
 
 ___
 
@@ -81,7 +81,7 @@ Lock Reset to Factory Defaults
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:276](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L276)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:266
 
 ___
 
@@ -93,7 +93,7 @@ Locking Mechanism Jammed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:271](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L271)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:261
 
 ___
 
@@ -105,7 +105,7 @@ Lock Radio Power Cycled
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:281](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L281)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:271
 
 ___
 
@@ -117,4 +117,4 @@ Tamper Alarm - wrong code entry limit
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:286](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L286)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:276

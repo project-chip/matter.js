@@ -30,7 +30,7 @@ Supports CEC keys 0x0A (Settings) and 0x09 (Home)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:158
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:159
 
 ___
 
@@ -44,7 +44,7 @@ Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:152
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:153
 
 ___
 
@@ -58,4 +58,4 @@ Supports numeric input 0..9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:164
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:165

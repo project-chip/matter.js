@@ -27,7 +27,7 @@ Indicate the source is available and currently supplying power
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:22
 
 ___
 
@@ -39,7 +39,7 @@ Indicate the source is available, but is not currently supplying power
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:26
 
 ___
 
@@ -51,7 +51,7 @@ Indicate the source is not currently available to supply power
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:30
 
 ___
 
@@ -63,4 +63,4 @@ Indicate the source status is not specified
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:18

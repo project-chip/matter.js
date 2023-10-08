@@ -24,7 +24,7 @@
 
 ### pair
 
-▸ **pair**(`client`, `exchange`, `fabric`, `peerNodeId`): `Promise`<`any`\>
+▸ **pair**(`client`, `exchange`, `fabric`, `peerNodeId`): `Promise`<[`SecureSession`](session_export.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -37,8 +37,8 @@
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`<[`SecureSession`](session_export.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseClient.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/case/CaseClient.ts#L35)
+packages/matter.js/src/session/case/CaseClient.ts:35
