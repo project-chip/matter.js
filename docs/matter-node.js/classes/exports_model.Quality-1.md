@@ -74,7 +74,7 @@ Initialize from a Quality.All definition or a string conforming to the
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:27
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:27
 
 ## Properties
 
@@ -88,7 +88,7 @@ Quality.Ast.changesOmitted
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:18
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:18
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:13
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:13
 
 ___
 
@@ -116,7 +116,7 @@ Quality.Ast.disallowed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:22
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
 
 ___
 
@@ -144,7 +144,7 @@ Quality.Ast.fixed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:17
 
 ___
 
@@ -158,7 +158,7 @@ Quality.Ast.nonvolatile
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:16
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:16
 
 ___
 
@@ -172,7 +172,7 @@ Quality.Ast.nullable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:15
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:28
 
 ___
 
@@ -196,7 +196,7 @@ Quality.Ast.reportable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:20
 
 ___
 
@@ -210,7 +210,7 @@ Quality.Ast.scene
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:19
 
 ___
 
@@ -224,7 +224,7 @@ Quality.Ast.singleton
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:21
 
 ## Accessors
 
@@ -242,7 +242,7 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:17
 
 ___
 
@@ -260,7 +260,7 @@ Aspect.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:15
 
 ## Methods
 
@@ -286,7 +286,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:21
 
 ___
 
@@ -311,7 +311,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:24
 
 ___
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:24
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
 
 ___
 
@@ -349,9 +349,13 @@ Display quality using standard Matter syntax.
 
 `string`
 
+#### Overrides
+
+[Aspect](exports_model.Aspect.md).[toString](exports_model.Aspect.md#tostring)
+
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:32
 
 ___
 
@@ -369,4 +373,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:22

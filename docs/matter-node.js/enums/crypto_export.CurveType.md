@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:13
+packages/matter.js/dist/esm/crypto/Key.d.ts:13
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:14
+packages/matter.js/dist/esm/crypto/Key.d.ts:14
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:15
+packages/matter.js/dist/esm/crypto/Key.d.ts:15

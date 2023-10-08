@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:31](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L31)
+packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:35
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L29)
+packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:33
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L30)
+packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:34
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L28)
+packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:32

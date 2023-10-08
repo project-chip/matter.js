@@ -31,7 +31,7 @@ Indicates support for asynchronous BDX.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:25
 
 ___
 
@@ -43,7 +43,7 @@ Indicates support for synchronous BDX.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:21
 
 ___
 
@@ -55,7 +55,7 @@ Indicates support for HTTPS.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:29
 
 ___
 
@@ -67,4 +67,4 @@ Indicates support for vendor specific protocol.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:33

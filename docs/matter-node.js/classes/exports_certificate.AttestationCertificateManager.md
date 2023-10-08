@@ -44,7 +44,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:19
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:19
 
 ## Properties
 
@@ -54,7 +54,7 @@ packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:19
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:25
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:25
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:26
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:26
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:18
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:18
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:11
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:11
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:13
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:13
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:12
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:12
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:17
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:17
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:14
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:14
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:16
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:16
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:15
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:15
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:10
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:10
 
 ## Methods
 
@@ -176,7 +176,7 @@ packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:27
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:27
 
 ___
 
@@ -201,18 +201,18 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:21
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:21
 
 ___
 
 ### getPAICert
 
-▸ **getPAICert**(): `any`
+▸ **getPAICert**(): `Uint8Array`
 
 #### Returns
 
-`any`
+`Uint8Array`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/AttestationCertificateManager.d.ts:20
+packages/matter.js/dist/esm/certificate/AttestationCertificateManager.d.ts:20

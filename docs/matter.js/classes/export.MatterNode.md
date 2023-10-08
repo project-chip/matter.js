@@ -22,6 +22,7 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ### Properties
 
+- [ipv4Disabled](export.MatterNode.md#ipv4disabled)
 - [rootEndpoint](export.MatterNode.md#rootendpoint)
 
 ### Methods
@@ -47,13 +48,23 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ## Properties
 
+### ipv4Disabled
+
+• **ipv4Disabled**: `boolean` = `false`
+
+#### Defined in
+
+packages/matter.js/src/MatterNode.ts:22
+
+___
+
 ### rootEndpoint
 
 • `Protected` `Readonly` **rootEndpoint**: [`RootEndpoint`](device_export.RootEndpoint.md)
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L21)
+packages/matter.js/src/MatterNode.ts:21
 
 ## Methods
 
@@ -75,7 +86,7 @@ Add a child endpoint to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L86)
+packages/matter.js/src/MatterNode.ts:87
 
 ___
 
@@ -106,7 +117,7 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L52)
+packages/matter.js/src/MatterNode.ts:53
 
 ___
 
@@ -135,7 +146,7 @@ Add a cluster to the root endpoint. This is mainly used internally and not neede
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L28)
+packages/matter.js/src/MatterNode.ts:29
 
 ___
 
@@ -149,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:100](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L100)
+packages/matter.js/src/MatterNode.ts:101
 
 ___
 
@@ -171,7 +182,7 @@ Get a child endpoint from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:96](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L96)
+packages/matter.js/src/MatterNode.ts:97
 
 ___
 
@@ -185,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:102](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L102)
+packages/matter.js/src/MatterNode.ts:103
 
 ___
 
@@ -217,7 +228,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L63)
+packages/matter.js/src/MatterNode.ts:64
 
 ___
 
@@ -249,7 +260,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L37)
+packages/matter.js/src/MatterNode.ts:38
 
 ___
 
@@ -265,7 +276,7 @@ Get the root endpoint of the node.
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L76)
+packages/matter.js/src/MatterNode.ts:77
 
 ___
 
@@ -285,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:106](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L106)
+packages/matter.js/src/MatterNode.ts:107
 
 ___
 
@@ -305,7 +316,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:108](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L108)
+packages/matter.js/src/MatterNode.ts:109
 
 ___
 
@@ -319,4 +330,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:104](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L104)
+packages/matter.js/src/MatterNode.ts:105

@@ -77,7 +77,7 @@ TlvSchema&lt;T[]\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:27
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:27
 
 ## Properties
 
@@ -87,7 +87,7 @@ packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:24
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:24
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:26
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:26
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:25
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:25
 
 ## Methods
 
@@ -134,7 +134,7 @@ TlvSchema.decode
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+packages/matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:33
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:33
 
 ___
 
@@ -179,7 +179,7 @@ TlvSchema.decodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:10
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:10
 
 ___
 
@@ -203,7 +203,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:13
 
 ___
 
@@ -232,7 +232,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:14
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:14
 
 ___
 
@@ -257,7 +257,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:29
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:29
 
 ___
 
@@ -283,7 +283,7 @@ TlvSchema.encode
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:9
+packages/matter.js/dist/esm/schema/Schema.d.ts:9
 
 ___
 
@@ -303,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:34
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:34
 
 ___
 
@@ -327,7 +327,7 @@ TlvSchema.encodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:11
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:11
 
 ___
 
@@ -351,7 +351,7 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:12
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:12
 
 ___
 
@@ -377,7 +377,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:28
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:28
 
 ___
 
@@ -404,7 +404,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:30
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:30
 
 ___
 
@@ -430,7 +430,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:31
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:31
 
 ___
 
@@ -454,4 +454,4 @@ TlvSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:32
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:32

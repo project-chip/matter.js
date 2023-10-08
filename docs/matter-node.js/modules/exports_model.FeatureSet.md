@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:31
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:31
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:29
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:29
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:30
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:30

@@ -15,6 +15,9 @@ Interface for classes that allow to announce one Matter instance.
 ### Methods
 
 - [announce](internal_.InstanceBroadcaster.md#announce)
+- [expireAllAnnouncements](internal_.InstanceBroadcaster.md#expireallannouncements)
+- [expireCommissioningAnnouncement](internal_.InstanceBroadcaster.md#expirecommissioningannouncement)
+- [expireFabricAnnouncement](internal_.InstanceBroadcaster.md#expirefabricannouncement)
 - [setCommissionMode](internal_.InstanceBroadcaster.md#setcommissionmode)
 - [setCommissionerInfo](internal_.InstanceBroadcaster.md#setcommissionerinfo)
 - [setFabrics](internal_.InstanceBroadcaster.md#setfabrics)
@@ -33,7 +36,55 @@ Send out announcements for this instance.
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:258
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:261
+
+___
+
+### expireAllAnnouncements
+
+▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+
+Expire all announcements.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:267
+
+___
+
+### expireCommissioningAnnouncement
+
+▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this commissioning instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:265
+
+___
+
+### expireFabricAnnouncement
+
+▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this operative instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:263
 
 ___
 
@@ -78,21 +129,23 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:256
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:259
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(`fabrics`): `Promise`<`void`\>
+▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`<`void`\>
 
 Set operational details to Announce an operational device which is already commissioned.
+Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `fabrics` | [`Fabric`](../classes/internal_.Fabric.md)[] |
+| `expireCommissioningAnnouncements?` | `boolean` |
 
 #### Returns
 
@@ -100,4 +153,4 @@ Set operational details to Announce an operational device which is already commi
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:254
+matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:257

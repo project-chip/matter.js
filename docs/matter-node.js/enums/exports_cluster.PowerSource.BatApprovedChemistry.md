@@ -56,7 +56,7 @@ Cell chemistry is alkaline
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:486
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:487
 
 ___
 
@@ -68,7 +68,7 @@ Cell chemistry is lead acid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:546
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:547
 
 ___
 
@@ -80,7 +80,7 @@ Cell chemistry is lithium carbon fluoride
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:490
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:491
 
 ___
 
@@ -92,7 +92,7 @@ Cell chemistry is lithium chromium oxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:494
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:495
 
 ___
 
@@ -104,7 +104,7 @@ Cell chemistry is lithium cobalt oxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:550
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:551
 
 ___
 
@@ -116,7 +116,7 @@ Cell chemistry is lithium copper oxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:498
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:499
 
 ___
 
@@ -128,7 +128,7 @@ Cell chemistry is lithium ion
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:554
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:555
 
 ___
 
@@ -140,7 +140,7 @@ Cell chemistry is lithium ion polymer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:558
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:559
 
 ___
 
@@ -152,7 +152,7 @@ Cell chemistry is lithium iron disulfide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:502
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:503
 
 ___
 
@@ -164,7 +164,7 @@ Cell chemistry is lithium iron phosphate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:562
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:563
 
 ___
 
@@ -176,7 +176,7 @@ Cell chemistry is lithium manganese dioxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:506
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:507
 
 ___
 
@@ -188,7 +188,7 @@ Cell chemistry is lithium sulfur
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:566
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:567
 
 ___
 
@@ -200,7 +200,7 @@ Cell chemistry is lithium thionyl chloride
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:510
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:511
 
 ___
 
@@ -212,7 +212,7 @@ Cell chemistry is lithium titanate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:570
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:571
 
 ___
 
@@ -224,7 +224,7 @@ Cell chemistry is magnesium
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:514
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:515
 
 ___
 
@@ -236,7 +236,7 @@ Cell chemistry is mercury oxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:518
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:519
 
 ___
 
@@ -248,7 +248,7 @@ Cell chemistry is nickel cadmium
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:574
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:575
 
 ___
 
@@ -260,7 +260,7 @@ Cell chemistry is nickel hydrogen
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:578
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:579
 
 ___
 
@@ -272,7 +272,7 @@ Cell chemistry is nickel iron
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:582
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:583
 
 ___
 
@@ -284,7 +284,7 @@ Cell chemistry is nickel metal hydride
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:586
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:587
 
 ___
 
@@ -296,7 +296,7 @@ Cell chemistry is nickel oxyhydride
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:522
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:523
 
 ___
 
@@ -308,7 +308,7 @@ Cell chemistry is nickel zinc
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:590
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:591
 
 ___
 
@@ -320,7 +320,7 @@ Cell chemistry is silver oxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:526
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:527
 
 ___
 
@@ -332,7 +332,7 @@ Cell chemistry is silver zinc
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:594
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:595
 
 ___
 
@@ -344,7 +344,7 @@ Cell chemistry is sodium ion
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:598
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:599
 
 ___
 
@@ -356,7 +356,7 @@ Cell chemistry is sodium sulfur
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:602
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:603
 
 ___
 
@@ -368,7 +368,7 @@ Cell chemistry is unspecified or unknown
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:482
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:483
 
 ___
 
@@ -380,7 +380,7 @@ Cell chemistry is zinc air
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:530
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:531
 
 ___
 
@@ -392,7 +392,7 @@ Cell chemistry is zinc bromide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:606
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:607
 
 ___
 
@@ -404,7 +404,7 @@ Cell chemistry is zinc carbon
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:534
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:535
 
 ___
 
@@ -416,7 +416,7 @@ Cell chemistry is zinc cerium
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:610
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:611
 
 ___
 
@@ -428,7 +428,7 @@ Cell chemistry is zinc chloride
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:538
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:539
 
 ___
 
@@ -440,4 +440,4 @@ Cell chemistry is zinc manganese dioxide
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:542
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:543

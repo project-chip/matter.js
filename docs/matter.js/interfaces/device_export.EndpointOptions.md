@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L29)
+packages/matter.js/src/device/Endpoint.ts:29
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L30)
+packages/matter.js/src/device/Endpoint.ts:30

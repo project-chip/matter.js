@@ -23,6 +23,7 @@
 - [invokeId](exports_cluster.CommandServer.md#invokeid)
 - [name](exports_cluster.CommandServer.md#name)
 - [requestSchema](exports_cluster.CommandServer.md#requestschema)
+- [requiresTimedInteraction](exports_cluster.CommandServer.md#requirestimedinteraction)
 - [responseId](exports_cluster.CommandServer.md#responseid)
 - [responseSchema](exports_cluster.CommandServer.md#responseschema)
 
@@ -34,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `handler`)
+• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
 
 #### Type parameters
 
@@ -52,11 +53,12 @@
 | `name` | `string` |
 | `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`ResponseT`\> |
+| `requiresTimedInteraction` | `boolean` |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ## Properties
 
@@ -83,7 +85,7 @@ packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
 
 ___
 
@@ -93,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:14
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:14
 
 ___
 
@@ -103,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:16
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
 
 ___
 
@@ -113,7 +115,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:17
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
+
+___
+
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
 
 ___
 
@@ -123,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:15
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
 
 ___
 
@@ -133,13 +145,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ## Methods
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Parameters
 
@@ -152,8 +164,8 @@ packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
 
 #### Returns
 
-`Promise`<{ `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
+`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21
+packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:22

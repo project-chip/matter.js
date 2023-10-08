@@ -43,6 +43,7 @@
 - [getNodeId](exports_session.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](exports_session.UnsecureSession.md#getpeersessionid)
+- [isPase](exports_session.UnsecureSession.md#ispase)
 - [isPeerActive](exports_session.UnsecureSession.md#ispeeractive)
 - [isSecure](exports_session.UnsecureSession.md#issecure)
 - [notifyActivity](exports_session.UnsecureSession.md#notifyactivity)
@@ -68,7 +69,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:14
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:14
 
 ## Properties
 
@@ -78,7 +79,7 @@ packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:12
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:12
 
 ___
 
@@ -88,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:13
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:13
 
 ## Accessors
 
@@ -106,7 +107,7 @@ packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:22
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:23
 
 ## Methods
 
@@ -130,13 +131,19 @@ packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:22
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:18
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:19
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -148,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:33
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:34
 
 ___
 
@@ -172,13 +179,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:19
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:20
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -190,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:34
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:35
 
 ___
 
@@ -208,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:35
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:36
 
 ___
 
@@ -222,7 +235,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:20
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:21
 
 ___
 
@@ -240,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:28
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:29
 
 ___
 
@@ -258,7 +271,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:29
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:30
 
 ___
 
@@ -282,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:23
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 ___
 
@@ -300,7 +313,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:31
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:32
 
 ___
 
@@ -318,7 +331,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:32
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:33
 
 ___
 
@@ -336,7 +349,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:30
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:31
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[isPase](../interfaces/exports_session.Session.md#ispase)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:16
 
 ___
 
@@ -354,7 +385,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:17
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:18
 
 ___
 
@@ -372,7 +403,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:15
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:15
 
 ___
 
@@ -396,7 +427,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:16
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:17
 
 ___
 
@@ -416,4 +447,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/UnsecureSession.d.ts:21
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:22

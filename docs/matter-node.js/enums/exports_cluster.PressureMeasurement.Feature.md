@@ -28,4 +28,4 @@ The cluster is capable of extended range and resolution
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PressureMeasurementCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/PressureMeasurementCluster.d.ts:22

@@ -60,7 +60,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:8
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:8
 
 ## Variables
 
@@ -70,7 +70,7 @@ packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/SimulatedNetwork.d.ts:9
+packages/matter.js/dist/esm/net/fake/SimulatedNetwork.d.ts:9
 
 ## Functions
 
@@ -90,4 +90,4 @@ obj is NetInterface
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/NetInterface.d.ts:16
+packages/matter.js/dist/esm/net/NetInterface.d.ts:16

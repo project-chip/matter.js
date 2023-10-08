@@ -73,7 +73,7 @@ Special AttributeClient class to allow identifying attributes that are present b
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L48)
+packages/matter.js/src/cluster/client/AttributeClient.ts:48
 
 ## Properties
 
@@ -87,7 +87,7 @@ Special AttributeClient class to allow identifying attributes that are present b
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:49](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L49)
+packages/matter.js/src/cluster/client/AttributeClient.ts:49
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L52)
+packages/matter.js/src/cluster/client/AttributeClient.ts:52
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L51)
+packages/matter.js/src/cluster/client/AttributeClient.ts:51
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L46)
+packages/matter.js/src/cluster/client/AttributeClient.ts:46
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L50)
+packages/matter.js/src/cluster/client/AttributeClient.ts:50
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L44)
+packages/matter.js/src/cluster/client/AttributeClient.ts:44
 
 ## Methods
 
@@ -183,7 +183,7 @@ Add a listener to the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:164](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L164)
+packages/matter.js/src/cluster/client/AttributeClient.ts:166
 
 ___
 
@@ -210,7 +210,7 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:103](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L103)
+packages/matter.js/src/cluster/client/AttributeClient.ts:105
 
 ___
 
@@ -237,7 +237,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:121](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L121)
+packages/matter.js/src/cluster/client/AttributeClient.ts:123
 
 ___
 
@@ -263,7 +263,7 @@ Remove a listener from the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:169](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L169)
+packages/matter.js/src/cluster/client/AttributeClient.ts:171
 
 ___
 
@@ -291,7 +291,7 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:66](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L66)
+packages/matter.js/src/cluster/client/AttributeClient.ts:66
 
 ___
 
@@ -320,7 +320,7 @@ Subscribe to the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:137](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L137)
+packages/matter.js/src/cluster/client/AttributeClient.ts:139
 
 ___
 
@@ -346,4 +346,4 @@ Update the value of the attribute. Just internally used!
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/client/AttributeClient.ts#L159)
+packages/matter.js/src/cluster/client/AttributeClient.ts:161

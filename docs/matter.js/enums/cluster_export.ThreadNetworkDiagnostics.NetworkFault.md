@@ -27,7 +27,7 @@ Indicates there has been Thread hardware failure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:396](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L396)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:388
 
 ___
 
@@ -39,7 +39,7 @@ Indicates the Thread link is down.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:391](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L391)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:383
 
 ___
 
@@ -51,7 +51,7 @@ Indicates the Thread network is jammed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:401](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L401)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:393
 
 ___
 
@@ -63,4 +63,4 @@ Indicates an unspecified fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:386](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L386)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:378

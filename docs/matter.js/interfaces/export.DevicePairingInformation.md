@@ -22,7 +22,7 @@ Represents device pairing information.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningServer.ts#L80)
+packages/matter.js/src/CommissioningServer.ts:90
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningServer.ts#L82)
+packages/matter.js/src/CommissioningServer.ts:92
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:81](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningServer.ts#L81)
+packages/matter.js/src/CommissioningServer.ts:91

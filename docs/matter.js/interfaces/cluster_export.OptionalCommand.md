@@ -22,6 +22,7 @@
 
 ### Properties
 
+- [invokeAcl](cluster_export.OptionalCommand.md#invokeacl)
 - [isConditional](cluster_export.OptionalCommand.md#isconditional)
 - [mandatoryIf](cluster_export.OptionalCommand.md#mandatoryif)
 - [optional](cluster_export.OptionalCommand.md#optional)
@@ -30,8 +31,23 @@
 - [requestSchema](cluster_export.OptionalCommand.md#requestschema)
 - [responseId](cluster_export.OptionalCommand.md#responseid)
 - [responseSchema](cluster_export.OptionalCommand.md#responseschema)
+- [timed](cluster_export.OptionalCommand.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/cluster_export.AccessLevel.md)
+
+#### Inherited from
+
+Command.invokeAcl
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:604
+
+___
 
 ### isConditional
 
@@ -43,7 +59,7 @@ Command.isConditional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:572](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L572)
+packages/matter.js/src/cluster/Cluster.ts:606
 
 ___
 
@@ -57,7 +73,7 @@ Command.mandatoryIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:573](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L573)
+packages/matter.js/src/cluster/Cluster.ts:607
 
 ___
 
@@ -71,7 +87,7 @@ Command.optional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:578](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L578)
+packages/matter.js/src/cluster/Cluster.ts:612
 
 ___
 
@@ -85,7 +101,7 @@ Command.optionalIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:574](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L574)
+packages/matter.js/src/cluster/Cluster.ts:608
 
 ___
 
@@ -99,7 +115,7 @@ Command.requestId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:568](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L568)
+packages/matter.js/src/cluster/Cluster.ts:600
 
 ___
 
@@ -113,7 +129,7 @@ Command.requestSchema
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:569](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L569)
+packages/matter.js/src/cluster/Cluster.ts:601
 
 ___
 
@@ -127,7 +143,7 @@ Command.responseId
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:570](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L570)
+packages/matter.js/src/cluster/Cluster.ts:602
 
 ___
 
@@ -141,4 +157,18 @@ Command.responseSchema
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:571](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L571)
+packages/matter.js/src/cluster/Cluster.ts:603
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+Command.timed
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:605

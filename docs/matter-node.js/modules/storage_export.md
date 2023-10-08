@@ -31,7 +31,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:23
+packages/matter.js/dist/esm/storage/StringifyTools.d.ts:23
 
 ## Functions
 
@@ -51,7 +51,7 @@ packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:25
+packages/matter.js/dist/esm/storage/StringifyTools.d.ts:25
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:24
+packages/matter.js/dist/esm/storage/StringifyTools.d.ts:24

@@ -26,7 +26,7 @@ These are the native types used by this module.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:44
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:44
 
 ## Functions
 
@@ -51,7 +51,7 @@ the cast value or FieldValue.Invalid if cast is not possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:40
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:40
 
 ___
 
@@ -73,7 +73,7 @@ Does the specific type have children?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:28
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:28
 
 ___
 
@@ -95,4 +95,4 @@ Determine the JS type for a metatype.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Metatype.d.ts:32
+packages/matter.js/dist/esm/model/definitions/Metatype.d.ts:32

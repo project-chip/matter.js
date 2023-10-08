@@ -27,6 +27,7 @@
 - [optional](exports_cluster.ConditionalEvent.md#optional)
 - [optionalIf](exports_cluster.ConditionalEvent.md#optionalif)
 - [priority](exports_cluster.ConditionalEvent.md#priority)
+- [readAcl](exports_cluster.ConditionalEvent.md#readacl)
 - [schema](exports_cluster.ConditionalEvent.md#schema)
 - [unknown](exports_cluster.ConditionalEvent.md#unknown)
 
@@ -42,7 +43,7 @@ OptionalEvent.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:152
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:164
 
 ___
 
@@ -56,7 +57,7 @@ OptionalEvent.isConditional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:172
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:188
 
 ___
 
@@ -70,7 +71,7 @@ OptionalEvent.mandatoryIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:158
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:171
 
 ___
 
@@ -84,7 +85,7 @@ OptionalEvent.optional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:169
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:185
 
 ___
 
@@ -98,7 +99,7 @@ OptionalEvent.optionalIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:157
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:170
 
 ___
 
@@ -112,7 +113,21 @@ OptionalEvent.priority
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:154
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:166
+
+___
+
+### readAcl
+
+• **readAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+OptionalEvent.readAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:168
 
 ___
 
@@ -126,7 +141,7 @@ OptionalEvent.schema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:153
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:165
 
 ___
 
@@ -140,4 +155,4 @@ OptionalEvent.unknown
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:159
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:172

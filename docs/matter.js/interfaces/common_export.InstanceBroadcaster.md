@@ -15,6 +15,9 @@ Interface for classes that allow to announce one Matter instance.
 ### Methods
 
 - [announce](common_export.InstanceBroadcaster.md#announce)
+- [expireAllAnnouncements](common_export.InstanceBroadcaster.md#expireallannouncements)
+- [expireCommissioningAnnouncement](common_export.InstanceBroadcaster.md#expirecommissioningannouncement)
+- [expireFabricAnnouncement](common_export.InstanceBroadcaster.md#expirefabricannouncement)
 - [setCommissionMode](common_export.InstanceBroadcaster.md#setcommissionmode)
 - [setCommissionerInfo](common_export.InstanceBroadcaster.md#setcommissionerinfo)
 - [setFabrics](common_export.InstanceBroadcaster.md#setfabrics)
@@ -33,7 +36,55 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:202](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/common/InstanceBroadcaster.ts#L202)
+packages/matter.js/src/common/InstanceBroadcaster.ts:205
+
+___
+
+### expireAllAnnouncements
+
+▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+
+Expire all announcements.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/common/InstanceBroadcaster.ts:214
+
+___
+
+### expireCommissioningAnnouncement
+
+▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this commissioning instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/common/InstanceBroadcaster.ts:211
+
+___
+
+### expireFabricAnnouncement
+
+▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this operative instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/common/InstanceBroadcaster.ts:208
 
 ___
 
@@ -56,7 +107,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:193](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/common/InstanceBroadcaster.ts#L193)
+packages/matter.js/src/common/InstanceBroadcaster.ts:193
 
 ___
 
@@ -78,21 +129,23 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:199](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/common/InstanceBroadcaster.ts#L199)
+packages/matter.js/src/common/InstanceBroadcaster.ts:202
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(`fabrics`): `Promise`<`void`\>
+▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`<`void`\>
 
 Set operational details to Announce an operational device which is already commissioned.
+Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `fabrics` | [`Fabric`](../classes/fabric_export.Fabric.md)[] |
+| `expireCommissioningAnnouncements?` | `boolean` |
 
 #### Returns
 
@@ -100,4 +153,4 @@ Set operational details to Announce an operational device which is already commi
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:196](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/common/InstanceBroadcaster.ts#L196)
+packages/matter.js/src/common/InstanceBroadcaster.ts:199

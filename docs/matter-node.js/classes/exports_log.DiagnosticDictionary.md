@@ -20,7 +20,6 @@ log output.  See Logger.dict() for maximal convenience.
 ### Methods
 
 - [serialize](exports_log.DiagnosticDictionary.md#serialize)
-- [set](exports_log.DiagnosticDictionary.md#set)
 - [toString](exports_log.DiagnosticDictionary.md#tostring)
 
 ## Constructors
@@ -39,17 +38,17 @@ Create a new dictionary with optional entry values.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:35
+packages/matter.js/dist/esm/log/Logger.d.ts:45
 
 ## Properties
 
 ### entries
 
-• `Private` **entries**: `any`
+• `Private` `Readonly` **entries**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:29
+packages/matter.js/dist/esm/log/Logger.d.ts:39
 
 ## Methods
 
@@ -74,30 +73,7 @@ the formatted value
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:52
-
-___
-
-### set
-
-▸ **set**(`KEY`, `value`): `void`
-
-Add a value to the dictionary.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `KEY` | `string` | the value's KEY |
-| `value` | `any` | the value to add |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/log/Logger.d.ts:44
+packages/matter.js/dist/esm/log/Logger.d.ts:55
 
 ___
 
@@ -111,4 +87,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:53
+packages/matter.js/dist/esm/log/Logger.d.ts:56

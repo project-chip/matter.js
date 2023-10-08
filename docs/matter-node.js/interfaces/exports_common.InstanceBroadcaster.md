@@ -11,6 +11,9 @@ Interface for classes that allow to announce one Matter instance.
 ### Methods
 
 - [announce](exports_common.InstanceBroadcaster.md#announce)
+- [expireAllAnnouncements](exports_common.InstanceBroadcaster.md#expireallannouncements)
+- [expireCommissioningAnnouncement](exports_common.InstanceBroadcaster.md#expirecommissioningannouncement)
+- [expireFabricAnnouncement](exports_common.InstanceBroadcaster.md#expirefabricannouncement)
 - [setCommissionMode](exports_common.InstanceBroadcaster.md#setcommissionmode)
 - [setCommissionerInfo](exports_common.InstanceBroadcaster.md#setcommissionerinfo)
 - [setFabrics](exports_common.InstanceBroadcaster.md#setfabrics)
@@ -29,7 +32,55 @@ Send out announcements for this instance.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:258
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:261
+
+___
+
+### expireAllAnnouncements
+
+▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+
+Expire all announcements.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:267
+
+___
+
+### expireCommissioningAnnouncement
+
+▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this commissioning instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:265
+
+___
+
+### expireFabricAnnouncement
+
+▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this operative instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:263
 
 ___
 
@@ -52,7 +103,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:252
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:252
 
 ___
 
@@ -74,21 +125,23 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:256
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:259
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(`fabrics`): `Promise`<`void`\>
+▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`<`void`\>
 
 Set operational details to Announce an operational device which is already commissioned.
+Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `fabrics` | [`Fabric`](../classes/exports_fabric.Fabric.md)[] |
+| `expireCommissioningAnnouncements?` | `boolean` |
 
 #### Returns
 
@@ -96,4 +149,4 @@ Set operational details to Announce an operational device which is already commi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:254
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:257

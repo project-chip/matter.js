@@ -42,7 +42,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelStatusMessageSchema.d.ts:9
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelStatusMessageSchema.d.ts:9
 
 ## Variables
 
@@ -57,7 +57,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:6
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:6
 
 ___
 
@@ -67,4 +67,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelStatusMessageSchema.d.ts:22
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelStatusMessageSchema.d.ts:22

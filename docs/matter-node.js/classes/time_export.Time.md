@@ -8,8 +8,6 @@
 
 - **`Time`**
 
-  ↳ [`TimeFake`](time_export.TimeFake.md)
-
   ↳ [`TimeNode`](time_export.TimeNode.md)
 
 ## Table of contents
@@ -56,7 +54,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:8
+packages/matter.js/dist/esm/time/Time.d.ts:8
 
 ___
 
@@ -81,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:18
+packages/matter.js/dist/esm/time/Time.d.ts:18
 
 ___
 
@@ -106,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:15
+packages/matter.js/dist/esm/time/Time.d.ts:15
 
 ___
 
@@ -124,7 +122,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:10
+packages/matter.js/dist/esm/time/Time.d.ts:10
 
 ___
 
@@ -142,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:12
+packages/matter.js/dist/esm/time/Time.d.ts:12
 
 ___
 
@@ -166,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:19
+packages/matter.js/dist/esm/time/Time.d.ts:19
 
 ## Methods
 
@@ -189,7 +187,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:17
+packages/matter.js/dist/esm/time/Time.d.ts:17
 
 ___
 
@@ -212,7 +210,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:14
+packages/matter.js/dist/esm/time/Time.d.ts:14
 
 ___
 
@@ -226,7 +224,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:9
+packages/matter.js/dist/esm/time/Time.d.ts:9
 
 ___
 
@@ -240,4 +238,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:11
+packages/matter.js/dist/esm/time/Time.d.ts:11

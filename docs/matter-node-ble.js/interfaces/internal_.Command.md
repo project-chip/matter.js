@@ -16,6 +16,7 @@
 
 ### Properties
 
+- [invokeAcl](internal_.Command.md#invokeacl)
 - [isConditional](internal_.Command.md#isconditional)
 - [mandatoryIf](internal_.Command.md#mandatoryif)
 - [optional](internal_.Command.md#optional)
@@ -24,8 +25,19 @@
 - [requestSchema](internal_.Command.md#requestschema)
 - [responseId](internal_.Command.md#responseid)
 - [responseSchema](internal_.Command.md#responseschema)
+- [timed](internal_.Command.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:129
+
+___
 
 ### isConditional
 
@@ -33,7 +45,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:127
+matter.js/dist/cjs/cluster/Cluster.d.ts:131
 
 ___
 
@@ -43,7 +55,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:128
+matter.js/dist/cjs/cluster/Cluster.d.ts:132
 
 ___
 
@@ -53,7 +65,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:122
+matter.js/dist/cjs/cluster/Cluster.d.ts:124
 
 ___
 
@@ -63,7 +75,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:129
+matter.js/dist/cjs/cluster/Cluster.d.ts:133
 
 ___
 
@@ -73,7 +85,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:123
+matter.js/dist/cjs/cluster/Cluster.d.ts:125
 
 ___
 
@@ -83,7 +95,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:124
+matter.js/dist/cjs/cluster/Cluster.d.ts:126
 
 ___
 
@@ -93,7 +105,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:125
+matter.js/dist/cjs/cluster/Cluster.d.ts:127
 
 ___
 
@@ -103,4 +115,14 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:126
+matter.js/dist/cjs/cluster/Cluster.d.ts:128
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:130

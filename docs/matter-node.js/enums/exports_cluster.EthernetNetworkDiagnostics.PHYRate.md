@@ -33,7 +33,7 @@ PHY rate is 100Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:45
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:46
 
 ___
 
@@ -45,7 +45,7 @@ PHY rate is 100Mbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:22
 
 ___
 
@@ -57,7 +57,7 @@ PHY rate is 10Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:38
 
 ___
 
@@ -69,7 +69,7 @@ PHY rate is 10Mbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:18
 
 ___
 
@@ -81,7 +81,7 @@ PHY rate is 1Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:26
 
 ___
 
@@ -93,7 +93,7 @@ PHY rate is 200Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:50
 
 ___
 
@@ -105,7 +105,7 @@ PHY rate is 2.5Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:30
 
 ___
 
@@ -117,7 +117,7 @@ PHY rate is 400Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:53
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:54
 
 ___
 
@@ -129,7 +129,7 @@ PHY rate is 40Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:41
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:42
 
 ___
 
@@ -141,4 +141,4 @@ PHY rate is 5Gbps
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/EthernetNetworkDiagnosticsCluster.d.ts:34

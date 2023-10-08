@@ -26,7 +26,7 @@ The Node detects the supplied voltage is above maximum supported value for this 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:55
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:56
 
 ___
 
@@ -38,7 +38,7 @@ The Node detects the supplied voltage is below maximum supported value for this 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:59
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:60
 
 ___
 
@@ -50,4 +50,4 @@ The Node detects an unspecified fault on this wired power source.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/PowerSourceCluster.d.ts:51
+packages/matter.js/dist/esm/cluster/definitions/PowerSourceCluster.d.ts:52

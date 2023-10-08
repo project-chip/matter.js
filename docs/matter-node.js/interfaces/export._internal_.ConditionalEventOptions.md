@@ -10,12 +10,19 @@
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
 
+## Hierarchy
+
+- [`EventOptions`](export._internal_.EventOptions.md)
+
+  ↳ **`ConditionalEventOptions`**
+
 ## Table of contents
 
 ### Properties
 
 - [mandatoryIf](export._internal_.ConditionalEventOptions.md#mandatoryif)
 - [optionalIf](export._internal_.ConditionalEventOptions.md#optionalif)
+- [readAcl](export._internal_.ConditionalEventOptions.md#readacl)
 
 ## Properties
 
@@ -25,7 +32,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:166
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:182
 
 ___
 
@@ -35,4 +42,18 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:165
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:181
+
+___
+
+### readAcl
+
+• `Optional` **readAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+[EventOptions](export._internal_.EventOptions.md).[readAcl](export._internal_.EventOptions.md#readacl)
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:178

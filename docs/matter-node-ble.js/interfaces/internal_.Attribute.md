@@ -28,6 +28,7 @@
 - [readAcl](internal_.Attribute.md#readacl)
 - [scene](internal_.Attribute.md#scene)
 - [schema](internal_.Attribute.md#schema)
+- [timed](internal_.Attribute.md#timed)
 - [unknown](internal_.Attribute.md#unknown)
 - [writable](internal_.Attribute.md#writable)
 - [writeAcl](internal_.Attribute.md#writeacl)
@@ -40,7 +41,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:37
+matter.js/dist/cjs/cluster/Cluster.d.ts:38
 
 ___
 
@@ -50,7 +51,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:34
+matter.js/dist/cjs/cluster/Cluster.d.ts:35
 
 ___
 
@@ -60,7 +61,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:33
+matter.js/dist/cjs/cluster/Cluster.d.ts:34
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:38
+matter.js/dist/cjs/cluster/Cluster.d.ts:39
 
 ___
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:40
+matter.js/dist/cjs/cluster/Cluster.d.ts:41
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:35
+matter.js/dist/cjs/cluster/Cluster.d.ts:36
 
 ___
 
@@ -120,7 +121,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:39
+matter.js/dist/cjs/cluster/Cluster.d.ts:40
 
 ___
 
@@ -164,13 +165,23 @@ matter.js/dist/cjs/cluster/Cluster.d.ts:27
 
 ___
 
+### timed
+
+• **timed**: `boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:33
+
+___
+
 ### unknown
 
 • **unknown**: `boolean`
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:41
+matter.js/dist/cjs/cluster/Cluster.d.ts:42
 
 ___
 
@@ -190,4 +201,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:36
+matter.js/dist/cjs/cluster/Cluster.d.ts:37

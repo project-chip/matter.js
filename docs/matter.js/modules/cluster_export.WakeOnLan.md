@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `linkLocalAddress`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`Uint8Array`, `any`\> ; `macAddress`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`Uint8Array`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, {}, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `linkLocalAddress`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`Uint8Array`, `any`\> ; `macAddress`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`Uint8Array`, `any`\>  } ; `id`: ``1283`` = 0x503; `name`: ``"WakeOnLan"`` = "WakeOnLan"; `revision`: ``1`` = 1 }\>
 
 Wake on LAN
 
@@ -27,4 +27,4 @@ On Wireless LAN (WLAN) protocol (see [Wake On LAN]).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L22)
+packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:23

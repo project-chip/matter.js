@@ -28,6 +28,7 @@ SPDX-License-Identifier: Apache-2.0
 ### Properties
 
 - [channel](exports_protocol.MessageChannel.md#channel)
+- [closeCallback](exports_protocol.MessageChannel.md#closecallback)
 - [session](exports_protocol.MessageChannel.md#session)
 
 ### Accessors
@@ -43,7 +44,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new MessageChannel**<`ContextT`\>(`channel`, `session`)
+• **new MessageChannel**<`ContextT`\>(`channel`, `session`, `closeCallback?`)
 
 #### Type parameters
 
@@ -57,10 +58,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\> |
+| `closeCallback?` | () => `void` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
 
 ## Properties
 
@@ -70,7 +72,17 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:19
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:19
+
+___
+
+### closeCallback
+
+• `Private` `Optional` `Readonly` **closeCallback**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
 
 ___
 
@@ -80,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
 
 ## Accessors
 
@@ -98,7 +110,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 ## Methods
 
@@ -116,7 +128,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:25
 
 ___
 
@@ -140,4 +152,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:22
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:23

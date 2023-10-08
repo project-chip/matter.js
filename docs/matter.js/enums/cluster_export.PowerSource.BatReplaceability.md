@@ -27,7 +27,7 @@ The battery is replaceable by an authorized factory technician.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:162](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L162)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:153
 
 ___
 
@@ -39,7 +39,7 @@ The battery is not replaceable.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:152](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L152)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:143
 
 ___
 
@@ -51,7 +51,7 @@ The replaceability is unspecified or unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:147](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L147)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:138
 
 ___
 
@@ -63,4 +63,4 @@ The battery is replaceable by the user or customer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:157](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L157)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:148

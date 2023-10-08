@@ -38,6 +38,7 @@
 - [WrapCommandHandler](device_export.md#wrapcommandhandler)
 - [getClusterInitialAttributeValues](device_export.md#getclusterinitialattributevalues)
 - [getDeviceTypeDefinitionByCode](device_export.md#getdevicetypedefinitionbycode)
+- [logEndpoint](device_export.md#logendpoint)
 
 ## Variables
 
@@ -51,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DeviceTypes.ts#L113)
+packages/matter.js/src/device/DeviceTypes.ts:113
 
 ## Functions
 
@@ -81,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DeviceTypes.ts#L78)
+packages/matter.js/src/device/DeviceTypes.ts:78
 
 ___
 
@@ -101,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DeviceTypes.ts#L974)
+packages/matter.js/src/device/DeviceTypes.ts:974
 
 ___
 
@@ -116,7 +117,7 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`, `C`\> |
+| `C` | extends [`Cluster`](cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -131,7 +132,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L28)
+packages/matter.js/src/device/Device.ts:28
 
 ___
 
@@ -165,7 +166,7 @@ for multiple clusters
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/OnOffDevices.ts#L36)
+packages/matter.js/src/device/OnOffDevices.ts:36
 
 ___
 
@@ -185,4 +186,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DeviceTypes.ts#L983)
+packages/matter.js/src/device/DeviceTypes.ts:983
+
+___
+
+### logEndpoint
+
+▸ **logEndpoint**(`endpoint`, `options?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpoint` | [`Endpoint`](../classes/device_export.Endpoint.md) |
+| `options` | [`EndpointLoggingOptions`](export._internal_.md#endpointloggingoptions) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/device/EndpointStructureLogger.ts:238

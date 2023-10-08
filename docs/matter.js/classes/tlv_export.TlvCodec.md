@@ -13,6 +13,9 @@
 ### Methods
 
 - [getIntTlvLength](tlv_export.TlvCodec.md#getinttlvlength)
+- [getPrimitiveByteLength](tlv_export.TlvCodec.md#getprimitivebytelength)
+- [getTagByteLength](tlv_export.TlvCodec.md#gettagbytelength)
+- [getUIntByteLength](tlv_export.TlvCodec.md#getuintbytelength)
 - [getUIntTlvLength](tlv_export.TlvCodec.md#getuinttlvlength)
 - [parseTypeLength](tlv_export.TlvCodec.md#parsetypelength)
 - [readPrimitive](tlv_export.TlvCodec.md#readprimitive)
@@ -46,7 +49,74 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:129](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L129)
+packages/matter.js/src/tlv/TlvCodec.ts:129
+
+___
+
+### getPrimitiveByteLength
+
+▸ `Static` **getPrimitiveByteLength**<`T`\>(`typeLength`, `value`): `number`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`TlvTypeLength`](../modules/tlv_export.md#tlvtypelength) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `typeLength` | `T` |
+| `value` | [`TlvToPrimitive`](../modules/tlv_export.md#tlvtoprimitive)[`T`[``"type"``]] |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/src/tlv/TlvCodec.ts:422
+
+___
+
+### getTagByteLength
+
+▸ `Static` **getTagByteLength**(`tag?`): ``1`` \| ``2`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `tag?` | [`TlvTag`](../modules/tlv_export.md#tlvtag) |
+
+#### Returns
+
+``1`` \| ``2`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+
+#### Defined in
+
+packages/matter.js/src/tlv/TlvCodec.ts:342
+
+___
+
+### getUIntByteLength
+
+▸ `Static` `Private` **getUIntByteLength**(`length`): ``1`` \| ``2`` \| ``4`` \| ``8``
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `length` | [`TlvLength`](../enums/tlv_export.TlvLength.md) |
+
+#### Returns
+
+``1`` \| ``2`` \| ``4`` \| ``8``
+
+#### Defined in
+
+packages/matter.js/src/tlv/TlvCodec.ts:457
 
 ___
 
@@ -66,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:117](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L117)
+packages/matter.js/src/tlv/TlvCodec.ts:117
 
 ___
 
@@ -86,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:179](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L179)
+packages/matter.js/src/tlv/TlvCodec.ts:179
 
 ___
 
@@ -114,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L206)
+packages/matter.js/src/tlv/TlvCodec.ts:206
 
 ___
 
@@ -135,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L159)
+packages/matter.js/src/tlv/TlvCodec.ts:159
 
 ___
 
@@ -164,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:154](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L154)
+packages/matter.js/src/tlv/TlvCodec.ts:154
 
 ___
 
@@ -192,7 +262,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:342](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L342)
+packages/matter.js/src/tlv/TlvCodec.ts:370
 
 ___
 
@@ -218,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:292](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L292)
+packages/matter.js/src/tlv/TlvCodec.ts:292
 
 ___
 
@@ -240,4 +310,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:394](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvCodec.ts#L394)
+packages/matter.js/src/tlv/TlvCodec.ts:444

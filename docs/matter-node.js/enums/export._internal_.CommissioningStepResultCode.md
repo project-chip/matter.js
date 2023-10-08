@@ -22,7 +22,7 @@ Result code of a single commissioning step
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ControllerCommissioner.d.ts:33
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:33
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ControllerCommissioner.d.ts:34
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:34
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ControllerCommissioner.d.ts:32
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:32

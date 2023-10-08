@@ -34,6 +34,7 @@
 - [getNodeId](exports_session.Session.md#getnodeid)
 - [getPeerNodeId](exports_session.Session.md#getpeernodeid)
 - [getPeerSessionId](exports_session.Session.md#getpeersessionid)
+- [isPase](exports_session.Session.md#ispase)
 - [isPeerActive](exports_session.Session.md#ispeeractive)
 - [isSecure](exports_session.Session.md#issecure)
 - [notifyActivity](exports_session.Session.md#notifyactivity)
@@ -46,7 +47,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:24
+packages/matter.js/dist/esm/session/Session.d.ts:24
 
 ## Methods
 
@@ -66,13 +67,19 @@ packages/matter.js/dist/cjs/session/Session.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:26
+packages/matter.js/dist/esm/session/Session.d.ts:27
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -80,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:35
+packages/matter.js/dist/esm/session/Session.d.ts:36
 
 ___
 
@@ -100,13 +107,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:27
+packages/matter.js/dist/esm/session/Session.d.ts:28
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -114,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:34
+packages/matter.js/dist/esm/session/Session.d.ts:35
 
 ___
 
@@ -128,7 +141,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:38
+packages/matter.js/dist/esm/session/Session.d.ts:39
 
 ___
 
@@ -142,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:29
+packages/matter.js/dist/esm/session/Session.d.ts:30
 
 ___
 
@@ -156,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:30
+packages/matter.js/dist/esm/session/Session.d.ts:31
 
 ___
 
@@ -170,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:28
+packages/matter.js/dist/esm/session/Session.d.ts:29
 
 ___
 
@@ -184,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:32
+packages/matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
@@ -198,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:33
+packages/matter.js/dist/esm/session/Session.d.ts:34
 
 ___
 
@@ -212,7 +225,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:31
+packages/matter.js/dist/esm/session/Session.d.ts:32
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:26
 
 ___
 
@@ -226,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:37
+packages/matter.js/dist/esm/session/Session.d.ts:38
 
 ___
 
@@ -240,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:25
+packages/matter.js/dist/esm/session/Session.d.ts:25
 
 ___
 
@@ -260,4 +287,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:36
+packages/matter.js/dist/esm/session/Session.d.ts:37

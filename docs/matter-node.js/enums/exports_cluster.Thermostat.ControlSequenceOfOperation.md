@@ -31,7 +31,7 @@ All modes are possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:55
 
 ___
 
@@ -43,7 +43,7 @@ All modes are possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:59
 
 ___
 
@@ -55,7 +55,7 @@ Heat and Emergency are not possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:39
 
 ___
 
@@ -67,7 +67,7 @@ Heat and Emergency are not possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:43
 
 ___
 
@@ -79,7 +79,7 @@ Cool and precooling (see Terms) are not possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:47
 
 ___
 
@@ -91,4 +91,4 @@ Cool and precooling are not possible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:51

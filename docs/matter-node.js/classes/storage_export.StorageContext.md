@@ -38,7 +38,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:11
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:11
 
 ## Properties
 
@@ -48,7 +48,7 @@ packages/matter.js/dist/cjs/storage/StorageContext.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:10
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:10
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:9
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:9
 
 ## Methods
 
@@ -78,7 +78,7 @@ packages/matter.js/dist/cjs/storage/StorageContext.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:16
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:16
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:15
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:15
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:12
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:12
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:13
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:13
 
 ___
 
@@ -172,4 +172,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageContext.d.ts:14
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:14

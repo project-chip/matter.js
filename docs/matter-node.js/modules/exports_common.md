@@ -6,9 +6,11 @@
 
 ### Classes
 
+- [FailSafeManager](../classes/exports_common.FailSafeManager.md)
 - [ImplementationError](../classes/exports_common.ImplementationError.md)
 - [InternalError](../classes/exports_common.InternalError.md)
 - [MatterError](../classes/exports_common.MatterError.md)
+- [MatterFabricConflictError](../classes/exports_common.MatterFabricConflictError.md)
 - [MatterFlowError](../classes/exports_common.MatterFlowError.md)
 - [NoProviderError](../classes/exports_common.NoProviderError.md)
 - [NotImplementedError](../classes/exports_common.NotImplementedError.md)
@@ -72,7 +74,7 @@ The properties are named identical as in the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:14
+packages/matter.js/dist/esm/common/Scanner.d.ts:14
 
 ___
 
@@ -85,7 +87,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:44
+packages/matter.js/dist/esm/common/Scanner.d.ts:44
 
 ___
 
@@ -106,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:229
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:229
 
 ___
 
@@ -130,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:209
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:209
 
 ___
 
@@ -147,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:243
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:243
 
 ___
 
@@ -157,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/ServerAddress.d.ts:15
+packages/matter.js/dist/esm/common/ServerAddress.d.ts:15
 
 ___
 
@@ -174,7 +176,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/ServerAddress.d.ts:11
+packages/matter.js/dist/esm/common/ServerAddress.d.ts:11
 
 ___
 
@@ -197,7 +199,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/ServerAddress.d.ts:6
+packages/matter.js/dist/esm/common/ServerAddress.d.ts:6
 
 ## Variables
 
@@ -232,17 +234,17 @@ packages/matter.js/dist/cjs/common/ServerAddress.d.ts:6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:9
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:9
 
 ___
 
 ### PairingHintBitmapSchema
 
-• `Const` **PairingHintBitmapSchema**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md)
+• `Const` **PairingHintBitmapSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:109
+packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:109
 
 ## Functions
 
@@ -275,7 +277,7 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/TryCatchHandler.d.ts:17
+packages/matter.js/dist/esm/common/TryCatchHandler.d.ts:17
 
 ___
 
@@ -308,4 +310,4 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/TryCatchHandler.d.ts:27
+packages/matter.js/dist/esm/common/TryCatchHandler.d.ts:27

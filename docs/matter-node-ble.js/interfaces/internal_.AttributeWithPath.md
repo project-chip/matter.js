@@ -15,11 +15,11 @@
 
 ### attribute
 
-• **attribute**: [`AttributeServer`](../classes/internal_.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](../classes/internal_.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](../classes/internal_.FixedAttributeServer.md)<`any`\>
+• **attribute**: [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:41
+matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:43
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:40
+matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:42

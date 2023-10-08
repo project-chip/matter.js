@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/LevelControlCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:75
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/LevelControlCluster.d.ts:73
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:74

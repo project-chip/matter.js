@@ -27,7 +27,7 @@ Media is not currently buffering and playback will start when buffer has been fi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaPlaybackCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:30
 
 ___
 
@@ -39,7 +39,7 @@ Media is not currently playing
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaPlaybackCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:26
 
 ___
 
@@ -51,7 +51,7 @@ Media is currently paused
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaPlaybackCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:22
 
 ___
 
@@ -63,4 +63,4 @@ Media is currently playing (includes FF and REW)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaPlaybackCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:18

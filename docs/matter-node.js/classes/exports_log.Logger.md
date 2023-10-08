@@ -62,7 +62,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:113
+packages/matter.js/dist/esm/log/Logger.d.ts:116
 
 ## Properties
 
@@ -86,7 +86,7 @@ packages/matter.js/dist/cjs/log/Logger.d.ts:113
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:114
+packages/matter.js/dist/esm/log/Logger.d.ts:117
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:117
+packages/matter.js/dist/esm/log/Logger.d.ts:120
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:118
+packages/matter.js/dist/esm/log/Logger.d.ts:121
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:115
+packages/matter.js/dist/esm/log/Logger.d.ts:118
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:119
+packages/matter.js/dist/esm/log/Logger.d.ts:122
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:68
+packages/matter.js/dist/esm/log/Logger.d.ts:71
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:116
+packages/matter.js/dist/esm/log/Logger.d.ts:119
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:71
+packages/matter.js/dist/esm/log/Logger.d.ts:74
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:70
+packages/matter.js/dist/esm/log/Logger.d.ts:73
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:69
+packages/matter.js/dist/esm/log/Logger.d.ts:72
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:72
+packages/matter.js/dist/esm/log/Logger.d.ts:75
 
 ___
 
@@ -288,7 +288,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:75
+packages/matter.js/dist/esm/log/Logger.d.ts:78
 
 ## Accessors
 
@@ -310,7 +310,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:81
+packages/matter.js/dist/esm/log/Logger.d.ts:84
 
 ## Methods
 
@@ -332,7 +332,7 @@ Shortcut for new DiagnosticDictionary().
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:101
+packages/matter.js/dist/esm/log/Logger.d.ts:104
 
 ___
 
@@ -356,7 +356,7 @@ a new facility
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:88
+packages/matter.js/dist/esm/log/Logger.d.ts:91
 
 ___
 
@@ -385,7 +385,7 @@ indented while the context executes.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:108
+packages/matter.js/dist/esm/log/Logger.d.ts:111
 
 ___
 
@@ -393,7 +393,7 @@ ___
 
 ▸ `Static` **nestAsync**(`context`): `Promise`<`any`\>
 
-Async version of above.
+Async version of nest().
 
 #### Parameters
 
@@ -407,7 +407,7 @@ Async version of above.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:112
+packages/matter.js/dist/esm/log/Logger.d.ts:115
 
 ___
 
@@ -431,4 +431,4 @@ the stringified value
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:95
+packages/matter.js/dist/esm/log/Logger.d.ts:98

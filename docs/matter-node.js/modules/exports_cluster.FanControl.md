@@ -33,7 +33,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.FanControl.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `multiSpeed`: ``true``  } ? typeof [`MultiSpeedComponent`](exports_cluster.FanControl.md#multispeedcomponent) : {} & `SF` extends { `rocking`: ``true``  } ? typeof [`RockingComponent`](exports_cluster.FanControl.md#rockingcomponent) : {} & `SF` extends { `wind`: ``true``  } ? typeof [`WindComponent`](exports_cluster.FanControl.md#windcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.FanControl.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `multiSpeed`: ``true``  } ? typeof [`MultiSpeedComponent`](exports_cluster.FanControl.md#multispeedcomponent) : {} & `SF` extends { `rocking`: ``true``  } ? typeof [`RockingComponent`](exports_cluster.FanControl.md#rockingcomponent) : {} & `SF` extends { `wind`: ``true``  } ? typeof [`WindComponent`](exports_cluster.FanControl.md#windcomponent) : {}
 
 #### Type parameters
 
@@ -43,25 +43,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:460
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:546
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `fanMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `fanMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\>  } ; `features`: { `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``514`` ; `name`: ``"FanControl"`` ; `revision`: ``2``  }\>
 
 These elements and properties are present in all FanControl clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:163
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:164
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.FanControl.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: { `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"FanControl"`` ; `revision`: ``2`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `fanMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> ; `percentCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\>  } ; `features`: { `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``514`` ; `name`: ``"FanControl"`` ; `revision`: ``2``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.FanControl.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Fan Control
 
@@ -76,13 +76,13 @@ MatterApplicationClusterSpecificationV1_1 § 4.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:329
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:342
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](exports_cluster.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `fanMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanMode`](../enums/exports_cluster.FanControl.FanMode.md), `any`\> ; `fanModeSequence`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`FanModeSequence`](../enums/exports_cluster.FanControl.FanModeSequence.md), `any`\> ; `featureMap`: [`Attribute`](exports_cluster.md#attribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `percentCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `percentSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> ; `rockSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `rockSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `speedCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `speedMax`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `speedSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `windSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `windSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: { `auto`: [`BitFlag`](exports_schema.md#bitflag-1) ; `multiSpeed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rocking`: [`BitFlag`](exports_schema.md#bitflag-1) ; `wind`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``514`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"FanControl"`` ; `revision`: ``2``  }\>
 
 This cluster supports all FanControl features. It may support illegal feature combinations.
 
@@ -91,19 +91,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:475
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:561
 
 ___
 
 ### MultiSpeedComponent
 
-• `Const` **MultiSpeedComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `speedCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **MultiSpeedComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `speedCurrent`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `speedMax`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `speedSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature MultiSpeed.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:222
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:229
 
 ___
 
@@ -127,7 +127,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:106
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:107
 
 ___
 
@@ -151,31 +151,31 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:96
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:97
 
 ___
 
 ### RockingComponent
 
-• `Const` **RockingComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `rockSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `rockLeftRight`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rockRound`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `rockSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `rockLeftRight`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rockRound`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rockUpDown`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **RockingComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `rockSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `rockSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature Rocking.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:250
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:259
 
 ___
 
 ### WindComponent
 
-• `Const` **WindComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `windSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `naturalWind`: [`BitFlag`](exports_schema.md#bitflag-1) ; `sleepWind`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `windSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `naturalWind`: [`BitFlag`](exports_schema.md#bitflag-1) ; `sleepWind`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **WindComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `windSetting`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `windSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  }\>
 
 A FanControlCluster supports these elements if it supports feature Wind.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:287
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:298
 
 ___
 
@@ -198,7 +198,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:125
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:126
 
 ___
 
@@ -221,4 +221,4 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:116
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:117

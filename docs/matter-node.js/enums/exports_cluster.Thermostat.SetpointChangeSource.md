@@ -28,7 +28,7 @@ Externally-initiated setpoint change (e.g., DRLC cluster command, attribute writ
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:190
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:191
 
 ___
 
@@ -40,7 +40,7 @@ Manual, user-initiated setpoint change via the thermostat
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:182
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:183
 
 ___
 
@@ -52,4 +52,4 @@ Schedule/internal programming-initiated setpoint change
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:186
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:187

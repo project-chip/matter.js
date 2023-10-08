@@ -41,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/Storage.d.ts:12
+packages/matter.js/dist/esm/storage/Storage.d.ts:12
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/Storage.d.ts:15
+packages/matter.js/dist/esm/storage/Storage.d.ts:15
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/Storage.d.ts:13
+packages/matter.js/dist/esm/storage/Storage.d.ts:13
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/Storage.d.ts:11
+packages/matter.js/dist/esm/storage/Storage.d.ts:11
 
 ___
 
@@ -131,4 +131,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/Storage.d.ts:14
+packages/matter.js/dist/esm/storage/Storage.d.ts:14

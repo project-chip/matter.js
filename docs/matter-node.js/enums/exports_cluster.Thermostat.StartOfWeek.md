@@ -30,7 +30,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.3.7.27
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:373
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:374
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:369
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:370
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:374
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:375
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:368
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:369
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:372
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:373
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:370
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:371
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:371
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:372

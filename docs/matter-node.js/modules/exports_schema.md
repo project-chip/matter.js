@@ -58,9 +58,9 @@ Defines the bit position and bit length of a numeric value.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:25
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:25
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:26
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:26
 
 ___
 
@@ -78,9 +78,9 @@ Defines the bit position and bit length of an enum flag.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:28
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:28
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:29
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:29
 
 ___
 
@@ -92,9 +92,9 @@ Defines the bit position of a boolean flag.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:22
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:22
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:23
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:23
 
 ___
 
@@ -113,9 +113,9 @@ Create a type with specified bit flags set
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:69
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:69
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:65
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:65
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:30
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:30
 
 ___
 
@@ -147,7 +147,7 @@ Create a partial bitmap from a flag sequence
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:61
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:61
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:50
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:50
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:44
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:44
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:33
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:33
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:39
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:39
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:36
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:36
 
 ## Variables
 
@@ -235,7 +235,7 @@ packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:36
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Base38Schema.d.ts:15
+packages/matter.js/dist/esm/schema/Base38Schema.d.ts:15
 
 ___
 
@@ -255,17 +255,17 @@ See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:18
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:18
 
 ___
 
 ### DiscoveryCapabilitiesSchema
 
-• `Const` **DiscoveryCapabilitiesSchema**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md)
+• `Const` **DiscoveryCapabilitiesSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:26
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:26
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:62
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:62
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/QrCodeSchema.d.ts:12
+packages/matter.js/dist/esm/schema/QrCodeSchema.d.ts:12
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:49
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:49
 
 ## Functions
 
@@ -316,7 +316,7 @@ packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:49
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:26
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:26
 
 ___
 
@@ -343,7 +343,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:29
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:29
 
 ___
 
@@ -363,7 +363,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:23
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:23
 
 ___
 
@@ -393,7 +393,7 @@ Create a bitmap schema with a named subset of flags set
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:69
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:69
 
 ___
 
@@ -421,7 +421,7 @@ Declares a bitmap schema by indicating the bit position and their names.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:73
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:73
 
 ___
 
@@ -451,7 +451,7 @@ Create a full bitmap schema from a partial bitmap schema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:71
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:71
 
 ___
 
@@ -479,4 +479,4 @@ Declares a bitmap schema backed by a ByteArray by indicating the bit position an
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:75
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:75

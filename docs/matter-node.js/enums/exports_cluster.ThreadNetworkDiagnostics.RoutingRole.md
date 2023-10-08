@@ -30,7 +30,7 @@ The Node acts as an End Device without RX- off-when-idle sleepy radio behavior.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:31
 
 ___
 
@@ -42,7 +42,7 @@ The Node acts as a Leader Device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:43
 
 ___
 
@@ -54,7 +54,7 @@ The Node acts as an Router Eligible End Device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:35
 
 ___
 
@@ -66,7 +66,7 @@ The Node acts as a Router Device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:39
 
 ___
 
@@ -78,7 +78,7 @@ The Node acts as a Sleepy End Device with RX-off-when-idle sleepy radio behavior
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:27
 
 ___
 
@@ -91,7 +91,7 @@ or operational.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:23
 
 ___
 
@@ -103,4 +103,4 @@ Unspecified routing role.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:18

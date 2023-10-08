@@ -29,7 +29,7 @@ Indicate the usage of no Wi-Fi security
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:22
 
 ___
 
@@ -41,7 +41,7 @@ Indicate the usage of an unspecified Wi-Fi security type
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:18
 
 ___
 
@@ -53,7 +53,7 @@ Indicate the usage of WEP Wi-Fi security
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:26
 
 ___
 
@@ -65,7 +65,7 @@ Indicate the usage of WPA Wi-Fi security
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:30
 
 ___
 
@@ -77,7 +77,7 @@ Indicate the usage of WPA2 Wi-Fi security
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:34
 
 ___
 
@@ -89,4 +89,4 @@ Indicate the usage of WPA3 Wi-Fi security
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:38

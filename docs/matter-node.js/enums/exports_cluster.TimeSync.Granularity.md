@@ -29,7 +29,7 @@ protocol such as PTP, or has built-in GNSS. UTC time is accurate to ± 10 μs.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeSyncCluster.d.ts:39
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:40
 
 ___
 
@@ -43,7 +43,7 @@ is accurate to ± 50ms.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeSyncCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:35
 
 ___
 
@@ -56,7 +56,7 @@ occurred such that the clock error is now > 5 seconds.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeSyncCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:24
 
 ___
 
@@ -69,7 +69,7 @@ on the Last Known Good UTC Time only.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeSyncCluster.d.ts:18
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:19
 
 ___
 
@@ -82,4 +82,4 @@ accurate to ± 5 seconds.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeSyncCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:29

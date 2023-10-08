@@ -13,6 +13,7 @@
 - [InterfaceType](../enums/exports_cluster.GeneralDiagnostics.InterfaceType.md)
 - [NetworkFault](../enums/exports_cluster.GeneralDiagnostics.NetworkFault.md)
 - [RadioFault](../enums/exports_cluster.GeneralDiagnostics.RadioFault.md)
+- [StatusCode](../enums/exports_cluster.GeneralDiagnostics.StatusCode.md)
 
 ### Variables
 
@@ -28,7 +29,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `testEventTrigger`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, { `bootReason`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `hardwareFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `networkFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `radioFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `activeHardwareFaults`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`HardwareFault`](../enums/exports_cluster.GeneralDiagnostics.HardwareFault.md)[], `any`\> ; `activeNetworkFaults`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`NetworkFault`](../enums/exports_cluster.GeneralDiagnostics.NetworkFault.md)[], `any`\> ; `activeRadioFaults`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`RadioFault`](../enums/exports_cluster.GeneralDiagnostics.RadioFault.md)[], `any`\> ; `bootReason`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`BootReason`](../enums/exports_cluster.GeneralDiagnostics.BootReason.md), `any`\> ; `networkInterfaces`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `rebootCount`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `testEventTriggersEnabled`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `totalOperationalHours`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number`, `any`\> ; `upTime`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\>  } ; `commands`: { `testEventTrigger`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `bootReason`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `hardwareFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `networkFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `radioFaultChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``51`` ; `name`: ``"GeneralDiagnostics"`` ; `revision`: ``1``  }\>
 
 General Diagnostics
 
@@ -43,13 +44,13 @@ MatterCoreSpecificationV1_1 § 11.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:350
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:359
 
 ___
 
 ### TlvBootReasonEvent
 
-• `Const` **TlvBootReasonEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvBootReasonEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the GeneralDiagnostics bootReason event
 
@@ -59,13 +60,13 @@ MatterCoreSpecificationV1_1 § 11.11.8.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:332
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:333
 
 ___
 
 ### TlvHardwareFaultChangeEvent
 
-• `Const` **TlvHardwareFaultChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvHardwareFaultChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the GeneralDiagnostics hardwareFaultChange event
 
@@ -75,13 +76,13 @@ MatterCoreSpecificationV1_1 § 11.11.8.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:292
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:293
 
 ___
 
 ### TlvNetworkFaultChangeEvent
 
-• `Const` **TlvNetworkFaultChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNetworkFaultChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the GeneralDiagnostics networkFaultChange event
 
@@ -91,13 +92,13 @@ MatterCoreSpecificationV1_1 § 11.11.8.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:323
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:324
 
 ___
 
 ### TlvNetworkInterface
 
-• `Const` **TlvNetworkInterface**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNetworkInterface**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This structure describes a network interface supported by the Node, as provided in the NetworkInterfaces
 attribute.
@@ -108,13 +109,13 @@ MatterCoreSpecificationV1_1 § 11.11.4.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:40
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:41
 
 ___
 
 ### TlvRadioFaultChangeEvent
 
-• `Const` **TlvRadioFaultChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvRadioFaultChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the GeneralDiagnostics radioFaultChange event
 
@@ -124,13 +125,13 @@ MatterCoreSpecificationV1_1 § 11.11.8.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:314
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:315
 
 ___
 
 ### TlvTestEventTriggerRequest
 
-• `Const` **TlvTestEventTriggerRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvTestEventTriggerRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the GeneralDiagnostics testEventTrigger command
 
@@ -140,4 +141,4 @@ MatterCoreSpecificationV1_1 § 11.11.7.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:241
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:242

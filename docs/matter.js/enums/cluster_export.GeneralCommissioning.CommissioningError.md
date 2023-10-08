@@ -31,7 +31,7 @@ associated with the current fail- safe context.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
+packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:112
 
 ___
 
@@ -43,7 +43,7 @@ Executed CommissioningComplete outside CASE session.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:107](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L107)
+packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:101
 
 ___
 
@@ -55,7 +55,7 @@ Executed CommissioningComplete when there was no active Fail-Safe context.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L112)
+packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:106
 
 ___
 
@@ -67,7 +67,7 @@ No error
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:96](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L96)
+packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:90
 
 ___
 
@@ -80,4 +80,4 @@ have proper configuration.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:102](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L102)
+packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:96

@@ -27,7 +27,7 @@ Temperature displayed in °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L28)
+packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:24
 
 ___
 
@@ -39,4 +39,4 @@ Temperature displayed in °F
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:33](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L33)
+packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:29

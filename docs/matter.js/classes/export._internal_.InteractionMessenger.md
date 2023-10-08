@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L76)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:88
 
 ## Properties
 
@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L76)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:88
 
 ## Methods
 
@@ -82,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:103](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L103)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:118
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:118](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L118)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:133
 
 ___
 
@@ -116,13 +116,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:91](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L91)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:106
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -130,6 +130,7 @@ ___
 | :------ | :------ |
 | `messageType` | `number` |
 | `payload` | `Uint8Array` |
+| `options?` | [`ExchangeSendOptions`](../modules/protocol_export.md#exchangesendoptions) |
 
 #### Returns
 
@@ -137,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L78)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:90
 
 ___
 
@@ -157,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L82)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:94
 
 ___
 
@@ -177,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:107](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L107)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:122
 
 ___
 
@@ -191,4 +192,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L86)
+packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:101

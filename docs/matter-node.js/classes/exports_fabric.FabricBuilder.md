@@ -17,6 +17,7 @@
 - [identityProtectionKey](exports_fabric.FabricBuilder.md#identityprotectionkey)
 - [intermediateCACert](exports_fabric.FabricBuilder.md#intermediatecacert)
 - [keyPair](exports_fabric.FabricBuilder.md#keypair)
+- [label](exports_fabric.FabricBuilder.md#label)
 - [nodeId](exports_fabric.FabricBuilder.md#nodeid)
 - [operationalCert](exports_fabric.FabricBuilder.md#operationalcert)
 - [rootCert](exports_fabric.FabricBuilder.md#rootcert)
@@ -28,7 +29,13 @@
 
 - [build](exports_fabric.FabricBuilder.md#build)
 - [createCertificateSigningRequest](exports_fabric.FabricBuilder.md#createcertificatesigningrequest)
+- [getFabricId](exports_fabric.FabricBuilder.md#getfabricid)
+- [getFabricIndex](exports_fabric.FabricBuilder.md#getfabricindex)
+- [getNodeId](exports_fabric.FabricBuilder.md#getnodeid)
 - [getPublicKey](exports_fabric.FabricBuilder.md#getpublickey)
+- [hasRootCert](exports_fabric.FabricBuilder.md#hasrootcert)
+- [initializeFromFabricForUpdate](exports_fabric.FabricBuilder.md#initializefromfabricforupdate)
+- [matchesToFabric](exports_fabric.FabricBuilder.md#matchestofabric)
 - [setIdentityProtectionKey](exports_fabric.FabricBuilder.md#setidentityprotectionkey)
 - [setIntermediateCACert](exports_fabric.FabricBuilder.md#setintermediatecacert)
 - [setOperationalCert](exports_fabric.FabricBuilder.md#setoperationalcert)
@@ -40,17 +47,7 @@
 
 ### constructor
 
-• **new FabricBuilder**(`fabricIndex`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:91
+• **new FabricBuilder**()
 
 ## Properties
 
@@ -60,17 +57,17 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:91
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:86
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:87
 
 ___
 
 ### fabricIndex
 
-• `Private` `Readonly` **fabricIndex**: `any`
+• `Private` `Optional` **fabricIndex**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:80
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:92
 
 ___
 
@@ -80,7 +77,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:90
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:91
 
 ___
 
@@ -90,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:84
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:85
 
 ___
 
@@ -100,7 +97,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:81
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:82
+
+___
+
+### label
+
+• `Private` **label**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:93
 
 ___
 
@@ -110,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:87
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:88
 
 ___
 
@@ -120,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:85
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:86
 
 ___
 
@@ -130,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:83
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:84
 
 ___
 
@@ -140,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:88
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:89
 
 ___
 
@@ -150,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:89
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:90
 
 ___
 
@@ -160,13 +167,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:82
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:83
 
 ## Methods
 
 ### build
 
-▸ **build**(): `Promise`<[`Fabric`](exports_fabric.Fabric.md)\>
+▸ **build**(`fabricIndex`): `Promise`<[`Fabric`](exports_fabric.Fabric.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 
 #### Returns
 
@@ -174,7 +187,7 @@ packages/matter.js/dist/cjs/fabric/Fabric.d.ts:82
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:100
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:108
 
 ___
 
@@ -188,7 +201,49 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:93
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:96
+
+___
+
+### getFabricId
+
+▸ **getFabricId**(): `undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
+
+#### Returns
+
+`undefined` \| [`FabricId`](../modules/exports_datatype.md#fabricid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:107
+
+___
+
+### getFabricIndex
+
+▸ **getFabricIndex**(): `undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
+
+#### Returns
+
+`undefined` \| [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:95
+
+___
+
+### getNodeId
+
+▸ **getNodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Returns
+
+`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:106
 
 ___
 
@@ -202,7 +257,61 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:92
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:94
+
+___
+
+### hasRootCert
+
+▸ **hasRootCert**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:98
+
+___
+
+### initializeFromFabricForUpdate
+
+▸ **initializeFromFabricForUpdate**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:104
+
+___
+
+### matchesToFabric
+
+▸ **matchesToFabric**(`fabric`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:105
 
 ___
 
@@ -222,7 +331,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:99
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:103
 
 ___
 
@@ -242,7 +351,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:96
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:100
 
 ___
 
@@ -262,7 +371,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:95
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:99
 
 ___
 
@@ -282,7 +391,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:94
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:97
 
 ___
 
@@ -302,7 +411,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:98
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:102
 
 ___
 
@@ -322,4 +431,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:97
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:101

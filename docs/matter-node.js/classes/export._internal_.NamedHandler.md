@@ -47,7 +47,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:8
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:8
 
 ## Methods
 
@@ -74,7 +74,7 @@ packages/matter.js/dist/cjs/util/NamedHandler.d.ts:8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:10
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:10
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:11
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:11
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:9
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:9
 
 ___
 
@@ -154,4 +154,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:12
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:12

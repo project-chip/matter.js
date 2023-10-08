@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:11
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:11
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:12
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:12
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:13
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:13
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:9
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:9
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:10
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:10
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:14
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:14
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:15
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:15
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:17
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:17
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:16
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:16
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:8
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:8
 
 ___
 
@@ -128,4 +128,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:18
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:18

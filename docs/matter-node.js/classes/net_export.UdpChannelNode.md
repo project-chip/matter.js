@@ -41,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L63)
+packages/matter-node.js/src/net/UdpChannelNode.ts:63
 
 ## Properties
 
@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L65)
+packages/matter-node.js/src/net/UdpChannelNode.ts:65
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:64](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L64)
+packages/matter-node.js/src/net/UdpChannelNode.ts:64
 
 ## Methods
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:95](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L95)
+packages/matter-node.js/src/net/UdpChannelNode.ts:95
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L68)
+packages/matter-node.js/src/net/UdpChannelNode.ts:68
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L83)
+packages/matter-node.js/src/net/UdpChannelNode.ts:83
 
 ___
 
@@ -153,4 +153,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/UdpChannelNode.ts#L41)
+packages/matter-node.js/src/net/UdpChannelNode.ts:41

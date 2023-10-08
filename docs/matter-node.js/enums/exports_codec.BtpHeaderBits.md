@@ -23,7 +23,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:46
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:46
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:49
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:49
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:48
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:48
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:47
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:47
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:44
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:44
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:45
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:45

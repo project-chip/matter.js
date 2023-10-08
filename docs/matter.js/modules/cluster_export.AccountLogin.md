@@ -17,7 +17,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{}, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `getSetupPin`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `string`\>  }\>, `any`\> ; `login`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `logout`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `getSetupPin`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `string`\>  }\>, `any`\> ; `login`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `logout`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``1294`` = 0x50e; `name`: ``"AccountLogin"`` = "AccountLogin"; `revision`: ``1`` = 1 }\>
 
 Account Login
 
@@ -32,7 +32,7 @@ Client.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:79](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L79)
+packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:80
 
 ___
 
@@ -48,7 +48,7 @@ Input to the AccountLogin getSetupPin command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L22)
+packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:23
 
 ___
 
@@ -65,7 +65,7 @@ account identified in the request does not match the active account of the runni
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L38)
+packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:39
 
 ___
 
@@ -81,4 +81,4 @@ Input to the AccountLogin login command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L53)
+packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:54

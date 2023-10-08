@@ -60,7 +60,7 @@ but the contained attribute is unknown.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:30
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ## Properties
 
@@ -74,7 +74,7 @@ packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:30
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:20
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:20
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:23
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:23
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:22
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:22
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:29
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:29
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:21
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:21
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:27
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:27
 
 ## Methods
 
@@ -170,7 +170,7 @@ Add a listener to the attribute.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:53
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:53
 
 ___
 
@@ -197,7 +197,7 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:37
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:37
 
 ___
 
@@ -224,7 +224,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:41
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:41
 
 ___
 
@@ -250,7 +250,7 @@ Remove a listener from the attribute.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:55
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:55
 
 ___
 
@@ -278,7 +278,7 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:35
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:35
 
 ___
 
@@ -307,7 +307,7 @@ Subscribe to the attribute.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:46
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:46
 
 ___
 
@@ -333,4 +333,4 @@ Update the value of the attribute. Just internally used!
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/AttributeClient.d.ts:51
+packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:51

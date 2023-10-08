@@ -6,16 +6,21 @@
 
 ### Namespaces
 
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/datatype/FabricIndex&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_datatype_FabricIndex_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/datatype/NodeId&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_datatype_NodeId_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/datatype/VendorId&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_datatype_VendorId_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/device/DeviceTypes&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_device_DeviceTypes_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvVoid&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvVoid_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvWrapper&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvWrapper_.md)
-- [&quot;/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type&quot;](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EndpointNumber&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EndpointNumber_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/FabricIndex&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_FabricIndex_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
 
 ### Enumerations
 
@@ -47,10 +52,12 @@
 - [CachedAttributeInfo](../interfaces/export._internal_.CachedAttributeInfo.md)
 - [CachedCommandInfo](../interfaces/export._internal_.CachedCommandInfo.md)
 - [CachedEventInfo](../interfaces/export._internal_.CachedEventInfo.md)
+- [CommandOptions](../interfaces/export._internal_.CommandOptions.md)
 - [ConditionalAttributeOptions](../interfaces/export._internal_.ConditionalAttributeOptions.md)
 - [ConditionalCommandOptions](../interfaces/export._internal_.ConditionalCommandOptions.md)
 - [ConditionalEventOptions](../interfaces/export._internal_.ConditionalEventOptions.md)
 - [EventData](../interfaces/export._internal_.EventData.md)
+- [EventOptions](../interfaces/export._internal_.EventOptions.md)
 - [EventStorageData](../interfaces/export._internal_.EventStorageData.md)
 - [MrpParameters](../interfaces/export._internal_.MrpParameters.md)
 - [RecordValidationResult](../interfaces/export._internal_.RecordValidationResult.md)
@@ -60,12 +67,12 @@
 ### Type Aliases
 
 - [ArrayChunkData](export._internal_.md#arraychunkdata)
+- [AttributeDataPayload](export._internal_.md#attributedatapayload)
 - [AttributeGetters](export._internal_.md#attributegetters)
 - [AttributeHandlers](export._internal_.md#attributehandlers)
 - [AttributeSetters](export._internal_.md#attributesetters)
 - [AttributeValidators](export._internal_.md#attributevalidators)
 - [BitRange](export._internal_.md#bitrange)
-- [Brand](export._internal_.md#brand)
 - [ClientAttributeGetters](export._internal_.md#clientattributegetters)
 - [ClientAttributeListeners](export._internal_.md#clientattributelisteners)
 - [ClientAttributeSetters](export._internal_.md#clientattributesetters)
@@ -84,12 +91,10 @@
 - [ElementSelector](export._internal_.md#elementselector)
 - [EndpointLoggingOptions](export._internal_.md#endpointloggingoptions)
 - [ErrorHandler](export._internal_.md#errorhandler)
+- [EventDataPayload](export._internal_.md#eventdatapayload)
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec-1)
 - [HandlerFunction](export._internal_.md#handlerfunction)
-- [IllegalFeatureCombinations](export._internal_.md#illegalfeaturecombinations)
-- [InferredComponent](export._internal_.md#inferredcomponent)
-- [InferredComponents](export._internal_.md#inferredcomponents)
 - [LengthConstraints](export._internal_.md#lengthconstraints)
 - [LengthConstraints](export._internal_.md#lengthconstraints-1)
 - [MakeAttributeMandatory](export._internal_.md#makeattributemandatory)
@@ -98,8 +103,6 @@
 - [MandatoryCommandNames](export._internal_.md#mandatorycommandnames)
 - [MandatoryFieldNames](export._internal_.md#mandatoryfieldnames)
 - [NameMapping](export._internal_.md#namemapping)
-- [NamedComponent](export._internal_.md#namedcomponent)
-- [NamedComponents](export._internal_.md#namedcomponents)
 - [OnOffBaseDeviceCommands](export._internal_.md#onoffbasedevicecommands)
 - [OptionalAttributeConf](export._internal_.md#optionalattributeconf)
 - [OptionalAttributeServers](export._internal_.md#optionalattributeservers)
@@ -128,10 +131,7 @@
 
 - [BitRange](export._internal_.md#bitrange-1)
 - [ClusterExtend](export._internal_.md#clusterextend-1)
-- [IllegalFeatureCombinations](export._internal_.md#illegalfeaturecombinations-1)
-- [InferredComponents](export._internal_.md#inferredcomponents-1)
 - [MakeAttributesMandatory](export._internal_.md#makeattributesmandatory-1)
-- [NamedComponents](export._internal_.md#namedcomponents-1)
 - [UseOptionalAttributes](export._internal_.md#useoptionalattributes-1)
 
 ## Enumeration Members
@@ -142,7 +142,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:12
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:12
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:10
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:10
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:11
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:11
 
 ## Type Aliases
 
@@ -179,7 +179,19 @@ packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:13
+
+___
+
+### AttributeDataPayload
+
+Ƭ **AttributeDataPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvAttributeReportData`](exports_interaction.md#tlvattributereportdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\>  }
+
+Type for TlvAttributeReportData where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:12
 
 ___
 
@@ -195,7 +207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:48
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:48
 
 ___
 
@@ -213,7 +225,7 @@ Handlers to process cluster commands
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:84
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:84
 
 ___
 
@@ -229,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:56
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:56
 
 ___
 
@@ -245,7 +257,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:63
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:63
 
 ___
 
@@ -271,31 +283,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:14
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:14
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:20
-
-___
-
-### Brand
-
-Ƭ **Brand**<`B`\>: `Object`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `B` |
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `[___brand]` | `B` |
-
-#### Defined in
-
-packages/matter.js/dist/cjs/util/Type.d.ts:29
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
@@ -311,7 +301,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:33
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:43
 
 ___
 
@@ -327,7 +317,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:50
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:60
 
 ___
 
@@ -343,7 +333,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:44
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:54
 
 ___
 
@@ -359,7 +349,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:47
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:57
 
 ___
 
@@ -375,7 +365,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:56
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:66
 
 ___
 
@@ -391,7 +381,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:62
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:72
 
 ___
 
@@ -407,7 +397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:59
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:69
 
 ___
 
@@ -423,7 +413,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:36
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:46
 
 ___
 
@@ -452,9 +442,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:232
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:248
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:238
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
 
 ___
 
@@ -472,7 +462,7 @@ This type manages state that changes when we enter a cluster.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:99
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:99
 
 ___
 
@@ -490,7 +480,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:78
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:78
 
 ___
 
@@ -506,7 +496,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:53
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:63
 
 ___
 
@@ -524,7 +514,7 @@ Commands exposed by the CommissioningServer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningServer.d.ts:104
+packages/matter.js/dist/esm/CommissioningServer.d.ts:103
 
 ___
 
@@ -544,7 +534,7 @@ Breadcrump value is stored for each step for transparency
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ControllerCommissioner.d.ts:40
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:40
 
 ___
 
@@ -567,7 +557,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DimmableDevices.d.ts:7
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:7
 
 ___
 
@@ -577,7 +567,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelTraversal.d.ts:129
+packages/matter.js/dist/esm/model/logic/ModelTraversal.d.ts:129
 
 ___
 
@@ -609,7 +599,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/EndpointStructureLogger.d.ts:13
+packages/matter.js/dist/esm/device/EndpointStructureLogger.d.ts:13
 
 ___
 
@@ -640,7 +630,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/TryCatchHandler.d.ts:7
+packages/matter.js/dist/esm/common/TryCatchHandler.d.ts:7
+
+___
+
+### EventDataPayload
+
+Ƭ **EventDataPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\>  }
+
+Type for TlvEventData where the real data are represented with the schema and the JS value.
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21
 
 ___
 
@@ -656,7 +658,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:32
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:42
 
 ___
 
@@ -672,17 +674,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
 
 ___
 
 ### HandlerFunction
 
-Ƭ **HandlerFunction**: (...`args`: `any`[]) => `Promise`<`any`\> \| `any`
+Ƭ **HandlerFunction**: (...`args`: `any`[]) => `any`
 
 #### Type declaration
 
-▸ (`...args`): `Promise`<`any`\> \| `any`
+▸ (`...args`): `any`
 
 ##### Parameters
 
@@ -692,7 +694,7 @@ ___
 
 ##### Returns
 
-`Promise`<`any`\> \| `any`
+`any`
 
 **`License`**
 
@@ -701,53 +703,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/NamedHandler.d.ts:6
-
-___
-
-### IllegalFeatureCombinations
-
-Ƭ **IllegalFeatureCombinations**: [`FeatureBitmap`](exports_model.md#featurebitmap)[]
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:8
-
-___
-
-### InferredComponent
-
-Ƭ **InferredComponent**: `Object`
-
-Lists mandatory and optional elements for a specific context.
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `condition?` | [`VarianceCondition`](exports_model.md#variancecondition) |
-| `mandatory` | [`ValueModel`](../classes/exports_model.ValueModel.md)[] |
-| `optional` | [`ValueModel`](../classes/exports_model.ValueModel.md)[] |
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/InferredComponents.d.ts:11
-
-___
-
-### InferredComponents
-
-Ƭ **InferredComponents**: [`InferredComponent`](export._internal_.md#inferredcomponent)[]
-
-A list of component definitions.
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/InferredComponents.d.ts:23
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/InferredComponents.d.ts:19
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:6
 
 ___
 
@@ -765,7 +721,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvArray.d.ts:8
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:8
 
 ___
 
@@ -783,7 +739,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvString.d.ts:8
+packages/matter.js/dist/esm/tlv/TlvString.d.ts:8
 
 ___
 
@@ -799,7 +755,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:94
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:101
 
 ___
 
@@ -816,9 +772,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:95
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:102
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:98
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
 
 ___
 
@@ -836,7 +792,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:24
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:24
 
 ___
 
@@ -852,7 +808,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:42
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:42
 
 ___
 
@@ -868,7 +824,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:21
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:21
 
 ___
 
@@ -880,33 +836,7 @@ Map of Model -> name
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:95
-
-___
-
-### NamedComponent
-
-Ƭ **NamedComponent**: [`InferredComponent`](export._internal_.md#inferredcomponent) & { `documentation`: `string` ; `name`: `string`  }
-
-An inferred with generated name and documentation.
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/NamedComponents.d.ts:11
-
-___
-
-### NamedComponents
-
-Ƭ **NamedComponents**: [`NamedComponent`](export._internal_.md#namedcomponent)[]
-
-A set of components keyed by generated names.
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/NamedComponents.d.ts:22
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/NamedComponents.d.ts:18
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:95
 
 ___
 
@@ -923,7 +853,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:16
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:16
 
 ___
 
@@ -939,7 +869,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:91
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:98
 
 ___
 
@@ -955,7 +885,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:27
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
 
 ___
 
@@ -971,7 +901,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:45
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:45
 
 ___
 
@@ -987,7 +917,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:24
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:24
 
 ___
 
@@ -1003,7 +933,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:109
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:116
 
 ___
 
@@ -1019,7 +949,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:116
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:123
 
 ___
 
@@ -1035,7 +965,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:121
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:128
 
 ___
 
@@ -1051,7 +981,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:131
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:138
 
 ___
 
@@ -1063,7 +993,7 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:20
+packages/matter.js/dist/esm/storage/StringifyTools.d.ts:20
 
 ___
 
@@ -1075,7 +1005,7 @@ Supported base types to stringify the data for the storage that can be used as k
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StringifyTools.d.ts:18
+packages/matter.js/dist/esm/storage/StringifyTools.d.ts:18
 
 ___
 
@@ -1092,7 +1022,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:28
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:28
 
 ___
 
@@ -1109,7 +1039,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:31
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:31
 
 ___
 
@@ -1125,7 +1055,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvObject.d.ts:27
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:27
 
 ___
 
@@ -1141,7 +1071,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/certificate/CertificateManager.d.ts:190
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:218
 
 ___
 
@@ -1158,9 +1088,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:99
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:106
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:101
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
 
 ___
 
@@ -1176,13 +1106,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:39
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:49
 
 ## Variables
 
 ### DimmableBaseDevice\_base
 
-• `Const` **DimmableBaseDevice\_base**: (`definition`: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/device/DeviceTypes"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_device_DeviceTypes_.md), `attributeInitialValues?`: { `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`any`\>;  }, `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & { `_executeHandler`: <K_2\>(`action`: `K_2`, ...`args`: `Parameters`<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: <K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
+• `Const` **DimmableBaseDevice\_base**: (`definition`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md), `attributeInitialValues?`: { `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`any`\>;  }, `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & { `_executeHandler`: <K_2\>(`action`: `K_2`, ...`args`: `Parameters`<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: <K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
 
 #### Type declaration
 
@@ -1192,13 +1122,13 @@ packages/matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:39
 
 | Name | Type |
 | :------ | :------ |
-| `definition` | [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/device/DeviceTypes"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_device_DeviceTypes_.md) |
+| `definition` | [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md) |
 | `attributeInitialValues?` | `Object` |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/DimmableDevices.d.ts:17
+packages/matter.js/dist/esm/device/DimmableDevices.d.ts:17
 
 ___
 
@@ -1219,19 +1149,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:30
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:30
 
 ___
 
 ### QrCodeDataSchema
 
-• `Const` **QrCodeDataSchema**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md)
+• `Const` **QrCodeDataSchema**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
 
 See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecificationV1_0.md) § 5.1.3.1 Table 35
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:35
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:35
 
 ## Functions
 
@@ -1260,7 +1190,7 @@ packages/matter.js/dist/cjs/schema/PairingCodeSchema.d.ts:35
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/BitmapSchema.d.ts:20
+packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
@@ -1295,64 +1225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:238
-
-___
-
-### IllegalFeatureCombinations
-
-▸ **IllegalFeatureCombinations**(`cluster`): `Object`
-
-Analyzes feature conformance to ascertain feature combinations that are
-unsupported.  Uses rules to match the conformance AST.
-
-Rule matching is not exhaustive but supports a significant subset of the
-conformance dialect that is inclusive of all feature conformances used by
-the 1.1 specifications.
-
-Throws an error if conformance does not adhere to supported rules.  This
-indicates the ruleset needs augmentation.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `illegal` | [`IllegalFeatureCombinations`](export._internal_.md#illegalfeaturecombinations) |
-| `requiresFeatures` | `boolean` |
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
-
-___
-
-### InferredComponents
-
-▸ **InferredComponents**(`cluster`): [`InferredComponents`](export._internal_.md#inferredcomponents)
-
-Details components generated by analyzing variance of cluster elements.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
-
-#### Returns
-
-[`InferredComponents`](export._internal_.md#inferredcomponents)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/InferredComponents.d.ts:23
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:254
 
 ___
 
@@ -1380,35 +1253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:98
-
-___
-
-### NamedComponents
-
-▸ **NamedComponents**(`cluster`, `inferredComponents`): `Object`
-
-Compute name and documentation a set of inferred components.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
-| `inferredComponents` | [`InferredComponents`](export._internal_.md#inferredcomponents) |
-
-#### Returns
-
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `base` | [`InferredComponent`](export._internal_.md#inferredcomponent) |
-| `components` | [`NamedComponents`](export._internal_.md#namedcomponents) |
-
-#### Defined in
-
-packages/matter.js/dist/cjs/model/logic/cluster-variance/NamedComponents.d.ts:22
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
 
 ___
 
@@ -1422,7 +1267,7 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`, `C`\> |
+| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
 | `A` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)<`C`[``"attributes"``]\> |
 
 #### Parameters
@@ -1438,4 +1283,4 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:101
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108

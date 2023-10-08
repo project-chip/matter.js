@@ -36,7 +36,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.Switch.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `momentarySwitchMultiPress`: ``true``  } ? typeof [`MomentarySwitchMultiPressComponent`](cluster_export.Switch.md#momentaryswitchmultipresscomponent) : {} & `SF` extends { `latchingSwitch`: ``true``  } ? typeof [`LatchingSwitchComponent`](cluster_export.Switch.md#latchingswitchcomponent) : {} & `SF` extends { `momentarySwitch`: ``true``  } ? typeof [`MomentarySwitchComponent`](cluster_export.Switch.md#momentaryswitchcomponent) : {} & `SF` extends { `momentarySwitchLongPress`: ``true``  } ? typeof [`MomentarySwitchLongPressComponent`](cluster_export.Switch.md#momentaryswitchlongpresscomponent) : {} & `SF` extends { `momentarySwitchRelease`: ``true``  } ? typeof [`MomentarySwitchReleaseComponent`](cluster_export.Switch.md#momentaryswitchreleasecomponent) : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends { `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  } ? `never` : {} & `SF` extends { `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  } ? `never` : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.Switch.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `momentarySwitchMultiPress`: ``true``  } ? typeof [`MomentarySwitchMultiPressComponent`](cluster_export.Switch.md#momentaryswitchmultipresscomponent) : {} & `SF` extends { `latchingSwitch`: ``true``  } ? typeof [`LatchingSwitchComponent`](cluster_export.Switch.md#latchingswitchcomponent) : {} & `SF` extends { `momentarySwitch`: ``true``  } ? typeof [`MomentarySwitchComponent`](cluster_export.Switch.md#momentaryswitchcomponent) : {} & `SF` extends { `momentarySwitchLongPress`: ``true``  } ? typeof [`MomentarySwitchLongPressComponent`](cluster_export.Switch.md#momentaryswitchlongpresscomponent) : {} & `SF` extends { `momentarySwitchRelease`: ``true``  } ? typeof [`MomentarySwitchReleaseComponent`](cluster_export.Switch.md#momentaryswitchreleasecomponent) : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchRelease`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchLongPress`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitchLongPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends { `momentarySwitch`: ``false`` ; `momentarySwitchMultiPress`: ``true``  } ? `never` : {} & `SF` extends { `momentarySwitchMultiPress`: ``true`` ; `momentarySwitchRelease`: ``false``  } ? `never` : {} & `SF` extends { `latchingSwitch`: ``true`` ; `momentarySwitch`: ``true``  } ? `never` : {} & `SF` extends { `latchingSwitch`: ``false`` ; `momentarySwitch`: ``false``  } ? `never` : {}
 
 #### Type parameters
 
@@ -46,25 +46,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:377](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L377)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:371
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  } ; `features`: { `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``59`` = 0x3b; `name`: ``"Switch"`` = "Switch"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all Switch clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:116](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L116)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:107
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Switch.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: { `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``59`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"Switch"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  } ; `features`: { `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``59`` = 0x3b; `name`: ``"Switch"`` = "Switch"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Switch.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Switch
 
@@ -89,13 +89,13 @@ SwitchCluster supports optional features that you can enable with the SwitchClus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:342](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L342)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:333
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `multiPressMax`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>\> ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, {}, { `initialPress`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `longPress`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `longRelease`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `multiPressComplete`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `totalNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `multiPressOngoing`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `currentNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `shortRelease`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\> ; `switchLatched`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>\>  }\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentPosition`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `multiPressMax`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `numberOfPositions`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  } ; `events`: { `initialPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `longPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `longRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `multiPressComplete`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `totalNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `multiPressOngoing`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `currentNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `shortRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `switchLatched`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: { `latchingSwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitch`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchLongPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchMultiPress`: [`BitFlag`](schema_export.md#bitflag-1) ; `momentarySwitchRelease`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``59`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"Switch"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all Switch features. It may support illegal feature combinations.
 
@@ -104,67 +104,67 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:405](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L405)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:399
 
 ___
 
 ### LatchingSwitchComponent
 
-• `Const` **LatchingSwitchComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), { `switchLatched`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **LatchingSwitchComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `events`: { `switchLatched`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }  }\>
 
 A SwitchCluster supports these elements if it supports feature LatchingSwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:236](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L236)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:227
 
 ___
 
 ### MomentarySwitchComponent
 
-• `Const` **MomentarySwitchComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), { `initialPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **MomentarySwitchComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `events`: { `initialPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }  }\>
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitch.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:253](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L253)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:244
 
 ___
 
 ### MomentarySwitchLongPressComponent
 
-• `Const` **MomentarySwitchLongPressComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), { `longPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `longRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **MomentarySwitchLongPressComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `events`: { `longPress`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `longRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }  }\>
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchLongPress.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:269](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L269)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:260
 
 ___
 
 ### MomentarySwitchMultiPressComponent
 
-• `Const` **MomentarySwitchMultiPressComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `multiPressMax`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), { `multiPressComplete`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `totalNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `multiPressOngoing`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `currentNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **MomentarySwitchMultiPressComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `multiPressMax`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\>  } ; `events`: { `multiPressComplete`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `totalNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `multiPressOngoing`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `currentNumberOfPressesCounted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }  }\>
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchMultiPress.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:172](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L172)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:163
 
 ___
 
 ### MomentarySwitchReleaseComponent
 
-• `Const` **MomentarySwitchReleaseComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), { `shortRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **MomentarySwitchReleaseComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `events`: { `shortRelease`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `previousPosition`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }  }\>
 
 A SwitchCluster supports these elements if it supports feature MomentarySwitchRelease.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:299](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L299)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:290
 
 ___
 
@@ -180,7 +180,7 @@ Body of the Switch initialPress event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L58)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:49
 
 ___
 
@@ -196,7 +196,7 @@ Body of the Switch longPress event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L65)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:56
 
 ___
 
@@ -212,7 +212,7 @@ Body of the Switch longRelease event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L72)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:63
 
 ___
 
@@ -228,7 +228,7 @@ Body of the Switch multiPressComplete event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L41)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:32
 
 ___
 
@@ -244,7 +244,7 @@ Body of the Switch multiPressOngoing event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:31](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L31)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:22
 
 ___
 
@@ -260,7 +260,7 @@ Body of the Switch shortRelease event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:79](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L79)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:70
 
 ___
 
@@ -276,4 +276,4 @@ Body of the Switch switchLatched event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L51)
+packages/matter.js/src/cluster/definitions/SwitchCluster.ts:42

@@ -22,7 +22,7 @@ The Matter specification documents.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Specification.d.ts:11
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:11
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Specification.d.ts:10
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:10
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/Specification.d.ts:12
+packages/matter.js/dist/esm/model/definitions/Specification.d.ts:12

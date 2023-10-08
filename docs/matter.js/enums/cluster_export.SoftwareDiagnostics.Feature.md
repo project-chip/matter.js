@@ -28,4 +28,4 @@ Node makes available the metrics for high watermark related to memory consumptio
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:114](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L114)
+packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:106

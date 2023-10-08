@@ -61,7 +61,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:11
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L35)
+packages/matter-node.js/src/net/NetworkNode.ts:43
 
 ## Methods
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L40)
+packages/matter-node.js/src/net/NetworkNode.ts:48
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L86)
+packages/matter-node.js/src/net/NetworkNode.ts:94
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L80)
+packages/matter-node.js/src/net/NetworkNode.ts:88
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L68)
+packages/matter-node.js/src/net/NetworkNode.ts:76
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L14)
+packages/matter-node.js/src/net/NetworkNode.ts:14
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L29)
+packages/matter-node.js/src/net/NetworkNode.ts:37
 
 ___
 
@@ -216,4 +216,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/net/NetworkNode.ts#L44)
+packages/matter-node.js/src/net/NetworkNode.ts:52

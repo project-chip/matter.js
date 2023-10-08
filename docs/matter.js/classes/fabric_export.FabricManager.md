@@ -12,7 +12,6 @@
 
 ### Properties
 
-- [fabricBuilder](fabric_export.FabricManager.md#fabricbuilder)
 - [fabricStorage](fabric_export.FabricManager.md#fabricstorage)
 - [fabrics](fabric_export.FabricManager.md#fabrics)
 - [nextFabricIndex](fabric_export.FabricManager.md#nextfabricindex)
@@ -20,14 +19,13 @@
 ### Methods
 
 - [addFabric](fabric_export.FabricManager.md#addfabric)
-- [armFailSafe](fabric_export.FabricManager.md#armfailsafe)
-- [completeCommission](fabric_export.FabricManager.md#completecommission)
 - [findFabricFromDestinationId](fabric_export.FabricManager.md#findfabricfromdestinationid)
-- [getFabricBuilder](fabric_export.FabricManager.md#getfabricbuilder)
 - [getFabrics](fabric_export.FabricManager.md#getfabrics)
+- [getNextFabricIndex](fabric_export.FabricManager.md#getnextfabricindex)
 - [persistFabrics](fabric_export.FabricManager.md#persistfabrics)
 - [removeFabric](fabric_export.FabricManager.md#removefabric)
-- [tentativelyAddFabric](fabric_export.FabricManager.md#tentativelyaddfabric)
+- [revokeFabric](fabric_export.FabricManager.md#revokefabric)
+- [updateFabric](fabric_export.FabricManager.md#updatefabric)
 
 ## Constructors
 
@@ -43,19 +41,9 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L22)
+packages/matter.js/src/fabric/FabricManager.ts:22
 
 ## Properties
-
-### fabricBuilder
-
-• `Private` `Optional` **fabricBuilder**: [`FabricBuilder`](fabric_export.FabricBuilder.md)
-
-#### Defined in
-
-[packages/matter.js/src/fabric/FabricManager.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L19)
-
-___
 
 ### fabricStorage
 
@@ -63,17 +51,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L20)
+packages/matter.js/src/fabric/FabricManager.ts:20
 
 ___
 
 ### fabrics
 
-• `Private` `Readonly` **fabrics**: [`Fabric`](fabric_export.Fabric.md)[]
+• `Private` `Readonly` **fabrics**: `Map`<[`FabricIndex`](../modules/datatype_export.md#fabricindex), [`Fabric`](fabric_export.Fabric.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L18)
+packages/matter.js/src/fabric/FabricManager.ts:19
 
 ___
 
@@ -83,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L17)
+packages/matter.js/src/fabric/FabricManager.ts:18
 
 ## Methods
 
@@ -103,35 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L37)
-
-___
-
-### armFailSafe
-
-▸ **armFailSafe**(): `void`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/matter.js/src/fabric/FabricManager.ts:67](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L67)
-
-___
-
-### completeCommission
-
-▸ **completeCommission**(): `void`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/matter.js/src/fabric/FabricManager.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L83)
+packages/matter.js/src/fabric/FabricManager.ts:48
 
 ___
 
@@ -152,21 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L57)
-
-___
-
-### getFabricBuilder
-
-▸ **getFabricBuilder**(): [`FabricBuilder`](fabric_export.FabricBuilder.md)
-
-#### Returns
-
-[`FabricBuilder`](fabric_export.FabricBuilder.md)
-
-#### Defined in
-
-[packages/matter.js/src/fabric/FabricManager.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L71)
+packages/matter.js/src/fabric/FabricManager.ts:71
 
 ___
 
@@ -180,7 +126,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L53)
+packages/matter.js/src/fabric/FabricManager.ts:67
+
+___
+
+### getNextFabricIndex
+
+▸ **getNextFabricIndex**(): [`FabricIndex`](../modules/datatype_export.md#fabricindex)
+
+#### Returns
+
+[`FabricIndex`](../modules/datatype_export.md#fabricindex)
+
+#### Defined in
+
+packages/matter.js/src/fabric/FabricManager.ts:29
 
 ___
 
@@ -194,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L29)
+packages/matter.js/src/fabric/FabricManager.ts:40
 
 ___
 
@@ -214,13 +174,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L43)
+packages/matter.js/src/fabric/FabricManager.ts:58
 
 ___
 
-### tentativelyAddFabric
+### revokeFabric
 
-▸ **tentativelyAddFabric**(): `Promise`<`void`\>
+▸ **revokeFabric**(`fabricIndex`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricIndex` | [`FabricIndex`](../modules/datatype_export.md#fabricindex) |
 
 #### Returns
 
@@ -228,4 +194,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/FabricManager.ts:77](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/fabric/FabricManager.ts#L77)
+packages/matter.js/src/fabric/FabricManager.ts:91
+
+___
+
+### updateFabric
+
+▸ **updateFabric**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](fabric_export.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/fabric/FabricManager.ts:81

@@ -21,7 +21,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `navigateTarget`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `currentTarget`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| ``null``, `any`\> ; `targetList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: { `navigateTarget`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``1285`` ; `name`: ``"TargetNavigator"`` ; `revision`: ``1``  }\>
 
 Target Navigator
 
@@ -33,13 +33,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TargetNavigatorCluster.d.ts:91
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:92
 
 ___
 
 ### TlvNavigateTargetRequest
 
-• `Const` **TlvNavigateTargetRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNavigateTargetRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the TargetNavigator navigateTarget command
 
@@ -49,13 +49,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.11.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TargetNavigatorCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:34
 
 ___
 
 ### TlvNavigateTargetResponse
 
-• `Const` **TlvNavigateTargetResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvNavigateTargetResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This command shall be generated in response to NavigateTarget command.
 
@@ -65,13 +65,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.11.4.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TargetNavigatorCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:71
 
 ___
 
 ### TlvTargetInfoStruct
 
-• `Const` **TlvTargetInfoStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvTargetInfoStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This indicates an object describing the navigable target.
 
@@ -81,4 +81,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.11.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TargetNavigatorCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/TargetNavigatorCluster.d.ts:15

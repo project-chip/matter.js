@@ -20,6 +20,7 @@
 
 ### Type Aliases
 
+- [IntermediateCertificate](certificate_export.md#intermediatecertificate)
 - [OperationalCertificate](certificate_export.md#operationalcertificate)
 - [RootCertificate](certificate_export.md#rootcertificate)
 
@@ -34,6 +35,7 @@
 - [TestCert\_PAA\_NoVID\_PublicKey](certificate_export.md#testcert_paa_novid_publickey)
 - [TestCert\_PAA\_NoVID\_SKID](certificate_export.md#testcert_paa_novid_skid)
 - [TlvCertificationDeclaration](certificate_export.md#tlvcertificationdeclaration)
+- [TlvIntermediateCertificate](certificate_export.md#tlvintermediatecertificate)
 - [TlvOperationalCertificate](certificate_export.md#tlvoperationalcertificate)
 - [TlvRootCertificate](certificate_export.md#tlvrootcertificate)
 
@@ -41,6 +43,7 @@
 
 - [CommonName\_X520](certificate_export.md#commonname_x520)
 - [FabricId\_Matter](certificate_export.md#fabricid_matter)
+- [IcacId\_Matter](certificate_export.md#icacid_matter)
 - [NodeId\_Matter](certificate_export.md#nodeid_matter)
 - [ProductId\_Matter](certificate_export.md#productid_matter)
 - [RcacId\_Matter](certificate_export.md#rcacid_matter)
@@ -50,13 +53,23 @@
 
 ## Type Aliases
 
+### IntermediateCertificate
+
+Ƭ **IntermediateCertificate**: [`TypeFromSchema`](tlv_export.md#typefromschema)<typeof [`TlvIntermediateCertificate`](certificate_export.md#tlvintermediatecertificate)\>
+
+#### Defined in
+
+packages/matter.js/src/certificate/CertificateManager.ts:327
+
+___
+
 ### OperationalCertificate
 
 Ƭ **OperationalCertificate**: [`TypeFromSchema`](tlv_export.md#typefromschema)<typeof [`TlvOperationalCertificate`](certificate_export.md#tlvoperationalcertificate)\>
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:285](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L285)
+packages/matter.js/src/certificate/CertificateManager.ts:328
 
 ___
 
@@ -66,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:284](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L284)
+packages/matter.js/src/certificate/CertificateManager.ts:326
 
 ## Variables
 
@@ -76,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:32](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L32)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:32
 
 ___
 
@@ -86,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:25](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L25)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:25
 
 ___
 
@@ -96,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L28)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:28
 
 ___
 
@@ -106,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:31](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L31)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:31
 
 ___
 
@@ -116,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L19)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:19
 
 ___
 
@@ -126,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L15)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:15
 
 ___
 
@@ -136,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L12)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:12
 
 ___
 
@@ -146,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L18)
+packages/matter.js/src/certificate/ChipPAAuthorities.ts:18
 
 ___
 
@@ -156,7 +169,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:266](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L266)
+packages/matter.js/src/certificate/CertificateManager.ts:308
+
+___
+
+### TlvIntermediateCertificate
+
+• `Const` **TlvIntermediateCertificate**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `ellipticCurveIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `ellipticCurvePublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `extensions`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `authorityKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `basicConstraints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `isCa`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>\> ; `keyUsage`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `subjectKeyIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>\> ; `issuer`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `issuerRcacId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `notAfter`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `notBefore`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `publicKeyAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `serialNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `signatureAlgorithm`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `subject`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricId`](datatype_export.md#fabricid)\> ; `icacId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\>  }\>\>  }\>
+
+#### Defined in
+
+packages/matter.js/src/certificate/CertificateManager.ts:177
 
 ___
 
@@ -166,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:132](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L132)
+packages/matter.js/src/certificate/CertificateManager.ts:135
 
 ___
 
@@ -176,7 +199,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L92)
+packages/matter.js/src/certificate/CertificateManager.ts:95
 
 ## Functions
 
@@ -198,7 +221,7 @@ commonName = ASN.1 OID 2.5.4.3
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:73](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L73)
+packages/matter.js/src/certificate/CertificateManager.ts:73
 
 ___
 
@@ -220,7 +243,29 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L82)
+packages/matter.js/src/certificate/CertificateManager.ts:85
+
+___
+
+### IcacId\_Matter
+
+▸ **IcacId_Matter**(`id`): `any`[]
+
+matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` \| `bigint` |
+
+#### Returns
+
+`any`[]
+
+#### Defined in
+
+packages/matter.js/src/certificate/CertificateManager.ts:79
 
 ___
 
@@ -242,7 +287,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L76)
+packages/matter.js/src/certificate/CertificateManager.ts:76
 
 ___
 
@@ -264,7 +309,7 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L90)
+packages/matter.js/src/certificate/CertificateManager.ts:93
 
 ___
 
@@ -286,7 +331,7 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:79](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L79)
+packages/matter.js/src/certificate/CertificateManager.ts:82
 
 ___
 
@@ -308,7 +353,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L85)
+packages/matter.js/src/certificate/CertificateManager.ts:88
 
 ___
 
@@ -329,7 +374,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L54)
+packages/matter.js/src/certificate/CertificateManager.ts:54
 
 ___
 
@@ -349,4 +394,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L50)
+packages/matter.js/src/certificate/CertificateManager.ts:50

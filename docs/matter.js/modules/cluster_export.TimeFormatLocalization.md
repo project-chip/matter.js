@@ -27,7 +27,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.TimeFormatLocalization.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `calendarFormat`: ``true``  } ? typeof [`CalendarFormatComponent`](cluster_export.TimeFormatLocalization.md#calendarformatcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.TimeFormatLocalization.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `calendarFormat`: ``true``  } ? typeof [`CalendarFormatComponent`](cluster_export.TimeFormatLocalization.md#calendarformatcomponent) : {}
 
 #### Type parameters
 
@@ -37,37 +37,37 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:218](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L218)
+packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:213
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  } ; `features`: { `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``44`` = 0x2c; `name`: ``"TimeFormatLocalization"`` = "TimeFormatLocalization"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all TimeFormatLocalization clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:123](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L123)
+packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:115
 
 ___
 
 ### CalendarFormatComponent
 
-• `Const` **CalendarFormatComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `activeCalendarType`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md), `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md)[], `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **CalendarFormatComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `activeCalendarType`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md), `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md)[], `any`\>  }  }\>
 
 A TimeFormatLocalizationCluster supports these elements if it supports feature CalendarFormat.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:157](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L157)
+packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:149
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.TimeFormatLocalization.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: { `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``44`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"TimeFormatLocalization"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\>  } ; `features`: { `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``44`` = 0x2c; `name`: ``"TimeFormatLocalization"`` = "TimeFormatLocalization"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.TimeFormatLocalization.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Time Format Localization
 
@@ -87,13 +87,13 @@ TimeFormatLocalizationCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:199](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L199)
+packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:191
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `activeCalendarType`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md), `any`\>\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\> ; `supportedCalendarTypes`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`FixedAttribute`](cluster_export.md#fixedattribute)<[`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md)[], `any`\>\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, {}, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `activeCalendarType`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md), `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `hourFormat`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`HourFormat`](../enums/cluster_export.TimeFormatLocalization.HourFormat.md), `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`CalendarType`](../enums/cluster_export.TimeFormatLocalization.CalendarType.md)[], `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: { `calendarFormat`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``44`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"TimeFormatLocalization"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
 
@@ -102,4 +102,4 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:230](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L230)
+packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:225

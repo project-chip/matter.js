@@ -23,6 +23,7 @@ It sends out queries to discover various types of Matter device types and listen
 - [buildCommissionableQueryIdentifier](exports_mdns.MdnsScanner.md#buildcommissionablequeryidentifier)
 - [commissionableDeviceRecords](exports_mdns.MdnsScanner.md#commissionabledevicerecords)
 - [createOperationalMatterQName](exports_mdns.MdnsScanner.md#createoperationalmatterqname)
+- [enableIpv4](exports_mdns.MdnsScanner.md#enableipv4)
 - [expire](exports_mdns.MdnsScanner.md#expire)
 - [findCommissionableQueryIdentifier](exports_mdns.MdnsScanner.md#findcommissionablequeryidentifier)
 - [finishWaiter](exports_mdns.MdnsScanner.md#finishwaiter)
@@ -60,17 +61,18 @@ It sends out queries to discover various types of Matter device types and listen
 
 ### constructor
 
-• **new MdnsScanner**(`multicastServer`)
+• **new MdnsScanner**(`multicastServer`, `enableIpv4?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
+| `enableIpv4?` | `boolean` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:25
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:29
 
 ## Properties
 
@@ -80,7 +82,7 @@ packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:18
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:22
 
 ___
 
@@ -93,7 +95,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:81
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:85
 
 ___
 
@@ -103,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:22
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:26
 
 ___
 
@@ -113,7 +115,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:65
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:69
+
+___
+
+### enableIpv4
+
+• `Private` `Optional` `Readonly` **enableIpv4**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:17
 
 ___
 
@@ -123,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:128
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:132
 
 ___
 
@@ -135,7 +147,7 @@ Check all options for a query identifier and return the most relevant one with a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:86
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:90
 
 ___
 
@@ -148,7 +160,7 @@ promise.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:64
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:68
 
 ___
 
@@ -158,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:39
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:43
 
 ___
 
@@ -171,7 +183,7 @@ record.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:76
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:80
 
 ___
 
@@ -183,7 +195,7 @@ Returns the list of all targets (IP/port) discovered for a queried operational d
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:48
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:52
 
 ___
 
@@ -193,7 +205,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:126
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:130
 
 ___
 
@@ -206,7 +218,7 @@ It will parse the message and check if it contains relevant discovery records.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:123
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:127
 
 ___
 
@@ -216,7 +228,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:124
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:128
 
 ___
 
@@ -226,7 +238,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:125
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:129
 
 ___
 
@@ -236,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:16
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:16
 
 ___
 
@@ -246,7 +258,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:20
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:24
 
 ___
 
@@ -256,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:21
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:25
 
 ___
 
@@ -266,7 +278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:127
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:131
 
 ___
 
@@ -276,7 +288,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:24
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:28
 
 ___
 
@@ -286,7 +298,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:19
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:23
 
 ___
 
@@ -296,7 +308,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:23
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:27
 
 ___
 
@@ -309,7 +321,7 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:59
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:63
 
 ___
 
@@ -322,7 +334,7 @@ out. If it was the last query announcing will stop completely.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:44
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:48
 
 ___
 
@@ -337,7 +349,7 @@ packets and the query is sent as Truncated query.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:33
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:37
 
 ___
 
@@ -350,7 +362,7 @@ out. When entry already exists the query is overwritten and answers are always a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:38
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:42
 
 ___
 
@@ -364,7 +376,7 @@ Sort the list of found IP/ports and make sure link-local IPv6 addresses come fir
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:54
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:58
 
 ## Methods
 
@@ -384,7 +396,7 @@ Close all connects, end all timers and resolve all pending promises.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:118
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:122
 
 ___
 
@@ -404,7 +416,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:82
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:86
 
 ___
 
@@ -436,7 +448,7 @@ the timeout period.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:95
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:99
 
 ___
 
@@ -465,7 +477,7 @@ IP/ports or an empty array if not found.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:70
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:74
 
 ___
 
@@ -491,7 +503,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:96
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:100
 
 ___
 
@@ -519,19 +531,21 @@ DNS-SD queries.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:71
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:75
 
 ___
 
 ### create
 
-▸ `Static` **create**(`netInterface?`): `Promise`<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
+▸ `Static` **create**(`options?`): `Promise`<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `netInterface?` | `string` |
+| `options?` | `Object` |
+| `options.enableIpv4?` | `boolean` |
+| `options.netInterface?` | `string` |
 
 #### Returns
 
@@ -539,4 +553,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsScanner.d.ts:17
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:18

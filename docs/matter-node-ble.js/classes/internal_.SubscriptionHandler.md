@@ -458,13 +458,14 @@ ___
 
 ### cancel
 
-▸ **cancel**(`flush?`): `Promise`<`void`\>
+▸ **cancel**(`flush?`, `cancelledByPeer?`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `flush?` | `boolean` |
+| `cancelledByPeer?` | `boolean` |
 
 #### Returns
 

@@ -34,6 +34,7 @@
 - [readAcl](internal_.OptionalWritableFabricScopedAttribute.md#readacl)
 - [scene](internal_.OptionalWritableFabricScopedAttribute.md#scene)
 - [schema](internal_.OptionalWritableFabricScopedAttribute.md#schema)
+- [timed](internal_.OptionalWritableFabricScopedAttribute.md#timed)
 - [unknown](internal_.OptionalWritableFabricScopedAttribute.md#unknown)
 - [writable](internal_.OptionalWritableFabricScopedAttribute.md#writable)
 - [writeAcl](internal_.OptionalWritableFabricScopedAttribute.md#writeacl)
@@ -50,7 +51,7 @@ OptionalWritableAttribute.default
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:37
+matter.js/dist/cjs/cluster/Cluster.d.ts:38
 
 ___
 
@@ -64,7 +65,7 @@ OptionalWritableAttribute.fabricScoped
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:65
+matter.js/dist/cjs/cluster/Cluster.d.ts:66
 
 ___
 
@@ -78,7 +79,7 @@ OptionalWritableAttribute.fixed
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:33
+matter.js/dist/cjs/cluster/Cluster.d.ts:34
 
 ___
 
@@ -106,7 +107,7 @@ OptionalWritableAttribute.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:38
+matter.js/dist/cjs/cluster/Cluster.d.ts:39
 
 ___
 
@@ -120,7 +121,7 @@ OptionalWritableAttribute.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:40
+matter.js/dist/cjs/cluster/Cluster.d.ts:41
 
 ___
 
@@ -134,7 +135,7 @@ OptionalWritableAttribute.omitChanges
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:35
+matter.js/dist/cjs/cluster/Cluster.d.ts:36
 
 ___
 
@@ -148,7 +149,7 @@ OptionalWritableAttribute.optional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:44
+matter.js/dist/cjs/cluster/Cluster.d.ts:45
 
 ___
 
@@ -162,7 +163,7 @@ OptionalWritableAttribute.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:39
+matter.js/dist/cjs/cluster/Cluster.d.ts:40
 
 ___
 
@@ -222,6 +223,20 @@ matter.js/dist/cjs/cluster/Cluster.d.ts:27
 
 ___
 
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+OptionalWritableAttribute.timed
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:33
+
+___
+
 ### unknown
 
 • **unknown**: `boolean`
@@ -232,7 +247,7 @@ OptionalWritableAttribute.unknown
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:41
+matter.js/dist/cjs/cluster/Cluster.d.ts:42
 
 ___
 
@@ -246,7 +261,7 @@ OptionalWritableAttribute.writable
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:53
+matter.js/dist/cjs/cluster/Cluster.d.ts:54
 
 ___
 
@@ -260,4 +275,4 @@ OptionalWritableAttribute.writeAcl
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:36
+matter.js/dist/cjs/cluster/Cluster.d.ts:37

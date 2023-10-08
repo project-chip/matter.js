@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `validProxyList`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `getValidProxiesRequest`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `validProxyList`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `commands`: { `getValidProxiesRequest`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``68`` = 0x44; `name`: ``"ValidProxies"`` = "ValidProxies"; `revision`: ``1`` = 1 }\>
 
 Proxy Valid
 
@@ -28,7 +28,7 @@ subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignme
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:32](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L32)
+packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33
 
 ___
 
@@ -44,4 +44,4 @@ Encapsulates the Node ID of a Valid Proxy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L22)
+packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23

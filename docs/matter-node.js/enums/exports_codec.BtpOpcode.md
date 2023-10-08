@@ -18,4 +18,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:52
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:52

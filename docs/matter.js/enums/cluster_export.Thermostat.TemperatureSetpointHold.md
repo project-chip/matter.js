@@ -27,7 +27,7 @@ Follow scheduling program
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:161](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L161)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:151
 
 ___
 
@@ -39,4 +39,4 @@ Maintain current setpoint, regardless of schedule transitions
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:166](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L166)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:156

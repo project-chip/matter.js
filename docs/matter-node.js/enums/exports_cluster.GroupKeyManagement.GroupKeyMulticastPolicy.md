@@ -31,7 +31,7 @@ MatterCoreSpecificationV1_1 § 11.2.6.2.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:87
 
 ___
 
@@ -49,4 +49,4 @@ MatterCoreSpecificationV1_1 § 11.2.6.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:79

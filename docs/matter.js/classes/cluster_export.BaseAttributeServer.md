@@ -32,6 +32,7 @@ Base class for all attribute servers.
 - [isSubscribable](cluster_export.BaseAttributeServer.md#issubscribable)
 - [isWritable](cluster_export.BaseAttributeServer.md#iswritable)
 - [name](cluster_export.BaseAttributeServer.md#name)
+- [requiresTimedInteraction](cluster_export.BaseAttributeServer.md#requirestimedinteraction)
 - [schema](cluster_export.BaseAttributeServer.md#schema)
 - [value](cluster_export.BaseAttributeServer.md#value)
 
@@ -45,7 +46,7 @@ Base class for all attribute servers.
 
 ### constructor
 
-• **new BaseAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `defaultValue`)
+• **new BaseAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`)
 
 #### Type parameters
 
@@ -62,11 +63,12 @@ Base class for all attribute servers.
 | `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
+| `requiresTimedInteraction` | `boolean` |
 | `defaultValue` | `T` |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:107](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L107)
+packages/matter.js/src/cluster/server/AttributeServer.ts:112
 
 ## Properties
 
@@ -76,7 +78,7 @@ Base class for all attribute servers.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:113](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L113)
+packages/matter.js/src/cluster/server/AttributeServer.ts:119
 
 ___
 
@@ -86,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:105](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L105)
+packages/matter.js/src/cluster/server/AttributeServer.ts:110
 
 ___
 
@@ -96,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:108](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L108)
+packages/matter.js/src/cluster/server/AttributeServer.ts:113
 
 ___
 
@@ -106,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L112)
+packages/matter.js/src/cluster/server/AttributeServer.ts:117
 
 ___
 
@@ -116,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:111](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L111)
+packages/matter.js/src/cluster/server/AttributeServer.ts:116
 
 ___
 
@@ -126,7 +128,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L109)
+packages/matter.js/src/cluster/server/AttributeServer.ts:114
+
+___
+
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/cluster/server/AttributeServer.ts:118
 
 ___
 
@@ -136,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:110](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L110)
+packages/matter.js/src/cluster/server/AttributeServer.ts:115
 
 ___
 
@@ -148,7 +160,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:104](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L104)
+packages/matter.js/src/cluster/server/AttributeServer.ts:109
 
 ## Methods
 
@@ -168,7 +180,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:130](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L130)
+packages/matter.js/src/cluster/server/AttributeServer.ts:136
 
 ___
 
@@ -191,7 +203,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:138](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L138)
+packages/matter.js/src/cluster/server/AttributeServer.ts:144
 
 ___
 
@@ -211,4 +223,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/AttributeServer.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/AttributeServer.ts#L119)
+packages/matter.js/src/cluster/server/AttributeServer.ts:125

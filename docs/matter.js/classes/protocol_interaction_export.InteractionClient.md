@@ -33,6 +33,7 @@
 - [getMultipleAttributesAndEvents](protocol_interaction_export.InteractionClient.md#getmultipleattributesandevents)
 - [getMultipleEvents](protocol_interaction_export.InteractionClient.md#getmultipleevents)
 - [invoke](protocol_interaction_export.InteractionClient.md#invoke)
+- [invokeWithSuppressedResponse](protocol_interaction_export.InteractionClient.md#invokewithsuppressedresponse)
 - [processReadRequest](protocol_interaction_export.InteractionClient.md#processreadrequest)
 - [setAttribute](protocol_interaction_export.InteractionClient.md#setattribute)
 - [setMultipleAttributes](protocol_interaction_export.InteractionClient.md#setmultipleattributes)
@@ -56,7 +57,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L87)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:96
 
 ## Properties
 
@@ -66,7 +67,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L87)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:96
 
 ___
 
@@ -76,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L85)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:94
 
 ___
 
@@ -86,17 +87,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:84](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L84)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:93
 
 ___
 
 ### subscriptionListeners
 
-• `Private` `Readonly` **subscriptionListeners**: `Map`<`number`, (`dataReport`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `dataVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EventPriority`](../enums/cluster_export.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>) => `void`\>
+• `Private` `Readonly` **subscriptionListeners**: `Map`<`number`, (`dataReport`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EventPriority`](../enums/cluster_export.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>) => `void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L83)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:92
 
 ## Accessors
 
@@ -110,13 +111,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:775](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L775)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:920
 
 ## Methods
 
 ### getAllAttributes
 
-▸ **getAllAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[]\>
+▸ **getAllAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Parameters
 
@@ -128,17 +129,17 @@ ___
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[]\>
+`Promise`<[`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L92)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:101
 
 ___
 
 ### getAllAttributesAndEvents
 
-▸ **getAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
@@ -151,11 +152,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L119)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:128
 
 ___
 
@@ -177,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:108](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L108)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:117
 
 ___
 
@@ -189,7 +190,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -208,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:207](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L207)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:223
 
 ___
 
@@ -220,7 +221,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -239,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:225](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L225)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:241
 
 ___
 
@@ -252,7 +253,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/cluster_export.md#event)<`T`, `any`, `E`\> |
+| `E` | extends [`Event`](../modules/cluster_export.md#event)<`T`, `any`\> |
 
 #### Parameters
 
@@ -271,13 +272,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:256](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L256)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:272
 
 ___
 
 ### getMultipleAttributes
 
-▸ **getMultipleAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[]\>
+▸ **getMultipleAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Parameters
 
@@ -290,17 +291,17 @@ ___
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[]\>
+`Promise`<[`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[]\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:143](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L143)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:152
 
 ___
 
 ### getMultipleAttributesAndEvents
 
-▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
@@ -315,11 +316,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:166](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L166)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:175
 
 ___
 
@@ -342,32 +343,32 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:155](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L155)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:164
 
 ___
 
 ### invoke
 
-▸ **invoke**<`C`\>(`endpointId`, `clusterId`, `request`, `id`, `requestSchema`, `_responseId`, `responseSchema`, `optional`): `Promise`<[`ResponseType`](../modules/cluster_export.md#responsetype)<`C`\>\>
+▸ **invoke**<`C`\>(`options`): `Promise`<[`ResponseType`](../modules/cluster_export.md#responsetype)<`C`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/cluster_export.md#command)<`any`, `any`, `any`, `C`\> |
+| `C` | extends [`Command`](../modules/cluster_export.md#command)<`any`, `any`, `any`\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
-| `clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
-| `request` | [`RequestType`](../modules/cluster_export.md#requesttype)<`C`\> |
-| `id` | [`CommandId`](../modules/datatype_export.md#commandid) |
-| `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<[`RequestType`](../modules/cluster_export.md#requesttype)<`C`\>\> |
-| `_responseId` | [`CommandId`](../modules/datatype_export.md#commandid) |
-| `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<[`ResponseType`](../modules/cluster_export.md#responsetype)<`C`\>\> |
-| `optional` | `boolean` |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
+| `options.command` | `C` |
+| `options.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
+| `options.request` | [`RequestType`](../modules/cluster_export.md#requesttype)<`C`\> |
+| `options.timedRequestTimeoutMs?` | `number` |
+| `options.useExtendedFailSafeMessageResponseTimeout?` | `boolean` |
 
 #### Returns
 
@@ -375,13 +376,45 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:707](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L707)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:759
+
+___
+
+### invokeWithSuppressedResponse
+
+▸ **invokeWithSuppressedResponse**<`C`\>(`options`): `Promise`<`void`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `C` | extends [`Command`](../modules/cluster_export.md#command)<`any`, `any`, `any`\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
+| `options.command` | `C` |
+| `options.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
+| `options.request` | [`RequestType`](../modules/cluster_export.md#requesttype)<`C`\> |
+| `options.timedRequestTimeoutMs?` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:857
 
 ___
 
 ### processReadRequest
 
-▸ `Private` **processReadRequest**(`messenger`, `request`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ `Private` **processReadRequest**(`messenger`, `request`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
@@ -392,17 +425,17 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:273](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L273)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:289
 
 ___
 
 ### setAttribute
 
-▸ **setAttribute**<`T`\>(`attributeData`): `Promise`<`void`\>
+▸ **setAttribute**<`T`\>(`options`): `Promise`<`void`\>
 
 #### Type parameters
 
@@ -414,12 +447,16 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `attributeData` | `Object` |
-| `attributeData.attribute` | [`Attribute`](../modules/cluster_export.md#attribute)<`T`, `any`\> |
-| `attributeData.clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
-| `attributeData.dataVersion?` | `number` |
-| `attributeData.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
-| `attributeData.value` | `T` |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.attributeData` | `Object` |
+| `options.attributeData.attribute` | [`Attribute`](../modules/cluster_export.md#attribute)<`T`, `any`\> |
+| `options.attributeData.clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
+| `options.attributeData.dataVersion?` | `number` |
+| `options.attributeData.endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
+| `options.attributeData.value` | `T` |
+| `options.suppressResponse?` | `boolean` |
+| `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
@@ -427,19 +464,23 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:317](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L317)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:333
 
 ___
 
 ### setMultipleAttributes
 
-▸ **setMultipleAttributes**(`attributes`): `Promise`<[`AttributeStatus`](../interfaces/protocol_interaction_export.AttributeStatus.md)[]\>
+▸ **setMultipleAttributes**(`options`): `Promise`<[`AttributeStatus`](../interfaces/protocol_interaction_export.AttributeStatus.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `attributes` | { `attribute`: [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) ; `value`: `any`  }[] |
+| `options` | `Object` |
+| `options.asTimedRequest?` | `boolean` |
+| `options.attributes` | { `attribute`: [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) ; `value`: `any`  }[] |
+| `options.suppressResponse?` | `boolean` |
+| `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
@@ -447,20 +488,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:342](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L342)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:369
 
 ___
 
 ### subscribeAllAttributesAndEvents
 
-▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>) => `void` |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>) => `void` |
 | `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)  }[] |
 | `options.eventFilters?` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
 | `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>) => `void` |
@@ -472,11 +513,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:537](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L537)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:583
 
 ___
 
@@ -488,7 +529,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`, `A`\> |
+| `A` | extends [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> |
 
 #### Parameters
 
@@ -511,7 +552,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:392](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L392)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:438
 
 ___
 
@@ -524,7 +565,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/cluster_export.md#event)<`T`, `any`, `E`\> |
+| `E` | extends [`Event`](../modules/cluster_export.md#event)<`T`, `any`\> |
 
 #### Parameters
 
@@ -547,20 +588,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:471](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L471)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:517
 
 ___
 
 ### subscribeMultipleAttributesAndEvents
 
-▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>) => `void` |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>) => `void` |
 | `options.attributes` | { `attributeId?`: [`AttributeId`](../modules/datatype_export.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)  }[] |
 | `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/datatype_export.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)  }[] |
 | `options.eventFilters?` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>[] |
@@ -573,11 +614,11 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:576](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L576)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:622
 
 ___
 
@@ -603,4 +644,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:766](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L766)
+packages/matter.js/src/protocol/interaction/InteractionClient.ts:911

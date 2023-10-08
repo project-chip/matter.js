@@ -10,6 +10,7 @@
 
 - [CommissioningWindowStatus](../enums/exports_cluster.AdministratorCommissioning.CommissioningWindowStatus.md)
 - [Feature](../enums/exports_cluster.AdministratorCommissioning.Feature.md)
+- [StatusCode](../enums/exports_cluster.AdministratorCommissioning.StatusCode.md)
 
 ### Type Aliases
 
@@ -28,7 +29,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.AdministratorCommissioning.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `basic`: ``true``  } ? typeof [`BasicComponent`](exports_cluster.AdministratorCommissioning.md#basiccomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.AdministratorCommissioning.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `basic`: ``true``  } ? typeof [`BasicComponent`](exports_cluster.AdministratorCommissioning.md#basiccomponent) : {}
 
 #### Type parameters
 
@@ -38,37 +39,37 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:489
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:687
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `adminFabricIndex`: [`Attribute`](exports_cluster.md#attribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/datatype/FabricIndex"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_datatype_FabricIndex_.md) \| ``null``, `any`\> ; `adminVendorId`: [`Attribute`](exports_cluster.md#attribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/datatype/VendorId"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_datatype_VendorId_.md) \| ``null``, `any`\> ; `windowStatus`: [`Attribute`](exports_cluster.md#attribute)<[`CommissioningWindowStatus`](../enums/exports_cluster.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, { `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `adminFabricIndex`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/FabricIndex"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_FabricIndex_.md) \| ``null``, `any`\> ; `adminVendorId`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md) \| ``null``, `any`\> ; `windowStatus`: [`Attribute`](exports_cluster.md#attribute)<[`CommissioningWindowStatus`](../enums/exports_cluster.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: { `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``60`` ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all AdministratorCommissioning clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:114
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:135
 
 ___
 
 ### BasicComponent
 
-• `Const` **BasicComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `openBasicCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **BasicComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `openBasicCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
 
 A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:267
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:295
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.AdministratorCommissioning.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: { `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `adminFabricIndex`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/FabricIndex"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_FabricIndex_.md) \| ``null``, `any`\> ; `adminVendorId`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md) \| ``null``, `any`\> ; `windowStatus`: [`Attribute`](exports_cluster.md#attribute)<[`CommissioningWindowStatus`](../enums/exports_cluster.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: { `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``60`` ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.AdministratorCommissioning.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Administrator Commissioning
 
@@ -87,13 +88,13 @@ MatterCoreSpecificationV1_1 § 11.18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:318
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:348
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `openBasicCommissioningWindow`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `openBasicCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `openCommissioningWindow`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `revokeCommissioning`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``60`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1``  }\>
 
 This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
 
@@ -102,13 +103,13 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:500
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:698
 
 ___
 
 ### TlvOpenBasicCommissioningWindowRequest
 
-• `Const` **TlvOpenBasicCommissioningWindowRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvOpenBasicCommissioningWindowRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
@@ -118,13 +119,13 @@ MatterCoreSpecificationV1_1 § 11.18.8.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:95
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:116
 
 ___
 
 ### TlvOpenCommissioningWindowRequest
 
-• `Const` **TlvOpenCommissioningWindowRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvOpenCommissioningWindowRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the AdministratorCommissioning openCommissioningWindow command
 
@@ -134,4 +135,4 @@ MatterCoreSpecificationV1_1 § 11.18.8.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:33

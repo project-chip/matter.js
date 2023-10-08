@@ -18,6 +18,7 @@
 - [DataReader](../classes/util_export.DataReader.md)
 - [DataWriter](../classes/util_export.DataWriter.md)
 - [EndOfStreamError](../classes/util_export.EndOfStreamError.md)
+- [NoResponseTimeoutError](../classes/util_export.NoResponseTimeoutError.md)
 - [Queue](../classes/util_export.Queue.md)
 
 ### Interfaces
@@ -26,6 +27,7 @@
 
 ### Type Aliases
 
+- [Brand](util_export.md#brand)
 - [Branded](util_export.md#branded)
 - [ByteArray](util_export.md#bytearray)
 - [ClassExtends](util_export.md#classextends)
@@ -62,10 +64,10 @@
 - [camelize](util_export.md#camelize)
 - [capitalize](util_export.md#capitalize)
 - [commandExecutor](util_export.md#commandexecutor)
+- [createPromise](util_export.md#createpromise)
 - [describeList](util_export.md#describelist)
 - [getIntParameter](util_export.md#getintparameter)
 - [getParameter](util_export.md#getparameter)
-- [getPromiseResolver](util_export.md#getpromiseresolver)
 - [hasParameter](util_export.md#hasparameter)
 - [iPv4ToNumber](util_export.md#ipv4tonumber)
 - [iPv6ToArray](util_export.md#ipv6toarray)
@@ -73,7 +75,6 @@
 - [isIPv4](util_export.md#isipv4)
 - [isIPv6](util_export.md#isipv6)
 - [isNullish](util_export.md#isnullish)
-- [logEndpoint](util_export.md#logendpoint)
 - [maxValue](util_export.md#maxvalue)
 - [minValue](util_export.md#minvalue)
 - [onSameNetwork](util_export.md#onsamenetwork)
@@ -86,9 +87,31 @@
 
 ## Type Aliases
 
+### Brand
+
+Ƭ **Brand**<`B`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `B` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `[___brand]` | `B` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Type.d.ts:29
+
+___
+
 ### Branded
 
-Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](export._internal_.md#brand)<`B`\>
+Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](util_export.md#brand)<`B`\>
 
 #### Type parameters
 
@@ -99,7 +122,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:32
+packages/matter.js/dist/esm/util/Type.d.ts:32
 
 ___
 
@@ -111,9 +134,9 @@ Array of bytes, alias of Uint8Array.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/ByteArray.d.ts:25
+packages/matter.js/dist/esm/util/ByteArray.d.ts:25
 
-packages/matter.js/dist/cjs/util/ByteArray.d.ts:26
+packages/matter.js/dist/esm/util/ByteArray.d.ts:26
 
 ___
 
@@ -145,7 +168,7 @@ Type that represents a class constructor of a defined type or extend of it
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:15
+packages/matter.js/dist/esm/util/Type.d.ts:15
 
 ___
 
@@ -161,7 +184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:26
+packages/matter.js/dist/esm/util/Type.d.ts:26
 
 ___
 
@@ -180,9 +203,9 @@ Merges two types into one.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:13
+packages/matter.js/dist/esm/util/Type.d.ts:13
 
-packages/matter.js/dist/cjs/util/Type.d.ts:10
+packages/matter.js/dist/esm/util/Type.d.ts:10
 
 ___
 
@@ -200,9 +223,9 @@ Merge an array of objects into one.  Currently assumes unique elements
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:20
+packages/matter.js/dist/esm/util/Type.d.ts:20
 
-packages/matter.js/dist/cjs/util/Type.d.ts:19
+packages/matter.js/dist/esm/util/Type.d.ts:19
 
 ___
 
@@ -221,9 +244,9 @@ Pluck an item from an array of objects if present
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:23
+packages/matter.js/dist/esm/util/Type.d.ts:23
 
-packages/matter.js/dist/cjs/util/Type.d.ts:22
+packages/matter.js/dist/esm/util/Type.d.ts:22
 
 ___
 
@@ -242,7 +265,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:6
+packages/matter.js/dist/esm/util/Type.d.ts:6
 
 ## Variables
 
@@ -252,9 +275,9 @@ packages/matter.js/dist/cjs/util/Type.d.ts:6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/ByteArray.d.ts:25
+packages/matter.js/dist/esm/util/ByteArray.d.ts:25
 
-packages/matter.js/dist/cjs/util/ByteArray.d.ts:26
+packages/matter.js/dist/esm/util/ByteArray.d.ts:26
 
 ___
 
@@ -264,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:20
+packages/matter.js/dist/esm/util/Number.d.ts:20
 
 ___
 
@@ -274,7 +297,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:19
+packages/matter.js/dist/esm/util/Number.d.ts:19
 
 ___
 
@@ -284,7 +307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:16
+packages/matter.js/dist/esm/util/Number.d.ts:16
 
 ___
 
@@ -294,7 +317,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:12
+packages/matter.js/dist/esm/util/Number.d.ts:12
 
 ___
 
@@ -304,7 +327,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:17
+packages/matter.js/dist/esm/util/Number.d.ts:17
 
 ___
 
@@ -314,7 +337,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:13
+packages/matter.js/dist/esm/util/Number.d.ts:13
 
 ___
 
@@ -324,7 +347,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:18
+packages/matter.js/dist/esm/util/Number.d.ts:18
 
 ___
 
@@ -334,7 +357,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:14
+packages/matter.js/dist/esm/util/Number.d.ts:14
 
 ___
 
@@ -344,7 +367,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:15
+packages/matter.js/dist/esm/util/Number.d.ts:15
 
 ___
 
@@ -354,7 +377,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:11
+packages/matter.js/dist/esm/util/Number.d.ts:11
 
 ___
 
@@ -364,7 +387,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:7
+packages/matter.js/dist/esm/util/Number.d.ts:7
 
 ___
 
@@ -374,7 +397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:8
+packages/matter.js/dist/esm/util/Number.d.ts:8
 
 ___
 
@@ -384,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:9
+packages/matter.js/dist/esm/util/Number.d.ts:9
 
 ___
 
@@ -394,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:10
+packages/matter.js/dist/esm/util/Number.d.ts:10
 
 ___
 
@@ -409,7 +432,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:6
+packages/matter.js/dist/esm/util/Number.d.ts:6
 
 ## Functions
 
@@ -437,7 +460,7 @@ packages/matter.js/dist/cjs/util/Number.d.ts:6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:13
+packages/matter.js/dist/esm/util/Type.d.ts:13
 
 ___
 
@@ -463,7 +486,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:20
+packages/matter.js/dist/esm/util/Type.d.ts:20
 
 ___
 
@@ -491,7 +514,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:23
+packages/matter.js/dist/esm/util/Type.d.ts:23
 
 ___
 
@@ -515,7 +538,7 @@ Converts identifiers of the form "foo-bar", "foo_bar", "foo bar", "foo*bar",
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/String.d.ts:11
+packages/matter.js/dist/esm/util/String.d.ts:11
 
 ___
 
@@ -546,7 +569,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/String.d.ts:6
+packages/matter.js/dist/esm/util/String.d.ts:6
 
 ___
 
@@ -566,7 +589,35 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/util/CommandLine.ts#L30)
+packages/matter-node.js/src/util/CommandLine.ts:30
+
+___
+
+### createPromise
+
+▸ **createPromise**<`T`\>(): `Object`
+
+Obtain a promise with functions to resolve and reject.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `promise` | `Promise`<`T`\> |
+| `rejecter` | (`reason?`: `any`) => `void` |
+| `resolver` | (`value`: `T`) => `void` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:11
 
 ___
 
@@ -589,7 +640,7 @@ Create a human readable version of a list of items.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/String.d.ts:34
+packages/matter.js/dist/esm/util/String.d.ts:34
 
 ___
 
@@ -609,7 +660,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/util/CommandLine.ts#L22)
+packages/matter-node.js/src/util/CommandLine.ts:22
 
 ___
 
@@ -629,29 +680,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/util/CommandLine.ts#L12)
-
-___
-
-### getPromiseResolver
-
-▸ **getPromiseResolver**<`T`\>(): `Promise`<{ `promise`: `Promise`<`T`\> ; `rejecter`: (`reason?`: `any`) => `void` ; `resolver`: (`value`: `T`) => `void`  }\>
-
-Dark magic to have access to the promise resolver outside the promise context.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Returns
-
-`Promise`<{ `promise`: `Promise`<`T`\> ; `rejecter`: (`reason?`: `any`) => `void` ; `resolver`: (`value`: `T`) => `void`  }\>
-
-#### Defined in
-
-packages/matter.js/dist/cjs/util/Promises.d.ts:9
+packages/matter-node.js/src/util/CommandLine.ts:12
 
 ___
 
@@ -671,7 +700,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/util/CommandLine.ts#L18)
+packages/matter-node.js/src/util/CommandLine.ts:18
 
 ___
 
@@ -691,7 +720,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Ip.d.ts:8
+packages/matter.js/dist/esm/util/Ip.d.ts:8
 
 ___
 
@@ -711,7 +740,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Ip.d.ts:9
+packages/matter.js/dist/esm/util/Ip.d.ts:9
 
 ___
 
@@ -737,7 +766,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DeepEqual.d.ts:6
+packages/matter.js/dist/esm/util/DeepEqual.d.ts:6
 
 ___
 
@@ -762,7 +791,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Ip.d.ts:6
+packages/matter.js/dist/esm/util/Ip.d.ts:6
 
 ___
 
@@ -782,7 +811,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Ip.d.ts:7
+packages/matter.js/dist/esm/util/Ip.d.ts:7
 
 ___
 
@@ -804,28 +833,7 @@ Same as "a == undefined" but keeps the kids happy
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Type.d.ts:25
-
-___
-
-### logEndpoint
-
-▸ **logEndpoint**(`endpoint`, `options?`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `endpoint` | [`Endpoint`](../classes/exports_device.Endpoint.md) |
-| `options?` | [`EndpointLoggingOptions`](export._internal_.md#endpointloggingoptions) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/util/EndpointStructureLogger.d.ts:29
+packages/matter.js/dist/esm/util/Type.d.ts:25
 
 ___
 
@@ -852,7 +860,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:24
+packages/matter.js/dist/esm/util/Number.d.ts:24
 
 ___
 
@@ -879,7 +887,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:23
+packages/matter.js/dist/esm/util/Number.d.ts:23
 
 ___
 
@@ -901,7 +909,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Ip.d.ts:10
+packages/matter.js/dist/esm/util/Ip.d.ts:10
 
 ___
 
@@ -921,7 +929,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/util/Node.ts#L11)
+packages/matter-node.js/src/util/Node.ts:11
 
 ___
 
@@ -943,7 +951,7 @@ Like JSON.stringify but targets well-formed JS and is slightly more readable.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/String.d.ts:15
+packages/matter.js/dist/esm/util/String.d.ts:15
 
 ___
 
@@ -980,7 +988,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Singleton.d.ts:6
+packages/matter.js/dist/esm/util/Singleton.d.ts:6
 
 ___
 
@@ -1000,7 +1008,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:22
+packages/matter.js/dist/esm/util/Number.d.ts:22
 
 ___
 
@@ -1020,7 +1028,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:25
+packages/matter.js/dist/esm/util/Number.d.ts:25
 
 ___
 
@@ -1040,4 +1048,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/Number.d.ts:21
+packages/matter.js/dist/esm/util/Number.d.ts:21

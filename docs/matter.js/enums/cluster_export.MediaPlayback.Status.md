@@ -29,7 +29,7 @@ Command failed: Requested playback command is invalid in the current playback st
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L65)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:57
 
 ___
 
@@ -41,7 +41,7 @@ Command failed: This endpoint is not active for playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L76)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:68
 
 ___
 
@@ -54,7 +54,7 @@ attempting to fast-forward during a commercial might return NotAllowed.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L71)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:63
 
 ___
 
@@ -67,7 +67,7 @@ the media.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:88](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L88)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:80
 
 ___
 
@@ -80,7 +80,7 @@ fastest speed supported by the server in the respective direction.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L82)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:74
 
 ___
 
@@ -92,4 +92,4 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L60)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:52

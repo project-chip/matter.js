@@ -76,7 +76,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:64
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:64
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:25
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:25
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:37
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:37
 
 ___
 
@@ -155,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:45
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:45
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:50
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:50
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:23
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:23
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:21
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:21
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:28
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:28
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:32
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:32
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:31
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:31
 
 ___
 
@@ -310,7 +310,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:27
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:27
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:29
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:29
 
 ___
 
@@ -346,7 +346,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:30
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:30
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:52
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:52
 
 ___
 
@@ -397,7 +397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:56
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:56
 
 ___
 
@@ -422,7 +422,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:58
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:58
 
 ___
 
@@ -449,7 +449,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:54
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:54
 
 ___
 
@@ -475,7 +475,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:60
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:60
 
 ___
 
@@ -502,7 +502,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:62
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
 
 ## Methods
 
@@ -516,7 +516,7 @@ packages/matter.js/dist/cjs/crypto/Crypto.d.ts:62
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:63
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:63
 
 ___
 
@@ -539,7 +539,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:24
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:24
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:33
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:33
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:41
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:41
 
 ___
 
@@ -604,7 +604,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:49
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:49
 
 ___
 
@@ -627,7 +627,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:22
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:22
 
 ___
 
@@ -647,7 +647,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:26
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:26
 
 ___
 
@@ -667,7 +667,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:51
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:51
 
 ___
 
@@ -690,7 +690,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:55
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:55
 
 ___
 
@@ -711,7 +711,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:57
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:57
 
 ___
 
@@ -734,7 +734,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:53
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:53
 
 ___
 
@@ -756,7 +756,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:59
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:59
 
 ___
 
@@ -779,4 +779,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:61
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:61

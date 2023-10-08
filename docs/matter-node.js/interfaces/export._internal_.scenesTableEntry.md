@@ -27,7 +27,7 @@ these attributes for a cluster implemented on the same endpoint. The sum of all 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:25
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:25
 
 ___
 
@@ -39,7 +39,7 @@ The identifier, unique within this group, which is used to identify this scene.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:15
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:15
 
 ___
 
@@ -51,7 +51,7 @@ The name of the scene (optional)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:17
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:17
 
 ___
 
@@ -63,7 +63,7 @@ The amount of time, in seconds, it will take for a cluster to change from its cu
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:19
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:19
 
 ___
 
@@ -75,7 +75,7 @@ The group identifier for which this scene applies, or 0 if the scene is not asso
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:13
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:13
 
 ___
 
@@ -87,4 +87,4 @@ Together with the SceneTransitionTime field, this field allows the transition ti
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/ScenesServer.d.ts:27
+packages/matter.js/dist/esm/cluster/server/ScenesServer.d.ts:27

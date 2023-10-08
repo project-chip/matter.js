@@ -89,7 +89,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:41
 
 ## Properties
 
@@ -99,7 +99,7 @@ packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:41
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:28
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:16
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:16
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:22
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:17
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:17
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:42
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:15
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:15
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:19
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:19
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:20
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:20
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:29
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:18
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:18
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:36
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:21
 
 ___
 
@@ -219,7 +219,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:23
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:23
 
 ___
 
@@ -229,7 +229,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:31
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:31
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:34
 
 ___
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:33
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:26
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:26
 
 ___
 
@@ -269,7 +269,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:27
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:27
 
 ___
 
@@ -279,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:37
 
 ___
 
@@ -289,7 +289,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:43
 
 ___
 
@@ -299,7 +299,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:45
 
 ___
 
@@ -309,7 +309,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:25
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:25
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:32
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:32
 
 ___
 
@@ -329,7 +329,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:39
 
 ___
 
@@ -339,7 +339,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:40
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:71
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:71
 
 ___
 
@@ -359,7 +359,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:30
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:30
 
 ___
 
@@ -369,7 +369,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:38
 
 ___
 
@@ -379,7 +379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:35
 
 ___
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:14
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:14
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:13
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:13
 
 ___
 
@@ -409,7 +409,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:24
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:24
 
 ## Methods
 
@@ -423,7 +423,7 @@ packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:56
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:56
 
 ___
 
@@ -452,19 +452,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:67
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:67
 
 ___
 
 ### cancel
 
-▸ **cancel**(`flush?`): `Promise`<`void`\>
+▸ **cancel**(`flush?`, `cancelledByPeer?`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `flush?` | `boolean` |
+| `cancelledByPeer?` | `boolean` |
 
 #### Returns
 
@@ -472,7 +473,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:70
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:70
 
 ___
 
@@ -500,7 +501,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:68
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:68
 
 ___
 
@@ -514,7 +515,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:69
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:69
 
 ___
 
@@ -528,7 +529,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:54
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:54
 
 ___
 
@@ -542,7 +543,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:55
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:55
 
 ___
 
@@ -559,7 +560,7 @@ sending by 50ms in any case to mke sure to catch all updates.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:61
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:61
 
 ___
 
@@ -579,7 +580,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:66
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:66
 
 ___
 
@@ -595,7 +596,7 @@ Determine all attributes that have changed since the last update and send them t
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:65
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:65
 
 ___
 
@@ -615,7 +616,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:44
 
 ___
 
@@ -635,7 +636,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:46
 
 ___
 
@@ -654,4 +655,4 @@ controller. The data of newly added events are not sent automatically.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/SubscriptionHandler.d.ts:53
+packages/matter.js/dist/esm/protocol/interaction/SubscriptionHandler.d.ts:53

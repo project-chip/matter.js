@@ -62,7 +62,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:336](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L336)
+packages/matter.js/src/log/Logger.ts:341
 
 ## Properties
 
@@ -72,7 +72,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:336](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L336)
+packages/matter.js/src/log/Logger.ts:341
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:249](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L249)
+packages/matter.js/src/log/Logger.ts:254
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:248](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L248)
+packages/matter.js/src/log/Logger.ts:253
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:247](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L247)
+packages/matter.js/src/log/Logger.ts:252
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:250](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L250)
+packages/matter.js/src/log/Logger.ts:255
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:251](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L251)
+packages/matter.js/src/log/Logger.ts:256
 
 ## Accessors
 
@@ -180,7 +180,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:258](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L258)
+packages/matter.js/src/log/Logger.ts:263
 
 ## Methods
 
@@ -200,7 +200,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:338](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L338)
+packages/matter.js/src/log/Logger.ts:343
 
 ___
 
@@ -220,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:341](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L341)
+packages/matter.js/src/log/Logger.ts:346
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:342](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L342)
+packages/matter.js/src/log/Logger.ts:347
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:339](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L339)
+packages/matter.js/src/log/Logger.ts:344
 
 ___
 
@@ -281,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:344](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L344)
+packages/matter.js/src/log/Logger.ts:349
 
 ___
 
@@ -301,7 +301,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:340](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L340)
+packages/matter.js/src/log/Logger.ts:345
 
 ___
 
@@ -323,7 +323,7 @@ Shortcut for new DiagnosticDictionary().
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:307](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L307)
+packages/matter.js/src/log/Logger.ts:312
 
 ___
 
@@ -347,7 +347,7 @@ a new facility
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:280](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L280)
+packages/matter.js/src/log/Logger.ts:285
 
 ___
 
@@ -376,7 +376,7 @@ indented while the context executes.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:315](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L315)
+packages/matter.js/src/log/Logger.ts:320
 
 ___
 
@@ -384,7 +384,7 @@ ___
 
 ▸ `Static` **nestAsync**(`context`): `Promise`<`any`\>
 
-Async version of above.
+Async version of nest().
 
 #### Parameters
 
@@ -398,7 +398,7 @@ Async version of above.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:327](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L327)
+packages/matter.js/src/log/Logger.ts:332
 
 ___
 
@@ -422,4 +422,4 @@ the stringified value
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:290](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/log/Logger.ts#L290)
+packages/matter.js/src/log/Logger.ts:295

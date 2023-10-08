@@ -26,7 +26,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.UnitLocalization.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `temperatureUnit`: ``true``  } ? typeof [`TemperatureUnitComponent`](cluster_export.UnitLocalization.md#temperatureunitcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.UnitLocalization.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `temperatureUnit`: ``true``  } ? typeof [`TemperatureUnitComponent`](cluster_export.UnitLocalization.md#temperatureunitcomponent) : {}
 
 #### Type parameters
 
@@ -36,25 +36,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:132](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L132)
+packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:127
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `features`: { `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``45`` = 0x2d; `name`: ``"UnitLocalization"`` = "UnitLocalization"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all UnitLocalization clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:62](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L62)
+packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:54
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.UnitLocalization.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<{}, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: {} ; `events`: {} ; `features`: { `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``45`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"UnitLocalization"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `features`: { `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``45`` = 0x2d; `name`: ``"UnitLocalization"`` = "UnitLocalization"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.UnitLocalization.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Unit Localization
 
@@ -75,13 +75,13 @@ factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:113](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L113)
+packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:105
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `temperatureUnit`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`TempUnit`](../enums/cluster_export.UnitLocalization.TempUnit.md), `any`\>\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, {}, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `temperatureUnit`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`TempUnit`](../enums/cluster_export.UnitLocalization.TempUnit.md), `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  }  } ; `features`: { `temperatureUnit`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``45`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"UnitLocalization"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all UnitLocalization features. It may support illegal feature combinations.
 
@@ -90,16 +90,16 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:144](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L144)
+packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:139
 
 ___
 
 ### TemperatureUnitComponent
 
-• `Const` **TemperatureUnitComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `temperatureUnit`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`TempUnit`](../enums/cluster_export.UnitLocalization.TempUnit.md), `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **TemperatureUnitComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `temperatureUnit`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| [`TempUnit`](../enums/cluster_export.UnitLocalization.TempUnit.md), `any`\>  }  }\>
 
 A UnitLocalizationCluster supports these elements if it supports feature TemperatureUnit.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L80)
+packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:72

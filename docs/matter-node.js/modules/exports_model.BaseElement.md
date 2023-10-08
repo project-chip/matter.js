@@ -25,7 +25,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:56
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:56
 
 ___
 
@@ -43,4 +43,4 @@ Element with optional type; used for factory functions and constructors.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:60
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:60

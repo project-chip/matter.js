@@ -27,7 +27,7 @@ The Node has encountered a network fault as a result of a failure to establish a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:294](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L294)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:295
 
 ___
 
@@ -39,7 +39,7 @@ The Node has encountered a network fault as a result of a hardware failure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:284](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L284)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:285
 
 ___
 
@@ -51,7 +51,7 @@ The Node has encountered a network fault as a result of a jammed network.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:289](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L289)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:290
 
 ___
 
@@ -63,4 +63,4 @@ The Node has encountered an unspecified fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:279](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L279)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:280

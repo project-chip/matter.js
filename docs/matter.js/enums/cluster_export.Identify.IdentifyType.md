@@ -32,7 +32,7 @@ relay.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L65)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:57
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L54)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:46
 
 ___
 
@@ -54,7 +54,7 @@ Presentation will be visible on display screen.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:59](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L59)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:51
 
 ___
 
@@ -66,7 +66,7 @@ Light output of a lighting product.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L47)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:39
 
 ___
 
@@ -78,7 +78,7 @@ No presentation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L42)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:34
 
 ___
 
@@ -90,4 +90,4 @@ Typically a small LED.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L52)
+packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:44

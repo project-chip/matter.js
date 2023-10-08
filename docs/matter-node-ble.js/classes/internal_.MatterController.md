@@ -77,7 +77,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:53
+matter.js/dist/cjs/MatterController.d.ts:55
 
 ## Properties
 
@@ -87,7 +87,7 @@ matter.js/dist/cjs/MatterController.d.ts:53
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:49
+matter.js/dist/cjs/MatterController.d.ts:51
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:39
+matter.js/dist/cjs/MatterController.d.ts:41
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:46
+matter.js/dist/cjs/MatterController.d.ts:48
 
 ___
 
@@ -117,11 +117,10 @@ ___
 
 Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
 success.
-TODO: Split this out into an own CommissioningHandler class
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:80
+matter.js/dist/cjs/MatterController.d.ts:81
 
 ___
 
@@ -131,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:51
+matter.js/dist/cjs/MatterController.d.ts:53
 
 ___
 
@@ -141,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:50
+matter.js/dist/cjs/MatterController.d.ts:52
 
 ___
 
@@ -154,7 +153,7 @@ The method returns a list of addresses of the discovered devices.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:59
+matter.js/dist/cjs/MatterController.d.ts:61
 
 ___
 
@@ -164,7 +163,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:47
+matter.js/dist/cjs/MatterController.d.ts:49
 
 ___
 
@@ -174,7 +173,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:40
+matter.js/dist/cjs/MatterController.d.ts:42
 
 ___
 
@@ -188,7 +187,7 @@ is wrong.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:74
+matter.js/dist/cjs/MatterController.d.ts:76
 
 ___
 
@@ -198,7 +197,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:36
+matter.js/dist/cjs/MatterController.d.ts:38
 
 ___
 
@@ -208,7 +207,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:52
+matter.js/dist/cjs/MatterController.d.ts:54
 
 ___
 
@@ -218,7 +217,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:37
+matter.js/dist/cjs/MatterController.d.ts:39
 
 ___
 
@@ -228,7 +227,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:38
+matter.js/dist/cjs/MatterController.d.ts:40
 
 ___
 
@@ -238,7 +237,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:42
+matter.js/dist/cjs/MatterController.d.ts:44
 
 ___
 
@@ -248,7 +247,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:48
+matter.js/dist/cjs/MatterController.d.ts:50
 
 ___
 
@@ -258,7 +257,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:43
+matter.js/dist/cjs/MatterController.d.ts:45
 
 ___
 
@@ -268,7 +267,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:45
+matter.js/dist/cjs/MatterController.d.ts:47
 
 ___
 
@@ -278,7 +277,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:41
+matter.js/dist/cjs/MatterController.d.ts:43
 
 ## Methods
 
@@ -298,7 +297,7 @@ matter.js/dist/cjs/MatterController.d.ts:41
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:54
+matter.js/dist/cjs/MatterController.d.ts:56
 
 ___
 
@@ -312,7 +311,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:114
+matter.js/dist/cjs/MatterController.d.ts:115
 
 ___
 
@@ -326,7 +325,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:115
+matter.js/dist/cjs/MatterController.d.ts:116
 
 ___
 
@@ -355,7 +354,7 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:68
+matter.js/dist/cjs/MatterController.d.ts:70
 
 ___
 
@@ -377,7 +376,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:60
+matter.js/dist/cjs/MatterController.d.ts:62
 
 ___
 
@@ -401,13 +400,13 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:107
+matter.js/dist/cjs/MatterController.d.ts:108
 
 ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransTimeoutMs?`, `activeRetransTimeoutMs?`): `any`
+▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransTimeoutMs?`, `activeRetransTimeoutMs?`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -426,17 +425,17 @@ ___
 
 #### Returns
 
-`any`
+`Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:110
+matter.js/dist/cjs/MatterController.d.ts:111
 
 ___
 
 ### findResumptionRecordByNodeId
 
-▸ **findResumptionRecordByNodeId**(`nodeId`): `any`
+▸ **findResumptionRecordByNodeId**(`nodeId`): `undefined` \| [`ResumptionRecord`](../interfaces/internal_.ResumptionRecord.md)
 
 #### Parameters
 
@@ -446,25 +445,25 @@ ___
 
 #### Returns
 
-`any`
+`undefined` \| [`ResumptionRecord`](../interfaces/internal_.ResumptionRecord.md)
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:112
+matter.js/dist/cjs/MatterController.d.ts:113
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): `any`
+▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-`any`
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:116
+matter.js/dist/cjs/MatterController.d.ts:117
 
 ___
 
@@ -478,21 +477,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:109
+matter.js/dist/cjs/MatterController.d.ts:110
 
 ___
 
 ### getNextAvailableSessionId
 
-▸ **getNextAvailableSessionId**(): `any`
+▸ **getNextAvailableSessionId**(): `number`
 
 #### Returns
 
-`any`
+`number`
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:108
+matter.js/dist/cjs/MatterController.d.ts:109
 
 ___
 
@@ -506,13 +505,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:102
+matter.js/dist/cjs/MatterController.d.ts:103
 
 ___
 
 ### getResumptionRecord
 
-▸ **getResumptionRecord**(`resumptionId`): `any`
+▸ **getResumptionRecord**(`resumptionId`): `undefined` \| [`ResumptionRecord`](../interfaces/internal_.ResumptionRecord.md)
 
 #### Parameters
 
@@ -522,11 +521,11 @@ ___
 
 #### Returns
 
-`any`
+`undefined` \| [`ResumptionRecord`](../interfaces/internal_.ResumptionRecord.md)
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:111
+matter.js/dist/cjs/MatterController.d.ts:112
 
 ___
 
@@ -540,7 +539,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:100
+matter.js/dist/cjs/MatterController.d.ts:101
 
 ___
 
@@ -577,13 +576,13 @@ call is returned. The logic makes sure to only try each unique address (IP/port)
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:87
+matter.js/dist/cjs/MatterController.d.ts:88
 
 ___
 
 ### pair
 
-▸ **pair**(`peerNodeId`, `operationalServerAddress`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`unknown`\>\>
+▸ **pair**(`peerNodeId`, `operationalServerAddress`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 Pair with an operational device (already commissioned) and establish a CASE session.
 
@@ -596,17 +595,17 @@ Pair with an operational device (already commissioned) and establish a CASE sess
 
 #### Returns
 
-`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`unknown`\>\>
+`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:99
+matter.js/dist/cjs/MatterController.d.ts:100
 
 ___
 
 ### resume
 
-▸ **resume**(`peerNodeId`, `timeoutSeconds?`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`unknown`\>\>
+▸ **resume**(`peerNodeId`, `timeoutSeconds?`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 Resume a device connection and establish a CASE session that was previously paired with the controller. This
 method will try to connect to the device using the previously used server address (if set). If that fails, the
@@ -622,17 +621,17 @@ It returns the operational MessageChannel on success.
 
 #### Returns
 
-`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`unknown`\>\>
+`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:97
+matter.js/dist/cjs/MatterController.d.ts:98
 
 ___
 
 ### saveResumptionRecord
 
-▸ **saveResumptionRecord**(`resumptionRecord`): `any`
+▸ **saveResumptionRecord**(`resumptionRecord`): `void`
 
 #### Parameters
 
@@ -642,11 +641,11 @@ ___
 
 #### Returns
 
-`any`
+`void`
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:113
+matter.js/dist/cjs/MatterController.d.ts:114
 
 ___
 
@@ -666,7 +665,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:101
+matter.js/dist/cjs/MatterController.d.ts:102
 
 ___
 
@@ -692,4 +691,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:44
+matter.js/dist/cjs/MatterController.d.ts:46

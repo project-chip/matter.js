@@ -30,7 +30,7 @@ example a "seek bar". Adds support for Attributes and Commands related to advanc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:208](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L208)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:200
 
 ___
 
@@ -44,4 +44,4 @@ Support for commands to support variable speed playback on media that supports i
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:215](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L215)
+packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:207
