@@ -30,9 +30,9 @@ jobs:
         CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E "^packages\/" || true)
         if [ -z "$CHANGES" ] ; then
           echo "🔸 No package changes since latest version, aborting..."
-          echo "::set-output name=result::unchanged"
+          echo "result=unchanged" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=result::ok"
+          echo "result=ok" >> $GITHUB_OUTPUT
         fi
 
     - name: Prepare testing environment

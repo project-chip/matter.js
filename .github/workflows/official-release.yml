@@ -65,13 +65,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const fs = require('fs-extra');
+            const fs = require('fs');
             
             const WIP_MARKER = '__WORK IN PROGRESS__';
             
             const TEMP_PLACEHOLDER = '**TEMP_PLACEHOLDER_GH_ACTION**';
             const changelog = fs
-            .readFileSync(`${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`, { encoding: 'utf-8' })
+            .readFileSync(`${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`, 'utf8')
             .replace(WIP_MARKER, TEMP_PLACEHOLDER);
             
             if (!changelog.includes(WIP_MARKER)) {
@@ -85,9 +85,7 @@ jobs:
             fs.writeFileSync(
               `${process.env.GITHUB_WORKSPACE}/CHANGELOG.md`,
               changelog.replace(WIP_MARKER, versionDateStr).replace(TEMP_PLACEHOLDER, WIP_MARKER),
-              {
-                encoding: 'utf-8'
-              }
+              'utf8'
             );
 
       - name: Bump version locally

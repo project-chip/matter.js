@@ -9,5 +9,12 @@
     ]
   },
 
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+
+  "typedocOptions": {
+    "entryPoints": [
+      "src/ble/export.ts"
+    ],
+    "out": "../../docs/matter-node-ble.js"
+  }
 }
