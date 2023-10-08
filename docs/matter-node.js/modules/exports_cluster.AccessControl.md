@@ -25,7 +25,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, { `accessControlEntryChanged`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `accessControlExtensionChanged`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `accessControlEntriesPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `acl`: [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `extension`: [`OptionalWritableFabricScopedAttribute`](exports_cluster.md#optionalwritablefabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `subjectsPerAccessControlEntry`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `targetsPerAccessControlEntry`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `events`: { `accessControlEntryChanged`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `accessControlExtensionChanged`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``31`` ; `name`: ``"AccessControl"`` ; `revision`: ``1``  }\>
 
 Access Control
 
@@ -43,13 +43,13 @@ MatterCoreSpecificationV1_1 § 9.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:393
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:394
 
 ___
 
 ### TlvAccessControlEntryChangedEvent
 
-• `Const` **TlvAccessControlEntryChangedEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAccessControlEntryChangedEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the AccessControl accessControlEntryChanged event
 
@@ -59,13 +59,13 @@ MatterCoreSpecificationV1_1 § 9.10.7.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:218
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:219
 
 ___
 
 ### TlvAccessControlEntryStruct
 
-• `Const` **TlvAccessControlEntryStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAccessControlEntryStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -73,13 +73,13 @@ MatterCoreSpecificationV1_1 § 9.10.4.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:78
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:79
 
 ___
 
 ### TlvAccessControlExtensionChangedEvent
 
-• `Const` **TlvAccessControlExtensionChangedEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAccessControlExtensionChangedEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the AccessControl accessControlExtensionChanged event
 
@@ -89,13 +89,13 @@ MatterCoreSpecificationV1_1 § 9.10.7.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:357
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:358
 
 ___
 
 ### TlvAccessControlExtensionStruct
 
-• `Const` **TlvAccessControlExtensionStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAccessControlExtensionStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -103,13 +103,13 @@ MatterCoreSpecificationV1_1 § 9.10.4.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:179
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:180
 
 ___
 
 ### TlvAccessControlTargetStruct
 
-• `Const` **TlvAccessControlTargetStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAccessControlTargetStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -117,4 +117,4 @@ MatterCoreSpecificationV1_1 § 9.10.4.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:71

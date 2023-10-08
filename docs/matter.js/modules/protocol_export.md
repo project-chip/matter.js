@@ -26,6 +26,7 @@
 ### Type Aliases
 
 - [CommissioningOptions](protocol_export.md#commissioningoptions)
+- [ExchangeSendOptions](protocol_export.md#exchangesendoptions)
 
 ## Type Aliases
 
@@ -51,4 +52,22 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L39)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:39
+
+___
+
+### ExchangeSendOptions
+
+Ƭ **ExchangeSendOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `expectAckOnly?` | `boolean` | The response to this send should be an ack only and no StatusResponse or such. If a StatusResponse is returned then this is handled as error. |
+| `minimumResponseTimeoutMs?` | `number` | Define a minimum Response Timeout. This setting only increases the response timeout! The minimum four resubmissions are always done regardless of what is specified here. The logic will check if the timeout is reached after each resubmission, so it is not checked exact at the given timeout. |
+| `requiresAck?` | `boolean` | Allows to specify if the send message requires to be acknowledged by the receiver or not. |
+
+#### Defined in
+
+packages/matter.js/src/protocol/MessageExchange.ts:36

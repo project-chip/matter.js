@@ -38,7 +38,7 @@ decoded bytes in a ByteArray
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/Base64Codec.d.ts:21
+packages/matter.js/dist/esm/codec/Base64Codec.d.ts:21
 
 ___
 
@@ -63,4 +63,4 @@ an encoded string
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/Base64Codec.d.ts:14
+packages/matter.js/dist/esm/codec/Base64Codec.d.ts:14

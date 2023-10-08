@@ -17,31 +17,33 @@
 ### Properties
 
 - [caseCommissioner](protocol_securechannel_export.SecureChannelProtocol.md#casecommissioner)
+- [commissioningCancelledCallback](protocol_securechannel_export.SecureChannelProtocol.md#commissioningcancelledcallback)
 - [paseCommissioner](protocol_securechannel_export.SecureChannelProtocol.md#pasecommissioner)
 
 ### Methods
 
 - [getId](protocol_securechannel_export.SecureChannelProtocol.md#getid)
+- [handleInitialStatusReport](protocol_securechannel_export.SecureChannelProtocol.md#handleinitialstatusreport)
 - [onNewExchange](protocol_securechannel_export.SecureChannelProtocol.md#onnewexchange)
-- [updatePaseCommissioner](protocol_securechannel_export.SecureChannelProtocol.md#updatepasecommissioner)
+- [removePaseCommissioner](protocol_securechannel_export.SecureChannelProtocol.md#removepasecommissioner)
+- [setPaseCommissioner](protocol_securechannel_export.SecureChannelProtocol.md#setpasecommissioner)
 - [isStandaloneAck](protocol_securechannel_export.SecureChannelProtocol.md#isstandaloneack)
 
 ## Constructors
 
 ### constructor
 
-• **new SecureChannelProtocol**(`paseCommissioner`, `caseCommissioner`)
+• **new SecureChannelProtocol**(`commissioningCancelledCallback`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `paseCommissioner` | [`PaseServer`](session_export.PaseServer.md) |
-| `caseCommissioner` | [`CaseServer`](session_export.CaseServer.md) |
+| `commissioningCancelledCallback` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L17)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:31
 
 ## Properties
 
@@ -51,17 +53,35 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L19)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:29
+
+___
+
+### commissioningCancelledCallback
+
+• `Private` **commissioningCancelledCallback**: () => `Promise`<`void`\>
+
+#### Type declaration
+
+▸ (): `Promise`<`void`\>
+
+##### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:31
 
 ___
 
 ### paseCommissioner
 
-• `Private` **paseCommissioner**: [`PaseServer`](session_export.PaseServer.md)
+• `Private` **paseCommissioner**: `undefined` \| [`PaseServer`](session_export.PaseServer.md)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L18)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:28
 
 ## Methods
 
@@ -79,7 +99,28 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L22)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:33
+
+___
+
+### handleInitialStatusReport
+
+▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `message` | [`Message`](../interfaces/codec_export.Message.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:82
 
 ___
 
@@ -104,13 +145,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L30)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:45
 
 ___
 
-### updatePaseCommissioner
+### removePaseCommissioner
 
-▸ **updatePaseCommissioner**(`paseServer`): `void`
+▸ **removePaseCommissioner**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:41
+
+___
+
+### setPaseCommissioner
+
+▸ **setPaseCommissioner**(`paseServer`): `void`
 
 #### Parameters
 
@@ -124,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L26)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:37
 
 ___
 
@@ -145,4 +200,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L47)
+packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:118

@@ -17,7 +17,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `getSetupPin`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `login`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `logout`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `commands`: { `getSetupPin`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `login`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `logout`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `id`: ``1294`` ; `name`: ``"AccountLogin"`` ; `revision`: ``1``  }\>
 
 Account Login
 
@@ -32,13 +32,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccountLoginCluster.d.ts:67
+packages/matter.js/dist/esm/cluster/definitions/AccountLoginCluster.d.ts:68
 
 ___
 
 ### TlvGetSetupPinRequest
 
-• `Const` **TlvGetSetupPinRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetSetupPinRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the AccountLogin getSetupPin command
 
@@ -48,13 +48,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.2.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccountLoginCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/AccountLoginCluster.d.ts:15
 
 ___
 
 ### TlvGetSetupPinResponse
 
-• `Const` **TlvGetSetupPinResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetSetupPinResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
 account identified in the request does not match the active account of the running Content App.
@@ -65,13 +65,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.2.4.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccountLoginCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/AccountLoginCluster.d.ts:30
 
 ___
 
 ### TlvLoginRequest
 
-• `Const` **TlvLoginRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLoginRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the AccountLogin login command
 
@@ -81,4 +81,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.2.4.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccountLoginCluster.d.ts:43
+packages/matter.js/dist/esm/cluster/definitions/AccountLoginCluster.d.ts:44

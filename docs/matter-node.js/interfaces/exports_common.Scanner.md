@@ -32,7 +32,7 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:84
+packages/matter.js/dist/esm/common/Scanner.d.ts:84
 
 ___
 
@@ -56,7 +56,7 @@ vendorId, etc.) and return them.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:80
+packages/matter.js/dist/esm/common/Scanner.d.ts:80
 
 ___
 
@@ -81,7 +81,7 @@ and return them.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:70
+packages/matter.js/dist/esm/common/Scanner.d.ts:70
 
 ___
 
@@ -103,7 +103,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:82
+packages/matter.js/dist/esm/common/Scanner.d.ts:82
 
 ___
 
@@ -127,4 +127,4 @@ DNS-SD queries.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/common/Scanner.d.ts:75
+packages/matter.js/dist/esm/common/Scanner.d.ts:75

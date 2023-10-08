@@ -21,7 +21,7 @@ The general type of datatype (ignoring size).
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:61
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:61
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:62
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:62

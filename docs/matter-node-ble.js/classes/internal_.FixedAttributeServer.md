@@ -38,6 +38,7 @@ Attribute server types.
 - [isSubscribable](internal_.FixedAttributeServer.md#issubscribable)
 - [isWritable](internal_.FixedAttributeServer.md#iswritable)
 - [name](internal_.FixedAttributeServer.md#name)
+- [requiresTimedInteraction](internal_.FixedAttributeServer.md#requirestimedinteraction)
 - [schema](internal_.FixedAttributeServer.md#schema)
 - [value](internal_.FixedAttributeServer.md#value)
 
@@ -59,7 +60,7 @@ Attribute server types.
 
 ### constructor
 
-• **new FixedAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `defaultValue`, `getClusterDataVersion`, `getter?`)
+• **new FixedAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `getter?`)
 
 #### Type parameters
 
@@ -76,6 +77,7 @@ Attribute server types.
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
+| `requiresTimedInteraction` | `boolean` | - |
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
 | `getter?` | (`session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
@@ -86,7 +88,7 @@ Attribute server types.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:58
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:60
 
 ## Properties
 
@@ -100,7 +102,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:58
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -114,7 +116,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:40
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -132,7 +134,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:55
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:57
 
 ___
 
@@ -158,7 +160,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:57
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:59
 
 ___
 
@@ -172,7 +174,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:30
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
 
 ___
 
@@ -182,7 +184,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:56
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:58
 
 ___
 
@@ -196,7 +198,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
 
 ___
 
@@ -210,7 +212,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -224,7 +226,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+
+___
+
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Inherited from
+
+[BaseAttributeServer](internal_.BaseAttributeServer.md).[requiresTimedInteraction](internal_.BaseAttributeServer.md#requirestimedinteraction)
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -238,7 +254,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -254,7 +270,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:39
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
 
 ## Methods
 
@@ -277,7 +293,7 @@ new value and the version number.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:99
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:101
 
 ___
 
@@ -300,7 +316,7 @@ new value and the old value.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:108
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:110
 
 ___
 
@@ -324,7 +340,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:45
 
 ___
 
@@ -349,7 +365,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:72
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:74
 
 ___
 
@@ -367,7 +383,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:88
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:90
 
 ___
 
@@ -398,7 +414,7 @@ attributes.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:79
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:81
 
 ___
 
@@ -426,7 +442,7 @@ If a getter or setter is defined the value must be undefined The version number 
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:94
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:96
 
 ___
 
@@ -448,7 +464,7 @@ Remove an internal listener.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:103
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:105
 
 ___
 
@@ -470,7 +486,7 @@ Remove an external listener.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:117
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:119
 
 ___
 
@@ -493,7 +509,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:113
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:115
 
 ___
 
@@ -517,4 +533,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:44

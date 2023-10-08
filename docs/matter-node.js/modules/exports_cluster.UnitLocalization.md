@@ -26,7 +26,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.UnitLocalization.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `temperatureUnit`: ``true``  } ? typeof [`TemperatureUnitComponent`](exports_cluster.UnitLocalization.md#temperatureunitcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.UnitLocalization.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `temperatureUnit`: ``true``  } ? typeof [`TemperatureUnitComponent`](exports_cluster.UnitLocalization.md#temperatureunitcomponent) : {}
 
 #### Type parameters
 
@@ -36,25 +36,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:109
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:134
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `features`: { `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``45`` ; `name`: ``"UnitLocalization"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all UnitLocalization clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:43
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:44
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.UnitLocalization.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: { `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"UnitLocalization"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `features`: { `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``45`` ; `name`: ``"UnitLocalization"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.UnitLocalization.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Unit Localization
 
@@ -75,13 +75,13 @@ MatterCoreSpecificationV1_1 § 11.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:80
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:88
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `temperatureUnit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TempUnit`](../enums/exports_cluster.UnitLocalization.TempUnit.md) \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: { `temperatureUnit`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``45`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"UnitLocalization"`` ; `revision`: ``1``  }\>
 
 This cluster supports all UnitLocalization features. It may support illegal feature combinations.
 
@@ -90,16 +90,16 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:120
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:145
 
 ___
 
 ### TemperatureUnitComponent
 
-• `Const` **TemperatureUnitComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `temperatureUnit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TempUnit`](../enums/exports_cluster.UnitLocalization.TempUnit.md) \| ``null``, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **TemperatureUnitComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `temperatureUnit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TempUnit`](../enums/exports_cluster.UnitLocalization.TempUnit.md) \| ``null``, `any`\>  }  }\>
 
 A UnitLocalizationCluster supports these elements if it supports feature TemperatureUnit.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:60

@@ -28,4 +28,4 @@ Supports updates to the input names
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:122](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L122)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:114

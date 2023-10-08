@@ -29,7 +29,7 @@ Indoor only
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralCommissioningCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:47
 
 ___
 
@@ -41,7 +41,7 @@ Indoor/Outdoor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralCommissioningCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:55
 
 ___
 
@@ -53,4 +53,4 @@ Outdoor only
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralCommissioningCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/GeneralCommissioningCluster.d.ts:51

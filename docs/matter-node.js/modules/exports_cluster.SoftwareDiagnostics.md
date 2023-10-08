@@ -27,7 +27,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.SoftwareDiagnostics.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `watermarks`: ``true``  } ? typeof [`WatermarksComponent`](exports_cluster.SoftwareDiagnostics.md#watermarkscomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.SoftwareDiagnostics.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `watermarks`: ``true``  } ? typeof [`WatermarksComponent`](exports_cluster.SoftwareDiagnostics.md#watermarkscomponent) : {}
 
 #### Type parameters
 
@@ -37,25 +37,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:337
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:462
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `currentHeapFree`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)[], `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `currentHeapFree`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `events`: { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``52`` ; `name`: ``"SoftwareDiagnostics"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all SoftwareDiagnostics clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:87
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.SoftwareDiagnostics.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"SoftwareDiagnostics"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `currentHeapFree`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `currentHeapUsed`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `threadMetrics`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `events`: { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``52`` ; `name`: ``"SoftwareDiagnostics"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.SoftwareDiagnostics.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Software Diagnostics
 
@@ -72,13 +72,13 @@ MatterCoreSpecificationV1_1 § 11.12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:224
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:235
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `resetWatermarks`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\>  }, { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](exports_cluster.md#attribute)<`number`, `never`\> ; `currentHeapFree`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `currentHeapHighWatermark`: [`Attribute`](exports_cluster.md#attribute)<`number` \| `bigint`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `currentHeapUsed`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number` \| `bigint`, `any`\> ; `eventList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](exports_cluster.md#attribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `threadMetrics`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `commands`: { `resetWatermarks`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `events`: { `softwareFault`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `watermarks`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``52`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"SoftwareDiagnostics"`` ; `revision`: ``1``  }\>
 
 This cluster supports all SoftwareDiagnostics features. It may support illegal feature combinations.
 
@@ -87,13 +87,13 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:348
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:473
 
 ___
 
 ### TlvSoftwareFaultEvent
 
-• `Const` **TlvSoftwareFaultEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSoftwareFaultEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the SoftwareDiagnostics softwareFault event
 
@@ -103,13 +103,13 @@ MatterCoreSpecificationV1_1 § 11.12.8.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:59
 
 ___
 
 ### TlvThreadMetricsStruct
 
-• `Const` **TlvThreadMetricsStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvThreadMetricsStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -117,16 +117,16 @@ MatterCoreSpecificationV1_1 § 11.12.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:13
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:14
 
 ___
 
 ### WatermarksComponent
 
-• `Const` **WatermarksComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `currentHeapHighWatermark`: [`Attribute`](exports_cluster.md#attribute)<`number` \| `bigint`, `any`\>  }, { `resetWatermarks`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **WatermarksComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `currentHeapHighWatermark`: [`Attribute`](exports_cluster.md#attribute)<`number` \| `bigint`, `any`\>  } ; `commands`: { `resetWatermarks`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }  }\>
 
 A SoftwareDiagnosticsCluster supports these elements if it supports feature Watermarks.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:181
+packages/matter.js/dist/esm/cluster/definitions/SoftwareDiagnosticsCluster.d.ts:189

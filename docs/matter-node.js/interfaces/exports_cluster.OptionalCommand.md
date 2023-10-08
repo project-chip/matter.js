@@ -22,6 +22,7 @@
 
 ### Properties
 
+- [invokeAcl](exports_cluster.OptionalCommand.md#invokeacl)
 - [isConditional](exports_cluster.OptionalCommand.md#isconditional)
 - [mandatoryIf](exports_cluster.OptionalCommand.md#mandatoryif)
 - [optional](exports_cluster.OptionalCommand.md#optional)
@@ -30,8 +31,23 @@
 - [requestSchema](exports_cluster.OptionalCommand.md#requestschema)
 - [responseId](exports_cluster.OptionalCommand.md#responseid)
 - [responseSchema](exports_cluster.OptionalCommand.md#responseschema)
+- [timed](exports_cluster.OptionalCommand.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/exports_cluster.AccessLevel.md)
+
+#### Inherited from
+
+Command.invokeAcl
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:129
+
+___
 
 ### isConditional
 
@@ -43,7 +59,7 @@ Command.isConditional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:127
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:131
 
 ___
 
@@ -57,7 +73,7 @@ Command.mandatoryIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:128
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:132
 
 ___
 
@@ -71,7 +87,7 @@ Command.optional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:132
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:136
 
 ___
 
@@ -85,7 +101,7 @@ Command.optionalIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:129
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:133
 
 ___
 
@@ -99,7 +115,7 @@ Command.requestId
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:123
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:125
 
 ___
 
@@ -113,7 +129,7 @@ Command.requestSchema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:124
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:126
 
 ___
 
@@ -127,7 +143,7 @@ Command.responseId
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:125
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:127
 
 ___
 
@@ -141,4 +157,18 @@ Command.responseSchema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:126
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:128
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+Command.timed
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:130

@@ -25,7 +25,7 @@ Message counter synchronization using cache-and-sync
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:100](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L100)
+packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:94
 
 ___
 
@@ -37,4 +37,4 @@ Message counter synchronization using trust-first
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:95](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L95)
+packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:89

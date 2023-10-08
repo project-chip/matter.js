@@ -26,7 +26,7 @@ A Basic Commissioning Method window is open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:26
 
 ___
 
@@ -38,7 +38,7 @@ An Enhanced Commissioning Method window is open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:22
 
 ___
 
@@ -50,4 +50,4 @@ Commissioning window not open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AdministratorCommissioningCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/AdministratorCommissioningCluster.d.ts:18

@@ -44,7 +44,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:64
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:64
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:60
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:60
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:62
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:62
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:65
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:65
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:61
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:61
 
 ## Methods
 
@@ -111,7 +111,7 @@ packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:61
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:67
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:67
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:73
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:73
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:55
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:55
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:63
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:63
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:56
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:56
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:66
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:66
 
 ___
 
@@ -241,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:58
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:58
 
 ___
 
@@ -261,7 +261,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:59
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:59
 
 ___
 
@@ -281,4 +281,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:57
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:57

@@ -27,7 +27,7 @@ these attributes for a cluster implemented on the same endpoint. The sum of all 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L38)
+packages/matter.js/src/cluster/server/ScenesServer.ts:37
 
 ___
 
@@ -39,7 +39,7 @@ The identifier, unique within this group, which is used to identify this scene.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:25](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L25)
+packages/matter.js/src/cluster/server/ScenesServer.ts:24
 
 ___
 
@@ -51,7 +51,7 @@ The name of the scene (optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L28)
+packages/matter.js/src/cluster/server/ScenesServer.ts:27
 
 ___
 
@@ -63,7 +63,7 @@ The amount of time, in seconds, it will take for a cluster to change from its cu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:31](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L31)
+packages/matter.js/src/cluster/server/ScenesServer.ts:30
 
 ___
 
@@ -75,7 +75,7 @@ The group identifier for which this scene applies, or 0 if the scene is not asso
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L22)
+packages/matter.js/src/cluster/server/ScenesServer.ts:21
 
 ___
 
@@ -87,4 +87,4 @@ Together with the SceneTransitionTime field, this field allows the transition ti
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/ScenesServer.ts#L41)
+packages/matter.js/src/cluster/server/ScenesServer.ts:40

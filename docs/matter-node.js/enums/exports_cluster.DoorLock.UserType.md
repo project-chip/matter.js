@@ -40,7 +40,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:611
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:612
 
 ___
 
@@ -59,7 +59,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:620
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:621
 
 ___
 
@@ -76,7 +76,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:604
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:605
 
 ___
 
@@ -93,7 +93,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:597
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:598
 
 ___
 
@@ -111,7 +111,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:590
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:591
 
 ___
 
@@ -130,7 +130,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:635
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:636
 
 ___
 
@@ -146,7 +146,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:626
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:627
 
 ___
 
@@ -162,7 +162,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:569
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:570
 
 ___
 
@@ -179,7 +179,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:582
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:583
 
 ___
 
@@ -195,4 +195,4 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.16.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:575
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:576

@@ -41,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:102](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvSchema.ts#L102)
+packages/matter.js/src/tlv/TlvSchema.ts:97
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:100](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/tlv/TlvSchema.ts#L100)
+packages/matter.js/src/tlv/TlvSchema.ts:95

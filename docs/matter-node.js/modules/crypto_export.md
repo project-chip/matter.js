@@ -48,6 +48,7 @@
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH](crypto_export.md#crypto_symmetric_key_length)
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH\_BITS](crypto_export.md#crypto_symmetric_key_length_bits)
 - [CRYPTO\_SYMMETRIC\_KEY\_LENGTH\_BYTES](crypto_export.md#crypto_symmetric_key_length_bytes)
+- [ec](crypto_export.md#ec)
 
 ### Functions
 
@@ -71,7 +72,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:17
+packages/matter.js/dist/esm/crypto/Key.d.ts:17
 
 ___
 
@@ -81,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:17
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:17
 
 ## Variables
 
@@ -91,7 +92,7 @@ packages/matter.js/dist/cjs/crypto/Crypto.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:16
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:16
 
 ___
 
@@ -101,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:17
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:17
 
 ___
 
@@ -111,7 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:18
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:18
 
 ___
 
@@ -121,7 +122,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:15
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:15
 
 ___
 
@@ -131,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:13
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:13
 
 ___
 
@@ -141,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:14
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:14
 
 ___
 
@@ -151,7 +152,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:11
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:11
 
 ___
 
@@ -165,7 +166,7 @@ MatterCoreSpecificationV1_0 § 3.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:7
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:7
 
 ___
 
@@ -175,7 +176,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:8
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:8
 
 ___
 
@@ -185,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:12
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:12
 
 ___
 
@@ -195,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:12
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:12
 
 ___
 
@@ -209,7 +210,7 @@ MatterCoreSpecificationV1_0 § 3.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:11
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:11
 
 ___
 
@@ -219,7 +220,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:9
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:9
 
 ___
 
@@ -229,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:10
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:10
 
 ___
 
@@ -239,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Crypto.d.ts:16
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:16
 
 ___
 
@@ -253,7 +254,7 @@ MatterCoreSpecificationV1_0 § 3.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:14
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:14
 
 ___
 
@@ -263,7 +264,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/CryptoConstants.d.ts:15
+packages/matter.js/dist/esm/crypto/CryptoConstants.d.ts:15
+
+___
+
+### ec
+
+• `Const` **ec**: typeof `elliptic.ec`
+
+#### Defined in
+
+packages/matter.js/dist/esm/crypto/Crypto.d.ts:67
 
 ## Functions
 
@@ -285,7 +296,7 @@ Generic key factory.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:159
+packages/matter.js/dist/esm/crypto/Key.d.ts:159
 
 ___
 
@@ -308,7 +319,7 @@ Private key factory.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:163
+packages/matter.js/dist/esm/crypto/Key.d.ts:163
 
 ___
 
@@ -331,7 +342,7 @@ Public key factory.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:167
+packages/matter.js/dist/esm/crypto/Key.d.ts:167
 
 ___
 
@@ -354,4 +365,4 @@ Symmetric key factory.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:171
+packages/matter.js/dist/esm/crypto/Key.d.ts:171

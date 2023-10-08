@@ -17,7 +17,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `registerClientMonitoring`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `activeModeInterval`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `activeModeThreshold`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `expectedClients`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `idleModeInterval`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\>  } ; `commands`: { `registerClientMonitoring`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `stayAwakeRequest`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `unregisterClientMonitoring`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `id`: ``4166`` ; `name`: ``"ClientMonitoring"`` ; `revision`: ``1``  }\>
 
 Client Monitoring
 
@@ -25,38 +25,38 @@ Client Monitoring allows for ensuring that listed clients meet the required moni
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ClientMonitoringCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:33
 
 ___
 
 ### TlvMonitoringRegistration
 
-• `Const` **TlvMonitoringRegistration**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvMonitoringRegistration**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ClientMonitoringCluster.d.ts:9
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:10
 
 ___
 
 ### TlvRegisterClientMonitoringRequest
 
-• `Const` **TlvRegisterClientMonitoringRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvRegisterClientMonitoringRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the ClientMonitoring registerClientMonitoring command
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ClientMonitoringCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:17
 
 ___
 
 ### TlvUnregisterClientMonitoringRequest
 
-• `Const` **TlvUnregisterClientMonitoringRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvUnregisterClientMonitoringRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the ClientMonitoring unregisterClientMonitoring command
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ClientMonitoringCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/ClientMonitoringCluster.d.ts:24

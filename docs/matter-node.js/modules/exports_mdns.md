@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [AnnouncementType](../enums/exports_mdns.AnnouncementType.md)
+
 ### Classes
 
 - [MdnsBroadcaster](../classes/exports_mdns.MdnsBroadcaster.md)
@@ -39,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:9
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:9
 
 ___
 
@@ -49,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:8
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:8
 
 ___
 
@@ -59,7 +63,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:10
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:10
 
 ___
 
@@ -69,7 +73,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:8
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:8
 
 ___
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:9
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:9
 
 ___
 
@@ -89,7 +93,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:10
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:10
 
 ___
 
@@ -99,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:7
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:7
 
 ## Functions
 
@@ -113,7 +117,7 @@ packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:17
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:17
 
 ___
 
@@ -133,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:18
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:18
 
 ___
 
@@ -154,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:12
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:12
 
 ___
 
@@ -174,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:14
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:14
 
 ___
 
@@ -194,7 +198,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:11
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:11
 
 ___
 
@@ -214,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:16
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:16
 
 ___
 
@@ -234,7 +238,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:15
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:15
 
 ___
 
@@ -254,4 +258,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsConsts.d.ts:13
+packages/matter.js/dist/esm/mdns/MdnsConsts.d.ts:13

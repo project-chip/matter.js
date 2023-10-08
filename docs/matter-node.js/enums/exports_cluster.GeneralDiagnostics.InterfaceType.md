@@ -28,7 +28,7 @@ Indicates a Cellular interface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:29
 
 ___
 
@@ -40,7 +40,7 @@ Indicates a Ethernet interface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:25
 
 ___
 
@@ -52,7 +52,7 @@ Indicates a Thread interface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:33
 
 ___
 
@@ -64,7 +64,7 @@ Indicates an interface of an unspecified type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:16
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:17
 
 ___
 
@@ -76,4 +76,4 @@ Indicates a Wi-Fi interface.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:21

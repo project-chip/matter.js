@@ -19,7 +19,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `allowedVendorList`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`VendorId`](exports_datatype.md#vendorid)[], `any`\> ; `application`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `applicationName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `applicationVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `productId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `status`: [`Attribute`](exports_cluster.md#attribute)<[`ApplicationStatus`](../enums/exports_cluster.ApplicationBasic.ApplicationStatus.md), `any`\> ; `vendorId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  } ; `id`: ``1293`` ; `name`: ``"ApplicationBasic"`` ; `revision`: ``1``  }\>
 
 Application Basic
 
@@ -32,13 +32,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ApplicationBasicCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/ApplicationBasicCluster.d.ts:67
 
 ___
 
 ### TlvApplicationStruct
 
-• `Const` **TlvApplicationStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvApplicationStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This indicates a global identifier for an Application given a catalog.
 
@@ -48,4 +48,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.3.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ApplicationBasicCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/ApplicationBasicCluster.d.ts:16

@@ -47,7 +47,7 @@ TODO - extract/merge with StatusCode in InteractionProtocol.ts
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:30
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:30
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:21
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:21
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:28
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:28
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:37
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:37
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:13
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:13
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:17
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:17
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:19
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:19
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:26
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:26
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:14
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:14
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:33
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:33
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:32
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:32
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:24
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:24
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:35
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:35
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:23
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:23
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:12
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:12
 
 ___
 
@@ -197,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:36
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:36
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:25
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:25
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:15
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:15
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:20
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:20
 
 ___
 
@@ -237,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:31
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:31
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:18
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:18
 
 ___
 
@@ -257,7 +257,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:16
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:16
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:34
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:34
 
 ___
 
@@ -277,7 +277,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:29
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:29
 
 ___
 
@@ -287,7 +287,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:27
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:27
 
 ___
 
@@ -297,4 +297,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/StatusCode.d.ts:22
+packages/matter.js/dist/esm/model/definitions/StatusCode.d.ts:22

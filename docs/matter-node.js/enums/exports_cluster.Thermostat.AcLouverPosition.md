@@ -30,7 +30,7 @@ Fully Closed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:301
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:302
 
 ___
 
@@ -42,7 +42,7 @@ Half Open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:313
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:314
 
 ___
 
@@ -54,7 +54,7 @@ Fully Open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:305
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:306
 
 ___
 
@@ -66,7 +66,7 @@ Quarter Open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:309
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:310
 
 ___
 
@@ -78,4 +78,4 @@ Three Quarters Open
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:317
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:318

@@ -19,6 +19,7 @@
 - [persistent](internal_.AttributeOptions.md#persistent)
 - [readAcl](internal_.AttributeOptions.md#readacl)
 - [scene](internal_.AttributeOptions.md#scene)
+- [timed](internal_.AttributeOptions.md#timed)
 - [writeAcl](internal_.AttributeOptions.md#writeacl)
 
 ## Properties
@@ -29,7 +30,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:87
+matter.js/dist/cjs/cluster/Cluster.d.ts:89
 
 ___
 
@@ -39,7 +40,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:86
+matter.js/dist/cjs/cluster/Cluster.d.ts:87
 
 ___
 
@@ -49,7 +50,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:85
+matter.js/dist/cjs/cluster/Cluster.d.ts:86
 
 ___
 
@@ -59,7 +60,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:88
+matter.js/dist/cjs/cluster/Cluster.d.ts:90
 
 ___
 
@@ -69,7 +70,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:84
+matter.js/dist/cjs/cluster/Cluster.d.ts:85
+
+___
+
+### timed
+
+• `Optional` **timed**: `boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:88
 
 ___
 
@@ -79,4 +90,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:89
+matter.js/dist/cjs/cluster/Cluster.d.ts:91

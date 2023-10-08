@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:220](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L220)
+packages/matter.js/src/certificate/CertificateManager.ts:262
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:221](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L221)
+packages/matter.js/src/certificate/CertificateManager.ts:263
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:222](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L222)
+packages/matter.js/src/certificate/CertificateManager.ts:264
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:208](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L208)
+packages/matter.js/src/certificate/CertificateManager.ts:250
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:213](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L213)
+packages/matter.js/src/certificate/CertificateManager.ts:255
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:212](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L212)
+packages/matter.js/src/certificate/CertificateManager.ts:254
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:219](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L219)
+packages/matter.js/src/certificate/CertificateManager.ts:261
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L206)
+packages/matter.js/src/certificate/CertificateManager.ts:248
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:233](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L233)
+packages/matter.js/src/certificate/CertificateManager.ts:275
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:207](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L207)
+packages/matter.js/src/certificate/CertificateManager.ts:249
 
 ___
 
@@ -156,4 +156,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:214](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/certificate/CertificateManager.ts#L214)
+packages/matter.js/src/certificate/CertificateManager.ts:256

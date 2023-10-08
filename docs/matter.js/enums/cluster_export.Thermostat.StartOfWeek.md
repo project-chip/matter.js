@@ -30,7 +30,7 @@ The value of the Thermostat startOfWeek attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:462](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L462)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:452
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:458](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L458)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:448
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:463](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L463)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:453
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:457](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L457)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:447
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:461](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L461)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:451
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:459](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L459)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:449
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:460](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L460)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:450

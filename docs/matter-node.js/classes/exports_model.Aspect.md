@@ -47,6 +47,7 @@ for "constraint" which is not formally described as a quality.
 - [equals](exports_model.Aspect.md#equals)
 - [error](exports_model.Aspect.md#error)
 - [extend](exports_model.Aspect.md#extend)
+- [toString](exports_model.Aspect.md#tostring)
 - [valueOf](exports_model.Aspect.md#valueof)
 
 ## Constructors
@@ -69,7 +70,7 @@ for "constraint" which is not formally described as a quality.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:16
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:16
 
 ## Properties
 
@@ -79,7 +80,7 @@ packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:13
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:13
 
 ___
 
@@ -89,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
 
 ## Accessors
 
@@ -103,7 +104,7 @@ packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:17
 
 ___
 
@@ -117,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:15
 
 ## Methods
 
@@ -139,7 +140,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:21
 
 ___
 
@@ -160,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:24
 
 ___
 
@@ -180,7 +181,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:24
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
+
+___
+
+### toString
+
+▸ `Abstract` **toString**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:23
 
 ___
 
@@ -194,4 +209,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:22

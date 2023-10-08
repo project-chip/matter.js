@@ -68,7 +68,7 @@ Special EventClient class to allow identifying events that are present because r
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:27
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:27
 
 ## Properties
 
@@ -82,7 +82,7 @@ packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:23
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:23
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:22
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:22
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:20
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:20
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:26
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:26
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:21
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 ## Methods
 
@@ -162,7 +162,7 @@ packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:31
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:31
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:28
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:28
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:32
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:32
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:29
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:29
 
 ___
 
@@ -263,4 +263,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/client/EventClient.d.ts:30
+packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:30

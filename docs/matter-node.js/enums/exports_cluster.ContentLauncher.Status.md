@@ -26,7 +26,7 @@ Requested URL returned 401 error code.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ContentLauncherCluster.d.ts:716
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:717
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ContentLauncherCluster.d.ts:708
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:709
 
 ___
 
@@ -50,4 +50,4 @@ Requested URL could not be reached by device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ContentLauncherCluster.d.ts:712
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:713

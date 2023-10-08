@@ -25,6 +25,7 @@
 - [persistent](export._internal_.AttributeOptions.md#persistent)
 - [readAcl](export._internal_.AttributeOptions.md#readacl)
 - [scene](export._internal_.AttributeOptions.md#scene)
+- [timed](export._internal_.AttributeOptions.md#timed)
 - [writeAcl](export._internal_.AttributeOptions.md#writeacl)
 
 ## Properties
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:87
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:89
 
 ___
 
@@ -45,7 +46,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:86
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:87
 
 ___
 
@@ -55,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:85
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:86
 
 ___
 
@@ -65,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:88
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:90
 
 ___
 
@@ -75,7 +76,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:84
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:85
+
+___
+
+### timed
+
+• `Optional` **timed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:88
 
 ___
 
@@ -85,4 +96,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:89
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:91

@@ -40,7 +40,7 @@
 
 ### decode
 
-▸ `Static` **decode**(`message`): `undefined` \| [`DnsMessage`](../interfaces/codec_export.DnsMessage.md)
+▸ `Static` **decode**(`message`): `undefined` \| [`DnsMessage`](../modules/codec_export.md#dnsmessage)
 
 #### Parameters
 
@@ -50,11 +50,11 @@
 
 #### Returns
 
-`undefined` \| [`DnsMessage`](../interfaces/codec_export.DnsMessage.md)
+`undefined` \| [`DnsMessage`](../modules/codec_export.md#dnsmessage)
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:102](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L102)
+packages/matter.js/src/codec/DnsCodec.ts:125
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:232](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L232)
+packages/matter.js/src/codec/DnsCodec.ts:261
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L206)
+packages/matter.js/src/codec/DnsCodec.ts:235
 
 ___
 
@@ -115,13 +115,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:151](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L151)
+packages/matter.js/src/codec/DnsCodec.ts:178
 
 ___
 
 ### decodeQuery
 
-▸ `Static` `Private` **decodeQuery**(`reader`, `message`): `Object`
+▸ `Static` `Private` **decodeQuery**(`reader`, `message`): [`DnsQuery`](../modules/codec_export.md#dnsquery)
 
 #### Parameters
 
@@ -132,23 +132,17 @@ ___
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `recordClass` | `number` |
-| `recordType` | `number` |
+[`DnsQuery`](../modules/codec_export.md#dnsquery)
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:133](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L133)
+packages/matter.js/src/codec/DnsCodec.ts:156
 
 ___
 
 ### decodeRecord
 
-▸ `Static` `Private` **decodeRecord**(`reader`, `message`): `Object`
+▸ `Static` `Private` **decodeRecord**(`reader`, `message`): [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>
 
 #### Parameters
 
@@ -159,25 +153,17 @@ ___
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
-| `recordClass` | `number` |
-| `recordType` | `number` |
-| `ttl` | `number` |
-| `value` | `string` \| `string`[] \| `Uint8Array` \| [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md) |
+[`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:140](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L140)
+packages/matter.js/src/codec/DnsCodec.ts:165
 
 ___
 
 ### decodeRecordValue
 
-▸ `Static` `Private` **decodeRecordValue**(`valueBytes`, `recordType`, `message`): `string` \| `string`[] \| `Uint8Array` \| [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)
+▸ `Static` `Private` **decodeRecordValue**(`valueBytes`, `recordType`, `message`): `string` \| `string`[] \| `Uint8Array` \| [`SrvRecordValue`](../modules/codec_export.md#srvrecordvalue)
 
 #### Parameters
 
@@ -189,17 +175,17 @@ ___
 
 #### Returns
 
-`string` \| `string`[] \| `Uint8Array` \| [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)
+`string` \| `string`[] \| `Uint8Array` \| [`SrvRecordValue`](../modules/codec_export.md#srvrecordvalue)
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:167](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L167)
+packages/matter.js/src/codec/DnsCodec.ts:196
 
 ___
 
 ### decodeSrvRecord
 
-▸ `Static` `Private` **decodeSrvRecord**(`valueBytes`, `message`): [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)
+▸ `Static` `Private` **decodeSrvRecord**(`valueBytes`, `message`): [`SrvRecordValue`](../modules/codec_export.md#srvrecordvalue)
 
 #### Parameters
 
@@ -210,11 +196,11 @@ ___
 
 #### Returns
 
-[`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md)
+[`SrvRecordValue`](../modules/codec_export.md#srvrecordvalue)
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:185](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L185)
+packages/matter.js/src/codec/DnsCodec.ts:214
 
 ___
 
@@ -234,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:194](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L194)
+packages/matter.js/src/codec/DnsCodec.ts:223
 
 ___
 
@@ -246,7 +232,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | `Partial`<[`DnsMessage`](../interfaces/codec_export.DnsMessage.md)\> |
+| `«destructured»` | `Partial`<[`DnsMessagePartiallyPreEncoded`](../modules/codec_export.md#dnsmessagepartiallypreencoded)\> |
 
 #### Returns
 
@@ -254,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:241](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L241)
+packages/matter.js/src/codec/DnsCodec.ts:270
 
 ___
 
@@ -274,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:304](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L304)
+packages/matter.js/src/codec/DnsCodec.ts:337
 
 ___
 
@@ -294,7 +280,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:313](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L313)
+packages/matter.js/src/codec/DnsCodec.ts:346
 
 ___
 
@@ -314,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:348](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L348)
+packages/matter.js/src/codec/DnsCodec.ts:381
 
 ___
 
@@ -326,7 +312,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\> |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\> |
 
 #### Returns
 
@@ -334,7 +320,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:272](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L272)
+packages/matter.js/src/codec/DnsCodec.ts:305
 
 ___
 
@@ -355,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:286](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L286)
+packages/matter.js/src/codec/DnsCodec.ts:319
 
 ___
 
@@ -367,7 +353,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`SrvRecordValue`](../interfaces/codec_export.SrvRecordValue.md) |
+| `«destructured»` | [`SrvRecordValue`](../modules/codec_export.md#srvrecordvalue) |
 
 #### Returns
 
@@ -375,7 +361,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:339](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L339)
+packages/matter.js/src/codec/DnsCodec.ts:372
 
 ___
 
@@ -395,4 +381,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:329](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L329)
+packages/matter.js/src/codec/DnsCodec.ts:362

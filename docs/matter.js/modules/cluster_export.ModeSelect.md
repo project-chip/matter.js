@@ -28,7 +28,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.ModeSelect.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `onOff`: ``true``  } ? typeof [`OnOffComponent`](cluster_export.ModeSelect.md#onoffcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.ModeSelect.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `onOff`: ``true``  } ? typeof [`OnOffComponent`](cluster_export.ModeSelect.md#onoffcomponent) : {}
 
 #### Type parameters
 
@@ -38,25 +38,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:284](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L284)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:278
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  }, { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  } ; `commands`: { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `features`: { `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``80`` = 0x50; `name`: ``"ModeSelect"`` = "ModeSelect"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all ModeSelect clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:129](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L129)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:120
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.ModeSelect.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `events`: {} ; `features`: { `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``80`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"ModeSelect"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  } ; `commands`: { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `features`: { `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``80`` = 0x50; `name`: ``"ModeSelect"`` = "ModeSelect"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.ModeSelect.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Mode Select
 
@@ -87,13 +87,13 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:265](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L265)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:256
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `onMode`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\>\> ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `attributeList`: [`Attribute`](cluster_export.md#attribute)<[`AttributeId`](datatype_export.md#attributeid)[], `never`\> ; `clusterRevision`: [`Attribute`](cluster_export.md#attribute)<`number`, `never`\> ; `currentMode`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `description`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `eventList`: [`Attribute`](cluster_export.md#attribute)<[`EventId`](datatype_export.md#eventid)[], `never`\> ; `featureMap`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](cluster_export.md#attribute)<[`CommandId`](datatype_export.md#commandid)[], `never`\> ; `onMode`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `standardNamespace`: [`FixedAttribute`](cluster_export.md#fixedattribute)<``null`` \| `number`, `any`\> ; `startUpMode`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `supportedModes`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `label`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `mode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `semanticTags`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `mfgCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`VendorId`](datatype_export.md#vendorid)\> ; `value`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[]\>  }\>[], `any`\>  } ; `commands`: { `changeToMode`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newMode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  } = Cluster.commands; `features`: { `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``80`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"ModeSelect"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all ModeSelect features. It may support illegal feature combinations.
 
@@ -102,19 +102,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:296](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L296)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:290
 
 ___
 
 ### OnOffComponent
 
-• `Const` **OnOffComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<{ `onMode`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\>  }, [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **OnOffComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `attributes`: { `onMode`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\>  }  }\>
 
 A ModeSelectCluster supports these elements if it supports feature OnOff.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:224](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L224)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:215
 
 ___
 
@@ -130,7 +130,7 @@ Input to the ModeSelect changeToMode command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:110](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L110)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:101
 
 ___
 
@@ -146,7 +146,7 @@ This is a struct representing a possible mode of the server.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:69](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L69)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:60
 
 ___
 
@@ -162,4 +162,4 @@ A Semantic Tag is meant to be interpreted by the client for the purpose the clus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L42)
+packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:33

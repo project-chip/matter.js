@@ -28,6 +28,7 @@ SPDX-License-Identifier: Apache-2.0
 ### Properties
 
 - [channel](protocol_export.MessageChannel.md#channel)
+- [closeCallback](protocol_export.MessageChannel.md#closecallback)
 - [session](protocol_export.MessageChannel.md#session)
 
 ### Accessors
@@ -43,7 +44,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new MessageChannel**<`ContextT`\>(`channel`, `session`)
+• **new MessageChannel**<`ContextT`\>(`channel`, `session`, `closeCallback?`)
 
 #### Type parameters
 
@@ -57,10 +58,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/session_export.Session.md)<`ContextT`\> |
+| `closeCallback?` | () => `void` |
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:27](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L27)
+packages/matter.js/src/protocol/ExchangeManager.ts:27
 
 ## Properties
 
@@ -70,7 +72,25 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L28)
+packages/matter.js/src/protocol/ExchangeManager.ts:28
+
+___
+
+### closeCallback
+
+• `Private` `Optional` `Readonly` **closeCallback**: () => `void`
+
+#### Type declaration
+
+▸ (): `void`
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/protocol/ExchangeManager.ts:30
 
 ___
 
@@ -80,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L29)
+packages/matter.js/src/protocol/ExchangeManager.ts:29
 
 ## Accessors
 
@@ -98,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L39)
+packages/matter.js/src/protocol/ExchangeManager.ts:40
 
 ## Methods
 
@@ -116,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L43)
+packages/matter.js/src/protocol/ExchangeManager.ts:44
 
 ___
 
@@ -140,4 +160,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:32](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L32)
+packages/matter.js/src/protocol/ExchangeManager.ts:33

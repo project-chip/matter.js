@@ -10,6 +10,10 @@
 | :------ |
 | `ContextT` |
 
+## Implemented by
+
+- [`PaseServer`](../classes/internal_.PaseServer.md)
+
 ## Table of contents
 
 ### Methods

@@ -25,7 +25,7 @@ Node is connected
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:335
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:336
 
 ___
 
@@ -37,4 +37,4 @@ Node is not connected
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:339
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:340

@@ -34,6 +34,7 @@
 - [readAcl](exports_cluster.ConditionalWritableFabricScopedAttribute.md#readacl)
 - [scene](exports_cluster.ConditionalWritableFabricScopedAttribute.md#scene)
 - [schema](exports_cluster.ConditionalWritableFabricScopedAttribute.md#schema)
+- [timed](exports_cluster.ConditionalWritableFabricScopedAttribute.md#timed)
 - [unknown](exports_cluster.ConditionalWritableFabricScopedAttribute.md#unknown)
 - [writable](exports_cluster.ConditionalWritableFabricScopedAttribute.md#writable)
 - [writeAcl](exports_cluster.ConditionalWritableFabricScopedAttribute.md#writeacl)
@@ -50,7 +51,7 @@ OptionalWritableFabricScopedAttribute.default
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:37
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:38
 
 ___
 
@@ -64,7 +65,7 @@ OptionalWritableFabricScopedAttribute.fabricScoped
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:65
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:66
 
 ___
 
@@ -78,7 +79,7 @@ OptionalWritableFabricScopedAttribute.fixed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:33
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:34
 
 ___
 
@@ -92,7 +93,7 @@ OptionalWritableFabricScopedAttribute.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:26
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:26
 
 ___
 
@@ -106,7 +107,7 @@ OptionalWritableFabricScopedAttribute.isConditional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:68
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:69
 
 ___
 
@@ -120,7 +121,7 @@ OptionalWritableFabricScopedAttribute.mandatoryIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:40
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:41
 
 ___
 
@@ -134,7 +135,7 @@ OptionalWritableFabricScopedAttribute.omitChanges
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:35
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:36
 
 ___
 
@@ -148,7 +149,7 @@ OptionalWritableFabricScopedAttribute.optional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:44
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:45
 
 ___
 
@@ -162,7 +163,7 @@ OptionalWritableFabricScopedAttribute.optionalIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:39
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:40
 
 ___
 
@@ -176,7 +177,7 @@ OptionalWritableFabricScopedAttribute.persistent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:32
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:32
 
 ___
 
@@ -190,7 +191,7 @@ OptionalWritableFabricScopedAttribute.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:29
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:29
 
 ___
 
@@ -204,7 +205,7 @@ OptionalWritableFabricScopedAttribute.scene
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:31
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:31
 
 ___
 
@@ -218,7 +219,21 @@ OptionalWritableFabricScopedAttribute.schema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:27
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:27
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+OptionalWritableFabricScopedAttribute.timed
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:33
 
 ___
 
@@ -232,7 +247,7 @@ OptionalWritableFabricScopedAttribute.unknown
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:41
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:42
 
 ___
 
@@ -246,7 +261,7 @@ OptionalWritableFabricScopedAttribute.writable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:53
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:54
 
 ___
 
@@ -260,4 +275,4 @@ OptionalWritableFabricScopedAttribute.writeAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:36
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:37

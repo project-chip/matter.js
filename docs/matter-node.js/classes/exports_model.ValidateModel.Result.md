@@ -40,7 +40,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:32
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:32
 
 ## Properties
 
@@ -50,7 +50,7 @@ packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:32
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:25
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:25
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:27
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:27
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:30
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:30
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:26
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:26
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:24
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:24
 
 ## Accessors
 
@@ -108,7 +108,7 @@ packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:31
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:31
 
 ## Methods
 
@@ -122,4 +122,4 @@ packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:31
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:33
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:33

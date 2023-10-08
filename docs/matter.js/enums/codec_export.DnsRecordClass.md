@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L98)
+packages/matter.js/src/codec/DnsCodec.ts:121
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DnsCodec.ts:97](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/codec/DnsCodec.ts#L97)
+packages/matter.js/src/codec/DnsCodec.ts:120

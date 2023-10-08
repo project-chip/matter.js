@@ -23,6 +23,7 @@
 - [resumptionRecords](session_export.SessionManager.md#resumptionrecords)
 - [sessionStorage](session_export.SessionManager.md#sessionstorage)
 - [sessions](session_export.SessionManager.md#sessions)
+- [sessionsToClose](session_export.SessionManager.md#sessionstoclose)
 - [unsecureSession](session_export.SessionManager.md#unsecuresession)
 
 ### Methods
@@ -33,13 +34,16 @@
 - [findResumptionRecordByNodeId](session_export.SessionManager.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](session_export.SessionManager.md#getactivesessioninformation)
 - [getNextAvailableSessionId](session_export.SessionManager.md#getnextavailablesessionid)
+- [getPaseSession](session_export.SessionManager.md#getpasesession)
 - [getSession](session_export.SessionManager.md#getsession)
 - [getSessionForNode](session_export.SessionManager.md#getsessionfornode)
+- [getSessionsToClose](session_export.SessionManager.md#getsessionstoclose)
 - [getUnsecureSession](session_export.SessionManager.md#getunsecuresession)
 - [initFromStorage](session_export.SessionManager.md#initfromstorage)
 - [removeSession](session_export.SessionManager.md#removesession)
 - [saveResumptionRecord](session_export.SessionManager.md#saveresumptionrecord)
 - [storeResumptionRecords](session_export.SessionManager.md#storeresumptionrecords)
+- [updateFabricForResumptionRecords](session_export.SessionManager.md#updatefabricforresumptionrecords)
 
 ## Constructors
 
@@ -62,7 +66,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L46)
+packages/matter.js/src/session/SessionManager.ts:48
 
 ## Properties
 
@@ -72,7 +76,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L47)
+packages/matter.js/src/session/SessionManager.ts:49
 
 ___
 
@@ -82,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L42)
+packages/matter.js/src/session/SessionManager.ts:43
 
 ___
 
@@ -92,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L43)
+packages/matter.js/src/session/SessionManager.ts:44
 
 ___
 
@@ -102,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L44)
+packages/matter.js/src/session/SessionManager.ts:45
 
 ___
 
@@ -112,7 +116,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L41)
+packages/matter.js/src/session/SessionManager.ts:42
+
+___
+
+### sessionsToClose
+
+• `Private` `Readonly` **sessionsToClose**: [`SecureSession`](session_export.SecureSession.md)<`any`\>[]
+
+#### Defined in
+
+packages/matter.js/src/session/SessionManager.ts:46
 
 ___
 
@@ -122,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L40)
+packages/matter.js/src/session/SessionManager.ts:41
 
 ## Methods
 
@@ -136,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:187](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L187)
+packages/matter.js/src/session/SessionManager.ts:217
 
 ___
 
@@ -158,7 +172,7 @@ ___
 | `isResumption` | `boolean` |
 | `idleRetransTimeoutMs?` | `number` |
 | `activeRetransTimeoutMs?` | `number` |
-| `closeCallback?` | () => `Promise`<`void`\> |
+| `closeCallback?` | (`sendClose`: `boolean`) => `Promise`<`void`\> |
 
 #### Returns
 
@@ -166,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L55)
+packages/matter.js/src/session/SessionManager.ts:57
 
 ___
 
@@ -186,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:126](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L126)
+packages/matter.js/src/session/SessionManager.ts:147
 
 ___
 
@@ -206,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:130](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L130)
+packages/matter.js/src/session/SessionManager.ts:151
 
 ___
 
@@ -220,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:171](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L171)
+packages/matter.js/src/session/SessionManager.ts:201
 
 ___
 
@@ -234,7 +248,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L98)
+packages/matter.js/src/session/SessionManager.ts:113
+
+___
+
+### getPaseSession
+
+▸ **getPaseSession**(): [`SecureSession`](session_export.SecureSession.md)<`ContextT`\>
+
+#### Returns
+
+[`SecureSession`](session_export.SecureSession.md)<`ContextT`\>
+
+#### Defined in
+
+packages/matter.js/src/session/SessionManager.ts:128
 
 ___
 
@@ -254,7 +282,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L109)
+packages/matter.js/src/session/SessionManager.ts:124
 
 ___
 
@@ -275,7 +303,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:113](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L113)
+packages/matter.js/src/session/SessionManager.ts:134
+
+___
+
+### getSessionsToClose
+
+▸ **getSessionsToClose**(): [`SecureSession`](session_export.SecureSession.md)<`any`\>[]
+
+#### Returns
+
+[`SecureSession`](session_export.SecureSession.md)<`any`\>[]
+
+#### Defined in
+
+packages/matter.js/src/session/SessionManager.ts:99
 
 ___
 
@@ -289,7 +331,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:122](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L122)
+packages/matter.js/src/session/SessionManager.ts:143
 
 ___
 
@@ -309,13 +351,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:152](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L152)
+packages/matter.js/src/session/SessionManager.ts:182
 
 ___
 
 ### removeSession
 
-▸ **removeSession**(`sessionId`, `peerNodeId`): `void`
+▸ **removeSession**(`sessionId`, `peerNodeId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -326,11 +368,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:91](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L91)
+packages/matter.js/src/session/SessionManager.ts:106
 
 ___
 
@@ -350,7 +392,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:134](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L134)
+packages/matter.js/src/session/SessionManager.ts:155
 
 ___
 
@@ -364,4 +406,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/SessionManager.ts#L139)
+packages/matter.js/src/session/SessionManager.ts:169
+
+___
+
+### updateFabricForResumptionRecords
+
+▸ **updateFabricForResumptionRecords**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](fabric_export.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/session/SessionManager.ts:160

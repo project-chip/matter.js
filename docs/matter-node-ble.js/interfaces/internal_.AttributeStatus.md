@@ -28,7 +28,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:23
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:22
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:29
+matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:28

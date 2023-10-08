@@ -37,7 +37,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseServer.d.ts:12
+packages/matter.js/dist/esm/session/case/CaseServer.d.ts:12
 
 ## Methods
 
@@ -55,7 +55,7 @@ packages/matter.js/dist/cjs/session/case/CaseServer.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseServer.d.ts:11
+packages/matter.js/dist/esm/session/case/CaseServer.d.ts:11
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseServer.d.ts:10
+packages/matter.js/dist/esm/session/case/CaseServer.d.ts:10

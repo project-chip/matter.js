@@ -22,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:28
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:32
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:29
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:29
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:31
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:30

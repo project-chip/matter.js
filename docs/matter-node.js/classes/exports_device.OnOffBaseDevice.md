@@ -42,9 +42,9 @@ Abstract Base class for OnOff devices
 - [addFixedLabel](exports_device.OnOffBaseDevice.md#addfixedlabel)
 - [addOnOffListener](exports_device.OnOffBaseDevice.md#addonofflistener)
 - [addUserLabel](exports_device.OnOffBaseDevice.md#adduserlabel)
-- [clearStructureChangedCallback](exports_device.OnOffBaseDevice.md#clearstructurechangedcallback)
 - [createOptionalClusterClient](exports_device.OnOffBaseDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](exports_device.OnOffBaseDevice.md#createoptionalclusterserver)
+- [destroy](exports_device.OnOffBaseDevice.md#destroy)
 - [determineUniqueID](exports_device.OnOffBaseDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device.OnOffBaseDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device.OnOffBaseDevice.md#getallclusterservers)
@@ -56,13 +56,14 @@ Abstract Base class for OnOff devices
 - [getClusterServerById](exports_device.OnOffBaseDevice.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.OnOffBaseDevice.md#getdevicetypes)
 - [getId](exports_device.OnOffBaseDevice.md#getid)
+- [getOnOff](exports_device.OnOffBaseDevice.md#getonoff)
 - [hasClusterClient](exports_device.OnOffBaseDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device.OnOffBaseDevice.md#hasclusterserver)
-- [isOn](exports_device.OnOffBaseDevice.md#ison)
-- [onOff](exports_device.OnOffBaseDevice.md#onoff)
 - [removeChildEndpoint](exports_device.OnOffBaseDevice.md#removechildendpoint)
 - [removeCommandHandler](exports_device.OnOffBaseDevice.md#removecommandhandler)
+- [removeFromStructure](exports_device.OnOffBaseDevice.md#removefromstructure)
 - [setDeviceTypes](exports_device.OnOffBaseDevice.md#setdevicetypes)
+- [setOnOff](exports_device.OnOffBaseDevice.md#setonoff)
 - [setStructureChangedCallback](exports_device.OnOffBaseDevice.md#setstructurechangedcallback)
 - [toggle](exports_device.OnOffBaseDevice.md#toggle)
 - [updatePartsList](exports_device.OnOffBaseDevice.md#updatepartslist)
@@ -90,7 +91,7 @@ OnOffBaseDevice\_base.constructor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:47
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:47
 
 ## Properties
 
@@ -104,7 +105,7 @@ OnOffBaseDevice\_base.commandHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:64
+packages/matter.js/dist/esm/device/Device.d.ts:64
 
 ___
 
@@ -118,7 +119,7 @@ OnOffBaseDevice\_base.deviceType
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:63
+packages/matter.js/dist/esm/device/Device.d.ts:63
 
 ___
 
@@ -132,7 +133,7 @@ OnOffBaseDevice\_base.deviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
+packages/matter.js/dist/esm/device/Endpoint.d.ts:19
 
 ___
 
@@ -146,7 +147,7 @@ OnOffBaseDevice\_base.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -160,7 +161,7 @@ OnOffBaseDevice\_base.name
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -174,7 +175,7 @@ OnOffBaseDevice\_base.uniqueStorageKey
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -202,7 +203,7 @@ OnOffBaseDevice\_base.\_executeHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:96
+packages/matter.js/dist/esm/device/Device.d.ts:96
 
 ▸ `Protected` **_executeHandler**<`K_2`\>(`action`, `...args`): `Promise`<`void`\>
 
@@ -229,7 +230,7 @@ OnOffBaseDevice\_base.\_executeHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:33
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:33
 
 ___
 
@@ -253,7 +254,7 @@ OnOffBaseDevice\_base.addChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -286,7 +287,7 @@ OnOffBaseDevice\_base.addClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -317,7 +318,7 @@ OnOffBaseDevice\_base.addClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -345,7 +346,7 @@ OnOffBaseDevice\_base.addCommandHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:79
+packages/matter.js/dist/esm/device/Device.d.ts:79
 
 ▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -372,7 +373,7 @@ OnOffBaseDevice\_base.addCommandHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:31
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:31
 
 ___
 
@@ -395,7 +396,7 @@ Adds mandatory clusters to the device
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:57
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:57
 
 ___
 
@@ -420,7 +421,7 @@ OnOffBaseDevice\_base.addFixedLabel
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -443,7 +444,7 @@ This is an example of a convenient device class API to control the device withou
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:79
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:79
 
 ___
 
@@ -468,25 +469,7 @@ OnOffBaseDevice\_base.addUserLabel
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
-
-___
-
-### clearStructureChangedCallback
-
-▸ **clearStructureChangedCallback**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-OnOffBaseDevice\_base.clearStructureChangedCallback
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -520,7 +503,7 @@ OnOffBaseDevice\_base.createOptionalClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:98
+packages/matter.js/dist/esm/device/Device.d.ts:98
 
 ___
 
@@ -554,7 +537,25 @@ OnOffBaseDevice\_base.createOptionalClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:97
+packages/matter.js/dist/esm/device/Device.d.ts:97
+
+___
+
+### destroy
+
+▸ **destroy**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+OnOffBaseDevice\_base.destroy
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -572,7 +573,7 @@ OnOffBaseDevice\_base.determineUniqueID
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -590,7 +591,7 @@ OnOffBaseDevice\_base.getAllClusterClients
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -608,7 +609,7 @@ OnOffBaseDevice\_base.getAllClusterServers
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -632,7 +633,7 @@ OnOffBaseDevice\_base.getChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -650,7 +651,7 @@ OnOffBaseDevice\_base.getChildEndpoints
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -684,7 +685,7 @@ OnOffBaseDevice\_base.getClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:100
+packages/matter.js/dist/esm/device/Device.d.ts:100
 
 ___
 
@@ -708,7 +709,7 @@ OnOffBaseDevice\_base.getClusterClientById
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -742,7 +743,7 @@ OnOffBaseDevice\_base.getClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:99
+packages/matter.js/dist/esm/device/Device.d.ts:99
 
 ___
 
@@ -766,7 +767,7 @@ OnOffBaseDevice\_base.getClusterServerById
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -784,7 +785,7 @@ OnOffBaseDevice\_base.getDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -802,7 +803,21 @@ OnOffBaseDevice\_base.getId
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+
+___
+
+### getOnOff
+
+▸ **getOnOff**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:67
 
 ___
 
@@ -836,7 +851,7 @@ OnOffBaseDevice\_base.hasClusterClient
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -870,44 +885,7 @@ OnOffBaseDevice\_base.hasClusterServer
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
-
-___
-
-### isOn
-
-▸ **isOn**(): `Promise`<`undefined` \| `boolean`\>
-
-#### Returns
-
-`Promise`<`undefined` \| `boolean`\>
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:72
-
-___
-
-### onOff
-
-▸ **onOff**(`onOff`): `Promise`<`void`\>
-
-Turns the device on or off
-This is an example f a convenient device class API to control the device without need to access clusters
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `onOff` | `boolean` | true to turn on, false to turn off |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:66
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -931,7 +909,7 @@ OnOffBaseDevice\_base.removeChildEndpoint
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -959,7 +937,7 @@ OnOffBaseDevice\_base.removeCommandHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Device.d.ts:87
+packages/matter.js/dist/esm/device/Device.d.ts:87
 
 ▸ **removeCommandHandler**<`K_1`\>(`action`, `handler`): `void`
 
@@ -986,7 +964,25 @@ OnOffBaseDevice\_base.removeCommandHandler
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:32
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:32
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+OnOffBaseDevice\_base.removeFromStructure
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -1010,7 +1006,30 @@ OnOffBaseDevice\_base.setDeviceTypes
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
+
+___
+
+### setOnOff
+
+▸ **setOnOff**(`onOff`): `void`
+
+Turns the device on or off
+This is an example f a convenient device class API to control the device without need to access clusters
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `onOff` | `boolean` | true to turn on, false to turn off |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:66
 
 ___
 
@@ -1034,24 +1053,24 @@ OnOffBaseDevice\_base.setStructureChangedCallback
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ___
 
 ### toggle
 
-▸ **toggle**(): `Promise`<`void`\>
+▸ **toggle**(): `void`
 
 Toggles the device on or off
 This is an example f a convenient device class API to control the device without need to access clusters
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/OnOffDevices.d.ts:71
+packages/matter.js/dist/esm/device/OnOffDevices.d.ts:72
 
 ___
 
@@ -1069,7 +1088,7 @@ OnOffBaseDevice\_base.updatePartsList
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -1087,4 +1106,4 @@ OnOffBaseDevice\_base.verifyRequiredClusters
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56

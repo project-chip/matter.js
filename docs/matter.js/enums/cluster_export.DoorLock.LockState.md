@@ -28,7 +28,7 @@ Lock state is fully locked
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L60)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:50
 
 ___
 
@@ -40,7 +40,7 @@ Lock state is not fully locked
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L55)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:45
 
 ___
 
@@ -52,4 +52,4 @@ Lock state is fully unlocked
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L65)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:55

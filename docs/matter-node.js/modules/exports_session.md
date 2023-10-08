@@ -10,6 +10,7 @@
 - [CaseClientMessenger](../classes/exports_session.CaseClientMessenger.md)
 - [CaseServer](../classes/exports_session.CaseServer.md)
 - [CaseServerMessenger](../classes/exports_session.CaseServerMessenger.md)
+- [MaximumPasePairingErrorsReachedError](../classes/exports_session.MaximumPasePairingErrorsReachedError.md)
 - [NoAssociatedFabricError](../classes/exports_session.NoAssociatedFabricError.md)
 - [PaseClient](../classes/exports_session.PaseClient.md)
 - [PaseClientMessenger](../classes/exports_session.PaseClientMessenger.md)
@@ -69,7 +70,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:10
+packages/matter.js/dist/esm/session/Session.d.ts:10
 
 ___
 
@@ -79,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:9
+packages/matter.js/dist/esm/session/Session.d.ts:9
 
 ___
 
@@ -89,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:11
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:11
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:11
+packages/matter.js/dist/esm/session/Session.d.ts:11
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:1
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:1
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:5
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:5
 
 ___
 
@@ -129,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:2
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:2
 
 ___
 
@@ -139,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:6
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:6
 
 ___
 
@@ -149,7 +150,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:3
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:3
 
 ___
 
@@ -159,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:4
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:4
 
 ___
 
@@ -171,7 +172,7 @@ Maximum sleep interval of node when in active mode.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:13
+packages/matter.js/dist/esm/session/Session.d.ts:13
 
 ___
 
@@ -183,7 +184,7 @@ Minimum amount the node SHOULD stay awake after network activity.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:17
+packages/matter.js/dist/esm/session/Session.d.ts:17
 
 ___
 
@@ -195,7 +196,7 @@ Maximum sleep interval of node when in idle mode.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/Session.d.ts:15
+packages/matter.js/dist/esm/session/Session.d.ts:15
 
 ___
 
@@ -205,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:12
+packages/matter.js/dist/esm/session/pase/PaseMessenger.d.ts:12
 
 ___
 
@@ -215,7 +216,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:7
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:7
 
 ___
 
@@ -225,13 +226,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:8
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:8
 
 ___
 
 ### TlvCaseSigma1
 
-• `Const` **TlvCaseSigma1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma1**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -239,13 +240,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:10
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:10
 
 ___
 
 ### TlvCaseSigma2
 
-• `Const` **TlvCaseSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma2**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -253,13 +254,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:25
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:25
 
 ___
 
 ### TlvCaseSigma2Resume
 
-• `Const` **TlvCaseSigma2Resume**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma2Resume**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -267,13 +268,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:38
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:38
 
 ___
 
 ### TlvCaseSigma3
 
-• `Const` **TlvCaseSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCaseSigma3**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -281,13 +282,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:44
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:44
 
 ___
 
 ### TlvEncryptedDataSigma2
 
-• `Const` **TlvEncryptedDataSigma2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEncryptedDataSigma2**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -295,13 +296,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:55
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:55
 
 ___
 
 ### TlvEncryptedDataSigma3
 
-• `Const` **TlvEncryptedDataSigma3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEncryptedDataSigma3**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -309,13 +310,13 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:62
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:62
 
 ___
 
 ### TlvPasePake1
 
-• `Const` **TlvPasePake1**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake1**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -323,13 +324,13 @@ MatterCoreSpecificationV1_0 § 4.13.1.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessages.d.ts:36
+packages/matter.js/dist/esm/session/pase/PaseMessages.d.ts:36
 
 ___
 
 ### TlvPasePake2
 
-• `Const` **TlvPasePake2**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake2**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -337,13 +338,13 @@ MatterCoreSpecificationV1_0 § 4.13.1.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessages.d.ts:40
+packages/matter.js/dist/esm/session/pase/PaseMessages.d.ts:40
 
 ___
 
 ### TlvPasePake3
 
-• `Const` **TlvPasePake3**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPasePake3**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -351,13 +352,13 @@ MatterCoreSpecificationV1_0 § 4.13.1.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessages.d.ts:45
+packages/matter.js/dist/esm/session/pase/PaseMessages.d.ts:45
 
 ___
 
 ### TlvPbkdfParamRequest
 
-• `Const` **TlvPbkdfParamRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPbkdfParamRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -365,13 +366,13 @@ MatterCoreSpecificationV1_0 § 4.13.1.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessages.d.ts:7
+packages/matter.js/dist/esm/session/pase/PaseMessages.d.ts:7
 
 ___
 
 ### TlvPbkdfParamResponse
 
-• `Const` **TlvPbkdfParamResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvPbkdfParamResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -379,13 +380,13 @@ MatterCoreSpecificationV1_0 § 4.13.1.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseMessages.d.ts:20
+packages/matter.js/dist/esm/session/pase/PaseMessages.d.ts:20
 
 ___
 
 ### TlvSignedData
 
-• `Const` **TlvSignedData**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSignedData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -393,7 +394,7 @@ MatterCoreSpecificationV1_0 § 4.13.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/case/CaseMessages.d.ts:48
+packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:48
 
 ___
 
@@ -403,7 +404,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:14
+packages/matter.js/dist/esm/session/SessionManager.d.ts:14
 
 ___
 
@@ -413,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SessionManager.d.ts:15
+packages/matter.js/dist/esm/session/SessionManager.d.ts:15
 
 ## Functions
 
@@ -440,4 +441,4 @@ asserts session is SecureSession<T\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:61
+packages/matter.js/dist/esm/session/SecureSession.d.ts:64

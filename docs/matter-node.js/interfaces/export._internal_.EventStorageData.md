@@ -42,7 +42,7 @@ Data of an event which was triggered and stored internally
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:18
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:18
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:22
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:17
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:17
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:20
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:20
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:19
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:19
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:28
 
 ___
 
@@ -122,4 +122,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:21

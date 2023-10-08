@@ -35,7 +35,7 @@ Dates conveyed using the Buddhist calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:31
 
 ___
 
@@ -47,7 +47,7 @@ Dates conveyed using the Chinese calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:35
 
 ___
 
@@ -59,7 +59,7 @@ Dates conveyed using the Coptic calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:39
 
 ___
 
@@ -71,7 +71,7 @@ Dates conveyed using the Ethiopian calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:43
 
 ___
 
@@ -83,7 +83,7 @@ Dates conveyed using the Gregorian calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:47
 
 ___
 
@@ -95,7 +95,7 @@ Dates conveyed using the Hebrew calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:51
 
 ___
 
@@ -107,7 +107,7 @@ Dates conveyed using the Indian calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:55
 
 ___
 
@@ -119,7 +119,7 @@ Dates conveyed using the Islamic calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:59
 
 ___
 
@@ -131,7 +131,7 @@ Dates conveyed using the Japanese calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:63
 
 ___
 
@@ -143,7 +143,7 @@ Dates conveyed using the Korean calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:67
 
 ___
 
@@ -155,7 +155,7 @@ Dates conveyed using the Persian calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:71
 
 ___
 
@@ -167,4 +167,4 @@ Dates conveyed using the Taiwanese calendar
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:74
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:75

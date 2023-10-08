@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `linkLocalAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`Uint8Array`, `any`\> ; `macAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`Uint8Array`, `any`\>  } ; `id`: ``1283`` ; `name`: ``"WakeOnLan"`` ; `revision`: ``1``  }\>
 
 Wake on LAN
 
@@ -27,4 +27,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WakeOnLanCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/WakeOnLanCluster.d.ts:18

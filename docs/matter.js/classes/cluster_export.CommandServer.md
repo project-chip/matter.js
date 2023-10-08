@@ -23,6 +23,7 @@
 - [invokeId](cluster_export.CommandServer.md#invokeid)
 - [name](cluster_export.CommandServer.md#name)
 - [requestSchema](cluster_export.CommandServer.md#requestschema)
+- [requiresTimedInteraction](cluster_export.CommandServer.md#requirestimedinteraction)
 - [responseId](cluster_export.CommandServer.md#responseid)
 - [responseSchema](cluster_export.CommandServer.md#responseschema)
 
@@ -34,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `handler`)
+• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
 
 #### Type parameters
 
@@ -52,11 +53,12 @@
 | `name` | `string` |
 | `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`ResponseT`\> |
+| `requiresTimedInteraction` | `boolean` |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L19)
+packages/matter.js/src/cluster/server/CommandServer.ts:19
 
 ## Properties
 
@@ -83,7 +85,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
+packages/matter.js/src/cluster/server/CommandServer.ts:26
 
 ___
 
@@ -93,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L20)
+packages/matter.js/src/cluster/server/CommandServer.ts:20
 
 ___
 
@@ -103,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+packages/matter.js/src/cluster/server/CommandServer.ts:22
 
 ___
 
@@ -113,7 +115,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
+packages/matter.js/src/cluster/server/CommandServer.ts:23
+
+___
+
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/cluster/server/CommandServer.ts:25
 
 ___
 
@@ -123,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
+packages/matter.js/src/cluster/server/CommandServer.ts:21
 
 ___
 
@@ -133,13 +145,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
+packages/matter.js/src/cluster/server/CommandServer.ts:24
 
 ## Methods
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
 
 #### Parameters
 
@@ -152,8 +164,8 @@ ___
 
 #### Returns
 
-`Promise`<{ `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
+`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:33](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/server/CommandServer.ts#L33)
+packages/matter.js/src/cluster/server/CommandServer.ts:34

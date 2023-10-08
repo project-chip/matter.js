@@ -30,7 +30,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.OnOff.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `levelControlForLighting`: ``true``  } ? typeof [`LevelControlForLightingComponent`](exports_cluster.OnOff.md#levelcontrolforlightingcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.OnOff.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `levelControlForLighting`: ``true``  } ? typeof [`LevelControlForLightingComponent`](exports_cluster.OnOff.md#levelcontrolforlightingcomponent) : {}
 
 #### Type parameters
 
@@ -40,25 +40,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:343
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:411
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `onOff`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\>  }, { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `onOff`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\>  } ; `commands`: { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``6`` ; `name`: ``"OnOff"`` ; `revision`: ``4``  }\>
 
 These elements and properties are present in all OnOff clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:115
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:116
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.OnOff.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: { `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"OnOff"`` ; `revision`: ``4`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `onOff`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\>  } ; `commands`: { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``6`` ; `name`: ``"OnOff"`` ; `revision`: ``4``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.OnOff.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 On/Off
 
@@ -72,13 +72,13 @@ MatterApplicationClusterSpecificationV1_1 § 1.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:287
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:298
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `offWithEffect`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `onWithRecallGlobalScene`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `onWithTimedOff`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `attributeList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `clusterRevision`: [`Attribute`](exports_cluster.md#attribute)<`number`, `never`\> ; `eventList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `featureMap`: [`Attribute`](exports_cluster.md#attribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `globalSceneControl`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `offWaitTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `onOff`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `onTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `startUpOnOff`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`StartUpOnOff`](../enums/exports_cluster.OnOff.StartUpOnOff.md) \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: { `off`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `offWithEffect`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `on`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `onWithTimedOff`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `toggle`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `features`: { `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``6`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"OnOff"`` ; `revision`: ``4``  }\>
 
 This cluster supports all OnOff features. It may support illegal feature combinations.
 
@@ -87,19 +87,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:354
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:422
 
 ___
 
 ### LevelControlForLightingComponent
 
-• `Const` **LevelControlForLightingComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `globalSceneControl`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> ; `onTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> ; `startUpOnOff`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`StartUpOnOff`](../enums/exports_cluster.OnOff.StartUpOnOff.md) \| ``null``, `any`\>  }, { `offWithEffect`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **LevelControlForLightingComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `globalSceneControl`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `offWaitTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> ; `onTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number` \| ``null``, `any`\> ; `startUpOnOff`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`StartUpOnOff`](../enums/exports_cluster.OnOff.StartUpOnOff.md) \| ``null``, `any`\>  } ; `commands`: { `offWithEffect`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `onWithRecallGlobalScene`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `onWithTimedOff`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
 
 A OnOffCluster supports these elements if it supports feature LevelControlForLighting.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:153
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:161
 
 ___
 
@@ -122,13 +122,13 @@ MatterApplicationClusterSpecificationV1_1 § 1.5.7.6.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:61
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:62
 
 ___
 
 ### TlvOffWithEffectRequest
 
-• `Const` **TlvOffWithEffectRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvOffWithEffectRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OnOff offWithEffect command
 
@@ -138,13 +138,13 @@ MatterApplicationClusterSpecificationV1_1 § 1.5.7.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:38
 
 ___
 
 ### TlvOnWithTimedOffRequest
 
-• `Const` **TlvOnWithTimedOffRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvOnWithTimedOffRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the OnOff onWithTimedOff command
 
@@ -154,4 +154,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.5.7.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OnOffCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:71

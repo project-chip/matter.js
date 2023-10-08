@@ -43,6 +43,7 @@ Reader that auto-increments its offset after each read.
 - [readUInt64](util_export.DataReader.md#readuint64)
 - [readUInt8](util_export.DataReader.md#readuint8)
 - [readUtf8String](util_export.DataReader.md#readutf8string)
+- [setOffset](util_export.DataReader.md#setoffset)
 
 ## Constructors
 
@@ -65,7 +66,7 @@ Reader that auto-increments its offset after each read.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:13
+packages/matter.js/dist/esm/util/DataReader.d.ts:13
 
 ## Properties
 
@@ -75,7 +76,7 @@ packages/matter.js/dist/cjs/util/DataReader.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:9
+packages/matter.js/dist/esm/util/DataReader.d.ts:9
 
 ___
 
@@ -85,7 +86,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:11
+packages/matter.js/dist/esm/util/DataReader.d.ts:11
 
 ___
 
@@ -95,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:29
+packages/matter.js/dist/esm/util/DataReader.d.ts:30
 
 ___
 
@@ -105,7 +106,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:10
+packages/matter.js/dist/esm/util/DataReader.d.ts:10
 
 ___
 
@@ -115,7 +116,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:12
+packages/matter.js/dist/esm/util/DataReader.d.ts:12
 
 ## Methods
 
@@ -129,7 +130,7 @@ packages/matter.js/dist/cjs/util/DataReader.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:28
+packages/matter.js/dist/esm/util/DataReader.d.ts:28
 
 ___
 
@@ -143,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:27
+packages/matter.js/dist/esm/util/DataReader.d.ts:27
 
 ___
 
@@ -157,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:26
+packages/matter.js/dist/esm/util/DataReader.d.ts:26
 
 ___
 
@@ -177,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:25
+packages/matter.js/dist/esm/util/DataReader.d.ts:25
 
 ___
 
@@ -191,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:23
+packages/matter.js/dist/esm/util/DataReader.d.ts:23
 
 ___
 
@@ -205,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:22
+packages/matter.js/dist/esm/util/DataReader.d.ts:22
 
 ___
 
@@ -219,7 +220,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:19
+packages/matter.js/dist/esm/util/DataReader.d.ts:19
 
 ___
 
@@ -233,7 +234,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:20
+packages/matter.js/dist/esm/util/DataReader.d.ts:20
 
 ___
 
@@ -247,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:21
+packages/matter.js/dist/esm/util/DataReader.d.ts:21
 
 ___
 
@@ -261,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:18
+packages/matter.js/dist/esm/util/DataReader.d.ts:18
 
 ___
 
@@ -275,7 +276,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:15
+packages/matter.js/dist/esm/util/DataReader.d.ts:15
 
 ___
 
@@ -289,7 +290,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:16
+packages/matter.js/dist/esm/util/DataReader.d.ts:16
 
 ___
 
@@ -303,7 +304,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:17
+packages/matter.js/dist/esm/util/DataReader.d.ts:17
 
 ___
 
@@ -317,7 +318,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:14
+packages/matter.js/dist/esm/util/DataReader.d.ts:14
 
 ___
 
@@ -337,4 +338,24 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataReader.d.ts:24
+packages/matter.js/dist/esm/util/DataReader.d.ts:24
+
+___
+
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/DataReader.d.ts:29

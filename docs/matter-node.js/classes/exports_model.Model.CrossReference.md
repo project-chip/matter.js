@@ -33,7 +33,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:186
+packages/matter.js/dist/esm/model/models/Model.d.ts:186
 
 ## Properties
 
@@ -47,7 +47,7 @@ Specification.CrossReference.document
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:183
+packages/matter.js/dist/esm/model/models/Model.d.ts:183
 
 ___
 
@@ -61,7 +61,7 @@ Specification.CrossReference.section
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:184
+packages/matter.js/dist/esm/model/models/Model.d.ts:184
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:185
+packages/matter.js/dist/esm/model/models/Model.d.ts:185
 
 ## Methods
 
@@ -85,7 +85,7 @@ packages/matter.js/dist/cjs/model/models/Model.d.ts:185
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:187
+packages/matter.js/dist/esm/model/models/Model.d.ts:187
 
 ___
 
@@ -105,4 +105,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:188
+packages/matter.js/dist/esm/model/models/Model.d.ts:188

@@ -78,7 +78,7 @@ PublicKey.alg
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:57
+packages/matter.js/dist/esm/crypto/Key.d.ts:57
 
 ___
 
@@ -94,7 +94,7 @@ PublicKey.algorithm
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:35
+packages/matter.js/dist/esm/crypto/Key.d.ts:35
 
 ___
 
@@ -108,7 +108,7 @@ PublicKey.crv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:58
+packages/matter.js/dist/esm/crypto/Key.d.ts:58
 
 ___
 
@@ -122,7 +122,7 @@ PublicKey.curve
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:130
+packages/matter.js/dist/esm/crypto/Key.d.ts:130
 
 ___
 
@@ -136,7 +136,7 @@ PublicKey.d
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:142
+packages/matter.js/dist/esm/crypto/Key.d.ts:142
 
 ___
 
@@ -150,7 +150,7 @@ PublicKey.dp
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:60
+packages/matter.js/dist/esm/crypto/Key.d.ts:60
 
 ___
 
@@ -164,7 +164,7 @@ PublicKey.dq
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:61
+packages/matter.js/dist/esm/crypto/Key.d.ts:61
 
 ___
 
@@ -178,7 +178,7 @@ PublicKey.e
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:62
+packages/matter.js/dist/esm/crypto/Key.d.ts:62
 
 ___
 
@@ -192,7 +192,7 @@ PublicKey.ext
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:63
+packages/matter.js/dist/esm/crypto/Key.d.ts:63
 
 ___
 
@@ -209,7 +209,7 @@ PublicKey.extractable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:56
+packages/matter.js/dist/esm/crypto/Key.d.ts:56
 
 ___
 
@@ -223,7 +223,7 @@ PublicKey.k
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:64
+packages/matter.js/dist/esm/crypto/Key.d.ts:64
 
 ___
 
@@ -237,7 +237,7 @@ PublicKey.keyPair
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:145
+packages/matter.js/dist/esm/crypto/Key.d.ts:145
 
 ___
 
@@ -251,7 +251,7 @@ PublicKey.keyPairBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:146
+packages/matter.js/dist/esm/crypto/Key.d.ts:146
 
 ___
 
@@ -265,7 +265,7 @@ PublicKey.key\_ops
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:65
+packages/matter.js/dist/esm/crypto/Key.d.ts:65
 
 ___
 
@@ -279,7 +279,7 @@ PublicKey.kty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:66
+packages/matter.js/dist/esm/crypto/Key.d.ts:66
 
 ___
 
@@ -293,7 +293,7 @@ PublicKey.n
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:67
+packages/matter.js/dist/esm/crypto/Key.d.ts:67
 
 ___
 
@@ -309,7 +309,7 @@ PublicKey.operations
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:47
+packages/matter.js/dist/esm/crypto/Key.d.ts:47
 
 ___
 
@@ -323,7 +323,7 @@ PublicKey.oth
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:68
+packages/matter.js/dist/esm/crypto/Key.d.ts:68
 
 ___
 
@@ -337,7 +337,7 @@ PublicKey.p
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:69
+packages/matter.js/dist/esm/crypto/Key.d.ts:69
 
 ___
 
@@ -353,7 +353,7 @@ PublicKey.pkcs8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:97
+packages/matter.js/dist/esm/crypto/Key.d.ts:97
 
 ___
 
@@ -367,7 +367,7 @@ PublicKey.private
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:141
+packages/matter.js/dist/esm/crypto/Key.d.ts:141
 
 ___
 
@@ -381,7 +381,7 @@ PublicKey.privateBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:143
+packages/matter.js/dist/esm/crypto/Key.d.ts:143
 
 ___
 
@@ -395,7 +395,7 @@ PublicKey.privateKey
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:144
+packages/matter.js/dist/esm/crypto/Key.d.ts:144
 
 ___
 
@@ -409,7 +409,7 @@ PublicKey.publicBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:135
+packages/matter.js/dist/esm/crypto/Key.d.ts:135
 
 ___
 
@@ -425,7 +425,7 @@ PublicKey.publicKey
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:115
+packages/matter.js/dist/esm/crypto/Key.d.ts:115
 
 ___
 
@@ -439,7 +439,7 @@ PublicKey.q
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:70
+packages/matter.js/dist/esm/crypto/Key.d.ts:70
 
 ___
 
@@ -453,7 +453,7 @@ PublicKey.qi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:71
+packages/matter.js/dist/esm/crypto/Key.d.ts:71
 
 ___
 
@@ -469,7 +469,7 @@ PublicKey.sec1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:93
+packages/matter.js/dist/esm/crypto/Key.d.ts:93
 
 ___
 
@@ -485,7 +485,7 @@ PublicKey.spki
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:101
+packages/matter.js/dist/esm/crypto/Key.d.ts:101
 
 ___
 
@@ -499,7 +499,7 @@ PublicKey.type
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:129
+packages/matter.js/dist/esm/crypto/Key.d.ts:129
 
 ___
 
@@ -513,7 +513,7 @@ PublicKey.use
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:72
+packages/matter.js/dist/esm/crypto/Key.d.ts:72
 
 ___
 
@@ -527,7 +527,7 @@ PublicKey.x
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:131
+packages/matter.js/dist/esm/crypto/Key.d.ts:131
 
 ___
 
@@ -541,7 +541,7 @@ PublicKey.xBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:133
+packages/matter.js/dist/esm/crypto/Key.d.ts:133
 
 ___
 
@@ -555,7 +555,7 @@ PublicKey.y
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:132
+packages/matter.js/dist/esm/crypto/Key.d.ts:132
 
 ___
 
@@ -569,4 +569,4 @@ PublicKey.yBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:134
+packages/matter.js/dist/esm/crypto/Key.d.ts:134

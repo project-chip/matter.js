@@ -51,7 +51,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:11
 
 ## Methods
 
@@ -65,7 +65,7 @@ packages/matter.js/dist/cjs/net/Network.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:18
+packages/matter.js/dist/esm/net/Network.d.ts:18
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:17
+packages/matter.js/dist/esm/net/Network.d.ts:17
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:13
+packages/matter.js/dist/esm/net/Network.d.ts:13
 
 ___
 
@@ -119,4 +119,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:12
+packages/matter.js/dist/esm/net/Network.d.ts:12

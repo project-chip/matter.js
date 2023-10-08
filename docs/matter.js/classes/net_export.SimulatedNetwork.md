@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L21)
+packages/matter.js/src/net/fake/SimulatedNetwork.ts:21
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L19)
+packages/matter.js/src/net/fake/SimulatedNetwork.ts:19
 
 ## Methods
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L36)
+packages/matter.js/src/net/fake/SimulatedNetwork.ts:36
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L23)
+packages/matter.js/src/net/fake/SimulatedNetwork.ts:23
 
 ___
 
@@ -121,4 +121,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L48)
+packages/matter.js/src/net/fake/SimulatedNetwork.ts:48

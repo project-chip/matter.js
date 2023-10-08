@@ -31,7 +31,7 @@ shall be used by a Client to request that logs are transferred using BDX as defi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L71)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:72
 
 ___
 
@@ -49,4 +49,4 @@ shall be used by a Client to request that logs are transferred using the LogCont
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:62](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L62)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:63

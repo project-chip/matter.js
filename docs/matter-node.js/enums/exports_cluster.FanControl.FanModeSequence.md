@@ -29,7 +29,7 @@ MatterApplicationClusterSpecificationV1_1 § 4.4.6.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:85
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:86
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:87
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:88
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:84
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:85
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:86
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:87
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:89
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:90
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/FanControlCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/FanControlCluster.d.ts:89

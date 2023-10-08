@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, { `stateChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `stateValue`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\>  } ; `events`: { `stateChange`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``69`` ; `name`: ``"BooleanState"`` ; `revision`: ``1``  }\>
 
 Boolean State
 
@@ -27,13 +27,13 @@ MatterApplicationClusterSpecificationV1_1 § 1.7
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BooleanStateCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:25
 
 ___
 
 ### TlvStateChangeEvent
 
-• `Const` **TlvStateChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvStateChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BooleanState stateChange event
 
@@ -43,4 +43,4 @@ MatterApplicationClusterSpecificationV1_1 § 1.7.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BooleanStateCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/BooleanStateCluster.d.ts:15

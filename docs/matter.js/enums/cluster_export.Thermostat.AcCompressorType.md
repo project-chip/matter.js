@@ -29,7 +29,7 @@ Max working ambient 43 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:328](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L328)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:318
 
 ___
 
@@ -41,7 +41,7 @@ Max working ambient 35 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:333](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L333)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:323
 
 ___
 
@@ -53,7 +53,7 @@ Max working ambient 52 °C
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:338](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L338)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:328
 
 ___
 
@@ -65,4 +65,4 @@ Unknown compressor type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:323](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L323)
+packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:313

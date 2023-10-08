@@ -28,6 +28,7 @@
 - [readAcl](cluster_export.Attribute.md#readacl)
 - [scene](cluster_export.Attribute.md#scene)
 - [schema](cluster_export.Attribute.md#schema)
+- [timed](cluster_export.Attribute.md#timed)
 - [unknown](cluster_export.Attribute.md#unknown)
 - [writable](cluster_export.Attribute.md#writable)
 - [writeAcl](cluster_export.Attribute.md#writeacl)
@@ -40,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L46)
+packages/matter.js/src/cluster/Cluster.ts:48
 
 ___
 
@@ -50,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L43)
+packages/matter.js/src/cluster/Cluster.ts:45
 
 ___
 
@@ -60,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L42)
+packages/matter.js/src/cluster/Cluster.ts:44
 
 ___
 
@@ -70,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L35)
+packages/matter.js/src/cluster/Cluster.ts:36
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L47)
+packages/matter.js/src/cluster/Cluster.ts:49
 
 ___
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:49](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L49)
+packages/matter.js/src/cluster/Cluster.ts:51
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L44)
+packages/matter.js/src/cluster/Cluster.ts:46
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L37)
+packages/matter.js/src/cluster/Cluster.ts:38
 
 ___
 
@@ -120,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L48)
+packages/matter.js/src/cluster/Cluster.ts:50
 
 ___
 
@@ -130,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L41)
+packages/matter.js/src/cluster/Cluster.ts:42
 
 ___
 
@@ -140,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L38)
+packages/matter.js/src/cluster/Cluster.ts:39
 
 ___
 
@@ -150,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L40)
+packages/matter.js/src/cluster/Cluster.ts:41
 
 ___
 
@@ -160,7 +161,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L36)
+packages/matter.js/src/cluster/Cluster.ts:37
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:43
 
 ___
 
@@ -170,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L50)
+packages/matter.js/src/cluster/Cluster.ts:52
 
 ___
 
@@ -180,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L39)
+packages/matter.js/src/cluster/Cluster.ts:40
 
 ___
 
@@ -190,4 +201,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L45)
+packages/matter.js/src/cluster/Cluster.ts:47

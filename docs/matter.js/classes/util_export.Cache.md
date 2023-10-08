@@ -32,6 +32,7 @@
 - [deleteEntry](util_export.Cache.md#deleteentry)
 - [expire](util_export.Cache.md#expire)
 - [get](util_export.Cache.md#get)
+- [keys](util_export.Cache.md#keys)
 
 ## Constructors
 
@@ -55,7 +56,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L16)
+packages/matter.js/src/util/Cache.ts:16
 
 ## Properties
 
@@ -65,7 +66,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L18)
+packages/matter.js/src/util/Cache.ts:18
 
 ___
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L19)
+packages/matter.js/src/util/Cache.ts:19
 
 ___
 
@@ -114,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L17)
+packages/matter.js/src/util/Cache.ts:17
 
 ___
 
@@ -124,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L14)
+packages/matter.js/src/util/Cache.ts:14
 
 ___
 
@@ -134,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L13)
+packages/matter.js/src/util/Cache.ts:13
 
 ___
 
@@ -144,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L12)
+packages/matter.js/src/util/Cache.ts:12
 
 ## Methods
 
@@ -158,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L44)
+packages/matter.js/src/util/Cache.ts:48
 
 ___
 
@@ -172,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L52)
+packages/matter.js/src/util/Cache.ts:56
 
 ___
 
@@ -192,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L35)
+packages/matter.js/src/util/Cache.ts:39
 
 ___
 
@@ -206,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L57)
+packages/matter.js/src/util/Cache.ts:61
 
 ___
 
@@ -226,4 +227,18 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Cache.ts#L24)
+packages/matter.js/src/util/Cache.ts:24
+
+___
+
+### keys
+
+▸ **keys**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+packages/matter.js/src/util/Cache.ts:35

@@ -25,6 +25,7 @@
 ### Methods
 
 - [clear](exports_interaction.InteractionEndpointStructure.md#clear)
+- [destroy](exports_interaction.InteractionEndpointStructure.md#destroy)
 - [getAttribute](exports_interaction.InteractionEndpointStructure.md#getattribute)
 - [getAttributes](exports_interaction.InteractionEndpointStructure.md#getattributes)
 - [getClusterServer](exports_interaction.InteractionEndpointStructure.md#getclusterserver)
@@ -59,17 +60,17 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:23
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
 
 ___
 
 ### attributes
 
-• **attributes**: `Map`<`string`, [`AttributeServer`](exports_cluster.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](exports_cluster.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)<`any`\>\>
+• **attributes**: `Map`<`string`, [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)<`any`\>\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
 
 ___
 
@@ -79,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:27
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
 
 ___
 
@@ -89,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:26
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:21
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:21
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:25
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:24
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
 
 ___
 
@@ -129,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:30
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
 
 ___
 
@@ -139,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:31
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 ## Methods
 
@@ -153,13 +154,27 @@ packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
+
+___
+
+### destroy
+
+▸ **destroy**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
 
 ___
 
 ### getAttribute
 
-▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AttributeServer`](exports_cluster.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](exports_cluster.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)<`any`\>
+▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)<`any`\>
 
 #### Parameters
 
@@ -171,11 +186,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`AttributeServer`](exports_cluster.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](exports_cluster.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)<`any`\>
+`undefined` \| [`AnyAttributeServer`](../modules/exports_cluster.md#anyattributeserver)<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:41
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
 
 ___
 
@@ -196,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -217,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
 
 ___
 
@@ -239,7 +254,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -259,7 +274,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
 
 ___
 
@@ -279,7 +294,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:37
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
 
 ___
 
@@ -301,7 +316,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
 
 ___
 
@@ -321,7 +336,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
 
 ___
 
@@ -343,7 +358,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
 
 ___
 
@@ -364,7 +379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:40
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
 
 ___
 
@@ -386,7 +401,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
 
 ___
 
@@ -406,7 +421,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
 
 ___
 
@@ -428,7 +443,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -448,7 +463,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:29
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
 
 ___
 
@@ -468,7 +483,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:34
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
 
 ___
 
@@ -488,7 +503,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:36
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:37
 
 ___
 
@@ -508,7 +523,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:35
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
 
 ___
 
@@ -532,7 +547,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:33
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
 
 ___
 
@@ -552,4 +567,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:32
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33

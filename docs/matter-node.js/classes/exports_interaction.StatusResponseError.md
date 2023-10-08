@@ -20,13 +20,14 @@ Error base Class for all errors related to the status response messages.
 
 ### Properties
 
+- [clusterCode](exports_interaction.StatusResponseError.md#clustercode)
 - [code](exports_interaction.StatusResponseError.md#code)
 
 ## Constructors
 
 ### constructor
 
-• **new StatusResponseError**(`message`, `code`)
+• **new StatusResponseError**(`message`, `code`, `clusterCode?`)
 
 #### Parameters
 
@@ -34,6 +35,7 @@ Error base Class for all errors related to the status response messages.
 | :------ | :------ |
 | `message` | `string` |
 | `code` | [`StatusCode`](../enums/exports_interaction.StatusCode.md) |
+| `clusterCode?` | `number` |
 
 #### Overrides
 
@@ -41,9 +43,19 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:39
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:41
 
 ## Properties
+
+### clusterCode
+
+• `Optional` `Readonly` **clusterCode**: `number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:40
+
+___
 
 ### code
 
@@ -51,4 +63,4 @@ packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:39
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:39

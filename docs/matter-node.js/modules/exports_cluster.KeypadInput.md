@@ -27,7 +27,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.KeypadInput.md#base), `SF`\> & { `supportedFeatures`: `SF`  }
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.KeypadInput.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  }
 
 #### Type parameters
 
@@ -37,25 +37,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:327
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:377
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `sendKey`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `commands`: { `sendKey`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``1289`` ; `name`: ``"KeypadInput"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all KeypadInput clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:169
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:170
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `sendKey`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.KeypadInput.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `sendKey`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `events`: {} ; `features`: { `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"KeypadInput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `commands`: { `sendKey`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``1289`` ; `name`: ``"KeypadInput"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.KeypadInput.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `locationKeys`: [`BitFlag`](exports_schema.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](exports_schema.md#bitflag-1) ; `numberKeys`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Keypad Input
 
@@ -71,13 +71,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:225
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:232
 
 ___
 
 ### TlvSendKeyRequest
 
-• `Const` **TlvSendKeyRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSendKeyRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the KeypadInput sendKey command
 
@@ -87,13 +87,13 @@ MatterApplicationClusterSpecificationV1_1 § 6.8.3.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:103
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:104
 
 ___
 
 ### TlvSendKeyResponse
 
-• `Const` **TlvSendKeyResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSendKeyResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This command shall be generated in response to a SendKey command.
 
@@ -103,4 +103,4 @@ MatterApplicationClusterSpecificationV1_1 § 6.8.3.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/KeypadInputCluster.d.ts:133
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:134

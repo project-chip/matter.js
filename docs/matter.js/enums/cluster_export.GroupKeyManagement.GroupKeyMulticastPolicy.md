@@ -31,7 +31,7 @@ The 16-bit Group Identifier of the Multicast Address shall be 0xFFFF.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:123](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L123)
+packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:117
 
 ___
 
@@ -49,4 +49,4 @@ The 16-bit Group Identifier of the Multicast Address shall be the Group ID of th
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:114](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L114)
+packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:108

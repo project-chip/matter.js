@@ -22,7 +22,7 @@ Result code of a single commissioning step
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:66](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L66)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:66
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:67](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L67)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:67
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ControllerCommissioner.ts#L65)
+packages/matter.js/src/protocol/ControllerCommissioner.ts:65

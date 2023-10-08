@@ -23,7 +23,7 @@
 - [operationalId](internal_.Fabric.md#operationalid)
 - [operationalIdentityProtectionKey](internal_.Fabric.md#operationalidentityprotectionkey)
 - [persistCallback](internal_.Fabric.md#persistcallback)
-- [removeCallback](internal_.Fabric.md#removecallback)
+- [removeCallbacks](internal_.Fabric.md#removecallbacks)
 - [rootCert](internal_.Fabric.md#rootcert)
 - [rootNodeId](internal_.Fabric.md#rootnodeid)
 - [rootPublicKey](internal_.Fabric.md#rootpublickey)
@@ -33,7 +33,9 @@
 
 ### Methods
 
+- [addRemoveCallback](internal_.Fabric.md#addremovecallback)
 - [addSession](internal_.Fabric.md#addsession)
+- [deleteRemoveCallback](internal_.Fabric.md#deleteremovecallback)
 - [deleteScopedClusterData](internal_.Fabric.md#deletescopedclusterdata)
 - [deleteScopedClusterDataValue](internal_.Fabric.md#deletescopedclusterdatavalue)
 - [getDestinationId](internal_.Fabric.md#getdestinationid)
@@ -42,12 +44,12 @@
 - [getScopedClusterDataKeys](internal_.Fabric.md#getscopedclusterdatakeys)
 - [getScopedClusterDataValue](internal_.Fabric.md#getscopedclusterdatavalue)
 - [hasScopedClusterDataValue](internal_.Fabric.md#hasscopedclusterdatavalue)
+- [matchesFabricIdAndRootPublicKey](internal_.Fabric.md#matchesfabricidandrootpublickey)
 - [persist](internal_.Fabric.md#persist)
 - [remove](internal_.Fabric.md#remove)
 - [removeSession](internal_.Fabric.md#removesession)
 - [setLabel](internal_.Fabric.md#setlabel)
 - [setPersistCallback](internal_.Fabric.md#setpersistcallback)
-- [setRemoveCallback](internal_.Fabric.md#setremovecallback)
 - [setScopedClusterDataValue](internal_.Fabric.md#setscopedclusterdatavalue)
 - [sign](internal_.Fabric.md#sign)
 - [toStorageObject](internal_.Fabric.md#tostorageobject)
@@ -196,9 +198,9 @@ matter.js/dist/cjs/fabric/Fabric.d.ts:50
 
 ___
 
-### removeCallback
+### removeCallbacks
 
-• `Private` **removeCallback**: `any`
+• `Private` **removeCallbacks**: `any`
 
 #### Defined in
 
@@ -266,6 +268,26 @@ matter.js/dist/cjs/fabric/Fabric.d.ts:47
 
 ## Methods
 
+### addRemoveCallback
+
+▸ **addRemoveCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/cjs/fabric/Fabric.d.ts:62
+
+___
+
 ### addSession
 
 ▸ **addSession**(`session`): `void`
@@ -282,7 +304,27 @@ matter.js/dist/cjs/fabric/Fabric.d.ts:47
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:59
+matter.js/dist/cjs/fabric/Fabric.d.ts:60
+
+___
+
+### deleteRemoveCallback
+
+▸ **deleteRemoveCallback**(`callback`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callback` | () => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/cjs/fabric/Fabric.d.ts:63
 
 ___
 
@@ -302,7 +344,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:69
+matter.js/dist/cjs/fabric/Fabric.d.ts:71
 
 ___
 
@@ -323,7 +365,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:67
+matter.js/dist/cjs/fabric/Fabric.d.ts:69
 
 ___
 
@@ -344,7 +386,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:58
+matter.js/dist/cjs/fabric/Fabric.d.ts:59
 
 ___
 
@@ -366,7 +408,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:71
+matter.js/dist/cjs/fabric/Fabric.d.ts:73
 
 ___
 
@@ -400,7 +442,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:70
+matter.js/dist/cjs/fabric/Fabric.d.ts:72
 
 ___
 
@@ -427,7 +469,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:65
+matter.js/dist/cjs/fabric/Fabric.d.ts:67
 
 ___
 
@@ -448,7 +490,28 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:68
+matter.js/dist/cjs/fabric/Fabric.d.ts:70
+
+___
+
+### matchesFabricIdAndRootPublicKey
+
+▸ **matchesFabricIdAndRootPublicKey**(`fabricId`, `rootPublicKey`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricId` | [`FabricId`](../modules/internal_.md#fabricid) |
+| `rootPublicKey` | `Uint8Array` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/fabric/Fabric.d.ts:58
 
 ___
 
@@ -462,7 +525,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:64
+matter.js/dist/cjs/fabric/Fabric.d.ts:66
 
 ___
 
@@ -476,7 +539,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:63
+matter.js/dist/cjs/fabric/Fabric.d.ts:65
 
 ___
 
@@ -496,7 +559,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:60
+matter.js/dist/cjs/fabric/Fabric.d.ts:61
 
 ___
 
@@ -536,27 +599,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:62
-
-___
-
-### setRemoveCallback
-
-▸ **setRemoveCallback**(`callback`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `callback` | () => `void` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-matter.js/dist/cjs/fabric/Fabric.d.ts:61
+matter.js/dist/cjs/fabric/Fabric.d.ts:64
 
 ___
 
@@ -584,7 +627,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:66
+matter.js/dist/cjs/fabric/Fabric.d.ts:68
 
 ___
 

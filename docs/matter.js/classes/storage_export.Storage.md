@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/Storage.ts#L13)
+packages/matter.js/src/storage/Storage.ts:13
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/Storage.ts#L16)
+packages/matter.js/src/storage/Storage.ts:16
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/Storage.ts#L14)
+packages/matter.js/src/storage/Storage.ts:14
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/Storage.ts#L12)
+packages/matter.js/src/storage/Storage.ts:12
 
 ___
 
@@ -130,4 +130,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/Storage.ts#L15)
+packages/matter.js/src/storage/Storage.ts:15

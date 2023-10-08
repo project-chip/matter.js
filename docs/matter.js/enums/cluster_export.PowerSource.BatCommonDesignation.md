@@ -104,7 +104,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:242](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L242)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:233
 
 ___
 
@@ -116,7 +116,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:317](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L317)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:308
 
 ___
 
@@ -128,7 +128,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:322](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L322)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:313
 
 ___
 
@@ -140,7 +140,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:357](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L357)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:348
 
 ___
 
@@ -152,7 +152,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:327](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L327)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:318
 
 ___
 
@@ -164,7 +164,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:332](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L332)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:323
 
 ___
 
@@ -176,7 +176,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:302](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L302)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:293
 
 ___
 
@@ -188,7 +188,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:227](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L227)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:218
 
 ___
 
@@ -200,7 +200,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:337](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L337)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:328
 
 ___
 
@@ -212,7 +212,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:232](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L232)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:223
 
 ___
 
@@ -224,7 +224,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:237](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L237)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:228
 
 ___
 
@@ -236,7 +236,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:252](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L252)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:243
 
 ___
 
@@ -248,7 +248,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:487](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L487)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:478
 
 ___
 
@@ -260,7 +260,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:492](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L492)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:483
 
 ___
 
@@ -272,7 +272,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:282](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L282)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:273
 
 ___
 
@@ -284,7 +284,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:287](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L287)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:278
 
 ___
 
@@ -296,7 +296,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:497](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L497)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:488
 
 ___
 
@@ -308,7 +308,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:482](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L482)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:473
 
 ___
 
@@ -320,7 +320,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:502](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L502)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:493
 
 ___
 
@@ -332,7 +332,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:212](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L212)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:203
 
 ___
 
@@ -344,7 +344,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:207](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L207)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:198
 
 ___
 
@@ -356,7 +356,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:247](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L247)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:238
 
 ___
 
@@ -368,7 +368,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:507](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L507)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:498
 
 ___
 
@@ -380,7 +380,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:257](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L257)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:248
 
 ___
 
@@ -392,7 +392,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:292](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L292)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:283
 
 ___
 
@@ -404,7 +404,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:217](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L217)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:208
 
 ___
 
@@ -416,7 +416,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:347](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L347)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:338
 
 ___
 
@@ -428,7 +428,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:352](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L352)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:343
 
 ___
 
@@ -440,7 +440,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:362](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L362)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:353
 
 ___
 
@@ -452,7 +452,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:367](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L367)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:358
 
 ___
 
@@ -464,7 +464,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:222](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L222)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:213
 
 ___
 
@@ -476,7 +476,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:297](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L297)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:288
 
 ___
 
@@ -488,7 +488,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:512](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L512)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:503
 
 ___
 
@@ -500,7 +500,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:517](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L517)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:508
 
 ___
 
@@ -512,7 +512,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:522](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L522)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:513
 
 ___
 
@@ -524,7 +524,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:527](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L527)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:518
 
 ___
 
@@ -536,7 +536,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:532](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L532)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:523
 
 ___
 
@@ -548,7 +548,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:537](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L537)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:528
 
 ___
 
@@ -560,7 +560,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:542](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L542)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:533
 
 ___
 
@@ -572,7 +572,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:547](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L547)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:538
 
 ___
 
@@ -584,7 +584,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:552](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L552)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:543
 
 ___
 
@@ -596,7 +596,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:562](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L562)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:553
 
 ___
 
@@ -608,7 +608,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:567](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L567)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:558
 
 ___
 
@@ -620,7 +620,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:572](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L572)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:563
 
 ___
 
@@ -632,7 +632,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:577](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L577)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:568
 
 ___
 
@@ -644,7 +644,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:582](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L582)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:573
 
 ___
 
@@ -656,7 +656,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:587](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L587)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:578
 
 ___
 
@@ -668,7 +668,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:592](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L592)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:583
 
 ___
 
@@ -680,7 +680,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:597](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L597)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:588
 
 ___
 
@@ -692,7 +692,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:602](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L602)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:593
 
 ___
 
@@ -704,7 +704,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:307](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L307)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:298
 
 ___
 
@@ -716,7 +716,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:312](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L312)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:303
 
 ___
 
@@ -728,7 +728,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:262](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L262)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:253
 
 ___
 
@@ -740,7 +740,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:342](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L342)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:333
 
 ___
 
@@ -752,7 +752,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:477](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L477)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:468
 
 ___
 
@@ -764,7 +764,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:267](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L267)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:258
 
 ___
 
@@ -776,7 +776,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:272](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L272)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:263
 
 ___
 
@@ -788,7 +788,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:557](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L557)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:548
 
 ___
 
@@ -800,7 +800,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:372](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L372)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:363
 
 ___
 
@@ -812,7 +812,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:377](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L377)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:368
 
 ___
 
@@ -824,7 +824,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:382](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L382)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:373
 
 ___
 
@@ -836,7 +836,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:387](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L387)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:378
 
 ___
 
@@ -848,7 +848,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:392](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L392)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:383
 
 ___
 
@@ -860,7 +860,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:462](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L462)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:453
 
 ___
 
@@ -872,7 +872,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:397](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L397)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:388
 
 ___
 
@@ -884,7 +884,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:402](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L402)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:393
 
 ___
 
@@ -896,7 +896,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:407](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L407)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:398
 
 ___
 
@@ -908,7 +908,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:412](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L412)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:403
 
 ___
 
@@ -920,7 +920,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:417](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L417)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:408
 
 ___
 
@@ -932,7 +932,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:422](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L422)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:413
 
 ___
 
@@ -944,7 +944,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:427](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L427)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:418
 
 ___
 
@@ -956,7 +956,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:432](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L432)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:423
 
 ___
 
@@ -968,7 +968,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:437](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L437)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:428
 
 ___
 
@@ -980,7 +980,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:442](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L442)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:433
 
 ___
 
@@ -992,7 +992,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:447](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L447)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:438
 
 ___
 
@@ -1004,7 +1004,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:452](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L452)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:443
 
 ___
 
@@ -1016,7 +1016,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:457](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L457)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:448
 
 ___
 
@@ -1028,7 +1028,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:472](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L472)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:463
 
 ___
 
@@ -1040,7 +1040,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:467](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L467)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:458
 
 ___
 
@@ -1052,7 +1052,7 @@ Common type is as specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:277](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L277)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:268
 
 ___
 
@@ -1064,4 +1064,4 @@ Common type is unknown or unspecified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:202](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L202)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:193

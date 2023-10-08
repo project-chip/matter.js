@@ -32,6 +32,7 @@ Base class for all attribute servers.
 - [isSubscribable](internal_.BaseAttributeServer.md#issubscribable)
 - [isWritable](internal_.BaseAttributeServer.md#iswritable)
 - [name](internal_.BaseAttributeServer.md#name)
+- [requiresTimedInteraction](internal_.BaseAttributeServer.md#requirestimedinteraction)
 - [schema](internal_.BaseAttributeServer.md#schema)
 - [value](internal_.BaseAttributeServer.md#value)
 
@@ -45,7 +46,7 @@ Base class for all attribute servers.
 
 ### constructor
 
-• **new BaseAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `defaultValue`)
+• **new BaseAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`)
 
 #### Type parameters
 
@@ -62,11 +63,12 @@ Base class for all attribute servers.
 | `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
+| `requiresTimedInteraction` | `boolean` |
 | `defaultValue` | `T` |
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:43
 
 ## Properties
 
@@ -76,7 +78,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -86,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:40
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -96,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:30
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
 
 ___
 
@@ -106,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
 
 ___
 
@@ -116,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -126,7 +128,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+
+___
+
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -136,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -148,7 +160,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:39
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
 
 ## Methods
 
@@ -168,7 +180,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:39
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:45
 
 ___
 
@@ -191,7 +203,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:48
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:50
 
 ___
 
@@ -211,4 +223,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:44

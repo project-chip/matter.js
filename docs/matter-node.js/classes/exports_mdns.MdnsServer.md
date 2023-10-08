@@ -12,19 +12,26 @@
 
 ### Properties
 
+- [announceRecordsForInterface](exports_mdns.MdnsServer.md#announcerecordsforinterface)
 - [getMulticastInterfacesForAnnounce](exports_mdns.MdnsServer.md#getmulticastinterfacesforannounce)
 - [handleDnsMessage](exports_mdns.MdnsServer.md#handlednsmessage)
 - [multicastServer](exports_mdns.MdnsServer.md#multicastserver)
 - [netInterface](exports_mdns.MdnsServer.md#netinterface)
 - [network](exports_mdns.MdnsServer.md#network)
 - [queryRecords](exports_mdns.MdnsServer.md#queryrecords)
+- [recordLastSentAsMulticastAnswer](exports_mdns.MdnsServer.md#recordlastsentasmulticastanswer)
 - [records](exports_mdns.MdnsServer.md#records)
 - [recordsGenerator](exports_mdns.MdnsServer.md#recordsgenerator)
+- [sendRecords](exports_mdns.MdnsServer.md#sendrecords)
 
 ### Methods
 
 - [announce](exports_mdns.MdnsServer.md#announce)
+- [buildDnsRecordKey](exports_mdns.MdnsServer.md#builddnsrecordkey)
+- [buildTypePortKey](exports_mdns.MdnsServer.md#buildtypeportkey)
 - [close](exports_mdns.MdnsServer.md#close)
+- [expireAnnouncements](exports_mdns.MdnsServer.md#expireannouncements)
+- [isKeyForPort](exports_mdns.MdnsServer.md#iskeyforport)
 - [setRecordsGenerator](exports_mdns.MdnsServer.md#setrecordsgenerator)
 - [create](exports_mdns.MdnsServer.md#create)
 
@@ -43,9 +50,19 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:18
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:26
 
 ## Properties
+
+### announceRecordsForInterface
+
+• `Private` **announceRecordsForInterface**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:31
+
+___
 
 ### getMulticastInterfacesForAnnounce
 
@@ -53,7 +70,7 @@ packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:23
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:37
 
 ___
 
@@ -63,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:19
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:30
 
 ___
 
@@ -73,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:12
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:16
 
 ___
 
@@ -83,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:13
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:17
 
 ___
 
@@ -93,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:15
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:22
 
 ___
 
@@ -103,7 +120,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:24
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:38
+
+___
+
+### recordLastSentAsMulticastAnswer
+
+• `Private` `Readonly` **recordLastSentAsMulticastAnswer**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:25
 
 ___
 
@@ -113,7 +140,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:17
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:24
 
 ___
 
@@ -123,7 +150,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:16
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:23
+
+___
+
+### sendRecords
+
+• `Private` **sendRecords**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
 
 ## Methods
 
@@ -143,7 +180,49 @@ packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:20
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:33
+
+___
+
+### buildDnsRecordKey
+
+▸ **buildDnsRecordKey**(`record`, `netInterface?`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\> |
+| `netInterface?` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:27
+
+___
+
+### buildTypePortKey
+
+▸ **buildTypePortKey**(`type`, `port`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `type` | [`AnnouncementType`](../enums/exports_mdns.AnnouncementType.md) |
+| `port` | `number` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:28
 
 ___
 
@@ -157,20 +236,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:22
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:36
 
 ___
 
-### setRecordsGenerator
+### expireAnnouncements
 
-▸ **setRecordsGenerator**(`hostPort`, `generator`): `Promise`<`void`\>
+▸ **expireAnnouncements**(`announcedNetPort?`, `type?`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `hostPort` | `number` |
-| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../interfaces/exports_codec.DnsRecord.md)<`any`\>[] |
+| `announcedNetPort?` | `number` |
+| `type?` | [`AnnouncementType`](../enums/exports_mdns.AnnouncementType.md) |
 
 #### Returns
 
@@ -178,19 +257,64 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:21
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:34
 
 ___
 
-### create
+### isKeyForPort
 
-▸ `Static` **create**(`netInterface?`): `Promise`<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
+▸ **isKeyForPort**(`key`, `port`): `boolean`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `netInterface?` | `string` |
+| `key` | `string` |
+| `port` | `number` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:29
+
+___
+
+### setRecordsGenerator
+
+▸ **setRecordsGenerator**(`hostPort`, `type`, `generator`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `hostPort` | `number` |
+| `type` | [`AnnouncementType`](../enums/exports_mdns.AnnouncementType.md) |
+| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\>[] |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:35
+
+___
+
+### create
+
+▸ `Static` **create**(`options?`): `Promise`<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `options?` | `Object` |
+| `options.enableIpv4?` | `boolean` |
+| `options.netInterface?` | `string` |
 
 #### Returns
 
@@ -198,4 +322,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/mdns/MdnsServer.d.ts:14
+packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:18

@@ -22,7 +22,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `id`: ``57`` ; `name`: ``"BridgedDeviceBasicInformation"`` ; `revision`: ``2``  }\>
 
 Bridged Device Basic Information
 
@@ -55,23 +55,23 @@ MatterCoreSpecificationV1_1 § 9.13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:88
+packages/matter.js/dist/esm/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:89
 
 ___
 
 ### TlvProductAppearanceStruct
 
-• `Const` **TlvProductAppearanceStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvProductAppearanceStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:40
+packages/matter.js/dist/esm/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:41
 
 ___
 
 ### TlvReachableChangedEvent
 
-• `Const` **TlvReachableChangedEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvReachableChangedEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BridgedDeviceBasicInformation reachableChanged event
 
@@ -81,13 +81,13 @@ MatterCoreSpecificationV1_1 § 9.13.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:57
+packages/matter.js/dist/esm/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:58
 
 ___
 
 ### TlvStartUpEvent
 
-• `Const` **TlvStartUpEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvStartUpEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the BridgedDeviceBasicInformation startUp event
 
@@ -97,4 +97,4 @@ MatterCoreSpecificationV1_1 § 9.13.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/BridgedDeviceBasicInformationCluster.d.ts:50

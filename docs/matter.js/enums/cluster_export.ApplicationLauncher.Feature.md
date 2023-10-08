@@ -29,4 +29,4 @@ supported application catalogs
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:173](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L173)
+packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:165

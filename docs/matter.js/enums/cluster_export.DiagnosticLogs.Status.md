@@ -35,7 +35,7 @@ Client SHOULD re-attempt the request later.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:179](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L179)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:180
 
 ___
 
@@ -53,7 +53,7 @@ shall be used if the Node is denying the current transfer of diagnostic logs for
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:188](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L188)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:189
 
 ___
 
@@ -73,7 +73,7 @@ LogContent field.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L159)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:160
 
 ___
 
@@ -92,7 +92,7 @@ transfer.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:169](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L169)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:170
 
 ___
 
@@ -110,4 +110,4 @@ shall be used if diagnostic logs will be or are being transferred.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:148](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L148)
+packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:149

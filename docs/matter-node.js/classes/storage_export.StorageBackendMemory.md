@@ -27,6 +27,7 @@
 
 ### Methods
 
+- [clear](storage_export.StorageBackendMemory.md#clear)
 - [close](storage_export.StorageBackendMemory.md#close)
 - [delete](storage_export.StorageBackendMemory.md#delete)
 - [get](storage_export.StorageBackendMemory.md#get)
@@ -47,7 +48,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:10
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:10
 
 ## Properties
 
@@ -57,7 +58,7 @@ packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:11
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:11
 
 ___
 
@@ -67,9 +68,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:9
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14
+
+___
 
 ### close
 
@@ -85,7 +100,7 @@ packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:13
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:13
 
 ___
 
@@ -110,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:16
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:17
 
 ___
 
@@ -141,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:14
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
 
 ___
 
@@ -159,7 +174,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:12
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:12
 
 ___
 
@@ -191,4 +206,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:15
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:16

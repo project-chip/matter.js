@@ -27,7 +27,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.10
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:265
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:266
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:262
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:263
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:264
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:265
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:263
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:264

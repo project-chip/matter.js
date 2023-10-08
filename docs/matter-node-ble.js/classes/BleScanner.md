@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
+matter-node-ble.js/src/ble/BleScanner.ts:38
 
 ## Properties
 
@@ -57,7 +57,7 @@
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L36)
+matter-node-ble.js/src/ble/BleScanner.ts:36
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L38)
+matter-node-ble.js/src/ble/BleScanner.ts:38
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L35)
+matter-node-ble.js/src/ble/BleScanner.ts:35
 
 ## Methods
 
@@ -100,7 +100,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:150](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L150)
+matter-node-ble.js/src/ble/BleScanner.ts:150
 
 ___
 
@@ -120,7 +120,7 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:224](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L224)
+matter-node-ble.js/src/ble/BleScanner.ts:224
 
 ___
 
@@ -148,7 +148,7 @@ vendorId, etc.) and return them.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:201](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L201)
+matter-node-ble.js/src/ble/BleScanner.ts:201
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:111](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L111)
+matter-node-ble.js/src/ble/BleScanner.ts:111
 
 ___
 
@@ -189,7 +189,7 @@ and return them.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:191](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L191)
+matter-node-ble.js/src/ble/BleScanner.ts:191
 
 ___
 
@@ -213,7 +213,7 @@ promise.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L68)
+matter-node-ble.js/src/ble/BleScanner.ts:68
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:163](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L163)
+matter-node-ble.js/src/ble/BleScanner.ts:163
 
 ___
 
@@ -259,7 +259,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:220](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L220)
+matter-node-ble.js/src/ble/BleScanner.ts:220
 
 ___
 
@@ -279,7 +279,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L44)
+matter-node-ble.js/src/ble/BleScanner.ts:44
 
 ___
 
@@ -300,7 +300,7 @@ DNS-SD queries.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:196](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L196)
+matter-node-ble.js/src/ble/BleScanner.ts:196
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L80)
+matter-node-ble.js/src/ble/BleScanner.ts:80
 
 ___
 
@@ -345,4 +345,4 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:56](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node-ble.js/src/ble/BleScanner.ts#L56)
+matter-node-ble.js/src/ble/BleScanner.ts:56

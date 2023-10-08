@@ -29,7 +29,7 @@ Indicate the network interface is currently using 802.11a against the wireless a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:47
 
 ___
 
@@ -41,7 +41,7 @@ Indicate the network interface is currently using 802.11ac against the wireless 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:63
 
 ___
 
@@ -53,7 +53,7 @@ Indicate the network interface is currently using 802.11ax against the wireless 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:67
 
 ___
 
@@ -65,7 +65,7 @@ Indicate the network interface is currently using 802.11b against the wireless a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:51
 
 ___
 
@@ -77,7 +77,7 @@ Indicate the network interface is currently using 802.11g against the wireless a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:55
 
 ___
 
@@ -89,4 +89,4 @@ Indicate the network interface is currently using 802.11n against the wireless a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:59

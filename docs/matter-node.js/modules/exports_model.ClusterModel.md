@@ -18,4 +18,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/ClusterModel.d.ts:31
+packages/matter.js/dist/esm/model/models/ClusterModel.d.ts:31

@@ -43,6 +43,7 @@
 - [getNodeId](session_export.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](session_export.UnsecureSession.md#getpeernodeid)
 - [getPeerSessionId](session_export.UnsecureSession.md#getpeersessionid)
+- [isPase](session_export.UnsecureSession.md#ispase)
 - [isPeerActive](session_export.UnsecureSession.md#ispeeractive)
 - [isSecure](session_export.UnsecureSession.md#issecure)
 - [notifyActivity](session_export.UnsecureSession.md#notifyactivity)
@@ -68,7 +69,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L24)
+packages/matter.js/src/session/UnsecureSession.ts:24
 
 ## Properties
 
@@ -78,7 +79,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L24)
+packages/matter.js/src/session/UnsecureSession.ts:24
 
 ___
 
@@ -88,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L22)
+packages/matter.js/src/session/UnsecureSession.ts:22
 
 ## Accessors
 
@@ -106,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:54](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L54)
+packages/matter.js/src/session/UnsecureSession.ts:58
 
 ## Methods
 
@@ -130,13 +131,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L38)
+packages/matter.js/src/session/UnsecureSession.ts:42
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -148,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L86)
+packages/matter.js/src/session/UnsecureSession.ts:90
 
 ___
 
@@ -172,13 +179,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L42)
+packages/matter.js/src/session/UnsecureSession.ts:46
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`_sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_sendClose` | `boolean` |
 
 #### Returns
 
@@ -190,7 +203,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L90)
+packages/matter.js/src/session/UnsecureSession.ts:94
 
 ___
 
@@ -208,7 +221,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:94](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L94)
+packages/matter.js/src/session/UnsecureSession.ts:98
 
 ___
 
@@ -222,7 +235,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L46)
+packages/matter.js/src/session/UnsecureSession.ts:50
 
 ___
 
@@ -240,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:66](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L66)
+packages/matter.js/src/session/UnsecureSession.ts:70
 
 ___
 
@@ -258,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:70](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L70)
+packages/matter.js/src/session/UnsecureSession.ts:74
 
 ___
 
@@ -282,7 +295,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L58)
+packages/matter.js/src/session/UnsecureSession.ts:62
 
 ___
 
@@ -300,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L78)
+packages/matter.js/src/session/UnsecureSession.ts:82
 
 ___
 
@@ -318,7 +331,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L82)
+packages/matter.js/src/session/UnsecureSession.ts:86
 
 ___
 
@@ -336,7 +349,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:74](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L74)
+packages/matter.js/src/session/UnsecureSession.ts:78
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+[Session](../interfaces/session_export.Session.md).[isPase](../interfaces/session_export.Session.md#ispase)
+
+#### Defined in
+
+packages/matter.js/src/session/UnsecureSession.ts:30
 
 ___
 
@@ -354,7 +385,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L34)
+packages/matter.js/src/session/UnsecureSession.ts:38
 
 ___
 
@@ -372,7 +403,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L26)
+packages/matter.js/src/session/UnsecureSession.ts:26
 
 ___
 
@@ -396,7 +427,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L30)
+packages/matter.js/src/session/UnsecureSession.ts:34
 
 ___
 
@@ -416,4 +447,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/session/UnsecureSession.ts#L50)
+packages/matter.js/src/session/UnsecureSession.ts:54

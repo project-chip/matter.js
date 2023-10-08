@@ -12,7 +12,6 @@ Constructor options for the CommissioningController class
 
 - [commissioningOptions](export.CommissioningControllerOptions.md#commissioningoptions)
 - [delayedPairing](export.CommissioningControllerOptions.md#delayedpairing)
-- [disableIpv4](export.CommissioningControllerOptions.md#disableipv4)
 - [listeningAddressIpv4](export.CommissioningControllerOptions.md#listeningaddressipv4)
 - [listeningAddressIpv6](export.CommissioningControllerOptions.md#listeningaddressipv6)
 - [localPort](export.CommissioningControllerOptions.md#localport)
@@ -32,7 +31,7 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L76)
+packages/matter.js/src/CommissioningController.ts:75
 
 ___
 
@@ -42,17 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:67](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L67)
-
-___
-
-### disableIpv4
-
-• `Optional` `Readonly` **disableIpv4**: `boolean`
-
-#### Defined in
-
-[packages/matter.js/src/CommissioningController.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L63)
+packages/matter.js/src/CommissioningController.ts:66
 
 ___
 
@@ -62,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:64](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L64)
+packages/matter.js/src/CommissioningController.ts:63
 
 ___
 
@@ -72,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L65)
+packages/matter.js/src/CommissioningController.ts:64
 
 ___
 
@@ -82,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:62](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L62)
+packages/matter.js/src/CommissioningController.ts:62
 
 ___
 
@@ -92,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:73](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L73)
+packages/matter.js/src/CommissioningController.ts:72
 
 ___
 
@@ -102,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L72)
+packages/matter.js/src/CommissioningController.ts:71
 
 ___
 
@@ -112,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:61](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L61)
+packages/matter.js/src/CommissioningController.ts:61
 
 ___
 
@@ -122,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:74](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L74)
+packages/matter.js/src/CommissioningController.ts:73
 
 ___
 
@@ -132,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L68)
+packages/matter.js/src/CommissioningController.ts:67
 
 ___
 
@@ -142,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:70](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L70)
+packages/matter.js/src/CommissioningController.ts:69
 
 ___
 
@@ -152,4 +141,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:69](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L69)
+packages/matter.js/src/CommissioningController.ts:68

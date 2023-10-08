@@ -78,7 +78,7 @@ Key.alg
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:57
+packages/matter.js/dist/esm/crypto/Key.d.ts:57
 
 ___
 
@@ -94,7 +94,7 @@ Key.algorithm
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:35
+packages/matter.js/dist/esm/crypto/Key.d.ts:35
 
 ___
 
@@ -108,7 +108,7 @@ Key.crv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:58
+packages/matter.js/dist/esm/crypto/Key.d.ts:58
 
 ___
 
@@ -124,7 +124,7 @@ Key.curve
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:39
+packages/matter.js/dist/esm/crypto/Key.d.ts:39
 
 ___
 
@@ -138,7 +138,7 @@ Key.d
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:154
+packages/matter.js/dist/esm/crypto/Key.d.ts:154
 
 ___
 
@@ -152,7 +152,7 @@ Key.dp
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:60
+packages/matter.js/dist/esm/crypto/Key.d.ts:60
 
 ___
 
@@ -166,7 +166,7 @@ Key.dq
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:61
+packages/matter.js/dist/esm/crypto/Key.d.ts:61
 
 ___
 
@@ -180,7 +180,7 @@ Key.e
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:62
+packages/matter.js/dist/esm/crypto/Key.d.ts:62
 
 ___
 
@@ -194,7 +194,7 @@ Key.ext
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:63
+packages/matter.js/dist/esm/crypto/Key.d.ts:63
 
 ___
 
@@ -211,7 +211,7 @@ Key.extractable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:56
+packages/matter.js/dist/esm/crypto/Key.d.ts:56
 
 ___
 
@@ -225,7 +225,7 @@ Key.k
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:64
+packages/matter.js/dist/esm/crypto/Key.d.ts:64
 
 ___
 
@@ -241,7 +241,7 @@ Key.keyPair
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:123
+packages/matter.js/dist/esm/crypto/Key.d.ts:123
 
 ___
 
@@ -258,7 +258,7 @@ Key.keyPairBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:111
+packages/matter.js/dist/esm/crypto/Key.d.ts:111
 
 ___
 
@@ -272,7 +272,7 @@ Key.key\_ops
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:65
+packages/matter.js/dist/esm/crypto/Key.d.ts:65
 
 ___
 
@@ -286,7 +286,7 @@ Key.kty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:66
+packages/matter.js/dist/esm/crypto/Key.d.ts:66
 
 ___
 
@@ -300,7 +300,7 @@ Key.n
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:67
+packages/matter.js/dist/esm/crypto/Key.d.ts:67
 
 ___
 
@@ -316,7 +316,7 @@ Key.operations
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:47
+packages/matter.js/dist/esm/crypto/Key.d.ts:47
 
 ___
 
@@ -330,7 +330,7 @@ Key.oth
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:68
+packages/matter.js/dist/esm/crypto/Key.d.ts:68
 
 ___
 
@@ -344,7 +344,7 @@ Key.p
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:69
+packages/matter.js/dist/esm/crypto/Key.d.ts:69
 
 ___
 
@@ -360,7 +360,7 @@ Key.pkcs8
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:97
+packages/matter.js/dist/esm/crypto/Key.d.ts:97
 
 ___
 
@@ -374,7 +374,7 @@ Key.private
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:153
+packages/matter.js/dist/esm/crypto/Key.d.ts:153
 
 ___
 
@@ -391,7 +391,7 @@ Key.privateBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:79
+packages/matter.js/dist/esm/crypto/Key.d.ts:79
 
 ___
 
@@ -407,7 +407,7 @@ Key.privateKey
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:119
+packages/matter.js/dist/esm/crypto/Key.d.ts:119
 
 ___
 
@@ -424,7 +424,7 @@ Key.publicBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:106
+packages/matter.js/dist/esm/crypto/Key.d.ts:106
 
 ___
 
@@ -440,7 +440,7 @@ Key.publicKey
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:115
+packages/matter.js/dist/esm/crypto/Key.d.ts:115
 
 ___
 
@@ -454,7 +454,7 @@ Key.q
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:70
+packages/matter.js/dist/esm/crypto/Key.d.ts:70
 
 ___
 
@@ -468,7 +468,7 @@ Key.qi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:71
+packages/matter.js/dist/esm/crypto/Key.d.ts:71
 
 ___
 
@@ -484,7 +484,7 @@ Key.sec1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:93
+packages/matter.js/dist/esm/crypto/Key.d.ts:93
 
 ___
 
@@ -500,7 +500,7 @@ Key.spki
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:101
+packages/matter.js/dist/esm/crypto/Key.d.ts:101
 
 ___
 
@@ -514,7 +514,7 @@ Key.type
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:152
+packages/matter.js/dist/esm/crypto/Key.d.ts:152
 
 ___
 
@@ -528,7 +528,7 @@ Key.use
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:72
+packages/matter.js/dist/esm/crypto/Key.d.ts:72
 
 ___
 
@@ -542,7 +542,7 @@ Key.x
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:73
+packages/matter.js/dist/esm/crypto/Key.d.ts:73
 
 ___
 
@@ -559,7 +559,7 @@ Key.xBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:84
+packages/matter.js/dist/esm/crypto/Key.d.ts:84
 
 ___
 
@@ -573,7 +573,7 @@ Key.y
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:74
+packages/matter.js/dist/esm/crypto/Key.d.ts:74
 
 ___
 
@@ -590,4 +590,4 @@ Key.yBits
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Key.d.ts:89
+packages/matter.js/dist/esm/crypto/Key.d.ts:89

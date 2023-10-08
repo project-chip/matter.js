@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `stateValue`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, {}, { `stateChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `stateValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `stateValue`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  } ; `events`: { `stateChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `stateValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\>  } ; `id`: ``69`` = 0x45; `name`: ``"BooleanState"`` = "BooleanState"; `revision`: ``1`` = 1 }\>
 
 Boolean State
 
@@ -27,7 +27,7 @@ This cluster provides an interface to a boolean state called StateValue.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L29)
+packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:30
 
 ___
 
@@ -43,4 +43,4 @@ Body of the BooleanState stateChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L20)
+packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:21

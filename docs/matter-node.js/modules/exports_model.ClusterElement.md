@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:33
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:33
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:32
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:30
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31
 
 ## Variables
 
@@ -60,6 +60,6 @@ packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:31
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:30
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:31

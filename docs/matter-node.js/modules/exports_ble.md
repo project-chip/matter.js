@@ -35,7 +35,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:8
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:8
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:9
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:9
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:10
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:10
 
 ___
 
@@ -69,7 +69,7 @@ MatterCoreSpecificationV1_1 § 4.17.3.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:7
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:7
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:12
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:12
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:11
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:11
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:15
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:15
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:14
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:14
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:13
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:13
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BleConsts.d.ts:16
+packages/matter.js/dist/esm/ble/BleConsts.d.ts:16
 
 ___
 
@@ -139,4 +139,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:14
+packages/matter.js/dist/esm/ble/BtpSessionHandler.d.ts:14

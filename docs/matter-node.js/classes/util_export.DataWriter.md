@@ -59,7 +59,7 @@ Writer that auto-increments its offset after each write.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:12
+packages/matter.js/dist/esm/util/DataWriter.d.ts:12
 
 ## Properties
 
@@ -69,7 +69,7 @@ packages/matter.js/dist/cjs/util/DataWriter.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:11
+packages/matter.js/dist/esm/util/DataWriter.d.ts:11
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:10
+packages/matter.js/dist/esm/util/DataWriter.d.ts:10
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:9
+packages/matter.js/dist/esm/util/DataWriter.d.ts:9
 
 ## Methods
 
@@ -103,7 +103,7 @@ packages/matter.js/dist/cjs/util/DataWriter.d.ts:9
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:24
+packages/matter.js/dist/esm/util/DataWriter.d.ts:24
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:23
+packages/matter.js/dist/esm/util/DataWriter.d.ts:23
 
 ___
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:22
+packages/matter.js/dist/esm/util/DataWriter.d.ts:22
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:21
+packages/matter.js/dist/esm/util/DataWriter.d.ts:21
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:18
+packages/matter.js/dist/esm/util/DataWriter.d.ts:18
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:19
+packages/matter.js/dist/esm/util/DataWriter.d.ts:19
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:20
+packages/matter.js/dist/esm/util/DataWriter.d.ts:20
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:17
+packages/matter.js/dist/esm/util/DataWriter.d.ts:17
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:14
+packages/matter.js/dist/esm/util/DataWriter.d.ts:14
 
 ___
 
@@ -283,7 +283,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:15
+packages/matter.js/dist/esm/util/DataWriter.d.ts:15
 
 ___
 
@@ -303,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:16
+packages/matter.js/dist/esm/util/DataWriter.d.ts:16
 
 ___
 
@@ -323,4 +323,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/util/DataWriter.d.ts:13
+packages/matter.js/dist/esm/util/DataWriter.d.ts:13

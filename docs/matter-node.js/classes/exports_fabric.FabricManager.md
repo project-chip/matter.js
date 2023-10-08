@@ -12,7 +12,6 @@
 
 ### Properties
 
-- [fabricBuilder](exports_fabric.FabricManager.md#fabricbuilder)
 - [fabricStorage](exports_fabric.FabricManager.md#fabricstorage)
 - [fabrics](exports_fabric.FabricManager.md#fabrics)
 - [nextFabricIndex](exports_fabric.FabricManager.md#nextfabricindex)
@@ -20,14 +19,13 @@
 ### Methods
 
 - [addFabric](exports_fabric.FabricManager.md#addfabric)
-- [armFailSafe](exports_fabric.FabricManager.md#armfailsafe)
-- [completeCommission](exports_fabric.FabricManager.md#completecommission)
 - [findFabricFromDestinationId](exports_fabric.FabricManager.md#findfabricfromdestinationid)
-- [getFabricBuilder](exports_fabric.FabricManager.md#getfabricbuilder)
 - [getFabrics](exports_fabric.FabricManager.md#getfabrics)
+- [getNextFabricIndex](exports_fabric.FabricManager.md#getnextfabricindex)
 - [persistFabrics](exports_fabric.FabricManager.md#persistfabrics)
 - [removeFabric](exports_fabric.FabricManager.md#removefabric)
-- [tentativelyAddFabric](exports_fabric.FabricManager.md#tentativelyaddfabric)
+- [revokeFabric](exports_fabric.FabricManager.md#revokefabric)
+- [updateFabric](exports_fabric.FabricManager.md#updatefabric)
 
 ## Constructors
 
@@ -43,19 +41,9 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:19
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
 
 ## Properties
-
-### fabricBuilder
-
-• `Private` `Optional` **fabricBuilder**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:17
-
-___
 
 ### fabricStorage
 
@@ -63,7 +51,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:18
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
 
 ___
 
@@ -73,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:16
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:18
 
 ___
 
@@ -83,7 +71,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:15
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:17
 
 ## Methods
 
@@ -103,35 +91,7 @@ packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:21
-
-___
-
-### armFailSafe
-
-▸ **armFailSafe**(): `void`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:25
-
-___
-
-### completeCommission
-
-▸ **completeCommission**(): `void`
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:28
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:23
 
 ___
 
@@ -152,21 +112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:24
-
-___
-
-### getFabricBuilder
-
-▸ **getFabricBuilder**(): [`FabricBuilder`](exports_fabric.FabricBuilder.md)
-
-#### Returns
-
-[`FabricBuilder`](exports_fabric.FabricBuilder.md)
-
-#### Defined in
-
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:26
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
 
 ___
 
@@ -180,7 +126,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:23
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
+
+___
+
+### getNextFabricIndex
+
+▸ **getNextFabricIndex**(): [`FabricIndex`](../modules/exports_datatype.md#fabricindex)
+
+#### Returns
+
+[`FabricIndex`](../modules/exports_datatype.md#fabricindex)
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
 
 ___
 
@@ -194,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:20
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:22
 
 ___
 
@@ -214,13 +174,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:22
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
 
 ___
 
-### tentativelyAddFabric
+### revokeFabric
 
-▸ **tentativelyAddFabric**(): `Promise`<`void`\>
+▸ **revokeFabric**(`fabricIndex`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 
 #### Returns
 
@@ -228,4 +194,24 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/FabricManager.d.ts:27
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:28
+
+___
+
+### updateFabric
+
+▸ **updateFabric**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27

@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:207](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L207)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:198
 
 ___
 
@@ -33,4 +33,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L206)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:197

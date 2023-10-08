@@ -18,11 +18,14 @@
 
 - [L](exports_session.PaseServer.md#l)
 - [handlePairingRequest](exports_session.PaseServer.md#handlepairingrequest)
+- [pairingErrors](exports_session.PaseServer.md#pairingerrors)
+- [pairingTimer](exports_session.PaseServer.md#pairingtimer)
 - [pbkdfParameters](exports_session.PaseServer.md#pbkdfparameters)
 - [w0](exports_session.PaseServer.md#w0)
 
 ### Methods
 
+- [cancelPairing](exports_session.PaseServer.md#cancelpairing)
 - [getId](exports_session.PaseServer.md#getid)
 - [onNewExchange](exports_session.PaseServer.md#onnewexchange)
 - [fromPin](exports_session.PaseServer.md#frompin)
@@ -44,7 +47,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:18
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:24
 
 ## Properties
 
@@ -54,7 +57,7 @@ packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:14
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:18
 
 ___
 
@@ -64,7 +67,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:21
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:27
+
+___
+
+### pairingErrors
+
+• `Private` **pairingErrors**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:21
+
+___
+
+### pairingTimer
+
+• `Private` **pairingTimer**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:20
 
 ___
 
@@ -74,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:15
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:19
 
 ___
 
@@ -84,9 +107,30 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:13
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 ## Methods
+
+### cancelPairing
+
+▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messenger` | [`PaseServerMessenger`](exports_session.PaseServerMessenger.md) |
+| `sendError?` | `boolean` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:28
+
+___
 
 ### getId
 
@@ -102,7 +146,7 @@ packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:19
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:25
 
 ___
 
@@ -126,7 +170,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:20
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:26
 
 ___
 
@@ -147,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:16
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:22
 
 ___
 
@@ -168,4 +212,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/pase/PaseServer.d.ts:17
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:23

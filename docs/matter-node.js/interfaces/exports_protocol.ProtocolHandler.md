@@ -37,7 +37,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ProtocolHandler.d.ts:9
+packages/matter.js/dist/esm/protocol/ProtocolHandler.d.ts:9
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ProtocolHandler.d.ts:10
+packages/matter.js/dist/esm/protocol/ProtocolHandler.d.ts:10

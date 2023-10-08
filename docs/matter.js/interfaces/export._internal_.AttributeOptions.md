@@ -25,6 +25,7 @@
 - [persistent](export._internal_.AttributeOptions.md#persistent)
 - [readAcl](export._internal_.AttributeOptions.md#readacl)
 - [scene](export._internal_.AttributeOptions.md#scene)
+- [timed](export._internal_.AttributeOptions.md#timed)
 - [writeAcl](export._internal_.AttributeOptions.md#writeacl)
 
 ## Properties
@@ -35,7 +36,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L112)
+packages/matter.js/src/cluster/Cluster.ts:115
 
 ___
 
@@ -45,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:111](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L111)
+packages/matter.js/src/cluster/Cluster.ts:113
 
 ___
 
@@ -55,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:110](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L110)
+packages/matter.js/src/cluster/Cluster.ts:112
 
 ___
 
@@ -65,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:113](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L113)
+packages/matter.js/src/cluster/Cluster.ts:116
 
 ___
 
@@ -75,7 +76,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L109)
+packages/matter.js/src/cluster/Cluster.ts:111
+
+___
+
+### timed
+
+• `Optional` **timed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/cluster/Cluster.ts:114
 
 ___
 
@@ -85,4 +96,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:114](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/Cluster.ts#L114)
+packages/matter.js/src/cluster/Cluster.ts:117

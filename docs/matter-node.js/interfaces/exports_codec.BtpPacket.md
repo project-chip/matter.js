@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:36
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:36
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/BtpCodec.d.ts:37
+packages/matter.js/dist/esm/codec/BtpCodec.d.ts:37

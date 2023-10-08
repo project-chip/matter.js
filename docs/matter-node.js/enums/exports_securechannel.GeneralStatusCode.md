@@ -15,7 +15,7 @@
 - [Busy](exports_securechannel.GeneralStatusCode.md#busy)
 - [Continue](exports_securechannel.GeneralStatusCode.md#continue)
 - [DataLoss](exports_securechannel.GeneralStatusCode.md#dataloss)
-- [Error](exports_securechannel.GeneralStatusCode.md#error)
+- [Failure](exports_securechannel.GeneralStatusCode.md#failure)
 - [InvalidArgument](exports_securechannel.GeneralStatusCode.md#invalidargument)
 - [NotFound](exports_securechannel.GeneralStatusCode.md#notfound)
 - [OutOfRange](exports_securechannel.GeneralStatusCode.md#outofrange)
@@ -36,7 +36,7 @@ Failure, may be due to a concurrency error.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:51
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:51
 
 ___
 
@@ -48,7 +48,7 @@ The sender attempted to create something that already exists.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:57
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:57
 
 ___
 
@@ -60,7 +60,7 @@ Operation was rejected by the system because the system is in an invalid state.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:33
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:33
 
 ___
 
@@ -72,7 +72,7 @@ A request was unrecognized or malformed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:37
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:37
 
 ___
 
@@ -84,7 +84,7 @@ Device is busy and cannot handle this request at this time.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:45
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:45
 
 ___
 
@@ -96,7 +96,7 @@ Context-specific signal to proceed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:49
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:49
 
 ___
 
@@ -108,19 +108,19 @@ Unrecoverable data loss or corruption has occurred.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:61
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:61
 
 ___
 
-### Error
+### Failure
 
-• **Error** = ``1``
+• **Failure** = ``1``
 
 Generic failure, additional details may be included in the protocol specific status.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:31
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:31
 
 ___
 
@@ -132,7 +132,7 @@ An invalid/unsupported argument was provided.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:53
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:53
 
 ___
 
@@ -144,7 +144,7 @@ Some requested entity was not found.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:55
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:55
 
 ___
 
@@ -156,7 +156,7 @@ A value was out of a required range
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:35
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:35
 
 ___
 
@@ -168,7 +168,7 @@ The sender does not have sufficient permissions to execute the requested operati
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:59
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:59
 
 ___
 
@@ -180,7 +180,7 @@ Insufficient resources to process the given request.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:43
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:43
 
 ___
 
@@ -192,7 +192,7 @@ Operation completed successfully.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:29
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:29
 
 ___
 
@@ -204,7 +204,7 @@ A timeout occurred.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:47
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:47
 
 ___
 
@@ -216,7 +216,7 @@ A request was not expected at this time.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:41
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:41
 
 ___
 
@@ -228,4 +228,4 @@ An unrecognized or unsupported request was received.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:39
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:39

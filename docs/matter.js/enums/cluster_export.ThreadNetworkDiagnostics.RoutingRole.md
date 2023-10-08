@@ -30,7 +30,7 @@ The Node acts as an End Device without RX- off-when-idle sleepy radio behavior.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:61](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L61)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:53
 
 ___
 
@@ -42,7 +42,7 @@ The Node acts as a Leader Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L76)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:68
 
 ___
 
@@ -54,7 +54,7 @@ The Node acts as an Router Eligible End Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:66](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L66)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:58
 
 ___
 
@@ -66,7 +66,7 @@ The Node acts as a Router Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L71)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:63
 
 ___
 
@@ -78,7 +78,7 @@ The Node acts as a Sleepy End Device with RX-off-when-idle sleepy radio behavior
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:56](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L56)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:48
 
 ___
 
@@ -91,7 +91,7 @@ or operational.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L51)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:43
 
 ___
 
@@ -103,4 +103,4 @@ Unspecified routing role.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L45)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:37

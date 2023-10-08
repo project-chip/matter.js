@@ -28,7 +28,7 @@ Request the DER- encoded DAC certificate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OperationalCredentialsCluster.d.ts:129
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:130
 
 ___
 
@@ -40,4 +40,4 @@ Request the DER- encoded PAI certificate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OperationalCredentialsCluster.d.ts:133
+packages/matter.js/dist/esm/cluster/definitions/OperationalCredentialsCluster.d.ts:134

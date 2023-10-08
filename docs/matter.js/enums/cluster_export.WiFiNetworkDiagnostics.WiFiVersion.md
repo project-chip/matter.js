@@ -29,7 +29,7 @@ Indicate the network interface is currently using 802.11a against the wireless a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L78)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:69
 
 ___
 
@@ -41,7 +41,7 @@ Indicate the network interface is currently using 802.11ac against the wireless 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L98)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:89
 
 ___
 
@@ -53,7 +53,7 @@ Indicate the network interface is currently using 802.11ax against the wireless 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:103](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L103)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:94
 
 ___
 
@@ -65,7 +65,7 @@ Indicate the network interface is currently using 802.11b against the wireless a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L83)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:74
 
 ___
 
@@ -77,7 +77,7 @@ Indicate the network interface is currently using 802.11g against the wireless a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:88](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L88)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:79
 
 ___
 
@@ -89,4 +89,4 @@ Indicate the network interface is currently using 802.11n against the wireless a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:93](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L93)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:84

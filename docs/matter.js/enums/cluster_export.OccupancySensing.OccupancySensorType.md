@@ -27,7 +27,7 @@ Indicates a physical contact sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L50)
+packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:51
 
 ___
 
@@ -39,7 +39,7 @@ Indicates a passive infrared sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L35)
+packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:36
 
 ___
 
@@ -51,7 +51,7 @@ Indicates a passive infrared and ultrasonic sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L45)
+packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:46
 
 ___
 
@@ -63,4 +63,4 @@ Indicates a ultrasonic sensor.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L40)
+packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:41

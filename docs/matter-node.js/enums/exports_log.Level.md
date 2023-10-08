@@ -27,7 +27,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:7
+packages/matter.js/dist/esm/log/Logger.d.ts:7
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:10
+packages/matter.js/dist/esm/log/Logger.d.ts:10
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:11
+packages/matter.js/dist/esm/log/Logger.d.ts:11
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:8
+packages/matter.js/dist/esm/log/Logger.d.ts:8
 
 ___
 
@@ -67,4 +67,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:9
+packages/matter.js/dist/esm/log/Logger.d.ts:9

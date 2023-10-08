@@ -21,6 +21,7 @@ It sends out queries to discover various types of Matter device types and listen
 
 - [activeAnnounceQueries](mdns_export.MdnsScanner.md#activeannouncequeries)
 - [commissionableDeviceRecords](mdns_export.MdnsScanner.md#commissionabledevicerecords)
+- [enableIpv4](mdns_export.MdnsScanner.md#enableipv4)
 - [multicastServer](mdns_export.MdnsScanner.md#multicastserver)
 - [nextAnnounceIntervalSeconds](mdns_export.MdnsScanner.md#nextannounceintervalseconds)
 - [operationalDeviceRecords](mdns_export.MdnsScanner.md#operationaldevicerecords)
@@ -60,27 +61,28 @@ It sends out queries to discover various types of Matter device types and listen
 
 ### constructor
 
-• **new MdnsScanner**(`multicastServer`)
+• **new MdnsScanner**(`multicastServer`, `enableIpv4?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
+| `enableIpv4?` | `boolean` |
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L90)
+packages/matter.js/src/mdns/MdnsScanner.ts:88
 
 ## Properties
 
 ### activeAnnounceQueries
 
-• `Private` `Readonly` **activeAnnounceQueries**: `Map`<`string`, { `answers`: [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] ; `queries`: [`DnsQuery`](../interfaces/codec_export.DnsQuery.md)[]  }\>
+• `Private` `Readonly` **activeAnnounceQueries**: `Map`<`string`, { `answers`: [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] ; `queries`: [`DnsQuery`](../modules/codec_export.md#dnsquery)[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:81](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L81)
+packages/matter.js/src/mdns/MdnsScanner.ts:79
 
 ___
 
@@ -90,7 +92,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L86)
+packages/matter.js/src/mdns/MdnsScanner.ts:84
+
+___
+
+### enableIpv4
+
+• `Private` `Optional` `Readonly` **enableIpv4**: `boolean`
+
+#### Defined in
+
+packages/matter.js/src/mdns/MdnsScanner.ts:90
 
 ___
 
@@ -100,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L90)
+packages/matter.js/src/mdns/MdnsScanner.ts:89
 
 ___
 
@@ -110,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:83](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L83)
+packages/matter.js/src/mdns/MdnsScanner.ts:81
 
 ___
 
@@ -120,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L85)
+packages/matter.js/src/mdns/MdnsScanner.ts:83
 
 ___
 
@@ -130,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:88](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L88)
+packages/matter.js/src/mdns/MdnsScanner.ts:86
 
 ___
 
@@ -140,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L82)
+packages/matter.js/src/mdns/MdnsScanner.ts:80
 
 ___
 
@@ -150,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L87)
+packages/matter.js/src/mdns/MdnsScanner.ts:85
 
 ## Methods
 
@@ -173,7 +185,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:360](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L360)
+packages/matter.js/src/mdns/MdnsScanner.ts:359
 
 ___
 
@@ -193,7 +205,7 @@ Close all connects, end all timers and resolve all pending promises.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:519](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L519)
+packages/matter.js/src/mdns/MdnsScanner.ts:518
 
 ___
 
@@ -214,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:280](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L280)
+packages/matter.js/src/mdns/MdnsScanner.ts:279
 
 ___
 
@@ -228,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:721](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L721)
+packages/matter.js/src/mdns/MdnsScanner.ts:715
 
 ___
 
@@ -248,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:380](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L380)
+packages/matter.js/src/mdns/MdnsScanner.ts:379
 
 ___
 
@@ -280,7 +292,7 @@ the timeout period.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:446](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L446)
+packages/matter.js/src/mdns/MdnsScanner.ts:445
 
 ___
 
@@ -303,7 +315,7 @@ Check all options for a query identifier and return the most relevant one with a
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:391](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L391)
+packages/matter.js/src/mdns/MdnsScanner.ts:390
 
 ___
 
@@ -332,7 +344,7 @@ IP/ports or an empty array if not found.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:289](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L289)
+packages/matter.js/src/mdns/MdnsScanner.ts:288
 
 ___
 
@@ -356,21 +368,21 @@ promise.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:268](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L268)
+packages/matter.js/src/mdns/MdnsScanner.ts:267
 
 ___
 
 ### getActiveQueryEarlierAnswers
 
-▸ `Private` **getActiveQueryEarlierAnswers**(): [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[]
+▸ `Private` **getActiveQueryEarlierAnswers**(): [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
 
 #### Returns
 
-[`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[]
+[`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:189](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L189)
+packages/matter.js/src/mdns/MdnsScanner.ts:188
 
 ___
 
@@ -393,7 +405,7 @@ record.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:323](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L323)
+packages/matter.js/src/mdns/MdnsScanner.ts:322
 
 ___
 
@@ -419,7 +431,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:512](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L512)
+packages/matter.js/src/mdns/MdnsScanner.ts:511
 
 ___
 
@@ -447,7 +459,7 @@ DNS-SD queries.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:315](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L315)
+packages/matter.js/src/mdns/MdnsScanner.ts:314
 
 ___
 
@@ -469,7 +481,7 @@ Returns the list of all targets (IP/port) discovered for a queried operational d
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:211](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L211)
+packages/matter.js/src/mdns/MdnsScanner.ts:210
 
 ___
 
@@ -481,8 +493,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `answers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] |
-| `formerAnswers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] |
+| `answers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
+| `formerAnswers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
 | `netInterface` | `string` |
 
 #### Returns
@@ -491,7 +503,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:605](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L605)
+packages/matter.js/src/mdns/MdnsScanner.ts:602
 
 ___
 
@@ -516,7 +528,7 @@ It will parse the message and check if it contains relevant discovery records.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:530](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L530)
+packages/matter.js/src/mdns/MdnsScanner.ts:529
 
 ___
 
@@ -528,7 +540,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `answers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] |
+| `answers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
 | `target` | `string` |
 | `netInterface` | `string` |
 
@@ -538,7 +550,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:545](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L545)
+packages/matter.js/src/mdns/MdnsScanner.ts:544
 
 ___
 
@@ -550,8 +562,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `answers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] |
-| `formerAnswers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] |
+| `answers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
+| `formerAnswers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
 | `netInterface` | `string` |
 
 #### Returns
@@ -560,7 +572,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:555](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L555)
+packages/matter.js/src/mdns/MdnsScanner.ts:555
 
 ___
 
@@ -572,7 +584,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\> |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\> |
 
 #### Returns
 
@@ -580,7 +592,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:699](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L699)
+packages/matter.js/src/mdns/MdnsScanner.ts:693
 
 ___
 
@@ -604,7 +616,7 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:256](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L256)
+packages/matter.js/src/mdns/MdnsScanner.ts:255
 
 ___
 
@@ -627,7 +639,7 @@ out. If it was the last query announcing will stop completely.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:197](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L197)
+packages/matter.js/src/mdns/MdnsScanner.ts:196
 
 ___
 
@@ -646,7 +658,7 @@ packets and the query is sent as Truncated query.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:104](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L104)
+packages/matter.js/src/mdns/MdnsScanner.ts:105
 
 ___
 
@@ -662,8 +674,8 @@ out. When entry already exists the query is overwritten and answers are always a
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `queryId` | `string` | `undefined` |
-| `queries` | [`DnsQuery`](../interfaces/codec_export.DnsQuery.md)[] | `undefined` |
-| `answers` | [`DnsRecord`](../interfaces/codec_export.DnsRecord.md)<`any`\>[] | `[]` |
+| `queries` | [`DnsQuery`](../modules/codec_export.md#dnsquery)[] | `undefined` |
+| `answers` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] | `[]` |
 
 #### Returns
 
@@ -671,7 +683,7 @@ out. When entry already exists the query is overwritten and answers are always a
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:177](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L177)
+packages/matter.js/src/mdns/MdnsScanner.ts:176
 
 ___
 
@@ -693,19 +705,21 @@ Sort the list of found IP/ports and make sure link-local IPv6 addresses come fir
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:228](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L228)
+packages/matter.js/src/mdns/MdnsScanner.ts:227
 
 ___
 
 ### create
 
-▸ `Static` **create**(`netInterface?`): `Promise`<[`MdnsScanner`](mdns_export.MdnsScanner.md)\>
+▸ `Static` **create**(`options?`): `Promise`<[`MdnsScanner`](mdns_export.MdnsScanner.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `netInterface?` | `string` |
+| `options?` | `Object` |
+| `options.enableIpv4?` | `boolean` |
+| `options.netInterface?` | `string` |
 
 #### Returns
 
@@ -713,4 +727,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:70](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsScanner.ts#L70)
+packages/matter.js/src/mdns/MdnsScanner.ts:66

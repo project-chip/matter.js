@@ -45,7 +45,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:12
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:12
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:14
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:14
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:13
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:13
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:16
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:16
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:15
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:15
 
 ___
 
@@ -154,4 +154,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/server/GroupsServer.d.ts:11
+packages/matter.js/dist/esm/cluster/server/GroupsServer.d.ts:11

@@ -59,7 +59,7 @@ model variants have different names.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:58
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:58
 
 ## Properties
 
@@ -69,7 +69,7 @@ packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:58
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:50
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:50
 
 ___
 
@@ -81,7 +81,7 @@ Create a VariantDetail from a VariantMap.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:90
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:90
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:86
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:86
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:52
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:52
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:49
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:49
 
 ___
 
@@ -123,7 +123,7 @@ This is the function that actually recurses during the visit.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:85
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:85
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:51
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:51
 
 ## Methods
 
@@ -155,7 +155,7 @@ Determine if we are entering a cluster and install cluster state if so.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:81
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:81
 
 ___
 
@@ -178,7 +178,7 @@ names may be selected, otherwise the name of the model is returned.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:77
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:77
 
 ___
 
@@ -201,7 +201,7 @@ invoked while traversal is ongoing.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:63
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:63
 
 ___
 
@@ -226,4 +226,4 @@ from traverse().
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:72
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:72

@@ -36,7 +36,7 @@ Lock user face information was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:858
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:859
 
 ___
 
@@ -48,7 +48,7 @@ Lock user finger-vein information was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:854
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:855
 
 ___
 
@@ -60,7 +60,7 @@ Lock user fingerprint was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:850
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:851
 
 ___
 
@@ -72,7 +72,7 @@ Lock holiday schedule was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:838
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:839
 
 ___
 
@@ -84,7 +84,7 @@ Lock user PIN code was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:842
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:843
 
 ___
 
@@ -96,7 +96,7 @@ Lock programming PIN code was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:822
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:823
 
 ___
 
@@ -108,7 +108,7 @@ Lock user RFID code was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:846
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:847
 
 ___
 
@@ -120,7 +120,7 @@ Unspecified or manufacturer specific lock user data added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:818
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:819
 
 ___
 
@@ -132,7 +132,7 @@ Lock user index was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:826
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:827
 
 ___
 
@@ -144,7 +144,7 @@ Lock user week day schedule was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:830
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:831
 
 ___
 
@@ -156,4 +156,4 @@ Lock user year day schedule was added, cleared, or modified.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:834
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:835

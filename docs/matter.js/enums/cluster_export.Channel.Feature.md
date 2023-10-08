@@ -29,7 +29,7 @@ Provides list of available channels.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:221](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L221)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:207
 
 ___
 
@@ -43,4 +43,4 @@ Provides lineup info, which is a reference to an external source of lineup infor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:228](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L228)
+packages/matter.js/src/cluster/definitions/ChannelCluster.ts:214

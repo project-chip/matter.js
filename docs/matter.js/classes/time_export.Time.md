@@ -4,12 +4,6 @@
 
 [time/export](../modules/time_export.md).Time
 
-## Hierarchy
-
-- **`Time`**
-
-  ↳ [`TimeFake`](time_export.TimeFake.md)
-
 ## Table of contents
 
 ### Constructors
@@ -54,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L12)
+packages/matter.js/src/time/Time.ts:12
 
 ## Methods
 
@@ -77,7 +71,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L26)
+packages/matter.js/src/time/Time.ts:26
 
 ___
 
@@ -100,7 +94,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L21)
+packages/matter.js/src/time/Time.ts:21
 
 ___
 
@@ -114,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L14)
+packages/matter.js/src/time/Time.ts:14
 
 ___
 
@@ -128,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L17)
+packages/matter.js/src/time/Time.ts:17
 
 ___
 
@@ -149,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:27](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L27)
+packages/matter.js/src/time/Time.ts:27
 
 ___
 
@@ -170,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L22)
+packages/matter.js/src/time/Time.ts:22
 
 ___
 
@@ -184,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L15)
+packages/matter.js/src/time/Time.ts:15
 
 ___
 
@@ -198,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L18)
+packages/matter.js/src/time/Time.ts:18
 
 ___
 
@@ -218,4 +212,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/time/Time.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/time/Time.ts#L30)
+packages/matter.js/src/time/Time.ts:30

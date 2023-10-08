@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L10)
+packages/matter.js/src/util/NamedHandler.ts:10
 
 ## Methods
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L16)
+packages/matter.js/src/util/NamedHandler.ts:16
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L20)
+packages/matter.js/src/util/NamedHandler.ts:20
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L12)
+packages/matter.js/src/util/NamedHandler.ts:12
 
 ___
 
@@ -154,4 +154,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L28)
+packages/matter.js/src/util/NamedHandler.ts:28
