@@ -28,7 +28,7 @@ jobs:
       chip-long-tests-required: ${{ steps.check-long-tests.outputs.chip-long-tests-required }}
     steps:
       - name: Check out matter.js
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: dorny/paths-filter@v2
         id: changes
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Prepare chip tests and rebuild chip-tool if needed
         uses: ./.github/actions/prepare-chip-testing
@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing

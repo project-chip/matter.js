@@ -3,7 +3,12 @@
 This page tries to get an detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
 All Changes without a GitHub Username in brackets are from the core team: @Apollon77, @mfucci and @turon
 
-## 0.6.0 WIP
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	## __WORK IN PROGRESS__
+-->
+
+## __WORK IN PROGRESS__
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
   * Fix: Adjusted Bleno and Noble to be optional Dependencies to allow building the Monorepo also when these are failing (e.g. on Windows)
