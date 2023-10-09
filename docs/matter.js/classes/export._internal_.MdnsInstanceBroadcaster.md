@@ -24,6 +24,9 @@ This class is handing MDNS Announcements for one instance of a device aka "port"
 ### Methods
 
 - [announce](export._internal_.MdnsInstanceBroadcaster.md#announce)
+- [expireAllAnnouncements](export._internal_.MdnsInstanceBroadcaster.md#expireallannouncements)
+- [expireCommissioningAnnouncement](export._internal_.MdnsInstanceBroadcaster.md#expirecommissioningannouncement)
+- [expireFabricAnnouncement](export._internal_.MdnsInstanceBroadcaster.md#expirefabricannouncement)
 - [setCommissionMode](export._internal_.MdnsInstanceBroadcaster.md#setcommissionmode)
 - [setCommissionerInfo](export._internal_.MdnsInstanceBroadcaster.md#setcommissionerinfo)
 - [setFabrics](export._internal_.MdnsInstanceBroadcaster.md#setfabrics)
@@ -43,7 +46,7 @@ This class is handing MDNS Announcements for one instance of a device aka "port"
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L19)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:19
 
 ## Properties
 
@@ -53,7 +56,7 @@ This class is handing MDNS Announcements for one instance of a device aka "port"
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L20)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:20
 
 ___
 
@@ -63,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L21)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:21
 
 ## Methods
 
@@ -83,7 +86,67 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L38)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:41
+
+___
+
+### expireAllAnnouncements
+
+▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+
+Expire all announcements.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[InstanceBroadcaster](../interfaces/common_export.InstanceBroadcaster.md).[expireAllAnnouncements](../interfaces/common_export.InstanceBroadcaster.md#expireallannouncements)
+
+#### Defined in
+
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:53
+
+___
+
+### expireCommissioningAnnouncement
+
+▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this commissioning instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[InstanceBroadcaster](../interfaces/common_export.InstanceBroadcaster.md).[expireCommissioningAnnouncement](../interfaces/common_export.InstanceBroadcaster.md#expirecommissioningannouncement)
+
+#### Defined in
+
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:49
+
+___
+
+### expireFabricAnnouncement
+
+▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+
+Expire the announcement for this operative instance.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[InstanceBroadcaster](../interfaces/common_export.InstanceBroadcaster.md).[expireFabricAnnouncement](../interfaces/common_export.InstanceBroadcaster.md#expirefabricannouncement)
+
+#### Defined in
+
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:45
 
 ___
 
@@ -110,7 +173,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L24)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:24
 
 ___
 
@@ -136,21 +199,22 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L34)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:37
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(`fabrics`): `Promise`<`void`\>
+▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`<`void`\>
 
 Set the Broadcaster Data to announce a device for operative discovery (aka "already paired")
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `fabrics` | [`Fabric`](fabric_export.Fabric.md)[] |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `fabrics` | [`Fabric`](fabric_export.Fabric.md)[] | `undefined` |
+| `expireCommissioningAnnouncements` | `boolean` | `false` |
 
 #### Returns
 
@@ -162,4 +226,4 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L29)
+packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:29

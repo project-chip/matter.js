@@ -8,7 +8,7 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.6.0 (2023-10-08)
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs
   * Fix: Adjusted Bleno and Noble to be optional Dependencies to allow building the Monorepo also when these are failing (e.g. on Windows)

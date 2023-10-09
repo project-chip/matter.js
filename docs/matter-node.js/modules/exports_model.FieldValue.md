@@ -56,9 +56,9 @@ Celsius value, typically .1°C or .01°C
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:51
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:51
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:47
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:47
 
 ___
 
@@ -68,9 +68,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:34
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:34
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:35
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:35
 
 ___
 
@@ -89,9 +89,9 @@ Percent value, units of either 1% (.01) or .01% (.0001)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:59
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:59
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:55
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:55
 
 ___
 
@@ -110,7 +110,7 @@ A set of struct property values keyed by name.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:63
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:63
 
 ___
 
@@ -129,9 +129,9 @@ Reference to a named field
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:43
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:43
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:39
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:39
 
 ___
 
@@ -144,7 +144,7 @@ field indicating one of these types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:25
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:25
 
 ___
 
@@ -154,9 +154,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:15
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:15
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:16
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:16
 
 ___
 
@@ -166,9 +166,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:13
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:13
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:14
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:14
 
 ___
 
@@ -178,9 +178,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:19
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:19
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:20
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:20
 
 ___
 
@@ -190,9 +190,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:17
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:17
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:18
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:18
 
 ## Variables
 
@@ -205,9 +205,9 @@ returned when casting to a field value if the cast is impossible
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:34
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:34
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:35
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:35
 
 ___
 
@@ -217,9 +217,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:15
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:15
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:16
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:16
 
 ___
 
@@ -229,9 +229,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:13
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:13
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:14
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:14
 
 ___
 
@@ -241,9 +241,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:19
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:19
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:20
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:20
 
 ___
 
@@ -253,9 +253,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:17
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:17
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:18
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:18
 
 ## Functions
 
@@ -275,7 +275,7 @@ packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:18
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:51
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:51
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:59
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:59
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:43
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:43
 
 ___
 
@@ -338,7 +338,7 @@ Test for one of the special placeholder types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:29
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:29
 
 ___
 
@@ -362,7 +362,7 @@ number.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:77
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:77
 
 ___
 
@@ -384,7 +384,7 @@ Extract object properties from the value.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:81
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:81
 
 ___
 
@@ -406,7 +406,7 @@ Get the referenced name if the FieldValue is a reference.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:93
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:93
 
 ___
 
@@ -428,7 +428,7 @@ Convert the field value to a "defacto-standard" form.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:72
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:72
 
 ___
 
@@ -451,4 +451,4 @@ Unwrap wrapped values, leave others as-is.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:87
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:87

@@ -27,7 +27,7 @@ An error occurred during association.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:133](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L133)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:124
 
 ___
 
@@ -39,7 +39,7 @@ An error occurred during authentication.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:138](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L138)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:129
 
 ___
 
@@ -51,7 +51,7 @@ The specified SSID could not be found.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:143](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L143)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:134
 
 ___
 
@@ -63,4 +63,4 @@ The reason for the failure is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:128](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L128)
+packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:119

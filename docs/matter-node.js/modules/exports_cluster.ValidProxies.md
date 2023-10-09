@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `getValidProxiesRequest`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `validProxyList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `commands`: { `getValidProxiesRequest`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `id`: ``68`` ; `name`: ``"ValidProxies"`` ; `revision`: ``1``  }\>
 
 Proxy Valid
 
@@ -28,13 +28,13 @@ MatterCoreSpecificationV1_1 § 9.15.15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ValidProxiesCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:26
 
 ___
 
 ### TlvValidProxyStruct
 
-• `Const` **TlvValidProxyStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvValidProxyStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Encapsulates the Node ID of a Valid Proxy.
 
@@ -44,4 +44,4 @@ MatterCoreSpecificationV1_1 § 9.15.15.4.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ValidProxiesCluster.d.ts:14
+packages/matter.js/dist/esm/cluster/definitions/ValidProxiesCluster.d.ts:15

@@ -31,7 +31,7 @@ control.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:150](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L150)
+packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:141
 
 ___
 
@@ -45,7 +45,7 @@ Behavior that supports lighting applications
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:142](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L142)
+packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:133
 
 ___
 
@@ -59,4 +59,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:135](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L135)
+packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:126

@@ -30,7 +30,7 @@ The Node has rebooted as the result of a brown-out of the Node’s power supply.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:115
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:116
 
 ___
 
@@ -42,7 +42,7 @@ The Node has rebooted as the result of a hardware watchdog timer.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:123
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:124
 
 ___
 
@@ -54,7 +54,7 @@ The Node has booted as the result of physical interaction with the device result
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:111
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:112
 
 ___
 
@@ -66,7 +66,7 @@ The Node has rebooted as the result of a software initiated reboot.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:131
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:132
 
 ___
 
@@ -78,7 +78,7 @@ The Node has rebooted as the result of a completed software update.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:127
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:128
 
 ___
 
@@ -90,7 +90,7 @@ The Node has rebooted as the result of a software watchdog timer.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:119
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:120
 
 ___
 
@@ -102,4 +102,4 @@ The Node is unable to identify the Power-On reason as one of the other provided 
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:107
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:108

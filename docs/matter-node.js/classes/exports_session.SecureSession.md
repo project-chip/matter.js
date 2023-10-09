@@ -46,8 +46,10 @@
 
 ### Methods
 
+- [addAssociatedFabric](exports_session.SecureSession.md#addassociatedfabric)
 - [addSubscription](exports_session.SecureSession.md#addsubscription)
 - [clearSubscriptions](exports_session.SecureSession.md#clearsubscriptions)
+- [close](exports_session.SecureSession.md#close)
 - [decode](exports_session.SecureSession.md#decode)
 - [destroy](exports_session.SecureSession.md#destroy)
 - [encode](exports_session.SecureSession.md#encode)
@@ -61,6 +63,7 @@
 - [getNodeId](exports_session.SecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.SecureSession.md#getpeernodeid)
 - [getPeerSessionId](exports_session.SecureSession.md#getpeersessionid)
+- [isPase](exports_session.SecureSession.md#ispase)
 - [isPeerActive](exports_session.SecureSession.md#ispeeractive)
 - [isSecure](exports_session.SecureSession.md#issecure)
 - [notifyActivity](exports_session.SecureSession.md#notifyactivity)
@@ -92,14 +95,14 @@
 | `decryptKey` | `Uint8Array` |
 | `encryptKey` | `Uint8Array` |
 | `attestationKey` | `Uint8Array` |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | (`sendClose`: `boolean`) => `Promise`<`void`\> |
 | `idleRetransmissionTimeoutMs?` | `number` |
 | `activeRetransmissionTimeoutMs?` | `number` |
 | `retransmissionRetries?` | `number` |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:31
+packages/matter.js/dist/esm/session/SecureSession.d.ts:31
 
 ## Properties
 
@@ -109,7 +112,7 @@ packages/matter.js/dist/cjs/session/SecureSession.d.ts:31
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:25
+packages/matter.js/dist/esm/session/SecureSession.d.ts:25
 
 ___
 
@@ -119,7 +122,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:29
+packages/matter.js/dist/esm/session/SecureSession.d.ts:29
 
 ___
 
@@ -129,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:22
+packages/matter.js/dist/esm/session/SecureSession.d.ts:22
 
 ___
 
@@ -139,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:23
+packages/matter.js/dist/esm/session/SecureSession.d.ts:23
 
 ___
 
@@ -149,7 +152,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:15
+packages/matter.js/dist/esm/session/SecureSession.d.ts:15
 
 ___
 
@@ -159,7 +162,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:20
+packages/matter.js/dist/esm/session/SecureSession.d.ts:20
 
 ___
 
@@ -169,17 +172,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:21
+packages/matter.js/dist/esm/session/SecureSession.d.ts:21
 
 ___
 
 ### fabric
 
-• `Private` `Readonly` **fabric**: `any`
+• `Private` **fabric**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:17
+packages/matter.js/dist/esm/session/SecureSession.d.ts:17
 
 ___
 
@@ -189,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:59
+packages/matter.js/dist/esm/session/SecureSession.d.ts:62
 
 ___
 
@@ -199,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:16
+packages/matter.js/dist/esm/session/SecureSession.d.ts:16
 
 ___
 
@@ -209,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:24
+packages/matter.js/dist/esm/session/SecureSession.d.ts:24
 
 ___
 
@@ -219,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:18
+packages/matter.js/dist/esm/session/SecureSession.d.ts:18
 
 ___
 
@@ -229,7 +232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:19
+packages/matter.js/dist/esm/session/SecureSession.d.ts:19
 
 ___
 
@@ -239,7 +242,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:26
+packages/matter.js/dist/esm/session/SecureSession.d.ts:26
 
 ___
 
@@ -249,7 +252,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:27
+packages/matter.js/dist/esm/session/SecureSession.d.ts:27
 
 ___
 
@@ -259,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:28
+packages/matter.js/dist/esm/session/SecureSession.d.ts:28
 
 ## Accessors
 
@@ -277,7 +280,7 @@ packages/matter.js/dist/cjs/session/SecureSession.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:40
+packages/matter.js/dist/esm/session/SecureSession.d.ts:43
 
 ___
 
@@ -291,9 +294,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:52
+packages/matter.js/dist/esm/session/SecureSession.d.ts:55
 
 ## Methods
+
+### addAssociatedFabric
+
+▸ **addAssociatedFabric**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:41
+
+___
 
 ### addSubscription
 
@@ -311,7 +334,7 @@ packages/matter.js/dist/cjs/session/SecureSession.d.ts:52
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:51
+packages/matter.js/dist/esm/session/SecureSession.d.ts:54
 
 ___
 
@@ -331,7 +354,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:54
+packages/matter.js/dist/esm/session/SecureSession.d.ts:57
+
+___
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:34
 
 ___
 
@@ -355,15 +392,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:35
+packages/matter.js/dist/esm/session/SecureSession.d.ts:37
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`sendClose`): `Promise`<`void`\>
 
 Destroys a session. Outstanding subscription data will be discarded.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -375,7 +418,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:58
+packages/matter.js/dist/esm/session/SecureSession.d.ts:61
 
 ___
 
@@ -399,15 +442,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:36
+packages/matter.js/dist/esm/session/SecureSession.d.ts:38
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`sendClose`): `Promise`<`void`\>
 
 Ends a session. Outstanding subscription data will be flushed before the session is destroyed.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -419,7 +468,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:56
+packages/matter.js/dist/esm/session/SecureSession.d.ts:59
 
 ___
 
@@ -437,7 +486,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:39
+packages/matter.js/dist/esm/session/SecureSession.d.ts:42
 
 ___
 
@@ -451,7 +500,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:37
+packages/matter.js/dist/esm/session/SecureSession.d.ts:39
 
 ___
 
@@ -469,7 +518,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:46
+packages/matter.js/dist/esm/session/SecureSession.d.ts:49
 
 ___
 
@@ -483,7 +532,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:38
+packages/matter.js/dist/esm/session/SecureSession.d.ts:40
 
 ___
 
@@ -501,7 +550,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:47
+packages/matter.js/dist/esm/session/SecureSession.d.ts:50
 
 ___
 
@@ -525,7 +574,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:41
+packages/matter.js/dist/esm/session/SecureSession.d.ts:44
 
 ___
 
@@ -543,7 +592,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:49
+packages/matter.js/dist/esm/session/SecureSession.d.ts:52
 
 ___
 
@@ -561,7 +610,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:50
+packages/matter.js/dist/esm/session/SecureSession.d.ts:53
 
 ___
 
@@ -579,7 +628,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:48
+packages/matter.js/dist/esm/session/SecureSession.d.ts:51
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[isPase](../interfaces/exports_session.Session.md#ispase)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:33
 
 ___
 
@@ -597,7 +664,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:34
+packages/matter.js/dist/esm/session/SecureSession.d.ts:36
 
 ___
 
@@ -615,7 +682,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:32
+packages/matter.js/dist/esm/session/SecureSession.d.ts:32
 
 ___
 
@@ -639,7 +706,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:33
+packages/matter.js/dist/esm/session/SecureSession.d.ts:35
 
 ___
 
@@ -659,7 +726,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:53
+packages/matter.js/dist/esm/session/SecureSession.d.ts:56
 
 ___
 
@@ -686,7 +753,7 @@ ___
 | `salt` | `Uint8Array` |
 | `isInitiator` | `boolean` |
 | `isResumption` | `boolean` |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | (`sendClose`: `boolean`) => `Promise`<`void`\> |
 | `idleRetransTimeoutMs?` | `number` |
 | `activeRetransTimeoutMs?` | `number` |
 
@@ -696,4 +763,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/session/SecureSession.d.ts:30
+packages/matter.js/dist/esm/session/SecureSession.d.ts:30

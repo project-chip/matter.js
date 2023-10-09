@@ -18,6 +18,7 @@
 - [DataReader](../classes/util_export.DataReader.md)
 - [DataWriter](../classes/util_export.DataWriter.md)
 - [EndOfStreamError](../classes/util_export.EndOfStreamError.md)
+- [NoResponseTimeoutError](../classes/util_export.NoResponseTimeoutError.md)
 - [Queue](../classes/util_export.Queue.md)
 
 ### Interfaces
@@ -26,6 +27,7 @@
 
 ### Type Aliases
 
+- [Brand](util_export.md#brand)
 - [Branded](util_export.md#branded)
 - [ByteArray](util_export.md#bytearray)
 - [ClassExtends](util_export.md#classextends)
@@ -61,15 +63,14 @@
 - [Pluck](util_export.md#pluck-1)
 - [camelize](util_export.md#camelize)
 - [capitalize](util_export.md#capitalize)
+- [createPromise](util_export.md#createpromise)
 - [describeList](util_export.md#describelist)
-- [getPromiseResolver](util_export.md#getpromiseresolver)
 - [iPv4ToNumber](util_export.md#ipv4tonumber)
 - [iPv6ToArray](util_export.md#ipv6toarray)
 - [isDeepEqual](util_export.md#isdeepequal)
 - [isIPv4](util_export.md#isipv4)
 - [isIPv6](util_export.md#isipv6)
 - [isNullish](util_export.md#isnullish)
-- [logEndpoint](util_export.md#logendpoint)
 - [maxValue](util_export.md#maxvalue)
 - [minValue](util_export.md#minvalue)
 - [onSameNetwork](util_export.md#onsamenetwork)
@@ -81,9 +82,31 @@
 
 ## Type Aliases
 
+### Brand
+
+Ƭ **Brand**<`B`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `B` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `[___brand]` | `B` |
+
+#### Defined in
+
+packages/matter.js/src/util/Type.ts:67
+
+___
+
 ### Branded
 
-Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](export._internal_.md#brand)<`B`\>
+Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](util_export.md#brand)<`B`\>
 
 #### Type parameters
 
@@ -94,7 +117,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L60)
+packages/matter.js/src/util/Type.ts:68
 
 ___
 
@@ -106,9 +129,9 @@ Array of bytes, alias of Uint8Array.
 
 #### Defined in
 
-[packages/matter.js/src/util/ByteArray.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L71)
+packages/matter.js/src/util/ByteArray.ts:74
 
-[packages/matter.js/src/util/ByteArray.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L72)
+packages/matter.js/src/util/ByteArray.ts:75
 
 ___
 
@@ -140,7 +163,7 @@ Type that represents a class constructor of a defined type or extend of it
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L19)
+packages/matter.js/src/util/Type.ts:19
 
 ___
 
@@ -156,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L55)
+packages/matter.js/src/util/Type.ts:55
 
 ___
 
@@ -175,9 +198,9 @@ Merges two types into one.
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L14)
+packages/matter.js/src/util/Type.ts:14
 
-[packages/matter.js/src/util/Type.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L10)
+packages/matter.js/src/util/Type.ts:10
 
 ___
 
@@ -195,9 +218,9 @@ Merge an array of objects into one.  Currently assumes unique elements
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L30)
+packages/matter.js/src/util/Type.ts:30
 
-[packages/matter.js/src/util/Type.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L22)
+packages/matter.js/src/util/Type.ts:22
 
 ___
 
@@ -216,9 +239,9 @@ Pluck an item from an array of objects if present
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L43)
+packages/matter.js/src/util/Type.ts:43
 
-[packages/matter.js/src/util/Type.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L35)
+packages/matter.js/src/util/Type.ts:35
 
 ___
 
@@ -237,7 +260,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:7](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L7)
+packages/matter.js/src/util/Type.ts:7
 
 ## Variables
 
@@ -247,9 +270,9 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/ByteArray.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L71)
+packages/matter.js/src/util/ByteArray.ts:74
 
-[packages/matter.js/src/util/ByteArray.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/ByteArray.ts#L72)
+packages/matter.js/src/util/ByteArray.ts:75
 
 ___
 
@@ -259,7 +282,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L23)
+packages/matter.js/src/util/Number.ts:23
 
 ___
 
@@ -269,7 +292,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L22)
+packages/matter.js/src/util/Number.ts:22
 
 ___
 
@@ -279,7 +302,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L18)
+packages/matter.js/src/util/Number.ts:18
 
 ___
 
@@ -289,7 +312,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L14)
+packages/matter.js/src/util/Number.ts:14
 
 ___
 
@@ -299,7 +322,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:19](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L19)
+packages/matter.js/src/util/Number.ts:19
 
 ___
 
@@ -309,7 +332,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L15)
+packages/matter.js/src/util/Number.ts:15
 
 ___
 
@@ -319,7 +342,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L20)
+packages/matter.js/src/util/Number.ts:20
 
 ___
 
@@ -329,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L16)
+packages/matter.js/src/util/Number.ts:16
 
 ___
 
@@ -339,7 +362,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L17)
+packages/matter.js/src/util/Number.ts:17
 
 ___
 
@@ -349,7 +372,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L13)
+packages/matter.js/src/util/Number.ts:13
 
 ___
 
@@ -359,7 +382,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:8](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L8)
+packages/matter.js/src/util/Number.ts:8
 
 ___
 
@@ -369,7 +392,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:9](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L9)
+packages/matter.js/src/util/Number.ts:9
 
 ___
 
@@ -379,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L10)
+packages/matter.js/src/util/Number.ts:10
 
 ___
 
@@ -389,7 +412,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L11)
+packages/matter.js/src/util/Number.ts:11
 
 ___
 
@@ -404,7 +427,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:7](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L7)
+packages/matter.js/src/util/Number.ts:7
 
 ## Functions
 
@@ -432,7 +455,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:14](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L14)
+packages/matter.js/src/util/Type.ts:14
 
 ___
 
@@ -458,7 +481,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L30)
+packages/matter.js/src/util/Type.ts:30
 
 ___
 
@@ -486,7 +509,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L43)
+packages/matter.js/src/util/Type.ts:43
 
 ___
 
@@ -510,7 +533,7 @@ Converts identifiers of the form "foo-bar", "foo_bar", "foo bar", "foo*bar",
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/String.ts#L15)
+packages/matter.js/src/util/String.ts:15
 
 ___
 
@@ -541,7 +564,35 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:7](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/String.ts#L7)
+packages/matter.js/src/util/String.ts:7
+
+___
+
+### createPromise
+
+▸ **createPromise**<`T`\>(): `Object`
+
+Obtain a promise with functions to resolve and reject.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `promise` | `Promise`<`T`\> |
+| `rejecter` | (`reason?`: `any`) => `void` |
+| `resolver` | (`value`: `T`) => `void` |
+
+#### Defined in
+
+packages/matter.js/src/util/Promises.ts:14
 
 ___
 
@@ -564,29 +615,7 @@ Create a human readable version of a list of items.
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:209](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/String.ts#L209)
-
-___
-
-### getPromiseResolver
-
-▸ **getPromiseResolver**<`T`\>(): `Promise`<{ `promise`: `Promise`<`T`\> ; `rejecter`: (`reason?`: `any`) => `void` ; `resolver`: (`value`: `T`) => `void`  }\>
-
-Dark magic to have access to the promise resolver outside the promise context.
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Returns
-
-`Promise`<{ `promise`: `Promise`<`T`\> ; `rejecter`: (`reason?`: `any`) => `void` ; `resolver`: (`value`: `T`) => `void`  }\>
-
-#### Defined in
-
-[packages/matter.js/src/util/Promises.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Promises.ts#L10)
+packages/matter.js/src/util/String.ts:209
 
 ___
 
@@ -606,7 +635,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Ip.ts:17](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Ip.ts#L17)
+packages/matter.js/src/util/Ip.ts:17
 
 ___
 
@@ -626,7 +655,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Ip.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Ip.ts#L26)
+packages/matter.js/src/util/Ip.ts:26
 
 ___
 
@@ -652,7 +681,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/DeepEqual.ts:7](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/DeepEqual.ts#L7)
+packages/matter.js/src/util/DeepEqual.ts:7
 
 ___
 
@@ -672,7 +701,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Ip.ts:9](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Ip.ts#L9)
+packages/matter.js/src/util/Ip.ts:9
 
 ___
 
@@ -692,7 +721,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Ip.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Ip.ts#L13)
+packages/matter.js/src/util/Ip.ts:13
 
 ___
 
@@ -714,28 +743,7 @@ Same as "a == undefined" but keeps the kids happy
 
 #### Defined in
 
-[packages/matter.js/src/util/Type.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Type.ts#L51)
-
-___
-
-### logEndpoint
-
-▸ **logEndpoint**(`endpoint`, `options?`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `endpoint` | [`Endpoint`](../classes/device_export.Endpoint.md) |
-| `options` | [`EndpointLoggingOptions`](export._internal_.md#endpointloggingoptions) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/matter.js/src/util/EndpointStructureLogger.ts:243](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/EndpointStructureLogger.ts#L243)
+packages/matter.js/src/util/Type.ts:51
 
 ___
 
@@ -762,7 +770,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L39)
+packages/matter.js/src/util/Number.ts:39
 
 ___
 
@@ -789,7 +797,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:33](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L33)
+packages/matter.js/src/util/Number.ts:33
 
 ___
 
@@ -811,7 +819,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Ip.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Ip.ts#L41)
+packages/matter.js/src/util/Ip.ts:41
 
 ___
 
@@ -833,7 +841,7 @@ Like JSON.stringify but targets well-formed JS and is slightly more readable.
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/String.ts#L82)
+packages/matter.js/src/util/String.ts:82
 
 ___
 
@@ -870,7 +878,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/util/Singleton.ts:7](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Singleton.ts#L7)
+packages/matter.js/src/util/Singleton.ts:7
 
 ___
 
@@ -890,7 +898,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L29)
+packages/matter.js/src/util/Number.ts:29
 
 ___
 
@@ -910,7 +918,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L45)
+packages/matter.js/src/util/Number.ts:45
 
 ___
 
@@ -930,4 +938,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Number.ts:25](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/Number.ts#L25)
+packages/matter.js/src/util/Number.ts:25

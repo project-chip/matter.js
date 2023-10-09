@@ -49,7 +49,7 @@ Set&lt;FeatureSet.Flag\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:15
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:15
 
 ## Accessors
 
@@ -65,7 +65,7 @@ Access features as an array of feature names.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:19
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:19
 
 ___
 
@@ -81,7 +81,7 @@ Access features as an object mapping feature name -> true.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:23
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:23
 
 ## Methods
 
@@ -107,4 +107,4 @@ packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FeatureSet.d.ts:26
+packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:26

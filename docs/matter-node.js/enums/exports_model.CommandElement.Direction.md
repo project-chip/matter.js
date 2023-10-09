@@ -21,7 +21,7 @@ Indicates request vs response command.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:27
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:27
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:28

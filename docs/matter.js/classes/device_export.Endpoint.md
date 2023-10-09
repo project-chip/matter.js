@@ -43,7 +43,7 @@
 - [addClusterServer](device_export.Endpoint.md#addclusterserver)
 - [addFixedLabel](device_export.Endpoint.md#addfixedlabel)
 - [addUserLabel](device_export.Endpoint.md#adduserlabel)
-- [clearStructureChangedCallback](device_export.Endpoint.md#clearstructurechangedcallback)
+- [destroy](device_export.Endpoint.md#destroy)
 - [determineUniqueID](device_export.Endpoint.md#determineuniqueid)
 - [getAllClusterClients](device_export.Endpoint.md#getallclusterclients)
 - [getAllClusterServers](device_export.Endpoint.md#getallclusterservers)
@@ -58,6 +58,7 @@
 - [hasClusterClient](device_export.Endpoint.md#hasclusterclient)
 - [hasClusterServer](device_export.Endpoint.md#hasclusterserver)
 - [removeChildEndpoint](device_export.Endpoint.md#removechildendpoint)
+- [removeFromStructure](device_export.Endpoint.md#removefromstructure)
 - [setDeviceTypes](device_export.Endpoint.md#setdevicetypes)
 - [setStructureChangedCallback](device_export.Endpoint.md#setstructurechangedcallback)
 - [updatePartsList](device_export.Endpoint.md#updatepartslist)
@@ -80,7 +81,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L52)
+packages/matter.js/src/device/Endpoint.ts:52
 
 ## Properties
 
@@ -90,7 +91,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:36](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L36)
+packages/matter.js/src/device/Endpoint.ts:36
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L35)
+packages/matter.js/src/device/Endpoint.ts:35
 
 ___
 
@@ -110,17 +111,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:34](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L34)
+packages/matter.js/src/device/Endpoint.ts:34
 
 ___
 
 ### descriptorCluster
 
-• `Private` **descriptorCluster**: [`ClusterServerObjForCluster`](../modules/cluster_export.md#clusterserverobjforcluster)<[`Cluster`](../modules/cluster_export.md#cluster)<[`BitSchema`](../modules/schema_export.md#bitschema), [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<[`BitSchema`](../modules/schema_export.md#bitschema)\>, [`Merge`](../modules/util_export.md#merge)<{ `clientList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[], `any`\> ; `partsList`: [`Attribute`](../modules/cluster_export.md#attribute)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[], `any`\> ; `serverList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)<[`BitSchema`](../modules/schema_export.md#bitschema)\>\>, {}, {}\>\>
+• `Private` **descriptorCluster**: [`ClusterServerObjForCluster`](../modules/cluster_export.md#clusterserverobjforcluster)<[`Definition`](../modules/cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `clientList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\> ; `deviceTypeList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `deviceType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`DeviceTypeId`](../modules/datatype_export.md#devicetypeid)\> ; `revision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>[], `any`\> ; `partsList`: [`Attribute`](../modules/cluster_export.md#attribute)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[], `any`\> ; `serverList`: [`FixedAttribute`](../modules/cluster_export.md#fixedattribute)<[`ClusterId`](../modules/datatype_export.md#clusterid)[], `any`\>  } ; `id`: ``29`` = 0x1d; `name`: ``"Descriptor"`` = "Descriptor"; `revision`: ``1`` = 1 }\>\>
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L44)
+packages/matter.js/src/device/Endpoint.ts:44
 
 ___
 
@@ -132,7 +133,7 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L53)
+packages/matter.js/src/device/Endpoint.ts:53
 
 ___
 
@@ -142,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L37)
+packages/matter.js/src/device/Endpoint.ts:37
 
 ___
 
@@ -152,7 +153,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L39)
+packages/matter.js/src/device/Endpoint.ts:39
 
 ___
 
@@ -170,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L40)
+packages/matter.js/src/device/Endpoint.ts:40
 
 ___
 
@@ -180,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L38)
+packages/matter.js/src/device/Endpoint.ts:38
 
 ## Methods
 
@@ -200,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:230](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L230)
+packages/matter.js/src/device/Endpoint.ts:256
 
 ___
 
@@ -229,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:149](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L149)
+packages/matter.js/src/device/Endpoint.ts:173
 
 ___
 
@@ -256,7 +257,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L139)
+packages/matter.js/src/device/Endpoint.ts:146
 
 ___
 
@@ -277,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L99)
+packages/matter.js/src/device/Endpoint.ts:106
 
 ___
 
@@ -298,13 +299,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L119)
+packages/matter.js/src/device/Endpoint.ts:126
 
 ___
 
-### clearStructureChangedCallback
+### destroy
 
-▸ **clearStructureChangedCallback**(): `void`
+▸ **destroy**(): `void`
 
 #### Returns
 
@@ -312,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L85)
+packages/matter.js/src/device/Endpoint.ts:93
 
 ___
 
@@ -326,7 +327,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:254](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L254)
+packages/matter.js/src/device/Endpoint.ts:280
 
 ___
 
@@ -340,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:314](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L314)
+packages/matter.js/src/device/Endpoint.ts:340
 
 ___
 
@@ -354,7 +355,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:310](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L310)
+packages/matter.js/src/device/Endpoint.ts:336
 
 ___
 
@@ -374,7 +375,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L236)
+packages/matter.js/src/device/Endpoint.ts:262
 
 ___
 
@@ -388,7 +389,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L240)
+packages/matter.js/src/device/Endpoint.ts:266
 
 ___
 
@@ -418,7 +419,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:172](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L172)
+packages/matter.js/src/device/Endpoint.ts:198
 
 ___
 
@@ -438,7 +439,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:186](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L186)
+packages/matter.js/src/device/Endpoint.ts:212
 
 ___
 
@@ -468,7 +469,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L159)
+packages/matter.js/src/device/Endpoint.ts:183
 
 ___
 
@@ -488,7 +489,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:182](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L182)
+packages/matter.js/src/device/Endpoint.ts:208
 
 ___
 
@@ -502,7 +503,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:210](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L210)
+packages/matter.js/src/device/Endpoint.ts:236
 
 ___
 
@@ -516,7 +517,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L92)
+packages/matter.js/src/device/Endpoint.ts:99
 
 ___
 
@@ -546,7 +547,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:200](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L200)
+packages/matter.js/src/device/Endpoint.ts:226
 
 ___
 
@@ -576,7 +577,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:190](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L190)
+packages/matter.js/src/device/Endpoint.ts:216
 
 ___
 
@@ -596,7 +597,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:244](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L244)
+packages/matter.js/src/device/Endpoint.ts:270
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/device/Endpoint.ts:85
 
 ___
 
@@ -616,7 +631,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:214](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L214)
+packages/matter.js/src/device/Endpoint.ts:240
 
 ___
 
@@ -636,7 +651,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L80)
+packages/matter.js/src/device/Endpoint.ts:80
 
 ___
 
@@ -650,7 +665,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:318](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L318)
+packages/matter.js/src/device/Endpoint.ts:344
 
 ___
 
@@ -664,4 +679,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:276](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L276)
+packages/matter.js/src/device/Endpoint.ts:302

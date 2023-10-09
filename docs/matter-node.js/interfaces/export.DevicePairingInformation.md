@@ -22,7 +22,7 @@ Represents device pairing information.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningServer.d.ts:26
+packages/matter.js/dist/esm/CommissioningServer.d.ts:27
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningServer.d.ts:28
+packages/matter.js/dist/esm/CommissioningServer.d.ts:29
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/CommissioningServer.d.ts:27
+packages/matter.js/dist/esm/CommissioningServer.d.ts:28

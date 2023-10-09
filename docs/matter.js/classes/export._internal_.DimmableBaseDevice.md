@@ -41,9 +41,9 @@
 - [addFixedLabel](export._internal_.DimmableBaseDevice.md#addfixedlabel)
 - [addOnOffListener](export._internal_.DimmableBaseDevice.md#addonofflistener)
 - [addUserLabel](export._internal_.DimmableBaseDevice.md#adduserlabel)
-- [clearStructureChangedCallback](export._internal_.DimmableBaseDevice.md#clearstructurechangedcallback)
 - [createOptionalClusterClient](export._internal_.DimmableBaseDevice.md#createoptionalclusterclient)
 - [createOptionalClusterServer](export._internal_.DimmableBaseDevice.md#createoptionalclusterserver)
+- [destroy](export._internal_.DimmableBaseDevice.md#destroy)
 - [determineUniqueID](export._internal_.DimmableBaseDevice.md#determineuniqueid)
 - [getAllClusterClients](export._internal_.DimmableBaseDevice.md#getallclusterclients)
 - [getAllClusterServers](export._internal_.DimmableBaseDevice.md#getallclusterservers)
@@ -56,14 +56,15 @@
 - [getCurrentLevel](export._internal_.DimmableBaseDevice.md#getcurrentlevel)
 - [getDeviceTypes](export._internal_.DimmableBaseDevice.md#getdevicetypes)
 - [getId](export._internal_.DimmableBaseDevice.md#getid)
+- [getOnOff](export._internal_.DimmableBaseDevice.md#getonoff)
 - [hasClusterClient](export._internal_.DimmableBaseDevice.md#hasclusterclient)
 - [hasClusterServer](export._internal_.DimmableBaseDevice.md#hasclusterserver)
-- [isOn](export._internal_.DimmableBaseDevice.md#ison)
-- [onOff](export._internal_.DimmableBaseDevice.md#onoff)
 - [removeChildEndpoint](export._internal_.DimmableBaseDevice.md#removechildendpoint)
 - [removeCommandHandler](export._internal_.DimmableBaseDevice.md#removecommandhandler)
+- [removeFromStructure](export._internal_.DimmableBaseDevice.md#removefromstructure)
 - [setCurrentLevel](export._internal_.DimmableBaseDevice.md#setcurrentlevel)
 - [setDeviceTypes](export._internal_.DimmableBaseDevice.md#setdevicetypes)
+- [setOnOff](export._internal_.DimmableBaseDevice.md#setonoff)
 - [setStructureChangedCallback](export._internal_.DimmableBaseDevice.md#setstructurechangedcallback)
 - [toggle](export._internal_.DimmableBaseDevice.md#toggle)
 - [updatePartsList](export._internal_.DimmableBaseDevice.md#updatepartslist)
@@ -89,7 +90,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L39)
+packages/matter.js/src/util/NamedHandler.ts:39
 
 ## Properties
 
@@ -105,7 +106,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:126](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L126)
+packages/matter.js/src/device/Device.ts:126
 
 ___
 
@@ -121,7 +122,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:125](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L125)
+packages/matter.js/src/device/Device.ts:125
 
 ___
 
@@ -139,7 +140,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L53)
+packages/matter.js/src/device/Endpoint.ts:53
 
 ___
 
@@ -155,7 +156,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L37)
+packages/matter.js/src/device/Endpoint.ts:37
 
 ___
 
@@ -171,7 +172,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L39)
+packages/matter.js/src/device/Endpoint.ts:39
 
 ___
 
@@ -187,7 +188,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L38)
+packages/matter.js/src/device/Endpoint.ts:38
 
 ## Methods
 
@@ -217,7 +218,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:183](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L183)
+packages/matter.js/src/device/Device.ts:183
 
 ▸ `Protected` **_executeHandler**<`K`\>(`action`, `...args`): `Promise`<`void`\>
 
@@ -249,7 +250,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L42)
+packages/matter.js/src/util/NamedHandler.ts:42
 
 ▸ `Protected` **_executeHandler**<`K`\>(`action`, `...args`): `Promise`<`void`\>
 
@@ -281,7 +282,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L42)
+packages/matter.js/src/util/NamedHandler.ts:42
 
 ___
 
@@ -307,7 +308,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:230](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L230)
+packages/matter.js/src/device/Endpoint.ts:256
 
 ___
 
@@ -342,7 +343,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:149](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L149)
+packages/matter.js/src/device/Endpoint.ts:173
 
 ___
 
@@ -375,7 +376,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L139)
+packages/matter.js/src/device/Endpoint.ts:146
 
 ___
 
@@ -405,7 +406,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:160](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L160)
+packages/matter.js/src/device/Device.ts:160
 
 ▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -437,7 +438,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L40)
+packages/matter.js/src/util/NamedHandler.ts:40
 
 ▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -469,7 +470,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L40)
+packages/matter.js/src/util/NamedHandler.ts:40
 
 ___
 
@@ -491,7 +492,7 @@ Adds a listener for the CurrentLevel attribute
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DimmableDevices.ts#L71)
+packages/matter.js/src/device/DimmableDevices.ts:71
 
 ___
 
@@ -518,7 +519,7 @@ extendPublicHandlerMethods&lt;typeof OnOffBaseDevice, DimmableDeviceCommands\&gt
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DimmableDevices.ts#L29)
+packages/matter.js/src/device/DimmableDevices.ts:29
 
 ___
 
@@ -545,7 +546,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L99)
+packages/matter.js/src/device/Endpoint.ts:106
 
 ___
 
@@ -574,7 +575,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:136](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/OnOffDevices.ts#L136)
+packages/matter.js/src/device/OnOffDevices.ts:136
 
 ___
 
@@ -601,27 +602,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L119)
-
-___
-
-### clearStructureChangedCallback
-
-▸ **clearStructureChangedCallback**(): `void`
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
-    OnOffBaseDevice,
-).clearStructureChangedCallback
-
-#### Defined in
-
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L85)
+packages/matter.js/src/device/Endpoint.ts:126
 
 ___
 
@@ -657,7 +638,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:198](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L198)
+packages/matter.js/src/device/Device.ts:198
 
 ___
 
@@ -693,7 +674,27 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:187](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L187)
+packages/matter.js/src/device/Device.ts:187
+
+___
+
+### destroy
+
+▸ **destroy**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
+    OnOffBaseDevice,
+).destroy
+
+#### Defined in
+
+packages/matter.js/src/device/Endpoint.ts:93
 
 ___
 
@@ -713,7 +714,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:254](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L254)
+packages/matter.js/src/device/Endpoint.ts:280
 
 ___
 
@@ -733,7 +734,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:314](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L314)
+packages/matter.js/src/device/Endpoint.ts:340
 
 ___
 
@@ -753,7 +754,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:310](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L310)
+packages/matter.js/src/device/Endpoint.ts:336
 
 ___
 
@@ -779,7 +780,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L236)
+packages/matter.js/src/device/Endpoint.ts:262
 
 ___
 
@@ -799,7 +800,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L240)
+packages/matter.js/src/device/Endpoint.ts:266
 
 ___
 
@@ -835,7 +836,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L229)
+packages/matter.js/src/device/Device.ts:229
 
 ___
 
@@ -861,7 +862,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:186](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L186)
+packages/matter.js/src/device/Endpoint.ts:212
 
 ___
 
@@ -897,7 +898,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:209](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L209)
+packages/matter.js/src/device/Device.ts:209
 
 ___
 
@@ -923,21 +924,21 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:182](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L182)
+packages/matter.js/src/device/Endpoint.ts:208
 
 ___
 
 ### getCurrentLevel
 
-▸ **getCurrentLevel**(): `undefined` \| ``null`` \| `number`
+▸ **getCurrentLevel**(): `number`
 
 #### Returns
 
-`undefined` \| ``null`` \| `number`
+`number`
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DimmableDevices.ts#L58)
+packages/matter.js/src/device/DimmableDevices.ts:58
 
 ___
 
@@ -957,7 +958,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:210](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L210)
+packages/matter.js/src/device/Endpoint.ts:236
 
 ___
 
@@ -977,7 +978,27 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L92)
+packages/matter.js/src/device/Endpoint.ts:99
+
+___
+
+### getOnOff
+
+▸ **getOnOff**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Inherited from
+
+extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
+    OnOffBaseDevice,
+).getOnOff
+
+#### Defined in
+
+packages/matter.js/src/device/OnOffDevices.ts:116
 
 ___
 
@@ -1013,7 +1034,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:200](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L200)
+packages/matter.js/src/device/Endpoint.ts:226
 
 ___
 
@@ -1049,56 +1070,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:190](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L190)
-
-___
-
-### isOn
-
-▸ **isOn**(): `Promise`<`undefined` \| `boolean`\>
-
-#### Returns
-
-`Promise`<`undefined` \| `boolean`\>
-
-#### Inherited from
-
-extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
-    OnOffBaseDevice,
-).isOn
-
-#### Defined in
-
-[packages/matter.js/src/device/OnOffDevices.ts:125](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/OnOffDevices.ts#L125)
-
-___
-
-### onOff
-
-▸ **onOff**(`onOff`): `Promise`<`void`\>
-
-Turns the device on or off
-This is an example f a convenient device class API to control the device without need to access clusters
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `onOff` | `boolean` | true to turn on, false to turn off |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Inherited from
-
-extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
-    OnOffBaseDevice,
-).onOff
-
-#### Defined in
-
-[packages/matter.js/src/device/OnOffDevices.ts:112](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/OnOffDevices.ts#L112)
+packages/matter.js/src/device/Endpoint.ts:216
 
 ___
 
@@ -1124,7 +1096,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:244](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L244)
+packages/matter.js/src/device/Endpoint.ts:270
 
 ___
 
@@ -1154,7 +1126,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:171](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Device.ts#L171)
+packages/matter.js/src/device/Device.ts:171
 
 ▸ **removeCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -1186,7 +1158,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L41)
+packages/matter.js/src/util/NamedHandler.ts:41
 
 ▸ **removeCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -1218,7 +1190,27 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/util/NamedHandler.ts#L41)
+packages/matter.js/src/util/NamedHandler.ts:41
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
+    OnOffBaseDevice,
+).removeFromStructure
+
+#### Defined in
+
+packages/matter.js/src/device/Endpoint.ts:85
 
 ___
 
@@ -1238,7 +1230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:62](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/DimmableDevices.ts#L62)
+packages/matter.js/src/device/DimmableDevices.ts:62
 
 ___
 
@@ -1264,7 +1256,36 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:214](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L214)
+packages/matter.js/src/device/Endpoint.ts:240
+
+___
+
+### setOnOff
+
+▸ **setOnOff**(`onOff`): `void`
+
+Turns the device on or off
+This is an example f a convenient device class API to control the device without need to access clusters
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `onOff` | `boolean` | true to turn on, false to turn off |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
+    OnOffBaseDevice,
+).setOnOff
+
+#### Defined in
+
+packages/matter.js/src/device/OnOffDevices.ts:112
 
 ___
 
@@ -1290,20 +1311,20 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L80)
+packages/matter.js/src/device/Endpoint.ts:80
 
 ___
 
 ### toggle
 
-▸ **toggle**(): `Promise`<`void`\>
+▸ **toggle**(): `void`
 
 Toggles the device on or off
 This is an example f a convenient device class API to control the device without need to access clusters
 
 #### Returns
 
-`Promise`<`void`\>
+`void`
 
 #### Inherited from
 
@@ -1313,7 +1334,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:120](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/OnOffDevices.ts#L120)
+packages/matter.js/src/device/OnOffDevices.ts:124
 
 ___
 
@@ -1333,7 +1354,7 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:318](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L318)
+packages/matter.js/src/device/Endpoint.ts:344
 
 ___
 
@@ -1353,4 +1374,4 @@ extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands\>(
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:276](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L276)
+packages/matter.js/src/device/Endpoint.ts:302

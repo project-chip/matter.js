@@ -27,7 +27,7 @@ The battery is at full charge
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:792](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L792)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:783
 
 ___
 
@@ -39,7 +39,7 @@ The battery is charging
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:787](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L787)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:778
 
 ___
 
@@ -51,7 +51,7 @@ The battery is not charging
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:797](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L797)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:788
 
 ___
 
@@ -63,4 +63,4 @@ Unable to determine the charging state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:782](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L782)
+packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:773

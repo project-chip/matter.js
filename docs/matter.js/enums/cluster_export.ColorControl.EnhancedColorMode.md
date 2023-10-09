@@ -27,7 +27,7 @@ The value of the ColorControl enhancedColorMode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:77](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L77)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:68
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:75](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L75)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:66
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L76)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:67
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:78](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L78)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:69

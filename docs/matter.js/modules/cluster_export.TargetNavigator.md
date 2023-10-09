@@ -21,7 +21,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `currentTarget`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| `number`, `any`\> ; `targetList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `identifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `navigateTarget`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `target`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.TargetNavigator.Status.md)\>  }\>, `any`\>  }, {}\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentTarget`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<``null`` \| `number`, `any`\> ; `targetList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `identifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  } ; `commands`: { `navigateTarget`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `target`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.TargetNavigator.Status.md)\>  }\>, `any`\>  } ; `id`: ``1285`` = 0x505; `name`: ``"TargetNavigator"`` = "TargetNavigator"; `revision`: ``1`` = 1 }\>
 
 Target Navigator
 
@@ -33,7 +33,7 @@ This cluster provides an interface for UX navigation within a set of targets on 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L109)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:110
 
 ___
 
@@ -49,7 +49,7 @@ Input to the TargetNavigator navigateTarget command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L44)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:45
 
 ___
 
@@ -65,7 +65,7 @@ This command shall be generated in response to NavigateTarget command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L86)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:87
 
 ___
 
@@ -81,4 +81,4 @@ This indicates an object describing the navigable target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L23)
+packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:24

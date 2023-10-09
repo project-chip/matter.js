@@ -27,7 +27,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.TimeFormatLocalization.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `calendarFormat`: ``true``  } ? typeof [`CalendarFormatComponent`](exports_cluster.TimeFormatLocalization.md#calendarformatcomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.TimeFormatLocalization.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `calendarFormat`: ``true``  } ? typeof [`CalendarFormatComponent`](exports_cluster.TimeFormatLocalization.md#calendarformatcomponent) : {}
 
 #### Type parameters
 
@@ -37,37 +37,37 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:186
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:230
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `hourFormat`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`HourFormat`](../enums/exports_cluster.TimeFormatLocalization.HourFormat.md) \| ``null``, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `hourFormat`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`HourFormat`](../enums/exports_cluster.TimeFormatLocalization.HourFormat.md) \| ``null``, `any`\>  } ; `features`: { `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``44`` ; `name`: ``"TimeFormatLocalization"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all TimeFormatLocalization clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:92
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:93
 
 ___
 
 ### CalendarFormatComponent
 
-• `Const` **CalendarFormatComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `activeCalendarType`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md) \| ``null``, `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md)[], `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **CalendarFormatComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `activeCalendarType`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md) \| ``null``, `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md)[], `any`\>  }  }\>
 
 A TimeFormatLocalizationCluster supports these elements if it supports feature CalendarFormat.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:113
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:120
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.TimeFormatLocalization.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: {} ; `events`: {} ; `features`: { `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"TimeFormatLocalization"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `hourFormat`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`HourFormat`](../enums/exports_cluster.TimeFormatLocalization.HourFormat.md) \| ``null``, `any`\>  } ; `features`: { `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``44`` ; `name`: ``"TimeFormatLocalization"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.TimeFormatLocalization.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Time Format Localization
 
@@ -87,13 +87,13 @@ MatterCoreSpecificationV1_1 § 11.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:147
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:156
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `activeCalendarType`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md) \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `attributeList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `clusterRevision`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `eventList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `featureMap`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `generatedCommandList`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `hourFormat`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`HourFormat`](../enums/exports_cluster.TimeFormatLocalization.HourFormat.md) \| ``null``, `any`\> ; `supportedCalendarTypes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`CalendarType`](../enums/exports_cluster.TimeFormatLocalization.CalendarType.md)[], `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: { `calendarFormat`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``44`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"TimeFormatLocalization"`` ; `revision`: ``1``  }\>
 
 This cluster supports all TimeFormatLocalization features. It may support illegal feature combinations.
 
@@ -102,4 +102,4 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/TimeFormatLocalizationCluster.d.ts:197
+packages/matter.js/dist/esm/cluster/definitions/TimeFormatLocalizationCluster.d.ts:241

@@ -22,7 +22,7 @@ Event priority as defined in Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:28
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:26
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:26
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:27
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:27

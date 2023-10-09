@@ -27,7 +27,7 @@ Indicates there has been Thread hardware failure.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:322
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:323
 
 ___
 
@@ -39,7 +39,7 @@ Indicates the Thread link is down.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:318
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:319
 
 ___
 
@@ -51,7 +51,7 @@ Indicates the Thread network is jammed.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:326
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:327
 
 ___
 
@@ -63,4 +63,4 @@ Indicates an unspecified fault.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:314
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:315

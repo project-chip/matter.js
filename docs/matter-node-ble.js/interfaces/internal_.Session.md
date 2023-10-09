@@ -34,6 +34,7 @@
 - [getNodeId](internal_.Session.md#getnodeid)
 - [getPeerNodeId](internal_.Session.md#getpeernodeid)
 - [getPeerSessionId](internal_.Session.md#getpeersessionid)
+- [isPase](internal_.Session.md#ispase)
 - [isPeerActive](internal_.Session.md#ispeeractive)
 - [isSecure](internal_.Session.md#issecure)
 - [notifyActivity](internal_.Session.md#notifyactivity)
@@ -66,13 +67,19 @@ matter.js/dist/cjs/session/Session.d.ts:24
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:26
+matter.js/dist/cjs/session/Session.d.ts:27
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(`sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -80,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:35
+matter.js/dist/cjs/session/Session.d.ts:36
 
 ___
 
@@ -100,13 +107,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:27
+matter.js/dist/cjs/session/Session.d.ts:28
 
 ___
 
 ### end
 
-▸ **end**(): `Promise`<`void`\>
+▸ **end**(`sendClose`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sendClose` | `boolean` |
 
 #### Returns
 
@@ -114,7 +127,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:34
+matter.js/dist/cjs/session/Session.d.ts:35
 
 ___
 
@@ -128,7 +141,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:38
+matter.js/dist/cjs/session/Session.d.ts:39
 
 ___
 
@@ -142,7 +155,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:29
+matter.js/dist/cjs/session/Session.d.ts:30
 
 ___
 
@@ -156,7 +169,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:30
+matter.js/dist/cjs/session/Session.d.ts:31
 
 ___
 
@@ -170,7 +183,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:28
+matter.js/dist/cjs/session/Session.d.ts:29
 
 ___
 
@@ -184,7 +197,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:32
+matter.js/dist/cjs/session/Session.d.ts:33
 
 ___
 
@@ -198,7 +211,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:33
+matter.js/dist/cjs/session/Session.d.ts:34
 
 ___
 
@@ -212,7 +225,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:31
+matter.js/dist/cjs/session/Session.d.ts:32
+
+___
+
+### isPase
+
+▸ **isPase**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/session/Session.d.ts:26
 
 ___
 
@@ -226,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:37
+matter.js/dist/cjs/session/Session.d.ts:38
 
 ___
 
@@ -260,4 +287,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/Session.d.ts:36
+matter.js/dist/cjs/session/Session.d.ts:37

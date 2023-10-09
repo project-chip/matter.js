@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L57)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:42
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L58)
+packages/matter.js/src/cluster/definitions/OnOffCluster.ts:43

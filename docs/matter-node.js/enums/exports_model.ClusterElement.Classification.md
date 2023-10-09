@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:37
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:37
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:35
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:35
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:36
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:36

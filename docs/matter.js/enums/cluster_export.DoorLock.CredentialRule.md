@@ -27,7 +27,7 @@ particular user.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:719](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L719)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:709
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:718](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L718)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:708
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:720](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L720)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:710

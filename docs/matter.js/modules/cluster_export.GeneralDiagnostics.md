@@ -13,6 +13,7 @@
 - [InterfaceType](../enums/cluster_export.GeneralDiagnostics.InterfaceType.md)
 - [NetworkFault](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)
 - [RadioFault](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)
+- [StatusCode](../enums/cluster_export.GeneralDiagnostics.StatusCode.md)
 
 ### Variables
 
@@ -28,7 +29,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `activeHardwareFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[], `any`\> ; `activeNetworkFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[], `any`\> ; `activeRadioFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[], `any`\> ; `bootReason`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`BootReason`](../enums/cluster_export.GeneralDiagnostics.BootReason.md), `any`\> ; `networkInterfaces`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `hardwareAddress`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `iPv4Addresses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`[]\> ; `iPv6Addresses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`[]\> ; `isOperational`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `offPremiseServicesReachableIPv4`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `boolean`\> ; `offPremiseServicesReachableIPv6`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `boolean`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InterfaceType`](../enums/cluster_export.GeneralDiagnostics.InterfaceType.md)\>  }\>[], `any`\> ; `rebootCount`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `testEventTriggersEnabled`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `totalOperationalHours`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number`, `any`\> ; `upTime`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number` \| `bigint`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, { `testEventTrigger`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `enableKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `eventTrigger`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\>  }\>, `void`, `any`\>  }, { `bootReason`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `bootReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`BootReason`](../enums/cluster_export.GeneralDiagnostics.BootReason.md)\>  }\>, `any`\> ; `hardwareFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[]\>  }\>, `any`\> ; `networkFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]\>  }\>, `any`\> ; `radioFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]\>  }\>, `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `activeHardwareFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[], `any`\> ; `activeNetworkFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[], `any`\> ; `activeRadioFaults`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[], `any`\> ; `bootReason`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`BootReason`](../enums/cluster_export.GeneralDiagnostics.BootReason.md), `any`\> ; `networkInterfaces`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `hardwareAddress`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `iPv4Addresses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`[]\> ; `iPv6Addresses`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`[]\> ; `isOperational`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `offPremiseServicesReachableIPv4`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `boolean`\> ; `offPremiseServicesReachableIPv6`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `boolean`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InterfaceType`](../enums/cluster_export.GeneralDiagnostics.InterfaceType.md)\>  }\>[], `any`\> ; `rebootCount`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `testEventTriggersEnabled`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `totalOperationalHours`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number`, `any`\> ; `upTime`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number` \| `bigint`, `any`\>  } ; `commands`: { `testEventTrigger`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `enableKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `eventTrigger`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\>  }\>, `void`, `any`\>  } ; `events`: { `bootReason`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `bootReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`BootReason`](../enums/cluster_export.GeneralDiagnostics.BootReason.md)\>  }\>, `any`\> ; `hardwareFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`HardwareFault`](../enums/cluster_export.GeneralDiagnostics.HardwareFault.md)[]\>  }\>, `any`\> ; `networkFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NetworkFault`](../enums/cluster_export.GeneralDiagnostics.NetworkFault.md)[]\>  }\>, `any`\> ; `radioFaultChange`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `current`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]\> ; `previous`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RadioFault`](../enums/cluster_export.GeneralDiagnostics.RadioFault.md)[]\>  }\>, `any`\>  } ; `id`: ``51`` = 0x33; `name`: ``"GeneralDiagnostics"`` = "GeneralDiagnostics"; `revision`: ``1`` = 1 }\>
 
 General Diagnostics
 
@@ -43,7 +44,7 @@ majority of Nodes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:418](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L418)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:428
 
 ___
 
@@ -59,7 +60,7 @@ Body of the GeneralDiagnostics bootReason event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:399](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L399)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:400
 
 ___
 
@@ -75,7 +76,7 @@ Body of the GeneralDiagnostics hardwareFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:355](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L355)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:356
 
 ___
 
@@ -91,7 +92,7 @@ Body of the GeneralDiagnostics networkFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:389](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L389)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:390
 
 ___
 
@@ -108,7 +109,7 @@ attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:64](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L64)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:65
 
 ___
 
@@ -124,7 +125,7 @@ Body of the GeneralDiagnostics radioFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:379](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L379)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:380
 
 ___
 
@@ -140,4 +141,4 @@ Input to the GeneralDiagnostics testEventTrigger command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:302](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L302)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:303

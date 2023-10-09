@@ -74,7 +74,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:28
 
 ## Properties
 
@@ -88,7 +88,7 @@ packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:28
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:13
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:13
 
 ___
 
@@ -102,7 +102,7 @@ Constraint.Ast.desc
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:18
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:18
 
 ___
 
@@ -116,7 +116,7 @@ Constraint.Ast.entry
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:22
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
 
 ___
 
@@ -144,7 +144,7 @@ Constraint.Ast.max
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:21
 
 ___
 
@@ -158,7 +158,7 @@ Constraint.Ast.min
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:20
 
 ___
 
@@ -172,7 +172,7 @@ Constraint.Ast.parts
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:23
 
 ___
 
@@ -186,7 +186,7 @@ Constraint.Ast.value
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:19
 
 ## Accessors
 
@@ -204,7 +204,7 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:17
 
 ___
 
@@ -222,7 +222,7 @@ Aspect.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:15
 
 ## Methods
 
@@ -248,7 +248,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:21
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:24
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:24
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
 
 ___
 
@@ -319,7 +319,7 @@ Test a value against a constraint.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:32
 
 ___
 
@@ -331,9 +331,13 @@ ___
 
 `string`
 
+#### Overrides
+
+[Aspect](exports_model.Aspect.md).[toString](exports_model.Aspect.md#tostring)
+
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Constraint.d.ts:33
+packages/matter.js/dist/esm/model/aspects/Constraint.d.ts:33
 
 ___
 
@@ -351,4 +355,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:22

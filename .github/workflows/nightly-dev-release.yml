@@ -36,14 +36,19 @@ jobs:
         fi
 
     - name: Prepare testing environment
+      if: steps.changes.outputs.result == 'ok'
       uses: ./.github/actions/prepare-env
     - name: Prepare Webbrowser testing environment
+      if: steps.changes.outputs.result == 'ok'
       uses: ./.github/actions/prepare-webtests
     - name: Execute tests
+      if: steps.changes.outputs.result == 'ok'
       run: npm run test
-    - name: Prepare and execute chip tests
+    - name: Prepare chip tests
+      if: steps.changes.outputs.result == 'ok'
       uses: ./.github/actions/prepare-chip-testing
     - name: chip-tool-test execution
+      if: steps.changes.outputs.result == 'ok'
       id: test-execution
       shell: bash
       run: |

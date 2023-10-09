@@ -7,3 +7,4 @@ The API docs are listed here per package and are updated with each release.
 
 * @project-chip/matter-node.js / [Modules](./matter-node.js/modules.md)
 
+* @project-chip/matter-node-ble.js / [Modules](./matter-node-ble.js/modules.md)

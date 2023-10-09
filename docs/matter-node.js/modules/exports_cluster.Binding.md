@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `binding`: [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\>  } ; `id`: ``30`` ; `name`: ``"Binding"`` ; `revision`: ``1``  }\>
 
 Binding
 
@@ -54,13 +54,13 @@ MatterCoreSpecificationV1_1 § 9.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BindingCluster.d.ts:77
+packages/matter.js/dist/esm/cluster/definitions/BindingCluster.d.ts:78
 
 ___
 
 ### TlvTargetStruct
 
-• `Const` **TlvTargetStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvTargetStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -68,4 +68,4 @@ MatterCoreSpecificationV1_1 § 9.6.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BindingCluster.d.ts:12
+packages/matter.js/dist/esm/cluster/definitions/BindingCluster.d.ts:13

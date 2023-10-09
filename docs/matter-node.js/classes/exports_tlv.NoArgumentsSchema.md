@@ -68,7 +68,7 @@ VoidSchema.decode
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:11
+packages/matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -92,7 +92,7 @@ VoidSchema.decodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:10
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:10
 
 ___
 
@@ -116,7 +116,7 @@ VoidSchema.decodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvVoid.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvVoid.d.ts:13
 
 ___
 
@@ -145,7 +145,7 @@ VoidSchema.decodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:14
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:14
 
 ___
 
@@ -170,7 +170,7 @@ VoidSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvVoid.d.ts:14
+packages/matter.js/dist/esm/tlv/TlvVoid.d.ts:14
 
 ___
 
@@ -196,7 +196,7 @@ VoidSchema.encode
 
 #### Defined in
 
-packages/matter.js/dist/cjs/schema/Schema.d.ts:9
+packages/matter.js/dist/esm/schema/Schema.d.ts:9
 
 ___
 
@@ -220,7 +220,7 @@ VoidSchema.encodeInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:11
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:11
 
 ___
 
@@ -244,7 +244,7 @@ VoidSchema.encodeTlv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:12
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:12
 
 ___
 
@@ -270,7 +270,7 @@ VoidSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvNoArguments.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvNoArguments.d.ts:13
 
 ___
 
@@ -297,7 +297,7 @@ VoidSchema.injectField
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:20
 
 ___
 
@@ -323,7 +323,7 @@ VoidSchema.removeField
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
+packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:21
 
 ___
 
@@ -347,4 +347,4 @@ VoidSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/cjs/tlv/TlvVoid.d.ts:15
+packages/matter.js/dist/esm/tlv/TlvVoid.d.ts:15

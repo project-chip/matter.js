@@ -21,7 +21,7 @@ The result of validation.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/record-validation/RecordValidatorInterface.d.ts:12
+packages/matter.js/dist/esm/model/logic/record-validation/RecordValidatorInterface.d.ts:12
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/record-validation/RecordValidatorInterface.d.ts:11
+packages/matter.js/dist/esm/model/logic/record-validation/RecordValidatorInterface.d.ts:11

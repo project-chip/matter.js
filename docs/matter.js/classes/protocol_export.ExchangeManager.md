@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L55)
+packages/matter.js/src/protocol/ExchangeManager.ts:57
 
 ## Properties
 
@@ -66,7 +66,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L57)
+packages/matter.js/src/protocol/ExchangeManager.ts:59
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:49](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L49)
+packages/matter.js/src/protocol/ExchangeManager.ts:51
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L51)
+packages/matter.js/src/protocol/ExchangeManager.ts:53
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L50)
+packages/matter.js/src/protocol/ExchangeManager.ts:52
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L52)
+packages/matter.js/src/protocol/ExchangeManager.ts:54
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:56](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L56)
+packages/matter.js/src/protocol/ExchangeManager.ts:58
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L53)
+packages/matter.js/src/protocol/ExchangeManager.ts:55
 
 ## Methods
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:68](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L68)
+packages/matter.js/src/protocol/ExchangeManager.ts:70
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L60)
+packages/matter.js/src/protocol/ExchangeManager.ts:62
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L87)
+packages/matter.js/src/protocol/ExchangeManager.ts:89
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L72)
+packages/matter.js/src/protocol/ExchangeManager.ts:74
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L76)
+packages/matter.js/src/protocol/ExchangeManager.ts:78
 
 ___
 
@@ -244,4 +244,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/ExchangeManager.ts#L98)
+packages/matter.js/src/protocol/ExchangeManager.ts:100

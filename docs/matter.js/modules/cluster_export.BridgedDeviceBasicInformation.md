@@ -22,7 +22,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](cluster_export.md#cluster)<[`BitSchema`](schema_export.md#bitschema), [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<[`BitSchema`](schema_export.md#bitschema)\>, [`Merge`](util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<[`BitSchema`](schema_export.md#bitschema)\>\>, {}, { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``57`` = 0x39; `name`: ``"BridgedDeviceBasicInformation"`` = "BridgedDeviceBasicInformation"; `revision`: ``2`` = 2 }\>
 
 Bridged Device Basic Information
 
@@ -55,7 +55,7 @@ Bridged Device. See below for Conformance details.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:110](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L110)
+packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:110
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L63)
+packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:63
 
 ___
 
@@ -81,7 +81,7 @@ Body of the BridgedDeviceBasicInformation reachableChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L80)
+packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:80
 
 ___
 
@@ -97,4 +97,4 @@ Body of the BridgedDeviceBasicInformation startUp event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:73](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L73)
+packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:73

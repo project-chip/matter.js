@@ -40,7 +40,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:166
+packages/matter.js/dist/esm/model/models/Model.d.ts:166
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:167
+packages/matter.js/dist/esm/model/models/Model.d.ts:167
 
 ___
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/models/Model.d.ts:171
+packages/matter.js/dist/esm/model/models/Model.d.ts:171

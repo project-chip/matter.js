@@ -25,6 +25,7 @@
 ### Methods
 
 - [clear](internal_.InteractionEndpointStructure.md#clear)
+- [destroy](internal_.InteractionEndpointStructure.md#destroy)
 - [getAttribute](internal_.InteractionEndpointStructure.md#getattribute)
 - [getAttributes](internal_.InteractionEndpointStructure.md#getattributes)
 - [getClusterServer](internal_.InteractionEndpointStructure.md#getclusterserver)
@@ -65,7 +66,7 @@ ___
 
 ### attributes
 
-• **attributes**: `Map`<`string`, [`AttributeServer`](internal_.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](internal_.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](internal_.FixedAttributeServer.md)<`any`\>\>
+• **attributes**: `Map`<`string`, [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>\>
 
 #### Defined in
 
@@ -129,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:30
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:31
 
 ___
 
@@ -139,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:31
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 ## Methods
 
@@ -157,9 +158,23 @@ matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:28
 
 ___
 
+### destroy
+
+▸ **destroy**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:29
+
+___
+
 ### getAttribute
 
-▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AttributeServer`](internal_.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](internal_.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](internal_.FixedAttributeServer.md)<`any`\>
+▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>
 
 #### Parameters
 
@@ -171,11 +186,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`AttributeServer`](internal_.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](internal_.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](internal_.FixedAttributeServer.md)<`any`\>
+`undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:41
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:42
 
 ___
 
@@ -196,7 +211,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:47
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -217,7 +232,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:39
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:40
 
 ___
 
@@ -239,7 +254,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:45
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -259,7 +274,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:49
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:50
 
 ___
 
@@ -279,7 +294,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:37
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:38
 
 ___
 
@@ -301,7 +316,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:43
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:44
 
 ___
 
@@ -321,7 +336,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:48
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:49
 
 ___
 
@@ -343,7 +358,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:42
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:43
 
 ___
 
@@ -364,7 +379,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:40
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:41
 
 ___
 
@@ -386,7 +401,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:46
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:47
 
 ___
 
@@ -406,7 +421,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:38
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:39
 
 ___
 
@@ -428,7 +443,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:44
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -448,7 +463,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:29
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:30
 
 ___
 
@@ -468,7 +483,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:34
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:35
 
 ___
 
@@ -488,7 +503,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:36
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:37
 
 ___
 
@@ -508,7 +523,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:35
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:36
 
 ___
 
@@ -532,7 +547,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:33
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:34
 
 ___
 
@@ -552,4 +567,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:32
+matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:33

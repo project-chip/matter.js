@@ -29,7 +29,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](cluster_export.md#clusterforbasecluster)<typeof [`Base`](cluster_export.MediaInput.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `nameUpdates`: ``true``  } ? typeof [`NameUpdatesComponent`](cluster_export.MediaInput.md#nameupdatescomponent) : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.MediaInput.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `nameUpdates`: ``true``  } ? typeof [`NameUpdatesComponent`](cluster_export.MediaInput.md#nameupdatescomponent) : {}
 
 #### Type parameters
 
@@ -39,25 +39,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:227](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L227)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:222
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](cluster_export.md#baseclustercomponent)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, { `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  } ; `commands`: { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1287`` = 0x507; `name`: ``"MediaInput"`` = "MediaInput"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all MediaInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:128](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L128)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:120
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](cluster_export.md#extensiblecluster)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<{ `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md), <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.MediaInput.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: { `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``1287`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"MediaInput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  } ; `commands`: { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1287`` = 0x507; `name`: ``"MediaInput"`` = "MediaInput"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.MediaInput.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Media Input
 
@@ -72,13 +72,13 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:208](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L208)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:200
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](cluster_export.md#cluster)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `renameInput`: [`AsConditional`](cluster_export.md#asconditional)<[`BitSchema`](schema_export.md#bitschema), [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\>\> ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  }, {}\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentInput`: [`Attribute`](cluster_export.md#attribute)<`number`, `any`\> ; `inputList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `description`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `inputType`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`InputType`](../enums/cluster_export.MediaInput.InputType.md)\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>[], `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> = Cluster.attributes; `commands`: { `hideInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `renameInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `selectInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `showInputStatus`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `nameUpdates`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``1287`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"MediaInput"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all MediaInput features. It may support illegal feature combinations.
 
@@ -87,19 +87,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:239](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L239)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:234
 
 ___
 
 ### NameUpdatesComponent
 
-• `Const` **NameUpdatesComponent**: [`ClusterComponent`](cluster_export.md#clustercomponent)<[`Attributes`](../interfaces/cluster_export.Attributes.md), { `renameInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\>  }, [`Events`](../interfaces/cluster_export.Events.md)\>
+• `Const` **NameUpdatesComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `commands`: { `renameInput`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `index`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\>  }  }\>
 
 A MediaInputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:186](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L186)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:178
 
 ___
 
@@ -115,7 +115,7 @@ This contains information about an input.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L57)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:49
 
 ___
 
@@ -131,7 +131,7 @@ Input to the MediaInput renameInput command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L109)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:101
 
 ___
 
@@ -147,4 +147,4 @@ Input to the MediaInput selectInput command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:94](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L94)
+packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:86

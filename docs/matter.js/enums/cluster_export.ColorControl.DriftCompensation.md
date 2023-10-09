@@ -28,7 +28,7 @@ The value of the ColorControl driftCompensation attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L44)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:35
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:48](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L48)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:39
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L47)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:38
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L45)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:36
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:46](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L46)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:37

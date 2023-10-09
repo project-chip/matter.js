@@ -45,7 +45,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:25
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:25
 
 ## Properties
 
@@ -55,7 +55,7 @@ packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:40
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:40
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:38
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:38
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:39
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:39
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:13
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:13
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:14
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:14
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:15
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:15
 
 ## Methods
 
@@ -127,7 +127,7 @@ packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:33
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:33
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:28
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:28
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:26
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:26
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:27
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:27
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:20
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:20
 
 ___
 
@@ -219,7 +219,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:16
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:16
 
 ___
 
@@ -240,4 +240,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/crypto/Spake2p.d.ts:24
+packages/matter.js/dist/esm/crypto/Spake2p.d.ts:24

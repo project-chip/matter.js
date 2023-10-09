@@ -27,7 +27,7 @@ Temperature displayed in °C
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:18
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:19
 
 ___
 
@@ -39,4 +39,4 @@ Temperature displayed in °F
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:23

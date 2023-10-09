@@ -29,7 +29,7 @@ The action is active
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ActionsCluster.d.ts:155
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:156
 
 ___
 
@@ -41,7 +41,7 @@ The action has been disabled
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ActionsCluster.d.ts:163
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:164
 
 ___
 
@@ -53,7 +53,7 @@ The action is not active
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ActionsCluster.d.ts:151
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:152
 
 ___
 
@@ -65,4 +65,4 @@ The action has been paused
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ActionsCluster.d.ts:159
+packages/matter.js/dist/esm/cluster/definitions/ActionsCluster.d.ts:160

@@ -41,7 +41,7 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:16
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:16
 
 ## Properties
 
@@ -51,4 +51,4 @@ packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/MessageExchange.d.ts:15
+packages/matter.js/dist/esm/protocol/MessageExchange.d.ts:15

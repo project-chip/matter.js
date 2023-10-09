@@ -23,6 +23,7 @@ Abstract base class that represents a node in the matter ecosystem.
 - [controllerInstance](export.CommissioningController.md#controllerinstance)
 - [endpoints](export.CommissioningController.md#endpoints)
 - [interactionClient](export.CommissioningController.md#interactionclient)
+- [ipv4Disabled](export.CommissioningController.md#ipv4disabled)
 - [listeningAddressIpv4](export.CommissioningController.md#listeningaddressipv4)
 - [listeningAddressIpv6](export.CommissioningController.md#listeningaddressipv6)
 - [mdnsScanner](export.CommissioningController.md#mdnsscanner)
@@ -58,6 +59,7 @@ Abstract base class that represents a node in the matter ecosystem.
 - [setStorage](export.CommissioningController.md#setstorage)
 - [start](export.CommissioningController.md#start)
 - [structureEndpoints](export.CommissioningController.md#structureendpoints)
+- [subscribeAllAttributesAndEvents](export.CommissioningController.md#subscribeallattributesandevents)
 
 ## Constructors
 
@@ -79,7 +81,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L98)
+packages/matter.js/src/CommissioningController.ts:97
 
 ## Properties
 
@@ -89,7 +91,7 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L87)
+packages/matter.js/src/CommissioningController.ts:86
 
 ___
 
@@ -99,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:91](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L91)
+packages/matter.js/src/CommissioningController.ts:90
 
 ___
 
@@ -109,7 +111,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:88](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L88)
+packages/matter.js/src/CommissioningController.ts:87
+
+___
+
+### ipv4Disabled
+
+• **ipv4Disabled**: `boolean` = `false`
+
+#### Inherited from
+
+[MatterNode](export.MatterNode.md).[ipv4Disabled](export.MatterNode.md#ipv4disabled)
+
+#### Defined in
+
+packages/matter.js/src/MatterNode.ts:22
 
 ___
 
@@ -119,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:81](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L81)
+packages/matter.js/src/CommissioningController.ts:80
 
 ___
 
@@ -129,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:82](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L82)
+packages/matter.js/src/CommissioningController.ts:81
 
 ___
 
@@ -139,7 +155,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L85)
+packages/matter.js/src/CommissioningController.ts:84
 
 ___
 
@@ -149,7 +165,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L90)
+packages/matter.js/src/CommissioningController.ts:89
 
 ___
 
@@ -161,7 +177,7 @@ The options for the CommissioningController
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:98](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L98)
+packages/matter.js/src/CommissioningController.ts:97
 
 ___
 
@@ -175,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L21)
+packages/matter.js/src/MatterNode.ts:21
 
 ___
 
@@ -185,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L80)
+packages/matter.js/src/CommissioningController.ts:79
 
 ___
 
@@ -195,7 +211,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:84](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L84)
+packages/matter.js/src/CommissioningController.ts:83
 
 ## Methods
 
@@ -221,7 +237,7 @@ Add a child endpoint to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:86](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L86)
+packages/matter.js/src/MatterNode.ts:87
 
 ___
 
@@ -256,7 +272,7 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:52](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L52)
+packages/matter.js/src/MatterNode.ts:53
 
 ___
 
@@ -289,7 +305,7 @@ Add a cluster to the root endpoint. This is mainly used internally and not neede
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L28)
+packages/matter.js/src/MatterNode.ts:29
 
 ___
 
@@ -309,7 +325,7 @@ close network connections of the device
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:501](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L501)
+packages/matter.js/src/CommissioningController.ts:506
 
 ___
 
@@ -326,7 +342,7 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:107](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L107)
+packages/matter.js/src/CommissioningController.ts:106
 
 ___
 
@@ -349,7 +365,7 @@ Create a device object from the data read from the device.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:388](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L388)
+packages/matter.js/src/CommissioningController.ts:393
 
 ___
 
@@ -365,21 +381,21 @@ Creates and Return a new InteractionClient to communicate with the device.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:291](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L291)
+packages/matter.js/src/CommissioningController.ts:296
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): `any`
+▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-`any`
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:517](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L517)
+packages/matter.js/src/CommissioningController.ts:522
 
 ___
 
@@ -405,7 +421,7 @@ Get a child endpoint from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:96](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L96)
+packages/matter.js/src/MatterNode.ts:97
 
 ___
 
@@ -421,7 +437,7 @@ Returns the devices known to the controller.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:494](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L494)
+packages/matter.js/src/CommissioningController.ts:499
 
 ___
 
@@ -437,7 +453,7 @@ Returns the paired Fabric object of the node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:274](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L274)
+packages/matter.js/src/CommissioningController.ts:279
 
 ___
 
@@ -451,7 +467,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:521](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L521)
+packages/matter.js/src/CommissioningController.ts:526
 
 ___
 
@@ -469,7 +485,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:507](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L507)
+packages/matter.js/src/CommissioningController.ts:512
 
 ___
 
@@ -505,7 +521,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:63](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L63)
+packages/matter.js/src/MatterNode.ts:64
 
 ___
 
@@ -541,7 +557,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L37)
+packages/matter.js/src/MatterNode.ts:38
 
 ___
 
@@ -561,7 +577,7 @@ Get the root endpoint of the node.
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:76](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterNode.ts#L76)
+packages/matter.js/src/MatterNode.ts:77
 
 ___
 
@@ -575,7 +591,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:185](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L185)
+packages/matter.js/src/CommissioningController.ts:234
 
 ___
 
@@ -589,7 +605,7 @@ Read all data from the device and create a device object structure out of it.
 
 | Name | Type |
 | :------ | :------ |
-| `allClusterAttributes` | [`DecodedAttributeReportValue`](../interfaces/protocol_interaction_export.DecodedAttributeReportValue.md)<`any`\>[] |
+| `allClusterAttributes` | [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] |
 
 #### Returns
 
@@ -597,7 +613,7 @@ Read all data from the device and create a device object structure out of it.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:303](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L303)
+packages/matter.js/src/CommissioningController.ts:308
 
 ___
 
@@ -613,7 +629,7 @@ Return info if a device is successfully paired.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:284](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L284)
+packages/matter.js/src/CommissioningController.ts:289
 
 ___
 
@@ -639,7 +655,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:259](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L259)
+packages/matter.js/src/CommissioningController.ts:264
 
 ___
 
@@ -665,7 +681,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:250](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L250)
+packages/matter.js/src/CommissioningController.ts:255
 
 ___
 
@@ -687,7 +703,7 @@ Set the Storage instance. Should be only used internally
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:267](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L267)
+packages/matter.js/src/CommissioningController.ts:272
 
 ___
 
@@ -705,7 +721,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:511](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L511)
+packages/matter.js/src/CommissioningController.ts:516
 
 ___
 
@@ -727,4 +743,24 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:328](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/CommissioningController.ts#L328)
+packages/matter.js/src/CommissioningController.ts:333
+
+___
+
+### subscribeAllAttributesAndEvents
+
+▸ **subscribeAllAttributesAndEvents**(`ignoreInitialTriggers`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ignoreInitialTriggers` | `boolean` |
+
+#### Returns
+
+`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+
+#### Defined in
+
+packages/matter.js/src/CommissioningController.ts:182

@@ -20,6 +20,7 @@
 
 ### Methods
 
+- [clear](storage_export.StorageBackendMemory.md#clear)
 - [close](storage_export.StorageBackendMemory.md#close)
 - [createContextKey](storage_export.StorageBackendMemory.md#createcontextkey)
 - [delete](storage_export.StorageBackendMemory.md#delete)
@@ -41,7 +42,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+packages/matter.js/src/storage/StorageBackendMemory.ts:11
 
 ## Properties
 
@@ -51,9 +52,23 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
+packages/matter.js/src/storage/StorageBackendMemory.ts:11
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/storage/StorageBackendMemory.ts:28
+
+___
 
 ### close
 
@@ -69,7 +84,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L24)
+packages/matter.js/src/storage/StorageBackendMemory.ts:24
 
 ___
 
@@ -89,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
+packages/matter.js/src/storage/StorageBackendMemory.ts:13
 
 ___
 
@@ -114,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L42)
+packages/matter.js/src/storage/StorageBackendMemory.ts:46
 
 ___
 
@@ -145,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:28](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L28)
+packages/matter.js/src/storage/StorageBackendMemory.ts:32
 
 ___
 
@@ -163,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L20)
+packages/matter.js/src/storage/StorageBackendMemory.ts:20
 
 ___
 
@@ -195,4 +210,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageBackendMemory.ts:33](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/storage/StorageBackendMemory.ts#L33)
+packages/matter.js/src/storage/StorageBackendMemory.ts:37

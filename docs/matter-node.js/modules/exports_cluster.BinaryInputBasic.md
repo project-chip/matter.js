@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `activeText`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `applicationType`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number`, `any`\> ; `description`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `inactiveText`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `outOfService`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `polarity`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number`, `any`\> ; `presentValue`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `reliability`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `statusFlags`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\>  } ; `id`: ``15`` ; `name`: ``"BinaryInputBasic"`` ; `revision`: ``1``  }\>
 
 Binary Input (Basic)
 
@@ -23,4 +23,4 @@ measurement.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BinaryInputBasicCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/BinaryInputBasicCluster.d.ts:16

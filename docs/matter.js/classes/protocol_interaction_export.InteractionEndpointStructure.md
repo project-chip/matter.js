@@ -23,6 +23,7 @@
 ### Methods
 
 - [clear](protocol_interaction_export.InteractionEndpointStructure.md#clear)
+- [destroy](protocol_interaction_export.InteractionEndpointStructure.md#destroy)
 - [getAttribute](protocol_interaction_export.InteractionEndpointStructure.md#getattribute)
 - [getAttributes](protocol_interaction_export.InteractionEndpointStructure.md#getattributes)
 - [getClusterServer](protocol_interaction_export.InteractionEndpointStructure.md#getclusterserver)
@@ -59,17 +60,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:41](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L41)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:37
 
 ___
 
 ### attributes
 
-• **attributes**: `Map`<`string`, [`AttributeServer`](cluster_export.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](cluster_export.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](cluster_export.FixedAttributeServer.md)<`any`\>\>
+• **attributes**: `Map`<`string`, [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)<`any`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L40)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:36
 
 ___
 
@@ -79,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L45)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:41
 
 ___
 
@@ -89,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L44)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:40
 
 ___
 
@@ -99,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L39)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:35
 
 ___
 
@@ -109,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L43)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:39
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:42](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L42)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:38
 
 ## Methods
 
@@ -133,13 +134,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L47)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:43
+
+___
+
+### destroy
+
+▸ **destroy**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:53
 
 ___
 
 ### getAttribute
 
-▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AttributeServer`](cluster_export.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](cluster_export.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](cluster_export.FixedAttributeServer.md)<`any`\>
+▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)<`any`\>
 
 #### Parameters
 
@@ -151,11 +166,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`AttributeServer`](cluster_export.AttributeServer.md)<`any`\> \| [`FabricScopedAttributeServer`](cluster_export.FabricScopedAttributeServer.md)<`any`\> \| [`FixedAttributeServer`](cluster_export.FixedAttributeServer.md)<`any`\>
+`undefined` \| [`AnyAttributeServer`](../modules/cluster_export.md#anyattributeserver)<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:190](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L190)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:192
 
 ___
 
@@ -176,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:222](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L222)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:224
 
 ___
 
@@ -197,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:182](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L182)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:184
 
 ___
 
@@ -219,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:210](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L210)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:212
 
 ___
 
@@ -239,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:281](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L281)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:283
 
 ___
 
@@ -259,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:174](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L174)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:176
 
 ___
 
@@ -281,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:202](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L202)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:204
 
 ___
 
@@ -301,7 +316,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:252](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L252)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:254
 
 ___
 
@@ -323,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:198](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L198)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:200
 
 ___
 
@@ -344,7 +359,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:186](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L186)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:188
 
 ___
 
@@ -366,7 +381,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:218](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L218)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:220
 
 ___
 
@@ -386,7 +401,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:178](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L178)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:180
 
 ___
 
@@ -408,7 +423,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L206)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:208
 
 ___
 
@@ -428,7 +443,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L57)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:59
 
 ___
 
@@ -448,7 +463,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:64](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L64)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:66
 
 ___
 
@@ -468,7 +483,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:156](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L156)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:158
 
 ___
 
@@ -488,7 +503,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:170](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L170)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:172
 
 ___
 
@@ -508,7 +523,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:160](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L160)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:162
 
 ___
 
@@ -532,7 +547,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:120](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L120)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:122
 
 ___
 
@@ -552,7 +567,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:116](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L116)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:118
 
 ___
 
@@ -572,4 +587,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:72](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts#L72)
+packages/matter.js/src/protocol/interaction/InteractionEndpointStructure.ts:74

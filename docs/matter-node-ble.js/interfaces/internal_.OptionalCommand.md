@@ -22,6 +22,7 @@
 
 ### Properties
 
+- [invokeAcl](internal_.OptionalCommand.md#invokeacl)
 - [isConditional](internal_.OptionalCommand.md#isconditional)
 - [mandatoryIf](internal_.OptionalCommand.md#mandatoryif)
 - [optional](internal_.OptionalCommand.md#optional)
@@ -30,8 +31,23 @@
 - [requestSchema](internal_.OptionalCommand.md#requestschema)
 - [responseId](internal_.OptionalCommand.md#responseid)
 - [responseSchema](internal_.OptionalCommand.md#responseschema)
+- [timed](internal_.OptionalCommand.md#timed)
 
 ## Properties
+
+### invokeAcl
+
+• **invokeAcl**: [`AccessLevel`](../enums/internal_.AccessLevel.md)
+
+#### Inherited from
+
+Command.invokeAcl
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:129
+
+___
 
 ### isConditional
 
@@ -43,7 +59,7 @@ Command.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:127
+matter.js/dist/cjs/cluster/Cluster.d.ts:131
 
 ___
 
@@ -57,7 +73,7 @@ Command.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:128
+matter.js/dist/cjs/cluster/Cluster.d.ts:132
 
 ___
 
@@ -71,7 +87,7 @@ Command.optional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:132
+matter.js/dist/cjs/cluster/Cluster.d.ts:136
 
 ___
 
@@ -85,7 +101,7 @@ Command.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:129
+matter.js/dist/cjs/cluster/Cluster.d.ts:133
 
 ___
 
@@ -99,7 +115,7 @@ Command.requestId
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:123
+matter.js/dist/cjs/cluster/Cluster.d.ts:125
 
 ___
 
@@ -113,7 +129,7 @@ Command.requestSchema
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:124
+matter.js/dist/cjs/cluster/Cluster.d.ts:126
 
 ___
 
@@ -127,7 +143,7 @@ Command.responseId
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:125
+matter.js/dist/cjs/cluster/Cluster.d.ts:127
 
 ___
 
@@ -141,4 +157,18 @@ Command.responseSchema
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:126
+matter.js/dist/cjs/cluster/Cluster.d.ts:128
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+Command.timed
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/Cluster.d.ts:130

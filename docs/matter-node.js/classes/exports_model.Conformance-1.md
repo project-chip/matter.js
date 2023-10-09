@@ -67,7 +67,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:26
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:26
 
 ## Properties
 
@@ -77,7 +77,7 @@ packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:19
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:13
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:13
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
 
 ## Accessors
 
@@ -123,21 +123,21 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:21
 
 ___
 
 ### type
 
-• `get` **type**(): [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Special`](../enums/exports_model.Conformance.Special.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
+• `get` **type**(): [`Special`](../enums/exports_model.Conformance.Special.md) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
 
 #### Returns
 
-[`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`Special`](../enums/exports_model.Conformance.Special.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
+[`Special`](../enums/exports_model.Conformance.Special.md) \| [`Flag`](../enums/exports_model.Conformance.Flag.md) \| [`NOT`](../enums/exports_model.Conformance.Operator.md#not) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:20
 
 ___
 
@@ -155,7 +155,7 @@ Aspect.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:15
 
 ## Methods
 
@@ -181,7 +181,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:21
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:24
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:24
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
 
 ___
 
@@ -242,9 +242,13 @@ ___
 
 `string`
 
+#### Overrides
+
+[Aspect](exports_model.Aspect.md).[toString](exports_model.Aspect.md#tostring)
+
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:28
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:28
 
 ___
 
@@ -264,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Conformance.d.ts:27
+packages/matter.js/dist/esm/model/aspects/Conformance.d.ts:27
 
 ___
 
@@ -282,4 +286,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:22

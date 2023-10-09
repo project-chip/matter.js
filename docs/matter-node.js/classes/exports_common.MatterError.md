@@ -42,6 +42,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`FabricNotFoundError`](exports_fabric.FabricNotFoundError.md)
 
+  ↳↳ [`FabricTableFullError`](exports_fabric.FabricTableFullError.md)
+
   ↳↳ [`NetworkError`](net_export.NetworkError.md)
 
   ↳↳ [`NoChannelError`](exports_protocol.NoChannelError.md)
@@ -59,6 +61,8 @@ Error base class for all errors thrown by this library.
   ↳↳ [`StorageError`](storage_export.StorageError.md)
 
   ↳↳ [`EndOfStreamError`](util_export.EndOfStreamError.md)
+
+  ↳↳ [`NoResponseTimeoutError`](util_export.NoResponseTimeoutError.md)
 
 ## Table of contents
 
@@ -84,4 +88,4 @@ Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1059
+node_modules/typescript/lib/lib.es5.d.ts:1073

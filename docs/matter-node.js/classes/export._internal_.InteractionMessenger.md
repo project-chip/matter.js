@@ -58,7 +58,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:43
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
 
 ## Properties
 
@@ -68,7 +68,7 @@ packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:43
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:42
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
 
 ## Methods
 
@@ -82,7 +82,7 @@ packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:42
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:50
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:50
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:52
 
 ___
 
@@ -116,13 +116,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:49
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -130,6 +130,7 @@ ___
 | :------ | :------ |
 | `messageType` | `number` |
 | `payload` | `Uint8Array` |
+| `options?` | [`ExchangeSendOptions`](../modules/exports_protocol.md#exchangesendoptions) |
 
 #### Returns
 
@@ -137,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
 
 ___
 
@@ -157,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:47
 
 ___
 
@@ -177,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:51
 
 ___
 
@@ -191,4 +192,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:48

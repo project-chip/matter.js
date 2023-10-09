@@ -43,7 +43,7 @@
 - [addClusterServer](exports_device.Endpoint.md#addclusterserver)
 - [addFixedLabel](exports_device.Endpoint.md#addfixedlabel)
 - [addUserLabel](exports_device.Endpoint.md#adduserlabel)
-- [clearStructureChangedCallback](exports_device.Endpoint.md#clearstructurechangedcallback)
+- [destroy](exports_device.Endpoint.md#destroy)
 - [determineUniqueID](exports_device.Endpoint.md#determineuniqueid)
 - [getAllClusterClients](exports_device.Endpoint.md#getallclusterclients)
 - [getAllClusterServers](exports_device.Endpoint.md#getallclusterservers)
@@ -58,6 +58,7 @@
 - [hasClusterClient](exports_device.Endpoint.md#hasclusterclient)
 - [hasClusterServer](exports_device.Endpoint.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.Endpoint.md#removechildendpoint)
+- [removeFromStructure](exports_device.Endpoint.md#removefromstructure)
 - [setDeviceTypes](exports_device.Endpoint.md#setdevicetypes)
 - [setStructureChangedCallback](exports_device.Endpoint.md#setstructurechangedcallback)
 - [updatePartsList](exports_device.Endpoint.md#updatepartslist)
@@ -80,7 +81,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:34
+packages/matter.js/dist/esm/device/Endpoint.d.ts:34
 
 ## Properties
 
@@ -90,7 +91,7 @@ packages/matter.js/dist/cjs/device/Endpoint.d.ts:34
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:22
+packages/matter.js/dist/esm/device/Endpoint.d.ts:22
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:21
+packages/matter.js/dist/esm/device/Endpoint.d.ts:21
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:20
+packages/matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -120,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:27
+packages/matter.js/dist/esm/device/Endpoint.d.ts:27
 
 ___
 
@@ -130,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
+packages/matter.js/dist/esm/device/Endpoint.d.ts:19
 
 ___
 
@@ -140,7 +141,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -150,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -160,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:26
+packages/matter.js/dist/esm/device/Endpoint.d.ts:26
 
 ___
 
@@ -170,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -190,7 +191,7 @@ packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -219,7 +220,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -246,7 +247,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -267,7 +268,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -288,13 +289,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
-### clearStructureChangedCallback
+### destroy
 
-▸ **clearStructureChangedCallback**(): `void`
+▸ **destroy**(): `void`
 
 #### Returns
 
@@ -302,7 +303,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -316,7 +317,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -330,7 +331,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -344,7 +345,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -364,7 +365,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -378,7 +379,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -408,7 +409,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -428,7 +429,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -458,7 +459,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -478,7 +479,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -492,7 +493,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -506,7 +507,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -536,7 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -566,7 +567,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -586,7 +587,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -606,7 +621,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -626,7 +641,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ___
 
@@ -640,7 +655,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -654,4 +669,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56

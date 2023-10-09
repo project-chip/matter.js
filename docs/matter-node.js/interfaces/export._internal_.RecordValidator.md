@@ -25,7 +25,7 @@ Record validation API.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/record-validation/RecordValidatorInterface.d.ts:21
+packages/matter.js/dist/esm/model/logic/record-validation/RecordValidatorInterface.d.ts:21
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/record-validation/RecordValidatorInterface.d.ts:18
+packages/matter.js/dist/esm/model/logic/record-validation/RecordValidatorInterface.d.ts:18

@@ -39,7 +39,7 @@ PIN codes over- the-air supported for lock/unlock operations
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1255](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1255)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1245
 
 ___
 
@@ -53,7 +53,7 @@ Lock supports a door position sensor that indicates door’s state
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1241](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1241)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1231
 
 ___
 
@@ -67,7 +67,7 @@ Lock supports face related credentials (face, iris, retina)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1248](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1248)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1238
 
 ___
 
@@ -81,7 +81,7 @@ Lock supports finger related credentials (fingerprint, finger vein)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1220](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1220)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1210
 
 ___
 
@@ -95,7 +95,7 @@ Lock supports holiday schedules
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1283](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1283)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1273
 
 ___
 
@@ -109,7 +109,7 @@ Lock supports local/on-lock logging when Events are not supported
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1227](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1227)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1217
 
 ___
 
@@ -123,7 +123,7 @@ Operation and Programming Notifications
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1269](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1269)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1259
 
 ___
 
@@ -137,7 +137,7 @@ Lock supports PIN credentials (via keypad, or over- the-air)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1206](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1206)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1196
 
 ___
 
@@ -151,7 +151,7 @@ Lock supports RFID credentials
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1213](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1213)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1203
 
 ___
 
@@ -165,7 +165,7 @@ Lock supports the user commands and database
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1262](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1262)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1252
 
 ___
 
@@ -179,7 +179,7 @@ Lock supports week day user access schedules
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1234](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1234)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1224
 
 ___
 
@@ -193,4 +193,4 @@ Lock supports year day user access schedules
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1276](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L1276)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:1266

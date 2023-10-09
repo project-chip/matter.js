@@ -27,7 +27,7 @@ The Node has encountered a network fault as a result of a failure to establish a
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:234
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:235
 
 ___
 
@@ -39,7 +39,7 @@ The Node has encountered a network fault as a result of a hardware failure.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:226
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:227
 
 ___
 
@@ -51,7 +51,7 @@ The Node has encountered a network fault as a result of a jammed network.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:230
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:231
 
 ___
 
@@ -63,4 +63,4 @@ The Node has encountered an unspecified fault.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GeneralDiagnosticsCluster.d.ts:222
+packages/matter.js/dist/esm/cluster/definitions/GeneralDiagnosticsCluster.d.ts:223

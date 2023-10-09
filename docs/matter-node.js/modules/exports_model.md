@@ -86,9 +86,14 @@
 - [FeatureFlags](exports_model.md#featureflags)
 - [FeatureNames](exports_model.md#featurenames)
 - [FieldValue](exports_model.md#fieldvalue)
+- [IllegalFeatureCombinations](exports_model.md#illegalfeaturecombinations)
+- [InferredComponent](exports_model.md#inferredcomponent)
+- [InferredComponents](exports_model.md#inferredcomponents)
 - [ManufacturerExtensibleIdentifier](exports_model.md#manufacturerextensibleidentifier)
 - [MatterElement](exports_model.md#matterelement)
 - [Mei](exports_model.md#mei)
+- [NamedComponent](exports_model.md#namedcomponent)
+- [NamedComponents](exports_model.md#namedcomponents)
 - [NodeElement](exports_model.md#nodeelement)
 - [RequirementElement](exports_model.md#requirementelement)
 - [TraverseMap](exports_model.md#traversemap)
@@ -125,8 +130,11 @@
 - [EventElement](exports_model.md#eventelement-1)
 - [FabricElement](exports_model.md#fabricelement-1)
 - [FeatureBitmap](exports_model.md#featurebitmap-1)
+- [IllegalFeatureCombinations](exports_model.md#illegalfeaturecombinations-1)
+- [InferredComponents](exports_model.md#inferredcomponents-1)
 - [MatterElement](exports_model.md#matterelement-1)
 - [MergeModels](exports_model.md#mergemodels)
+- [NamedComponents](exports_model.md#namedcomponents-1)
 - [NodeElement](exports_model.md#nodeelement-1)
 - [RecordValidator](exports_model.md#recordvalidator)
 - [RequirementElement](exports_model.md#requirementelement-1)
@@ -145,7 +153,7 @@ Any Matter element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/AnyElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/AnyElement.d.ts:17
 
 ___
 
@@ -157,7 +165,7 @@ All Matter data elements.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/AnyValueElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/AnyValueElement.d.ts:13
 
 ___
 
@@ -169,11 +177,11 @@ A cluster property description.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/AttributeElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:16
 
-packages/matter.js/dist/cjs/model/elements/AttributeElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/AttributeElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:17
 
 ___
 
@@ -203,11 +211,11 @@ functionality related to the element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:54
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:54
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:16
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:55
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:55
 
 ___
 
@@ -219,11 +227,11 @@ A cluster describes a set of related functionality.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:28
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:15
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:15
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:29
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:29
 
 ___
 
@@ -237,16 +245,16 @@ Defines different variants of clusters.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `base` | [`InferredComponent`](export._internal_.md#inferredcomponent) | The base component. |
-| `components` | [`NamedComponents`](export._internal_.md#namedcomponents) | Optional components. |
-| `illegal` | [`IllegalFeatureCombinations`](export._internal_.md#illegalfeaturecombinations) | Illegal feature combinations as bit flags. |
+| `base` | [`InferredComponent`](exports_model.md#inferredcomponent) | The base component. |
+| `components` | [`NamedComponents`](exports_model.md#namedcomponents) | Optional components. |
+| `illegal` | [`IllegalFeatureCombinations`](exports_model.md#illegalfeaturecombinations) | Illegal feature combinations as bit flags. |
 | `requiresFeatures` | `boolean` | If this is false, the cluster cannot be used without features. |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ClusterVariance.d.ts:35
+packages/matter.js/dist/esm/model/logic/ClusterVariance.d.ts:35
 
-packages/matter.js/dist/cjs/model/logic/ClusterVariance.d.ts:13
+packages/matter.js/dist/esm/model/logic/ClusterVariance.d.ts:13
 
 ___
 
@@ -258,11 +266,11 @@ A command describes a remote procedure call.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:18
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:19
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:19
 
 ___
 
@@ -274,11 +282,11 @@ A datatype element defines a standalone datatype.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:28
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:29
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:29
 
 ___
 
@@ -299,7 +307,7 @@ Describes an error in model construction.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/DefinitionError.d.ts:9
+packages/matter.js/dist/esm/model/definitions/DefinitionError.d.ts:9
 
 ___
 
@@ -313,11 +321,11 @@ TODO - extract/merge DeviceTypes.ts?
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:22
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:15
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:15
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:23
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:23
 
 ___
 
@@ -329,11 +337,11 @@ Runtime representation of an endpoint.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:17
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:18
 
 ___
 
@@ -345,11 +353,11 @@ An event is triggered by endpoints.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:17
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:18
 
 ___
 
@@ -361,11 +369,11 @@ Runtime representation of a fabric.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/FabricElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:17
 
-packages/matter.js/dist/cjs/model/elements/FabricElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/FabricElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:18
 
 ___
 
@@ -379,9 +387,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:14
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:14
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:8
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:8
 
 ___
 
@@ -391,7 +399,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:7
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:7
 
 ___
 
@@ -405,7 +413,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:11
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:11
 
 ___
 
@@ -419,9 +427,55 @@ can capture the original semantic meaning.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:11
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:11
 
-packages/matter.js/dist/cjs/model/definitions/FieldValue.d.ts:12
+packages/matter.js/dist/esm/model/definitions/FieldValue.d.ts:12
+
+___
+
+### IllegalFeatureCombinations
+
+Ƭ **IllegalFeatureCombinations**: [`FeatureBitmap`](exports_model.md#featurebitmap)[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:8
+
+___
+
+### InferredComponent
+
+Ƭ **InferredComponent**: `Object`
+
+Lists mandatory and optional elements for a specific context.
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `condition?` | [`VarianceCondition`](exports_model.md#variancecondition) |
+| `mandatory` | [`ValueModel`](../classes/exports_model.ValueModel.md)[] |
+| `optional` | [`ValueModel`](../classes/exports_model.ValueModel.md)[] |
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/InferredComponents.d.ts:11
+
+___
+
+### InferredComponents
+
+Ƭ **InferredComponents**: [`InferredComponent`](exports_model.md#inferredcomponent)[]
+
+A list of component definitions.
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/InferredComponents.d.ts:23
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/InferredComponents.d.ts:19
 
 ___
 
@@ -443,7 +497,7 @@ we do not express statically with TypeScript.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/identifiers.d.ts:19
+packages/matter.js/dist/esm/model/definitions/identifiers.d.ts:19
 
 ___
 
@@ -455,11 +509,11 @@ The root model element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:22
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:17
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:23
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:23
 
 ___
 
@@ -469,7 +523,33 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/definitions/identifiers.d.ts:20
+packages/matter.js/dist/esm/model/definitions/identifiers.d.ts:20
+
+___
+
+### NamedComponent
+
+Ƭ **NamedComponent**: [`InferredComponent`](exports_model.md#inferredcomponent) & { `documentation`: `string` ; `name`: `string`  }
+
+An inferred with generated name and documentation.
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/NamedComponents.d.ts:11
+
+___
+
+### NamedComponents
+
+Ƭ **NamedComponents**: [`NamedComponent`](exports_model.md#namedcomponent)[]
+
+A set of components keyed by generated names.
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/NamedComponents.d.ts:22
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/NamedComponents.d.ts:18
 
 ___
 
@@ -481,11 +561,11 @@ Runtime representation of a node.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/NodeElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/NodeElement.d.ts:17
 
-packages/matter.js/dist/cjs/model/elements/NodeElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/NodeElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/NodeElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/NodeElement.d.ts:18
 
 ___
 
@@ -497,11 +577,11 @@ Describes a cluster or cluster element requirement for a device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/RequirementElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:24
 
-packages/matter.js/dist/cjs/model/elements/RequirementElement.d.ts:12
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:12
 
-packages/matter.js/dist/cjs/model/elements/RequirementElement.d.ts:25
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:25
 
 ___
 
@@ -517,7 +597,7 @@ Input to traverse().
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:20
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:20
 
 ___
 
@@ -529,11 +609,11 @@ A base element for all elements that represent data values.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:52
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:52
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:13
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:13
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:53
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:53
 
 ___
 
@@ -554,7 +634,7 @@ Attributes, Commands and Events.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/VarianceCondition.d.ts:12
+packages/matter.js/dist/esm/model/logic/cluster-variance/VarianceCondition.d.ts:12
 
 ___
 
@@ -572,7 +652,7 @@ name is a string that identifies the source of the variant, such as "chip",
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:14
+packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:14
 
 ## Variables
 
@@ -582,7 +662,7 @@ packages/matter.js/dist/cjs/model/logic/ModelVariantTraversal.d.ts:14
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:41
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:41
 
 ___
 
@@ -592,7 +672,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:39
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:39
 
 ___
 
@@ -602,7 +682,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:10
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:10
 
 ___
 
@@ -698,7 +778,7 @@ these types or derive new types.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:24
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:24
 
 ___
 
@@ -708,7 +788,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:40
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:40
 
 ___
 
@@ -720,7 +800,7 @@ Canonical instance of the Matter Object Model.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/standard/Matter.d.ts:10
+packages/matter.js/dist/esm/model/standard/Matter.d.ts:10
 
 ___
 
@@ -730,7 +810,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:8
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:8
 
 ___
 
@@ -740,7 +820,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:9
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:9
 
 ___
 
@@ -750,7 +830,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:12
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:12
 
 ___
 
@@ -760,7 +840,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:13
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:13
 
 ___
 
@@ -770,7 +850,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:14
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:14
 
 ___
 
@@ -780,7 +860,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/Globals.d.ts:11
+packages/matter.js/dist/esm/model/elements/Globals.d.ts:11
 
 ## Functions
 
@@ -800,7 +880,7 @@ packages/matter.js/dist/cjs/model/elements/Globals.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/AttributeElement.d.ts:16
+packages/matter.js/dist/esm/model/elements/AttributeElement.d.ts:16
 
 ___
 
@@ -821,7 +901,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/BaseElement.d.ts:54
+packages/matter.js/dist/esm/model/elements/BaseElement.d.ts:54
 
 ___
 
@@ -841,7 +921,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ClusterElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/ClusterElement.d.ts:28
 
 ___
 
@@ -864,7 +944,7 @@ flag -> component mapping.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ClusterVariance.d.ts:35
+packages/matter.js/dist/esm/model/logic/ClusterVariance.d.ts:35
 
 ___
 
@@ -884,7 +964,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/CommandElement.d.ts:18
+packages/matter.js/dist/esm/model/elements/CommandElement.d.ts:18
 
 ___
 
@@ -904,7 +984,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:28
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:28
 
 ___
 
@@ -931,7 +1011,7 @@ correct type.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/DefaultValue.d.ts:15
+packages/matter.js/dist/esm/model/logic/DefaultValue.d.ts:15
 
 ___
 
@@ -951,7 +1031,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DeviceTypeElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/DeviceTypeElement.d.ts:22
 
 ___
 
@@ -971,7 +1051,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:17
 
 ___
 
@@ -991,7 +1071,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EventElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/EventElement.d.ts:17
 
 ___
 
@@ -1011,7 +1091,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/FabricElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/FabricElement.d.ts:17
 
 ___
 
@@ -1031,7 +1111,64 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:14
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:14
+
+___
+
+### IllegalFeatureCombinations
+
+▸ **IllegalFeatureCombinations**(`cluster`): `Object`
+
+Analyzes feature conformance to ascertain feature combinations that are
+unsupported.  Uses rules to match the conformance AST.
+
+Rule matching is not exhaustive but supports a significant subset of the
+conformance dialect that is inclusive of all feature conformances used by
+the 1.1 specifications.
+
+Throws an error if conformance does not adhere to supported rules.  This
+indicates the ruleset needs augmentation.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `illegal` | [`IllegalFeatureCombinations`](exports_model.md#illegalfeaturecombinations) |
+| `requiresFeatures` | `boolean` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/IllegalFeatureCombinations.d.ts:20
+
+___
+
+### InferredComponents
+
+▸ **InferredComponents**(`cluster`): [`InferredComponents`](exports_model.md#inferredcomponents)
+
+Details components generated by analyzing variance of cluster elements.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
+
+#### Returns
+
+[`InferredComponents`](exports_model.md#inferredcomponents)
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/InferredComponents.d.ts:23
 
 ___
 
@@ -1051,7 +1188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:22
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:22
 
 ___
 
@@ -1074,7 +1211,35 @@ Merge multiple variants of an element into a single element.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/MergeModels.d.ts:11
+packages/matter.js/dist/esm/model/logic/MergeModels.d.ts:11
+
+___
+
+### NamedComponents
+
+▸ **NamedComponents**(`cluster`, `inferredComponents`): `Object`
+
+Compute name and documentation a set of inferred components.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `cluster` | [`ClusterModel`](../classes/exports_model.ClusterModel-1.md) |
+| `inferredComponents` | [`InferredComponents`](exports_model.md#inferredcomponents) |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `base` | [`InferredComponent`](exports_model.md#inferredcomponent) |
+| `components` | [`NamedComponents`](exports_model.md#namedcomponents) |
+
+#### Defined in
+
+packages/matter.js/dist/esm/model/logic/cluster-variance/NamedComponents.d.ts:22
 
 ___
 
@@ -1094,7 +1259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/NodeElement.d.ts:17
+packages/matter.js/dist/esm/model/elements/NodeElement.d.ts:17
 
 ___
 
@@ -1122,7 +1287,7 @@ a Validator
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/RecordValidator.d.ts:19
+packages/matter.js/dist/esm/model/logic/RecordValidator.d.ts:19
 
 ___
 
@@ -1142,7 +1307,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/RequirementElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/RequirementElement.d.ts:24
 
 ___
 
@@ -1174,7 +1339,7 @@ logic we rely on for validation.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/ValidateModel.d.ts:21
+packages/matter.js/dist/esm/model/logic/ValidateModel.d.ts:21
 
 ___
 
@@ -1195,7 +1360,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/ValueElement.d.ts:52
+packages/matter.js/dist/esm/model/elements/ValueElement.d.ts:52
 
 ___
 
@@ -1218,7 +1383,7 @@ Convert a VarianceCondition to an array of FeatureBitmaps.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/VarianceCondition.d.ts:20
+packages/matter.js/dist/esm/model/logic/cluster-variance/VarianceCondition.d.ts:20
 
 ___
 
@@ -1246,4 +1411,4 @@ If a name isn't present leaves the feature code intact.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/logic/cluster-variance/FeatureBitmap.d.ts:23
+packages/matter.js/dist/esm/model/logic/cluster-variance/FeatureBitmap.d.ts:23

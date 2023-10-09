@@ -16,7 +16,7 @@
 
   ↳ **`TlvSchema`**
 
-  ↳↳ [`ObjectSchema`](internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.ObjectSchema.md)
+  ↳↳ [`ObjectSchema`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.ObjectSchema.md)
 
 ## Implements
 

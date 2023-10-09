@@ -29,7 +29,7 @@ Wait at least the given delay time.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:108
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:109
 
 ___
 
@@ -41,7 +41,7 @@ The OTA Provider is conveying a desire to rescind a previously provided Software
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:112
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:113
 
 ___
 
@@ -53,4 +53,4 @@ Apply the update.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:104
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:105

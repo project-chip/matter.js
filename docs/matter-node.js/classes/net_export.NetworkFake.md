@@ -48,7 +48,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:11
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:11
 
 ## Properties
 
@@ -58,7 +58,7 @@ packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:10
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:10
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:9
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:9
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:11
+packages/matter.js/dist/esm/net/Network.d.ts:11
 
 ## Methods
 
@@ -108,7 +108,7 @@ packages/matter.js/dist/cjs/net/Network.d.ts:11
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/Network.d.ts:18
+packages/matter.js/dist/esm/net/Network.d.ts:18
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:17
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:17
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:13
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:13
 
 ___
 
@@ -179,4 +179,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/net/fake/NetworkFake.d.ts:12
+packages/matter.js/dist/esm/net/fake/NetworkFake.d.ts:12

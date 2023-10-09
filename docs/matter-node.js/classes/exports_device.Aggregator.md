@@ -38,7 +38,7 @@ and PowerSourceCluster) to the device!
 - [addClusterServer](exports_device.Aggregator.md#addclusterserver)
 - [addFixedLabel](exports_device.Aggregator.md#addfixedlabel)
 - [addUserLabel](exports_device.Aggregator.md#adduserlabel)
-- [clearStructureChangedCallback](exports_device.Aggregator.md#clearstructurechangedcallback)
+- [destroy](exports_device.Aggregator.md#destroy)
 - [determineUniqueID](exports_device.Aggregator.md#determineuniqueid)
 - [getAllClusterClients](exports_device.Aggregator.md#getallclusterclients)
 - [getAllClusterServers](exports_device.Aggregator.md#getallclusterservers)
@@ -55,6 +55,7 @@ and PowerSourceCluster) to the device!
 - [hasClusterServer](exports_device.Aggregator.md#hasclusterserver)
 - [removeBridgedDevice](exports_device.Aggregator.md#removebridgeddevice)
 - [removeChildEndpoint](exports_device.Aggregator.md#removechildendpoint)
+- [removeFromStructure](exports_device.Aggregator.md#removefromstructure)
 - [setDeviceTypes](exports_device.Aggregator.md#setdevicetypes)
 - [setStructureChangedCallback](exports_device.Aggregator.md#setstructurechangedcallback)
 - [updatePartsList](exports_device.Aggregator.md#updatepartslist)
@@ -82,7 +83,7 @@ already have the BridgedDeviceBasicInformationCluster added!
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:25
+packages/matter.js/dist/esm/device/Aggregator.d.ts:25
 
 ## Properties
 
@@ -96,7 +97,7 @@ packages/matter.js/dist/cjs/device/Aggregator.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
+packages/matter.js/dist/esm/device/Endpoint.d.ts:19
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -124,7 +125,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -138,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -156,7 +157,7 @@ on the device!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -164,7 +165,7 @@ on the device!
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:35
+packages/matter.js/dist/esm/device/Aggregator.d.ts:35
 
 ___
 
@@ -182,7 +183,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](exports_device.Device.md) \| [`ComposedDevice`](exports_device.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/exports_cluster.md#optionalattribute)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<[`VendorId`](../modules/exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -190,7 +191,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:45
+packages/matter.js/dist/esm/device/Aggregator.d.ts:45
 
 ___
 
@@ -214,7 +215,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -247,7 +248,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -278,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -303,7 +304,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -328,13 +329,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
-### clearStructureChangedCallback
+### destroy
 
-▸ **clearStructureChangedCallback**(): `void`
+▸ **destroy**(): `void`
 
 #### Returns
 
@@ -342,11 +343,11 @@ ___
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[clearStructureChangedCallback](exports_device.Endpoint.md#clearstructurechangedcallback)
+[Endpoint](exports_device.Endpoint.md).[destroy](exports_device.Endpoint.md#destroy)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -364,7 +365,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -382,7 +383,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -400,7 +401,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -418,7 +419,7 @@ Array of bridged devices
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:51
+packages/matter.js/dist/esm/device/Aggregator.d.ts:51
 
 ___
 
@@ -442,7 +443,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -460,7 +461,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -494,7 +495,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -518,7 +519,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -552,7 +553,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -576,7 +577,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -594,7 +595,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -612,7 +613,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -646,7 +647,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -680,7 +681,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -700,7 +701,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Aggregator.d.ts:52
+packages/matter.js/dist/esm/device/Aggregator.d.ts:52
 
 ___
 
@@ -724,7 +725,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[removeFromStructure](exports_device.Endpoint.md#removefromstructure)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -748,7 +767,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -772,7 +791,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ___
 
@@ -790,7 +809,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -808,4 +827,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:55
+packages/matter.js/dist/esm/device/Endpoint.d.ts:56

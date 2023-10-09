@@ -38,7 +38,7 @@ MatterCoreSpecificationV1_1 § 9.10.4.2.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:48
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:49
 
 ___
 
@@ -56,7 +56,7 @@ MatterCoreSpecificationV1_1 § 9.10.4.2.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:40
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:41
 
 ___
 
@@ -74,7 +74,7 @@ MatterCoreSpecificationV1_1 § 9.10.4.2.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:33
 
 ___
 
@@ -86,7 +86,7 @@ Can read and observe all (as seen by a Proxy)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:25
 
 ___
 
@@ -98,4 +98,4 @@ Can read and observe all (except Access Control Cluster and as seen by a non-Pro
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/AccessControlCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/AccessControlCluster.d.ts:21

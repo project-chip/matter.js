@@ -23,7 +23,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:21
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:21
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:19
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:19
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:20
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:20
 
 ## Variables
 
@@ -45,6 +45,6 @@ packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:19
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:19
 
-packages/matter.js/dist/cjs/model/elements/EndpointElement.d.ts:20
+packages/matter.js/dist/esm/model/elements/EndpointElement.d.ts:20

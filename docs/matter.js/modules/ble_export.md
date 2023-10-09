@@ -35,7 +35,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:11](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L11)
+packages/matter.js/src/ble/BleConsts.ts:11
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:12](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L12)
+packages/matter.js/src/ble/BleConsts.ts:12
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:13](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L13)
+packages/matter.js/src/ble/BleConsts.ts:13
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:10](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L10)
+packages/matter.js/src/ble/BleConsts.ts:10
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:16](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L16)
+packages/matter.js/src/ble/BleConsts.ts:16
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:15](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L15)
+packages/matter.js/src/ble/BleConsts.ts:15
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L21)
+packages/matter.js/src/ble/BleConsts.ts:21
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L20)
+packages/matter.js/src/ble/BleConsts.ts:20
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:18](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L18)
+packages/matter.js/src/ble/BleConsts.ts:18
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BleConsts.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BleConsts.ts#L22)
+packages/matter.js/src/ble/BleConsts.ts:22
 
 ___
 
@@ -139,4 +139,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/BtpSessionHandler.ts:25](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/ble/BtpSessionHandler.ts#L25)
+packages/matter.js/src/ble/BtpSessionHandler.ts:25

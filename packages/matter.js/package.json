@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js",
-    "version": "0.5.1-alpha.0-20231006-78029b2",
+    "version": "0.6.1-alpha.0-20231009-939307e",
     "description": "Matter protocol in pure js",
     "keywords": [
         "iot",
@@ -27,7 +27,7 @@
         "clean": "build clean",
         "build": "build",
         "build-clean": "build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --gitRemote upstream --tsconfig tsconfig.dist-cjs.json",
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig tsconfig.json",
         "test": "matter-test -w",
         "coverage": "c8 matter-test esm"
     },
@@ -36,7 +36,7 @@
         "elliptic": "^6.5.4"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.5.1-alpha.0-20231006-78029b2",
+        "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231009-939307e",
         "@types/bn.js": "^5.1.2",
         "@types/chai": "^4.3.6",
         "@types/elliptic": "^6.4.15",

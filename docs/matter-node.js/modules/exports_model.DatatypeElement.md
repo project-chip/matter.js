@@ -32,9 +32,9 @@ and other metadata.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:40
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:40
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:45
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:45
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:32
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:32
 
 ___
 
@@ -54,9 +54,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:30
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:31
 
 ___
 
@@ -75,7 +75,7 @@ generating the Matter enum we ignore the string keys.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:52
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:52
 
 ## Variables
 
@@ -85,9 +85,9 @@ packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:52
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:30
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:30
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:31
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:31
 
 ## Functions
 
@@ -113,4 +113,4 @@ we can't use a TypeScript enum directly.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/DatatypeElement.d.ts:40
+packages/matter.js/dist/esm/model/elements/DatatypeElement.d.ts:40

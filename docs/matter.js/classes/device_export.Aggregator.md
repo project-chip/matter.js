@@ -38,7 +38,7 @@ and PowerSourceCluster) to the device!
 - [addClusterServer](device_export.Aggregator.md#addclusterserver)
 - [addFixedLabel](device_export.Aggregator.md#addfixedlabel)
 - [addUserLabel](device_export.Aggregator.md#adduserlabel)
-- [clearStructureChangedCallback](device_export.Aggregator.md#clearstructurechangedcallback)
+- [destroy](device_export.Aggregator.md#destroy)
 - [determineUniqueID](device_export.Aggregator.md#determineuniqueid)
 - [getAllClusterClients](device_export.Aggregator.md#getallclusterclients)
 - [getAllClusterServers](device_export.Aggregator.md#getallclusterservers)
@@ -55,6 +55,7 @@ and PowerSourceCluster) to the device!
 - [hasClusterServer](device_export.Aggregator.md#hasclusterserver)
 - [removeBridgedDevice](device_export.Aggregator.md#removebridgeddevice)
 - [removeChildEndpoint](device_export.Aggregator.md#removechildendpoint)
+- [removeFromStructure](device_export.Aggregator.md#removefromstructure)
 - [setDeviceTypes](device_export.Aggregator.md#setdevicetypes)
 - [setStructureChangedCallback](device_export.Aggregator.md#setstructurechangedcallback)
 - [updatePartsList](device_export.Aggregator.md#updatepartslist)
@@ -82,7 +83,7 @@ already have the BridgedDeviceBasicInformationCluster added!
 
 #### Defined in
 
-[packages/matter.js/src/device/Aggregator.ts:29](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Aggregator.ts#L29)
+packages/matter.js/src/device/Aggregator.ts:29
 
 ## Properties
 
@@ -98,7 +99,7 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L53)
+packages/matter.js/src/device/Endpoint.ts:53
 
 ___
 
@@ -112,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L37)
+packages/matter.js/src/device/Endpoint.ts:37
 
 ___
 
@@ -126,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L39)
+packages/matter.js/src/device/Endpoint.ts:39
 
 ___
 
@@ -140,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L38)
+packages/matter.js/src/device/Endpoint.ts:38
 
 ## Methods
 
@@ -158,7 +159,7 @@ on the device!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](device_export.Device.md) \| [`ComposedDevice`](device_export.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)<[`BitSchema`](../modules/schema_export.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -166,7 +167,7 @@ on the device!
 
 #### Defined in
 
-[packages/matter.js/src/device/Aggregator.ts:44](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Aggregator.ts#L44)
+packages/matter.js/src/device/Aggregator.ts:44
 
 ___
 
@@ -184,7 +185,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `device` | [`Device`](device_export.Device.md) \| [`ComposedDevice`](device_export.ComposedDevice.md) | Device instance to add |
-| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)<[`BitSchema`](../modules/schema_export.md#bitschema)\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
+| `bridgedBasicInformation?` | [`AttributeInitialValues`](../modules/cluster_export.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<{ `hardwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](../modules/cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](../modules/cluster_export.md#optionalattribute)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](../modules/cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<[`VendorId`](../modules/datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](../modules/cluster_export.md#optionalfixedattribute)<`string`, `any`\>  }, [`GlobalAttributes`](../modules/cluster_export.md#globalattributes-1)<{}\>\>\> | Optional BridgedDeviceBasicInformationCluster attribute values to |
 
 #### Returns
 
@@ -192,7 +193,7 @@ The required clusters PowerSourceConfigurationCluster and PowerSourceCluster nee
 
 #### Defined in
 
-[packages/matter.js/src/device/Aggregator.ts:87](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Aggregator.ts#L87)
+packages/matter.js/src/device/Aggregator.ts:87
 
 ___
 
@@ -216,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:230](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L230)
+packages/matter.js/src/device/Endpoint.ts:256
 
 ___
 
@@ -249,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:149](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L149)
+packages/matter.js/src/device/Endpoint.ts:173
 
 ___
 
@@ -280,7 +281,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:139](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L139)
+packages/matter.js/src/device/Endpoint.ts:146
 
 ___
 
@@ -305,7 +306,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L99)
+packages/matter.js/src/device/Endpoint.ts:106
 
 ___
 
@@ -330,13 +331,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:119](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L119)
+packages/matter.js/src/device/Endpoint.ts:126
 
 ___
 
-### clearStructureChangedCallback
+### destroy
 
-▸ **clearStructureChangedCallback**(): `void`
+▸ **destroy**(): `void`
 
 #### Returns
 
@@ -344,11 +345,11 @@ ___
 
 #### Inherited from
 
-[Endpoint](device_export.Endpoint.md).[clearStructureChangedCallback](device_export.Endpoint.md#clearstructurechangedcallback)
+[Endpoint](device_export.Endpoint.md).[destroy](device_export.Endpoint.md#destroy)
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L85)
+packages/matter.js/src/device/Endpoint.ts:93
 
 ___
 
@@ -366,7 +367,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:254](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L254)
+packages/matter.js/src/device/Endpoint.ts:280
 
 ___
 
@@ -384,7 +385,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:314](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L314)
+packages/matter.js/src/device/Endpoint.ts:340
 
 ___
 
@@ -402,7 +403,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:310](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L310)
+packages/matter.js/src/device/Endpoint.ts:336
 
 ___
 
@@ -420,7 +421,7 @@ Array of bridged devices
 
 #### Defined in
 
-[packages/matter.js/src/device/Aggregator.ts:114](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Aggregator.ts#L114)
+packages/matter.js/src/device/Aggregator.ts:114
 
 ___
 
@@ -444,7 +445,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L236)
+packages/matter.js/src/device/Endpoint.ts:262
 
 ___
 
@@ -462,7 +463,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L240)
+packages/matter.js/src/device/Endpoint.ts:266
 
 ___
 
@@ -496,7 +497,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:172](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L172)
+packages/matter.js/src/device/Endpoint.ts:198
 
 ___
 
@@ -520,7 +521,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:186](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L186)
+packages/matter.js/src/device/Endpoint.ts:212
 
 ___
 
@@ -554,7 +555,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:159](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L159)
+packages/matter.js/src/device/Endpoint.ts:183
 
 ___
 
@@ -578,7 +579,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:182](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L182)
+packages/matter.js/src/device/Endpoint.ts:208
 
 ___
 
@@ -596,7 +597,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:210](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L210)
+packages/matter.js/src/device/Endpoint.ts:236
 
 ___
 
@@ -614,7 +615,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:92](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L92)
+packages/matter.js/src/device/Endpoint.ts:99
 
 ___
 
@@ -648,7 +649,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:200](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L200)
+packages/matter.js/src/device/Endpoint.ts:226
 
 ___
 
@@ -682,7 +683,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:190](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L190)
+packages/matter.js/src/device/Endpoint.ts:216
 
 ___
 
@@ -702,7 +703,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Aggregator.ts:118](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Aggregator.ts#L118)
+packages/matter.js/src/device/Aggregator.ts:118
 
 ___
 
@@ -726,7 +727,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:244](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L244)
+packages/matter.js/src/device/Endpoint.ts:270
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](device_export.Endpoint.md).[removeFromStructure](device_export.Endpoint.md#removefromstructure)
+
+#### Defined in
+
+packages/matter.js/src/device/Endpoint.ts:85
 
 ___
 
@@ -750,7 +769,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:214](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L214)
+packages/matter.js/src/device/Endpoint.ts:240
 
 ___
 
@@ -774,7 +793,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L80)
+packages/matter.js/src/device/Endpoint.ts:80
 
 ___
 
@@ -792,7 +811,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:318](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L318)
+packages/matter.js/src/device/Endpoint.ts:344
 
 ___
 
@@ -810,4 +829,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:276](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/device/Endpoint.ts#L276)
+packages/matter.js/src/device/Endpoint.ts:302

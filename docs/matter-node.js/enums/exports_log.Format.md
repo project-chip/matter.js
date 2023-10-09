@@ -24,7 +24,7 @@ Format log messages using ANSI escape codes
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:20
+packages/matter.js/dist/esm/log/Logger.d.ts:20
 
 ___
 
@@ -36,7 +36,7 @@ Format log messages using HTML tags
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:22
+packages/matter.js/dist/esm/log/Logger.d.ts:22
 
 ___
 
@@ -48,4 +48,4 @@ Generate text only
 
 #### Defined in
 
-packages/matter.js/dist/cjs/log/Logger.d.ts:18
+packages/matter.js/dist/esm/log/Logger.d.ts:18

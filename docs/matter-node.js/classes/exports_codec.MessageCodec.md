@@ -39,7 +39,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:46
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:46
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:47
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:47
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:50
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:50
 
 ## Methods
 
@@ -79,7 +79,7 @@ packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:50
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:42
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:42
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:43
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:43
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:45
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:45
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:48
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:48
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:44
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:44
 
 ___
 
@@ -179,4 +179,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/MessageCodec.d.ts:49
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:49

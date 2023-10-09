@@ -29,7 +29,7 @@ Indicates OTA Provider may have an update, but it is not ready yet.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:62
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:63
 
 ___
 
@@ -41,7 +41,7 @@ Indicates that the requested download protocol is not supported by the OTA Provi
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:70
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:71
 
 ___
 
@@ -53,7 +53,7 @@ Indicates that there is definitely no update currently available from the OTA Pr
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:66
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:67
 
 ___
 
@@ -65,4 +65,4 @@ Indicates that the OTA Provider has an update available.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateProviderCluster.d.ts:59

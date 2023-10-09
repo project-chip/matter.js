@@ -23,6 +23,7 @@
 - [invokeId](internal_.CommandServer.md#invokeid)
 - [name](internal_.CommandServer.md#name)
 - [requestSchema](internal_.CommandServer.md#requestschema)
+- [requiresTimedInteraction](internal_.CommandServer.md#requirestimedinteraction)
 - [responseId](internal_.CommandServer.md#responseid)
 - [responseSchema](internal_.CommandServer.md#responseschema)
 
@@ -34,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `handler`)
+• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
 
 #### Type parameters
 
@@ -52,11 +53,12 @@
 | `name` | `string` |
 | `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)<`RequestT`\> |
 | `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)<`ResponseT`\> |
+| `requiresTimedInteraction` | `boolean` |
 | `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
+matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21
 
 ## Properties
 
@@ -83,7 +85,7 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
+matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
 
 ___
 
@@ -117,6 +119,16 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:17
 
 ___
 
+### requiresTimedInteraction
+
+• `Readonly` **requiresTimedInteraction**: `boolean`
+
+#### Defined in
+
+matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
+
+___
+
 ### responseId
 
 • `Readonly` **responseId**: [`CommandId`](../modules/internal_.md#commandid)
@@ -139,7 +151,7 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
 
 #### Parameters
 
@@ -152,8 +164,8 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
 
 #### Returns
 
-`Promise`<{ `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
+`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21
+matter.js/dist/cjs/cluster/server/CommandServer.d.ts:22

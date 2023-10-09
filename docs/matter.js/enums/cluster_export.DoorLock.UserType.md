@@ -40,7 +40,7 @@ UserStatus value to OccupiedDisabled automatically.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:681](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L681)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:671
 
 ___
 
@@ -59,7 +59,7 @@ timeout across reboots such that the ExpiringUserTimeout is honored.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:691](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L691)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:681
 
 ___
 
@@ -76,7 +76,7 @@ to allow a notified Node to alert emergency services or contacts on the user acc
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:673](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L673)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:663
 
 ___
 
@@ -93,7 +93,7 @@ lock to generate the appropriate event notification to any bound devices.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:665](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L665)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:655
 
 ___
 
@@ -111,7 +111,7 @@ only user that can disable the user interface (keypad, remote, etc…).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:657](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L657)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:647
 
 ___
 
@@ -130,7 +130,7 @@ over-the-air for the lock/unlock commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:708](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L708)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:698
 
 ___
 
@@ -146,7 +146,7 @@ User access is restricted by Week Day and/or Year Day schedule.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:698](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L698)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:688
 
 ___
 
@@ -162,7 +162,7 @@ User has access 24/7 provided proper PIN or RFID is supplied (e.g., owner).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:633](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L633)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:623
 
 ___
 
@@ -179,7 +179,7 @@ cleaning worker).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:648](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L648)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:638
 
 ___
 
@@ -195,4 +195,4 @@ User has ability to open lock within a specific time period (e.g., guest).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:640](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L640)
+packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:630

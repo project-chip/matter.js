@@ -99,7 +99,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.DoorLock.md#base), `SF`\> & { `supportedFeatures`: `SF`  } & `SF` extends { `doorPositionSensor`: ``true``  } ? typeof [`DoorPositionSensorComponent`](exports_cluster.DoorLock.md#doorpositionsensorcomponent) : {} & `SF` extends { `logging`: ``true``  } ? typeof [`LoggingComponent`](exports_cluster.DoorLock.md#loggingcomponent) : {} & `SF` extends { `user`: ``true``  } ? typeof [`UserComponent`](exports_cluster.DoorLock.md#usercomponent) : {} & `SF` extends { `pinCredential`: ``true``  } ? typeof [`PinCredentialComponent`](exports_cluster.DoorLock.md#pincredentialcomponent) : {} & `SF` extends { `rfidCredential`: ``true``  } ? typeof [`RfidCredentialComponent`](exports_cluster.DoorLock.md#rfidcredentialcomponent) : {} & `SF` extends { `weekDayAccessSchedules`: ``true``  } ? typeof [`WeekDayAccessSchedulesComponent`](exports_cluster.DoorLock.md#weekdayaccessschedulescomponent) : {} & `SF` extends { `yearDayAccessSchedules`: ``true``  } ? typeof [`YearDayAccessSchedulesComponent`](exports_cluster.DoorLock.md#yeardayaccessschedulescomponent) : {} & `SF` extends { `holidaySchedules`: ``true``  } ? typeof [`HolidaySchedulesComponent`](exports_cluster.DoorLock.md#holidayschedulescomponent) : {} & `SF` extends { `pinCredential`: ``true``  } \| { `rfidCredential`: ``true``  } ? typeof [`PinCredentialOrRfidCredentialComponent`](exports_cluster.DoorLock.md#pincredentialorrfidcredentialcomponent) : {} & `SF` extends { `credentialOverTheAirAccess`: ``true`` ; `pinCredential`: ``true``  } ? typeof [`CredentialOverTheAirAccessAndPinCredentialComponent`](exports_cluster.DoorLock.md#credentialovertheairaccessandpincredentialcomponent) : {} & `SF` extends { `notification`: ``true`` ; `pinCredential`: ``true``  } ? typeof [`NotificationAndPinCredentialComponent`](exports_cluster.DoorLock.md#notificationandpincredentialcomponent) : {} & `SF` extends { `notification`: ``true``  } ? typeof [`NotificationComponent`](exports_cluster.DoorLock.md#notificationcomponent) : {} & `SF` extends { `notification`: ``true`` ; `rfidCredential`: ``true``  } ? typeof [`NotificationAndRfidCredentialComponent`](exports_cluster.DoorLock.md#notificationandrfidcredentialcomponent) : {} & `SF` extends { `pinCredential`: ``true`` ; `user`: ``false``  } ? typeof [`PinCredentialNotUserComponent`](exports_cluster.DoorLock.md#pincredentialnotusercomponent) : {} & `SF` extends { `fingerCredentials`: ``true`` ; `pinCredential`: ``true`` ; `rfidCredential`: ``true`` ; `user`: ``false``  } ? typeof [`PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent`](exports_cluster.DoorLock.md#pincredentialandrfidcredentialandfingercredentialsnotusercomponent) : {} & `SF` extends { `user`: ``false``  } ? typeof [`NotUserComponent`](exports_cluster.DoorLock.md#notusercomponent) : {} & `SF` extends { `rfidCredential`: ``true`` ; `user`: ``false``  } ? typeof [`RfidCredentialNotUserComponent`](exports_cluster.DoorLock.md#rfidcredentialnotusercomponent) : {} & `SF` extends { `faceCredentials`: ``false`` ; `fingerCredentials`: ``false`` ; `pinCredential`: ``false`` ; `rfidCredential`: ``false`` ; `user`: ``true``  } ? `never` : {}
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.DoorLock.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `doorPositionSensor`: ``true``  } ? typeof [`DoorPositionSensorComponent`](exports_cluster.DoorLock.md#doorpositionsensorcomponent) : {} & `SF` extends { `logging`: ``true``  } ? typeof [`LoggingComponent`](exports_cluster.DoorLock.md#loggingcomponent) : {} & `SF` extends { `user`: ``true``  } ? typeof [`UserComponent`](exports_cluster.DoorLock.md#usercomponent) : {} & `SF` extends { `pinCredential`: ``true``  } ? typeof [`PinCredentialComponent`](exports_cluster.DoorLock.md#pincredentialcomponent) : {} & `SF` extends { `rfidCredential`: ``true``  } ? typeof [`RfidCredentialComponent`](exports_cluster.DoorLock.md#rfidcredentialcomponent) : {} & `SF` extends { `weekDayAccessSchedules`: ``true``  } ? typeof [`WeekDayAccessSchedulesComponent`](exports_cluster.DoorLock.md#weekdayaccessschedulescomponent) : {} & `SF` extends { `yearDayAccessSchedules`: ``true``  } ? typeof [`YearDayAccessSchedulesComponent`](exports_cluster.DoorLock.md#yeardayaccessschedulescomponent) : {} & `SF` extends { `holidaySchedules`: ``true``  } ? typeof [`HolidaySchedulesComponent`](exports_cluster.DoorLock.md#holidayschedulescomponent) : {} & `SF` extends { `pinCredential`: ``true``  } \| { `rfidCredential`: ``true``  } ? typeof [`PinCredentialOrRfidCredentialComponent`](exports_cluster.DoorLock.md#pincredentialorrfidcredentialcomponent) : {} & `SF` extends { `credentialOverTheAirAccess`: ``true`` ; `pinCredential`: ``true``  } ? typeof [`CredentialOverTheAirAccessAndPinCredentialComponent`](exports_cluster.DoorLock.md#credentialovertheairaccessandpincredentialcomponent) : {} & `SF` extends { `notification`: ``true`` ; `pinCredential`: ``true``  } ? typeof [`NotificationAndPinCredentialComponent`](exports_cluster.DoorLock.md#notificationandpincredentialcomponent) : {} & `SF` extends { `notification`: ``true``  } ? typeof [`NotificationComponent`](exports_cluster.DoorLock.md#notificationcomponent) : {} & `SF` extends { `notification`: ``true`` ; `rfidCredential`: ``true``  } ? typeof [`NotificationAndRfidCredentialComponent`](exports_cluster.DoorLock.md#notificationandrfidcredentialcomponent) : {} & `SF` extends { `pinCredential`: ``true`` ; `user`: ``false``  } ? typeof [`PinCredentialNotUserComponent`](exports_cluster.DoorLock.md#pincredentialnotusercomponent) : {} & `SF` extends { `fingerCredentials`: ``true`` ; `pinCredential`: ``true`` ; `rfidCredential`: ``true`` ; `user`: ``false``  } ? typeof [`PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent`](exports_cluster.DoorLock.md#pincredentialandrfidcredentialandfingercredentialsnotusercomponent) : {} & `SF` extends { `user`: ``false``  } ? typeof [`NotUserComponent`](exports_cluster.DoorLock.md#notusercomponent) : {} & `SF` extends { `rfidCredential`: ``true`` ; `user`: ``false``  } ? typeof [`RfidCredentialNotUserComponent`](exports_cluster.DoorLock.md#rfidcredentialnotusercomponent) : {} & `SF` extends { `faceCredentials`: ``false`` ; `fingerCredentials`: ``false`` ; `pinCredential`: ``false`` ; `rfidCredential`: ``false`` ; `user`: ``true``  } ? `never` : {}
 
 #### Type parameters
 
@@ -109,7 +109,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:3075
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:3565
 
 ## Variables
 
@@ -137,25 +137,25 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.39
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:170
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:171
 
 ___
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `actuatorEnabled`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `alarmMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `forcedDoorOpenUnderDoorLockedCondition`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockResetToFactoryDefaults`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockingMechanismJammed`: [`BitFlag`](exports_schema.md#bitflag-1) ; `reserved`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfModulePowerCycled`: [`BitFlag`](exports_schema.md#bitflag-1) ; `tamperAlarmFrontEscutcheonRemovedFromMain`: [`BitFlag`](exports_schema.md#bitflag-1) ; `tamperAlarmWrongCodeEntryLimit`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `autoRelockTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `defaultConfigurationRegister`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `autoRelockTimeSet`: [`BitFlag`](exports_schema.md#bitflag-1) ; `enableLocalProgrammingEnabled`: [`BitFlag`](exports_schema.md#bitflag-1) ; `keypadInterfaceDefaultAccessEnabled`: [`BitFlag`](exports_schema.md#bitflag-1) ; `ledSettingsSet`: [`BitFlag`](exports_schema.md#bitflag-1) ; `remoteInterfaceDefaultAccessIsEnabled`: [`BitFlag`](exports_schema.md#bitflag-1) ; `soundEnabled`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `enableInsideStatusLed`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableLocalProgramming`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableOneTouchLocking`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enablePrivacyModeButton`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `language`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `ledSettings`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `localProgrammingFeatures`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `addUsersCredentialsSchedulesLocally`: [`BitFlag`](exports_schema.md#bitflag-1) ; `adjustLockSettingsLocally`: [`BitFlag`](exports_schema.md#bitflag-1) ; `clearUsersCredentialsSchedulesLocally`: [`BitFlag`](exports_schema.md#bitflag-1) ; `modifyUsersCredentialsSchedulesLocally`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `lockState`: [`Attribute`](exports_cluster.md#attribute)<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> ; `lockType`: [`Attribute`](exports_cluster.md#attribute)<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> ; `operatingMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> ; `soundVolume`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `supportedOperatingModes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `noRemoteLockUnlock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `normal`: [`BitFlag`](exports_schema.md#bitflag-1) ; `passage`: [`BitFlag`](exports_schema.md#bitflag-1) ; `privacy`: [`BitFlag`](exports_schema.md#bitflag-1) ; `vacation`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, { `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `actuatorEnabled`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `alarmMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `autoRelockTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `defaultConfigurationRegister`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `enableInsideStatusLed`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableLocalProgramming`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableOneTouchLocking`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enablePrivacyModeButton`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `language`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `ledSettings`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `localProgrammingFeatures`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lockState`: [`Attribute`](exports_cluster.md#attribute)<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> ; `lockType`: [`Attribute`](exports_cluster.md#attribute)<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> ; `operatingMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> ; `soundVolume`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `supportedOperatingModes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: { `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``257`` ; `name`: ``"DoorLock"`` ; `revision`: ``6``  }\>
 
 These elements and properties are present in all DoorLock clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1246
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1247
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }, <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.DoorLock.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"DoorLock"`` ; `revision`: ``6`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `actuatorEnabled`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `alarmMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `autoRelockTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `defaultConfigurationRegister`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `enableInsideStatusLed`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableLocalProgramming`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableOneTouchLocking`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enablePrivacyModeButton`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `language`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `ledSettings`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `localProgrammingFeatures`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lockState`: [`Attribute`](exports_cluster.md#attribute)<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> ; `lockType`: [`Attribute`](exports_cluster.md#attribute)<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> ; `operatingMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> ; `soundVolume`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `supportedOperatingModes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  } ; `commands`: { `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  } ; `features`: { `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``257`` ; `name`: ``"DoorLock"`` ; `revision`: ``6``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.DoorLock.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Door Lock
 
@@ -169,13 +169,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2433
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2481
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Cluster`](exports_cluster.md#cluster)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `clearAllPinCodes`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `clearAllRfidCodes`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `clearCredential`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `clearHolidaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `clearPinCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `clearRfidCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `clearUser`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `clearWeekDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `clearYearDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `getCredentialStatus`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `getHolidaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `getLogRecord`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `getPinCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `getRfidCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `getUser`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `getUserStatus`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>\> ; `getUserType`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>\> ; `getWeekDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `getYearDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `setCredential`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `setHolidaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `setPinCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `setRfidCode`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>\> ; `setUser`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `setUserStatus`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>\> ; `setUserType`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>\> ; `setWeekDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `setYearDaySchedule`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>\> ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `doorStateChange`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\> ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `lockUserChange`: [`AsConditional`](exports_cluster.md#asconditional)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>\>  }\>
+• `Const` **Complete**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `acceptedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `actuatorEnabled`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `alarmMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `attributeList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)[], `never`\> ; `autoRelockTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `clusterRevision`: [`Attribute`](exports_cluster.md#attribute)<`number`, `never`\> ; `credentialRulesSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `defaultConfigurationRegister`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `doorClosedEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `doorOpenEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `doorState`: [`Attribute`](exports_cluster.md#attribute)<[`DoorState`](../enums/exports_cluster.DoorLock.DoorState.md) \| ``null``, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `enableInsideStatusLed`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableLocalProgramming`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enableLogging`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `enableOneTouchLocking`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `enablePrivacyModeButton`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `eventList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)[], `never`\> ; `expiringUserTimeout`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `featureMap`: [`Attribute`](exports_cluster.md#attribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `never`\> ; `generatedCommandList`: [`Attribute`](exports_cluster.md#attribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)[], `never`\> ; `keypadOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `keypadProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `language`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `ledSettings`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `localProgrammingFeatures`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lockState`: [`Attribute`](exports_cluster.md#attribute)<[`LockState`](../enums/exports_cluster.DoorLock.LockState.md) \| ``null``, `any`\> ; `lockType`: [`Attribute`](exports_cluster.md#attribute)<[`LockType`](../enums/exports_cluster.DoorLock.LockType.md), `any`\> ; `manualOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `maxPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `maxRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `minPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `minRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfCredentialsSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfHolidaySchedulesSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfLogRecordsSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfPinUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfRfidUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfTotalUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfWeekDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `numberOfYearDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `openPeriod`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `operatingMode`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`OperatingMode`](../enums/exports_cluster.DoorLock.OperatingMode.md), `any`\> ; `remoteOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `remoteProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `requirePinForRemoteOperation`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `rfidOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `rfidProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `sendPinOverTheAir`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `soundVolume`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `supportedOperatingModes`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `userCodeTemporaryDisableTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `wrongCodeEntryLimit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `commands`: { `clearAllPinCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearAllRfidCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearCredential`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `clearYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getCredentialStatus`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getLogRecord`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `getYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `lockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `setCredential`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `setYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `unlockDoor`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `unlockWithTimeout`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `doorLockAlarm`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `doorStateChange`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  } ; `lockOperation`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockOperationError`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `lockUserChange`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> & { `isConditional`: ``true`` ; `mandatoryIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md) ; `optional`: ``true`` ; `optionalIf`: readonly [] \| [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)  }  } ; `features`: { `credentialOverTheAirAccess`: [`BitFlag`](exports_schema.md#bitflag-1) ; `doorPositionSensor`: [`BitFlag`](exports_schema.md#bitflag-1) ; `faceCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `fingerCredentials`: [`BitFlag`](exports_schema.md#bitflag-1) ; `holidaySchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `logging`: [`BitFlag`](exports_schema.md#bitflag-1) ; `notification`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCredential`: [`BitFlag`](exports_schema.md#bitflag-1) ; `user`: [`BitFlag`](exports_schema.md#bitflag-1) ; `weekDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1) ; `yearDayAccessSchedules`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``257`` & [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"DoorLock"`` ; `revision`: ``6``  }\>
 
 This cluster supports all DoorLock features. It may support illegal feature combinations.
 
@@ -184,19 +184,19 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:3134
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:3624
 
 ___
 
 ### CredentialOverTheAirAccessAndPinCredentialComponent
 
-• `Const` **CredentialOverTheAirAccessAndPinCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `requirePinForRemoteOperation`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **CredentialOverTheAirAccessAndPinCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `requirePinForRemoteOperation`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports features CredentialOverTheAirAccess and PinCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2210
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2244
 
 ___
 
@@ -220,7 +220,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.19
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:524
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:525
 
 ___
 
@@ -249,7 +249,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:922
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:923
 
 ___
 
@@ -276,31 +276,31 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.28
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:146
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:147
 
 ___
 
 ### DoorPositionSensorComponent
 
-• `Const` **DoorPositionSensorComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `doorClosedEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `doorOpenEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `doorState`: [`Attribute`](exports_cluster.md#attribute)<[`DoorState`](../enums/exports_cluster.DoorLock.DoorState.md) \| ``null``, `any`\> ; `openPeriod`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `doorStateChange`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **DoorPositionSensorComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `doorClosedEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `doorOpenEvents`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `doorState`: [`Attribute`](exports_cluster.md#attribute)<[`DoorState`](../enums/exports_cluster.DoorLock.DoorState.md) \| ``null``, `any`\> ; `openPeriod`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\>  } ; `events`: { `doorStateChange`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature DoorPositionSensor.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1672
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1681
 
 ___
 
 ### HolidaySchedulesComponent
 
-• `Const` **HolidaySchedulesComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `numberOfHolidaySchedulesSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `clearHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `getHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `setHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **HolidaySchedulesComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `numberOfHolidaySchedulesSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `clearHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setHolidaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature HolidaySchedules.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2142
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2171
 
 ___
 
@@ -329,7 +329,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.40
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1073
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1074
 
 ___
 
@@ -355,7 +355,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.44
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1088
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1089
 
 ___
 
@@ -380,19 +380,19 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.33
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:159
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:160
 
 ___
 
 ### LoggingComponent
 
-• `Const` **LoggingComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `enableLogging`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `numberOfLogRecordsSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `getLogRecord`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **LoggingComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `enableLogging`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`boolean`, `any`\> ; `numberOfLogRecordsSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `getLogRecord`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature Logging.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1718
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1730
 
 ___
 
@@ -424,105 +424,105 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.42
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1114
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1115
 
 ___
 
 ### NotUserComponent
 
-• `Const` **NotUserComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **NotUserComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{}\>
 
 A DoorLockCluster supports these elements if doesn't support feature USR.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2401
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2447
 
 ___
 
 ### NotificationAndPinCredentialComponent
 
-• `Const` **NotificationAndPinCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `keypadOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `lockSourceKeypad`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceKeypadErrorInvalidPin`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceKeypadErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1) ; `nonAccessUserOperationEventSourceKeypad`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknownOrManufacturerSpecificKeypadOperationEvent`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceKeypad`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceKeypadErrorInvalidCode`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceKeypadErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `keypadProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `pinAdded`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinChanged`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCleared`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCodeChanged`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknown`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **NotificationAndPinCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `keypadOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `keypadProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports features Notification and PinCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2222
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2258
 
 ___
 
 ### NotificationAndRfidCredentialComponent
 
-• `Const` **NotificationAndRfidCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `rfidOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `lockSourceRfid`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceRfidErrorInvalidRfidId`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceRfidErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknownOrManufacturerSpecificKeypadOperationEvent`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRfid`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRfidErrorInvalidRfidId`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRfidErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `rfidProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `idAdded`: [`BitFlag`](exports_schema.md#bitflag-1) ; `idCleared`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknown`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **NotificationAndRfidCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `rfidOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `rfidProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports features Notification and RfidCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2322
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2362
 
 ___
 
 ### NotificationComponent
 
-• `Const` **NotificationComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `manualOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `autoLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `keyLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `keyUnlock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `manualLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `manualUnlock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `oneTouchLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `scheduleLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `scheduleUnlock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `thumbturnLock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `thumbturnUnlock`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknownOrManufacturerSpecificManualOperationEvent`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `remoteOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `lockSourceRemote`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceRemoteErrorInvalidCode`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lockSourceRemoteErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknownOrManufacturerSpecificRemoteOperationEvent`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRemote`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRemoteErrorInvalidCode`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unlockSourceRemoteErrorInvalidSchedule`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `remoteProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `pinAdded`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinChanged`: [`BitFlag`](exports_schema.md#bitflag-1) ; `pinCleared`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCodeAdded`: [`BitFlag`](exports_schema.md#bitflag-1) ; `rfidCodeCleared`: [`BitFlag`](exports_schema.md#bitflag-1) ; `unknown`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **NotificationComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `manualOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `remoteOperationEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `remoteProgrammingEventMask`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature Notification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2261
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2299
 
 ___
 
 ### PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent
 
-• `Const` **PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `getUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `getUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `setUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `setUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **PinCredentialAndRfidCredentialAndFingerCredentialsNotUserComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `getUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `getUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `setUserStatus`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\> ; `setUserType`: [`OptionalCommand`](exports_cluster.md#optionalcommand)<`void`, `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports features PinCredential, RfidCredential and
 FingerCredentials and it doesn't support feature USR.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2380
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2424
 
 ___
 
 ### PinCredentialComponent
 
-• `Const` **PinCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `maxPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `minPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfPinUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `sendPinOverTheAir`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **PinCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `maxPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `minPinCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfPinUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `sendPinOverTheAir`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature PinCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1973
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1992
 
 ___
 
 ### PinCredentialNotUserComponent
 
-• `Const` **PinCredentialNotUserComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `clearAllPinCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `clearPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `getPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `setPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **PinCredentialNotUserComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `clearAllPinCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `clearPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `getPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `setPinCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature PinCredential and it doesn't support feature
 USR.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2358
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2400
 
 ___
 
 ### PinCredentialOrRfidCredentialComponent
 
-• `Const` **PinCredentialOrRfidCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `userCodeTemporaryDisableTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> ; `wrongCodeEntryLimit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **PinCredentialOrRfidCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `userCodeTemporaryDisableTime`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> ; `wrongCodeEntryLimit`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports features PinCredential or RfidCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2181
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2213
 
 ___
 
@@ -550,7 +550,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.41
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1100
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1101
 
 ___
 
@@ -577,32 +577,32 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.45
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1132
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1133
 
 ___
 
 ### RfidCredentialComponent
 
-• `Const` **RfidCredentialComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `maxRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `minRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfRfidUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **RfidCredentialComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `maxRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `minRfidCodeLength`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfRfidUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature RfidCredential.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2011
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2032
 
 ___
 
 ### RfidCredentialNotUserComponent
 
-• `Const` **RfidCredentialNotUserComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), { `clearAllRfidCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `clearRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `getRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `setRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **RfidCredentialNotUserComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `commands`: { `clearAllRfidCodes`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `clearRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `getRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\> ; `setRfidCode`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature RfidCredential and it doesn't support feature
 USR.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2406
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2452
 
 ___
 
@@ -630,7 +630,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.43
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1145
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1146
 
 ___
 
@@ -654,7 +654,7 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.46
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1159
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1160
 
 ___
 
@@ -680,13 +680,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.3.24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:134
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:135
 
 ___
 
 ### TlvClearCredentialRequest
 
-• `Const` **TlvClearCredentialRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClearCredentialRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock clearCredential command
 
@@ -696,13 +696,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:791
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:792
 
 ___
 
 ### TlvClearHolidayScheduleRequest
 
-• `Const` **TlvClearHolidayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClearHolidayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock clearHolidaySchedule command
 
@@ -712,13 +712,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1065
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1066
 
 ___
 
 ### TlvClearUserRequest
 
-• `Const` **TlvClearUserRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClearUserRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock clearUser command
 
@@ -728,13 +728,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:705
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:706
 
 ___
 
 ### TlvClearWeekDayScheduleRequest
 
-• `Const` **TlvClearWeekDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClearWeekDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock clearWeekDaySchedule command
 
@@ -744,13 +744,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:988
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:989
 
 ___
 
 ### TlvClearYearDayScheduleRequest
 
-• `Const` **TlvClearYearDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvClearYearDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock clearYearDaySchedule command
 
@@ -760,13 +760,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1027
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1028
 
 ___
 
 ### TlvCredentialStruct
 
-• `Const` **TlvCredentialStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvCredentialStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 The CredentialStruct is used in LockOperation event and Get User Record Response command and shall indicate the
 credential types and their corresponding indices (if any) for the event or user record.
@@ -777,13 +777,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:310
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:311
 
 ___
 
 ### TlvDoorLockAlarmEvent
 
-• `Const` **TlvDoorLockAlarmEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvDoorLockAlarmEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the DoorLock doorLockAlarm event
 
@@ -793,13 +793,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.5.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:248
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:249
 
 ___
 
 ### TlvDoorStateChangeEvent
 
-• `Const` **TlvDoorStateChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvDoorStateChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the DoorLock doorStateChange event
 
@@ -809,13 +809,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:511
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:512
 
 ___
 
 ### TlvGetCredentialStatusRequest
 
-• `Const` **TlvGetCredentialStatusRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetCredentialStatusRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock getCredentialStatus command
 
@@ -825,13 +825,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:758
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:759
 
 ___
 
 ### TlvGetCredentialStatusResponse
 
-• `Const` **TlvGetCredentialStatusResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetCredentialStatusResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -839,13 +839,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:779
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:780
 
 ___
 
 ### TlvGetHolidayScheduleRequest
 
-• `Const` **TlvGetHolidayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetHolidayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock getHolidaySchedule command
 
@@ -855,13 +855,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1047
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1048
 
 ___
 
 ### TlvGetHolidayScheduleResponse
 
-• `Const` **TlvGetHolidayScheduleResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetHolidayScheduleResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -869,13 +869,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1053
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1054
 
 ___
 
 ### TlvGetUserRequest
 
-• `Const` **TlvGetUserRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetUserRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock getUser command
 
@@ -885,13 +885,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:667
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:668
 
 ___
 
 ### TlvGetUserResponse
 
-• `Const` **TlvGetUserResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetUserResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -899,13 +899,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:673
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:674
 
 ___
 
 ### TlvGetWeekDayScheduleRequest
 
-• `Const` **TlvGetWeekDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetWeekDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock getWeekDaySchedule command
 
@@ -915,13 +915,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:958
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:959
 
 ___
 
 ### TlvGetWeekDayScheduleResponse
 
-• `Const` **TlvGetWeekDayScheduleResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetWeekDayScheduleResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -929,13 +929,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:965
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:966
 
 ___
 
 ### TlvGetYearDayScheduleRequest
 
-• `Const` **TlvGetYearDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetYearDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock getYearDaySchedule command
 
@@ -945,13 +945,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1008
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1009
 
 ___
 
 ### TlvGetYearDayScheduleResponse
 
-• `Const` **TlvGetYearDayScheduleResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGetYearDayScheduleResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -959,13 +959,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1015
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1016
 
 ___
 
 ### TlvLockDoorRequest
 
-• `Const` **TlvLockDoorRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLockDoorRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock lockDoor command
 
@@ -975,13 +975,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:184
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:185
 
 ___
 
 ### TlvLockOperationErrorEvent
 
-• `Const` **TlvLockOperationErrorEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLockOperationErrorEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the DoorLock lockOperationError event
 
@@ -991,13 +991,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.5.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:407
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:408
 
 ___
 
 ### TlvLockOperationEvent
 
-• `Const` **TlvLockOperationEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLockOperationEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the DoorLock lockOperation event
 
@@ -1007,13 +1007,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.5.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:331
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:332
 
 ___
 
 ### TlvLockUserChangeEvent
 
-• `Const` **TlvLockUserChangeEvent**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvLockUserChangeEvent**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Body of the DoorLock lockUserChange event
 
@@ -1023,13 +1023,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.5.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:865
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:866
 
 ___
 
 ### TlvSetCredentialRequest
 
-• `Const` **TlvSetCredentialRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetCredentialRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock setCredential command
 
@@ -1039,13 +1039,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:713
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:714
 
 ___
 
 ### TlvSetCredentialResponse
 
-• `Const` **TlvSetCredentialResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetCredentialResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -1053,13 +1053,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:748
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:749
 
 ___
 
 ### TlvSetHolidayScheduleRequest
 
-• `Const` **TlvSetHolidayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetHolidayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock setHolidaySchedule command
 
@@ -1069,13 +1069,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1036
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1037
 
 ___
 
 ### TlvSetUserRequest
 
-• `Const` **TlvSetUserRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetUserRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock setUser command
 
@@ -1085,13 +1085,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:653
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:654
 
 ___
 
 ### TlvSetWeekDayScheduleRequest
 
-• `Const` **TlvSetWeekDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetWeekDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock setWeekDaySchedule command
 
@@ -1101,13 +1101,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:936
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:937
 
 ___
 
 ### TlvSetYearDayScheduleRequest
 
-• `Const` **TlvSetYearDayScheduleRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvSetYearDayScheduleRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock setYearDaySchedule command
 
@@ -1117,13 +1117,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:997
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:998
 
 ___
 
 ### TlvUnlockDoorRequest
 
-• `Const` **TlvUnlockDoorRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvUnlockDoorRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock unlockDoor command
 
@@ -1133,13 +1133,13 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:192
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:193
 
 ___
 
 ### TlvUnlockWithTimeoutRequest
 
-• `Const` **TlvUnlockWithTimeoutRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvUnlockWithTimeoutRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the DoorLock unlockWithTimeout command
 
@@ -1149,40 +1149,40 @@ MatterApplicationClusterSpecificationV1_1 § 5.2.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:200
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:201
 
 ___
 
 ### UserComponent
 
-• `Const` **UserComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `credentialRulesSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `dual`: [`BitFlag`](exports_schema.md#bitflag-1) ; `single`: [`BitFlag`](exports_schema.md#bitflag-1) ; `tri`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\> ; `expiringUserTimeout`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `numberOfCredentialsSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfTotalUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `clearCredential`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `clearUser`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `getCredentialStatus`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `getUser`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `setCredential`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `setUser`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, { `lockUserChange`: [`Event`](exports_cluster.md#event)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\>  }\>
+• `Const` **UserComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `credentialRulesSupport`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `expiringUserTimeout`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `numberOfCredentialsSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `numberOfTotalUsersSupported`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `clearCredential`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `clearUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getCredentialStatus`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `getUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setCredential`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setUser`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: { `lockUserChange`: [`Event`](exports_cluster.md#event)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature User.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:1743
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:1758
 
 ___
 
 ### WeekDayAccessSchedulesComponent
 
-• `Const` **WeekDayAccessSchedulesComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `numberOfWeekDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `clearWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `getWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `setWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **WeekDayAccessSchedulesComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `numberOfWeekDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `clearWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setWeekDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature WeekDayAccessSchedules.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2038
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2061
 
 ___
 
 ### YearDayAccessSchedulesComponent
 
-• `Const` **YearDayAccessSchedulesComponent**: [`ClusterComponent`](exports_cluster.md#clustercomponent)<{ `numberOfYearDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `clearYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `getYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `setYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **YearDayAccessSchedulesComponent**: [`TypedComponent`](../interfaces/exports_cluster.ClusterFactory.TypedComponent.md)<{ `attributes`: { `numberOfYearDaySchedulesSupportedPerUser`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `clearYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `getYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `setYearDaySchedule`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  }  }\>
 
 A DoorLockCluster supports these elements if it supports feature YearDayAccessSchedules.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/DoorLockCluster.d.ts:2101
+packages/matter.js/dist/esm/cluster/definitions/DoorLockCluster.d.ts:2127

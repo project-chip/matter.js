@@ -34,7 +34,7 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 - [addDevice](exports_device.ComposedDevice.md#adddevice)
 - [addFixedLabel](exports_device.ComposedDevice.md#addfixedlabel)
 - [addUserLabel](exports_device.ComposedDevice.md#adduserlabel)
-- [clearStructureChangedCallback](exports_device.ComposedDevice.md#clearstructurechangedcallback)
+- [destroy](exports_device.ComposedDevice.md#destroy)
 - [determineUniqueID](exports_device.ComposedDevice.md#determineuniqueid)
 - [getAllClusterClients](exports_device.ComposedDevice.md#getallclusterclients)
 - [getAllClusterServers](exports_device.ComposedDevice.md#getallclusterservers)
@@ -50,6 +50,7 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 - [hasClusterClient](exports_device.ComposedDevice.md#hasclusterclient)
 - [hasClusterServer](exports_device.ComposedDevice.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.ComposedDevice.md#removechildendpoint)
+- [removeFromStructure](exports_device.ComposedDevice.md#removefromstructure)
 - [setDeviceTypes](exports_device.ComposedDevice.md#setdevicetypes)
 - [setStructureChangedCallback](exports_device.ComposedDevice.md#setstructurechangedcallback)
 - [updatePartsList](exports_device.ComposedDevice.md#updatepartslist)
@@ -77,7 +78,7 @@ Creates a new ComposedDevice.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:21
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:21
 
 ## Properties
 
@@ -91,7 +92,7 @@ packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:21
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:19
+packages/matter.js/dist/esm/device/Endpoint.d.ts:19
 
 ___
 
@@ -105,7 +106,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:23
+packages/matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -119,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:25
+packages/matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -133,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
+packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -157,7 +158,7 @@ packages/matter.js/dist/cjs/device/Endpoint.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:50
+packages/matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -190,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:41
+packages/matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -221,7 +222,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:40
+packages/matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -243,7 +244,7 @@ Add a sub-device to the composed device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:26
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:26
 
 ___
 
@@ -268,7 +269,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:38
+packages/matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -293,13 +294,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:39
+packages/matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
-### clearStructureChangedCallback
+### destroy
 
-▸ **clearStructureChangedCallback**(): `void`
+▸ **destroy**(): `void`
 
 #### Returns
 
@@ -307,11 +308,11 @@ ___
 
 #### Inherited from
 
-[Endpoint](exports_device.Endpoint.md).[clearStructureChangedCallback](exports_device.Endpoint.md#clearstructurechangedcallback)
+[Endpoint](exports_device.Endpoint.md).[destroy](exports_device.Endpoint.md#destroy)
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:36
+packages/matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -329,7 +330,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:54
+packages/matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -347,7 +348,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:57
+packages/matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -365,7 +366,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:56
+packages/matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -389,7 +390,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:51
+packages/matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -407,7 +408,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:52
+packages/matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -441,7 +442,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:43
+packages/matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -465,7 +466,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:45
+packages/matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -499,7 +500,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:42
+packages/matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -523,7 +524,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:44
+packages/matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -541,7 +542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:48
+packages/matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -559,7 +560,7 @@ Array with all sub-devices
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:32
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:32
 
 ___
 
@@ -577,7 +578,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:37
+packages/matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -611,7 +612,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:47
+packages/matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -645,7 +646,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:46
+packages/matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -669,7 +670,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:53
+packages/matter.js/dist/esm/device/Endpoint.d.ts:54
+
+___
+
+### removeFromStructure
+
+▸ **removeFromStructure**(): `void`
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Endpoint](exports_device.Endpoint.md).[removeFromStructure](exports_device.Endpoint.md#removefromstructure)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -693,7 +712,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:49
+packages/matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -717,7 +736,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:35
+packages/matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ___
 
@@ -735,7 +754,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/Endpoint.d.ts:58
+packages/matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -755,4 +774,4 @@ Verify that the required clusters exists on the device.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/device/ComposedDevice.d.ts:36
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:36

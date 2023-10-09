@@ -32,7 +32,7 @@ Indicate a Node currently in the process of verifying and applying a software up
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:46
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:47
 
 ___
 
@@ -44,7 +44,7 @@ Indicate a Node waiting caused by AwaitNextAction response.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:50
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:51
 
 ___
 
@@ -56,7 +56,7 @@ Indicate a Node waiting after a Busy response.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:38
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:39
 
 ___
 
@@ -68,7 +68,7 @@ Indicate a Node is capable of user consent.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:58
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:59
 
 ___
 
@@ -80,7 +80,7 @@ Indicate a Node currently in the process of downloading a software update.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:42
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:43
 
 ___
 
@@ -92,7 +92,7 @@ Indicate a Node not yet in the process of software update.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:31
 
 ___
 
@@ -104,7 +104,7 @@ Indicate a Node in the process of querying an OTA Provider.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:35
 
 ___
 
@@ -116,7 +116,7 @@ Indicate a Node in the process of recovering to a previous version.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:54
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:55
 
 ___
 
@@ -128,4 +128,4 @@ Current state is not yet determined.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/OtaSoftwareUpdateRequestorCluster.d.ts:27

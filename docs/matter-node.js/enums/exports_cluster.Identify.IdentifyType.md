@@ -32,7 +32,7 @@ relay.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:38
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:29
 
 ___
 
@@ -54,7 +54,7 @@ Presentation will be visible on display screen.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:32
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:33
 
 ___
 
@@ -66,7 +66,7 @@ Light output of a lighting product.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:24
 
 ___
 
@@ -78,7 +78,7 @@ No presentation.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:20
 
 ___
 
@@ -90,4 +90,4 @@ Typically a small LED.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/IdentifyCluster.d.ts:27
+packages/matter.js/dist/esm/cluster/definitions/IdentifyCluster.d.ts:28

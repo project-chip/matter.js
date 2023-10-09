@@ -24,7 +24,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:27
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:27
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:26
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:26
 
 ___
 
@@ -44,9 +44,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:24
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:25
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:25
 
 ## Variables
 
@@ -56,6 +56,6 @@ packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:25
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:24
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:24
 
-packages/matter.js/dist/cjs/model/elements/MatterElement.d.ts:25
+packages/matter.js/dist/esm/model/elements/MatterElement.d.ts:25

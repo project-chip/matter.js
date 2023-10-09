@@ -29,4 +29,4 @@ supported application catalogs
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ApplicationLauncherCluster.d.ts:218
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:219

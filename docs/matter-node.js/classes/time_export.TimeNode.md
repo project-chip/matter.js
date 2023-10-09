@@ -62,7 +62,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:8
+packages/matter.js/dist/esm/time/Time.d.ts:8
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:18
+packages/matter.js/dist/esm/time/Time.d.ts:18
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:15
+packages/matter.js/dist/esm/time/Time.d.ts:15
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:10
+packages/matter.js/dist/esm/time/Time.d.ts:10
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:12
+packages/matter.js/dist/esm/time/Time.d.ts:12
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/time/Time.d.ts:19
+packages/matter.js/dist/esm/time/Time.d.ts:19
 
 ## Methods
 
@@ -219,7 +219,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/time/TimeNode.ts#L51)
+packages/matter-node.js/src/time/TimeNode.ts:51
 
 ___
 
@@ -246,7 +246,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:47](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/time/TimeNode.ts#L47)
+packages/matter-node.js/src/time/TimeNode.ts:47
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:39](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/time/TimeNode.ts#L39)
+packages/matter-node.js/src/time/TimeNode.ts:39
 
 ___
 
@@ -282,4 +282,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/time/TimeNode.ts#L43)
+packages/matter-node.js/src/time/TimeNode.ts:43

@@ -33,7 +33,7 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: [`ClusterForBaseCluster`](exports_cluster.md#clusterforbasecluster)<typeof [`Base`](exports_cluster.GroupKeyManagement.md#base), `SF`\> & { `supportedFeatures`: `SF`  }
+Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](exports_cluster.GroupKeyManagement.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  }
 
 #### Type parameters
 
@@ -43,25 +43,25 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:1034
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:1379
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`BaseClusterComponent`](exports_cluster.md#baseclustercomponent)<{ `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  }, { `groupKeyMap`: [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)[], `any`\> ; `groupTable`: [`FabricScopedAttribute`](exports_cluster.md#fabricscopedattribute)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)[], `any`\> ; `maxGroupKeysPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `maxGroupsPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  }, { `keySetRead`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `keySetReadAllIndices`: [`Command`](exports_cluster.md#command)<`void`, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `keySetRemove`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `keySetWrite`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md)\>
+• `Const` **Base**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `groupKeyMap`: [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `groupTable`: [`FabricScopedAttribute`](exports_cluster.md#fabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `maxGroupKeysPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `maxGroupsPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `keySetRead`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetReadAllIndices`: [`Command`](exports_cluster.md#command)<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetRemove`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `keySetWrite`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: { `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``63`` ; `name`: ``"GroupKeyManagement"`` ; `revision`: ``1``  }\>
 
 These elements and properties are present in all GroupKeyManagement clusters.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:365
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:366
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`ExtensibleCluster`](exports_cluster.md#extensiblecluster)<{ `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  }, [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<{ `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), { `keySetRead`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `keySetReadAllIndices`: [`Command`](exports_cluster.md#command)<`void`, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `any`\> ; `keySetRemove`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\> ; `keySetWrite`: [`Command`](exports_cluster.md#command)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md), `void`, `any`\>  }, [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/cluster/Cluster"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_cluster_Cluster_.md), <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.GroupKeyManagement.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>\>
+• `Const` **Cluster**: { `attributes`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `commands`: { `keySetRead`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetReadAllIndices`: [`Command`](exports_cluster.md#command)<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetRemove`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `keySetWrite`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `events`: {} ; `features`: { `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md) ; `name`: ``"GroupKeyManagement"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `groupKeyMap`: [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `groupTable`: [`FabricScopedAttribute`](exports_cluster.md#fabricscopedattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)[], `any`\> ; `maxGroupKeysPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `maxGroupsPerFabric`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\>  } ; `commands`: { `keySetRead`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetReadAllIndices`: [`Command`](exports_cluster.md#command)<`void`, [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `any`\> ; `keySetRemove`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\> ; `keySetWrite`: [`Command`](exports_cluster.md#command)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md), `void`, `any`\>  } ; `features`: { `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  } ; `id`: ``63`` ; `name`: ``"GroupKeyManagement"`` ; `revision`: ``1``  }\>, ``"attributes"``\> & { `with`: <T\>(...`features_0`: `T`) => [`Extension`](exports_cluster.GroupKeyManagement.md#extension)<[`BitFlags`](exports_schema.md#bitflags)<{ `cacheAndSync`: [`BitFlag`](exports_schema.md#bitflag-1)  }, `T`\>\>  }
 
 Group Key Management
 
@@ -76,13 +76,13 @@ MatterCoreSpecificationV1_1 § 11.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:694
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:702
 
 ___
 
 ### TlvGroupInfoMapStruct
 
-• `Const` **TlvGroupInfoMapStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGroupInfoMapStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This field uniquely identifies the group within the scope of the given Fabric.
 
@@ -92,13 +92,13 @@ MatterCoreSpecificationV1_1 § 11.2.6.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:38
 
 ___
 
 ### TlvGroupKeyMapStruct
 
-• `Const` **TlvGroupKeyMapStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGroupKeyMapStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -106,13 +106,13 @@ MatterCoreSpecificationV1_1 § 11.2.6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:13
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:14
 
 ___
 
 ### TlvGroupKeySetStruct
 
-• `Const` **TlvGroupKeySetStruct**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvGroupKeySetStruct**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This field shall provide the fabric-unique index for the associated group key set, as specified in Section
 4.15.3.5.1, “Group Key Set ID”.
@@ -123,13 +123,13 @@ MatterCoreSpecificationV1_1 § 11.2.6.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:94
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:95
 
 ___
 
 ### TlvKeySetReadAllIndicesResponse
 
-• `Const` **TlvKeySetReadAllIndicesResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvKeySetReadAllIndicesResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This command shall be generated in response to KeySetReadAllIndices and it shall contain the list of
 GroupKeySetID for all Group Key Sets associated with the scoped Fabric.
@@ -147,13 +147,13 @@ MatterCoreSpecificationV1_1 § 11.2.8.6
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:346
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:347
 
 ___
 
 ### TlvKeySetReadRequest
 
-• `Const` **TlvKeySetReadRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvKeySetReadRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the GroupKeyManagement keySetRead command
 
@@ -163,13 +163,13 @@ MatterCoreSpecificationV1_1 § 11.2.8.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:244
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:245
 
 ___
 
 ### TlvKeySetReadResponse
 
-• `Const` **TlvKeySetReadResponse**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvKeySetReadResponse**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 This command shall be generated in response to the KeySetRead command, if a valid Group Key Set was found. It
 shall contain the configuration of the requested Group Key Set, with the EpochKey0, EpochKey1 and EpochKey2 key
@@ -181,13 +181,13 @@ MatterCoreSpecificationV1_1 § 11.2.8.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:254
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:255
 
 ___
 
 ### TlvKeySetRemoveRequest
 
-• `Const` **TlvKeySetRemoveRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvKeySetRemoveRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the GroupKeyManagement keySetRemove command
 
@@ -197,13 +197,13 @@ MatterCoreSpecificationV1_1 § 11.2.8.4
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:330
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:331
 
 ___
 
 ### TlvKeySetWriteRequest
 
-• `Const` **TlvKeySetWriteRequest**: [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvKeySetWriteRequest**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 Input to the GroupKeyManagement keySetWrite command
 
@@ -213,4 +213,4 @@ MatterCoreSpecificationV1_1 § 11.2.8.1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/GroupKeyManagementCluster.d.ts:168
+packages/matter.js/dist/esm/cluster/definitions/GroupKeyManagementCluster.d.ts:169

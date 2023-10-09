@@ -42,7 +42,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:54
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:55
 
 ## Properties
 
@@ -52,7 +52,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:54
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:52
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:53
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:51
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:52
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:53
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:54
 
 ## Accessors
 
@@ -86,7 +86,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:53
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:58
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:59
 
 ## Methods
 
@@ -106,7 +106,7 @@ packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:58
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:55
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:56
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:56
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:57
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/ExchangeManager.d.ts:57
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:58

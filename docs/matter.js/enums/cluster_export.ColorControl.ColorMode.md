@@ -26,7 +26,7 @@ The value of the ColorControl colorMode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:59](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L59)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:50
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:57](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L57)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:48
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L58)
+packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:49

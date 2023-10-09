@@ -31,7 +31,7 @@ Level 1 reduced functionality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:37
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:38
 
 ___
 
@@ -43,7 +43,7 @@ Level 2 reduced functionality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:41
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:42
 
 ___
 
@@ -55,7 +55,7 @@ Level 3 reduced functionality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:45
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:46
 
 ___
 
@@ -67,7 +67,7 @@ Level 4 reduced functionality
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:49
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:50
 
 ___
 
@@ -79,7 +79,7 @@ Least functionality available to the user
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:53
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:54
 
 ___
 
@@ -91,4 +91,4 @@ All functionality available to the user
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:33
+packages/matter.js/dist/esm/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.d.ts:34

@@ -74,7 +74,7 @@ by the Matter Specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:27
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:27
 
 ## Properties
 
@@ -88,7 +88,7 @@ packages/matter.js/dist/cjs/model/aspects/Access.d.ts:27
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:13
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:13
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:14
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:14
 
 ___
 
@@ -116,7 +116,7 @@ Access.Ast.fabric
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:18
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:18
 
 ___
 
@@ -130,7 +130,7 @@ Access.Ast.readPriv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:16
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:16
 
 ___
 
@@ -144,7 +144,7 @@ Access.Ast.rw
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:15
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:37
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:37
 
 ___
 
@@ -168,7 +168,7 @@ Access.Ast.timed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:19
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:19
 
 ___
 
@@ -182,7 +182,7 @@ Access.Ast.writePriv
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:17
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:17
 
 ## Accessors
 
@@ -200,7 +200,7 @@ Aspect.empty
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:22
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:20
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:20
 
 ___
 
@@ -232,7 +232,7 @@ Aspect.valid
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:15
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:15
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:21
 
 ## Methods
 
@@ -272,7 +272,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:21
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:21
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:23
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:24
 
 ___
 
@@ -321,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:24
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:25
 
 ___
 
@@ -335,9 +335,13 @@ Displays access using the standard Matter syntax.
 
 `string`
 
+#### Overrides
+
+[Aspect](exports_model.Aspect.md).[toString](exports_model.Aspect.md#tostring)
+
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:36
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:36
 
 ___
 
@@ -355,7 +359,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Aspect.d.ts:22
+packages/matter.js/dist/esm/model/aspects/Aspect.d.ts:22
 
 ___
 
@@ -379,4 +383,4 @@ lenient.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Access.d.ts:32
+packages/matter.js/dist/esm/model/aspects/Access.d.ts:32

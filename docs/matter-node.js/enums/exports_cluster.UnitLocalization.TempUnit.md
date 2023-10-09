@@ -26,7 +26,7 @@ Temperature conveyed in Celsius
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:22
 
 ___
 
@@ -38,7 +38,7 @@ Temperature conveyed in Fahrenheit
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:17
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:18
 
 ___
 
@@ -50,4 +50,4 @@ Temperature conveyed in Kelvin
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/UnitLocalizationCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/UnitLocalizationCluster.d.ts:26

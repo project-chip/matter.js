@@ -33,13 +33,13 @@ MatterApplicationClusterSpecificationV1_1 § 3.3.6.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BallastConfigurationCluster.d.ts:15
+packages/matter.js/dist/esm/cluster/definitions/BallastConfigurationCluster.d.ts:16
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: [`Cluster`](exports_cluster.md#cluster)<[`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/schema/BitmapSchema"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_schema_BitmapSchema_.md), [`"/Users/ingof/Dev/GitHub/matter.js/packages/matter.js/dist/cjs/util/Type"`](export._internal_.__Users_ingof_Dev_GitHub_matter_js_packages_matter_js_dist_cjs_util_Type_.md), {}, {}\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `ballastFactorAdjustment`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number` \| ``null``, `any`\> ; `ballastStatus`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `intrinsicBallastFactor`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number` \| ``null``, `any`\> ; `lampAlarmMode`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<[`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md), `any`\> ; `lampBurnHours`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number` \| ``null``, `any`\> ; `lampBurnHoursTripPoint`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number` \| ``null``, `any`\> ; `lampManufacturer`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `lampQuantity`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `lampRatedHours`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number` \| ``null``, `any`\> ; `lampType`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `maxLevel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> ; `minLevel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`number`, `any`\> ; `physicalMaxLevel`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\> ; `physicalMinLevel`: [`Attribute`](exports_cluster.md#attribute)<`number`, `any`\>  } ; `id`: ``769`` ; `name`: ``"BallastConfiguration"`` ; `revision`: ``4``  }\>
 
 Ballast Configuration
 
@@ -51,7 +51,7 @@ MatterApplicationClusterSpecificationV1_1 § 3.3
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BallastConfigurationCluster.d.ts:34
+packages/matter.js/dist/esm/cluster/definitions/BallastConfigurationCluster.d.ts:35
 
 ___
 
@@ -73,4 +73,4 @@ MatterApplicationClusterSpecificationV1_1 § 3.3.9.5
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/BallastConfigurationCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/BallastConfigurationCluster.d.ts:25

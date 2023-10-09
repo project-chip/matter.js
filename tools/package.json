@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.5.1-alpha.0-20231006-78029b2",
+    "version": "0.6.1-alpha.0-20231009-939307e",
     "description": "Matter.js tooling",
     "private": true,
     "type": "module",
@@ -63,6 +63,6 @@
         "@types/chai-as-promised": "^7.1.6",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.1",
-        "@types/yargs": "^17.0.26"
+        "@types/yargs": "^17.0.28"
     }
 }

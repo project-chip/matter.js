@@ -26,4 +26,4 @@ British Thermal Unit per Hour
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/ThermostatCluster.d.ts:328
+packages/matter.js/dist/esm/cluster/definitions/ThermostatCluster.d.ts:329

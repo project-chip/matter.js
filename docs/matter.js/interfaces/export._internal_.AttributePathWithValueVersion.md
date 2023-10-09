@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:58](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L58)
+packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:54
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:59](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L59)
+packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:55
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:60](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L60)
+packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:56
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:61](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts#L61)
+packages/matter.js/src/protocol/interaction/SubscriptionHandler.ts:57

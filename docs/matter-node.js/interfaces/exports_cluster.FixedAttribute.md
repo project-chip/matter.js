@@ -34,6 +34,7 @@
 - [readAcl](exports_cluster.FixedAttribute.md#readacl)
 - [scene](exports_cluster.FixedAttribute.md#scene)
 - [schema](exports_cluster.FixedAttribute.md#schema)
+- [timed](exports_cluster.FixedAttribute.md#timed)
 - [unknown](exports_cluster.FixedAttribute.md#unknown)
 - [writable](exports_cluster.FixedAttribute.md#writable)
 - [writeAcl](exports_cluster.FixedAttribute.md#writeacl)
@@ -50,7 +51,7 @@ Attribute.default
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:37
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:38
 
 ___
 
@@ -64,7 +65,7 @@ Attribute.fabricScoped
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:34
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:35
 
 ___
 
@@ -78,7 +79,7 @@ Attribute.fixed
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:71
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:72
 
 ___
 
@@ -92,7 +93,7 @@ Attribute.id
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:26
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:26
 
 ___
 
@@ -106,7 +107,7 @@ Attribute.isConditional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:38
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:39
 
 ___
 
@@ -120,7 +121,7 @@ Attribute.mandatoryIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:40
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:41
 
 ___
 
@@ -134,7 +135,7 @@ Attribute.omitChanges
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:35
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:36
 
 ___
 
@@ -148,7 +149,7 @@ Attribute.optional
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:28
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:28
 
 ___
 
@@ -162,7 +163,7 @@ Attribute.optionalIf
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:39
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:40
 
 ___
 
@@ -176,7 +177,7 @@ Attribute.persistent
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:32
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:32
 
 ___
 
@@ -190,7 +191,7 @@ Attribute.readAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:29
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:29
 
 ___
 
@@ -204,7 +205,7 @@ Attribute.scene
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:31
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:31
 
 ___
 
@@ -218,7 +219,21 @@ Attribute.schema
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:27
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:27
+
+___
+
+### timed
+
+• **timed**: `boolean`
+
+#### Inherited from
+
+Attribute.timed
+
+#### Defined in
+
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:33
 
 ___
 
@@ -232,7 +247,7 @@ Attribute.unknown
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:41
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:42
 
 ___
 
@@ -246,7 +261,7 @@ Attribute.writable
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:30
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:30
 
 ___
 
@@ -260,4 +275,4 @@ Attribute.writeAcl
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:36
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:37

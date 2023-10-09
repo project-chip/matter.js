@@ -26,7 +26,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:10
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:10
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:8
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:8
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:12
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:12
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:11
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:11
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:14
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:14
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:15
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:15
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:13
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:13
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:9
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:9
 
 ___
 
@@ -106,4 +106,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/codec/DerCodec.d.ts:16
+packages/matter.js/dist/esm/codec/DerCodec.d.ts:16

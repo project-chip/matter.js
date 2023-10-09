@@ -35,7 +35,7 @@ MatterApplicationClusterSpecificationV1_1 § 6.9.5.2
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:20
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:21
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:21
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:22
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:22
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:23
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:23
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:24
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:24
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:25
 
 ___
 
@@ -87,7 +87,7 @@ Indicates content not coming from a physical input.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:19
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:20
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:25
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:26
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:26
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:27
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:30
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:31
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:28
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:29
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:29
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:30
 
 ___
 
@@ -147,4 +147,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/definitions/MediaInputCluster.d.ts:27
+packages/matter.js/dist/esm/cluster/definitions/MediaInputCluster.d.ts:28

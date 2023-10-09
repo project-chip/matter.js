@@ -28,7 +28,7 @@ Indicates a Cellular interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:50](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L50)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:51
 
 ___
 
@@ -40,7 +40,7 @@ Indicates a Ethernet interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:45](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L45)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:46
 
 ___
 
@@ -52,7 +52,7 @@ Indicates a Thread interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:55](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L55)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:56
 
 ___
 
@@ -64,7 +64,7 @@ Indicates an interface of an unspecified type.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:35](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L35)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:36
 
 ___
 
@@ -76,4 +76,4 @@ Indicates a Wi-Fi interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:40](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L40)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:41

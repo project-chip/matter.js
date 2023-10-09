@@ -25,7 +25,7 @@ Node is connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:411](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L411)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:403
 
 ___
 
@@ -37,4 +37,4 @@ Node is not connected
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:416](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L416)
+packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:408

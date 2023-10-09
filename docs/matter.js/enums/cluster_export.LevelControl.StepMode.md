@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:90](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L90)
+packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:81
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:89](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L89)
+packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:80

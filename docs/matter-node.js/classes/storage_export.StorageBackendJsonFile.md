@@ -20,13 +20,16 @@
 
 - [closed](storage_export.StorageBackendJsonFile.md#closed)
 - [commitTimer](storage_export.StorageBackendJsonFile.md#committimer)
+- [committed](storage_export.StorageBackendJsonFile.md#committed)
 - [initialized](storage_export.StorageBackendJsonFile.md#initialized)
 - [path](storage_export.StorageBackendJsonFile.md#path)
+- [resolveCommitted](storage_export.StorageBackendJsonFile.md#resolvecommitted)
 - [store](storage_export.StorageBackendJsonFile.md#store)
-- [waitForCommit](storage_export.StorageBackendJsonFile.md#waitforcommit)
+- [commitDelay](storage_export.StorageBackendJsonFile.md#commitdelay)
 
 ### Methods
 
+- [clear](storage_export.StorageBackendJsonFile.md#clear)
 - [close](storage_export.StorageBackendJsonFile.md#close)
 - [commit](storage_export.StorageBackendJsonFile.md#commit)
 - [delete](storage_export.StorageBackendJsonFile.md#delete)
@@ -35,6 +38,7 @@
 - [initialize](storage_export.StorageBackendJsonFile.md#initialize)
 - [set](storage_export.StorageBackendJsonFile.md#set)
 - [toJson](storage_export.StorageBackendJsonFile.md#tojson)
+- [triggerCommit](storage_export.StorageBackendJsonFile.md#triggercommit)
 
 ## Constructors
 
@@ -54,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L26)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27
 
 ## Properties
 
@@ -64,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:23](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L23)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:23
 
 ___
 
@@ -74,7 +78,17 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:21](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L21)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22
+
+___
+
+### committed
+
+• **committed**: `Promise`<`void`\>
+
+#### Defined in
+
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:20
 
 ___
 
@@ -84,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:24](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L24)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:24
 
 ___
 
@@ -94,7 +108,25 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:26](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L26)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27
+
+___
+
+### resolveCommitted
+
+• `Private` `Optional` **resolveCommitted**: () => `void`
+
+#### Type declaration
+
+▸ (): `void`
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:25
 
 ___
 
@@ -108,19 +140,39 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:9
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
 
 ___
 
-### waitForCommit
+### commitDelay
 
-• `Private` **waitForCommit**: `boolean` = `false`
+▪ `Static` **commitDelay**: `number` = `1000`
+
+We store changes after a value was set to the storage, but not more often than this setting (in ms).
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L22)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[clear](storage_export.StorageBackendMemory.md#clear)
+
+#### Defined in
+
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:63
+
+___
 
 ### close
 
@@ -136,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:65](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L65)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:82
 
 ___
 
@@ -150,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:59](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L59)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:68
 
 ___
 
@@ -175,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:51](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L51)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:58
 
 ___
 
@@ -195,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:75](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L75)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:92
 
 ___
 
@@ -226,7 +278,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/storage/StorageBackendMemory.d.ts:14
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:15
 
 ___
 
@@ -244,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:30](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L30)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:31
 
 ___
 
@@ -276,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:43](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L43)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:53
 
 ___
 
@@ -296,4 +348,18 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:71](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L71)
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:88
+
+___
+
+### triggerCommit
+
+▸ `Private` **triggerCommit**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:44

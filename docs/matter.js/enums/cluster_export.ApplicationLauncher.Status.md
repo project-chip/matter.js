@@ -26,7 +26,7 @@ Requested app is not available.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:104](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L104)
+packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:96
 
 ___
 
@@ -38,7 +38,7 @@ Command succeeded
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:99](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L99)
+packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:91
 
 ___
 
@@ -50,4 +50,4 @@ Video platform unable to honor command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:109](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L109)
+packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:101

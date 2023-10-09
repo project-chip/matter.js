@@ -30,7 +30,7 @@ The Node has encountered a fault with its BLE radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:264](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L264)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:265
 
 ___
 
@@ -42,7 +42,7 @@ The Node has encountered a fault with its cellular radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:249](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L249)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:250
 
 ___
 
@@ -54,7 +54,7 @@ The Node has encountered a fault with its Ethernet controller.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:269](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L269)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:270
 
 ___
 
@@ -66,7 +66,7 @@ The Node has encountered a fault with its NFC radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:259](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L259)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:260
 
 ___
 
@@ -78,7 +78,7 @@ The Node has encountered a fault with its802.15.4 radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:254](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L254)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:255
 
 ___
 
@@ -90,7 +90,7 @@ The Node has encountered an unspecified radio fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:239](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L239)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:240
 
 ___
 
@@ -102,4 +102,4 @@ The Node has encountered a fault with its Wi-Fi radio.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:244](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L244)
+packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:245

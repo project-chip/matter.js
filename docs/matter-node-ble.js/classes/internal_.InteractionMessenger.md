@@ -56,7 +56,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:43
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:45
 
 ## Properties
 
@@ -66,7 +66,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:43
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:42
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:44
 
 ## Methods
 
@@ -80,7 +80,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:42
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:48
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:50
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:50
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:52
 
 ___
 
@@ -114,13 +114,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:47
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:49
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -128,6 +128,7 @@ ___
 | :------ | :------ |
 | `messageType` | `number` |
 | `payload` | `Uint8Array` |
+| `options?` | [`ExchangeSendOptions`](../modules/internal_.md#exchangesendoptions) |
 
 #### Returns
 
@@ -135,7 +136,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:44
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:46
 
 ___
 
@@ -155,7 +156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:45
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:47
 
 ___
 
@@ -175,7 +176,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:49
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:51
 
 ___
 
@@ -189,4 +190,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:46
+matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:48

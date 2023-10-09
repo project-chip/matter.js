@@ -10,6 +10,7 @@
 - [FabricBuilder](../classes/exports_fabric.FabricBuilder.md)
 - [FabricManager](../classes/exports_fabric.FabricManager.md)
 - [FabricNotFoundError](../classes/exports_fabric.FabricNotFoundError.md)
+- [FabricTableFullError](../classes/exports_fabric.FabricTableFullError.md)
 
 ### Type Aliases
 
@@ -43,4 +44,4 @@
 
 #### Defined in
 
-packages/matter.js/dist/cjs/fabric/Fabric.d.ts:15
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:15

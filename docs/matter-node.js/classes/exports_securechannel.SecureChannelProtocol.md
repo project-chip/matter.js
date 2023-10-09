@@ -17,31 +17,33 @@
 ### Properties
 
 - [caseCommissioner](exports_securechannel.SecureChannelProtocol.md#casecommissioner)
+- [commissioningCancelledCallback](exports_securechannel.SecureChannelProtocol.md#commissioningcancelledcallback)
 - [paseCommissioner](exports_securechannel.SecureChannelProtocol.md#pasecommissioner)
 
 ### Methods
 
 - [getId](exports_securechannel.SecureChannelProtocol.md#getid)
+- [handleInitialStatusReport](exports_securechannel.SecureChannelProtocol.md#handleinitialstatusreport)
 - [onNewExchange](exports_securechannel.SecureChannelProtocol.md#onnewexchange)
-- [updatePaseCommissioner](exports_securechannel.SecureChannelProtocol.md#updatepasecommissioner)
+- [removePaseCommissioner](exports_securechannel.SecureChannelProtocol.md#removepasecommissioner)
+- [setPaseCommissioner](exports_securechannel.SecureChannelProtocol.md#setpasecommissioner)
 - [isStandaloneAck](exports_securechannel.SecureChannelProtocol.md#isstandaloneack)
 
 ## Constructors
 
 ### constructor
 
-• **new SecureChannelProtocol**(`paseCommissioner`, `caseCommissioner`)
+• **new SecureChannelProtocol**(`commissioningCancelledCallback`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `paseCommissioner` | [`PaseServer`](exports_session.PaseServer.md) |
-| `caseCommissioner` | [`CaseServer`](exports_session.CaseServer.md) |
+| `commissioningCancelledCallback` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:15
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:15
 
 ## Properties
 
@@ -51,7 +53,17 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:14
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:14
+
+___
+
+### commissioningCancelledCallback
+
+• `Private` **commissioningCancelledCallback**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:12
 
 ___
 
@@ -61,7 +73,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:13
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:13
 
 ## Methods
 
@@ -79,7 +91,28 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:16
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:16
+
+___
+
+### handleInitialStatusReport
+
+▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `message` | [`Message`](../interfaces/exports_codec.Message.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:20
 
 ___
 
@@ -104,13 +137,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:18
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:19
 
 ___
 
-### updatePaseCommissioner
+### removePaseCommissioner
 
-▸ **updatePaseCommissioner**(`paseServer`): `void`
+▸ **removePaseCommissioner**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:18
+
+___
+
+### setPaseCommissioner
+
+▸ **setPaseCommissioner**(`paseServer`): `void`
 
 #### Parameters
 
@@ -124,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:17
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:17
 
 ___
 
@@ -145,4 +192,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelProtocol.d.ts:19
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:21

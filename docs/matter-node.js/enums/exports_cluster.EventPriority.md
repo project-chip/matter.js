@@ -4,6 +4,12 @@
 
 [exports/cluster](../modules/exports_cluster.md).EventPriority
 
+Interfaces and helper methods to define a cluster event
+
+**`See`**
+
+MatterCoreSpecificationV1_1 § 7.18.2.25
+
 ## Table of contents
 
 ### Enumeration Members
@@ -16,21 +22,21 @@
 
 ### Critical
 
-• **Critical** = ``0``
+• **Critical** = ``2``
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:147
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:161
 
 ___
 
 ### Debug
 
-• **Debug** = ``2``
+• **Debug** = ``0``
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:149
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:159
 
 ___
 
@@ -40,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/cluster/Cluster.d.ts:148
+packages/matter.js/dist/esm/cluster/Cluster.d.ts:160

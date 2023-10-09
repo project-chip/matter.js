@@ -43,7 +43,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:15
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:15
 
 ## Properties
 
@@ -53,7 +53,7 @@ packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:13
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:13
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:14
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:14

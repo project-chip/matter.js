@@ -32,6 +32,7 @@
 
 ### Type Aliases
 
+- [MatterServerOptions](export.md#matterserveroptions)
 - [NodeOptions](export.md#nodeoptions)
 
 ## References
@@ -72,6 +73,23 @@ Re-exports [MatterDeviceLibrarySpecificationV1_1](../interfaces/spec_export.Matt
 
 ## Type Aliases
 
+### MatterServerOptions
+
+Ƭ **MatterServerOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `disableIpv4?` | `boolean` | If set to true no IPv4 socket listener is sed and only IPv6 is supported. |
+| `mdnsAnnounceInterface?` | `string` | Interface to use for MDNS announcements. If not provided announcements will be sent from all network interfaces |
+
+#### Defined in
+
+packages/matter.js/src/MatterServer.ts:25
+
+___
+
 ### NodeOptions
 
 Ƭ **NodeOptions**: `Object`
@@ -84,4 +102,4 @@ Re-exports [MatterDeviceLibrarySpecificationV1_1](../interfaces/spec_export.Matt
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:20](https://github.com/project-chip/matter.js/blob/16d5b0d/packages/matter.js/src/MatterServer.ts#L20)
+packages/matter.js/src/MatterServer.ts:20

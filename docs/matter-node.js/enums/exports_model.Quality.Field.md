@@ -26,7 +26,7 @@ All qualities designated as "other qualities" in the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:48
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:48
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:45
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:45
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:44
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:44
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:43
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:43
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:47
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:47
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:46
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:46
 
 ___
 
@@ -86,4 +86,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/cjs/model/aspects/Quality.d.ts:49
+packages/matter.js/dist/esm/model/aspects/Quality.d.ts:49

@@ -20,7 +20,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:26
+matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:28
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:27
+matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:29
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:25
+matter.js/dist/cjs/protocol/interaction/InteractionServer.d.ts:27

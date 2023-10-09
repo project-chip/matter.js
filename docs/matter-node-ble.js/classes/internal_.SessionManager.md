@@ -23,6 +23,7 @@
 - [resumptionRecords](internal_.SessionManager.md#resumptionrecords)
 - [sessionStorage](internal_.SessionManager.md#sessionstorage)
 - [sessions](internal_.SessionManager.md#sessions)
+- [sessionsToClose](internal_.SessionManager.md#sessionstoclose)
 - [unsecureSession](internal_.SessionManager.md#unsecuresession)
 
 ### Methods
@@ -33,13 +34,16 @@
 - [findResumptionRecordByNodeId](internal_.SessionManager.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](internal_.SessionManager.md#getactivesessioninformation)
 - [getNextAvailableSessionId](internal_.SessionManager.md#getnextavailablesessionid)
+- [getPaseSession](internal_.SessionManager.md#getpasesession)
 - [getSession](internal_.SessionManager.md#getsession)
 - [getSessionForNode](internal_.SessionManager.md#getsessionfornode)
+- [getSessionsToClose](internal_.SessionManager.md#getsessionstoclose)
 - [getUnsecureSession](internal_.SessionManager.md#getunsecuresession)
 - [initFromStorage](internal_.SessionManager.md#initfromstorage)
 - [removeSession](internal_.SessionManager.md#removesession)
 - [saveResumptionRecord](internal_.SessionManager.md#saveresumptionrecord)
 - [storeResumptionRecords](internal_.SessionManager.md#storeresumptionrecords)
+- [updateFabricForResumptionRecords](internal_.SessionManager.md#updatefabricforresumptionrecords)
 
 ## Constructors
 
@@ -62,7 +66,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:29
+matter.js/dist/cjs/session/SessionManager.d.ts:30
 
 ## Properties
 
@@ -116,6 +120,16 @@ matter.js/dist/cjs/session/SessionManager.d.ts:25
 
 ___
 
+### sessionsToClose
+
+• `Private` `Readonly` **sessionsToClose**: `any`
+
+#### Defined in
+
+matter.js/dist/cjs/session/SessionManager.d.ts:29
+
+___
+
 ### unsecureSession
 
 • `Private` `Readonly` **unsecureSession**: `any`
@@ -136,7 +150,7 @@ matter.js/dist/cjs/session/SessionManager.d.ts:24
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:58
+matter.js/dist/cjs/session/SessionManager.d.ts:62
 
 ___
 
@@ -158,7 +172,7 @@ ___
 | `isResumption` | `boolean` |
 | `idleRetransTimeoutMs?` | `number` |
 | `activeRetransTimeoutMs?` | `number` |
-| `closeCallback?` | () => `Promise`<`void`\> |
+| `closeCallback?` | (`sendClose`: `boolean`) => `Promise`<`void`\> |
 
 #### Returns
 
@@ -166,7 +180,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:30
+matter.js/dist/cjs/session/SessionManager.d.ts:31
 
 ___
 
@@ -186,7 +200,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:36
+matter.js/dist/cjs/session/SessionManager.d.ts:39
 
 ___
 
@@ -206,7 +220,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:37
+matter.js/dist/cjs/session/SessionManager.d.ts:40
 
 ___
 
@@ -220,7 +234,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:41
+matter.js/dist/cjs/session/SessionManager.d.ts:45
 
 ___
 
@@ -234,7 +248,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:32
+matter.js/dist/cjs/session/SessionManager.d.ts:34
+
+___
+
+### getPaseSession
+
+▸ **getPaseSession**(): [`SecureSession`](internal_.SecureSession.md)<`ContextT`\>
+
+#### Returns
+
+[`SecureSession`](internal_.SecureSession.md)<`ContextT`\>
+
+#### Defined in
+
+matter.js/dist/cjs/session/SessionManager.d.ts:36
 
 ___
 
@@ -254,7 +282,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:33
+matter.js/dist/cjs/session/SessionManager.d.ts:35
 
 ___
 
@@ -275,7 +303,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:34
+matter.js/dist/cjs/session/SessionManager.d.ts:37
+
+___
+
+### getSessionsToClose
+
+▸ **getSessionsToClose**(): [`SecureSession`](internal_.SecureSession.md)<`any`\>[]
+
+#### Returns
+
+[`SecureSession`](internal_.SecureSession.md)<`any`\>[]
+
+#### Defined in
+
+matter.js/dist/cjs/session/SessionManager.d.ts:32
 
 ___
 
@@ -289,7 +331,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:35
+matter.js/dist/cjs/session/SessionManager.d.ts:38
 
 ___
 
@@ -309,13 +351,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:40
+matter.js/dist/cjs/session/SessionManager.d.ts:44
 
 ___
 
 ### removeSession
 
-▸ **removeSession**(`sessionId`, `peerNodeId`): `void`
+▸ **removeSession**(`sessionId`, `peerNodeId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -326,11 +368,11 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:31
+matter.js/dist/cjs/session/SessionManager.d.ts:33
 
 ___
 
@@ -350,7 +392,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:38
+matter.js/dist/cjs/session/SessionManager.d.ts:41
 
 ___
 
@@ -364,4 +406,24 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/SessionManager.d.ts:39
+matter.js/dist/cjs/session/SessionManager.d.ts:43
+
+___
+
+### updateFabricForResumptionRecords
+
+▸ **updateFabricForResumptionRecords**(`fabric`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](internal_.Fabric.md) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/cjs/session/SessionManager.d.ts:42
