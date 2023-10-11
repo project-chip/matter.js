@@ -61,6 +61,8 @@ import {
 } from "@project-chip/matter.js/tlv";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
+import { StatusResponseError } from "@project-chip/matter.js/interaction";
+import { StatusCode } from "@project-chip/matter.js/interaction";
 
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
@@ -568,6 +570,19 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
                 status: { clusterStatus: undefined, status: 0 },
+            },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
+                status: { clusterStatus: undefined, status: 0x9c },
             },
         },
     ],
@@ -1277,6 +1292,35 @@ describe("InteractionProtocol", () => {
             assert.equal(triggeredOn, true);
             assert.equal(triggeredOff, true);
             assert.equal(onOffState, false);
+        });
+
+        it("handles StatusResponseError gracefully", async () => {
+            onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: false
+                },
+                {
+                    on: async() => {
+                        throw new StatusResponseError("Sorry so swamped", StatusCode.Busy);
+                    },
+                    off: async() => {},
+                    toggle: async() => {}
+                }
+            )
+
+            endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
+            endpoint.addClusterServer(onOffCluster);
+            interactionProtocol = new InteractionServer(storageContext);
+            interactionProtocol.setRootEndpoint(endpoint);
+
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(),
+                { ...INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS },
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_BUSY);
         });
 
         it("invoke command with timed interaction mismatch request", async () => {
