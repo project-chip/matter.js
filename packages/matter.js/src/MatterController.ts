@@ -10,13 +10,14 @@
  * @deprecated
  */
 
-import { Ble, BleError } from "./ble/Ble.js";
+import { NodeCommissioningOptions } from "./CommissioningController.js";
+import { Ble } from "./ble/Ble.js";
 import { RootCertificateManager } from "./certificate/RootCertificateManager.js";
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { Channel } from "./common/Channel.js";
 import { NoProviderError } from "./common/MatterError.js";
-import { CommissionableDeviceIdentifiers, Scanner } from "./common/Scanner.js";
-import { ServerAddress, ServerAddressBle, ServerAddressIp } from "./common/ServerAddress.js";
+import { Scanner } from "./common/Scanner.js";
+import { ServerAddress, ServerAddressIp } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricId } from "./datatype/FabricId.js";
@@ -25,26 +26,26 @@ import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
+import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { NetInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
-import { CommissioningError, CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
+import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
-import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
+import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
+import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
-import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvString } from "./tlv/TlvString.js";
 import { ByteArray } from "./util/ByteArray.js";
-import { isDeepEqual } from "./util/DeepEqual.js";
 import { isIPv6 } from "./util/Ip.js";
-import { ClassExtends } from "./util/Type.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -55,9 +56,13 @@ const TlvCommissioningSuccessFailureResponse = TlvObject({
 });
 export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommissioningSuccessFailureResponse>;
 
-const FABRIC_INDEX = FabricIndex(1);
-const FABRIC_ID = FabricId(1);
-const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1); // TODO combine into ControllerCommissioner!
+export type CommissionedNodeDetails = {
+    operationalServerAddress?: ServerAddressIp;
+};
+
+const DEFAULT_FABRIC_INDEX = FabricIndex(1);
+const DEFAULT_FABRIC_ID = FabricId(1);
+const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 
 const logger = Logger.get("MatterController");
 
@@ -69,27 +74,16 @@ export class PairRetransmissionLimitReachedError extends RetransmissionLimitReac
 
 export class MatterController {
     public static async create(
-        scanner: Scanner,
+        scanner: MdnsScanner,
         netInterfaceIpv4: NetInterface | undefined,
         netInterfaceIpv6: NetInterface,
         storage: StorageContext,
-        operationalServerAddress?: ServerAddressIp,
-        commissioningOptions?: CommissioningOptions,
         sessionClosedCallback?: (peerNodeId: NodeId) => void,
+        adminVendorId: VendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
+        adminFabricId: FabricId = FabricId(DEFAULT_FABRIC_ID),
+        adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
     ): Promise<MatterController> {
-        // TODO move to ControllerCommissioner
-        const CONTROLLER_NODE_ID = NodeId(Crypto.getRandomBigUInt64());
         const certificateManager = new RootCertificateManager(storage);
-
-        const ipkValue = Crypto.getRandomData(16);
-        const fabricBuilder = new FabricBuilder()
-            .setRootCert(certificateManager.getRootCert())
-            .setRootNodeId(CONTROLLER_NODE_ID)
-            .setIdentityProtectionKey(ipkValue)
-            .setRootVendorId(VendorId(commissioningOptions?.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID));
-        fabricBuilder.setOperationalCert(
-            certificateManager.generateNoc(fabricBuilder.getPublicKey(), FABRIC_ID, CONTROLLER_NODE_ID),
-        );
 
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         const controllerStorage = storage.createContext("MatterController");
@@ -102,20 +96,29 @@ export class MatterController {
                 certificateManager,
                 storedFabric,
                 storage,
-                operationalServerAddress,
-                commissioningOptions,
+                storedFabric.rootVendorId,
                 sessionClosedCallback,
             );
         } else {
+            const rootNodeId = NodeId.getRandomOperationalNodeId();
+            const ipkValue = Crypto.getRandomData(16);
+            const fabricBuilder = new FabricBuilder()
+                .setRootCert(certificateManager.getRootCert())
+                .setRootNodeId(rootNodeId)
+                .setIdentityProtectionKey(ipkValue)
+                .setRootVendorId(adminVendorId);
+            fabricBuilder.setOperationalCert(
+                certificateManager.generateNoc(fabricBuilder.getPublicKey(), adminFabricId, rootNodeId),
+            );
+
             return new MatterController(
                 scanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
                 certificateManager,
-                await fabricBuilder.build(FABRIC_INDEX),
+                await fabricBuilder.build(adminFabricIndex),
                 storage,
-                operationalServerAddress,
-                commissioningOptions,
+                adminVendorId,
                 sessionClosedCallback,
             );
         }
@@ -127,25 +130,40 @@ export class MatterController {
     private readonly paseClient = new PaseClient();
     private readonly caseClient = new CaseClient();
     private readonly controllerStorage: StorageContext;
-    private readonly commissioningOptions: CommissioningOptions;
     private netInterfaceBle: NetInterface | undefined;
+    private bleScanner: Scanner | undefined;
+    private readonly commissionedNodes = new Map<NodeId, CommissionedNodeDetails>();
 
     constructor(
-        private readonly mdnsScanner: Scanner,
+        private readonly mdnsScanner: MdnsScanner,
         private readonly netInterfaceIpv4: NetInterface | undefined,
         private readonly netInterfaceIpv6: NetInterface,
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
         private readonly storage: StorageContext,
-        public operationalServerAddress?: ServerAddressIp,
-        commissioningOptions?: CommissioningOptions,
+        private readonly adminVendorId: VendorId,
         private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void,
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
         // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
-        if (this.controllerStorage.has("operationalServerAddress")) {
-            this.operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
+        if (this.controllerStorage.has("commissionedNodes")) {
+            const commissionedNodes =
+                this.controllerStorage.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
+            this.commissionedNodes.clear();
+            for (const [nodeId, details] of commissionedNodes) {
+                this.commissionedNodes.set(nodeId, details);
+            }
+        } else if (this.controllerStorage.has("operationalServerAddress")) {
+            // Migrate legacy storages, TODO: Remove later
+            const operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
+            this.setOperationalServerAddress(this.fabric.nodeId, operationalServerAddress);
+            this.controllerStorage.delete("operationalServerAddress");
+        } else if (this.controllerStorage.has("fabricCommissioned")) {
+            // Migrate legacy storages, TODO: Remove later
+            this.commissionedNodes.set(this.fabric.nodeId, {});
+            this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
+            this.controllerStorage.delete("fabricCommissioned");
         }
 
         this.sessionManager = new SessionManager(this, this.storage);
@@ -156,80 +174,10 @@ export class MatterController {
             this.addTransportInterface(netInterfaceIpv4);
         }
         this.addTransportInterface(netInterfaceIpv6);
-
-        this.commissioningOptions = commissioningOptions ?? {
-            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
-            regulatoryCountryCode: "XX",
-        };
     }
 
     public addTransportInterface(netInterface: NetInterface) {
         this.exchangeManager.addTransportInterface(netInterface);
-    }
-
-    /**
-     * Discovers devices by a provided identifier. It returns after the timeout or if at least one device was found.
-     * The method returns a list of addresses of the discovered devices.
-     */
-    private async discoverDeviceAddressesByIdentifier(
-        scanner: Scanner,
-        identifier: CommissionableDeviceIdentifiers,
-        timeoutSeconds = 30,
-    ) {
-        const foundDevices = await scanner.findCommissionableDevices(identifier, timeoutSeconds);
-        if (foundDevices.length === 0) {
-            throw new CommissioningError(
-                `No device discovered using identifier ${Logger.toJSON(
-                    identifier,
-                )}! Please check that the relevant device is online.`,
-            );
-        }
-
-        const addresses = foundDevices.flatMap(device => device.addresses);
-        if (addresses.length === 0) {
-            throw new CommissioningError(
-                `Device discovered using identifier ${Logger.toJSON(identifier)}, but no Network addresses discovered.`,
-            );
-        }
-
-        return addresses;
-    }
-
-    async commissionViaBle(identifierData: CommissionableDeviceIdentifiers, passCode: number, timeoutSeconds = 30) {
-        let ble: Ble;
-        try {
-            ble = Ble.get();
-            this.netInterfaceBle = ble.getBleCentralInterface();
-            this.addTransportInterface(this.netInterfaceBle);
-        } catch (error) {
-            if (error instanceof NoProviderError) {
-                throw new BleError("BLE is not supported on this platform");
-            } else {
-                throw error;
-            }
-        }
-
-        const bleScanner = ble.getBleScanner();
-        const commissionServers = await this.discoverDeviceAddressesByIdentifier(
-            bleScanner,
-            identifierData,
-            timeoutSeconds,
-        );
-
-        const commissionIpAddresses = commissionServers.filter(server => server.type === "ble") as ServerAddressBle[];
-
-        const { result: paseSecureChannel } = await this.iterateServerAddresses(
-            commissionIpAddresses,
-            RetransmissionLimitReachedError,
-            async () =>
-                bleScanner
-                    ?.getDiscoveredCommissionableDevices(identifierData)
-                    .flatMap(device => device.addresses) as ServerAddressBle[],
-            async address => await this.initializePaseSecureChannel(address, passCode),
-        );
-
-        // Pairing was successful via BLE, so use the established secure channel
-        return await this.commissionDevice(paseSecureChannel);
     }
 
     /**
@@ -239,47 +187,99 @@ export class MatterController {
      * If it throws an PairRetransmissionLimitReachedError that means that no found device responded to the pairing
      * request or the passode did not match to any discovered device/address.
      */
-    async commission(
-        identifierData: CommissionableDeviceIdentifiers,
-        passCode: number,
-        timeoutSeconds = 30,
-        knownAddress?: ServerAddress,
-    ): Promise<NodeId> {
+    async commission(options: NodeCommissioningOptions): Promise<NodeId> {
+        const {
+            commissioningOptions = {
+                regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+                regulatoryCountryCode: "XX",
+            },
+            discoveryOptions: {
+                identifierData,
+                discoveryCapabilities = { onIpNetwork: true },
+                knownAddress,
+                timeoutSeconds = 30,
+            },
+            passcode,
+        } = options;
+
+        const scannersToUse = new Array<Scanner>();
+        scannersToUse.push(this.mdnsScanner); // Scan always on IP Network
+
+        if (discoveryCapabilities.ble) {
+            if (this.bleScanner === undefined) {
+                let ble: Ble;
+                try {
+                    ble = Ble.get();
+                    this.netInterfaceBle = ble.getBleCentralInterface();
+                    this.addTransportInterface(this.netInterfaceBle);
+
+                    this.bleScanner = ble.getBleScanner();
+                    scannersToUse.push(this.bleScanner);
+                } catch (error) {
+                    if (error instanceof NoProviderError) {
+                        logger.warn(
+                            "BLE is not supported on this platform. The device to commission might not be found!",
+                        );
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+        }
+        if (discoveryCapabilities.softAccessPoint) {
+            logger.info("SoftAP is not supported yet");
+        }
+
+        logger.info(
+            `Commissioning device with identifier ${Logger.toJSON(identifierData)} and ${
+                scannersToUse.length
+            } scanners and knownAddress ${JSON.stringify(knownAddress)}`,
+        );
+
         // If we have a known address we try this first before we discover the device
         const commissionServers =
             knownAddress !== undefined
                 ? [knownAddress]
-                : await this.discoverDeviceAddressesByIdentifier(this.mdnsScanner, identifierData, timeoutSeconds);
-
-        const commissionIpAddresses = commissionServers.filter(server => server.type === "udp") as ServerAddressIp[];
+                : await ControllerDiscovery.discoverDeviceAddressesByIdentifier(
+                      scannersToUse,
+                      identifierData,
+                      timeoutSeconds,
+                  );
 
         let paseSecureChannel: MessageChannel<MatterController> | undefined;
         try {
-            const { result, resultAddress } = await this.iterateServerAddresses(
-                commissionIpAddresses,
+            const { result } = await ControllerDiscovery.iterateServerAddresses(
+                commissionServers,
                 RetransmissionLimitReachedError,
                 async () =>
-                    this.mdnsScanner
-                        .getDiscoveredCommissionableDevices(identifierData)
-                        .flatMap(device => device.addresses) as ServerAddressIp[],
-                async address => await this.initializePaseSecureChannel(address, passCode),
+                    scannersToUse.flatMap(scanner =>
+                        scanner.getDiscoveredCommissionableDevices(identifierData).flatMap(device => device.addresses),
+                    ),
+                async address => await this.initializePaseSecureChannel(address, passcode),
             );
 
             // Pairing was successful, so store the address and assign the established secure channel
             paseSecureChannel = result;
-
-            this.setOperationalServerAddress(resultAddress);
         } catch (e) {
             if (e instanceof PairRetransmissionLimitReachedError && knownAddress !== undefined) {
-                // Know address was failure, so discover the device now
-                return await this.commission(identifierData, passCode, timeoutSeconds);
+                // Know address was a failure, so discover the device now anew
+                return await this.commission({
+                    commissioningOptions,
+                    discoveryOptions: { identifierData, timeoutSeconds, discoveryCapabilities },
+                    passcode,
+                });
             }
-            // No address was successful, so reset the object address, but do not reset the storage (maybe device is just offline)
-            this.operationalServerAddress = undefined;
             throw e;
         }
 
-        return await this.commissionDevice(paseSecureChannel);
+        return await this.commissionDevice(paseSecureChannel, commissioningOptions);
+    }
+
+    async removeNode(nodeId: NodeId) {
+        await this.sessionManager.removeAllSessionsForNode(nodeId);
+        this.channelManager.removeChannel(this.fabric, nodeId);
+        this.commissionedNodes.delete(nodeId);
+        this.storeCommisionedNodes();
     }
 
     /**
@@ -289,7 +289,7 @@ export class MatterController {
      */
     private async initializePaseSecureChannel(
         address: ServerAddress,
-        passCode: number,
+        passcode: number,
     ): Promise<MessageChannel<MatterController>> {
         let paseChannel: Channel<ByteArray>;
         if (address.type === "udp") {
@@ -321,7 +321,7 @@ export class MatterController {
             SECURE_CHANNEL_PROTOCOL_ID,
         );
         const paseSecureSession = await tryCatchAsync(
-            async () => await this.paseClient.pair(this, paseExchange, passCode),
+            async () => await this.paseClient.pair(this, paseExchange, passcode),
             Error,
             async error => {
                 // Close the exchange if the pairing fails and rethrow the error
@@ -337,7 +337,10 @@ export class MatterController {
      * Method to commission a device with a PASE secure channel. It returns the NodeId of the commissioned device on
      * success.
      */
-    private async commissionDevice(paseSecureMessageChannel: MessageChannel<MatterController>): Promise<NodeId> {
+    private async commissionDevice(
+        paseSecureMessageChannel: MessageChannel<MatterController>,
+        commissioningOptions: CommissioningOptions,
+    ): Promise<NodeId> {
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
         // TODO Depending on the Error type during commissioning we can do a retry ...
@@ -366,15 +369,16 @@ export class MatterController {
             Commissionee SHALL exit Commissioning Mode after 20 failed attempts.
          */
 
+        const peerNodeId = commissioningOptions.nodeId ?? NodeId.getRandomOperationalNodeId();
         const commissioningManager = new ControllerCommissioner(
             // Use the created secure session to do the commissioning
-            new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel)),
-
+            new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel), peerNodeId),
             this.certificateManager,
             this.fabric,
-            this.commissioningOptions,
-
-            async (peerNodeId: NodeId) => {
+            commissioningOptions,
+            peerNodeId,
+            this.adminVendorId,
+            async () => {
                 // TODO Right now we always close after step 12 because we do not check for commissioning flow requirements
                 /*
                     In concurrent connection commissioning flow the commissioning channel SHALL terminate after
@@ -384,7 +388,7 @@ export class MatterController {
                     when commissioning channel terminates. The PASE session SHALL be terminated by both Commissioner and
                     Commissionee once the CommissioningComplete command is received by the Commissionee.
                  */
-                await paseSecureMessageChannel.close(); // We reconnect using Case, so close Pase connection
+                await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
 
                 // Look for the device broadcast over MDNS and do CASE pairing
                 return await this.connect(peerNodeId, 120);
@@ -394,70 +398,8 @@ export class MatterController {
         await commissioningManager.executeCommissioning();
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
-        this.controllerStorage.set("fabricCommissioned", true);
 
-        return this.fabric.rootNodeId;
-    }
-
-    /**
-     * Helper method to iterate through a list of server addresses and try to execute a method on each of them. If the
-     * method throws a configurable error (or EHOSTUNREACH), the server address list is updated (to also add later
-     * discovered addresses or devices) and then next server address is tried.The result of the first successful method
-     * call is returned. The logic makes sure to only try each unique address (IP/port) once.
-     */
-    async iterateServerAddresses<SA extends ServerAddress, T, E extends Error>(
-        servers: SA[],
-        errorType: ClassExtends<E>,
-        updateNetworkInterfaceFunc: () => Promise<SA[]>,
-        func: (server: SA) => Promise<T>,
-        lastKnownServer?: SA,
-    ): Promise<{ result: T; resultAddress: SA }> {
-        if (lastKnownServer !== undefined) {
-            servers = servers.filter(server => !isDeepEqual(server, lastKnownServer));
-            servers.unshift(lastKnownServer);
-        }
-        const serversSet = new Set(servers);
-
-        const triedServers = new Set<string>();
-        while (true) {
-            logger.debug(
-                `Server addresses to try: ${Array.from(serversSet.values())
-                    .map(server =>
-                        server.type === "udp"
-                            ? `udp://${server.ip}:${server.port}`
-                            : `ble://${server.peripheralAddress}`,
-                    )
-                    .join(",")}`,
-            );
-
-            let triedOne = false;
-            for (const server of serversSet) {
-                const serverKey =
-                    server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`;
-                if (triedServers.has(serverKey)) continue;
-                triedServers.add(serverKey);
-
-                try {
-                    triedOne = true;
-                    logger.debug(`Try to communicate with ${serverKey} ...`);
-                    return { result: await func(server), resultAddress: server };
-                } catch (error) {
-                    if (
-                        error instanceof errorType ||
-                        (error instanceof Error && error.message.includes("EHOSTUNREACH"))
-                    ) {
-                        logger.debug(`Failed to communicate with ${serverKey}, try next server ...`, error);
-                        (await updateNetworkInterfaceFunc()).forEach(server => serversSet.add(server)); // Update list and add new
-                        break;
-                    } else {
-                        throw error;
-                    }
-                }
-            }
-            if (!triedOne) {
-                throw new PairRetransmissionLimitReachedError(`Failed to connect on any found server`);
-            }
-        }
+        return peerNodeId;
     }
 
     /**
@@ -466,12 +408,13 @@ export class MatterController {
      * device is discovered again using its operational instance details.
      * It returns the operational MessageChannel on success.
      */
-    async resume(peerNodeId: NodeId, timeoutSeconds = 60) {
-        if (this.operationalServerAddress !== undefined) {
-            const { ip, port } = this.operationalServerAddress;
+    private async resume(peerNodeId: NodeId, timeoutSeconds = 60) {
+        const operationalAddress = this.getLastOperationalAddress(peerNodeId);
+        if (operationalAddress !== undefined) {
+            const { ip, port } = operationalAddress;
             try {
                 logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
-                return await this.pair(peerNodeId, this.operationalServerAddress);
+                return await this.pair(peerNodeId, operationalAddress);
             } catch (error) {
                 if (
                     error instanceof RetransmissionLimitReachedError ||
@@ -481,7 +424,8 @@ export class MatterController {
                         `Failed to resume device connection with ${ip}:${port}, discover the device ...`,
                         error,
                     );
-                    this.operationalServerAddress = undefined;
+                    // TODO do not clear address if the device is "just" offline, but still try to discover it
+                    this.clearOperationalServerAddress(peerNodeId);
                 } else {
                     throw error;
                 }
@@ -489,25 +433,26 @@ export class MatterController {
         }
 
         const scanResult = await this.mdnsScanner.findOperationalDevice(this.fabric, peerNodeId, timeoutSeconds);
-        if (!scanResult.length)
+        if (!scanResult.length) {
             throw new NetworkError(
                 "The operational device cannot be found on the network. Please make sure it is online.",
             );
+        }
 
-        const { result, resultAddress } = await this.iterateServerAddresses(
+        const { result, resultAddress } = await ControllerDiscovery.iterateServerAddresses(
             scanResult,
             PairRetransmissionLimitReachedError,
             async () => this.mdnsScanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
             async address => await this.pair(peerNodeId, address),
         );
 
-        this.setOperationalServerAddress(resultAddress);
+        this.setOperationalServerAddress(peerNodeId, resultAddress);
 
         return result;
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
-    async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+    private async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp) {
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);
@@ -553,48 +498,62 @@ export class MatterController {
     }
 
     isCommissioned() {
-        return this.controllerStorage.get("fabricCommissioned", false);
+        return this.commissionedNodes.size > 0;
     }
 
-    setOperationalServerAddress(address: ServerAddressIp) {
-        this.operationalServerAddress = address;
-        this.controllerStorage.set("operationalServerAddress", address);
+    getCommissionedNodes() {
+        return Array.from(this.commissionedNodes.keys());
     }
 
-    getOperationalServerAddress() {
-        return this.operationalServerAddress;
+    private setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+        const nodeDetails = this.commissionedNodes.get(nodeId) ?? { operationalServerAddress };
+        nodeDetails.operationalServerAddress = operationalServerAddress;
+        this.commissionedNodes.set(nodeId, nodeDetails);
+        this.storeCommisionedNodes();
+    }
+
+    private clearOperationalServerAddress(nodeId: NodeId) {
+        const nodeDetails = this.commissionedNodes.get(nodeId) ?? {};
+        delete nodeDetails.operationalServerAddress;
+        this.commissionedNodes.set(nodeId, nodeDetails);
+        this.storeCommisionedNodes();
+    }
+
+    private getLastOperationalAddress(nodeId: NodeId) {
+        return this.commissionedNodes.get(nodeId)?.operationalServerAddress;
+    }
+
+    private storeCommisionedNodes() {
+        this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
     /**
      * Connect to the device by opening a channel and creating a new CASE session if necessary.
      * Returns a InteractionClient on success.
      */
-    async connect(nodeId: NodeId, timeoutSeconds?: number) {
+    async connect(peerNodeId: NodeId, timeoutSeconds?: number) {
         let channel: MessageChannel<any>;
         try {
-            channel = this.channelManager.getChannel(this.fabric, nodeId);
+            channel = this.channelManager.getChannel(this.fabric, peerNodeId);
         } catch (error) {
             if (error instanceof NoChannelError) {
-                channel = await this.resume(nodeId, timeoutSeconds);
+                channel = await this.resume(peerNodeId, timeoutSeconds);
             } else {
                 throw error;
             }
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
-                this.channelManager.removeChannel(this.fabric, nodeId);
-                await this.resume(nodeId);
-                return this.channelManager.getChannel(this.fabric, nodeId);
+                this.channelManager.removeChannel(this.fabric, peerNodeId);
+                await this.resume(peerNodeId);
+                return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
+            peerNodeId,
         );
     }
 
     getNextAvailableSessionId() {
         return this.sessionManager.getNextAvailableSessionId();
-    }
-
-    getFabric() {
-        return this.fabric;
     }
 
     createSecureSession(
