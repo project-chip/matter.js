@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ImplementationError } from "@project-chip/matter.js/common";
 import { Time, Timer, TimerCallback } from "@project-chip/matter.js/time";
 
 class TimerNode implements Timer {
@@ -14,7 +15,13 @@ class TimerNode implements Timer {
         private readonly intervalMs: number,
         private readonly callback: TimerCallback,
         private readonly periodic: boolean,
-    ) {}
+    ) {
+        if (intervalMs < 0 || intervalMs > 2147483647) {
+            throw new ImplementationError(
+                `Invalid intervalMs: ${intervalMs}. The value must be between 0 and 32-bit maximum value (2147483647)`,
+            );
+        }
+    }
 
     start() {
         if (this.isRunning) this.stop();
