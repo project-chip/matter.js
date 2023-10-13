@@ -16,7 +16,7 @@
  * Import needed modules from @project-chip/matter-node.js
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
-import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
+import { CommissioningController, MatterServer, NodeCommissioningOptions } from "@project-chip/matter-node.js";
 
 import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
@@ -26,7 +26,7 @@ import {
     GeneralCommissioning,
     OnOffCluster,
 } from "@project-chip/matter-node.js/cluster";
-import { logEndpoint } from "@project-chip/matter-node.js/device";
+import { NodeId } from "@project-chip/matter-node.js/datatype";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
@@ -177,13 +177,8 @@ class ControllerNode {
 
         const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            serverAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
-            longDiscriminator,
-            shortDiscriminator,
-            passcode: setupPin,
-            delayedPairing: true,
-            commissioningOptions,
-            subscribeAllAttributes: true,
+            delayedConnection: true,
+            subscribeAllAttributesAndEvents: true,
         });
         matterServer.addCommissioningController(commissioningController);
 
@@ -196,29 +191,47 @@ class ControllerNode {
 
         await matterServer.start();
 
+        if (!commissioningController.isCommissioned()) {
+            const options = {
+                commissioningOptions,
+                discoveryOptions: {
+                    knownAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
+                    identifierData:
+                        longDiscriminator !== undefined
+                            ? { longDiscriminator }
+                            : shortDiscriminator !== undefined
+                            ? { shortDiscriminator }
+                            : {},
+                },
+                passcode: setupPin,
+            } as NodeCommissioningOptions;
+            logger.info(`Commissioning ... ${JSON.stringify(options)}`);
+            const nodeId = await commissioningController.commissionNode(options);
+
+            console.log(`Commissioning successfully done with nodeId ${nodeId}`);
+        }
+
         /**
          * TBD
          */
         try {
-            await commissioningController.connect();
+            const nodes = commissioningController.getCommissionedNodes();
+            console.log("Found commissioned nodes:", Logger.toJSON(nodes));
 
-            if (commissioningController.serverAddress !== undefined) {
-                const { ip, port } = commissioningController.serverAddress;
-                controllerStorage.set("ip", ip);
-                controllerStorage.set("port", port);
+            const nodeId = NodeId(getIntParameter("nodeid") ?? nodes[0]);
+            if (!nodes.includes(nodeId)) {
+                throw new Error(`Node ${nodeId} not found in commissioned nodes`);
             }
-            if (longDiscriminator !== undefined) {
-                controllerStorage.set("longDiscriminator", longDiscriminator);
-            }
-            controllerStorage.set("pin", setupPin);
+
+            const node = await commissioningController.connectNode(nodeId);
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
 
-            logEndpoint(commissioningController.getRootEndpoint());
+            node.logStructure();
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = commissioningController.getRootClusterClient(DescriptorCluster);
+            const descriptor = node.getRootClusterClient(DescriptorCluster);
             if (descriptor !== undefined) {
                 console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
                 console.log(await descriptor.getServerListAttribute()); // or more convenient that way
@@ -227,7 +240,7 @@ class ControllerNode {
             }
 
             // Example to subscribe to a field and get the value
-            const info = commissioningController.getRootClusterClient(BasicInformationCluster);
+            const info = node.getRootClusterClient(BasicInformationCluster);
             if (info !== undefined) {
                 console.log(await info.getProductNameAttribute()); // This call is executed remotely
                 //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));
@@ -248,7 +261,7 @@ class ControllerNode {
             //const attributesBasicInformation = await interactionClient.getMultipleAttributes([{ endpointId: 0, clusterId: BasicInformationCluster.id} ]);
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
-            const devices = commissioningController.getDevices();
+            const devices = node.getDevices();
             if (devices[0] && devices[0].id === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
