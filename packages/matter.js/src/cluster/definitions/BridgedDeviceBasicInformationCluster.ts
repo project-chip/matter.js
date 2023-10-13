@@ -13,7 +13,6 @@ import {
     OptionalWritableAttribute,
     AccessLevel,
     Attribute,
-    OptionalAttribute,
     OptionalEvent,
     EventPriority,
     Event
@@ -192,7 +191,7 @@ export namespace BridgedDeviceBasicInformation {
              */
             uniqueId: OptionalFixedAttribute(0x12, TlvString.bound({ maxLength: 32 })),
 
-            productAppearance: OptionalAttribute(0x14, TlvProductAppearanceStruct)
+            productAppearance: OptionalFixedAttribute(0x14, TlvProductAppearanceStruct)
         },
 
         events: {
