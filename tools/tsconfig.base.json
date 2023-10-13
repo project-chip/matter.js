@@ -10,8 +10,8 @@
         // Compile incrementally using tsbuildinfo state file
         "incremental": true,
 
-        // We should probably boost this at least to ES 2017
-        "target": "es2015",
+        // Matter.js most likely won't work with older versions of ES
+        "target": "es2018",
 
         // Generate modules as ES2020 or CommonJS
         "module": "node16",
