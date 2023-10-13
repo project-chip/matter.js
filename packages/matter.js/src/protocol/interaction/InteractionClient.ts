@@ -108,7 +108,10 @@ export class InteractionClient {
     private readonly subscribedLocalValues = new Map<string, any>();
     private readonly subscribedClusterDataVersions = new Map<string, number>();
 
-    constructor(private readonly exchangeProvider: ExchangeProvider) {
+    constructor(
+        private readonly exchangeProvider: ExchangeProvider,
+        readonly nodeId: NodeId,
+    ) {
         // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
         this.exchangeProvider.addProtocolHandler(
             new SubscriptionClient(this.subscriptionListeners, this.subscriptionUpdateTimers),
