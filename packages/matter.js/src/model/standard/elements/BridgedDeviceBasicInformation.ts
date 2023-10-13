@@ -133,7 +133,10 @@ Matter.children.push({
             tag: "attribute", name: "CapabilityMinima", id: 0x13, conformance: "X",
             xref: { document: "core", section: "9.13.4" }
         },
-        { tag: "attribute", name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct", conformance: "O" },
+        {
+            tag: "attribute", name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct",
+            conformance: "O", quality: "F"
+        },
         {
             tag: "event", name: "StartUp", id: 0x0, conformance: "O", priority: "critical",
             xref: { document: "core", section: "9.13.5" },
