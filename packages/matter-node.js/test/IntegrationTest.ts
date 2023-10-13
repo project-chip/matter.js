@@ -837,33 +837,19 @@ describe("Integration Test", () => {
 
             const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
             assert.ok(basicInformationServer);
-            basicInformationServer.setReachableAttribute(false);
 
             const startTime = Time.nowMs();
 
-            // Await initial Data
-            const { promise: firstPromise, resolver: firstResolver } = createPromise<{
-                value: DecodedEventData<any>;
-                time: number;
-            }>();
-            let callback = (value: DecodedEventData<any>) => firstResolver({ value, time: Time.nowMs() });
+            let initialDataReceived = false;
+            let callback = (_value: DecodedEventData<any>) => {
+                initialDataReceived = true;
+            };
 
             await basicInformationClient.subscribeReachableChangedEvent(event => callback(event), 0, 5, true);
 
-            await MockTime.advance(0);
-            const firstReport = await firstPromise;
-            assert.deepEqual(firstReport, {
-                value: {
-                    eventNumber: 3,
-                    priority: 1,
-                    epochTimestamp: BigInt(startTime),
-                    data: {
-                        reachableNewValue: false,
-                    },
-                    path: undefined,
-                },
-                time: startTime,
-            });
+            await MockTime.yield(); // needed to finish internal processing to receive Statuscode
+
+            assert.equal(initialDataReceived, false); // we never had a reachability change event, so no data received
 
             // Await update Report on value change
             const { promise: updatePromise, resolver: updateResolver } = createPromise<{
@@ -873,21 +859,43 @@ describe("Integration Test", () => {
             callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
 
             await MockTime.advance(2 * 1000);
-            basicInformationServer.setReachableAttribute(true);
+            basicInformationServer.setReachableAttribute(false);
             await MockTime.advance(100);
-            const updateReport = await updatePromise;
+            await MockTime.advance(1);
 
+            const updateReport = await updatePromise;
             assert.deepEqual(updateReport, {
                 value: {
-                    eventNumber: 4,
+                    eventNumber: 3,
                     priority: 1,
                     epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
                     data: {
-                        reachableNewValue: true,
+                        reachableNewValue: false,
                     },
                     path: undefined,
                 },
-                time: startTime + 2 * 1000 + 100,
+                time: startTime + 2 * 1000 + 101,
+            });
+
+            // Await update Report on value change
+            const { promise: updatePromise2, resolver: updateResolver2 } = createPromise<{
+                value: DecodedEventData<any>;
+                time: number;
+            }>();
+            callback = (value: DecodedEventData<any>) => updateResolver2({ value, time: Time.nowMs() });
+
+            const updateReport2 = await updatePromise2;
+            assert.deepEqual(updateReport2, {
+                value: {
+                    eventNumber: 3,
+                    priority: 1,
+                    epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
+                    data: {
+                        reachableNewValue: false,
+                    },
+                    path: undefined,
+                },
+                time: startTime + 2 * 1000 + 101,
             });
         });
     });
