@@ -20,7 +20,7 @@ npm run build
 ```
 ## Run
 
-There are three ways to start matter-node-shell. The `nodenum` parameter provides a unique identifier for the matter-node-shell process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`. The node will allocate a default port of `nodenum + 5540` unless a config file already exists with a manually configured port for the node.
+There are three ways to start matter-node-shell. The `nodenum` parameter provides a unique identifier for the matter-node-shell process mainly to allocate a unique port number. If `nodenum` is not passed, it will default to `0`. 
 The shell currently just supports Controller side and so the port is not used and the node is always by default a "controller".
 
 ```

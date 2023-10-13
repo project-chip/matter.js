@@ -53,19 +53,26 @@ export function setLogLevel(level: string): void {
 async function main() {
     const yargsInstance = yargs(process.argv.slice(2))
         .command(
-            "* [node-num]",
+            "* [node-num] [node-type]",
             "Matter Node Shell",
             yargs => {
-                return yargs.positional("node-num", {
-                    describe: "Node number for storage",
-                    default: 0,
-                    type: "number",
-                });
+                return yargs
+                    .positional("node-num", {
+                        describe: "Node number for storage",
+                        default: 0,
+                        type: "number",
+                    })
+                    .positional("node-type", {
+                        describe: "Type of the node",
+                        choices: ["controller"],
+                        default: "controller",
+                        type: "string",
+                    });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble } = argv;
+                const { nodeNum, ble, nodeType } = argv;
 
                 const theNode = new MatterNode(nodeNum);
                 await theNode.initialize();
@@ -83,7 +90,7 @@ async function main() {
 
                 setLogLevel(theNode.Store.get<string>("LogLevel", "info"));
 
-                console.log(`Started Node #${nodeNum} ${ble ? "with" : "without"} BLE`);
+                console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
                 theShell.start();
             },
         )
