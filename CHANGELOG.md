@@ -8,6 +8,12 @@ All Changes without a GitHub Username in brackets are from the core team: @Apoll
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK_IN_PROGRESS__
+
+* Infrastructure
+  * Feature (vilic): Add project references and additional tsconfigs to support standard tsc development workflows
+  * Breaking: Change ES target from ES5 to ES2018 (affected environments probably already didn't support matter.js)
+
 ## 0.6.0 (2023-10-08)
 * Matter-Core functionality:
   * Fix: Adjusted Event Priority definition to match to specs

@@ -225,17 +225,26 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
                 logger.warn("Unknown attribute id", attributeId);
                 return;
             }
-            (attributes as any)[attributeName].update(value);
+            if ((attributes as any)[attributeName] !== undefined) {
+                (attributes as any)[attributeName].update(value);
+            } else {
+                logger.warn("Attribute not found", attributeName, "in list", Object.keys(attributes));
+            }
         },
 
         /** Trigger a value change for an Event, used by subscriptions. */
-        _triggerEventUpdate(eventId: EventId, events: DecodedEventData<any>[]) {
+        _triggerEventUpdate(eventId: EventId, eventData: DecodedEventData<any>[]) {
             const eventName = eventToId[eventId];
             if (eventName === undefined) {
                 logger.warn("Unknown event id", eventId);
                 return;
             }
-            events.forEach(event => (events as any)[eventName].update(event));
+            if ((events as any)[eventName] !== undefined) {
+                const event = (events as any)[eventName];
+                eventData.forEach(data => event.update(data));
+            } else {
+                logger.warn("Event not found", eventName, "in list", Object.keys(events));
+            }
         },
     };
 
