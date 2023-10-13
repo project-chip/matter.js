@@ -22,7 +22,7 @@ export default function commands(theNode: MatterNode) {
     return {
         command: "identify [time] [node-id] [endpoint-id]",
         describe:
-            "Trigger Identify command ith given time (default 10s). Execute on one node or endpoint, else all onoff clusters will be controlled",
+            "Trigger Identify command with given time (default 10s). Execute on one node or endpoint, else all onoff clusters will be controlled",
         builder: (yargs: Argv) => {
             return yargs
                 .positional("time", {
