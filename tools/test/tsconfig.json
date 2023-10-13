@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../build/test",
+        "target": "es2018",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "types": ["node", "mocha", "@project-chip/matter.js-tools"]
+    },
+    "references": [{ "path": "../src" }]
+}

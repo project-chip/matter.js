@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist/esm",
+        "target": "es2018",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "types": ["node"]
+    },
+    "include": ["**/*.ts", "testing/mocharc.cjs"]
+}
