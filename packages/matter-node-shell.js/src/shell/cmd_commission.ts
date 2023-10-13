@@ -1,0 +1,242 @@
+/**
+ * Copyright 2022 Project CHIP Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { NodeCommissioningOptions } from "@project-chip/matter-node.js";
+import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
+import { NodeId } from "@project-chip/matter-node.js/datatype";
+import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import type { Argv } from "yargs";
+import { MatterNode } from "../MatterNode";
+
+export default function commands(theNode: MatterNode) {
+    return {
+        command: "commission",
+        describe: "Handle device commissioning",
+        builder: (yargs: Argv) =>
+            yargs
+                // Pair
+                .command("pair", "Pair with a matter device", yargs => {
+                    return (
+                        yargs
+                            // Pair
+                            .command(
+                                "* [node-id] [ip:[port]]",
+                                "Commission a matter device",
+                                yargs => {
+                                    return yargs
+                                        .positional("node-id", {
+                                            describe: "node id",
+                                            default: undefined,
+                                            type: "string",
+                                        })
+                                        .positional("ip", {
+                                            describe: "ip address",
+                                            default: undefined,
+                                            type: "string",
+                                        })
+                                        .positional("port", {
+                                            describe: "ip port",
+                                            default: undefined,
+                                            type: "number",
+                                        });
+                                },
+                                async argv => {
+                                    const { pairingCode, nodeId: nodeIdStr, ipPort, ip, ble = false } = argv;
+                                    let { setupPinCode, discriminator, shortDiscriminator } = argv;
+
+                                    if (typeof pairingCode === "string") {
+                                        const { shortDiscriminator: pairingCodeShortDiscriminator, passcode } =
+                                            ManualPairingCodeCodec.decode(pairingCode);
+                                        shortDiscriminator = pairingCodeShortDiscriminator;
+                                        setupPinCode = passcode;
+                                        discriminator = undefined;
+                                    } else if (discriminator === undefined && shortDiscriminator === undefined) {
+                                        discriminator = 3840;
+                                    }
+
+                                    const nodeId = nodeIdStr !== undefined ? NodeId(BigInt(nodeIdStr)) : undefined;
+                                    await theNode.start();
+                                    if (theNode.commissioningController === undefined) {
+                                        throw new Error("CommissioningController not initialized");
+                                    }
+
+                                    const options = {
+                                        discoveryOptions: {
+                                            knownAddress:
+                                                ip !== undefined && ipPort !== undefined
+                                                    ? { ip, port: ipPort, type: "udp" }
+                                                    : undefined,
+                                            identifierData:
+                                                discriminator !== undefined
+                                                    ? { longDiscriminator: discriminator }
+                                                    : shortDiscriminator !== undefined
+                                                    ? { shortDiscriminator }
+                                                    : {},
+                                            discoveryCapabilities: {
+                                                ble,
+                                                onIpNetwork: true,
+                                            },
+                                        },
+                                        passcode: setupPinCode,
+                                    } as NodeCommissioningOptions;
+
+                                    options.commissioningOptions = {
+                                        nodeId: nodeId !== undefined ? NodeId(nodeId) : undefined,
+                                        regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+                                        regulatoryCountryCode: "XX",
+                                    };
+
+                                    console.log(JSON.stringify(options));
+
+                                    if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
+                                        options.commissioningOptions.wifiNetwork = {
+                                            wifiSsid: theNode.Store.get<string>("WiFiSsid", ""),
+                                            wifiCredentials: theNode.Store.get<string>("WiFiPassword", ""),
+                                        };
+                                    }
+                                    if (
+                                        theNode.Store.has("ThreadName") &&
+                                        theNode.Store.has("ThreadOperationalDataset")
+                                    ) {
+                                        options.commissioningOptions.threadNetwork = {
+                                            networkName: theNode.Store.get<string>("ThreadName", ""),
+                                            operationalDataset: theNode.Store.get<string>(
+                                                "ThreadOperationalDataset",
+                                                "",
+                                            ),
+                                        };
+                                    }
+
+                                    const node = await theNode.commissioningController.commissionNode(options);
+
+                                    console.log("Commissioned Node:", node.nodeId);
+
+                                    // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
+                                    // It is provided to proof the concept
+
+                                    // Example to initialize a ClusterClient and access concrete fields as API methods
+                                    const descriptor = node.getRootClusterClient(DescriptorCluster);
+                                    if (descriptor !== undefined) {
+                                        console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
+                                        console.log(await descriptor.getServerListAttribute()); // or more convenient that way
+                                    } else {
+                                        console.log("No Descriptor Cluster found. This should never happen!");
+                                    }
+
+                                    // Example to subscribe to a field and get the value
+                                    const info = node.getRootClusterClient(BasicInformationCluster);
+                                    if (info !== undefined) {
+                                        console.log(await info.getProductNameAttribute()); // This call is executed remotely
+                                        //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));
+                                        //console.log(await info.getProductNameAttribute()); // This call is resolved locally because we have subscribed to the value!
+                                    } else {
+                                        console.log("No BasicInformation Cluster found. This should never happen!");
+                                    }
+                                },
+                            )
+                            .options({
+                                pairingCode: {
+                                    describe: "pairing code",
+                                    default: undefined,
+                                    type: "string",
+                                },
+                                setupPinCode: {
+                                    describe: "setup pin code",
+                                    default: 20202021,
+                                    type: "number",
+                                },
+                                discriminator: {
+                                    alias: "d",
+                                    description: "Long discriminator",
+                                    type: "number",
+                                },
+                                shortDiscriminator: {
+                                    alias: "s",
+                                    description: "Short discriminator",
+                                    type: "number",
+                                },
+                                ble: {
+                                    alias: "b",
+                                    description: "Also discover over BLE",
+                                    type: "boolean",
+                                    default: false,
+                                },
+                            })
+                    );
+                })
+                .command(
+                    "open-basic-window <node-id> [timeout]",
+                    "Open a basic commissioning window",
+                    yargs => {
+                        return yargs
+                            .positional("node-id", {
+                                describe: "node id",
+                                type: "string",
+                                demandOption: true,
+                            })
+                            .positional("timeout", {
+                                describe: "timeout in seconds",
+                                type: "number",
+                                default: 900,
+                            });
+                    },
+                    async argv => {
+                        const { nodeId, timeout = 900 } = argv;
+                        await theNode.start();
+                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+
+                        await node.openBasicCommissioningWindow(timeout);
+
+                        console.log(`Basic Commissioning Window for node ${nodeId} opened`);
+                    },
+                )
+                .command(
+                    "open-enhanced-window <node-id> [timeout]",
+                    "Open a enhanced commissioning window",
+                    yargs => {
+                        return yargs
+                            .positional("node-id", {
+                                describe: "node id",
+                                type: "string",
+                                demandOption: true,
+                            })
+                            .positional("timeout", {
+                                describe: "timeout in seconds",
+                                type: "number",
+                                default: 900,
+                            });
+                    },
+                    async argv => {
+                        await theNode.start();
+                        const { nodeId, timeout = 900 } = argv;
+                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        const data = await node.openEnhancedCommissioningWindow(timeout);
+
+                        console.log(`Enhanced Commissioning Window for node ${nodeId} opened`);
+                        const { qrCode, qrPairingCode, manualPairingCode } = data;
+
+                        console.log(qrCode);
+                        console.log(
+                            `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+                        );
+                        console.log(`Manual pairing code: ${manualPairingCode}`);
+                    },
+                ),
+        handler: async (argv: any) => {
+            argv.unhandled = true;
+        },
+    };
+}

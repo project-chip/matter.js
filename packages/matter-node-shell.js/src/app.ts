@@ -14,29 +14,88 @@
  * limitations under the License.
  */
 
-import { Logger } from "@project-chip/matter-node.js/log";
-import { theNode } from "./MatterNode.js";
-import { Shell } from "./shell/Shell.js";
-import { theCommandList } from "./shell/cli";
+import { BleNode } from "@project-chip/matter-node-ble.js/ble";
+import { Ble } from "@project-chip/matter-node.js/ble";
+import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
+import { singleton } from "@project-chip/matter-node.js/util";
+import yargs from "yargs/yargs";
+import { MatterNode } from "./MatterNode.js";
+import { Shell } from "./shell/Shell";
 
 const PROMPT = "matter-node> ";
-const theShell = new Shell(PROMPT, theCommandList);
 const logger = Logger.get("Shell");
+if (process.stdin?.isTTY) Logger.format = Format.ANSI;
+
+let theNode: MatterNode;
+
+export function setLogLevel(level: string): void {
+    let logLevel = Level.INFO;
+    switch (level) {
+        case "fatal":
+            logLevel = Level.FATAL;
+            break;
+        case "error":
+            logLevel = Level.ERROR;
+            break;
+        case "warn":
+            logLevel = Level.WARN;
+            break;
+        case "debug":
+            logLevel = Level.DEBUG;
+            break;
+    }
+    Logger.defaultLogLevel = logLevel;
+}
 
 /**
  * @file Top level application for Matter Node.
  */
-function main() {
-    const myArgs = process.argv.slice(2);
-    const nodenum = myArgs.length > 0 ? Number(myArgs[0]) : 0;
-    console.log(`Started Node #${nodenum}`);
+async function main() {
+    const yargsInstance = yargs(process.argv.slice(2))
+        .command(
+            "* [node-num]",
+            "Matter Node Shell",
+            yargs => {
+                return yargs.positional("node-num", {
+                    describe: "Node number for storage",
+                    default: 0,
+                    type: "number",
+                });
+            },
+            async argv => {
+                if (argv.help) return;
 
-    if (myArgs.length > 0) {
-        console.log(`nodenum: ${nodenum}`);
-    }
+                const { nodeNum, ble } = argv;
 
-    theShell.start();
-    theNode.start(nodenum).catch(error => logger.error(error));
+                const theNode = new MatterNode(nodeNum);
+                await theNode.initialize();
+                const theShell = new Shell(theNode, PROMPT);
+
+                if (ble) {
+                    // Initialize Ble
+                    Ble.get = singleton(
+                        () =>
+                            new BleNode({
+                                hciId: theNode.Store.get<number>("BleHciId", 0),
+                            }),
+                    );
+                }
+
+                setLogLevel(theNode.Store.get<string>("LogLevel", "info"));
+
+                console.log(`Started Node #${nodeNum} ${ble ? "with" : "without"} BLE`);
+                theShell.start();
+            },
+        )
+        .options({
+            ble: {
+                description: "Enable BLE support",
+                type: "boolean",
+            },
+        })
+        .version(false)
+        .scriptName("shell");
+    await yargsInstance.wrap(yargsInstance.terminalWidth()).parseAsync();
 }
 
 process.on("message", function (message) {
@@ -44,13 +103,18 @@ process.on("message", function (message) {
 
     switch (message) {
         case "exit":
-            process.exit();
+            exit().catch(error => logger.error(error));
     }
 });
 
+export async function exit(code = 0) {
+    await theNode?.close();
+    process.exit(code);
+}
+
 process.on("SIGINT", () => {
     // Pragmatic way to make sure the storage is correctly closed before the process ends.
-    theNode.closeStorage();
+    exit().catch(error => logger.error(error));
 });
 
-main();
+main().catch(error => logger.error(error));
