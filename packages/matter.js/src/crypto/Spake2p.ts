@@ -33,7 +33,7 @@ export class Spake2p {
 
     static async computeW0L(pbkdfParameters: PbkdfParameters, pin: number) {
         const { w0, w1 } = await this.computeW0W1(pbkdfParameters, pin);
-        const L = P256_CURVE.g.mul(w1).encode();
+        const L = P256_CURVE.g.mul(w1).encode() as ByteArray;
         return { w0, L };
     }
 

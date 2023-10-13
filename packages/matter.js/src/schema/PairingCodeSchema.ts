@@ -5,6 +5,7 @@
  */
 
 import { UnexpectedDataError } from "../common/MatterError.js";
+import { VendorId } from "../datatype/VendorId.js";
 import { Verhoeff } from "../math/Verhoeff.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Base38 } from "./Base38Schema.js";
@@ -74,7 +75,7 @@ export type ManualPairingData = {
     discriminator?: number;
     shortDiscriminator?: number;
     passcode: number;
-    vendorId?: number;
+    vendorId?: VendorId;
     productId?: number;
 };
 
@@ -106,10 +107,10 @@ class ManualPairingCodeSchema extends Schema<ManualPairingData, string> {
         const hasVendorProductIds = !!(parseInt(encoded[0]) & (1 << 2));
         const shortDiscriminator = ((parseInt(encoded[0]) & 0x03) << 2) | ((parseInt(encoded.slice(1, 6)) >> 14) & 0x3);
         const passcode = (parseInt(encoded.slice(1, 6)) & 0x3fff) | (parseInt(encoded.slice(6, 10)) << 14);
-        let vendorId: number | undefined;
+        let vendorId: VendorId | undefined;
         let productId: number | undefined;
         if (hasVendorProductIds) {
-            vendorId = parseInt(encoded.slice(10, 15));
+            vendorId = VendorId(parseInt(encoded.slice(10, 15)));
             productId = parseInt(encoded.slice(15, 20));
         }
         return { shortDiscriminator, passcode, vendorId, productId };
