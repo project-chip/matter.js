@@ -2,9 +2,6 @@
     "extends": "../../tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../dist/esm",
-        "target": "es2018",
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
         "types": ["node"]
     },
     "references": [{ "path": "../../models/src" }, { "path": "../../packages/matter.js/src" }]
