@@ -14,9 +14,18 @@ concurrency:
 
 jobs:
   check-and-lint:
+    outputs:
+      package-changes: ${{ steps.changes.outputs.src }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - "package.json"
+            - "packages/**/package.json"
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
     - run: npm run format-verify
@@ -24,6 +33,7 @@ jobs:
 
   build-non-linux:
     needs: [ check-and-lint ]
+    if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
