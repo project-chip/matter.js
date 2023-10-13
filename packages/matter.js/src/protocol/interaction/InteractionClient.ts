@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterController } from "../../MatterController.js";
 import {
     Attribute,
     AttributeJsType,
@@ -21,9 +22,9 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterController } from "../../MatterController.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
+import { Time, Timer, TimerCallback } from "../../time/Time.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { ExchangeProvider } from "../ExchangeManager.js";
 import { DecodedAttributeReportValue, normalizeAndDecodeReadAttributeReport } from "./AttributeDataDecoder.js";
@@ -37,10 +38,10 @@ import {
 } from "./InteractionMessenger.js";
 import { StatusCode, TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
 import {
-    attributePathToId,
-    clusterPathToId,
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
+    attributePathToId,
+    clusterPathToId,
 } from "./InteractionServer.js";
 
 const logger = Logger.get("InteractionClient");
@@ -60,7 +61,10 @@ export interface AttributeStatus {
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {
-    constructor(private readonly subscriptionListeners: Map<number, (dataReport: DataReport) => void>) {}
+    constructor(
+        private readonly subscriptionListeners: Map<number, (dataReport: DataReport) => void>,
+        private readonly subscriptionUpdateTimers = new Map<number, Timer>(),
+    ) {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -75,27 +79,40 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
             throw new UnexpectedDataError("Invalid Data report without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
+        const timer = this.subscriptionUpdateTimers.get(subscriptionId);
         if (listener === undefined) {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
             logger.info(`Received data for unknown subscription ID ${subscriptionId}. Cancel this subscription.`);
+            if (timer !== undefined) {
+                // Should not happen but let's make sure to cleanup
+                timer.stop();
+                this.subscriptionUpdateTimers.delete(subscriptionId);
+            }
             await messenger.close();
             return;
         }
         await messenger.sendStatus(StatusCode.Success);
         await messenger.close();
 
+        if (timer !== undefined) {
+            timer.stop().start(); // Restart timer because we received data
+        }
         listener(dataReport);
     }
 }
 
 export class InteractionClient {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
+    private readonly subscriptionUpdateTimers = new Map<number, Timer>();
+    // TODO Add storage for these data to be able to optimize follow up subscriptions by only request updated data
     private readonly subscribedLocalValues = new Map<string, any>();
     private readonly subscribedClusterDataVersions = new Map<string, number>();
 
     constructor(private readonly exchangeProvider: ExchangeProvider) {
         // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
-        this.exchangeProvider.addProtocolHandler(new SubscriptionClient(this.subscriptionListeners));
+        this.exchangeProvider.addProtocolHandler(
+            new SubscriptionClient(this.subscriptionListeners, this.subscriptionUpdateTimers),
+        );
     }
 
     async getAllAttributes(
@@ -445,6 +462,7 @@ export class InteractionClient {
         knownDataVersion?: number;
         keepSubscriptions?: boolean;
         listener?: (value: AttributeJsType<A>, version: number) => void;
+        updateTimeoutHandler?: TimerCallback;
     }): Promise<void> {
         const {
             endpointId,
@@ -456,6 +474,7 @@ export class InteractionClient {
             listener,
             knownDataVersion,
             keepSubscriptions = true,
+            updateTimeoutHandler,
         } = options;
         return this.withMessenger<void>(async messenger => {
             const { id: attributeId } = attribute;
@@ -468,7 +487,7 @@ export class InteractionClient {
             );
             const {
                 report,
-                subscribeResponse: { subscriptionId },
+                subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: INTERACTION_MODEL_REVISION,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
@@ -509,6 +528,9 @@ export class InteractionClient {
                 listener?.(value, version);
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
+            if (updateTimeoutHandler !== undefined) {
+                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+            }
             subscriptionListener(report);
             return;
         });
@@ -524,6 +546,7 @@ export class InteractionClient {
         minimumEventNumber?: number | bigint;
         isFabricFiltered?: boolean;
         listener?: (value: DecodedEventData<T>) => void;
+        updateTimeoutHandler?: TimerCallback;
     }): Promise<void> {
         return this.withMessenger<void>(async messenger => {
             const {
@@ -536,6 +559,7 @@ export class InteractionClient {
                 minimumEventNumber,
                 isFabricFiltered = true,
                 listener,
+                updateTimeoutHandler,
             } = options;
             const { id: eventId } = event;
             logger.debug(
@@ -543,7 +567,7 @@ export class InteractionClient {
             );
             const {
                 report,
-                subscribeResponse: { subscriptionId },
+                subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
                 interactionModelRevision: INTERACTION_MODEL_REVISION,
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
@@ -575,6 +599,9 @@ export class InteractionClient {
                 events.forEach(event => listener?.(event));
             };
             this.subscriptionListeners.set(subscriptionId, subscriptionListener);
+            if (updateTimeoutHandler !== undefined) {
+                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+            }
             subscriptionListener(report);
             return;
         });
@@ -590,6 +617,7 @@ export class InteractionClient {
         isFabricFiltered?: boolean;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+        updateTimeoutHandler?: TimerCallback;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
@@ -604,6 +632,7 @@ export class InteractionClient {
             isFabricFiltered = true,
             eventFilters,
             dataVersionFilters,
+            updateTimeoutHandler,
         } = options;
         return this.subscribeMultipleAttributesAndEvents({
             attributes: REQUEST_ALL,
@@ -616,6 +645,7 @@ export class InteractionClient {
             eventListener,
             eventFilters,
             dataVersionFilters,
+            updateTimeoutHandler,
         });
     }
 
@@ -630,6 +660,7 @@ export class InteractionClient {
         eventListener?: (data: DecodedEventReportValue<any>) => void;
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
+        updateTimeoutHandler?: TimerCallback;
     }): Promise<{
         attributeReports?: DecodedAttributeReportValue<any>[];
         eventReports?: DecodedEventReportValue<any>[];
@@ -645,6 +676,7 @@ export class InteractionClient {
             eventListener,
             eventFilters,
             dataVersionFilters,
+            updateTimeoutHandler,
         } = options;
 
         const subscriptionPathsCount = (attributeRequests?.length ?? 0) + (eventRequests?.length ?? 0);
@@ -681,6 +713,10 @@ export class InteractionClient {
             logger.info(
                 `Subscription successfully initialized with ID ${subscriptionId} and maxInterval ${maxInterval}s.`,
             );
+
+            if (updateTimeoutHandler !== undefined) {
+                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+            }
 
             const subscriptionListener = (dataReport: {
                 attributeReports?: DecodedAttributeReportValue<any>[];
@@ -915,6 +951,32 @@ export class InteractionClient {
         } finally {
             await messenger.close();
         }
+    }
+
+    private registerSubscriptionUpdateTimer(
+        subscriptionId: number,
+        maxInterval: number,
+        updateTimeoutHandler: TimerCallback,
+    ) {
+        maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
+        const timer = Time.getTimer(maxInterval * 1000, () => {
+            logger.info(`Subscription ${subscriptionId} timed out ...`);
+            this.subscriptionUpdateTimers.delete(subscriptionId);
+            this.subscriptionListeners.delete(subscriptionId);
+            // We remove all data because we don't know which data is still valid, so we better read from remote if needed
+            this.subscribedLocalValues.clear();
+            this.subscribedClusterDataVersions.clear();
+            updateTimeoutHandler();
+        }).start();
+        this.subscriptionUpdateTimers.set(subscriptionId, timer);
+    }
+
+    close() {
+        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
+        this.subscriptionUpdateTimers.clear();
+        this.subscriptionListeners.clear();
+        this.subscribedLocalValues.clear();
+        this.subscribedClusterDataVersions.clear();
     }
 
     get session() {
