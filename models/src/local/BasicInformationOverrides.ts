@@ -13,5 +13,13 @@ LocalMatter.children.push({
     children: [
         // The used chip xmls with revision 2 fields, so we should also use it really
         { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 2 },
+        {
+            tag: "attribute",
+            name: "ProductAppearance",
+            id: 0x14,
+            type: "ProductAppearanceStruct",
+            conformance: "O",
+            quality: "F",
+        },
     ],
 });

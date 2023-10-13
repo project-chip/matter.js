@@ -1,7 +1,5 @@
 {
-  "extends": "../tools/tsconfig.base.json",
-
-  "include": [
-    "src/**/*.ts"
-  ]
+    "compilerOptions": { "composite": true },
+    "files": [],
+    "references": [{ "path": "src" }]
 }

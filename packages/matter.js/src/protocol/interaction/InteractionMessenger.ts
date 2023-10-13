@@ -32,6 +32,7 @@ import {
     TlvAttributeReport,
     TlvDataReport,
     TlvDataReportForSend,
+    TlvEventReport,
     TlvInvokeRequest,
     TlvInvokeResponse,
     TlvReadRequest,
@@ -341,7 +342,8 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
     async readDataReport(): Promise<DataReport> {
         let subscriptionId: number | undefined;
-        const values: TypeFromSchema<typeof TlvAttributeReport>[] = [];
+        const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
+        const eventValues: TypeFromSchema<typeof TlvEventReport>[] = [];
 
         while (true) {
             const dataReportMessage = await this.exchange.waitFor(MessageType.ReportData);
@@ -356,10 +358,14 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
             }
 
             if (Array.isArray(report.attributeReports) && report.attributeReports.length > 0) {
-                values.push(...report.attributeReports);
+                attributeValues.push(...report.attributeReports);
+            }
+            if (Array.isArray(report.eventReports) && report.eventReports.length > 0) {
+                eventValues.push(...report.eventReports);
             }
             if (!report.moreChunkedMessages) {
-                report.attributeReports = values;
+                report.attributeReports = attributeValues;
+                report.eventReports = eventValues;
                 return report;
             }
 

@@ -1,19 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "target": "es2018",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "types": [
-      "node",
-      "mocha"
-    ]
-  },
-
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "src/testing/mocharc.cjs"
-  ]
+    "compilerOptions": { "composite": true },
+    "files": [],
+    "references": [{ "path": "src" }, { "path": "test" }]
 }

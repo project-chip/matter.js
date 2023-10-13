@@ -27,7 +27,7 @@
         "clean": "build clean",
         "build": "build",
         "build-clean": "build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig tsconfig.json",
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json",
         "test": "matter-test -w",
         "coverage": "c8 matter-test esm"
     },
