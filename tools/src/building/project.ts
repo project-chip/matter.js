@@ -66,11 +66,11 @@ export class Project {
         // compilation is quite slow regardless
         return execute("tsc", [
             "-p",
-            this.pkg.resolve("tsconfig.json"),
+            this.pkg.resolve("src/tsconfig.json"),
             "--outDir",
-            this.pkg.resolve("build/types"),
+            this.pkg.resolve("build/types/src"),
             "--tsBuildInfoFile",
-            this.pkg.resolve("build/types/tsbuildinfo"),
+            this.pkg.resolve("build/types/src/tsbuildinfo"),
             "--emitDeclarationOnly",
             "--sourceMap",
             "--declarationMap",

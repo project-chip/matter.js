@@ -1,0 +1,7 @@
+{
+    "extends": "../../tools/tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist/esm",
+        "types": ["node"]
+    }
+}

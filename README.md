@@ -155,7 +155,8 @@ Table Legend:
 
 | Device type                       | Apple | Google        | Amazon | SmartThings | LG ThinQ | Tuya |
 |-----------------------------------|-------|---------------|--------|-------------|----------|------|
-| **Bridge Support**                | X     | X             | X      | -           | -        | -    |
+| **Bridge Support**                | X     | X             | X      | X           | -        | -    |
+| **Composed Devices Support**      | X     | X             | -      | -           | -        | -    |
 | **Light devices**                 |       |               |        |             |          |      |
 | * On/Off Light                    | X     | X             | X      | X           | X        | X    |
 | * Dimmable Light                  | X     | X             | X      | X           | -        | X    |

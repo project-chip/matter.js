@@ -26,7 +26,7 @@
         "clean": "build clean",
         "build": "build",
         "build-clean": "build --clean",
-        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig tsconfig.json"
+        "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231009-939307e",
