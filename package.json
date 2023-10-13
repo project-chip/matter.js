@@ -18,7 +18,7 @@
         "build-clean": "npm run build-clean --workspaces",
         "build-doc": "npm run build-doc --workspaces --if-present",
         "test": "npm run -s test --workspaces --if-present",
-        "lint": "eslint --cache --cache-strategy content 'packages/**/*.ts' 'tools/**/*.ts' 'codegen/**/*.ts' 'models/src/local/**/*.ts' 'chip-testing/**/*.ts'",
+        "lint": "eslint 'packages/**/*.ts' 'tools/**/*.ts' 'codegen/**/*.ts' 'models/src/local/**/*.ts' 'chip-testing/**/*.ts'",
         "lint-fix": "eslint --cache --cache-strategy content --fix 'packages/**/*.ts' 'tools/**/*.ts' 'codegen/**/*.ts' 'models/src/local/**/*.ts' 'chip-testing/**/*.ts'",
         "format": "prettier --write 'packages/**/*.ts' 'tools/**/*.ts' 'models/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts'",
         "format-verify": "prettier --check 'packages/**/*.ts' 'tools/**/*.ts' 'models/**/*.ts' 'codegen/**/*.ts' 'chip-testing/**/*.ts'",

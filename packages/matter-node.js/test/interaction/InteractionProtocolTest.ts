@@ -41,6 +41,8 @@ import {
     InvokeRequest,
     InvokeResponse,
     ReadRequest,
+    StatusCode,
+    StatusResponseError,
     SubscribeRequest,
     WriteRequest,
     WriteResponse,
@@ -61,8 +63,6 @@ import {
 } from "@project-chip/matter.js/tlv";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
-import { StatusResponseError } from "@project-chip/matter.js/interaction";
-import { StatusCode } from "@project-chip/matter.js/interaction";
 
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
@@ -1298,16 +1298,16 @@ describe("InteractionProtocol", () => {
             onOffCluster = ClusterServer(
                 OnOffCluster,
                 {
-                    onOff: false
+                    onOff: false,
                 },
                 {
-                    on: async() => {
+                    on: async () => {
                         throw new StatusResponseError("Sorry so swamped", StatusCode.Busy);
                     },
-                    off: async() => {},
-                    toggle: async() => {}
-                }
-            )
+                    off: async () => {},
+                    toggle: async () => {},
+                },
+            );
 
             endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
             endpoint.addClusterServer(onOffCluster);
