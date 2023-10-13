@@ -357,6 +357,25 @@ export class ControllerCommissioner {
     }
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
+    private ensureOperationalCredentialsSuccess(
+        context: string,
+        { statusCode, debugText, fabricIndex }: TypeFromSchema<typeof OperationalCredentials.TlvNocResponse>,
+    ) {
+        logger.debug(
+            `Commissioning step ${context} returned ${statusCode}, ${debugText}${
+                fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
+            }`,
+        );
+
+        if (statusCode === OperationalCredentials.NodeOperationalCertStatus.Ok) return;
+        throw new CommissioningError(
+            `Commission error for "${context}": ${statusCode}, ${debugText}${
+                fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
+            }`,
+        );
+    }
+
+    /** Helper method to check for errorCode/debugTest responses and throw error on failure */
     private ensureGeneralCommissioningSuccess(
         context: string,
         { errorCode, debugText }: CommissioningSuccessFailureResponse,
@@ -651,17 +670,23 @@ export class ControllerCommissioner {
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerNodeId = this.fabric.rootNodeId;
-        const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.addNoc(
-            {
-                nocValue: peerOperationalCert,
-                icacValue: new ByteArray(0),
-                ipkValue: this.fabric.identityProtectionKey,
-                adminVendorId: VendorId(this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID),
-                caseAdminSubject: peerNodeId,
-            },
-            { useExtendedFailSafeMessageResponseTimeout: true },
+        const peerOperationalCert = this.certificateManager.generateNoc(
+            operationalPublicKey,
+            this.fabric.fabricId,
+            this.nodeId,
+        );
+        this.ensureOperationalCredentialsSuccess(
+            "addNoc",
+            await operationalCredentialsClusterClient.addNoc(
+                {
+                    nocValue: peerOperationalCert,
+                    icacValue: new ByteArray(0),
+                    ipkValue: this.fabric.identityProtectionKey,
+                    adminVendorId: this.adminVendorId,
+                    caseAdminSubject: this.fabric.rootNodeId,
+                },
+                { useExtendedFailSafeMessageResponseTimeout: true },
+            ),
         );
 
         return {
