@@ -25,7 +25,7 @@ export class PaseClient {
 
     static generateRandomPasscode() {
         let passcode: number;
-        passcode = Math.floor(Math.random() * 99999997 + 1); // prevents 00000000 and 99999999
+        passcode = (Crypto.getRandomUInt32() % 99999998) + 1; // prevents 00000000 and 99999999
         if (FORBIDDEN_PASSCODES.includes(passcode)) {
             passcode += 1; // With current forbidden passcode list can never collide
         }
