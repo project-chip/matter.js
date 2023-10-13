@@ -1,20 +1,5 @@
 {
-  "extends": "../../tools/tsconfig.base.json",
-
-  "compilerOptions": {
-    "types": [
-      "node",
-      "@project-chip/matter.js-tools",
-      "mocha"
-    ]
-  },
-
-  "include": ["src/**/*.ts", "test/**/*.ts"],
-
-  "typedocOptions": {
-    "entryPoints": [
-      "src/ble/export.ts"
-    ],
-    "out": "../../docs/matter-node-ble.js"
-  }
+    "compilerOptions": { "composite": true },
+    "files": [],
+    "references": [{ "path": "src" }]
 }
