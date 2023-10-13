@@ -1,12 +1,26 @@
 # Changelog for matter.js
 
-This page tries to get an detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
-All Changes without a GitHub Username in brackets are from the core team: @Apollon77, @mfucci and @turon
+This page shows a detailed overview of the changes between versions without the need to look into code, especially to see relevant changes while interfaces and features are still in flux.
+
+The main work (all changes without a GitHub username in brackets in the below list) is done by the core team of this project completely in their free time (see their individual profiles for sponsoring options): @Apollon77, @lauckhart, @turon and @mfucci 
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	## __WORK IN PROGRESS__
 -->
+
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Fix: Handles event data correctly on subscription initially and also on updates to trigger the listeners
+  * Feature: Added detection of missing Subscription updates from a device and allow to react to such a timeout with callback
+  * Feature: Added generation method for random passcodes to PaseClient
+  * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel
+* matter.js API:
+  * Breaking: Restructure the CommissioningController to allow pairing with multiple nodes
+    * Introducing class PairedNode with the High level API for a paired Node
+    * Restructure CommissioningController to handle multiple nodes and offer new high level API
+* matter-node-shell.js
+  * Feature: Completely refactored and enhances shell to support commissioning, identify and many more new commands. See Readme, try it
 
 ## 0.6.0 (2023-10-08)
 * Matter-Core functionality:
