@@ -1,13 +1,5 @@
 {
-  "extends": "../../tools/tsconfig.base.json",
-
-  "compilerOptions": {
-    "types": [
-      "@project-chip/matter.js-tools",
-      "@project-chip/matter-node.js",
-      "mocha"
-    ]
-  },
-
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+    "compilerOptions": { "composite": true },
+    "files": [],
+    "references": [{ "path": "src" }]
 }
