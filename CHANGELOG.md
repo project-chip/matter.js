@@ -11,10 +11,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 * Infrastructure
-  * Feature (vilic): Add project references and additional tsconfigs to support standard tsc development workflows
-  * Breaking: Change ES target from ES5 to ES2018 (affected environments probably already didn't support matter.js)
+  * Feature (vilic): Added project references and additional tsconfigs to support standard tsc development workflows
+  * Breaking: Changed ES target from ES5 to ES2018 (affected environments probably already didn't support matter.js)
 * Matter-Core functionality:
   * Fix: Handles event data correctly on subscription initially and also on updates to trigger the listeners
+  * Enhance (vilic): Added MDNS Memberships to sockets for better operation on Windows and other platforms
   * Feature: Added detection of missing Subscription updates from a device and allow to react to such a timeout with callback
   * Feature: Added generation method for random passcodes to PaseClient
   * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel
