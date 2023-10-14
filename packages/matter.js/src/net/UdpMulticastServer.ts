@@ -35,8 +35,18 @@ export class UdpMulticastServer {
             listeningPort,
             broadcastAddressIpv4 === undefined
                 ? undefined
-                : await network.createUdpChannel({ type: "udp4", netInterface, listeningPort }),
-            await network.createUdpChannel({ type: "udp6", netInterface, listeningPort }),
+                : await network.createUdpChannel({
+                      type: "udp4",
+                      netInterface,
+                      listeningPort,
+                      membershipAddresses: [broadcastAddressIpv4],
+                  }),
+            await network.createUdpChannel({
+                type: "udp6",
+                netInterface,
+                listeningPort,
+                membershipAddresses: [broadcastAddressIpv6],
+            }),
             netInterface,
         );
     }

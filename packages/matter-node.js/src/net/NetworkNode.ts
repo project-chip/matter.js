@@ -22,15 +22,23 @@ export class NetworkNode extends Network {
             }
             throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
         } else {
-            if (process.platform !== "win32") {
-                return `::%${netInterface}`;
+            const multicastInterface = this.getMulticastInterfaceIpv6(netInterface, netInterfaceInfo);
+            if (multicastInterface === undefined) {
+                throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
             }
-            for (const { address, family, scopeid } of netInterfaceInfo) {
-                if (family === "IPv6" && address.startsWith("fe80::")) {
-                    return `::%${scopeid}`;
-                }
-            }
-            throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
+            return multicastInterface;
+        }
+    }
+
+    static getMembershipMulticastInterfaces(ipv4: boolean): (string | undefined)[] {
+        if (ipv4) {
+            return [undefined];
+        } else {
+            return Object.entries(networkInterfaces()).flatMap(([netInterface, netInterfaceInfo]) => {
+                if (netInterfaceInfo === undefined) return [];
+                const multicastInterface = this.getMulticastInterfaceIpv6(netInterface, netInterfaceInfo);
+                return multicastInterface === undefined ? [] : [multicastInterface];
+            });
         }
     }
 
@@ -71,6 +79,21 @@ export class NetworkNode extends Network {
             }
             return undefined;
         }
+    }
+
+    private static getMulticastInterfaceIpv6(
+        netInterface: string,
+        netInterfaceInfo: NetworkInterfaceInfo[],
+    ): string | undefined {
+        if (process.platform !== "win32") {
+            return `::%${netInterface}`;
+        }
+        for (const { address, family, scopeid } of netInterfaceInfo) {
+            if (family === "IPv6" && address.startsWith("fe80::")) {
+                return `::%${scopeid}`;
+            }
+        }
+        return undefined;
     }
 
     getNetInterfaces(): string[] {
