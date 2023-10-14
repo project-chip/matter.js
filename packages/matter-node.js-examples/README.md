@@ -20,11 +20,29 @@ For BLE usage please also see the [matter-node-ble.js README.md](../matter-node-
 npm i -g @project-chip/matter-node.js-examples
 ```
 
-### Use from Cloned MatterServer.js Repository
+### Use from Cloned Matter.js Repository
 
 When you clone the matter.js repository you can also use matter-node.js. To do this you need to execute `npm install` in the matter.js root directory once to install all dependencies and build all packages.
 
 Then after `cd packages/matter-node.js-examples` you can use `npm run matter-device` to run the matter-node.js server. Please see the next section for more details.
+
+### Bundling
+
+For production environments where space and/or CPU is at a premium, you might consider using a bundler to distribute your application.  This project includes an example demonstrating how to create such a bundle using [esbuild](https://esbuild.github.io/).
+
+To run the example, first install as described in [From NPM](#from-npm) or [Use from Cloned Matter.js Repository](#use-from-cloned-matterjs-repository).
+
+Then in the `matter-node.js-examples` installation directory, run:
+
+```bash
+npm bundle-device
+```
+
+This creates a single JavaScript file containing the application and dependencies.
+
+To view the example commands for bundling and running, see scripts `bundle-device` and `matter-device-bundled` in [package.json](package.json).
+
+Note that you cannot include native dependencies in this way so those will still need to be installed locally using NPM.  In this example, those are the dependencies flagged as `--external` in the `esbuild` command line.
 
 ## CLI usage
 
