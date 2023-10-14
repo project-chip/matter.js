@@ -67,7 +67,15 @@ export class UdpChannelNode implements UdpChannel {
             const multicastInterfaces = NetworkNode.getMembershipMulticastInterfaces(type === "udp4");
             for (const address of membershipAddresses) {
                 for (const multicastInterface of multicastInterfaces) {
-                    socket.addMembership(address, multicastInterface);
+                    try {
+                        socket.addMembership(address, multicastInterface);
+                    } catch (error) {
+                        logger.warn(
+                            `Error adding membership for address ${address}${
+                                multicastInterface ? ` with interface ${multicastInterface}` : ""
+                            }: ${error}`,
+                        );
+                    }
                 }
             }
         }
