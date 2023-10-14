@@ -33,7 +33,6 @@ jobs:
 
   build-non-linux:
     needs: [ check-and-lint ]
-    if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -41,7 +40,9 @@ jobs:
         os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
+        if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
       - name: Build on ${{ matrix.os }}
+        if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
         uses: ./.github/actions/prepare-env
         with:
           node-version: ${{ matrix.node-version }}
