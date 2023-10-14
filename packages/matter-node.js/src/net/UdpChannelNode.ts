@@ -38,7 +38,13 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
 }
 
 export class UdpChannelNode implements UdpChannel {
-    static async create({ listeningPort, type, listeningAddress, netInterface }: UdpChannelOptions) {
+    static async create({
+        listeningPort,
+        type,
+        listeningAddress,
+        netInterface,
+        membershipAddresses,
+    }: UdpChannelOptions) {
         const socketOptions: dgram.SocketOptions = { type, reuseAddr: true };
         if (type === "udp6") {
             socketOptions.ipv6Only = true;
@@ -56,6 +62,14 @@ export class UdpChannelNode implements UdpChannel {
                 }),
             );
             socket.setMulticastInterface(multicastInterface);
+        }
+        if (membershipAddresses !== undefined) {
+            const multicastInterfaces = NetworkNode.getMembershipMulticastInterfaces(type === "udp4");
+            for (const address of membershipAddresses) {
+                for (const multicastInterface of multicastInterfaces) {
+                    socket.addMembership(address, multicastInterface);
+                }
+            }
         }
         return new UdpChannelNode(socket, netInterface);
     }
