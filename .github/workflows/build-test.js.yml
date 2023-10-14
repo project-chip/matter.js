@@ -14,9 +14,18 @@ concurrency:
 
 jobs:
   check-and-lint:
+    outputs:
+      package-changes: ${{ steps.changes.outputs.src }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - "package.json"
+            - "packages/**/package.json"
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
     - run: npm run format-verify
@@ -31,7 +40,9 @@ jobs:
         os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
+        if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
       - name: Build on ${{ matrix.os }}
+        if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
         uses: ./.github/actions/prepare-env
         with:
           node-version: ${{ matrix.node-version }}

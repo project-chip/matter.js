@@ -244,7 +244,10 @@ Matter.children.push({
             xref: { document: "core", section: "11.1.5.20" }
         },
 
-        { tag: "attribute", name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct", conformance: "O" },
+        {
+            tag: "attribute", name: "ProductAppearance", id: 0x14, type: "ProductAppearanceStruct",
+            conformance: "O", quality: "F"
+        },
 
         {
             tag: "event", name: "StartUp", id: 0x0, access: "V", conformance: "M", priority: "critical",

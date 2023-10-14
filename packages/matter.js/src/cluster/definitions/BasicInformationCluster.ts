@@ -381,7 +381,7 @@ export namespace BasicInformation {
                 { default: { caseSessionsPerFabric: 3, subscriptionsPerFabric: 3 } }
             ),
 
-            productAppearance: OptionalAttribute(0x14, TlvProductAppearanceStruct)
+            productAppearance: OptionalFixedAttribute(0x14, TlvProductAppearanceStruct)
         },
 
         events: {
