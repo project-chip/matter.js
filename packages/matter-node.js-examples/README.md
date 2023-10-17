@@ -35,7 +35,7 @@ To run the example, first install as described in [From NPM](#from-npm) or [Use 
 Then in the `matter-node.js-examples` installation directory, run:
 
 ```bash
-npm bundle-device
+npm run bundle-device
 ```
 
 This creates a single JavaScript file containing the application and dependencies.
