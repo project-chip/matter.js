@@ -84,7 +84,7 @@ export class MatterNode {
 
         this.matterDevice = new MatterServer(this.storageManager);
         this.commissioningController = new CommissioningController({
-            delayedConnection: true,
+            autoConnect: false,
         });
         this.matterDevice.addCommissioningController(this.commissioningController);
 

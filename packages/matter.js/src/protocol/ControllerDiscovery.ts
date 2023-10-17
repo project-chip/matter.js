@@ -6,7 +6,7 @@
 
 import { PairRetransmissionLimitReachedError } from "../MatterController.js";
 import { CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
-import { ServerAddress } from "../common/ServerAddress.js";
+import { ServerAddress, serverAddressToString } from "../common/ServerAddress.js";
 import { Logger } from "../log/Logger.js";
 import { CommissioningError } from "../protocol/ControllerCommissioner.js";
 import { isDeepEqual } from "../util/DeepEqual.js";
@@ -95,18 +95,13 @@ export class ControllerDiscovery {
         while (true) {
             logger.debug(
                 `Server addresses to try: ${Array.from(serversSet.values())
-                    .map(server =>
-                        server.type === "udp"
-                            ? `udp://${server.ip}:${server.port}`
-                            : `ble://${server.peripheralAddress}`,
-                    )
+                    .map(server => serverAddressToString(server))
                     .join(",")}`,
             );
 
             let triedOne = false;
             for (const server of serversSet) {
-                const serverKey =
-                    server.type === "udp" ? `udp://${server.ip}:${server.port}` : `ble://${server.peripheralAddress}`;
+                const serverKey = serverAddressToString(server);
                 if (triedServers.has(serverKey)) continue;
                 triedServers.add(serverKey);
 

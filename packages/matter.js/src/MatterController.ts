@@ -189,11 +189,11 @@ export class MatterController {
      */
     async commission(options: NodeCommissioningOptions): Promise<NodeId> {
         const {
-            commissioningOptions = {
+            commissioning: commissioningOptions = {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
                 regulatoryCountryCode: "XX",
             },
-            discoveryOptions: {
+            discovery: {
                 identifierData,
                 discoveryCapabilities = { onIpNetwork: true },
                 knownAddress,
@@ -264,8 +264,8 @@ export class MatterController {
             if (e instanceof PairRetransmissionLimitReachedError && knownAddress !== undefined) {
                 // Know address was a failure, so discover the device now anew
                 return await this.commission({
-                    commissioningOptions,
-                    discoveryOptions: { identifierData, timeoutSeconds, discoveryCapabilities },
+                    commissioning: commissioningOptions,
+                    discovery: { identifierData, timeoutSeconds, discoveryCapabilities },
                     passcode,
                 });
             }

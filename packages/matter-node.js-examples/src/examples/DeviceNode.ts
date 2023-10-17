@@ -20,6 +20,7 @@ import { BleNode } from "@project-chip/matter-node-ble.js/ble";
 import { Ble } from "@project-chip/matter-node.js/ble";
 import { OnOffLightDevice, OnOffPluginUnitDevice, logEndpoint } from "@project-chip/matter-node.js/device";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
+import { QrCode } from "@project-chip/matter-node.js/schema";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
 import {
@@ -249,9 +250,9 @@ class Device {
                 onIpNetwork: false,
             });
 
-            const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
+            const { qrPairingCode, manualPairingCode } = pairingData;
 
-            console.log(qrCode);
+            console.log(QrCode.get(qrPairingCode));
             logger.info(
                 `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
             );

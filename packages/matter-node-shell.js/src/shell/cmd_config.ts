@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Logger } from "@project-chip/matter-node.js/log";
 import { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 import { setLogLevel } from "../app";
@@ -235,7 +236,7 @@ function doWifiCredentials(
                 `Current Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${theNode.Store.get<string>("WiFiPassword", "-")}"`,
+                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword", ""))}"`,
             );
             break;
         case "set":
@@ -249,7 +250,7 @@ function doWifiCredentials(
                 `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${theNode.Store.get<string>("WiFiPassword", "-")}"`,
+                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword"))}"`,
             );
             break;
         case "delete":
@@ -276,7 +277,9 @@ function doThreadCredentials(
                 `Current Thread network credentials: name="${theNode.Store.get<string>(
                     "ThreadName",
                     "-",
-                )}, Operational-Dataset="${theNode.Store.get<string>("ThreadOperationalDataset", "-")}"`,
+                )}, Operational-Dataset="${Logger.maskString(
+                    theNode.Store.get<string>("ThreadOperationalDataset", ""),
+                )}"`,
             );
             break;
         case "set":
@@ -290,7 +293,7 @@ function doThreadCredentials(
                 `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "ThreadName",
                     "-",
-                )}, OperationalDataset="${theNode.Store.get<string>("ThreadOperationalDataset", "-")}"`,
+                )}, OperationalDataset="${Logger.maskString(theNode.Store.get<string>("ThreadOperationalDataset"))}"`,
             );
             break;
         case "delete":

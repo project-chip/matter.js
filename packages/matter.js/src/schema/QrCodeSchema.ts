@@ -208,6 +208,10 @@ export class QrCodeSchema extends Schema<string, string> {
     protected decodeInternal(_encoded: string): string {
         throw new NotImplementedError("Method not implemented.");
     }
+
+    get(code: string): string {
+        return this.encode(code);
+    }
 }
 
 export const QrCode = new QrCodeSchema();

@@ -177,8 +177,7 @@ class ControllerNode {
 
         const matterServer = new MatterServer(storageManager);
         const commissioningController = new CommissioningController({
-            delayedConnection: true,
-            subscribeAllAttributesAndEvents: true,
+            autoConnect: false,
         });
         matterServer.addCommissioningController(commissioningController);
 
@@ -193,8 +192,8 @@ class ControllerNode {
 
         if (!commissioningController.isCommissioned()) {
             const options = {
-                commissioningOptions,
-                discoveryOptions: {
+                commissioning: commissioningOptions,
+                discovery: {
                     knownAddress: ip !== undefined && port !== undefined ? { ip, port, type: "udp" } : undefined,
                     identifierData:
                         longDiscriminator !== undefined

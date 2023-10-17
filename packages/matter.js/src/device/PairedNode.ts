@@ -47,7 +47,6 @@ import {
     ManualPairingCodeCodec,
     QrPairingCodeCodec,
 } from "../schema/PairingCodeSchema.js";
-import { QrCode } from "../schema/QrCodeSchema.js";
 import { PaseClient } from "../session/pase/PaseClient.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
@@ -57,10 +56,12 @@ const logger = Logger.get("PairedNode");
 
 export type CommissioningControllerNodeOptions = {
     /**
-     * When set to true all events and attributes are subscribed and value changes are reflected in the ClusterClient
+     * Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient
      * instances. With this reading attributes values is mostly looked up in the locally cached data.
+     * Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done
+     * internally automatically.
      */
-    readonly subscribeAllAttributesAndEvents?: boolean;
+    readonly autoSubscribe?: boolean;
 
     /** Minimum subscription interval when values are changed. Default it is set to 0s.*/
     readonly subscribeMinIntervalFloorSeconds?: number;
@@ -120,7 +121,7 @@ export class PairedNode {
         assignDisconnectedHandler(async () => await this.reconnect());
     }
 
-    /** Method internally used to reconnect to the device after the active Session was closed. */
+    /** Reconnect to the device after the active Session was closed. */
     private async reconnect() {
         if (this.interactionClient !== undefined) {
             this.interactionClient.close();
@@ -134,7 +135,7 @@ export class PairedNode {
         }
     }
 
-    /** Method internally used to ensure that the node is connected by creating a new InteractionClient if needed. */
+    /** Ensure that the node is connected by creating a new InteractionClient if needed. */
     private async ensureConnection() {
         if (this.interactionClient !== undefined) return this.interactionClient;
         this.interactionClient = await this.reconnectInteractionClient();
@@ -142,17 +143,12 @@ export class PairedNode {
     }
 
     /**
-     * Method internally used to initialize the node after the InteractionClient was created and to subscribe
-     * attributes and events if requested.
+     * Initialize the node after the InteractionClient was created and to subscribe attributes and events if requested.
      */
     private async initialize() {
         const interactionClient = await this.ensureConnection();
-        const {
-            subscribeAllAttributesAndEvents: subscribeAll,
-            attributeChangedCallback,
-            eventTriggeredCallback,
-        } = this.options;
-        if (subscribeAll) {
+        const { autoSubscribe, attributeChangedCallback, eventTriggeredCallback } = this.options;
+        if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
                 ignoreInitialTriggers: true,
                 attributeChangedCallback,
@@ -188,9 +184,8 @@ export class PairedNode {
     }
 
     /**
-     * Subscribe to all attributes and events of the device. When setting the Controller property
-     * subscribeAllAttributesAndEvents to true this is executed automatically. Alternatively you can manually subscribe
-     * by calling this method.
+     * Subscribe to all attributes and events of the device. Unless setting the Controller property autoSubscribe to
+     * false this is executed automatically. Alternatively you can manually subscribe by calling this method.
      */
     async subscribeAllAttributesAndEvents(options?: {
         ignoreInitialTriggers?: boolean;
@@ -291,13 +286,13 @@ export class PairedNode {
         return initialSubscriptionData;
     }
 
-    /** Internal method to handle a node shutDown event (if supported by the node and received). */
+    /** Handles a node shutDown event (if supported by the node and received). */
     private async handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
         await this.reconnect();
     }
 
-    /** Internal method to read all data from the device and create a device object structure out of it. */
+    /** Reads all data from the device and create a device object structure out of it. */
     private async initializeEndpointStructure(allClusterAttributes: DecodedAttributeReportValue<any>[]) {
         const interactionClient = await this.ensureConnection();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
@@ -421,7 +416,7 @@ export class PairedNode {
             endpointClusters.push(clusterClient);
         }
 
-        // TODO use the attributes attributeList, acceptedCommands, generatedCommands to crate the ClusterClient/Server objects
+        // TODO use the attributes attributeList, acceptedCommands, generatedCommands to create the ClusterClient/Server objects
         // Add ClusterServers for all client clusters of the device
         for (const clusterId of descriptorData.clientList) {
             const cluster = getClusterById(clusterId);
@@ -436,7 +431,7 @@ export class PairedNode {
         }
 
         if (endpointId === 0) {
-            // Endpoint 0 is the root endpoint, so this object
+            // Endpoint 0 is the root endpoint, so we use a RootEndpoint object
             const rootEndpoint = new RootEndpoint();
             rootEndpoint.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>); // Ideally only root one as defined
             endpointClusters.forEach(cluster => {
@@ -606,7 +601,6 @@ export class PairedNode {
                 passcode: passcode,
             }),
             qrPairingCode,
-            qrCode: QrCode.encode(qrPairingCode), // TODO: Really export that always?
         };
     }
 

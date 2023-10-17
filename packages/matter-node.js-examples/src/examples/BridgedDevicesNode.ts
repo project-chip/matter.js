@@ -16,8 +16,10 @@
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
+import { VendorId } from "@project-chip/matter-node.js/datatype";
 import { Aggregator, DeviceTypes, OnOffLightDevice, OnOffPluginUnitDevice } from "@project-chip/matter-node.js/device";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
+import { QrCode } from "@project-chip/matter-node.js/schema";
 import { StorageBackendDisk, StorageManager } from "@project-chip/matter-node.js/storage";
 import { Time } from "@project-chip/matter-node.js/time";
 import {
@@ -27,7 +29,6 @@ import {
     hasParameter,
     requireMinNodeVersion,
 } from "@project-chip/matter-node.js/util";
-import { VendorId } from "@project-chip/matter.js/datatype";
 
 const logger = Logger.get("Device");
 
@@ -208,9 +209,9 @@ class BridgedDevice {
         logger.info("Listening");
         if (!commissioningServer.isCommissioned()) {
             const pairingData = commissioningServer.getPairingCode();
-            const { qrCode, qrPairingCode, manualPairingCode } = pairingData;
+            const { qrPairingCode, manualPairingCode } = pairingData;
 
-            console.log(qrCode);
+            console.log(QrCode.get(qrPairingCode));
             console.log(
                 `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
             );

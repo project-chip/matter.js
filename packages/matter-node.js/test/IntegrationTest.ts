@@ -95,8 +95,8 @@ describe("Integration Test", () => {
         matterClient = new MatterServer(matterServerStorageManager, { disableIpv4: true });
         commissioningController = new CommissioningController({
             listeningAddressIpv6: CLIENT_IPv6,
-            delayedConnection: true,
-            subscribeAllAttributesAndEvents: false,
+            autoConnect: false,
+            autoSubscribe: false,
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -239,11 +239,11 @@ describe("Integration Test", () => {
 
             await commissioningController.start();
             const node = await commissioningController.commissionNode({
-                discoveryOptions: {
+                discovery: {
                     knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
                     identifierData: { longDiscriminator },
                 },
-                commissioningOptions: {
+                commissioning: {
                     regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                     regulatoryCountryCode: "DE",
                 },
@@ -1166,11 +1166,11 @@ describe("Integration Test", () => {
             const existingNodes = commissioningController.getCommissionedNodes();
 
             const node = await commissioningController.commissionNode({
-                discoveryOptions: {
+                discovery: {
                     knownAddress: { ip: SERVER_IPv6, port: matterPort2, type: "udp" },
                     identifierData: { longDiscriminator },
                 },
-                commissioningOptions: {
+                commissioning: {
                     regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                     regulatoryCountryCode: "DE",
                 },
@@ -1302,11 +1302,11 @@ describe("Integration Test", () => {
             await assert.rejects(
                 async () =>
                     await commissioningController.commissionNode({
-                        discoveryOptions: {
+                        discovery: {
                             knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
                             identifierData: { shortDiscriminator: shortDiscriminator! },
                         },
-                        commissioningOptions: {
+                        commissioning: {
                             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                             regulatoryCountryCode: "DE",
                         },
@@ -1320,8 +1320,8 @@ describe("Integration Test", () => {
 
             const commissioningController2 = new CommissioningController({
                 listeningAddressIpv6: CLIENT_IPv6,
-                delayedConnection: true,
-                subscribeAllAttributesAndEvents: false,
+                autoConnect: false,
+                autoSubscribe: false,
                 adminFabricId: FabricId(1000),
                 adminFabricIndex: FabricIndex(1001),
                 adminVendorId: VendorId(0x1234),
@@ -1335,11 +1335,11 @@ describe("Integration Test", () => {
             await assert.doesNotReject(
                 async () =>
                     await commissioningController2.commissionNode({
-                        discoveryOptions: {
+                        discovery: {
                             knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
                             identifierData: { shortDiscriminator: shortDiscriminator! },
                         },
-                        commissioningOptions: {
+                        commissioning: {
                             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
                             regulatoryCountryCode: "DE",
                         },

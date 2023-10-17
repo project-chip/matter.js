@@ -43,10 +43,10 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
     readonly listeningAddressIpv6?: string;
 
     /**
-     * If set to true, the controller will not connect to any device on startup. You need to user connectNode() or
-     * connect() to connect to the relevant nodes.
+     * If set to false, the controller will not connect to any device on startup. You need to use connectNode() or
+     * connect() to connect to the relevant nodes in this case. Else all nodes are connected on startup.
      * */
-    readonly delayedConnection?: boolean;
+    readonly autoConnect?: boolean;
 
     /** Admin Vendor ID used for all commissioning operations. Can not be changed afterward. Default: 0xFFF1 */
     readonly adminVendorId?: VendorId;
@@ -68,10 +68,10 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
 /** Options needed to commission a new node */
 export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
     /** Commission related options. */
-    commissioningOptions?: CommissioningOptions;
+    commissioning?: CommissioningOptions;
 
     /** Discovery related options. */
-    discoveryOptions: {
+    discovery: {
         /**
          * Device identifiers (Short or Long Discriminator, Product/Vendor-Ids, Device-type or a pre-discovered
          * instance Id, or "nothing" to discover all commissionable matter devices) to use for discovery.
@@ -162,8 +162,7 @@ export class CommissioningController extends MatterNode {
         const nodeId = await this.controllerInstance?.commission(nodeOptions);
 
         return this.connectNode(nodeId, {
-            subscribeAllAttributesAndEvents:
-                nodeOptions.subscribeAllAttributesAndEvents ?? this.options.subscribeAllAttributesAndEvents,
+            autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
             subscribeMinIntervalFloorSeconds:
                 nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
             subscribeMaxIntervalCeilingSeconds:
@@ -326,12 +325,12 @@ export class CommissioningController extends MatterNode {
         return undefined; // TODO Add later if UDC is used
     }
 
-    /** Initialize the controller and connect to all commissioned nodes if delayedConnection is set to false. */
+    /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
         if (this.controllerInstance === undefined) {
             this.controllerInstance = await this.initializeController();
         }
-        if (this.options.delayedConnection !== true) {
+        if (this.options.autoConnect !== false) {
             await this.connect();
         }
     }

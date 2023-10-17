@@ -16,3 +16,7 @@ export type ServerAddressBle = {
 };
 
 export type ServerAddress = ServerAddressIp | ServerAddressBle;
+
+export function serverAddressToString(address: ServerAddress): string {
+    return address.type === "udp" ? `udp://${address.ip}:${address.port}` : `ble://${address.peripheralAddress}`;
+}

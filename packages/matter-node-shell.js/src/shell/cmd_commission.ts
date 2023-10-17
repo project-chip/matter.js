@@ -17,7 +17,7 @@
 import { NodeCommissioningOptions } from "@project-chip/matter-node.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
 import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
+import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter-node.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
 
@@ -74,7 +74,7 @@ export default function commands(theNode: MatterNode) {
                                     }
 
                                     const options = {
-                                        discoveryOptions: {
+                                        discovery: {
                                             knownAddress:
                                                 ip !== undefined && ipPort !== undefined
                                                     ? { ip, port: ipPort, type: "udp" }
@@ -93,7 +93,7 @@ export default function commands(theNode: MatterNode) {
                                         passcode: setupPinCode,
                                     } as NodeCommissioningOptions;
 
-                                    options.commissioningOptions = {
+                                    options.commissioning = {
                                         nodeId: nodeId !== undefined ? NodeId(nodeId) : undefined,
                                         regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
                                         regulatoryCountryCode: "XX",
@@ -102,7 +102,7 @@ export default function commands(theNode: MatterNode) {
                                     console.log(JSON.stringify(options));
 
                                     if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
-                                        options.commissioningOptions.wifiNetwork = {
+                                        options.commissioning.wifiNetwork = {
                                             wifiSsid: theNode.Store.get<string>("WiFiSsid", ""),
                                             wifiCredentials: theNode.Store.get<string>("WiFiPassword", ""),
                                         };
@@ -111,7 +111,7 @@ export default function commands(theNode: MatterNode) {
                                         theNode.Store.has("ThreadName") &&
                                         theNode.Store.has("ThreadOperationalDataset")
                                     ) {
-                                        options.commissioningOptions.threadNetwork = {
+                                        options.commissioning.threadNetwork = {
                                             networkName: theNode.Store.get<string>("ThreadName", ""),
                                             operationalDataset: theNode.Store.get<string>(
                                                 "ThreadOperationalDataset",
@@ -226,9 +226,9 @@ export default function commands(theNode: MatterNode) {
                         const data = await node.openEnhancedCommissioningWindow(timeout);
 
                         console.log(`Enhanced Commissioning Window for node ${nodeId} opened`);
-                        const { qrCode, qrPairingCode, manualPairingCode } = data;
+                        const { qrPairingCode, manualPairingCode } = data;
 
-                        console.log(qrCode);
+                        console.log(QrCode.get(qrPairingCode));
                         console.log(
                             `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
                         );
