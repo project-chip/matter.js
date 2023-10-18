@@ -176,4 +176,79 @@ describe("StorageContext", () => {
         const valueFromStorage2 = storageContext.get("subcontext");
         expect(valueFromStorage2).equal("value2");
     });
+
+    it("getting all keys in a context works", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext.set("key", "value");
+        storageContext.set("key2", "value2");
+        storageContext.set("key3", "value3");
+        storageContext.set("key4", "value4");
+
+        const result = storageContext.keys();
+
+        expect(result).deep.equal(["key", "key2", "key3", "key4"]);
+    });
+
+    it("getting all keys in a context works also with sub contexts", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext"]);
+
+        storageContext.set("key", "value");
+        storageContext.set("key2", "value2");
+        storageContext.set("key3", "value3");
+        storageContext.set("key4", "value4");
+
+        const storageContext2 = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext2.set("subkey", "value");
+
+        const result = storageContext.keys();
+
+        expect(result).deep.equal(["key", "key2", "key3", "key4"]);
+    });
+
+    it("clearing keys in a context works", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
+
+        storageContext.set("key", "value");
+        storageContext.set("key2", "value2");
+        storageContext.set("key3", "value3");
+        storageContext.set("key4", "value4");
+
+        storageContext.clear();
+
+        expect(storageContext.has("key")).equal(false);
+        expect(storageContext.has("ke2")).equal(false);
+        expect(storageContext.has("key3")).equal(false);
+        expect(storageContext.has("key4")).equal(false);
+    });
+
+    it("clearing all keys in a context with subcontext works", () => {
+        const storage = new StorageBackendMemory();
+
+        const storageContext = new StorageContext(storage, ["context", "subcontext"]);
+
+        storageContext.set("key", "value");
+        storageContext.set("key2", "value2");
+        storageContext.set("key3", "value3");
+        storageContext.set("key4", "value4");
+
+        const subContext = storageContext.createContext("subsubcontext");
+
+        subContext.set("subkey", "value");
+
+        storageContext.clearAll();
+
+        expect(storageContext.has("key")).equal(false);
+        expect(storageContext.has("ke2")).equal(false);
+        expect(storageContext.has("key3")).equal(false);
+        expect(storageContext.has("key4")).equal(false);
+        expect(subContext.has("subkey")).equal(false);
+    });
 });

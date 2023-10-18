@@ -64,6 +64,25 @@ describe("Storage node-localstorage", () => {
         assert.equal(keyContent.toString(), `"value"`);
     });
 
+    it("return keys with storage values", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext", "subsubcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
+    it("return keys with storage without subcontexts values", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context", "subcontext"], "key", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
     it("Throws error when context is empty on set", () => {
         assert.throws(
             () => {

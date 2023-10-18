@@ -36,6 +36,25 @@ describe("StorageBackendMemory", () => {
         expect(value).equal("value");
     });
 
+    it("return keys with storage values", () => {
+        const storage = new StorageBackendMemory();
+
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext", "subsubcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
+    it("return keys with storage without subcontexts values", () => {
+        const storage = new StorageBackendMemory();
+
+        storage.set(["context", "subcontext"], "key", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
     it("Throws error when context is empty on set", () => {
         expect(() => {
             const storage = new StorageBackendMemory();
