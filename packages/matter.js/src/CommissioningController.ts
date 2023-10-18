@@ -338,6 +338,20 @@ export class CommissioningController extends MatterNode {
         }
     }
 
+    resetStorage() {
+        if (this.controllerInstance !== undefined) {
+            throw new ImplementationError(
+                "Storage can not be reset while the controller is operating! Please close the controller first.",
+            );
+        }
+        if (this.storage === undefined) {
+            throw new ImplementationError(
+                "Storage not initialized. The instance was not added to a Matter instance yet.",
+            );
+        }
+        this.storage.clearAll();
+    }
+
     /** Returns active session information for all connected nodes. */
     getActiveSessionInformation() {
         return this.controllerInstance?.getActiveSessionInformation() ?? [];

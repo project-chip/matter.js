@@ -820,7 +820,23 @@ export class CommissioningServer extends MatterNode {
     async close() {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
         await this.interactionServer?.close();
+        this.interactionServer = undefined;
         await this.deviceInstance?.stop();
+        this.deviceInstance = undefined;
+    }
+
+    resetStorage() {
+        if (this.interactionServer !== undefined || this.deviceInstance !== undefined) {
+            throw new ImplementationError(
+                "Storage can not be reset after while the device is operating! Please close the server first.",
+            );
+        }
+        if (this.storage === undefined) {
+            throw new ImplementationError(
+                "Storage not initialized. The instance was not added to a Matter instance yet.",
+            );
+        }
+        this.storage.clear();
     }
 
     /**
