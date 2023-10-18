@@ -25,6 +25,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     * Adjust some property and structure namings to be more consistent
     * Introducing class PairedNode with the High level API for a paired Node
     * Restructure CommissioningController to handle multiple nodes and offer new high level API
+    * Change name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
+  * Feature: Make Port for CommissioningServer optional and add automatic port handling in MatterServer
 * matter-node-shell.js
   * Feature: Completely refactored and enhances shell to support commissioning, identify and many more new commands. See Readme, try it
 

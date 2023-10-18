@@ -33,13 +33,16 @@ const logger = new Logger("CommissioningController");
  * Constructor options for the CommissioningController class
  */
 export type CommissioningControllerOptions = CommissioningControllerNodeOptions & {
-    /** Local port number to use for the UDP interface. By default a random port number will be generated. */
+    /**
+     * Local port number to use for the UDP interface. By default, a random port number will be generated
+     * (strongly recommended!).
+     */
     readonly localPort?: number;
 
-    /** Listening address for IPv4. By default the interface will listen on all IPv4 addresses. */
+    /** Listening address for IPv4. By default, the interface will listen on all IPv4 addresses. */
     readonly listeningAddressIpv4?: string;
 
-    /** Listening address for IPv6. By default the interface will listen on all IPv6 addresses. */
+    /** Listening address for IPv6. By default, the interface will listen on all IPv6 addresses. */
     readonly listeningAddressIpv6?: string;
 
     /**
@@ -122,7 +125,7 @@ export class CommissioningController extends MatterNode {
     /** Internal method to initialize a MatterController instance. */
     private async initializeController() {
         if (this.mdnsScanner === undefined || this.storage === undefined) {
-            throw new ImplementationError("Add the node to the Matter instance before!");
+            throw new ImplementationError("Add the node to the Matter instance before.");
         }
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
@@ -153,10 +156,10 @@ export class CommissioningController extends MatterNode {
      */
     async commissionNode(nodeOptions: NodeCommissioningOptions) {
         if (this.mdnsScanner === undefined || this.storage === undefined) {
-            throw new ImplementationError("Add the node to the Matter instance before!");
+            throw new ImplementationError("Add the node to the Matter instance before.");
         }
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
 
         const nodeId = await this.controllerInstance?.commission(nodeOptions);
@@ -173,7 +176,7 @@ export class CommissioningController extends MatterNode {
     /** Check if a given node id is commissioned on this controller. */
     isNodeCommissioned(nodeId: NodeId) {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
         return this.controllerInstance.getCommissionedNodes().includes(nodeId) ?? false;
     }
@@ -186,13 +189,13 @@ export class CommissioningController extends MatterNode {
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
         if (tryDecommissioning) {
             try {
                 const node = this.connectedNodes.get(nodeId);
                 if (node == undefined) {
-                    throw new ImplementationError(`Node ${nodeId} is not connected!`);
+                    throw new ImplementationError(`Node ${nodeId} is not connected.`);
                 }
                 await node.decommission();
             } catch (error) {
@@ -209,7 +212,7 @@ export class CommissioningController extends MatterNode {
      */
     async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
 
         if (!this.controllerInstance.getCommissionedNodes().includes(nodeId)) {
@@ -238,12 +241,12 @@ export class CommissioningController extends MatterNode {
      */
     async connect() {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
 
         if (!this.controllerInstance.isCommissioned()) {
             throw new ImplementationError(
-                "Controller instance not yet paired with any device, so nothing to connect to!",
+                "Controller instance not yet paired with any device, so nothing to connect to.",
             );
         }
 
@@ -283,7 +286,7 @@ export class CommissioningController extends MatterNode {
     /** Returns true if t least one node is commissioned/paired with this controller instance. */
     isCommissioned() {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
 
         return this.controllerInstance.isCommissioned();
@@ -295,7 +298,7 @@ export class CommissioningController extends MatterNode {
      */
     async createInteractionClient(nodeId: NodeId): Promise<InteractionClient> {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
         return this.controllerInstance.connect(nodeId);
     }
@@ -308,7 +311,7 @@ export class CommissioningController extends MatterNode {
     /** Returns an array with the Node Ids for all commissioned nodes. */
     getCommissionedNodes() {
         if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first!");
+            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
         }
 
         return this.controllerInstance.getCommissionedNodes() ?? [];
@@ -321,8 +324,8 @@ export class CommissioningController extends MatterNode {
         this.connectedNodes.clear();
     }
 
-    getPort() {
-        return undefined; // TODO Add later if UDC is used
+    getPort(): number | undefined {
+        return this.options.localPort;
     }
 
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */

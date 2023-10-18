@@ -100,7 +100,7 @@ export interface DevicePairingInformation {
  */
 export interface CommissioningServerOptions {
     /** Port of the server, normally automatically managed. */
-    port: number;
+    port?: number;
 
     /** IPv4 listener address, defaults to all interfaces.*/
     listeningAddressIpv4?: string;
@@ -197,7 +197,7 @@ type CommissioningServerCommands = {
  * host
  */
 export class CommissioningServer extends MatterNode {
-    private readonly port: number;
+    private port?: number;
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissionningFlowType;
@@ -524,7 +524,8 @@ export class CommissioningServer extends MatterNode {
             this.mdnsInstanceBroadcaster === undefined ||
             this.mdnsScanner === undefined ||
             this.storage === undefined ||
-            this.endpointStructureStorage === undefined
+            this.endpointStructureStorage === undefined ||
+            this.port === undefined
         ) {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
@@ -773,6 +774,9 @@ export class CommissioningServer extends MatterNode {
      * @param mdnsBroadcaster MdnsBroadcaster instance
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+        if (this.port === undefined) {
+            throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
+        }
         this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.port, mdnsBroadcaster);
     }
 
@@ -797,8 +801,17 @@ export class CommissioningServer extends MatterNode {
     /**
      * Return the port the device is listening on
      */
-    getPort(): number {
+    getPort(): number | undefined {
         return this.port;
+    }
+
+    /** Set the port the device is listening on. Can only be called before the device is initialized. */
+    setPort(port: number) {
+        if (port === this.port) return;
+        if (this.deviceInstance !== undefined || this.mdnsInstanceBroadcaster !== undefined) {
+            throw new ImplementationError("Port can not be changed after device is initialized!");
+        }
+        this.port = port;
     }
 
     /**
