@@ -67,15 +67,26 @@ async function main() {
                         choices: ["controller"],
                         default: "controller",
                         type: "string",
+                    })
+                    .options({
+                        ble: {
+                            description: "Enable BLE support",
+                            type: "boolean",
+                        },
+                        resetStorage: {
+                            description: "Reset storage of this node",
+                            default: false,
+                            type: "boolean",
+                        },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, nodeType } = argv;
+                const { nodeNum, ble, nodeType, resetStorage } = argv;
 
                 const theNode = new MatterNode(nodeNum);
-                await theNode.initialize();
+                await theNode.initialize(resetStorage);
                 const theShell = new Shell(theNode, PROMPT);
 
                 if (ble) {
@@ -94,12 +105,6 @@ async function main() {
                 theShell.start();
             },
         )
-        .options({
-            ble: {
-                description: "Enable BLE support",
-                type: "boolean",
-            },
-        })
         .version(false)
         .scriptName("shell");
     await yargsInstance.wrap(yargsInstance.terminalWidth()).parseAsync();
