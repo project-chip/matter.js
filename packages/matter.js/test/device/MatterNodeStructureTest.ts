@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
@@ -26,7 +27,6 @@ import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
 import { GeneralCommissioningClusterHandler } from "../../src/cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "../../src/cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "../../src/cluster/server/OperationalCredentialsServer.js";
-import { CommissioningServer } from "../../src/CommissioningServer.js";
 import { ImplementationError } from "../../src/common/MatterError.js";
 import { DeviceTypeId } from "../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
@@ -34,46 +34,22 @@ import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { Aggregator } from "../../src/device/Aggregator.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
+import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { Endpoint } from "../../src/device/Endpoint.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
-import { MatterNode } from "../../src/MatterNode.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
-import { attributePathToId, InteractionServer } from "../../src/protocol/interaction/InteractionServer.js";
+import { InteractionServer, attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
-/** Needed for tests because MatterNode is an abstract class */
-class TestNode extends MatterNode {
-    public override addEndpoint(endpoint: Endpoint) {
-        super.addEndpoint(endpoint);
-    }
-
-    override async close() {
-        // Do nothing
-    }
-
-    getPort() {
-        return undefined;
-    }
-
-    setMdnsBroadcaster() {
-        // Do nothing
-    }
-
-    setMdnsScanner() {
-        // Do nothing
-    }
-
-    async start() {
-        return;
-    }
-}
-
-function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningCluster = true) {
-    if (node instanceof TestNode) {
-        node.addRootClusterServer(
+function addRequiredRootClusters(
+    rootEndpoint: RootEndpoint,
+    includeAdminCommissioningCluster = true,
+    includeBasicInformationCluster = true,
+) {
+    if (includeBasicInformationCluster) {
+        rootEndpoint.addClusterServer(
             ClusterServer(
                 BasicInformationCluster,
                 {
@@ -98,11 +74,13 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
                 {},
                 {
                     startUp: true,
+                    shutDown: true,
+                    leave: true,
                 },
             ),
         );
 
-        node.addRootClusterServer(
+        rootEndpoint.addClusterServer(
             ClusterServer(
                 OperationalCredentialsCluster,
                 {
@@ -123,7 +101,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         );
     }
 
-    node.addRootClusterServer(
+    rootEndpoint.addClusterServer(
         ClusterServer(
             GeneralCommissioning.Cluster,
             {
@@ -140,7 +118,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         ),
     );
 
-    node.addRootClusterServer(
+    rootEndpoint.addClusterServer(
         ClusterServer(
             NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),
             {
@@ -162,7 +140,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         ),
     );
 
-    node.addRootClusterServer(
+    rootEndpoint.addClusterServer(
         ClusterServer(
             AccessControlCluster,
             {
@@ -180,7 +158,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         ),
     );
 
-    node.addRootClusterServer(
+    rootEndpoint.addClusterServer(
         ClusterServer(
             GroupKeyManagementCluster,
             {
@@ -193,7 +171,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
         ),
     );
 
-    node.addRootClusterServer(
+    rootEndpoint.addClusterServer(
         ClusterServer(
             GeneralDiagnostics.Cluster,
             {
@@ -219,7 +197,7 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
     );
 
     if (includeAdminCommissioningCluster) {
-        node.addRootClusterServer(
+        rootEndpoint.addClusterServer(
             ClusterServer(
                 AdministratorCommissioning.Cluster,
                 {
@@ -236,10 +214,10 @@ function addRequiredRootClusters(node: MatterNode, includeAdminCommissioningClus
 describe("Endpoint Structures", () => {
     describe("Simple Endpoint structure", () => {
         it("Root Endpoint with missing required cluster throws exception", () => {
-            const node = new TestNode();
-            addRequiredRootClusters(node, false);
+            const root = new RootEndpoint();
+            addRequiredRootClusters(root, false);
 
-            expect(() => node.getRootEndpoint().verifyRequiredClusters()).throw(
+            expect(() => root.verifyRequiredClusters()).throw(
                 ImplementationError,
                 "Device type MA-rootdevice (0x16) requires cluster server AdministratorCommissioning(0x3c) but it is not present on endpoint 0",
             );
@@ -278,7 +256,7 @@ describe("Endpoint Structures", () => {
                     certificationDeclaration: ByteArray.fromHex("00"),
                 },
             });
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
@@ -376,7 +354,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffLightDevice = new OnOffLightDevice();
 
@@ -467,7 +445,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
@@ -559,7 +537,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffLightDevice = new OnOffLightDevice();
 
@@ -651,7 +629,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
@@ -705,8 +683,8 @@ describe("Endpoint Structures", () => {
 
     describe("Aggregator/Bridged Endpoint structures", () => {
         it("Aggregator Structure with one Light endpoint and defined endpoint IDs", () => {
-            const node = new TestNode();
-            addRequiredRootClusters(node);
+            const rootEndpoint = new RootEndpoint();
+            addRequiredRootClusters(rootEndpoint);
 
             const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
 
@@ -726,9 +704,8 @@ describe("Endpoint Structures", () => {
             );
 
             aggregator.addBridgedDevice(onoffLightDevice);
-            node.addEndpoint(aggregator);
+            rootEndpoint.addChildEndpoint(aggregator);
 
-            const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
@@ -819,12 +796,12 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).equal(179);
             expect(commandPaths.length).equal(38);
-            expect(eventPaths.length).equal(5);
+            expect(eventPaths.length).equal(7);
         });
 
         it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
-            const node = new TestNode();
-            addRequiredRootClusters(node);
+            const rootEndpoint = new RootEndpoint();
+            addRequiredRootClusters(rootEndpoint);
 
             const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
 
@@ -839,9 +816,8 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 2",
                 reachable: true,
             });
-            node.addEndpoint(aggregator);
+            rootEndpoint.addChildEndpoint(aggregator);
 
-            const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
@@ -945,12 +921,12 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).equal(238);
             expect(commandPaths.length).equal(58);
-            expect(eventPaths.length).equal(6);
+            expect(eventPaths.length).equal(8);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
-            const node = new TestNode();
-            addRequiredRootClusters(node);
+            const rootEndpoint = new RootEndpoint();
+            addRequiredRootClusters(rootEndpoint);
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(1) });
             aggregator1.addClusterServer(
@@ -974,7 +950,7 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
-            node.addEndpoint(aggregator1);
+            rootEndpoint.addChildEndpoint(aggregator1);
 
             const aggregator2 = new Aggregator([], { endpointId: EndpointNumber(2) });
             aggregator2.addClusterServer(
@@ -998,9 +974,8 @@ describe("Endpoint Structures", () => {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
-            node.addEndpoint(aggregator2);
+            rootEndpoint.addChildEndpoint(aggregator2);
 
-            const rootEndpoint = node.getRootEndpoint();
             rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
             endpointStructure.initializeFromEndpoint(rootEndpoint);
@@ -1098,7 +1073,7 @@ describe("Endpoint Structures", () => {
 
             expect(attributePaths.length).equal(380);
             expect(commandPaths.length).equal(98);
-            expect(eventPaths.length).equal(8);
+            expect(eventPaths.length).equal(10);
         });
 
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
@@ -1140,7 +1115,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator1 = new Aggregator();
             aggregator1.addClusterServer(
@@ -1334,7 +1309,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
             aggregator1.addClusterServer(
@@ -1585,7 +1560,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
             aggregator1.addClusterServer(
@@ -1892,7 +1867,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const onoffLightDevice = new OnOffLightDevice();
 
@@ -2010,7 +1985,7 @@ describe("Endpoint Structures", () => {
                 },
             });
             node.setStorage(testStorageContext);
-            addRequiredRootClusters(node);
+            addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator = new Aggregator();
             const onoffLightDevice = new OnOffLightDevice();

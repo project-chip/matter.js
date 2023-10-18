@@ -112,6 +112,47 @@ export class RootEndpoint extends Endpoint {
         super([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
         this.deviceType = DeviceTypes.ROOT.code;
     }
+
+    /**
+     * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterServer to get or undefined if not existing
+     */
+    getRootClusterServer<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+        return this.getClusterServer(cluster);
+    }
+
+    /**
+     * Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterClient object to add
+     */
+    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: ClusterClientObj<F, A, C, E>,
+    ) {
+        this.addClusterClient(cluster);
+    }
+
+    /**
+     * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterClient to get or undefined if not existing
+     */
+    getRootClusterClient<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+        return this.getClusterClient(cluster);
+    }
 }
 
 // TODO Add checks that only allowed clusters are added

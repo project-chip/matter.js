@@ -6,6 +6,7 @@
 
 import * as assert from "assert";
 
+import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import {
     AccessControl,
     AdministratorCommissioning,
@@ -25,17 +26,18 @@ import {
     ClusterId,
     DeviceTypeId,
     EndpointNumber,
+    FabricId,
     FabricIndex,
     GroupId,
+    NodeId,
     VendorId,
 } from "@project-chip/matter.js/datatype";
-
-import { CommissioningController, CommissioningServer, MatterServer } from "@project-chip/matter.js";
 import { OnOffLightDevice } from "@project-chip/matter.js/device";
 import { FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { DecodedEventData, InteractionClientMessenger } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
+import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
 import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise, singleton } from "@project-chip/matter.js/util";
@@ -59,7 +61,9 @@ const productName = "Matter end-to-end device";
 const productId = 0x8001;
 const longDiscriminator = 3840;
 const setupPin = 20202021;
+const setupPin2 = 20202022;
 const matterPort = 5540;
+const matterPort2 = 5541;
 
 const TIME_START = 1666663000000;
 
@@ -74,8 +78,10 @@ describe("Integration Test", () => {
     let matterClient: MatterServer;
     let commissioningController: CommissioningController;
     let commissioningServer: CommissioningServer;
+    let commissioningServer2: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
-    let mdnsScanner: MdnsScanner;
+    let serverMdnsScanner: MdnsScanner;
+    let clientMdnsScanner: MdnsScanner;
     let mdnsBroadcaster: MdnsBroadcaster;
 
     before(async () => {
@@ -83,21 +89,14 @@ describe("Integration Test", () => {
 
         Network.get = () => clientNetwork;
 
-        const controllerStorageManager = new StorageManager(fakeControllerStorage);
-        await controllerStorageManager.initialize();
+        const matterServerStorageManager = new StorageManager(fakeControllerStorage);
+        await matterServerStorageManager.initialize();
 
-        matterClient = new MatterServer(controllerStorageManager, { disableIpv4: true });
+        matterClient = new MatterServer(matterServerStorageManager, { disableIpv4: true });
         commissioningController = new CommissioningController({
-            serverAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
-            longDiscriminator,
-            passcode: setupPin,
             listeningAddressIpv6: CLIENT_IPv6,
-            delayedPairing: true,
-            commissioningOptions: {
-                regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
-                regulatoryCountryCode: "DE",
-            },
-            subscribeAllAttributes: false,
+            autoConnect: false,
+            autoSubscribe: false,
         });
         matterClient.addCommissioningController(commissioningController);
 
@@ -191,8 +190,8 @@ describe("Integration Test", () => {
         matterServer.addCommissioningServer(commissioningServer);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        mdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
-        commissioningServer.setMdnsScanner(mdnsScanner);
+        serverMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
+        commissioningServer.setMdnsScanner(serverMdnsScanner);
         mdnsBroadcaster = await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 });
         commissioningServer.setMdnsBroadcaster(mdnsBroadcaster);
         await commissioningServer.advertise();
@@ -230,16 +229,26 @@ describe("Integration Test", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            commissioningController.setMdnsScanner(
-                await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 }),
-            );
+            clientMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 });
+            commissioningController.setMdnsScanner(clientMdnsScanner);
 
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
             const mockTimeInstance = Time.get();
             Time.get = singleton(() => new TimeNode());
 
-            await commissioningController.connect();
+            await commissioningController.start();
+            const node = await commissioningController.commissionNode({
+                discovery: {
+                    knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
+                    identifierData: { longDiscriminator },
+                },
+                commissioning: {
+                    regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
+                    regulatoryCountryCode: "DE",
+                },
+                passcode: setupPin,
+            });
 
             Time.get = () => mockTimeInstance;
 
@@ -247,26 +256,36 @@ describe("Integration Test", () => {
                 throw new Error("Network should not be requested post starting");
             };
 
-            assert.ok(commissioningController.getFabric().nodeId);
+            assert.deepEqual(commissioningController.getCommissionedNodes(), [node.nodeId]);
+        });
+
+        it("We can connect to the new comissioned device", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+
+            await commissioningController.connectNode(nodeId);
         });
 
         it("Subscribe to all Attributes and bind updates to them", async () => {
-            const data = await commissioningController.subscribeAllAttributesAndEvents(true);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const data = await node.subscribeAllAttributesAndEvents({ ignoreInitialTriggers: true });
 
             assert.equal(Array.isArray(data.attributeReports), true);
             assert.equal(Array.isArray(data.eventReports), true);
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
-            const generalCommissioningCluster = commissioningController.getRootClusterClient(
-                GeneralCommissioning.Cluster,
-            );
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const generalCommissioningCluster = node.getRootClusterClient(GeneralCommissioning.Cluster);
             assert.equal(
                 await generalCommissioningCluster?.getRegulatoryConfigAttribute(),
                 GeneralCommissioning.RegulatoryLocationType.Indoor,
             );
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
         });
     });
@@ -274,9 +293,10 @@ describe("Integration Test", () => {
     describe("Check Timed transactions", () => {
         describe("Timed Invokes", () => {
             it("Timed interaction expired", async () => {
-                const adminCommissioningCluster = commissioningController.getRootClusterClient(
-                    AdministratorCommissioning.Cluster,
-                );
+                const nodeId = commissioningController.getCommissionedNodes()[0];
+                const node = commissioningController.getConnectedNode(nodeId);
+                assert.ok(node);
+                const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
                 MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
                     MockTime.advance(10),
@@ -297,7 +317,10 @@ describe("Integration Test", () => {
             });
 
             it("Custom timed interaction with short timeout expired", async () => {
-                const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+                const nodeId = commissioningController.getCommissionedNodes()[0];
+                const node = commissioningController.getConnectedNode(nodeId);
+                assert.ok(node);
+                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
@@ -312,7 +335,10 @@ describe("Integration Test", () => {
             });
 
             it("Custom timed interaction with default timeout works", async () => {
-                const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+                const nodeId = commissioningController.getCommissionedNodes()[0];
+                const node = commissioningController.getConnectedNode(nodeId);
+                assert.ok(node);
+                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
@@ -324,9 +350,10 @@ describe("Integration Test", () => {
             });
 
             it("Timed invoke ok", async () => {
-                const adminCommissioningCluster = commissioningController.getRootClusterClient(
-                    AdministratorCommissioning.Cluster,
-                );
+                const nodeId = commissioningController.getCommissionedNodes()[0];
+                const node = commissioningController.getConnectedNode(nodeId);
+                assert.ok(node);
+                const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
                 await adminCommissioningCluster.openCommissioningWindow(
                     {
@@ -344,7 +371,10 @@ describe("Integration Test", () => {
 
     describe("read attributes", () => {
         it("read one specific attribute including schema parsing", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             // Access a Mandatory field with both APIs
@@ -367,7 +397,10 @@ describe("Integration Test", () => {
         });
 
         it("read one specific attribute including schema parsing", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onoffCluster);
@@ -376,14 +409,22 @@ describe("Integration Test", () => {
         });
 
         it("read all attributes and events", async () => {
-            const response = await commissioningController.getInteractionClient().getAllAttributesAndEvents();
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const response = await (await node.getInteractionClient()).getAllAttributesAndEvents();
             assert.ok(response);
             assert.ok(response.attributeReports.length);
             assert.ok(response.eventReports.length);
         });
 
         it("read multiple attributes", async () => {
-            const response = await commissioningController.getInteractionClient().getMultipleAttributes({
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const response = await (
+                await node.getInteractionClient()
+            ).getMultipleAttributes({
                 attributes: [
                     { clusterId: Descriptor.Cluster.id }, // * /DescriptorCluster/ *
                     { endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }, // 0/BasicInformationCluster/ *
@@ -500,7 +541,12 @@ describe("Integration Test", () => {
         });
 
         it("read events", async () => {
-            const response = await commissioningController.getInteractionClient().getMultipleEvents({
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const response = await (
+                await node.getInteractionClient()
+            ).getMultipleEvents({
                 events: [
                     { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
                     {
@@ -562,7 +608,10 @@ describe("Integration Test", () => {
 
     describe("write attributes", () => {
         it("write one attribute", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel");
@@ -587,7 +636,10 @@ describe("Integration Test", () => {
         });
 
         it("write one attribute with error", async () => {
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
@@ -596,7 +648,10 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes", async () => {
-            const client = commissioningController.getInteractionClient(); // We can also use a new Interaction clint
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const client = await node.getInteractionClient(); // We can also use a new Interaction clint
 
             const response = await client.setMultipleAttributes({
                 attributes: [
@@ -618,14 +673,19 @@ describe("Integration Test", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel2");
             assert.equal(await basicInfoCluster.getLocationAttribute(true), "GB");
         });
 
         it("write multiple attributes with partial errors", async () => {
-            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const response = await (
+                await node.getInteractionClient()
+            ).setMultipleAttributes({
                 attributes: [
                     {
                         endpointId: EndpointNumber(0),
@@ -646,7 +706,7 @@ describe("Integration Test", () => {
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel3");
@@ -654,7 +714,12 @@ describe("Integration Test", () => {
         });
 
         it("write multiple attributes with partial errors and suppressed response", async () => {
-            const response = await commissioningController.getInteractionClient().setMultipleAttributes({
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const response = await (
+                await node.getInteractionClient()
+            ).setMultipleAttributes({
                 attributes: [
                     {
                         endpointId: EndpointNumber(0),
@@ -674,7 +739,7 @@ describe("Integration Test", () => {
 
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
@@ -684,7 +749,10 @@ describe("Integration Test", () => {
 
     describe("Groups server fabric scoped storage", () => {
         it("add a group", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster);
             assert.ok(groupsCluster);
@@ -704,7 +772,12 @@ describe("Integration Test", () => {
             }>();
             let callback = (value: boolean) => firstResolver({ value, time: Time.nowMs() });
 
-            await commissioningController.getInteractionClient().subscribeAttribute({
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            await (
+                await node.getInteractionClient()
+            ).subscribeAttribute({
                 endpointId: EndpointNumber(1),
                 clusterId: OnOffCluster.id,
                 attribute: OnOffCluster.attributes.onOff,
@@ -749,7 +822,10 @@ describe("Integration Test", () => {
         });
 
         it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
@@ -786,7 +862,10 @@ describe("Integration Test", () => {
         });
 
         it("one more subscribe an attribute with getter that needs endpoint", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster);
             assert.ok(scenesClient);
@@ -831,8 +910,50 @@ describe("Integration Test", () => {
             assert.deepEqual(updateReport, { value: 1, time: startTime + 2 * 1000 + 100 });
         });
 
+        it("subscription of an event sends initial data", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
+            assert.ok(basicInformationClient);
+
+            const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
+            assert.ok(basicInformationServer);
+
+            const startTime = Time.nowMs();
+
+            // Await initial Data
+            const { promise: firstPromise, resolver: firstResolver } = createPromise<{
+                value: DecodedEventData<any>;
+                time: number;
+            }>();
+            const callback = (value: DecodedEventData<any>) => firstResolver({ value, time: Time.nowMs() });
+
+            await basicInformationClient.subscribeStartUpEvent(event => callback(event), 0, 5, true);
+
+            await MockTime.yield(); // needed to finish internal processing to receive Statuscode
+
+            const firstReport = await firstPromise;
+
+            assert.deepEqual(firstReport, {
+                value: {
+                    eventNumber: 1,
+                    priority: 2,
+                    epochTimestamp: BigInt(TIME_START), // Triggered directly
+                    data: {
+                        softwareVersion: 1,
+                    },
+                    path: undefined,
+                },
+                time: startTime,
+            });
+        });
+
         it("subscription of one event sends updates when event got triggered via auto-wiring", async () => {
-            const basicInformationClient = commissioningController.getRootClusterClient(BasicInformation.Cluster);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
 
             const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
@@ -902,7 +1023,10 @@ describe("Integration Test", () => {
 
     describe("Access Control server fabric scoped attribute storage", () => {
         it("set empty acl", async () => {
-            const accessControlCluster = commissioningController.getRootClusterClient(AccessControl.Cluster);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const accessControlCluster = node.getRootClusterClient(AccessControl.Cluster);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
             await accessControlCluster.setAclAttribute([]);
@@ -919,7 +1043,10 @@ describe("Integration Test", () => {
 
     describe("Command Handler test", () => {
         it("Trigger identify command and trigger command handler", async () => {
-            const onoffEndpoint = commissioningController.getDevices().find(endpoint => endpoint.id === 1);
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
             assert.ok(onoffEndpoint);
             const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster);
             assert.ok(identifyClient);
@@ -936,7 +1063,7 @@ describe("Integration Test", () => {
         });
     });
 
-    describe("storage", () => {
+    describe("initial storage check", () => {
         it("server storage has fabric fields stored correctly stringified", async () => {
             const storedFabrics = fakeServerStorage.get(["0", "FabricManager"], "fabrics");
             assert.ok(Array.isArray(storedFabrics));
@@ -965,26 +1092,349 @@ describe("Integration Test", () => {
             assert.ok(Array.isArray(storedServerResumptionRecords));
             assert.equal(storedServerResumptionRecords.length, 1);
 
-            assert.equal(fakeControllerStorage.get(["0", "RootCertificateManager"], "rootCertId"), BigInt(0));
-            assert.equal(fakeControllerStorage.get(["0", "MatterController"], "fabricCommissioned"), true);
-
             const storedControllerResumptionRecords = fakeServerStorage.get(
                 ["0", "SessionManager"],
                 "resumptionRecords",
             );
             assert.ok(Array.isArray(storedControllerResumptionRecords));
             assert.equal(storedControllerResumptionRecords.length, 1);
+        });
 
-            const storedControllerFabrics = fakeControllerStorage.get(["0", "MatterController"], "fabric");
-            assert.ok(typeof storedControllerFabrics === "object");
+        it("controller storage is as expected", async () => {
+            assert.equal(fakeControllerStorage.get(["0", "RootCertificateManager"], "rootCertId"), BigInt(0));
+            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            assert.ok(nodeData);
+            assert.equal(nodeData.length, 1);
+            assert.deepEqual(nodeData[0][1], {
+                operationalServerAddress: {
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: 5540,
+                    type: "udp",
+                },
+            });
+
+            const storedControllerFabric = fakeControllerStorage.get<FabricJsonObject>(
+                ["0", "MatterController"],
+                "fabric",
+            );
+            assert.ok(typeof storedControllerFabric === "object");
+            assert.equal(storedControllerFabric.fabricId, FabricId(1));
+            assert.equal(storedControllerFabric.fabricIndex, FabricIndex(1));
         });
     });
 
-    describe("remove Fabric", () => {
-        it("try to remove invalid fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(
-                OperationalCredentials.Cluster,
+    describe("pair a second node", () => {
+        it("start second server", async () => {
+            Network.get = () => serverNetwork;
+
+            commissioningServer2 = new CommissioningServer({
+                port: matterPort2,
+                listeningAddressIpv6: SERVER_IPv6,
+                deviceName: `${deviceName} 2`,
+                deviceType,
+                passcode: setupPin2,
+                discriminator: longDiscriminator,
+                basicInformation: {
+                    vendorName,
+                    vendorId,
+                    productName,
+                    productId,
+                    partNumber: "123456",
+                    nodeLabel: "",
+                    location: "US",
+                    reachable: true,
+                },
+                delayedAnnouncement: true, // delay because we need to override Mdns classes
+            });
+
+            onOffLightDeviceServer = new OnOffLightDevice();
+            commissioningServer2.addDevice(onOffLightDeviceServer);
+
+            commissioningServer2.setMdnsScanner(serverMdnsScanner);
+            commissioningServer2.setMdnsBroadcaster(mdnsBroadcaster);
+            matterServer.addCommissioningServer(commissioningServer2);
+
+            await assert.doesNotReject(async () => commissioningServer2.advertise());
+        });
+
+        it("the client commissions the second device", async () => {
+            // During commissioning too much magic happens, MockTime do not work in this case
+            // So use normal Time implementation and Reset for the following tests
+            const mockTimeInstance = Time.get();
+            Time.get = singleton(() => new TimeNode());
+
+            const existingNodes = commissioningController.getCommissionedNodes();
+
+            const node = await commissioningController.commissionNode({
+                discovery: {
+                    knownAddress: { ip: SERVER_IPv6, port: matterPort2, type: "udp" },
+                    identifierData: { longDiscriminator },
+                },
+                commissioning: {
+                    regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
+                    regulatoryCountryCode: "DE",
+                },
+                passcode: setupPin2,
+            });
+
+            Time.get = () => mockTimeInstance;
+
+            assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, node.nodeId]);
+        });
+
+        it("We can connect to the new commissioned device", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[1];
+
+            await commissioningController.connectNode(nodeId);
+        });
+
+        it("Subscribe to all Attributes and bind updates to them for second device", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[1];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const data = await node.subscribeAllAttributesAndEvents({ ignoreInitialTriggers: true });
+
+            assert.equal(Array.isArray(data.attributeReports), true);
+            assert.equal(Array.isArray(data.eventReports), true);
+        });
+
+        it("controller storage is updated for second device", async () => {
+            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            assert.ok(nodeData);
+            assert.equal(nodeData.length, 2);
+            assert.deepEqual(nodeData[0][1], {
+                operationalServerAddress: {
+                    ip: SERVER_IPv6,
+                    port: matterPort,
+                    type: "udp",
+                },
+            });
+            assert.deepEqual(nodeData[1][1], {
+                operationalServerAddress: {
+                    ip: SERVER_IPv6,
+                    port: matterPort2,
+                    type: "udp",
+                },
+            });
+        });
+
+        it("write one attribute on second device and check if updated", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[1];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            assert.ok(basicInfoCluster);
+
+            await basicInfoCluster.attributes.nodeLabel.set("testLabel-second");
+
+            // Local value because not yet updated from subscription
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "");
+            // Request remotely
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel-second");
+
+            // Await initial Data
+            const { promise, resolver } = createPromise<string>();
+            const callback = (value: string) => resolver(value);
+
+            basicInfoCluster.attributes.nodeLabel.addListener(callback);
+
+            await MockTime.advance(60);
+            await MockTime.advance(60);
+            await promise;
+
+            // Local value because not yet updated from subscription
+            assert.equal(await basicInfoCluster.attributes.nodeLabel.get(), "testLabel-second");
+
+            // Verify that first device is still on old value
+            const firstNodeId = commissioningController.getCommissionedNodes()[0];
+            const firstNode = commissioningController.getConnectedNode(firstNodeId);
+            assert.ok(firstNode);
+            const firstBasicInfoCluster = firstNode.getRootClusterClient(BasicInformation.Cluster);
+            assert.ok(firstBasicInfoCluster);
+            // Request remotely
+            assert.equal(await firstBasicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
+            // Request locally
+            assert.equal(await firstBasicInfoCluster.attributes.nodeLabel.get(), "testLabel4");
+        });
+    });
+
+    describe("Additional commissioning tests", () => {
+        let mockTimeInstance: Time;
+        let shortDiscriminator: number | undefined;
+        let passcode: number;
+
+        before(() => {
+            // During commissioning too much magic happens, MockTime do not work in this case
+            // So use normal Time implementation and Reset for the following tests
+            mockTimeInstance = Time.get();
+            Time.get = singleton(() => new TimeNode());
+        });
+
+        it("try to open a basic commissioning window which is not supported", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+
+            await assert.rejects(async () => await node.openBasicCommissioningWindow(), {
+                message: `AdministratorCommissioningCluster for node ${node.nodeId} does not support basic commissioning.`,
+            });
+        });
+
+        it("open an enhanced commissioning window and store values", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+
+            const commissioningData = await node.openEnhancedCommissioningWindow();
+            assert.ok(commissioningData);
+            assert.ok(commissioningData.manualPairingCode);
+
+            const pairingCodeCodec = ManualPairingCodeCodec.decode(commissioningData.manualPairingCode);
+            assert.ok(pairingCodeCodec);
+            assert.notEqual(pairingCodeCodec.shortDiscriminator, undefined);
+            shortDiscriminator = pairingCodeCodec.shortDiscriminator;
+            passcode = pairingCodeCodec.passcode;
+            assert.notEqual(shortDiscriminator, undefined);
+            assert.ok(passcode);
+        });
+
+        it("try to connect this controller to the device (again)", async () => {
+            await assert.rejects(
+                async () =>
+                    await commissioningController.commissionNode({
+                        discovery: {
+                            knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
+                            identifierData: { shortDiscriminator: shortDiscriminator! },
+                        },
+                        commissioning: {
+                            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
+                            regulatoryCountryCode: "DE",
+                        },
+                        passcode,
+                    }),
+            ); // We can not check the real exception because text is dynamic
+        });
+
+        it("connect this device to a new controller", async () => {
+            Network.get = () => clientNetwork;
+
+            const commissioningController2 = new CommissioningController({
+                listeningAddressIpv6: CLIENT_IPv6,
+                autoConnect: false,
+                autoSubscribe: false,
+                adminFabricId: FabricId(1000),
+                adminFabricIndex: FabricIndex(1001),
+                adminVendorId: VendorId(0x1234),
+            });
+            matterClient.addCommissioningController(commissioningController2);
+            commissioningController2.setMdnsScanner(clientMdnsScanner);
+
+            Network.get = () => serverNetwork;
+
+            await commissioningController2.start();
+            await assert.doesNotReject(
+                async () =>
+                    await commissioningController2.commissionNode({
+                        discovery: {
+                            knownAddress: { ip: SERVER_IPv6, port: matterPort, type: "udp" },
+                            identifierData: { shortDiscriminator: shortDiscriminator! },
+                        },
+                        commissioning: {
+                            regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Indoor,
+                            regulatoryCountryCode: "DE",
+                        },
+                        passcode,
+                    }),
             );
+        }).timeout(10_000);
+
+        it("verify that the server storage got updated", async () => {
+            const storedFabrics = fakeServerStorage.get(["0", "FabricManager"], "fabrics");
+            assert.ok(Array.isArray(storedFabrics));
+            assert.equal(storedFabrics.length, 2);
+            const firstFabric = storedFabrics[0] as FabricJsonObject;
+            assert.equal(typeof firstFabric, "object");
+            assert.equal(firstFabric.fabricIndex, 1);
+            assert.equal(firstFabric.fabricId, 1);
+            const secondFabric = storedFabrics[1] as FabricJsonObject;
+            assert.equal(typeof secondFabric, "object");
+            assert.equal(secondFabric.fabricIndex, 2);
+            assert.equal(secondFabric.fabricId, 1000);
+            assert.equal(secondFabric.rootVendorId, 0x1234);
+
+            assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 3);
+
+            const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
+            assert.ok(Array.isArray(storedServerResumptionRecords));
+            assert.equal(storedServerResumptionRecords.length, 2);
+
+            const storedControllerResumptionRecords = fakeServerStorage.get(
+                ["0", "SessionManager"],
+                "resumptionRecords",
+            );
+            assert.ok(Array.isArray(storedControllerResumptionRecords));
+            assert.equal(storedControllerResumptionRecords.length, 2);
+
+            const storedControllerResumptionRecords2 = fakeServerStorage.get(
+                ["1", "SessionManager"],
+                "resumptionRecords",
+            );
+            assert.ok(Array.isArray(storedControllerResumptionRecords2));
+            assert.equal(storedControllerResumptionRecords2.length, 1);
+        });
+
+        it("verify that the controller storage got updated", async () => {
+            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            assert.ok(nodeData);
+            assert.equal(nodeData.length, 2);
+            assert.deepEqual(nodeData[0][1], {
+                operationalServerAddress: {
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: matterPort,
+                    type: "udp",
+                },
+            });
+            assert.deepEqual(nodeData[1][1], {
+                operationalServerAddress: {
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: matterPort2,
+                    type: "udp",
+                },
+            });
+
+            const nodeData2 = fakeControllerStorage.get<[NodeId, any][]>(
+                ["1", "MatterController"],
+                "commissionedNodes",
+            );
+            assert.ok(nodeData2);
+            assert.equal(nodeData2.length, 1);
+            assert.deepEqual(nodeData2[0][1], {
+                operationalServerAddress: {
+                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
+                    port: matterPort,
+                    type: "udp",
+                },
+            });
+
+            const storedControllerFabrics = fakeControllerStorage.get<FabricJsonObject>(
+                ["1", "MatterController"],
+                "fabric",
+            );
+            assert.ok(typeof storedControllerFabrics === "object");
+            assert.equal(storedControllerFabrics.fabricIndex, FabricIndex(1001));
+        });
+
+        after(() => {
+            Time.get = () => mockTimeInstance;
+        });
+    });
+
+    describe("remove one Fabric", () => {
+        it("try to remove invalid fabric", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: FabricIndex(250) });
@@ -993,10 +1443,23 @@ describe("Integration Test", () => {
             assert.equal(result.debugText, "Fabric 250 not found");
         });
 
-        it("read and remove fabric", async () => {
-            const operationalCredentialsCluster = commissioningController.getRootClusterClient(
-                OperationalCredentials.Cluster,
-            );
+        it("read and remove first node by removing fabric from device", async () => {
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const secondNodeId = commissioningController.getCommissionedNodes()[1];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            await assert.doesNotReject(async () => node.decommission());
+
+            assert.equal(commissioningController.getCommissionedNodes().length, 1);
+            assert.equal(commissioningController.getCommissionedNodes()[0], secondNodeId);
+        });
+
+        it("read and remove second node by removing fabric from device unplanned", async () => {
+            // We remove the node ourself (should not be done that way), but for testing we do
+            const nodeId = commissioningController.getCommissionedNodes()[0];
+            const node = commissioningController.getConnectedNode(nodeId);
+            assert.ok(node);
+            const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
@@ -1006,6 +1469,38 @@ describe("Integration Test", () => {
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
             assert.deepEqual(result.fabricIndex, fabricIndex);
+
+            // For next test we need to use the read Time implementation
+            const mockTimeInstance = Time.get();
+            Time.get = singleton(() => new TimeNode());
+
+            // Try to remove node now will throw an error
+            await assert.rejects(async () => node.decommission(), {
+                message: "(1/2) Received general error status for protocol 0",
+            });
+
+            await assert.doesNotReject(async () => commissioningController.removeNode(nodeId, false));
+
+            Time.get = () => mockTimeInstance;
+        }).timeout(30_000);
+
+        it("controller storage is updated for removed nodes", async () => {
+            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            assert.ok(nodeData);
+            assert.equal(nodeData.length, 0);
+        });
+
+        it("server storage is updated for removed nodes", async () => {
+            const storedFabrics = fakeServerStorage.get(["0", "FabricManager"], "fabrics");
+            assert.ok(Array.isArray(storedFabrics));
+            assert.equal(storedFabrics.length, 1);
+            const firstFabric = storedFabrics[0] as FabricJsonObject;
+            assert.equal(typeof firstFabric, "object");
+            assert.equal(firstFabric.fabricIndex, 2);
+            assert.equal(firstFabric.fabricId, 1000);
+            assert.equal(firstFabric.rootVendorId, 0x1234);
+
+            assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 3);
         });
     });
 

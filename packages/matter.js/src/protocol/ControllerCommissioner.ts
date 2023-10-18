@@ -20,7 +20,6 @@ import { MatterError, UnexpectedDataError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
-import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -37,30 +36,33 @@ const logger = Logger.get("ControllerCommissioner");
  * User specific options for the Commissioning process
  */
 export type CommissioningOptions = {
+    /** Regulatory Location (Indoor/Outdoor) where the device is used. */
     regulatoryLocation: GeneralCommissioning.RegulatoryLocationType;
+
+    /** Country Code where the device is used. */
     regulatoryCountryCode: string;
+
+    /** Wifi network credentials to commission the device to. */
     wifiNetwork?: {
         wifiSsid: string;
         wifiCredentials: string;
     };
+
+    /** Thread network credentials to commission the device to. */
     threadNetwork?: {
         networkName: string;
         operationalDataset: string;
     };
-    adminVendorId?: number;
+    nodeId?: NodeId;
 };
 
-/**
- * Types representation of a general commissioning response
- */
+/** Types representation of a general commissioning response. */
 type CommissioningSuccessFailureResponse = {
     errorCode: number;
     debugText?: string;
 };
 
-/**
- * Result code of a single commissioning step
- */
+/** Result code of a single commissioning step. */
 enum CommissioningStepResultCode {
     Success,
     Failure,
@@ -119,10 +121,6 @@ class RecoverableCommissioningError extends CommissioningError {}
 
 const DEFAULT_FAILSAFE_TIME_MS = 60_000; // 60 seconds
 
-// TODO Do not hard code them!
-const FABRIC_ID = FabricId(1); // TODO Random?
-const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
-
 /**
  * Class to abstract the Device commission flow in a step wise way as defined in Specs. The specs are not 100%
  */
@@ -142,7 +140,9 @@ export class ControllerCommissioner {
         private readonly certificateManager: RootCertificateManager,
         private readonly fabric: Fabric,
         private readonly commissioningOptions: CommissioningOptions,
-        private readonly reconnectWithDeviceCallback: (peerNodeId: NodeId) => Promise<InteractionClient>,
+        private readonly nodeId: NodeId,
+        private readonly adminVendorId: VendorId,
+        private readonly reconnectWithDeviceCallback: () => Promise<InteractionClient>,
     ) {
         logger.debug(`Commissioning options: ${Logger.toJSON(commissioningOptions)}`);
         this.initializeCommissioningSteps();
@@ -274,7 +274,7 @@ export class ControllerCommissioner {
      * Execute the commissioning process in the defined order. The steps are sorted before execution based on the step
      * number and sub step number.
      * If >50% of the failsafe time has passed, the failsafe timer is re-armed (50% of 60s default are 30s and each
-     * action is allowed to take 30s at minimum based on specs)
+     * action is allowed to take 30s at minimum based on specs).
      */
     async executeCommissioning() {
         this.sortSteps();
@@ -354,6 +354,25 @@ export class ControllerCommissioner {
 
     getCommissioningStepResult(stepNumber: number, subStepNumber: number) {
         return this.commissioningStepResults.get(`${stepNumber}-${subStepNumber}`);
+    }
+
+    /** Helper method to check for errorCode/debugTest responses and throw error on failure */
+    private ensureOperationalCredentialsSuccess(
+        context: string,
+        { statusCode, debugText, fabricIndex }: TypeFromSchema<typeof OperationalCredentials.TlvNocResponse>,
+    ) {
+        logger.debug(
+            `Commissioning step ${context} returned ${statusCode}, ${debugText}${
+                fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
+            }`,
+        );
+
+        if (statusCode === OperationalCredentials.NodeOperationalCertStatus.Ok) return;
+        throw new CommissioningError(
+            `Commission error for "${context}": ${statusCode}, ${debugText}${
+                fabricIndex !== undefined ? `, fabricIndex: ${fabricIndex}` : ""
+            }`,
+        );
     }
 
     /** Helper method to check for errorCode/debugTest responses and throw error on failure */
@@ -651,17 +670,23 @@ export class ControllerCommissioner {
             },
             { useExtendedFailSafeMessageResponseTimeout: true },
         );
-        const peerNodeId = this.fabric.rootNodeId;
-        const peerOperationalCert = this.certificateManager.generateNoc(operationalPublicKey, FABRIC_ID, peerNodeId);
-        await operationalCredentialsClusterClient.addNoc(
-            {
-                nocValue: peerOperationalCert,
-                icacValue: new ByteArray(0),
-                ipkValue: this.fabric.identityProtectionKey,
-                adminVendorId: VendorId(this.commissioningOptions.adminVendorId ?? DEFAULT_ADMIN_VENDOR_ID),
-                caseAdminSubject: peerNodeId,
-            },
-            { useExtendedFailSafeMessageResponseTimeout: true },
+        const peerOperationalCert = this.certificateManager.generateNoc(
+            operationalPublicKey,
+            this.fabric.fabricId,
+            this.nodeId,
+        );
+        this.ensureOperationalCredentialsSuccess(
+            "addNoc",
+            await operationalCredentialsClusterClient.addNoc(
+                {
+                    nocValue: peerOperationalCert,
+                    icacValue: new ByteArray(0),
+                    ipkValue: this.fabric.identityProtectionKey,
+                    adminVendorId: this.adminVendorId,
+                    caseAdminSubject: this.fabric.rootNodeId,
+                },
+                { useExtendedFailSafeMessageResponseTimeout: true },
+            ),
         );
 
         return {
@@ -1020,7 +1045,7 @@ export class ControllerCommissioner {
      */
     private async reconnectWithDevice() {
         logger.debug("Reconnecting with device ...");
-        this.interactionClient = await this.reconnectWithDeviceCallback(this.fabric.rootNodeId);
+        this.interactionClient = await this.reconnectWithDeviceCallback();
         logger.debug("Successfully reconnected with device ...");
 
         this.clusterClients.clear();

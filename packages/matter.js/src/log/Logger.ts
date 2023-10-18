@@ -305,6 +305,18 @@ export class Logger {
     }
 
     /**
+     * Mask a string with a given character. If unmaskedLength is provided then these number of characters will be
+     * shown unmasked.
+     *
+     * @param str String to mask
+     * @param maskChar character to mask with
+     * @param unmaskedLength number of characters to show unmasked in the beginning
+     */
+    static maskString(str: string, maskChar = "*", unmaskedLength?: number) {
+        return str.substring(0, unmaskedLength ?? 0) + str.substring(unmaskedLength ?? 0).replace(/./g, maskChar);
+    }
+
+    /**
      * Shortcut for new DiagnosticDictionary().
      *
      * @param entries initial dictionary entries
