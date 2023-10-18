@@ -1508,7 +1508,7 @@ describe("Integration Test", () => {
         // For closing all down we need to use the real Time implementation
         const mockTimeInstance = Time.get();
         Time.get = singleton(() => new TimeNode());
-        
+
         await matterServer.close();
         await matterClient.close();
         await fakeControllerStorage.close();
