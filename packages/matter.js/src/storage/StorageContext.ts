@@ -8,8 +8,6 @@ import { Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
 export class StorageContext {
-    private readonly existingContexts = new Map<string, StorageContext>();
-
     constructor(
         private readonly storage: Storage,
         private readonly contexts: string[],
@@ -41,10 +39,7 @@ export class StorageContext {
     createContext(context: string) {
         if (context.length === 0) throw new StorageError("Context must not be an empty string");
         if (context.includes(".")) throw new StorageError("Context must not contain dots!");
-        const contextInstance =
-            this.existingContexts.get(context) ?? new StorageContext(this.storage, [...this.contexts, context]);
-        this.existingContexts.set(context, contextInstance);
-        return contextInstance;
+        return new StorageContext(this.storage, [...this.contexts, context]);
     }
 
     keys(): string[] {
@@ -60,9 +55,6 @@ export class StorageContext {
 
     /** Clears all keys in this context and all created sub-contexts. */
     clearAll(): void {
-        this.clear();
-        for (const context of this.existingContexts.values()) {
-            context.clearAll();
-        }
+        this.storage.clearAll(this.contexts);
     }
 }

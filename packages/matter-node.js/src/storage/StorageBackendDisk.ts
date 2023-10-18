@@ -73,4 +73,17 @@ export class StorageBackendDisk implements Storage {
         }
         return keys;
     }
+
+    clearAll(contexts: string[]): void {
+        if (!contexts.length) throw new StorageError("Context must not be empty!");
+        const contextKey = contexts.join(".");
+        if (contextKey.includes("..") || contextKey.startsWith(".") || contextKey.endsWith("."))
+            throw new StorageError("Context must not contain dots!");
+        const startContextKey = `${contextKey}.`;
+        for (const key of Object.keys(this.localStorage)) {
+            if (key.startsWith(startContextKey)) {
+                this.localStorage.removeItem(key);
+            }
+        }
+    }
 }

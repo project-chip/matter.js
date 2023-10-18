@@ -52,4 +52,16 @@ export class StorageBackendMemory implements Storage {
         if (!contexts.length) throw new StorageError("Context must not be empty!");
         return Object.keys(this.store[this.createContextKey(contexts)] ?? {});
     }
+
+    clearAll(contexts: string[]): void {
+        if (!contexts.length) throw new StorageError("Context must not be empty!");
+        const contextKey = this.createContextKey(contexts);
+        delete this.store[contextKey];
+        const startContextKey = `${contextKey}.`;
+        Object.keys(this.store).forEach(key => {
+            if (key.startsWith(startContextKey)) {
+                delete this.store[key];
+            }
+        });
+    }
 }

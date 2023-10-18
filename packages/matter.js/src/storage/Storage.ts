@@ -15,4 +15,5 @@ export abstract class Storage {
     abstract set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void;
     abstract delete(contexts: string[], key: string): void;
     abstract keys(contexts: string[]): string[];
+    abstract clearAll(contexts: string[]): void;
 }

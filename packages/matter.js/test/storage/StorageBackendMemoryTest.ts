@@ -45,6 +45,19 @@ describe("StorageBackendMemory", () => {
         expect(value).deep.equal(["key"]);
     });
 
+    it("clear all keys with multiple contextes", () => {
+        const storage = new StorageBackendMemory();
+
+        storage.set(["context"], "key1", "value");
+        storage.set(["context", "subcontext"], "key2", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key3", "value");
+
+        storage.clearAll(["context", "subcontext"]);
+        expect(storage.keys(["context"])).deep.equal(["key1"]);
+        expect(storage.keys(["context", "subcontext"])).deep.equal([]);
+        expect(storage.keys(["context", "subcontext", "subsubcontext"])).deep.equal([]);
+    });
+
     it("return keys with storage without subcontexts values", () => {
         const storage = new StorageBackendMemory();
 
