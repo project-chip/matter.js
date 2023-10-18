@@ -148,29 +148,23 @@ export class MatterDevice {
         }
         const fabrics = this.fabricManager.getFabrics();
         if (fabrics.length) {
-            const fabricsToAnnounce: Fabric[] = [];
+            let fabricsToAnnounce = 0;
             for (const fabric of fabrics) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (
-                    session !== undefined &&
-                    session.isSecure() &&
-                    (session as SecureSession<this>).numberOfActiveSubscriptions > 0
+                    session === undefined ||
+                    !session.isSecure() ||
+                    (session as SecureSession<this>).numberOfActiveSubscriptions === 0
                 ) {
-                    // We have a session, no need to re-announce
-                    logger.debug(
-                        "Skipping announce for fabric",
-                        fabric.fabricId,
-                        "because we have a session with active subscriptions",
-                        session.getId(),
-                    );
-                    continue;
+                    fabricsToAnnounce++;
+                    logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
                 }
-                logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
-                fabricsToAnnounce.push(fabric);
             }
             for (const broadcaster of this.broadcasters) {
-                await broadcaster.setFabrics(fabricsToAnnounce);
-                await broadcaster.announce();
+                await broadcaster.setFabrics(fabrics);
+                if (fabricsToAnnounce > 0) {
+                    await broadcaster.announce();
+                }
             }
         } else {
             // No fabric paired yet, so announce as "ready for commissioning"
