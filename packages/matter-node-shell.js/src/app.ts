@@ -73,7 +73,7 @@ async function main() {
                             description: "Enable BLE support",
                             type: "boolean",
                         },
-                        resetStorage: {
+                        "reset-storage": {
                             description: "Reset storage of this node",
                             default: false,
                             type: "boolean",
