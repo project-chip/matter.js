@@ -31,8 +31,12 @@ const PORT3 = 5542;
 const OPERATIONAL_ID = ByteArray.fromHex("0000000000000018");
 const NODE_ID = NodeId(BigInt(1));
 
-[false, true].forEach(testIpv4Enabled => {
-    const serverIps = testIpv4Enabled ? [SERVER_IPv4, SERVER_IPv6] : [SERVER_IPv6];
+[
+    { serverHasIpv4Addresses: true, testIpv4Enabled: true },
+    { serverHasIpv4Addresses: true, testIpv4Enabled: false },
+    { serverHasIpv4Addresses: false, testIpv4Enabled: false },
+].forEach(({ serverHasIpv4Addresses, testIpv4Enabled }) => {
+    const serverIps = serverHasIpv4Addresses ? [SERVER_IPv4, SERVER_IPv6] : [SERVER_IPv6];
     const clientIps = testIpv4Enabled ? [CLIENT_IPv4] : [CLIENT_IPv6];
     const serverNetwork = new NetworkFake(SERVER_MAC, serverIps);
     const clientNetwork = new NetworkFake(CLIENT_MAC, clientIps);
@@ -47,7 +51,7 @@ const NODE_ID = NodeId(BigInt(1));
             value: "fe80::e777:4f5e:c61e:7314",
         },
     ];
-    if (testIpv4Enabled) {
+    if (testIpv4Enabled && serverHasIpv4Addresses) {
         IPDnsRecords.unshift({
             flushCache: false,
             name: "00B0D063C2260000.local",
@@ -60,12 +64,14 @@ const NODE_ID = NodeId(BigInt(1));
 
     const IPIntegrationResultsPort1 = [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT, type: "udp" }];
     const IPIntegrationResultsPort2 = [{ ip: `${SERVER_IPv6}%fakeInterface`, port: PORT2, type: "udp" }];
-    if (testIpv4Enabled) {
+    if (testIpv4Enabled && serverHasIpv4Addresses) {
         IPIntegrationResultsPort1.push({ ip: SERVER_IPv4, port: PORT, type: "udp" });
         IPIntegrationResultsPort2.push({ ip: SERVER_IPv4, port: PORT2, type: "udp" });
     }
 
-    describe(`MDNS Scanner and Broadcaster ${testIpv4Enabled ? "with" : "without"} IPv4`, () => {
+    describe(`MDNS Scanner and Broadcaster ${testIpv4Enabled ? "with" : "without"} IPv4 (and Ipv4 ${
+        serverHasIpv4Addresses ? "" : "not "
+    }provided)`, () => {
         let broadcaster: MdnsBroadcaster;
         let scanner: MdnsScanner;
         let scannerChannel: UdpChannel;
