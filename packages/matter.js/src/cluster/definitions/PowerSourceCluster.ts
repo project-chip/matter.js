@@ -28,7 +28,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.4
      */
-    export const enum PowerSourceStatus {
+    export enum PowerSourceStatus {
         /**
          * Indicate the source status is not specified
          */
@@ -53,7 +53,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.5
      */
-    export const enum WiredCurrentType {
+    export enum WiredCurrentType {
         /**
          * Indicates AC current
          */
@@ -68,7 +68,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.1
      */
-    export const enum WiredFault {
+    export enum WiredFault {
         /**
          * The Node detects an unspecified fault on this wired power source.
          */
@@ -111,7 +111,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.6
      */
-    export const enum BatChargeLevel {
+    export enum BatChargeLevel {
         /**
          * Charge level is nominal
          */
@@ -131,7 +131,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.7
      */
-    export const enum BatReplaceability {
+    export enum BatReplaceability {
         /**
          * The replaceability is unspecified or unknown.
          */
@@ -156,7 +156,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.2
      */
-    export const enum BatFault {
+    export enum BatFault {
         /**
          * The Node detects an unspecified fault on this battery power source.
          */
@@ -186,7 +186,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.8
      */
-    export const enum BatCommonDesignation {
+    export enum BatCommonDesignation {
         /**
          * Common type is unknown or unspecified
          */
@@ -596,7 +596,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.9
      */
-    export const enum BatApprovedChemistry {
+    export enum BatApprovedChemistry {
         /**
          * Cell chemistry is unspecified or unknown
          */
@@ -766,7 +766,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.10
      */
-    export const enum BatChargeState {
+    export enum BatChargeState {
         /**
          * Unable to determine the charging state
          */
@@ -791,7 +791,7 @@ export namespace PowerSource {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.7.5.3
      */
-    export const enum BatChargeFault {
+    export enum BatChargeFault {
         /**
          * The Node detects an unspecified fault on this battery source.
          */

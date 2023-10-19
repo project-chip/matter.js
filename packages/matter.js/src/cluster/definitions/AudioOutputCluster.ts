@@ -21,7 +21,7 @@ export namespace AudioOutput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.5.2
      */
-    export const enum OutputType {
+    export enum OutputType {
         /**
          * HDMI
          */

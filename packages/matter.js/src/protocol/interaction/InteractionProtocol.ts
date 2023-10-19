@@ -20,7 +20,7 @@ import { TlvEnum, TlvPosixMs, TlvSysTimeMS, TlvUInt16, TlvUInt32, TlvUInt64, Tlv
 import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 
 /** @see {@link MatterCoreSpecificationV1_0}, section 8.10 */
-export const enum StatusCode {
+export enum StatusCode {
     Success = 0x00,
     Failure = 0x01,
     InvalidSubscription = 0x7d,

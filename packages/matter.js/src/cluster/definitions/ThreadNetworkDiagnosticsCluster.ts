@@ -30,7 +30,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.3
      */
-    export const enum RoutingRole {
+    export enum RoutingRole {
         /**
          * Unspecified routing role.
          */
@@ -371,7 +371,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.1
      */
-    export const enum NetworkFault {
+    export enum NetworkFault {
         /**
          * Indicates an unspecified fault.
          */
@@ -396,7 +396,7 @@ export namespace ThreadNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.13.5.2
      */
-    export const enum ConnectionStatus {
+    export enum ConnectionStatus {
         /**
          * Node is connected
          */

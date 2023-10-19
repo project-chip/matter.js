@@ -20,7 +20,7 @@ export namespace MediaPlayback {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.1
      */
-    export const enum PlaybackState {
+    export enum PlaybackState {
         /**
          * Media is currently playing (includes FF and REW)
          */
@@ -45,7 +45,7 @@ export namespace MediaPlayback {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.10.5.2
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */

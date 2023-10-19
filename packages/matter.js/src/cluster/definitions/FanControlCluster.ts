@@ -19,7 +19,7 @@ export namespace FanControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.1
      */
-    export const enum FanMode {
+    export enum FanMode {
         /**
          * Setting the attribute value to Off shall set the values of these attributes to 0 (zero):
          *
@@ -91,7 +91,7 @@ export namespace FanControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.4.6.2
      */
-    export const enum FanModeSequence {
+    export enum FanModeSequence {
         OffLowMedHigh = 0,
         OffLowHigh = 1,
         OffLowMedHighAuto = 2,

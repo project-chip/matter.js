@@ -51,7 +51,7 @@ export namespace GeneralCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.2
      */
-    export const enum RegulatoryLocationType {
+    export enum RegulatoryLocationType {
         /**
          * Indoor only
          */
@@ -83,7 +83,7 @@ export namespace GeneralCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.9.4.1
      */
-    export const enum CommissioningError {
+    export enum CommissioningError {
         /**
          * No error
          */

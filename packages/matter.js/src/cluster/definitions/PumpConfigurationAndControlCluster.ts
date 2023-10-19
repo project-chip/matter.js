@@ -107,7 +107,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.2
      */
-    export const enum OperationMode {
+    export enum OperationMode {
         /**
          * The pump is controlled by a setpoint, as defined by a connected remote sensor or by the ControlMode
          * attribute.
@@ -138,7 +138,7 @@ export namespace PumpConfigurationAndControl {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.2.6.3
      */
-    export const enum ControlMode {
+    export enum ControlMode {
         /**
          * The pump is running at a constant speed.
          *

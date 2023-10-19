@@ -14,7 +14,7 @@ export namespace OnOffSwitchConfiguration {
     /**
      * The value of the OnOffSwitchConfiguration switchType attribute
      */
-    export const enum SwitchType {
+    export enum SwitchType {
         Toggle = 0,
         Momentary = 1,
         MultiFunction = 2
@@ -23,7 +23,7 @@ export namespace OnOffSwitchConfiguration {
     /**
      * The value of the OnOffSwitchConfiguration switchActions attribute
      */
-    export const enum SwitchActions {
+    export enum SwitchActions {
         On = 0,
         Off = 1,
         Toggle = 2

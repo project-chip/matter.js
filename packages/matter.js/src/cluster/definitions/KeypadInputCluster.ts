@@ -14,7 +14,7 @@ import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvEnum } from "../../tlv/TlvNumber.js";
 
 export namespace KeypadInput {
-    export const enum CecKeyCode {
+    export enum CecKeyCode {
         Select = 0,
         Up = 1,
         Down = 2,
@@ -120,7 +120,7 @@ export namespace KeypadInput {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.8.4.1
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */

@@ -20,7 +20,7 @@ export namespace OnOff {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.5.5.1
      */
-    export const enum StartUpOnOff {
+    export enum StartUpOnOff {
         /**
          * Set the OnOff attribute to FALSE
          */
@@ -38,7 +38,7 @@ export namespace OnOff {
         Toggle = 2
     }
 
-    export const enum OnOffEffectIdentifier {
+    export enum OnOffEffectIdentifier {
         DelayedAllOff = 0,
         DyingLight = 1
     }

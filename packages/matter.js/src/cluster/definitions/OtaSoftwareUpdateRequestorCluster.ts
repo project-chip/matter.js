@@ -43,7 +43,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.5
      */
-    export const enum UpdateState {
+    export enum UpdateState {
         /**
          * Current state is not yet determined.
          */
@@ -93,7 +93,7 @@ export namespace OtaSoftwareUpdateRequestor {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.1
      */
-    export const enum AnnouncementReason {
+    export enum AnnouncementReason {
         /**
          * An OTA Provider is announcing its presence.
          */
@@ -131,7 +131,7 @@ export namespace OtaSoftwareUpdateRequestor {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.7.4.15
      */
-    export const enum ChangeReason {
+    export enum ChangeReason {
         /**
          * The reason for a state change is unknown.
          */

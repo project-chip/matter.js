@@ -17,7 +17,7 @@ export namespace ThermostatUserInterfaceConfiguration {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.1
      */
-    export const enum TemperatureDisplayMode {
+    export enum TemperatureDisplayMode {
         /**
          * Temperature displayed in °C
          */
@@ -34,7 +34,7 @@ export namespace ThermostatUserInterfaceConfiguration {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.2
      */
-    export const enum KeypadLockout {
+    export enum KeypadLockout {
         /**
          * All functionality available to the user
          */
@@ -71,7 +71,7 @@ export namespace ThermostatUserInterfaceConfiguration {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.5.5.3
      */
-    export const enum ScheduleProgrammingVisibility {
+    export enum ScheduleProgrammingVisibility {
         /**
          * Local schedule programming functionality is enabled at the thermostat
          */

@@ -19,7 +19,7 @@ export namespace EthernetNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.15.5.1
      */
-    export const enum PHYRate {
+    export enum PHYRate {
         /**
          * PHY rate is 10Mbps
          */

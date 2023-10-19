@@ -99,14 +99,14 @@ export type DnsMessagePartiallyPreEncoded = Omit<DnsMessage, "answers" | "additi
     additionalRecords: (DnsRecord<any> | ByteArray)[];
 };
 
-export const enum DnsMessageType {
+export enum DnsMessageType {
     Query = 0x0000,
     TruncatedQuery = 0x0200,
     Response = 0x8400, // Authoritative Answer
     TruncatedResponse = 0x8600,
 }
 
-export const enum DnsRecordType {
+export enum DnsRecordType {
     A = 0x01,
     PTR = 0x0c,
     TXT = 0x10,
@@ -116,7 +116,7 @@ export const enum DnsRecordType {
     ANY = 0xff,
 }
 
-export const enum DnsRecordClass {
+export enum DnsRecordClass {
     IN = 0x01,
     ANY = 0xff,
 }

@@ -286,7 +286,7 @@ export class TlvGenerator {
     }
 
     private defineEnum(name: string, model: ValueModel) {
-        const enumBlock = this.file.types.expressions(`export const enum ${name} {`, "}");
+        const enumBlock = this.file.types.expressions(`export enum ${name} {`, "}");
         this.file.types.insertingBefore(enumBlock, () => {
             model.children.forEach(child => {
                 let name = child.name;

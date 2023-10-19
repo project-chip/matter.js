@@ -37,7 +37,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.1
      */
-    export const enum WindowCoveringType {
+    export enum WindowCoveringType {
         Rollershade = 0,
         Rollershade2Motor = 1,
         RollershadeExterior = 2,
@@ -123,7 +123,7 @@ export namespace WindowCovering {
     /**
      * Values for OperationalStatus attribute fields.
      */
-    export const enum MovementStatus {
+    export enum MovementStatus {
         /**
          * Covering is not moving
          */
@@ -145,7 +145,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.5.16
      */
-    export const enum EndProductType {
+    export enum EndProductType {
         RollerShade = 0,
         RomanShade = 1,
         BalloonShade = 2,

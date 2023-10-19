@@ -24,7 +24,7 @@ export namespace OtaSoftwareUpdateProvider {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.4.3
      */
-    export const enum DownloadProtocol {
+    export enum DownloadProtocol {
         /**
          * Indicates support for synchronous BDX.
          */
@@ -67,7 +67,7 @@ export namespace OtaSoftwareUpdateProvider {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.4.1
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Indicates that the OTA Provider has an update available.
          */
@@ -119,7 +119,7 @@ export namespace OtaSoftwareUpdateProvider {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.19.6.4.2
      */
-    export const enum ApplyUpdateAction {
+    export enum ApplyUpdateAction {
         /**
          * Apply the update.
          */

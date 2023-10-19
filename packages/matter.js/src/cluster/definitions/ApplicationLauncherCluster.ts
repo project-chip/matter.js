@@ -84,7 +84,7 @@ export namespace ApplicationLauncher {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.4.5.1
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */

@@ -17,7 +17,7 @@ export namespace DiagnosticLogs {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.10.4.1
      */
-    export const enum Intent {
+    export enum Intent {
         /**
          * Logs to be used for end- user support
          *
@@ -52,7 +52,7 @@ export namespace DiagnosticLogs {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.10.4.3
      */
-    export const enum TransferProtocol {
+    export enum TransferProtocol {
         /**
          * Logs to be returned as a response
          *
@@ -138,7 +138,7 @@ export namespace DiagnosticLogs {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.10.4.2
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Successful transfer of logs
          *

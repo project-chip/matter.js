@@ -45,7 +45,7 @@ import {
 } from "./InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
 
-export const enum MessageType {
+export enum MessageType {
     StatusResponse = 0x01,
     ReadRequest = 0x02,
     SubscribeRequest = 0x03,

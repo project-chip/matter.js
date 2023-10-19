@@ -33,7 +33,7 @@ export namespace TimeSync {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.1
      */
-    export const enum Granularity {
+    export enum Granularity {
         /**
          * This indicates that the server is not currently synchronized with a UTC Time source and its clock is based
          * on the Last Known Good UTC Time only.
@@ -69,7 +69,7 @@ export namespace TimeSync {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.16.6.2
      */
-    export const enum TimeSource {
+    export enum TimeSource {
         /**
          * Server is not currently synchronized with a UTC Time source.
          */
@@ -185,7 +185,7 @@ export namespace TimeSync {
         timeSource: TlvOptionalField(2, TlvEnum<TimeSource>())
     });
 
-    export const enum StatusCode {
+    export enum StatusCode {
         /**
          * Server rejected the attempt to set the UTC time
          *

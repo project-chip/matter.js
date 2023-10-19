@@ -13,7 +13,7 @@ export const BYTES_KEY = "_bytes";
 export const ELEMENTS_KEY = "_elements";
 export const BITS_PADDING = "_padding";
 
-export const enum DerType {
+export enum DerType {
     Boolean = 0x01,
     UnsignedInt = 0x02,
     BitString = 0x03,

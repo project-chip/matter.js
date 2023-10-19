@@ -27,7 +27,7 @@ export namespace Identify {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.5.2
      */
-    export const enum IdentifyType {
+    export enum IdentifyType {
         /**
          * No presentation.
          */
@@ -69,7 +69,7 @@ export namespace Identify {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.1
      */
-    export const enum EffectIdentifier {
+    export enum EffectIdentifier {
         /**
          * e.g., Light is turned on/off once.
          */
@@ -108,7 +108,7 @@ export namespace Identify {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3.2
      */
-    export const enum EffectVariant {
+    export enum EffectVariant {
         Default = 0
     }
 

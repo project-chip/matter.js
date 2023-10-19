@@ -6,7 +6,7 @@
 
 export const SECURE_CHANNEL_PROTOCOL_ID = 0x00000000;
 
-export const enum MessageType {
+export enum MessageType {
     StandaloneAck = 0x10,
     PbkdfParamRequest = 0x20,
     PbkdfParamResponse = 0x21,
@@ -20,7 +20,7 @@ export const enum MessageType {
     StatusReport = 0x40,
 }
 
-export const enum ProtocolStatusCode {
+export enum ProtocolStatusCode {
     Success = 0x0000,
     NoSharedTrustRoots = 0x0001,
     InvalidParam = 0x0002,
@@ -28,7 +28,7 @@ export const enum ProtocolStatusCode {
     Busy = 0x0004,
 }
 
-export const enum GeneralStatusCode {
+export enum GeneralStatusCode {
     /** Operation completed successfully. */
     Success = 0,
 

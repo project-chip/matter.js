@@ -27,7 +27,7 @@ import {
  *
  * @see {@link MatterCoreSpecificationV1_0} § A.7.1
  */
-export const enum TlvType {
+export enum TlvType {
     SignedInt = 0x00,
     UnsignedInt = 0x04,
     Boolean = 0x08,
@@ -42,7 +42,7 @@ export const enum TlvType {
 }
 
 /** Byte length of the encoded value or length. */
-export const enum TlvLength {
+export enum TlvLength {
     OneByte = 0,
     TwoBytes = 1,
     FourBytes = 2,

@@ -22,7 +22,7 @@ export class AttributeError extends MatterError {}
 
 export class EventError extends MatterError {}
 
-export const enum AccessLevel {
+export enum AccessLevel {
     View,
     Operate,
     Manage,
@@ -704,7 +704,7 @@ export const ConditionalCommand = <RequestT, ResponseT, F extends BitSchema>(
  * Interfaces and helper methods to define a cluster event
  * @see {@link MatterCoreSpecificationV1_1} § 7.18.2.25
  */
-export const enum EventPriority {
+export enum EventPriority {
     Debug,
     Info,
     Critical,

@@ -53,7 +53,7 @@ export interface DecodedBtpPacket {
     payload: DecodedBtpPacketPayload;
 }
 
-export const enum BtpHeaderBits {
+export enum BtpHeaderBits {
     HandshakeBit = 0b01000000,
     ManagementMsg = 0b00100000,
     AckMsg = 0b00001000,
@@ -62,7 +62,7 @@ export const enum BtpHeaderBits {
     BeginSegment = 0b00000001,
 }
 
-export const enum BtpOpcode {
+export enum BtpOpcode {
     HandshakeManagementOpcode = 0x6c,
 }
 

@@ -27,7 +27,7 @@ export namespace Actions {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.2
      */
-    export const enum ActionType {
+    export enum ActionType {
         /**
          * Use this only when none of the other values applies
          */
@@ -180,7 +180,7 @@ export namespace Actions {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.3
      */
-    export const enum ActionState {
+    export enum ActionState {
         /**
          * The action is not active
          */
@@ -265,7 +265,7 @@ export namespace Actions {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.5
      */
-    export const enum EndpointListType {
+    export enum EndpointListType {
         /**
          * Another group of endpoints
          *
@@ -496,7 +496,7 @@ export namespace Actions {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 9.14.4.4
      */
-    export const enum ActionError {
+    export enum ActionError {
         /**
          * Other reason not listed in the row(s) below
          */

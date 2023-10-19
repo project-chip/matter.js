@@ -55,7 +55,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.23
      */
-    export const enum ControlSequenceOfOperation {
+    export enum ControlSequenceOfOperation {
         /**
          * Heat and Emergency are not possible
          */
@@ -92,7 +92,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.24
      */
-    export const enum SystemMode {
+    export enum SystemMode {
         /**
          * The Thermostat does not generate demand for Cooling or Heating
          */
@@ -144,7 +144,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.30
      */
-    export const enum TemperatureSetpointHold {
+    export enum TemperatureSetpointHold {
         /**
          * Follow scheduling program
          */
@@ -225,7 +225,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.34
      */
-    export const enum SetpointChangeSource {
+    export enum SetpointChangeSource {
         /**
          * Manual, user-initiated setpoint change via the thermostat
          */
@@ -247,7 +247,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.44
      */
-    export const enum AcType {
+    export enum AcType {
         /**
          * Unknown AC Type
          */
@@ -279,7 +279,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.46
      */
-    export const enum AcRefrigerantType {
+    export enum AcRefrigerantType {
         /**
          * Unknown Refrigerant Type
          */
@@ -306,7 +306,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.47
      */
-    export const enum AcCompressorType {
+    export enum AcCompressorType {
         /**
          * Unknown compressor type
          */
@@ -365,7 +365,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.49
      */
-    export const enum AcLouverPosition {
+    export enum AcLouverPosition {
         /**
          * Fully Closed
          */
@@ -397,14 +397,14 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.51
      */
-    export const enum AcCapacityFormat {
+    export enum AcCapacityFormat {
         /**
          * British Thermal Unit per Hour
          */
         BtUh = 0
     }
 
-    export const enum SetpointAdjustMode {
+    export enum SetpointAdjustMode {
         Heat = 0,
         Cool = 1,
         Both = 2
@@ -432,7 +432,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7
      */
-    export const enum ThermostatRunningMode {
+    export enum ThermostatRunningMode {
         Off = 0,
         Cool = 3,
         Heat = 4
@@ -443,7 +443,7 @@ export namespace Thermostat {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.7.27
      */
-    export const enum StartOfWeek {
+    export enum StartOfWeek {
         Sunday = 0,
         Monday = 1,
         Tuesday = 2,

@@ -22,7 +22,7 @@ export namespace MediaInput {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.5.2
      */
-    export const enum InputType {
+    export enum InputType {
         /**
          * Indicates content not coming from a physical input.
          */

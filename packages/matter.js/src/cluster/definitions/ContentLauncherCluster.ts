@@ -37,7 +37,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.9
      */
-    export const enum MetricType {
+    export enum MetricType {
         /**
          * This value is used for dimensions defined in a number of Pixels.
          *
@@ -211,7 +211,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.1
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */
@@ -254,7 +254,7 @@ export namespace ContentLauncher {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.7.5.4
      */
-    export const enum Parameter {
+    export enum Parameter {
         /**
          * Actor represents an actor credited in video media content; for example, “Gaby sHoffman”
          */
