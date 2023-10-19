@@ -5,8 +5,9 @@
  */
 
 import { readFileSync, statSync } from "fs";
+import { readdir, stat } from "fs/promises";
 import { dirname, relative, resolve } from "path";
-import { ignoreErrorSync } from "./errors.js";
+import { ignoreError, ignoreErrorSync } from "./errors.js";
 import { Progress } from "./progress.js";
 
 function findJson(filename: string, path: string = ".", title?: string) {
@@ -33,7 +34,7 @@ export class Package {
     cjs: boolean;
     src: boolean;
     tests: boolean;
-    #tsconfig?: Record<string, any>;
+    library: boolean;
 
     constructor({
         path = ".",
@@ -52,6 +53,12 @@ export class Package {
 
         this.src = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("src")).isDirectory());
         this.tests = !!ignoreErrorSync("ENOENT", () => statSync(this.resolve("test")).isDirectory());
+
+        this.library = !!(this.json.main || this.json.module || this.json.exports);
+    }
+
+    get name() {
+        return this.json.name;
     }
 
     resolve(path: string) {
@@ -68,11 +75,46 @@ export class Package {
         return progress;
     }
 
-    get tsconfig() {
-        if (this.#tsconfig) {
-            return this.#tsconfig;
+    async lastModified(...paths: string[]) {
+        return this.lastModifiedAbsolute(paths.map(p => this.resolve(p)));
+    }
+
+    private async lastModifiedAbsolute(paths: string[]) {
+        let mtime = 0;
+        await Promise.all(
+            paths.map(async p => {
+                const stats = await ignoreError("ENOENT", async () => await stat(p));
+                if (!stats) {
+                    return;
+                }
+
+                let thisMtime;
+                if (stats.isDirectory()) {
+                    const paths = (await readdir(p)).map(p2 => resolve(p, p2));
+                    thisMtime = await this.lastModifiedAbsolute(paths);
+                } else {
+                    thisMtime = stats.mtimeMs;
+                }
+                if (thisMtime > mtime) {
+                    mtime = thisMtime;
+                }
+            }),
+        );
+        return mtime;
+    }
+
+    get dependencies() {
+        let result = Array<string>();
+        for (const type of ["dependencies", "devDependencies", "peerDependencies"]) {
+            if (typeof this.json[type] === "object") {
+                result = [...result, ...Object.keys(this.json[type])];
+            }
         }
-        return (this.#tsconfig = findJson("tsconfig.json", this.path));
+        return [...new Set(result)];
+    }
+
+    static set workingDir(wd: string) {
+        workingDir = wd;
     }
 
     static node(name: string) {
@@ -81,20 +123,9 @@ export class Package {
         });
     }
 
-    static get project() {
-        if (!project) {
-            project = new Package();
-        }
-        return project;
-    }
-
-    static set project(pkg: Package) {
-        project = pkg;
-    }
-
     static get workspace() {
         if (!workspace) {
-            workspace = find(pkg => Array.isArray(pkg.json.workspaces));
+            workspace = find(workingDir, pkg => Array.isArray(pkg.json.workspaces));
         }
         return workspace;
     }
@@ -113,12 +144,12 @@ export type PackageJson = {
     [key: string]: any;
 };
 
-let project: Package | undefined;
+let workingDir = ".";
 let workspace: Package | undefined;
 let tools: Package | undefined;
 
-function find(selector: (pkg: Package) => boolean): Package {
-    let pkg = Package.project;
+function find(startDir: string, selector: (pkg: Package) => boolean): Package {
+    let pkg = new Package({ path: startDir });
     while (!selector(pkg)) {
         pkg = new Package({ path: dirname(pkg.path) });
     }

@@ -15,12 +15,14 @@ import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, Reporter } from "./reporter.js";
+import type { TestRunner } from "./runner.js";
 
 const libraries = ["chai", "chai-as-promised", "elliptic", "bn.js", "ansi-colors"];
 
-export async function testWeb(manual: boolean, files: string[], reporter: Reporter, options: TestOptions = {}) {
+export async function testWeb(runner: TestRunner, manual: boolean) {
     await buildLibraries();
 
+    const files = runner.loadFiles("esm");
     const server = await new Promise<http.Server>((resolve, reject) => {
         try {
             const server = express()
@@ -47,7 +49,7 @@ export async function testWeb(manual: boolean, files: string[], reporter: Report
         if (manual) {
             console.log(`Run tests manually at ${url}`);
         } else {
-            testInBrowser(url, reporter, options)
+            testInBrowser(url, runner.reporter, runner.options)
                 .then(() => {
                     server.close(() => {
                         // Hmm the close event above doesn't fire

@@ -4,18 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import colors from "ansi-colors";
-import { glob } from "glob";
-import { relative } from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Project } from "../building/project.js";
-import { Package } from "../util/package.js";
-import { Progress } from "../util/progress.js";
-import { listSupportFiles } from "./files.js";
-import { testNode } from "./node.js";
-import { ProgressReporter } from "./reporter.js";
-import { testWeb } from "./web.js";
+import { TestRunner } from "./runner.js";
 
 enum TestType {
     esm = "esm",
@@ -92,32 +84,22 @@ export async function main(argv = process.argv) {
     }
 
     const progress = project.pkg.start("Testing");
-    const reporter = new (class extends ProgressReporter {
-        constructor() {
-            super(progress);
-        }
-
-        override failRun(message: string, stack?: string) {
-            fatal(message, stack);
-        }
-    })();
-
-    const spec = Array.isArray(args.spec) ? args.spec : [args.spec];
+    const runner = new TestRunner(project.pkg, progress, args);
 
     if (testTypes.has(TestType.esm)) {
         await buildEsm();
-        await runTests(progress, () => testNode("esm", loadFiles("esm", spec), reporter, args));
+        await runner.runNode("esm");
     }
 
     if (testTypes.has(TestType.cjs)) {
         await project.buildSource("cjs");
         await project.buildTests("cjs");
-        await runTests(progress, () => testNode("cjs", loadFiles("cjs", spec), reporter, args));
+        await runner.runNode("cjs");
     }
 
     if (testTypes.has(TestType.web)) {
         await buildEsm();
-        await runTests(progress, () => testWeb(manual, loadFiles("esm", spec), reporter, args));
+        await runner.runWeb(manual);
     }
 
     progress.shutdown();
@@ -125,43 +107,4 @@ export async function main(argv = process.argv) {
     if (args.forceExit) {
         process.exit(0);
     }
-}
-
-function fatal(message: string, stack?: string) {
-    process.stderr.write(colors.bgRed.whiteBright(`\n\n${message}\n\n`));
-    if (stack) {
-        stack = stack.replace(/^ {4}/gms, "");
-        process.stderr.write(`${stack}\n\n`);
-    }
-    process.exit(1);
-}
-
-async function runTests(progress: Progress, runner: () => Promise<void>) {
-    await runner();
-    if (progress.status !== Progress.Status.Success) {
-        fatal(`Test ${progress.status.toLowerCase()}, aborting`);
-    }
-}
-
-function loadFiles(format: "esm" | "cjs", specs: string[]) {
-    const tests = [];
-    for (let spec of specs) {
-        spec = spec.replace(/\.ts$/, ".js");
-        spec = relative(Package.project.path, spec);
-        if (!spec.startsWith(".") && !spec.startsWith("build/") && !spec.startsWith("dist/")) {
-            spec = `build/${format}/${spec}`;
-        }
-        spec = Package.project.resolve(spec);
-
-        // Glob only understands forward-slash as separator because reasons
-        spec = spec.replace(/\\/g, "/");
-
-        tests.push(...glob.sync(spec));
-    }
-
-    if (!tests.length) {
-        fatal(`No files match ${specs.join(", ")}`);
-    }
-
-    return [...listSupportFiles(format), ...tests];
 }

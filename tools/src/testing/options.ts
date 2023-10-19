@@ -5,6 +5,7 @@
  */
 
 export type TestOptions = {
+    spec?: string | string[];
     profile?: boolean;
     grep?: string;
     fgrep?: string;
