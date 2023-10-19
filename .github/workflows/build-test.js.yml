@@ -6,6 +6,7 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  merge_group:
 
 # Cancel previous PR/branch runs when a new commit is pushed
 concurrency:
