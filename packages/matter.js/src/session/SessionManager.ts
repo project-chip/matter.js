@@ -142,7 +142,7 @@ export class SessionManager<ContextT> {
 
     async removeAllSessionsForNode(nodeId: NodeId) {
         for (const session of this.sessions.values()) {
-            if (!session.isSecure()) return;
+            if (!session.isSecure()) continue;
             const secureSession = session as SecureSession<any>;
             if (secureSession.getPeerNodeId() === nodeId) {
                 await secureSession.destroy(false);

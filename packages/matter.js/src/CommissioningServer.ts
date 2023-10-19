@@ -530,6 +530,12 @@ export class CommissioningServer extends MatterNode {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
+        if (this.interactionServer !== undefined && this.deviceInstance !== undefined) {
+            logger.debug("Device already initialized, just advertise the instance again ...");
+            await this.deviceInstance.announce();
+            return;
+        }
+
         const basicInformation = this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
