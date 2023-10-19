@@ -20,7 +20,7 @@ import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { Network } from "../net/Network.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
-import { isIPv4 } from "../util/Ip.js";
+import { isIPv4, isIPv6 } from "../util/Ip.js";
 import {
     MATTER_COMMISSIONER_SERVICE_QNAME,
     MATTER_COMMISSION_SERVICE_QNAME,
@@ -90,6 +90,22 @@ export class MdnsBroadcaster {
                 `Pairing instructions required for Pairing Hint of type "${needsInstructions}"`,
             );
         }
+    }
+
+    private getIpRecords(hostname: string, ips: string[]) {
+        const records = new Array<DnsRecord<any>>();
+        ips.forEach(ip => {
+            if (isIPv6(ip)) {
+                records.push(AAAARecord(hostname, ip));
+            } else if (isIPv4(ip)) {
+                if (this.enableIpv4) {
+                    records.push(ARecord(hostname, ip));
+                }
+            } else {
+                logger.warn(`Unknown IP address type: ${ip}`);
+            }
+        });
+        return records;
     }
 
     /** Set the Broadcaster data to announce a device ready for commissioning in a special mode */
@@ -170,13 +186,7 @@ export class MdnsBroadcaster {
                     `PI=${pairingInstructions}` /* Pairing Instruction */,
                 ]),
             ];
-            ips.forEach(ip => {
-                if (isIPv4(ip) && this.enableIpv4) {
-                    records.push(ARecord(hostname, ip));
-                } else {
-                    records.push(AAAARecord(hostname, ip));
-                }
-            });
+            records.push(...this.getIpRecords(hostname, ips));
             return records;
         });
     }
@@ -240,13 +250,7 @@ export class MdnsBroadcaster {
                 ];
                 records.push(...fabricRecords);
             });
-            ips.forEach(ip => {
-                if (isIPv4(ip) && this.enableIpv4) {
-                    records.push(ARecord(hostname, ip));
-                } else {
-                    records.push(AAAARecord(hostname, ip));
-                }
-            });
+            records.push(...this.getIpRecords(hostname, ips));
             return records;
         });
     }
@@ -302,13 +306,7 @@ export class MdnsBroadcaster {
                 records.push(PtrRecord(deviceTypeQname, deviceQname));
             }
 
-            ips.forEach(ip => {
-                if (isIPv4(ip) && this.enableIpv4) {
-                    records.push(ARecord(hostname, ip));
-                } else {
-                    records.push(AAAARecord(hostname, ip));
-                }
-            });
+            records.push(...this.getIpRecords(hostname, ips));
             return records;
         });
     }
