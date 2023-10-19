@@ -28,33 +28,60 @@ export class StorageBackendDisk implements Storage {
         this.localStorage.clear();
     }
 
-    buildStorageKey(contexts: string[], key: string): string {
+    getContextBaseKey(contexts: string[], allowEmptyContext = false): string {
         const contextKey = contexts.join(".");
         if (
-            !key.length ||
-            !contextKey.length ||
+            (!contextKey.length && !allowEmptyContext) ||
             contextKey.includes("..") ||
             contextKey.startsWith(".") ||
             contextKey.endsWith(".")
         )
-            throw new StorageError("Context must not be an empty string!");
+            throw new StorageError("Context must not be an empty and not contain dots.");
+        return contextKey;
+    }
+
+    buildStorageKey(contexts: string[], key: string): string {
+        if (!key.length) {
+            throw new StorageError("Key must not be an empty string.");
+        }
+        const contextKey = this.getContextBaseKey(contexts);
         return `${contextKey}.${key}`;
     }
 
     get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
-        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         const value = this.localStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T;
     }
 
     set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
-        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         this.localStorage.setItem(this.buildStorageKey(contexts, key), toJson(value));
     }
 
     delete(contexts: string[], key: string): void {
-        if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty strings!");
         this.localStorage.removeItem(this.buildStorageKey(contexts, key));
+    }
+
+    /** Returns all keys of a storage context without keys of sub-contexts */
+    keys(contexts: string[]): string[] {
+        const contextKey = this.getContextBaseKey(contexts);
+        const keys = [];
+        const contextKeyStart = `${contextKey}.`;
+        for (const key of Object.keys(this.localStorage)) {
+            if (key.startsWith(contextKeyStart) && key.indexOf(".", contextKeyStart.length) === -1) {
+                keys.push(key.substring(contextKeyStart.length));
+            }
+        }
+        return keys;
+    }
+
+    clearAll(contexts: string[]): void {
+        const contextKey = this.getContextBaseKey(contexts, true);
+        const startContextKey = contextKey.length ? `${contextKey}.` : "";
+        for (const key of Object.keys(this.localStorage)) {
+            if (key.startsWith(startContextKey)) {
+                this.localStorage.removeItem(key);
+            }
+        }
     }
 }

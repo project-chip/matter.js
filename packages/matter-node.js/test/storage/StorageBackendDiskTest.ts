@@ -64,6 +64,38 @@ describe("Storage node-localstorage", () => {
         assert.equal(keyContent.toString(), `"value"`);
     });
 
+    it("return keys with storage values", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext", "subsubcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
+    it("return keys with storage without subcontexts values", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context", "subcontext"], "key", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key", "value");
+
+        const value = storage.keys(["context", "subcontext"]);
+        expect(value).deep.equal(["key"]);
+    });
+
+    it("clear all keys with multiple contextes", () => {
+        const storage = new StorageBackendDisk(TEST_STORAGE_LOCATION);
+
+        storage.set(["context"], "key1", "value");
+        storage.set(["context", "subcontext"], "key2", "value");
+        storage.set(["context", "subcontext", "subsubcontext"], "key3", "value");
+
+        storage.clearAll(["context", "subcontext"]);
+        expect(storage.keys(["context"])).deep.equal(["key1"]);
+        expect(storage.keys(["context", "subcontext"])).deep.equal([]);
+        expect(storage.keys(["context", "subcontext", "subsubcontext"])).deep.equal([]);
+    });
+
     it("Throws error when context is empty on set", () => {
         assert.throws(
             () => {
@@ -71,7 +103,7 @@ describe("Storage node-localstorage", () => {
                 storage.set([""], "key", "value");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -83,7 +115,7 @@ describe("Storage node-localstorage", () => {
                 storage.set(["context"], "", "value");
             },
             {
-                message: "Context and key must not be empty strings!",
+                message: "Key must not be an empty string.",
             },
         );
     });
@@ -95,7 +127,7 @@ describe("Storage node-localstorage", () => {
                 storage.get([""], "key");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -107,7 +139,7 @@ describe("Storage node-localstorage", () => {
                 storage.get(["ok", ""], "key");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -119,7 +151,7 @@ describe("Storage node-localstorage", () => {
                 storage.get(["context"], "");
             },
             {
-                message: "Context and key must not be empty strings!",
+                message: "Key must not be an empty string.",
             },
         );
     });
