@@ -1505,29 +1505,15 @@ describe("Integration Test", () => {
     });
 
     after(async () => {
-        const promise = mdnsBroadcaster.expireAllAnnouncements(matterPort);
-
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.advance(150);
-        await MockTime.advance(150);
-        await MockTime.yield();
-
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.yield();
-        await MockTime.advance(150);
-        await MockTime.advance(150);
-        await MockTime.yield();
-
-        await promise;
+        // For closing all down we need to use the real Time implementation
+        const mockTimeInstance = Time.get();
+        Time.get = singleton(() => new TimeNode());
 
         await matterServer.close();
         await matterClient.close();
         await fakeControllerStorage.close();
         await fakeServerStorage.close();
+
+        Time.get = () => mockTimeInstance;
     });
 });
