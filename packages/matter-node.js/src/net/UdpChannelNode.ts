@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
+import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { ByteArray } from "@project-chip/matter.js/util";
 
 import * as dgram from "dgram";
@@ -51,8 +51,21 @@ export class UdpChannelNode implements UdpChannel {
         }
         const socket = await createDgramSocket(listeningAddress, listeningPort, socketOptions);
         socket.setBroadcast(true);
+        let netInterfaceZone: string | undefined;
         if (netInterface !== undefined) {
-            const multicastInterface = NetworkNode.getMulticastInterface(netInterface, type === "udp4");
+            let multicastInterface: string | undefined;
+            if (type === "udp4") {
+                multicastInterface = NetworkNode.getMulticastInterfaceIpv4(netInterface);
+                if (multicastInterface === undefined) {
+                    throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
+                }
+            } else {
+                netInterfaceZone = NetworkNode.getNetInterfaceZoneIpv6(netInterface);
+                if (netInterfaceZone === undefined) {
+                    throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
+                }
+                multicastInterface = `::%${netInterfaceZone}`;
+            }
             logger.debug(
                 "Initialize multicast",
                 Logger.dict({
@@ -64,7 +77,7 @@ export class UdpChannelNode implements UdpChannel {
             socket.setMulticastInterface(multicastInterface);
         }
         if (membershipAddresses !== undefined) {
-            const multicastInterfaces = NetworkNode.getMembershipMulticastInterfaces(type === "udp4");
+            const multicastInterfaces = NetworkNode.getMembershipMulticastInterfaces(netInterface, type === "udp4");
             for (const address of membershipAddresses) {
                 for (const multicastInterface of multicastInterfaces) {
                     try {
@@ -79,7 +92,7 @@ export class UdpChannelNode implements UdpChannel {
                 }
             }
         }
-        return new UdpChannelNode(socket, netInterface);
+        return new UdpChannelNode(socket, netInterfaceZone);
     }
 
     constructor(
