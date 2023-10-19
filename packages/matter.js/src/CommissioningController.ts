@@ -122,21 +122,35 @@ export class CommissioningController extends MatterNode {
         super();
     }
 
-    /** Internal method to initialize a MatterController instance. */
-    private async initializeController() {
+    assertIsAddedToMatterServer() {
         if (this.mdnsScanner === undefined || this.storage === undefined) {
             throw new ImplementationError("Add the node to the Matter instance before.");
         }
+        return { mdnsScanner: this.mdnsScanner, storage: this.storage };
+    }
+
+    assertControllerIsStarted(errorText?: string) {
+        if (this.controllerInstance === undefined) {
+            throw new ImplementationError(
+                errorText ?? "Controller instance not yet started. Please call start() first.",
+            );
+        }
+        return this.controllerInstance;
+    }
+
+    /** Internal method to initialize a MatterController instance. */
+    private async initializeController() {
+        const { mdnsScanner, storage } = this.assertIsAddedToMatterServer();
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
         }
         const { localPort, adminFabricId, adminVendorId, adminFabricIndex } = this.options;
 
         return await MatterController.create(
-            this.mdnsScanner,
+            mdnsScanner,
             this.ipv4Disabled ? undefined : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
             await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
-            this.storage,
+            storage,
             peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);
                 const handler = this.sessionDisconnectedHandler.get(peerNodeId);
@@ -155,14 +169,10 @@ export class CommissioningController extends MatterNode {
      * paired node on success.
      */
     async commissionNode(nodeOptions: NodeCommissioningOptions) {
-        if (this.mdnsScanner === undefined || this.storage === undefined) {
-            throw new ImplementationError("Add the node to the Matter instance before.");
-        }
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
 
-        const nodeId = await this.controllerInstance?.commission(nodeOptions);
+        const nodeId = await controller.commission(nodeOptions);
 
         return this.connectNode(nodeId, {
             autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
@@ -175,10 +185,8 @@ export class CommissioningController extends MatterNode {
 
     /** Check if a given node id is commissioned on this controller. */
     isNodeCommissioned(nodeId: NodeId) {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
-        return this.controllerInstance.getCommissionedNodes().includes(nodeId) ?? false;
+        const controller = this.assertControllerIsStarted();
+        return controller.getCommissionedNodes().includes(nodeId) ?? false;
     }
 
     /**
@@ -188,9 +196,7 @@ export class CommissioningController extends MatterNode {
      * use this in case of an error.
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        const controller = this.assertControllerIsStarted();
         if (tryDecommissioning) {
             try {
                 const node = this.connectedNodes.get(nodeId);
@@ -202,7 +208,7 @@ export class CommissioningController extends MatterNode {
                 logger.warn(`Decommissioning node ${nodeId} failed with error, remove node anyway: ${error}`);
             }
         }
-        await this.controllerInstance.removeNode(nodeId);
+        await controller.removeNode(nodeId);
         this.connectedNodes.delete(nodeId);
     }
 
@@ -211,11 +217,9 @@ export class CommissioningController extends MatterNode {
      * After connection the endpoint data of the device is analyzed and an object structure is created.
      */
     async connectNode(nodeId: NodeId, connectOptions?: CommissioningControllerNodeOptions) {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        const controller = this.assertControllerIsStarted();
 
-        if (!this.controllerInstance.getCommissionedNodes().includes(nodeId)) {
+        if (!controller.getCommissionedNodes().includes(nodeId)) {
             throw new ImplementationError(`Node ${nodeId} is not commissioned!`);
         }
 
@@ -240,17 +244,15 @@ export class CommissioningController extends MatterNode {
      * After connection the endpoint data of the device is analyzed and an object structure is created.
      */
     async connect() {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        const controller = this.assertControllerIsStarted();
 
-        if (!this.controllerInstance.isCommissioned()) {
+        if (!controller.isCommissioned()) {
             throw new ImplementationError(
                 "Controller instance not yet paired with any device, so nothing to connect to.",
             );
         }
 
-        for (const nodeId of this.controllerInstance.getCommissionedNodes()) {
+        for (const nodeId of controller.getCommissionedNodes()) {
             await this.connectNode(nodeId);
         }
         return Array.from(this.connectedNodes.values());
@@ -285,11 +287,9 @@ export class CommissioningController extends MatterNode {
 
     /** Returns true if t least one node is commissioned/paired with this controller instance. */
     isCommissioned() {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        const controller = this.assertControllerIsStarted();
 
-        return this.controllerInstance.isCommissioned();
+        return controller.isCommissioned();
     }
 
     /**
@@ -297,10 +297,8 @@ export class CommissioningController extends MatterNode {
      * not be used directly. See the PairedNode class for the public API.
      */
     async createInteractionClient(nodeId: NodeId): Promise<InteractionClient> {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
-        return this.controllerInstance.connect(nodeId);
+        const controller = this.assertControllerIsStarted();
+        return controller.connect(nodeId);
     }
 
     /** Returns the PairedNode instance for a given node id, if this node is connected. */
@@ -310,11 +308,9 @@ export class CommissioningController extends MatterNode {
 
     /** Returns an array with the Node Ids for all commissioned nodes. */
     getCommissionedNodes() {
-        if (this.controllerInstance === undefined) {
-            throw new ImplementationError("Controller instance not yet started. Please call start() first.");
-        }
+        const controller = this.assertControllerIsStarted();
 
-        return this.controllerInstance.getCommissionedNodes() ?? [];
+        return controller.getCommissionedNodes() ?? [];
     }
 
     /** Close network connections of the controller. */
@@ -339,17 +335,11 @@ export class CommissioningController extends MatterNode {
     }
 
     resetStorage() {
-        if (this.controllerInstance !== undefined) {
-            throw new ImplementationError(
-                "Storage can not be reset while the controller is operating! Please close the controller first.",
-            );
-        }
-        if (this.storage === undefined) {
-            throw new ImplementationError(
-                "Storage not initialized. The instance was not added to a Matter instance yet.",
-            );
-        }
-        this.storage.clearAll();
+        this.assertControllerIsStarted(
+            "Storage can not be reset while the controller is operating! Please close the controller first.",
+        );
+        const { storage } = this.assertIsAddedToMatterServer();
+        storage.clearAll();
     }
 
     /** Returns active session information for all connected nodes. */
