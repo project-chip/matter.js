@@ -270,12 +270,13 @@ export class MatterDevice {
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
             await this.endCommissioning();
         }
-        if (this.fabricManager.getFabrics().length === 1) {
+        const fabrics = this.fabricManager.getFabrics();
+        if (fabrics.length === 1) {
             // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
             // TODO Change when refactoring MatterDevice away
             this.initialCommissioningCallback();
         }
-        this.sendFabricAnnouncements([fabric], true).catch(error =>
+        this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
         return fabric.fabricIndex;
