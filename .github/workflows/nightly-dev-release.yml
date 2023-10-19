@@ -8,6 +8,7 @@ on:
 
 jobs:
   publish-config:
+    if: github.repository == 'project-chip/matter.js'  
     runs-on: ubuntu-latest
 
     steps:
