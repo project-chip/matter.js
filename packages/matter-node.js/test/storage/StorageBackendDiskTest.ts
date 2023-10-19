@@ -103,7 +103,7 @@ describe("Storage node-localstorage", () => {
                 storage.set([""], "key", "value");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -115,7 +115,7 @@ describe("Storage node-localstorage", () => {
                 storage.set(["context"], "", "value");
             },
             {
-                message: "Context and key must not be empty strings!",
+                message: "Key must not be an empty string.",
             },
         );
     });
@@ -127,7 +127,7 @@ describe("Storage node-localstorage", () => {
                 storage.get([""], "key");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -139,7 +139,7 @@ describe("Storage node-localstorage", () => {
                 storage.get(["ok", ""], "key");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty and not contain dots.",
             },
         );
     });
@@ -151,7 +151,7 @@ describe("Storage node-localstorage", () => {
                 storage.get(["context"], "");
             },
             {
-                message: "Context and key must not be empty strings!",
+                message: "Key must not be an empty string.",
             },
         );
     });
