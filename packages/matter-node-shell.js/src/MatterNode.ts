@@ -25,7 +25,7 @@ export class MatterNode {
 
     constructor(private nodeNum: number) {}
 
-    async initialize() {
+    async initialize(resetStorage: boolean) {
         /**
          * Initialize the storage system.
          *
@@ -39,6 +39,9 @@ export class MatterNode {
         this.storageManager = new StorageManager(this.storage);
         await this.storageManager.initialize();
         this.storageContext = this.storageManager.createContext("Node");
+        if (resetStorage) {
+            this.storage.clearAll([]);
+        }
     }
 
     get Store() {

@@ -20,11 +20,15 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Feature: Added detection of missing Subscription updates from a device and allow to react to such a timeout with callback
   * Feature: Added generation method for random passcodes to PaseClient
   * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel
+  * Feature: Added functionality to clear session contexts including data in sub-contexts or not
 * matter.js API:
   * Breaking: Restructure the CommissioningController to allow pairing with multiple nodes
-    * Adjust some property and structure namings to be more consistent
+    * Adjusts some property and structure namings to be more consistent
     * Introducing class PairedNode with the High level API for a paired Node
-    * Restructure CommissioningController to handle multiple nodes and offer new high level API
+    * Restructured CommissioningController to handle multiple nodes and offer new high level API
+    * Changed name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
+  * Feature: Makes Port for CommissioningServer optional and add automatic port handling in MatterServer
+  * Feature: Allows removal of Controller or Server instances from Matter server, optionally with deleting the storage
 * matter-node-shell.js
   * Feature: Completely refactored and enhances shell to support commissioning, identify and many more new commands. See Readme, try it
 

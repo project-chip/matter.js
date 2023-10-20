@@ -41,4 +41,20 @@ export class StorageContext {
         if (context.includes(".")) throw new StorageError("Context must not contain dots!");
         return new StorageContext(this.storage, [...this.contexts, context]);
     }
+
+    keys(): string[] {
+        return this.storage.keys(this.contexts);
+    }
+
+    /** Clears all keys in this context */
+    clear(): void {
+        for (const key of this.keys()) {
+            this.delete(key);
+        }
+    }
+
+    /** Clears all keys in this context and all created sub-contexts. */
+    clearAll(): void {
+        this.storage.clearAll(this.contexts);
+    }
 }

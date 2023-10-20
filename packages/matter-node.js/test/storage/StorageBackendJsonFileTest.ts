@@ -95,7 +95,7 @@ describe("Storage in JSON File", () => {
                 storage.set([""], "key", "value");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty string.",
             },
         );
     });
@@ -107,7 +107,7 @@ describe("Storage in JSON File", () => {
                 storage.set(["context"], "", "value");
             },
             {
-                message: "Context and key must not be empty!",
+                message: "Context and key must not be empty.",
             },
         );
     });
@@ -119,7 +119,7 @@ describe("Storage in JSON File", () => {
                 storage.get([""], "key");
             },
             {
-                message: "Context must not be an empty string!",
+                message: "Context must not be an empty string.",
             },
         );
     });
@@ -131,7 +131,7 @@ describe("Storage in JSON File", () => {
                 storage.get(["context"], "");
             },
             {
-                message: "Context and key must not be empty!",
+                message: "Context and key must not be empty.",
             },
         );
     });
