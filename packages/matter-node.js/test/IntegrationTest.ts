@@ -117,7 +117,6 @@ describe("Integration Test", () => {
         matterServer = new MatterServer(serverStorageManager, { disableIpv4: true });
 
         commissioningServer = new CommissioningServer({
-            port: matterPort,
             listeningAddressIpv6: SERVER_IPv6,
             deviceName,
             deviceType,
@@ -135,6 +134,7 @@ describe("Integration Test", () => {
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
         });
+        assert.equal(commissioningServer.getPort(), undefined);
 
         onOffLightDeviceServer = new OnOffLightDevice();
         commissioningServer.addDevice(onOffLightDeviceServer);
@@ -188,6 +188,7 @@ describe("Integration Test", () => {
         );
 
         matterServer.addCommissioningServer(commissioningServer);
+        assert.equal(commissioningServer.getPort(), matterPort);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
         serverMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
@@ -1128,7 +1129,6 @@ describe("Integration Test", () => {
             Network.get = () => serverNetwork;
 
             commissioningServer2 = new CommissioningServer({
-                port: matterPort2,
                 listeningAddressIpv6: SERVER_IPv6,
                 deviceName: `${deviceName} 2`,
                 deviceType,
@@ -1150,9 +1150,11 @@ describe("Integration Test", () => {
             onOffLightDeviceServer = new OnOffLightDevice();
             commissioningServer2.addDevice(onOffLightDeviceServer);
 
+            matterServer.addCommissioningServer(commissioningServer2, { uniqueStorageKey: "second" });
+            assert.equal(commissioningServer2.getPort(), matterPort2);
+
             commissioningServer2.setMdnsScanner(serverMdnsScanner);
             commissioningServer2.setMdnsBroadcaster(mdnsBroadcaster);
-            matterServer.addCommissioningServer(commissioningServer2);
 
             await assert.doesNotReject(async () => commissioningServer2.advertise());
         });
@@ -1326,7 +1328,7 @@ describe("Integration Test", () => {
                 adminFabricIndex: FabricIndex(1001),
                 adminVendorId: VendorId(0x1234),
             });
-            matterClient.addCommissioningController(commissioningController2);
+            matterClient.addCommissioningController(commissioningController2, { uniqueStorageKey: "another-second" });
             commissioningController2.setMdnsScanner(clientMdnsScanner);
 
             Network.get = () => serverNetwork;
@@ -1376,7 +1378,7 @@ describe("Integration Test", () => {
             assert.equal(storedControllerResumptionRecords.length, 2);
 
             const storedControllerResumptionRecords2 = fakeServerStorage.get(
-                ["1", "SessionManager"],
+                ["second", "SessionManager"],
                 "resumptionRecords",
             );
             assert.ok(Array.isArray(storedControllerResumptionRecords2));
@@ -1403,7 +1405,7 @@ describe("Integration Test", () => {
             });
 
             const nodeData2 = fakeControllerStorage.get<[NodeId, any][]>(
-                ["1", "MatterController"],
+                ["another-second", "MatterController"],
                 "commissionedNodes",
             );
             assert.ok(nodeData2);
@@ -1417,7 +1419,7 @@ describe("Integration Test", () => {
             });
 
             const storedControllerFabrics = fakeControllerStorage.get<FabricJsonObject>(
-                ["1", "MatterController"],
+                ["another-second", "MatterController"],
                 "fabric",
             );
             assert.ok(typeof storedControllerFabrics === "object");
@@ -1470,7 +1472,7 @@ describe("Integration Test", () => {
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
             assert.deepEqual(result.fabricIndex, fabricIndex);
 
-            // For next test we need to use the read Time implementation
+            // For next test we need to use the real Time implementation
             const mockTimeInstance = Time.get();
             Time.get = singleton(() => new TimeNode());
 

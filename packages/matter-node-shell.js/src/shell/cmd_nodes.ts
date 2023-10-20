@@ -19,7 +19,7 @@ import { MatterNode } from "../MatterNode";
 
 export default function commands(theNode: MatterNode) {
     return {
-        command: "nodes",
+        command: ["nodes", "node"],
         describe: "Manage nodes",
         builder: (yargs: Argv) =>
             yargs
@@ -62,7 +62,7 @@ export default function commands(theNode: MatterNode) {
                     "Log the Structure of one node",
                     yargs => {
                         return yargs.positional("node-id", {
-                            describe: "node id to log - if ommited the first node is logged.",
+                            describe: "node id to log - if omitted the first node is logged.",
                             default: undefined,
                             type: "string",
                         });

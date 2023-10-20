@@ -14,11 +14,17 @@ import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
 
-// TODO Move Mdns instances internally
-// TODO enhance storage manager to support multiple nodes
+const MATTER_PORT = 5540;
 
 export type NodeOptions = {
-    /** Unique node id to use for the storage context of this node. If not provided the order of node addition is used. */
+    /** Unique storage key for this node to use for the storage context of this node. If not provided the order of node addition is used. */
+    uniqueStorageKey?: string;
+
+    /**
+     * Deprecated name for uniqueStorageKey
+     * TODO: Remove with 0.8 or such
+     * @deprecated
+     */
     uniqueNodeId?: string;
 };
 
@@ -57,6 +63,33 @@ export class MatterServer {
         return !!this.options?.disableIpv4;
     }
 
+    private getNextMatterPort(desiredPort?: number) {
+        // Build a temporary map with all ports in use
+        const portCheckMap = new Map<number, boolean>();
+        for (const node of this.nodes) {
+            const nodePort = node.getPort();
+            if (nodePort === undefined) continue;
+            if (portCheckMap.has(nodePort)) {
+                throw new NetworkError(`Port ${nodePort} is already in use by other node.`);
+            }
+            portCheckMap.set(nodePort, true);
+        }
+
+        if (desiredPort !== undefined) {
+            if (portCheckMap.has(desiredPort)) {
+                throw new NetworkError(`Port ${desiredPort} is already in use by other node.`);
+            }
+            return desiredPort;
+        }
+
+        // Try to find a free port
+        let portToCheck = MATTER_PORT;
+        while (portCheckMap.has(portToCheck)) {
+            portToCheck++;
+        }
+        return portToCheck;
+    }
+
     /**
      * Add a CommissioningServer node to the server
      *
@@ -64,21 +97,36 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
-        // TODO move port handling completely to MatterServer
-        const portCheckMap = new Map<number, boolean>();
-        for (const node of this.nodes) {
-            const nodePort = node.getPort();
-            if (nodePort === undefined) continue;
-            if (portCheckMap.has(nodePort)) {
-                throw new NetworkError(`Port ${nodePort} is already in use by other node`);
-            }
-            portCheckMap.set(nodePort, true);
-        }
-        commissioningServer.setStorage(
-            this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()),
-        );
+        commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
+        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
+        commissioningServer.setStorage(this.storageManager.createContext(storageKey));
+        logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
         this.prepareNode(commissioningServer);
         this.nodes.push(commissioningServer);
+    }
+
+    /**
+     * Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
+     * storage context.
+     *
+     * @param commissioningServer CommissioningServer node to remove
+     * @param destroyStorage If true the storage context will be destroyed
+     */
+    async removeCommissioningServer(commissioningServer: CommissioningServer, destroyStorage = false) {
+        // Remove instance from list
+        const index = this.nodes.indexOf(commissioningServer);
+        if (index < 0) {
+            throw new Error("CommissioningServer not found");
+        }
+        this.nodes.splice(index, 1);
+
+        // Close instance
+        await commissioningServer.close();
+
+        if (destroyStorage) {
+            // Destroy storage
+            commissioningServer.resetStorage();
+        }
     }
 
     /**
@@ -88,11 +136,40 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
-        commissioningController.setStorage(
-            this.storageManager.createContext(nodeOptions?.uniqueNodeId ?? this.nodes.length.toString()),
-        );
+        const localPort = commissioningController.getPort();
+        if (localPort !== undefined) {
+            // If a local port for controller is defined verify that the port is not overlapping with other nodes
+            // Method throws if port is already used
+            this.getNextMatterPort(localPort);
+        }
+        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
+        commissioningController.setStorage(this.storageManager.createContext(storageKey));
+        logger.debug(`Adding CommissioningController using storage key "${storageKey}".`);
         this.prepareNode(commissioningController);
         this.nodes.push(commissioningController);
+    }
+
+    /**
+     * Remove a Controller node from the server, close the Controller and optionally destroy the storage context.
+     *
+     * @param commissioningController Controller node to remove
+     * @param destroyStorage If true the storage context will be destroyed
+     */
+    async removeCommissioningController(commissioningController: CommissioningController, destroyStorage = false) {
+        // Remove instance from list
+        const index = this.nodes.indexOf(commissioningController);
+        if (index < 0) {
+            throw new Error("CommissioningController not found");
+        }
+        this.nodes.splice(index, 1);
+
+        // Close instance
+        await commissioningController.close();
+
+        if (destroyStorage) {
+            // Destroy storage
+            commissioningController.resetStorage();
+        }
     }
 
     /**
