@@ -19,6 +19,7 @@ concurrency:
 jobs:
   # Find out what is needed to be done by this test workflow
   chip-tests-needed:
+    if: github.repository == 'project-chip/matter.js'  
     runs-on: ubuntu-latest
     outputs:
       chip-changes: ${{ steps.changes.outputs.src }}
@@ -74,7 +75,7 @@ jobs:
   # If we need to do anything make sure that chip binaries are build and environment can be set up
   prepare-chip-build:
     needs: [chip-tests-needed]
-    if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
@@ -89,7 +90,7 @@ jobs:
   # Execute the normal tests
   chip-tests:
     needs: [prepare-chip-build]
-    if: ${{ needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    if: ${{ github.repository == 'project-chip/matter.js' && (needs.chip-tests-needed.outputs.chip-tool-rebuild == 'true' || needs.chip-tests-needed.outputs.chip-tests-required == 'true' || needs.chip-tests-needed.outputs.chip-changes == 'true' || needs.chip-tests-needed.outputs.chip-long-tests-required == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js
@@ -110,7 +111,7 @@ jobs:
   # Execute the long running tests (if needed)
   chip-tests-long:
     needs: [prepare-chip-build]
-    if: ${{ needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
+    if: ${{ github.repository == 'project-chip/matter.js' && needs.chip-tests-needed.outputs.chip-long-tests-required == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out matter.js

@@ -10,8 +10,8 @@ jobs:
   auto-approve:
     if: |
       github.actor == 'Automator77' &&
-      github.event.label.name == 'automated pr'
-
+      github.event.label.name == 'automated pr' &&
+      github.repository == 'project-chip/matter.js'  
     runs-on: ubuntu-latest
     steps:
       - uses: hmarr/auto-approve-action@v3
