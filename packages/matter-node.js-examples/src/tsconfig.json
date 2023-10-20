@@ -1,7 +1,7 @@
 {
     "extends": "../../../tools/tsconfig.base.json",
     "compilerOptions": {
-        "outDir": "../dist/cjs",
+        "outDir": "../dist/esm",
         "types": ["node"]
     },
     "references": [{ "path": "../../matter-node.js/src" }, { "path": "../../matter-node-ble.js/src" }]
