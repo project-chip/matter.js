@@ -62,7 +62,7 @@ export class NetworkNode extends Network {
     }
 
     private static readonly netInterfaces = new Cache<string | undefined>(
-        (ip: string) => this.getNetInterfaceForIpInternal(ip),
+        (ip: string) => this.getNetInterfaceForRemoveAddress(ip),
         5 * 60 * 1000 /* 5mn */,
     );
 
@@ -70,7 +70,7 @@ export class NetworkNode extends Network {
         await NetworkNode.netInterfaces.close();
     }
 
-    private static getNetInterfaceForIpInternal(ip: string) {
+    private static getNetInterfaceForRemoveAddress(ip: string) {
         if (ip.includes("%")) {
             // IPv6 address with scope
             return ip.split("%")[1];
@@ -80,7 +80,7 @@ export class NetworkNode extends Network {
                 const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
                 for (const { address, netmask } of netInterfaces) {
                     if (onSameNetwork(ip, address, netmask)) {
-                        return name;
+                        return this.getNetInterfaceZoneIpv6Internal(name, netInterfaces);
                     }
                 }
             }

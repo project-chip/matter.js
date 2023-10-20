@@ -53,6 +53,7 @@ export class UdpChannelNode implements UdpChannel {
         socket.setBroadcast(true);
         let netInterfaceZone: string | undefined;
         if (netInterface !== undefined) {
+            netInterfaceZone = NetworkNode.getNetInterfaceZoneIpv6(netInterface);
             let multicastInterface: string | undefined;
             if (type === "udp4") {
                 multicastInterface = NetworkNode.getMulticastInterfaceIpv4(netInterface);
@@ -60,7 +61,6 @@ export class UdpChannelNode implements UdpChannel {
                     throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
                 }
             } else {
-                netInterfaceZone = NetworkNode.getNetInterfaceZoneIpv6(netInterface);
                 if (netInterfaceZone === undefined) {
                     throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
                 }
