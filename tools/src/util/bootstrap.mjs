@@ -14,6 +14,7 @@ import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { spawn } from "child_process";
 import { platform } from "os";
+import { stat } from "fs/promises";
 
 const toolRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -26,9 +27,14 @@ if (platform() === "win32") {
     options.shell = true;
 }
 
+let esbuild = resolve(toolRoot, "../node_modules/.bin/esbuild");
+if (!await stat(esbuild)) {
+    esbuild = "esbuild";
+}
+
 await new Promise((resolve) => {
     const proc = spawn(
-        "esbuild",
+        esbuild,
         [
             "src/**/*.ts",
             "--outdir=dist/esm",
