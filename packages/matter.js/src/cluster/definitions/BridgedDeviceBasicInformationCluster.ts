@@ -26,7 +26,7 @@ import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 
 export namespace BridgedDeviceBasicInformation {
-    export const enum ProductFinish {
+    export enum ProductFinish {
         Other = 0,
         Matte = 1,
         Satin = 2,
@@ -35,7 +35,7 @@ export namespace BridgedDeviceBasicInformation {
         Fabric = 5
     }
 
-    export const enum Color {
+    export enum Color {
         Black = 0,
         Navy = 1,
         Green = 2,

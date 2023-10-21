@@ -8,15 +8,19 @@ import { build as esbuild, Format } from "esbuild";
 import { cp, mkdir, readFile, rm, stat, symlink, writeFile } from "fs/promises";
 import { glob } from "glob";
 import { platform } from "os";
-import { execute } from "../running/execute.js";
 import { ignoreError } from "../util/errors.js";
 import { Package } from "../util/package.js";
+import { Typescript } from "./typescript.js";
 
 export class Project {
     pkg: Package;
 
-    constructor(path = ".") {
-        Package.project = this.pkg = new Package({ path });
+    constructor(source: Package | string = ".") {
+        if (typeof source === "string") {
+            this.pkg = new Package({ path: source });
+        } else {
+            this.pkg = source;
+        }
 
         if (!this.pkg.src) {
             throw new Error(`Found package ${this.pkg.json.name} but no src directory is present`);
@@ -30,7 +34,7 @@ export class Project {
 
     async buildTests(format: Format) {
         await ignoreError("ENOENT", async () => {
-            if ((await stat("test")).isDirectory()) {
+            if ((await stat(this.pkg.resolve("test"))).isDirectory()) {
                 await this.build(format, "test", `build/${format}/test`);
             }
         });
@@ -39,7 +43,7 @@ export class Project {
         const dest = `build/${format}/src`;
 
         try {
-            await ignoreError("EEXIST", async () => await symlink(`../../${src}`, this.pkg.resolve(dest)));
+            await ignoreError("EEXIST", async () => await symlink(this.pkg.resolve(src), this.pkg.resolve(dest)));
         } catch (e) {
             if ((e as any).code === "EPERM" && platform() === "win32") {
                 // If developer mode is not enabled, we can't create a symlink
@@ -62,20 +66,11 @@ export class Project {
     }
 
     async buildDeclarations() {
-        // Would prefer to run in-process but tsc API would be far messier and
-        // compilation is quite slow regardless
-        return execute("tsc", [
-            "-p",
-            this.pkg.resolve("src/tsconfig.json"),
-            "--outDir",
-            this.pkg.resolve("build/types/src"),
-            "--tsBuildInfoFile",
-            this.pkg.resolve("build/types/src/tsbuildinfo"),
-            "--emitDeclarationOnly",
-            "--sourceMap",
-            "--declarationMap",
-            "--incremental",
-        ]);
+        Typescript.emitDeclarations(this.pkg);
+    }
+
+    async validateTypes() {
+        Typescript.validateTypes(this.pkg);
     }
 
     async installDeclarationFormat(format: Format) {
@@ -127,13 +122,18 @@ export class Project {
     }
 
     async installDeclarations() {
-        await mkdir("dist", { recursive: true });
+        await mkdir(this.pkg.resolve("dist"), { recursive: true });
         if (this.pkg.esm) {
             await this.installDeclarationFormat("esm");
         }
         if (this.pkg.cjs) {
             await this.installDeclarationFormat("cjs");
         }
+    }
+
+    async recordBuildTime() {
+        await mkdir(this.pkg.resolve("build"), { recursive: true });
+        await writeFile(this.pkg.resolve("build/timestamp"), "");
     }
 
     private async build(format: Format, indir: string, outdir: string) {

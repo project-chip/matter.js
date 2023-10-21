@@ -31,7 +31,7 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.6
      */
-    export const enum DriftCompensation {
+    export enum DriftCompensation {
         None = 0,
         OtherUnknown = 1,
         TemperatureMonitoring = 2,
@@ -44,7 +44,7 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.9
      */
-    export const enum ColorMode {
+    export enum ColorMode {
         CurrentHueAndCurrentSaturation = 0,
         CurrentXAndCurrentY = 1,
         ColorTemperatureMireds = 2
@@ -62,7 +62,7 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.7.12
      */
-    export const enum EnhancedColorMode {
+    export enum EnhancedColorMode {
         CurrentHueAndCurrentSaturation = 0,
         CurrentXAndCurrentY = 1,
         ColorTemperatureMireds = 2,
@@ -114,7 +114,7 @@ export namespace ColorControl {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4.2
      */
-    export const enum ColorControlDirection {
+    export enum ColorControlDirection {
         ShortestDistance = 0,
         LongestDistance = 1,
         Up = 2,
@@ -156,7 +156,7 @@ export namespace ColorControl {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5.1
      */
-    export const enum MoveMode {
+    export enum MoveMode {
         Stop = 0,
         Up = 1,
         Down = 3
@@ -193,7 +193,7 @@ export namespace ColorControl {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6.1
      */
-    export const enum StepMode {
+    export enum StepMode {
         Up = 1,
         Down = 3
     }
@@ -670,7 +670,7 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19.2
      */
-    export const enum Action {
+    export enum Action {
         DeActivateTheColorLoop = 0,
         ActivateTheColorLoopFromTheValueInTheColorLoopStartEnhancedHueField = 1,
         ActivateTheColorLoopFromTheValueOfTheEnhancedCurrentHueAttribute = 2
@@ -681,7 +681,7 @@ export namespace ColorControl {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19.3
      */
-    export const enum ColorLoopSetDirection {
+    export enum ColorLoopSetDirection {
         DecrementTheHueInTheColorLoop = 0,
         IncrementTheHueInTheColorLoop = 1
     }

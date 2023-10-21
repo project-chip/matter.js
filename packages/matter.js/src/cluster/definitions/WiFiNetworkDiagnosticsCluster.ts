@@ -27,7 +27,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.1
      */
-    export const enum SecurityType {
+    export enum SecurityType {
         /**
          * Indicate the usage of an unspecified Wi-Fi security type
          */
@@ -62,7 +62,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.2
      */
-    export const enum WiFiVersion {
+    export enum WiFiVersion {
         /**
          * Indicate the network interface is currently using 802.11a against the wireless access point.
          */
@@ -112,7 +112,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.3
      */
-    export const enum AssociationFailureCause {
+    export enum AssociationFailureCause {
         /**
          * The reason for the failure is unknown.
          */
@@ -168,7 +168,7 @@ export namespace WiFiNetworkDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.14.5.4
      */
-    export const enum ConnectionStatus {
+    export enum ConnectionStatus {
         /**
          * Indicate the node is connected
          */

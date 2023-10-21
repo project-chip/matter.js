@@ -42,7 +42,7 @@ export namespace LevelControl {
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
 
-    export const enum MoveMode {
+    export enum MoveMode {
         Up = 0,
         Down = 1
     }
@@ -76,7 +76,7 @@ export namespace LevelControl {
         optionsOverride: TlvField(3, TlvBitmap(TlvUInt8, Options))
     });
 
-    export const enum StepMode {
+    export enum StepMode {
         Up = 0,
         Down = 1
     }

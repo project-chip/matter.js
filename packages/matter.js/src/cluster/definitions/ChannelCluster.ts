@@ -106,7 +106,7 @@ export namespace Channel {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.3
      */
-    export const enum LineupInfoType {
+    export enum LineupInfoType {
         /**
          * MultiSystemOperator
          */
@@ -155,7 +155,7 @@ export namespace Channel {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.6.5.4
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */

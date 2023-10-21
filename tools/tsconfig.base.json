@@ -36,6 +36,5 @@
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "strict": true,
-        "strictNullChecks": true
     }
 }

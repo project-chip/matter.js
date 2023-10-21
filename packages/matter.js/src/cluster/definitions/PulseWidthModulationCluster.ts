@@ -48,7 +48,7 @@ export namespace PulseWidthModulation {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2.1
      */
-    export const enum MoveMode {
+    export enum MoveMode {
         Up = 0,
         Down = 1
     }

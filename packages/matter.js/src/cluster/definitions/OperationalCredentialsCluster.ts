@@ -156,7 +156,7 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.2
      */
-    export const enum CertificateChainType {
+    export enum CertificateChainType {
         /**
          * Request the DER- encoded DAC certificate
          */
@@ -374,7 +374,7 @@ export namespace OperationalCredentials {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.17.4.3
      */
-    export const enum NodeOperationalCertStatus {
+    export enum NodeOperationalCertStatus {
         /**
          * OK, no error
          */

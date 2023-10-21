@@ -58,7 +58,7 @@ export namespace BasicInformation {
         subscriptionsPerFabric: TlvField(1, TlvUInt16.bound({ min: 3 }))
     });
 
-    export const enum ProductFinish {
+    export enum ProductFinish {
         Other = 0,
         Matte = 1,
         Satin = 2,
@@ -67,7 +67,7 @@ export namespace BasicInformation {
         Fabric = 5
     }
 
-    export const enum Color {
+    export enum Color {
         Black = 0,
         Navy = 1,
         Green = 2,

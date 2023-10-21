@@ -17,7 +17,7 @@ export namespace UnitLocalization {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.5.5.1
      */
-    export const enum TempUnit {
+    export enum TempUnit {
         /**
          * Temperature conveyed in Fahrenheit
          */

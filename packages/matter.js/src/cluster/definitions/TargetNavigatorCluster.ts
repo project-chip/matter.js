@@ -62,7 +62,7 @@ export namespace TargetNavigator {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.11.5.2
      */
-    export const enum Status {
+    export enum Status {
         /**
          * Command succeeded
          */

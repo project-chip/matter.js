@@ -38,7 +38,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.1
      */
-    export const enum LockState {
+    export enum LockState {
         /**
          * Lock state is not fully locked
          */
@@ -60,7 +60,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.3.2
      */
-    export const enum LockType {
+    export enum LockType {
         /**
          * Physical lock type is dead bolt
          */
@@ -129,7 +129,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.12
      */
-    export const enum OperatingMode {
+    export enum OperatingMode {
         /**
          * The lock operates normally. All interfaces are enabled.
          *
@@ -254,7 +254,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.1
      */
-    export const enum AlarmCode {
+    export enum AlarmCode {
         /**
          * Locking Mechanism Jammed
          */
@@ -315,7 +315,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.10
      */
-    export const enum LockOperationType {
+    export enum LockOperationType {
         Lock = 0,
         Unlock = 1,
         NonAccessUserEvent = 2,
@@ -334,7 +334,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.13
      */
-    export const enum OperationSource {
+    export enum OperationSource {
         Unspecified = 0,
         Manual = 1,
         ProprietaryRemote = 2,
@@ -352,7 +352,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.4
      */
-    export const enum CredentialType {
+    export enum CredentialType {
         ProgrammingPin = 0,
         Pin = 1,
         Rfid = 2,
@@ -445,7 +445,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.11
      */
-    export const enum OperationError {
+    export enum OperationError {
         Unspecified = 0,
         InvalidCredential = 1,
         DisabledUserDenied = 2,
@@ -523,7 +523,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.7
      */
-    export const enum DoorState {
+    export enum DoorState {
         /**
          * Door state is open
          */
@@ -581,7 +581,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.5
      */
-    export const enum DataOperationType {
+    export enum DataOperationType {
         /**
          * Data is being added or was added
          */
@@ -603,7 +603,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.15
      */
-    export const enum UserStatus {
+    export enum UserStatus {
         Available = 0,
         OccupiedEnabled = 1,
         OccupiedDisabled = 3
@@ -614,7 +614,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.16
      */
-    export const enum UserType {
+    export enum UserType {
         /**
          * User has access 24/7 provided proper PIN or RFID is supplied (e.g., owner).
          *
@@ -704,7 +704,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.2
      */
-    export const enum CredentialRule {
+    export enum CredentialRule {
         Single = 0,
         Dual = 1,
         Tri = 2
@@ -769,7 +769,7 @@ export namespace DoorLock {
         userType: TlvField(5, TlvNullable(TlvEnum<UserType>()))
     });
 
-    export const enum DlStatus {
+    export enum DlStatus {
         Success = 0,
         Failure = 1,
         Duplicate = 2,
@@ -818,7 +818,7 @@ export namespace DoorLock {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.6.9
      */
-    export const enum LockDataType {
+    export enum LockDataType {
         /**
          * Unspecified or manufacturer specific lock user data added, cleared, or modified.
          */

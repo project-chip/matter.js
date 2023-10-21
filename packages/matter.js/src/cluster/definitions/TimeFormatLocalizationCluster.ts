@@ -18,7 +18,7 @@ export namespace TimeFormatLocalization {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.1
      */
-    export const enum HourFormat {
+    export enum HourFormat {
         /**
          * Time conveyed with a 12-hour clock
          */
@@ -33,7 +33,7 @@ export namespace TimeFormatLocalization {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.4.5.2
      */
-    export const enum CalendarType {
+    export enum CalendarType {
         /**
          * Dates conveyed using the Buddhist calendar
          */

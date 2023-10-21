@@ -15,7 +15,7 @@ export function listSupportFiles(format = "cjs") {
     files.push(Package.tools.resolve("dist/esm/testing/mocks/index.js"));
 
     // Package code should load in the format being tested
-    const config = Package.project.resolve(`build/${format}/test/test.config.js`);
+    const config = new Package().resolve(`build/${format}/test/test.config.js`);
     if (existsSync(config)) {
         files.push(config);
     }

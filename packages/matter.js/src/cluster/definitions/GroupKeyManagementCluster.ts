@@ -82,7 +82,7 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.1
      */
-    export const enum GroupKeySecurityPolicy {
+    export enum GroupKeySecurityPolicy {
         /**
          * Message counter synchronization using trust-first
          */
@@ -97,7 +97,7 @@ export namespace GroupKeyManagement {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.2.6.2
      */
-    export const enum GroupKeyMulticastPolicy {
+    export enum GroupKeyMulticastPolicy {
         /**
          * Indicates filtering of multicast messages for a specific Group ID
          *

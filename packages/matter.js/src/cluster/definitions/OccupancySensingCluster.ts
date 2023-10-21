@@ -29,7 +29,7 @@ export namespace OccupancySensing {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.7.5.2
      */
-    export const enum OccupancySensorType {
+    export enum OccupancySensorType {
         /**
          * Indicates a passive infrared sensor.
          */

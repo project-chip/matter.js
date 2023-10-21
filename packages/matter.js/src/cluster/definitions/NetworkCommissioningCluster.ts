@@ -65,7 +65,7 @@ export namespace NetworkCommissioning {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.3
      */
-    export const enum NetworkCommissioningStatus {
+    export enum NetworkCommissioningStatus {
         /**
          * OK, no error
          */
@@ -196,7 +196,7 @@ export namespace NetworkCommissioning {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.2
      */
-    export const enum WiFiBand {
+    export enum WiFiBand {
         /**
          * 2.4GHz - 2.401GHz to2.495GHz(802.11b/g/n/ax)
          */

@@ -13,7 +13,7 @@ import { TlvEnum, TlvUInt32, TlvUInt8 } from "../../tlv/TlvNumber.js";
 import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 
 export namespace FaultInjection {
-    export const enum FaultType {
+    export enum FaultType {
         Unspecified = 0,
         SystemFault = 1,
         InetFault = 2,

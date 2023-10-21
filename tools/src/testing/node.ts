@@ -7,24 +7,24 @@
 import { mkdir, writeFile } from "fs/promises";
 import Mocha from "mocha";
 import { relative } from "path";
-import { Package } from "../util/package.js";
 import { adaptReporter, generalSetup } from "./mocha.js";
 import { TestOptions } from "./options.js";
-import { Reporter } from "./reporter.js";
+import type { TestRunner } from "./runner.js";
 
 // Load globals so settings get applied
 import "./global-definitions.js";
 
-export async function testNode(format: "cjs" | "esm", files: string[], reporter: Reporter, options: TestOptions = {}) {
+export async function testNode(runner: TestRunner, format: "cjs" | "esm") {
     generalSetup(Mocha);
 
     const mocha = new Mocha({
         inlineDiffs: true,
-        reporter: adaptReporter(Mocha, format.toUpperCase(), reporter),
+        reporter: adaptReporter(Mocha, format.toUpperCase(), runner.reporter),
     });
 
-    TestOptions.apply(mocha, options);
+    TestOptions.apply(mocha, runner.options);
 
+    const files = runner.loadFiles(format);
     files.forEach(path => {
         path = relative(process.cwd(), path);
         if (path[0] !== ".") {
@@ -36,7 +36,7 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
     await mocha.loadFilesAsync();
 
     const profiler = new Profiler();
-    if (options.profile) {
+    if (runner.options.profile) {
         await profiler.start();
     }
 
@@ -44,8 +44,8 @@ export async function testNode(format: "cjs" | "esm", files: string[], reporter:
         const runner = mocha.run(() => resolve(runner));
     });
 
-    if (options.profile) {
-        await profiler.stop();
+    if (runner.options.profile) {
+        await profiler.stop(runner.pkg.resolve("build/profiles"));
     }
 }
 
@@ -74,7 +74,7 @@ class Profiler {
         this.#profiler.startProfiling();
     }
 
-    async stop() {
+    async stop(outputDir: string) {
         if (!this.#profiler) {
             return;
         }
@@ -93,8 +93,8 @@ class Profiler {
             }),
         );
 
-        await mkdir(Package.project.resolve("build/profiles"), { recursive: true });
-        await writeFile(`build/profiles/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`, result);
+        await mkdir(outputDir, { recursive: true });
+        await writeFile(`${outputDir}/test-${new Date().toISOString().slice(0, 19)}.cpuprofile`, result);
 
         this.#profiler = undefined;
     }

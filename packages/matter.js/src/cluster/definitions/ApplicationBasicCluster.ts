@@ -48,7 +48,7 @@ export namespace ApplicationBasic {
     /**
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.3.4.2
      */
-    export const enum ApplicationStatus {
+    export enum ApplicationStatus {
         /**
          * Application is not running.
          */

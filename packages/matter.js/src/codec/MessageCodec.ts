@@ -46,7 +46,7 @@ export interface Message {
 
 const HEADER_VERSION = 0x00;
 
-export const enum SessionType {
+export enum SessionType {
     Group = 1,
     Unicast = 0,
 }

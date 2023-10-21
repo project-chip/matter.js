@@ -29,7 +29,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.4
      */
-    export const enum InterfaceType {
+    export enum InterfaceType {
         /**
          * Indicates an interface of an unspecified type.
          */
@@ -133,7 +133,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.5
      */
-    export const enum BootReason {
+    export enum BootReason {
         /**
          * The Node is unable to identify the Power-On reason as one of the other provided enumeration values.
          */
@@ -173,7 +173,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.1
      */
-    export const enum HardwareFault {
+    export enum HardwareFault {
         /**
          * The Node has encountered an unspecified fault.
          */
@@ -233,7 +233,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.2
      */
-    export const enum RadioFault {
+    export enum RadioFault {
         /**
          * The Node has encountered an unspecified radio fault.
          */
@@ -273,7 +273,7 @@ export namespace GeneralDiagnostics {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.11.4.3
      */
-    export const enum NetworkFault {
+    export enum NetworkFault {
         /**
          * The Node has encountered an unspecified fault.
          */
@@ -406,7 +406,7 @@ export namespace GeneralDiagnostics {
         bootReason: TlvField(0, TlvEnum<BootReason>())
     });
 
-    export const enum StatusCode {
+    export enum StatusCode {
         /**
          * Provided EnableKey does not match the previously configured value.
          *

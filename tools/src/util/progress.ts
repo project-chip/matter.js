@@ -14,6 +14,10 @@ const actualWrite = process.stdout.write;
 const FRONT = "\x1b[G";
 const CLEAR = "\x1b[K";
 
+function packageIdentity(pkg: Package) {
+    return `${colors.bold(pkg.json.name)}@${pkg.json.version}`;
+}
+
 export class Progress {
     status = Progress.Status.Startup;
     private start?: number;
@@ -21,9 +25,13 @@ export class Progress {
 
     constructor() {}
 
+    skip(why: string, pkg: Package) {
+        this.write(colors.dim(`Skip ${packageIdentity(pkg)}: ${why}\n\n`));
+    }
+
     startup(what: string, pkg: Package) {
         this.status = Progress.Status.Startup;
-        this.write(`${what} ${colors.bold(pkg.json.name)}@${pkg.json.version}\n`);
+        this.write(`${what} ${packageIdentity(pkg)}\n`);
     }
 
     update(text: string, extra?: string) {
@@ -52,8 +60,21 @@ export class Progress {
         delete this.start;
     }
 
+    info(label: string, value?: any) {
+        if (value) {
+            label = `${colors.dim(label)} ${value}`;
+        }
+        this.write(`${CLEAR}  ${colors.dim("‣")} ${label}\n`);
+    }
+
     shutdown() {
         stdout.write("\n");
+    }
+
+    async run(what: string, fn: () => Promise<void>) {
+        this.update(what);
+        await fn();
+        this.success(what);
     }
 
     protected write(text: string) {

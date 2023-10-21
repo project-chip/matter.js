@@ -36,7 +36,7 @@ export namespace AccessControl {
      *
      * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.2
      */
-    export const enum AccessControlEntryPrivilege {
+    export enum AccessControlEntryPrivilege {
         /**
          * Can read and observe all (except Access Control Cluster and as seen by a non-Proxy)
          */
@@ -78,7 +78,7 @@ export namespace AccessControl {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.3
      */
-    export const enum AccessControlEntryAuthMode {
+    export enum AccessControlEntryAuthMode {
         /**
          * Passcode authenticated session
          */
@@ -231,7 +231,7 @@ export namespace AccessControl {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 9.10.4.1
      */
-    export const enum ChangeType {
+    export enum ChangeType {
         /**
          * Entry or extension was changed
          */

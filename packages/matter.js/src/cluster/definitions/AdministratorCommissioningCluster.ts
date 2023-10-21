@@ -22,7 +22,7 @@ export namespace AdministratorCommissioning {
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.18.5.1
      */
-    export const enum CommissioningWindowStatus {
+    export enum CommissioningWindowStatus {
         /**
          * Commissioning window not open
          */
@@ -107,7 +107,7 @@ export namespace AdministratorCommissioning {
         salt: TlvField(4, TlvByteString.bound({ minLength: 16, maxLength: 32 }))
     });
 
-    export const enum StatusCode {
+    export enum StatusCode {
         /**
          * Could not be completed because another commissioning is in progress
          *
