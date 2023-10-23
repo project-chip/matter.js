@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export * from "./Array.js";
 export * from "./ByteArray.js";
 export * from "./Cache.js";
 export * from "./DataReader.js";
 export * from "./DataWriter.js";
 export * from "./DeepEqual.js";
 export * from "./Ip.js";
+export * from "./NamedHandler.js";
 export * from "./Number.js";
 export * from "./Promises.js";
 export * from "./Queue.js";
