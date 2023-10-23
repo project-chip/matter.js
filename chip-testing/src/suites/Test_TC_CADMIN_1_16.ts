@@ -15,10 +15,10 @@ export class Test_TC_CADMIN_1_16 extends MinimalOnOffDeviceTestInstance {
         super(overrideTestName ?? "Test_TC_CADMIN_1_16", "GeneralTestPicsFile.txt", storage);
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("Step 8b:")) {
             return "y\n";
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }

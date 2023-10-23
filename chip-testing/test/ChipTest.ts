@@ -1,5 +1,6 @@
 import { Network } from "@project-chip/matter.js/net";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
+import * as assert from "assert";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
 import { DeviceTestInstance } from "../src/DeviceTestInstance";
@@ -34,13 +35,13 @@ async function executeProcess(
             setImmediate(() => {
                 const string = data.toString();
                 // TODO: Optimize to make sure we always have complete lines ... so maybe we need to buffer
-                //       an uncomplete "last line" or such
+                //       an incomplete "last line" or such
                 const commandIndex = string.indexOf("@ChipTestRunner: Command: '");
                 if (commandIndex !== -1 && commandCallback !== undefined) {
                     const commandEndIndex = string.indexOf("'", commandIndex + 27);
                     const command = string.substring(commandIndex + 27, commandEndIndex);
                     const params = string.substring(commandEndIndex + 2, string.indexOf("\n", commandEndIndex)).trim();
-                    void commandCallback(command, params.split(",")); // Verify Params when we get some real
+                    commandCallback(command, params.split(",")).catch(error => console.log(error)); // Verify Params when we get some real
                 }
                 if (string.includes("TOO")) {
                     const lines = string.match(/^(.*[[:]TOO[\]:].*)$/gm);
@@ -52,9 +53,9 @@ async function executeProcess(
                                 lines[userPromptLineIndex - 1] ?? testResults[testResults.length - 1] ?? "";
                             const userPrompt = userPromptLine.substring(userPromptLine.indexOf("USER_PROMPT: ") + 13);
                             process.stdout.write(`====> Chip test Runner: Detected TH USER_PROMPT: ${userPrompt}\n`);
-                            userPromptCallback(userPrompt, userPromptPreviousLine)
+                            userPromptCallback(userPromptPreviousLine, userPrompt)
                                 .then(answer => proc.stdin?.write(answer)) // We acknowledge the TH reads as checked
-                                .catch(e => console.log(e));
+                                .catch(error => console.log(error));
                         }
                         testResults.push(...lines);
                     }
@@ -182,23 +183,27 @@ describe("Chip-Tool-Tests", () => {
             const storage = new StorageBackendMemory();
             const testInstance = new suite(storage) as DeviceTestInstance;
 
-            it(`"${suiteName}": Setup test instance`, async () => await testInstance.setup()).timeout(5000);
+            it(`"${suiteName}": Setup test instance`, async () =>
+                await assert.doesNotReject(async () => await testInstance.setup())).timeout(5000);
 
             it(`"${suiteName}": Start chip-tool and test instance for initial pairing`, async () =>
-                await pairWithChipTool(async () => await testInstance.start())).timeout(30000);
+                await assert.doesNotReject(
+                    async () => await pairWithChipTool(async () => await testInstance.start()),
+                )).timeout(30000);
 
             it(`"${suiteName}": Execute tests`, async () =>
-                await executeChipToolTest(
-                    testInstance.testName,
-                    testInstance.PICSConfig,
-                    (command, params) => testInstance.handleCommand(command, params),
-                    async (testDescription, userPrompt) => testInstance.handleUserprompt(testDescription, userPrompt),
+                await assert.doesNotReject(
+                    async () =>
+                        await executeChipToolTest(
+                            testInstance.testName,
+                            testInstance.PICSConfig,
+                            (command, params) => testInstance.handleCommand(command, params),
+                            async (testDescription, userPrompt) =>
+                                testInstance.handleUserprompt(testDescription, userPrompt),
+                        ),
                 )).timeout(suiteName in LongRunningTests ? 1200000 : 120000);
 
-            after(async () => {
-                await testInstance.stop();
-                //await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
-            });
+            after(async () => await assert.doesNotReject(async () => await testInstance.stop()));
         });
     }
 

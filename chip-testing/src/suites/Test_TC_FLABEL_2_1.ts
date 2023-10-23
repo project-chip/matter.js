@@ -17,7 +17,7 @@ export class Test_TC_FLABEL_2_1 extends Test_TC_FLABEL_1_1 {
         super(storage, "Test_TC_FLABEL_2_1");
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("TH reads LabelList from the DUT")) {
             const fixedLabelCluster = this.onOffDevice.getClusterServer(FixedLabel.Cluster);
             const labelList = fixedLabelCluster?.getLabelListAttribute();
@@ -31,6 +31,6 @@ export class Test_TC_FLABEL_2_1 extends Test_TC_FLABEL_1_1 {
             }
             return "n\n";
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }
