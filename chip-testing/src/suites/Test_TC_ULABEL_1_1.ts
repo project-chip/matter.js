@@ -48,10 +48,10 @@ export class Test_TC_ULABEL_1_1 extends DeviceTestInstance {
         return this.commissioningServer;
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("Read the global attribute")) {
             return "y\n";
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }

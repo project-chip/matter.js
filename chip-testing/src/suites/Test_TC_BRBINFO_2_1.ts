@@ -16,7 +16,7 @@ export class Test_TC_BRBINFO_2_1 extends Test_TC_BRBINFO_1_1 {
         super(storage, "Test_TC_BRBINFO_2_1");
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("Verify that VendorID matches the value assigned to this manufacturer")) {
             return "y\n";
         }
@@ -32,6 +32,6 @@ export class Test_TC_BRBINFO_2_1 extends Test_TC_BRBINFO_1_1 {
         if (testDescription.includes("Verify that it does not include the name of the vendor")) {
             return "y\n";
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }

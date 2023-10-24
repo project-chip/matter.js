@@ -70,13 +70,13 @@ export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
         return this.commissioningServer;
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("Read EventList attribute from the DUT")) {
             return "y\n";
         }
         if (testDescription.includes("TH1 reads")) {
             return "y\n";
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }

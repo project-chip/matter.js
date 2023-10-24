@@ -56,10 +56,10 @@ export class Test_TC_BINFO_1_1 extends DeviceTestInstance {
         return this.commissioningServer;
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("TH reads")) {
             return "y\n"; // We acknowledge the TH reads as checked
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }

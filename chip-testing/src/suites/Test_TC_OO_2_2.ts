@@ -15,7 +15,7 @@ export class Test_TC_OO_2_2 extends MinimalOnOffDeviceTestInstance {
         super("Test_TC_OO_2_2", "GeneralTestPicsFile.txt", storage);
     }
 
-    override async handleUserprompt(userPrompt: string, testDescription: string) {
+    override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("set OnOff attribute manually to on")) {
             if (this.onOffDevice !== undefined) {
                 this.onOffDevice.setOnOff(true);
@@ -31,6 +31,6 @@ export class Test_TC_OO_2_2 extends MinimalOnOffDeviceTestInstance {
                 return "n\n";
             }
         }
-        return super.handleUserprompt(userPrompt, testDescription);
+        return super.handleUserprompt(testDescription, userPrompt);
     }
 }
