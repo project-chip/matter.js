@@ -153,7 +153,7 @@ matter.js is used at the core of those two projects currently:
 
 ## Device types tested on various Ecosystems
 
-This list is a compilation of published information and own community tests. Many updates in the ecosystems happen without big announcements, so the information here can be a bit outdated and more device types are supported. If you find errors or added device types please open a PR or issue to report them. *Please note: This list is already, and can be out of date, re: supported device types and ecoystems.*
+This list is a compilation of published information and own community tests. Many updates in the ecosystems happen without big announcements, so the information here can be a bit outdated and more device types are supported. If you find errors or added device types please open a PR or issue to report them. *Please note: The content of this table is collected from various public sources, our own experiments, and community feedback which mean it might be outdated or not accurate.*
 
 Table Legend:
 
