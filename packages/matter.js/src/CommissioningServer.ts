@@ -65,6 +65,7 @@ import {
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
 import { QrCode } from "./schema/QrCodeSchema.js";
+import { PaseClient } from "./session/pase/PaseClient.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { ByteArray } from "./util/ByteArray.js";
@@ -118,10 +119,10 @@ export interface CommissioningServerOptions {
     nextEndpointId?: number;
 
     /** The passcode/pin of the device to use for initial commissioning. */
-    passcode: number;
+    passcode?: number;
 
     /** The Discriminator to use for initial commissioning. */
-    discriminator: number;
+    discriminator?: number;
 
     /** The Flow type of the Commissioning flow used in announcements. */
     flowType?: CommissionningFlowType;
@@ -225,18 +226,27 @@ export class CommissioningServer extends MatterNode {
      */
     constructor(private readonly options: CommissioningServerOptions) {
         super();
-        this.port = options.port;
-        if (FORBIDDEN_PASSCODES.includes(options.passcode)) {
-            throw new ImplementationError(`Passcode ${options.passcode} is not allowed.`);
+        const {
+            port,
+            passcode,
+            discriminator,
+            flowType,
+            nextEndpointId,
+            delayedAnnouncement,
+            basicInformation: { vendorId: vendorIdNumber, productId },
+            generalCommissioning,
+        } = options;
+        this.port = port;
+        if (passcode !== undefined && FORBIDDEN_PASSCODES.includes(passcode)) {
+            throw new ImplementationError(`Passcode ${passcode} is not allowed.`);
         }
-        this.passcode = options.passcode;
-        this.discriminator = options.discriminator;
-        this.flowType = options.flowType ?? CommissionningFlowType.Standard;
-        this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
-        this.delayedAnnouncement = options.delayedAnnouncement;
+        this.passcode = passcode ?? PaseClient.generateRandomPasscode();
+        this.discriminator = discriminator ?? PaseClient.generateRandomDiscriminator();
+        this.flowType = flowType ?? CommissionningFlowType.Standard;
+        this.nextEndpointId = EndpointNumber(nextEndpointId ?? 1);
+        this.delayedAnnouncement = delayedAnnouncement;
 
-        const vendorId = VendorId(options.basicInformation.vendorId);
-        const productId = options.basicInformation.productId;
+        const vendorId = VendorId(vendorIdNumber);
 
         // Set the required basicInformation and respect the provided values
         // TODO Get the defaults from the cluster meta details
@@ -251,8 +261,8 @@ export class CommissioningServer extends MatterNode {
                 softwareVersion: 1,
                 softwareVersionString: "v1",
                 capabilityMinima: {
-                    caseSessionsPerFabric: 3,
-                    subscriptionsPerFabric: 3,
+                    caseSessionsPerFabric: 3, // TODO get that limit from Sessionmanager or such or sync with it, add limit?
+                    subscriptionsPerFabric: 3, // TODO get that limit from Interactionserver? Respect it?
                 },
                 serialNumber: `node-matter-${Crypto.get().getRandomData(4).toHex()}`,
             },
@@ -281,7 +291,7 @@ export class CommissioningServer extends MatterNode {
         }
 
         // Use provided certificates for OperationalCredentialsCluster or generate own ones
-        let certificates = options.certificates;
+        let { certificates } = options;
         if (certificates == undefined) {
             const paa = new AttestationCertificateManager(vendorId);
             const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
@@ -317,22 +327,21 @@ export class CommissioningServer extends MatterNode {
             ClusterServer(
                 GeneralCommissioningCluster,
                 {
-                    breadcrumb: options.generalCommissioning?.breadcrumb ?? BigInt(0),
-                    basicCommissioningInfo: options.generalCommissioning?.basicCommissioningInfo ?? {
+                    breadcrumb: generalCommissioning?.breadcrumb ?? BigInt(0),
+                    basicCommissioningInfo: generalCommissioning?.basicCommissioningInfo ?? {
                         failSafeExpiryLengthSeconds: 60 /* 1min */,
                         maxCumulativeFailsafeSeconds: 900 /* Recommended according to Specs */,
                     },
                     regulatoryConfig:
-                        options.generalCommissioning?.regulatoryConfig ??
-                        GeneralCommissioning.RegulatoryLocationType.Outdoor, // Default is the most restrictive one
+                        generalCommissioning?.regulatoryConfig ?? GeneralCommissioning.RegulatoryLocationType.Outdoor, // Default is the most restrictive one
                     locationCapability:
-                        options.generalCommissioning?.locationCapability ??
+                        generalCommissioning?.locationCapability ??
                         GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
-                    supportsConcurrentConnection: options.generalCommissioning?.supportsConcurrentConnection ?? true,
+                    supportsConcurrentConnection: generalCommissioning?.supportsConcurrentConnection ?? true,
                 },
                 GeneralCommissioningClusterHandler({
-                    allowCountryCodeChange: options.generalCommissioning?.allowCountryCodeChange ?? true,
-                    countryCodeWhitelist: options.generalCommissioning?.countryCodeWhitelist ?? undefined,
+                    allowCountryCodeChange: generalCommissioning?.allowCountryCodeChange ?? true,
+                    countryCodeWhitelist: generalCommissioning?.countryCodeWhitelist ?? undefined,
                 }),
             ),
         );
