@@ -682,6 +682,33 @@ describe("Endpoint Structures", () => {
     });
 
     describe("Aggregator/Bridged Endpoint structures", () => {
+        it("Creating Structure with duplicate endpoint id throws error", () => {
+            const rootEndpoint = new RootEndpoint();
+            addRequiredRootClusters(rootEndpoint);
+
+            const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
+
+            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
+            onoffLightDevice.addClusterServer(
+                ClusterServer(
+                    BridgedDeviceBasicInformationCluster,
+                    {
+                        nodeLabel: "Socket 1",
+                        reachable: true,
+                    },
+                    {},
+                    {
+                        reachableChanged: true,
+                    },
+                ),
+            );
+
+            aggregator.addBridgedDevice(onoffLightDevice);
+            expect(() => aggregator.addBridgedDevice(onoffLightDevice)).throw(
+                `Endpoint with id 11 already exists as child from 1.`,
+            );
+        });
+
         it("Aggregator Structure with one Light endpoint and defined endpoint IDs", () => {
             const rootEndpoint = new RootEndpoint();
             addRequiredRootClusters(rootEndpoint);
