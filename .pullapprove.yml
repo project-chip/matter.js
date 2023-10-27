@@ -83,10 +83,8 @@ groups:
             required: 1
         reviewers:
             users:
-              - woody-apple
               - lauckhart
               - mfucci
-              - turon
               - Wes
             teams:
               - matter-js-reviewers
