@@ -60,7 +60,7 @@
         "v8-profiler-next": "^1.9.0"
     },
     "devDependencies": {
-        "@types/chai": "^4.3.6",
+        "@types/chai": "^4.3.9",
         "@types/chai-as-promised": "^7.1.6",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.1",
