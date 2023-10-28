@@ -566,7 +566,7 @@ export class PairedNode {
         const vendorId = await basicInformationCluster.getVendorIdAttribute();
         const productId = await basicInformationCluster.getProductIdAttribute();
 
-        const discriminator = Math.floor(Math.random() * 4095);
+        const discriminator = PaseClient.generateRandomDiscriminator();
         const passcode = PaseClient.generateRandomPasscode();
         const salt = Crypto.get().getRandomData(32);
         const iterations = 1_000; // Minimum 1_000, Maximum 100_000
