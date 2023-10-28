@@ -32,6 +32,10 @@ export class PaseClient {
         return passcode;
     }
 
+    static generateRandomDiscriminator() {
+        return Crypto.getRandomUInt16() % 4096;
+    }
+
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
         const random = Crypto.getRandom();
