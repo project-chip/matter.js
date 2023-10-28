@@ -254,6 +254,9 @@ export class Endpoint {
     }
 
     addChildEndpoint(endpoint: Endpoint): void {
+        if (endpoint.id !== undefined && this.getChildEndpoint(endpoint.id) !== undefined) {
+            throw new ImplementationError(`Endpoint with id ${endpoint.id} already exists as child from ${this.id}.`);
+        }
         this.childEndpoints.push(endpoint);
         endpoint.setStructureChangedCallback(this.structureChangedCallback);
         this.structureChangedCallback(); // Inform parent about structure change
