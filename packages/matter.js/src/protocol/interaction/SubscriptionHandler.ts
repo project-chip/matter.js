@@ -411,7 +411,7 @@ export class SubscriptionHandler {
                     // We could not send at all, consider session as dead
                     await this.session.destroy(false);
                 } else {
-                    await this.cancel();
+                    throw error;
                 }
             }
         }
