@@ -980,8 +980,8 @@ describe("Integration Test", () => {
             }>();
             callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
 
-            await MockTime.advance(2 * 1000);
-            basicInformationServer.setReachableAttribute(false);
+            await MockTime.advance(200);
+            commissioningServer.setReachability(false);
             await MockTime.advance(100);
             await MockTime.advance(1);
 
@@ -990,13 +990,13 @@ describe("Integration Test", () => {
                 value: {
                     eventNumber: 3,
                     priority: 1,
-                    epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
+                    epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
                         reachableNewValue: false,
                     },
                     path: undefined,
                 },
-                time: startTime + 2 * 1000 + 101,
+                time: startTime + 200 + 101,
             });
 
             // Await update Report on value change
@@ -1011,13 +1011,13 @@ describe("Integration Test", () => {
                 value: {
                     eventNumber: 3,
                     priority: 1,
-                    epochTimestamp: BigInt(startTime + 2 * 1000), // Triggered directly
+                    epochTimestamp: BigInt(startTime + 200), // Triggered directly
                     data: {
                         reachableNewValue: false,
                     },
                     path: undefined,
                 },
-                time: startTime + 2 * 1000 + 101,
+                time: startTime + 200 + 101,
             });
         });
     });
