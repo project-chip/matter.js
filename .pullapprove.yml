@@ -85,9 +85,7 @@ groups:
             users:
               - lauckhart
               - Apollon77
-              - Automator77
               - github-actions
-              - mfucci
               - Wes
             teams:
               - matter-js-reviewers
