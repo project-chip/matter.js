@@ -23,10 +23,10 @@ export function createEventClient<T>(
     present = false,
 ): EventClient<T> {
     if (event.unknown) {
-        return new UnknownPresentEventClient(event, name, endpointId, clusterId, interactionClient);
+        return new UnknownSupportedEventClient(event, name, endpointId, clusterId, interactionClient);
     }
     if (present) {
-        return new PresentEventClient(event, name, endpointId, clusterId, interactionClient);
+        return new SupportedEventClient(event, name, endpointId, clusterId, interactionClient);
     }
     return new EventClient(event, name, endpointId, clusterId, interactionClient);
 }
@@ -100,12 +100,12 @@ export class EventClient<T> {
 }
 
 /**
- * Special EventClient class to allow identifying events that are present because reported by the Devices.
+ * Special EventClient class to allow identifying events that are supported because reported by the Devices.
  */
-export class PresentEventClient<T> extends EventClient<T> {}
+export class SupportedEventClient<T> extends EventClient<T> {}
 
 /**
- * Special EventClient class to allow identifying events that are present because reported by the Devices,
+ * Special EventClient class to allow identifying events that are supported because reported by the Devices,
  * but the contained event is unknown.
  */
-export class UnknownPresentEventClient extends EventClient<any> {}
+export class UnknownSupportedEventClient extends EventClient<any> {}

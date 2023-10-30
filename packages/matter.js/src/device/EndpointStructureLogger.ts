@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PresentAttributeClient, UnknownPresentAttributeClient } from "../cluster/client/AttributeClient.js";
+import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cluster/client/AttributeClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { PresentEventClient, UnknownPresentEventClient } from "../cluster/client/EventClient.js";
+import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/client/EventClient.js";
 import { GlobalAttributes } from "../cluster/Cluster.js";
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
@@ -26,7 +26,7 @@ type EndpointLoggingOptions = {
     logChildEndpoints?: boolean;
     logClusterGlobalAttributes?: boolean;
     logClusterAttributes?: boolean;
-    logNotPresentClusterAttributes?: boolean;
+    logNotSupportedClusterAttributes?: boolean;
     logClusterCommands?: boolean;
     logClusterEvents?: boolean;
     logNotPresentClusterEvents?: boolean;
@@ -190,12 +190,12 @@ function logClusterClient(
                     if (attributeName in globalAttributes) continue;
                     const attribute = clusterClient.attributes[attributeName];
                     if (attribute === undefined) continue;
-                    const present = attribute instanceof PresentAttributeClient;
-                    if (!present && options.logNotPresentClusterAttributes === true) continue;
-                    const unknown = attribute instanceof UnknownPresentAttributeClient;
+                    const supported = attribute instanceof SupportedAttributeClient;
+                    if (!supported && options.logNotSupportedClusterAttributes === false) continue;
+                    const unknown = attribute instanceof UnknownSupportedAttributeClient;
 
                     let info = "";
-                    if (!present) info += " (Not Present)";
+                    if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
                     logger.info(`"${attribute.name}" (${toHexString(attribute.id)})${info}`);
@@ -220,12 +220,12 @@ function logClusterClient(
                 for (const eventName in clusterClient.events) {
                     const event = clusterClient.events[eventName];
                     if (event === undefined) continue;
-                    const present = event instanceof PresentEventClient;
-                    if (!present && options.logNotPresentClusterEvents === true) continue;
-                    const unknown = event instanceof UnknownPresentEventClient;
+                    const supported = event instanceof SupportedEventClient;
+                    if (!supported && options.logNotSupportedClusterEvents === false) continue;
+                    const unknown = event instanceof UnknownSupportedEventClient;
 
                     let info = "";
-                    if (!present) info += " (Not Present)";
+                    if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
                     logger.info(`"${event.name}" (${toHexString(event.id)})${info}`);

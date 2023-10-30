@@ -27,10 +27,10 @@ export function createAttributeClient<T>(
     present = false,
 ): AttributeClient<T> {
     if (attribute.unknown) {
-        return new UnknownPresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
+        return new UnknownSupportedAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
     if (present) {
-        return new PresentAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
+        return new SupportedAttributeClient(attribute, name, endpointId, clusterId, interactionClient);
     }
     return new AttributeClient(attribute, name, endpointId, clusterId, interactionClient);
 }
@@ -177,12 +177,12 @@ export class AttributeClient<T> {
 }
 
 /**
- * Special AttributeClient class to allow identifying attributes that are present because reported by the Devices.
+ * Special AttributeClient class to allow identifying attributes that are supported because reported by the Devices.
  */
-export class PresentAttributeClient<T> extends AttributeClient<T> {}
+export class SupportedAttributeClient<T> extends AttributeClient<T> {}
 
 /**
- * Special AttributeClient class to allow identifying attributes that are present because reported by the Devices,
+ * Special AttributeClient class to allow identifying attributes that are supported because reported by the Devices,
  * but the contained attribute is unknown.
  */
-export class UnknownPresentAttributeClient extends PresentAttributeClient<any> {}
+export class UnknownSupportedAttributeClient extends SupportedAttributeClient<any> {}
