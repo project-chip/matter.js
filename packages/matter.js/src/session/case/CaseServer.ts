@@ -208,4 +208,8 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             server.saveResumptionRecord(resumptionRecord);
         }
     }
+
+    async close() {
+        // Nothing to do
+    }
 }

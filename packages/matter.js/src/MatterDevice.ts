@@ -108,6 +108,10 @@ export class MatterDevice {
         return this;
     }
 
+    hasProtocolHandler(protocolId: number) {
+        return this.exchangeManager.hasProtocolHandler(protocolId);
+    }
+
     addProtocolHandler(protocol: ProtocolHandler<MatterDevice>) {
         this.exchangeManager.addProtocolHandler(protocol);
         return this;

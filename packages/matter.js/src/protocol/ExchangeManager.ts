@@ -6,7 +6,7 @@
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
-import { MatterFlowError, NotImplementedError } from "../common/MatterError.js";
+import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
@@ -67,7 +67,18 @@ export class ExchangeManager<ContextT> {
         );
     }
 
+    hasProtocolHandler(protocolId: number) {
+        return this.protocols.has(protocolId);
+    }
+
+    getProtocolHandler(protocolId: number) {
+        return this.protocols.get(protocolId);
+    }
+
     addProtocolHandler(protocol: ProtocolHandler<ContextT>) {
+        if (this.hasProtocolHandler(protocol.getId())) {
+            throw new ImplementationError(`Handler for protocol ${protocol.getId()} already registered.`);
+        }
         this.protocols.set(protocol.getId(), protocol);
     }
 
@@ -87,6 +98,9 @@ export class ExchangeManager<ContextT> {
     }
 
     async close() {
+        for (const protocol of this.protocols.values()) {
+            await protocol.close();
+        }
         for (const netListener of this.transportListeners) {
             await netListener.close();
         }
@@ -160,6 +174,14 @@ export class ExchangeProvider {
         private channel: MessageChannel<MatterController>,
         private readonly reconnectChannelFunc?: () => Promise<MessageChannel<MatterController>>,
     ) {}
+
+    hasProtocolHandler(protocolId: number) {
+        return this.exchangeManager.hasProtocolHandler(protocolId);
+    }
+
+    getProtocolHandler(protocolId: number) {
+        return this.exchangeManager.getProtocolHandler(protocolId);
+    }
 
     addProtocolHandler(handler: ProtocolHandler<MatterController>) {
         this.exchangeManager.addProtocolHandler(handler);

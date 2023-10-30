@@ -61,13 +61,30 @@ export interface AttributeStatus {
 }
 
 export class SubscriptionClient implements ProtocolHandler<MatterController> {
-    constructor(
-        private readonly subscriptionListeners: Map<number, (dataReport: DataReport) => void>,
-        private readonly subscriptionUpdateTimers = new Map<number, Timer>(),
-    ) {}
+    private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
+    private readonly subscriptionUpdateTimers = new Map<number, Timer>();
+
+    constructor() {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
+    }
+
+    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => void) {
+        this.subscriptionListeners.set(subscriptionId, listener);
+    }
+
+    removeSubscriptionListener(subscriptionId: number) {
+        this.subscriptionListeners.delete(subscriptionId);
+    }
+
+    registerSubscriptionUpdateTimer(subscriptionId: number, timer: Timer) {
+        this.subscriptionUpdateTimers.set(subscriptionId, timer);
+    }
+
+    removeSubscriptionUpdateTimer(subscriptionId: number) {
+        this.subscriptionUpdateTimers.get(subscriptionId)?.stop();
+        this.subscriptionUpdateTimers.delete(subscriptionId);
     }
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
@@ -84,9 +101,8 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
             await messenger.sendStatus(StatusCode.InvalidSubscription);
             logger.info(`Received data for unknown subscription ID ${subscriptionId}. Cancel this subscription.`);
             if (timer !== undefined) {
-                // Should not happen but let's make sure to cleanup
-                timer.stop();
-                this.subscriptionUpdateTimers.delete(subscriptionId);
+                // Should not happen but let's make sure to clean up
+                this.removeSubscriptionUpdateTimer(subscriptionId);
             }
             await messenger.close();
             return;
@@ -99,23 +115,48 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         }
         listener(dataReport);
     }
+
+    async close() {
+        this.subscriptionListeners.clear();
+        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
+        this.subscriptionUpdateTimers.clear();
+    }
 }
 
 export class InteractionClient {
-    private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
-    private readonly subscriptionUpdateTimers = new Map<number, Timer>();
     // TODO Add storage for these data to be able to optimize follow up subscriptions by only request updated data
     private readonly subscribedLocalValues = new Map<string, any>();
     private readonly subscribedClusterDataVersions = new Map<string, number>();
+    private readonly ownSubscriptionIds = new Set<number>();
+    private readonly subscriptionClient: SubscriptionClient;
 
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
         readonly nodeId: NodeId,
     ) {
-        // TODO: Right now we potentially add multiple handlers for the same protocol, We need to fix this
-        this.exchangeProvider.addProtocolHandler(
-            new SubscriptionClient(this.subscriptionListeners, this.subscriptionUpdateTimers),
-        );
+        if (this.exchangeProvider.hasProtocolHandler(INTERACTION_PROTOCOL_ID)) {
+            const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
+            if (!(client instanceof SubscriptionClient)) {
+                throw new ImplementationError(
+                    `Already existing protocol handler ${INTERACTION_PROTOCOL_ID} is not a SubscriptionClient.`,
+                );
+            }
+            this.subscriptionClient = client;
+        } else {
+            this.subscriptionClient = new SubscriptionClient();
+            this.exchangeProvider.addProtocolHandler(this.subscriptionClient);
+        }
+    }
+
+    registerSubscriptionListener(subscriptionId: number, listener: (dataReport: DataReport) => void) {
+        this.ownSubscriptionIds.add(subscriptionId);
+        this.subscriptionClient.registerSubscriptionListener(subscriptionId, listener);
+    }
+
+    removeSubscription(subscriptionId: number) {
+        this.ownSubscriptionIds.delete(subscriptionId);
+        this.subscriptionClient.removeSubscriptionListener(subscriptionId);
+        this.subscriptionClient.removeSubscriptionUpdateTimer(subscriptionId);
     }
 
     async getAllAttributes(
@@ -530,7 +571,7 @@ export class InteractionClient {
                 this.subscribedClusterDataVersions.set(clusterPathToId({ endpointId, clusterId }), version);
                 listener?.(value, version);
             };
-            this.subscriptionListeners.set(subscriptionId, subscriptionListener);
+            this.registerSubscriptionListener(subscriptionId, subscriptionListener);
             if (updateTimeoutHandler !== undefined) {
                 this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
             }
@@ -601,7 +642,7 @@ export class InteractionClient {
 
                 events.forEach(event => listener?.(event));
             };
-            this.subscriptionListeners.set(subscriptionId, subscriptionListener);
+            this.registerSubscriptionListener(subscriptionId, subscriptionListener);
             if (updateTimeoutHandler !== undefined) {
                 this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
             }
@@ -717,10 +758,6 @@ export class InteractionClient {
                 `Subscription successfully initialized with ID ${subscriptionId} and maxInterval ${maxInterval}s.`,
             );
 
-            if (updateTimeoutHandler !== undefined) {
-                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
-            }
-
             const subscriptionListener = (dataReport: {
                 attributeReports?: DecodedAttributeReportValue<any>[];
                 eventReports?: DecodedEventReportValue<any>[];
@@ -767,7 +804,7 @@ export class InteractionClient {
                     });
                 }
             };
-            this.subscriptionListeners.set(subscriptionId, dataReport => {
+            this.registerSubscriptionListener(subscriptionId, dataReport => {
                 subscriptionListener({
                     attributeReports:
                         dataReport.attributeReports !== undefined
@@ -779,6 +816,10 @@ export class InteractionClient {
                             : undefined,
                 });
             });
+
+            if (updateTimeoutHandler !== undefined) {
+                this.registerSubscriptionUpdateTimer(subscriptionId, maxInterval, updateTimeoutHandler);
+            }
 
             const seedReport = {
                 attributeReports:
@@ -961,23 +1002,27 @@ export class InteractionClient {
         maxInterval: number,
         updateTimeoutHandler: TimerCallback,
     ) {
+        if (!this.ownSubscriptionIds.has(subscriptionId)) {
+            throw new MatterFlowError(
+                `Cannot register update timer for subscription ${subscriptionId} because it is not owned by this client.`,
+            );
+        }
         maxInterval += 5; // Add 5 seconds to the maxInterval to allow at least one full resubmission cycle before assuming the subscription is lost
         const timer = Time.getTimer(maxInterval * 1000, () => {
             logger.info(`Subscription ${subscriptionId} timed out ...`);
-            this.subscriptionUpdateTimers.delete(subscriptionId);
-            this.subscriptionListeners.delete(subscriptionId);
+            this.removeSubscription(subscriptionId);
             // We remove all data because we don't know which data is still valid, so we better read from remote if needed
             this.subscribedLocalValues.clear();
             this.subscribedClusterDataVersions.clear();
             updateTimeoutHandler();
         }).start();
-        this.subscriptionUpdateTimers.set(subscriptionId, timer);
+        this.subscriptionClient.registerSubscriptionUpdateTimer(subscriptionId, timer);
     }
 
     close() {
-        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
-        this.subscriptionUpdateTimers.clear();
-        this.subscriptionListeners.clear();
+        for (const subscriptionId of this.ownSubscriptionIds) {
+            this.removeSubscription(subscriptionId);
+        }
         this.subscribedLocalValues.clear();
         this.subscribedClusterDataVersions.clear();
     }

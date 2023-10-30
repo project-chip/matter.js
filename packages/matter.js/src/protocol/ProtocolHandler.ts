@@ -10,4 +10,5 @@ import { MessageExchange } from "./MessageExchange.js";
 export interface ProtocolHandler<ContextT> {
     getId(): number;
     onNewExchange(exchange: MessageExchange<ContextT>, message: Message): Promise<void>;
+    close(): Promise<void>;
 }
