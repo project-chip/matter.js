@@ -830,7 +830,7 @@ export class CommissioningServer extends MatterNode {
     }
 
     /**
-     * close network connections of the device
+     * Close network connections of the device and stop responding to requests
      */
     async close() {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
@@ -840,18 +840,23 @@ export class CommissioningServer extends MatterNode {
         this.deviceInstance = undefined;
     }
 
-    resetStorage() {
-        if (this.interactionServer !== undefined || this.deviceInstance !== undefined) {
-            throw new ImplementationError(
-                "Storage can not be reset after while the device is operating! Please close the server first.",
-            );
-        }
+    async factoryReset() {
         if (this.storage === undefined) {
             throw new ImplementationError(
                 "Storage not initialized. The instance was not added to a Matter instance yet.",
             );
         }
+        const wasStarted = this.interactionServer !== undefined || this.deviceInstance !== undefined;
+        if (wasStarted) {
+            await this.close();
+        }
+
         this.storage.clear();
+
+        if (wasStarted) {
+            await this.advertise();
+        }
+        logger.info(`The device was factory reset${wasStarted ? " and restarted" : ""}.`);
     }
 
     /**

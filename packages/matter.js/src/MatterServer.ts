@@ -125,7 +125,7 @@ export class MatterServer {
 
         if (destroyStorage) {
             // Destroy storage
-            commissioningServer.resetStorage();
+            await commissioningServer.factoryReset();
         }
     }
 
