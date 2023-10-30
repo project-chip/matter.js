@@ -6,7 +6,7 @@
 
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
-import { MatterFlowError, NotImplementedError } from "../common/MatterError.js";
+import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
