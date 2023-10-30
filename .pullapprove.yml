@@ -80,7 +80,7 @@ groups:
     required-review:
         type: required
         reviews:
-            required: 1
+            required: 10
         reviewers:
             users:
               - lauckhart
