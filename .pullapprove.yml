@@ -55,6 +55,13 @@ overrides:
       status: success
       explanation: "PR has been fast tracked, bypassing reviews"
 
+    ############################################################
+    #  Automatic PRs for Releases
+    ############################################################
+    - if: "'automated pr' in labels"
+      status: success
+      explanation: "Automatic PR for Releases, bypassing reviews"
+
 ############################################################
 #  Notifications
 ############################################################
@@ -85,9 +92,6 @@ groups:
             users:
               - lauckhart
               - Apollon77
-              - Automator77
-              - github-actions
-              - mfucci
               - Wes
             teams:
               - matter-js-reviewers
