@@ -118,4 +118,8 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
     static isStandaloneAck(protocolId: number, messageType: number) {
         return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === MessageType.StandaloneAck;
     }
+
+    async close() {
+        // Nothing to do
+    }
 }

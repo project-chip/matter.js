@@ -98,6 +98,9 @@ export class ExchangeManager<ContextT> {
     }
 
     async close() {
+        for (const protocol of this.protocols.values()) {
+            await protocol.close();
+        }
         for (const netListener of this.transportListeners) {
             await netListener.close();
         }

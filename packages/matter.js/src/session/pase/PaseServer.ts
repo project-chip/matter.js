@@ -155,4 +155,8 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         }
         await messenger.close();
     }
+
+    async close() {
+        // Nothing to do
+    }
 }

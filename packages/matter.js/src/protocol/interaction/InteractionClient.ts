@@ -115,6 +115,12 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
         }
         listener(dataReport);
     }
+
+    async close() {
+        this.subscriptionListeners.clear();
+        this.subscriptionUpdateTimers.forEach(timer => timer.stop());
+        this.subscriptionUpdateTimers.clear();
+    }
 }
 
 export class InteractionClient {
