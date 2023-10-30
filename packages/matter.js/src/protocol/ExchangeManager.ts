@@ -67,7 +67,18 @@ export class ExchangeManager<ContextT> {
         );
     }
 
+    hasProtocolHandler(protocolId: number) {
+        return this.protocols.has(protocolId);
+    }
+
+    getProtocolHandler(protocolId: number) {
+        return this.protocols.get(protocolId);
+    }
+
     addProtocolHandler(protocol: ProtocolHandler<ContextT>) {
+        if (this.hasProtocolHandler(protocol.getId())) {
+            throw new ImplementationError(`Handler for protocol ${protocol.getId()} already registered.`);
+        }
         this.protocols.set(protocol.getId(), protocol);
     }
 
@@ -160,6 +171,14 @@ export class ExchangeProvider {
         private channel: MessageChannel<MatterController>,
         private readonly reconnectChannelFunc?: () => Promise<MessageChannel<MatterController>>,
     ) {}
+
+    hasProtocolHandler(protocolId: number) {
+        return this.exchangeManager.hasProtocolHandler(protocolId);
+    }
+
+    getProtocolHandler(protocolId: number) {
+        return this.exchangeManager.getProtocolHandler(protocolId);
+    }
 
     addProtocolHandler(handler: ProtocolHandler<MatterController>) {
         this.exchangeManager.addProtocolHandler(handler);
