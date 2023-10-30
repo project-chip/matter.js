@@ -39,7 +39,7 @@
         "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231025-f15e295",
         "@types/bn.js": "^5.1.2",
         "@types/chai": "^4.3.9",
-        "@types/elliptic": "^6.4.15",
+        "@types/elliptic": "^6.4.16",
         "@types/mocha": "^10.0.2",
         "chai": "^4.3.10",
         "mocha": "^10.2.0",
