@@ -138,7 +138,7 @@ export class InteractionClient {
             const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
             if (!(client instanceof SubscriptionClient)) {
                 throw new ImplementationError(
-                    `Unexpected protocol handler ${INTERACTION_PROTOCOL_ID} for InteractionClient already registered`,
+                    `Already existing protocol handler ${INTERACTION_PROTOCOL_ID} is not a SubscriptionClient.`,
                 );
             }
             this.subscriptionClient = client;
