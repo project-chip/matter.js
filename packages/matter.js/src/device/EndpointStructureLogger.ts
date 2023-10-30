@@ -17,10 +17,10 @@ import { toHexString } from "../util/Number.js";
 const logger = Logger.get("EndpointStructureLogger");
 
 /**
- * Options for logging endpoint structure. The default is that anything is logged beside "Non present" attributes and
+ * Options for logging endpoint structure. The default is that anything is logged beside "Non Supported" attributes and
  * events on ClusterClients. The Filter methods can be used to filter out specific endpoints or clusters if wanted.
  */
-type EndpointLoggingOptions = {
+export type EndpointLoggingOptions = {
     logClusterServers?: boolean;
     logClusterClients?: boolean;
     logChildEndpoints?: boolean;
@@ -29,7 +29,8 @@ type EndpointLoggingOptions = {
     logNotSupportedClusterAttributes?: boolean;
     logClusterCommands?: boolean;
     logClusterEvents?: boolean;
-    logNotPresentClusterEvents?: boolean;
+    logNotSupportedClusterEvents?: boolean;
+    logNotSupportedClusterCommands?: boolean;
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
@@ -38,13 +39,7 @@ type EndpointLoggingOptions = {
     endpointFilter?: (endpoint: Endpoint) => boolean;
 };
 
-function getAttributeServerValue(
-    attribute: AnyAttributeServer<any>,
-    options: EndpointLoggingOptions = {
-        logNotPresentClusterAttributes: false,
-        logNotPresentClusterEvents: false,
-    },
-) {
+function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: EndpointLoggingOptions = {}) {
     let value = "";
     try {
         const attributeValue = attribute.getLocal();
@@ -208,7 +203,9 @@ function logClusterClient(
             logger.info("Commands:");
             Logger.nest(() => {
                 for (const commandName in clusterClient.commands) {
-                    logger.info(`"${commandName}"`);
+                    const supported = clusterClient.isCommandSupportedByName(commandName);
+                    if (!supported && options.logNotSupportedClusterCommands === false) continue;
+                    logger.info(`"${commandName}"${supported ? "" : " (Not Supported)"}`);
                 }
             });
         });
@@ -235,7 +232,14 @@ function logClusterClient(
     }
 }
 
-export function logEndpoint(endpoint: Endpoint, options: EndpointLoggingOptions = {}) {
+export function logEndpoint(
+    endpoint: Endpoint,
+    options: EndpointLoggingOptions = {
+        logNotSupportedClusterAttributes: false,
+        logNotSupportedClusterEvents: false,
+        logNotSupportedClusterCommands: false,
+    },
+) {
     if (options.endpointFilter !== undefined && !options.endpointFilter(endpoint)) return;
 
     logger.info(`Endpoint ${endpoint.id} (${endpoint.name}):`);
@@ -264,7 +268,7 @@ export function logEndpoint(endpoint: Endpoint, options: EndpointLoggingOptions 
             logger.info("Child-Endpoints:");
             Logger.nest(() => {
                 for (const childEndpoint of endpoint.getChildEndpoints()) {
-                    logEndpoint(childEndpoint);
+                    logEndpoint(childEndpoint, options);
                 }
             });
         });
