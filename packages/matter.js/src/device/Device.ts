@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
+import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClientTypes.js";
 import { Binding } from "../cluster/definitions/BindingCluster.js";
+import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
@@ -284,5 +285,21 @@ export class Device extends Endpoint {
                 this.addClusterClient(clusterClient);
             }
         }
+    }
+
+    /**
+     * Set the reachability of the device exposed via the bridge. If this is a device inside  a composed device the
+     * reachability needs to be set there.
+     *
+     * @param reachable true if reachable, false otherwise
+     */
+    setBridgedDeviceReachability(reachable: boolean) {
+        const bridgedBasicInformationCluster = this.getClusterServer(BridgedDeviceBasicInformationCluster);
+        if (bridgedBasicInformationCluster === undefined) {
+            throw new ImplementationError(
+                "The reachability flag can only be set for bridged devices this way. To set the reachability flag for a non-bridged device or for the bridget itself please set it on the CommissioningServer!",
+            );
+        }
+        bridgedBasicInformationCluster.setReachableAttribute(reachable);
     }
 }

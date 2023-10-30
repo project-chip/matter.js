@@ -880,6 +880,23 @@ export class CommissioningServer extends MatterNode {
         this.commandHandler.removeHandler(command, handler);
     }
 
+    /**
+     * Set the reachability of the commissioning server aka "the main matter device". This call only has effect when
+     * the reachability flag was set in the BasicInformationCluster or in the BasicInformation data in the constructor!
+     *
+     * @param reachable true if reachable, false otherwise
+     */
+    setReachability(reachable: boolean) {
+        const basicInformationCluster = this.getRootClusterServer(BasicInformationCluster);
+        if (basicInformationCluster === undefined) {
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
+        }
+        if (basicInformationCluster.attributes.reachable !== undefined) {
+            basicInformationCluster.setReachableAttribute(reachable);
+        }
+    }
+
+    /** Starts the Matter device and advertises it. */
     async start() {
         if (this.delayedAnnouncement !== true) {
             return this.advertise();
