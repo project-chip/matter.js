@@ -5,7 +5,10 @@
  */
 
 import { Message } from "../../codec/MessageCodec.js";
+import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
+import { CommandId } from "../../datatype/CommandId.js";
+import { EventId } from "../../datatype/EventId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MatterDevice } from "../../MatterDevice.js";
@@ -288,6 +291,24 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
      * @readonly
      */
     readonly attributes: AttributeServers<A>;
+
+    /** Returns if a given Attribute Id is defined and supported by this cluster server. */
+    isAttributeSupported: (attributeId: AttributeId) => boolean;
+
+    /** Returns if a given Attribute for provided name is defined and supported by this cluster server. */
+    isAttributeSupportedByName: (attributeName: string) => boolean;
+
+    /** Returns if a given Event is defined and supported by this cluster server. */
+    isEventSupported: (eventId: EventId) => boolean;
+
+    /** Returns if a given Event for provided name is defined and supported by this cluster server. */
+    isEventSupportedByName: (eventName: string) => boolean;
+
+    /** Returns if a given Command is defined and supported by this cluster server. */
+    isCommandSupported: (commandId: CommandId) => boolean;
+
+    /** Returns if a given Command for provided name is defined and supported by this cluster server. */
+    isCommandSupportedByName: (commandName: string) => boolean;
 } & ServerAttributeGetters<A> &
     ServerAttributeSetters<A> &
     ServerAttributeSubscribers<A> &

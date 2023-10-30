@@ -52,7 +52,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             endpointId,
             clusterId,
             interactionClient,
-            globalAttributeValues?.attributeList ? globalAttributeValues?.attributeList.includes(attribute.id) : false,
+            !!globalAttributeValues?.attributeList?.includes(attribute.id),
         );
         attributeToId[attribute.id] = attributeName;
         const capitalizedAttributeName = capitalize(attributeName);
@@ -103,7 +103,7 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             endpointId,
             clusterId,
             interactionClient,
-            globalAttributeValues?.eventList ? globalAttributeValues?.eventList.includes(event.id) : false,
+            !!globalAttributeValues?.eventList?.includes(event.id),
         );
         eventToId[event.id] = eventName;
         const capitalizedEventName = capitalize(eventName);
@@ -245,6 +245,42 @@ export function ClusterClient<F extends BitSchema, A extends Attributes, C exten
             } else {
                 logger.warn("Event not found", eventName, "in list", Object.keys(events));
             }
+        },
+
+        isAttributeSupported: (attributeId: AttributeId) => {
+            return !!globalAttributeValues?.attributeList?.includes(attributeId);
+        },
+
+        isAttributeSupportedByName: (attributeName: string) => {
+            const attribute = (attributes as any)[attributeName];
+            if (attribute === undefined) {
+                return false;
+            }
+            return !!globalAttributeValues?.attributeList?.includes(attribute.id);
+        },
+
+        isEventSupported: (eventId: EventId) => {
+            return !!globalAttributeValues?.eventList?.includes(eventId);
+        },
+
+        isEventSupportedByName: (eventName: string) => {
+            const event = (events as any)[eventName];
+            if (event === undefined) {
+                return false;
+            }
+            return !!globalAttributeValues?.eventList?.includes(event.id);
+        },
+
+        isCommandSupported: (commandId: CommandId) => {
+            return !!globalAttributeValues?.acceptedCommandList?.includes(commandId);
+        },
+
+        isCommandSupportedByName: (commandName: string) => {
+            const command = commandDef[commandName];
+            if (command === undefined) {
+                return false;
+            }
+            return !!globalAttributeValues?.acceptedCommandList?.includes(command.requestId);
         },
     };
 

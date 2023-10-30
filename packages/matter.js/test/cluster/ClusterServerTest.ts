@@ -92,7 +92,7 @@ describe("ClusterServer structure", () => {
             expect(basic2.subscribeSoftwareVersionAttribute).undefined;
         });
 
-        it("Normal Attribute has set and get", async () => {
+        it("Normal Attribute have set and get", async () => {
             const basic = ClusterServer(
                 BasicInformationCluster,
                 {
@@ -749,6 +749,71 @@ describe("ClusterServer structure", () => {
                         'xxxx-xx-xx xx:xx:xx.xxx WARN ClusterServer Command "WindowCovering/goToLiftPercentage" is REQUIRED by supportedFeatures: {"lift":true,"positionAwareLift":true} but is not set!',
                 },
             ]);
+        });
+    });
+
+    describe("check supported methods on server", () => {
+        it("attributes and events returned correctly", async () => {
+            const basic = ClusterServer(
+                BasicInformationCluster,
+                {
+                    dataModelRevision: 1,
+                    vendorName: "test",
+                    vendorId: VendorId(0),
+                    productName: "test",
+                    productId: 1,
+                    nodeLabel: "",
+                    location: "DE",
+                    hardwareVersion: 1,
+                    hardwareVersionString: "1",
+                    softwareVersion: 1,
+                    softwareVersionString: "1",
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                },
+                {},
+                {
+                    startUp: true,
+                },
+            );
+
+            expect(basic.isAttributeSupported(BasicInformationCluster.attributes.vendorName.id)).equal(true);
+            expect(basic.isAttributeSupportedByName("vendorName")).equal(true);
+            expect(basic.isAttributeSupported(BasicInformationCluster.attributes.softwareVersionString.id)).equal(true);
+            expect(basic.isAttributeSupportedByName("softwareVersionString")).equal(true);
+            expect(basic.isAttributeSupported(BasicInformationCluster.attributes.reachable.id)).equal(false);
+            expect(basic.isAttributeSupportedByName("reachable")).equal(false);
+
+            expect(basic.isEventSupported(BasicInformationCluster.events.startUp.id)).equal(true);
+            expect(basic.isEventSupportedByName("startUp")).equal(true);
+            expect(basic.isEventSupported(BasicInformationCluster.events.reachableChanged.id)).equal(false);
+            expect(basic.isEventSupportedByName("reachableChanged")).equal(false);
+        });
+
+        it("Commands returned correctly", async () => {
+            const identifyServer = ClusterServer(
+                IdentifyCluster,
+                {
+                    identifyTime: 100,
+                    identifyType: Identify.IdentifyType.None,
+                },
+                {
+                    identify: async () => {
+                        /* dummy */
+                    },
+                },
+            );
+
+            expect(identifyServer.isAttributeSupported(IdentifyCluster.attributes.identifyTime.id)).equal(true);
+            expect(identifyServer.isAttributeSupportedByName("identifyType")).equal(true);
+            expect(identifyServer.isAttributeSupported(IdentifyCluster.attributes.identifyType.id)).equal(true);
+            expect(identifyServer.isAttributeSupportedByName("identifyTime")).equal(true);
+            expect(identifyServer.isCommandSupported(IdentifyCluster.commands.identify.requestId)).equal(true);
+            expect(identifyServer.isCommandSupportedByName("identify")).equal(true);
+            expect(identifyServer.isCommandSupported(Identify.Complete.commands.identifyQuery.requestId)).equal(false);
+            expect(identifyServer.isCommandSupportedByName("identifyQuery")).equal(false);
         });
     });
 });

@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { PresentAttributeClient, UnknownPresentAttributeClient } from "../cluster/client/AttributeClient.js";
+import { SupportedAttributeClient, UnknownSupportedAttributeClient } from "../cluster/client/AttributeClient.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { PresentEventClient, UnknownPresentEventClient } from "../cluster/client/EventClient.js";
+import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/client/EventClient.js";
 import { GlobalAttributes } from "../cluster/Cluster.js";
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
@@ -17,19 +17,20 @@ import { toHexString } from "../util/Number.js";
 const logger = Logger.get("EndpointStructureLogger");
 
 /**
- * Options for logging endpoint structure. The default is that anything is logged beside "Non present" attributes and
+ * Options for logging endpoint structure. The default is that anything is logged beside "Non Supported" attributes and
  * events on ClusterClients. The Filter methods can be used to filter out specific endpoints or clusters if wanted.
  */
-type EndpointLoggingOptions = {
+export type EndpointLoggingOptions = {
     logClusterServers?: boolean;
     logClusterClients?: boolean;
     logChildEndpoints?: boolean;
     logClusterGlobalAttributes?: boolean;
     logClusterAttributes?: boolean;
-    logNotPresentClusterAttributes?: boolean;
+    logNotSupportedClusterAttributes?: boolean;
     logClusterCommands?: boolean;
     logClusterEvents?: boolean;
-    logNotPresentClusterEvents?: boolean;
+    logNotSupportedClusterEvents?: boolean;
+    logNotSupportedClusterCommands?: boolean;
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
@@ -38,13 +39,7 @@ type EndpointLoggingOptions = {
     endpointFilter?: (endpoint: Endpoint) => boolean;
 };
 
-function getAttributeServerValue(
-    attribute: AnyAttributeServer<any>,
-    options: EndpointLoggingOptions = {
-        logNotPresentClusterAttributes: false,
-        logNotPresentClusterEvents: false,
-    },
-) {
+function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: EndpointLoggingOptions = {}) {
     let value = "";
     try {
         const attributeValue = attribute.getLocal();
@@ -190,12 +185,12 @@ function logClusterClient(
                     if (attributeName in globalAttributes) continue;
                     const attribute = clusterClient.attributes[attributeName];
                     if (attribute === undefined) continue;
-                    const present = attribute instanceof PresentAttributeClient;
-                    if (!present && options.logNotPresentClusterAttributes === true) continue;
-                    const unknown = attribute instanceof UnknownPresentAttributeClient;
+                    const supported = attribute instanceof SupportedAttributeClient;
+                    if (!supported && options.logNotSupportedClusterAttributes === false) continue;
+                    const unknown = attribute instanceof UnknownSupportedAttributeClient;
 
                     let info = "";
-                    if (!present) info += " (Not Present)";
+                    if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
                     logger.info(`"${attribute.name}" (${toHexString(attribute.id)})${info}`);
@@ -208,7 +203,9 @@ function logClusterClient(
             logger.info("Commands:");
             Logger.nest(() => {
                 for (const commandName in clusterClient.commands) {
-                    logger.info(`"${commandName}"`);
+                    const supported = clusterClient.isCommandSupportedByName(commandName);
+                    if (!supported && options.logNotSupportedClusterCommands === false) continue;
+                    logger.info(`"${commandName}"${supported ? "" : " (Not Supported)"}`);
                 }
             });
         });
@@ -220,12 +217,12 @@ function logClusterClient(
                 for (const eventName in clusterClient.events) {
                     const event = clusterClient.events[eventName];
                     if (event === undefined) continue;
-                    const present = event instanceof PresentEventClient;
-                    if (!present && options.logNotPresentClusterEvents === true) continue;
-                    const unknown = event instanceof UnknownPresentEventClient;
+                    const supported = event instanceof SupportedEventClient;
+                    if (!supported && options.logNotSupportedClusterEvents === false) continue;
+                    const unknown = event instanceof UnknownSupportedEventClient;
 
                     let info = "";
-                    if (!present) info += " (Not Present)";
+                    if (!supported) info += " (Not Supported)";
                     if (unknown) info += " (Unknown)";
 
                     logger.info(`"${event.name}" (${toHexString(event.id)})${info}`);
@@ -235,7 +232,14 @@ function logClusterClient(
     }
 }
 
-export function logEndpoint(endpoint: Endpoint, options: EndpointLoggingOptions = {}) {
+export function logEndpoint(
+    endpoint: Endpoint,
+    options: EndpointLoggingOptions = {
+        logNotSupportedClusterAttributes: false,
+        logNotSupportedClusterEvents: false,
+        logNotSupportedClusterCommands: false,
+    },
+) {
     if (options.endpointFilter !== undefined && !options.endpointFilter(endpoint)) return;
 
     logger.info(`Endpoint ${endpoint.id} (${endpoint.name}):`);
@@ -264,7 +268,7 @@ export function logEndpoint(endpoint: Endpoint, options: EndpointLoggingOptions 
             logger.info("Child-Endpoints:");
             Logger.nest(() => {
                 for (const childEndpoint of endpoint.getChildEndpoints()) {
-                    logEndpoint(childEndpoint);
+                    logEndpoint(childEndpoint, options);
                 }
             });
         });

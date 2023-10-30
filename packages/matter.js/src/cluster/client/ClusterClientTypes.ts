@@ -5,6 +5,7 @@
  */
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
+import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { DecodedEventData } from "../../protocol/interaction/EventDataDecoder.js";
@@ -216,6 +217,24 @@ export type ClusterClientObj<F extends BitSchema, A extends Attributes, C extend
         eventFilters?: TypeFromSchema<typeof TlvEventFilter>[];
         dataVersionFilters?: { endpointId: EndpointNumber; clusterId: ClusterId; dataVersion: number }[];
     }) => Promise<void>;
+
+    /** Returns if a given Attribute Id is present and supported at the connected cluster server. */
+    isAttributeSupported: (attributeId: AttributeId) => boolean;
+
+    /** Returns if a given Attribute with provided name is present and supported at the connected cluster server. */
+    isAttributeSupportedByName: (attributeName: string) => boolean;
+
+    /** Returns if a given Event Id is present and supported at the connected cluster server. */
+    isEventSupported: (eventId: EventId) => boolean;
+
+    /** Returns if a given Event with provided name is present and supported at the connected cluster server. */
+    isEventSupportedByName: (eventName: string) => boolean;
+
+    /** Returns if a given Command Id is present and supported at the connected cluster server. */
+    isCommandSupported: (commandId: CommandId) => boolean;
+
+    /** Returns if a given Command with provided name is present and supported at the connected cluster server. */
+    isCommandSupportedByName: (commandName: string) => boolean;
 } & ClientAttributeGetters<A> &
     ClientGlobalAttributeGetters<F> &
     ClientAttributeSetters<A> &
