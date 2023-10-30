@@ -197,6 +197,30 @@ export function ClusterServer<
             }
             return true;
         },
+
+        isAttributeSupported: (attributeId: AttributeId) => {
+            return (attributes as any).attributeList.getLocal().includes(attributeId);
+        },
+
+        isAttributeSupportedByName: (attributeName: string) => {
+            return (attributesInitialValues as any)[attributeName] !== undefined;
+        },
+
+        isEventSupported: (eventId: EventId) => {
+            return (attributes as any).eventList.getLocal().includes(eventId);
+        },
+
+        isEventSupportedByName: (eventName: string) => {
+            return (supportedEvents as any)[eventName] === true;
+        },
+
+        isCommandSupported: (commandId: CommandId) => {
+            return (attributes as any).acceptedCommandList.getLocal().includes(commandId);
+        },
+
+        isCommandSupportedByName: (commandName: string) => {
+            return (commands as any)[commandName] !== undefined;
+        },
     };
 
     const attributeStorageListener = (attributeName: string, value: any) => {
