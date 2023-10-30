@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   check-and-lint:
-    if: github.repository == 'project-chip/matter.js' 
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
       - run: npm run lint
 
   build-non-linux:
-    if: github.repository == 'project-chip/matter.js' 
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
     needs: [ check-and-lint ]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -39,7 +39,7 @@ jobs:
           os: ${{ matrix.os }}
 
   test:
-    if: github.repository == 'project-chip/matter.js' 
+    if: github.repository == 'project-chip/matter.js' && contains(github.event.pull_request.labels.*.name, 'automated pr')
     needs: [ check-and-lint ]
     runs-on: ubuntu-latest
     strategy:
@@ -60,7 +60,8 @@ jobs:
     if: |
       always() &&
       github.event_name == 'pull_request' &&
-      github.repository == 'project-chip/matter.js'
+      github.repository == 'project-chip/matter.js' &&
+      contains(github.event.pull_request.labels.*.name, 'automated pr')
     needs: [ test, build-non-linux, check-and-lint ]
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +83,7 @@ jobs:
 
       - name: Use Node.js 18.x
         if: steps.automerge.outputs.mergeResult == 'merged'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.x
 
