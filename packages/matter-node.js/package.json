@@ -32,8 +32,8 @@
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231025-f15e295",
-        "@types/bn.js": "^5.1.2",
-        "@types/bytebuffer": "^5.0.45",
+        "@types/bn.js": "^5.1.3",
+        "@types/bytebuffer": "^5.0.46",
         "@types/node-localstorage": "^1.3.1",
         "bn.js": "^5.2.1",
         "ts-node": "^10.9.1",
