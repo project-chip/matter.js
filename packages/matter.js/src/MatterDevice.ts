@@ -258,6 +258,7 @@ export class MatterDevice {
                 await this.startAnnouncement();
             },
         );
+        return session;
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
@@ -282,14 +283,17 @@ export class MatterDevice {
             await this.endCommissioning();
         }
         const fabrics = this.fabricManager.getFabrics();
+        logger.info("Added Fabric", Logger.dict({ fabric: fabric.fabricId }));
         if (fabrics.length === 1) {
             // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
             // TODO Change when refactoring MatterDevice away
             this.initialCommissioningCallback();
         }
+        logger.info("Send Fabric announcement", Logger.dict({ fabric: fabric.fabricId }));
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
+        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId }));
         return fabric.fabricIndex;
     }
 
@@ -541,6 +545,7 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();
         }
+        logger.info("All Announcements expired");
     }
 
     existsOpenPaseSession() {

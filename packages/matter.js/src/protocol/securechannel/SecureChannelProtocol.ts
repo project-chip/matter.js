@@ -87,7 +87,7 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
     private paseCommissioner: PaseServer | undefined;
     private readonly caseCommissioner = new CaseServer();
 
-    constructor(private commissioningCancelledCallback: () => void) {
+    constructor(private commissioningCancelledCallback: () => Promise<void>) {
         super();
     }
 
@@ -117,7 +117,7 @@ export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol
                 } catch (error) {
                     if (error instanceof MaximumPasePairingErrorsReachedError) {
                         logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
-                        this.commissioningCancelledCallback();
+                        await this.commissioningCancelledCallback();
                     } else {
                         throw error;
                     }
