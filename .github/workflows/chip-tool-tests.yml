@@ -49,7 +49,11 @@ jobs:
             src:
               - "chip-testing/src/suites-long/**"
 
-      - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[execute-chiptests]') == true }}
+      - name: Get head commit text
+        id: head_commit_message
+        run: echo "head_commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
+      - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(env.head_commit_message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
         id: check-trigger
         run: echo "chip-tests-required=true" >> $GITHUB_OUTPUT
@@ -65,7 +69,7 @@ jobs:
         run: |
           echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
-      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(github.event.head_commit.message, '[execute-chiptests-long]') == true)) }}
+      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(env.head_commit_message, '[execute-chiptests-long]') == true)) }}
         name: Enable Long tests if needed
         id: check-long-tests
         run: |
