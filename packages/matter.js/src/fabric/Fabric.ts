@@ -170,9 +170,9 @@ export class Fabric {
         this.persistCallback = callback;
     }
 
-    async remove() {
+    async remove(currentSessionId?: number) {
         for (const session of [...this.sessions]) {
-            await session.close();
+            await session.destroy(false, session.getId() === currentSessionId); // Delay Close for current session only
         }
         this.removeCallbacks.forEach(callback => callback());
     }

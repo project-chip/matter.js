@@ -370,7 +370,7 @@ export const OperationalCredentialsClusterHandler: (
 
         assertSecureSession(session);
 
-        await fabric.remove();
+        await fabric.remove(session.getId());
         nocs.updated(session);
         commissionedFabrics.updated(session);
         fabrics.updated(session);
