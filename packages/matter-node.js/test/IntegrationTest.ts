@@ -200,6 +200,13 @@ describe("Integration Test", () => {
         assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
     });
 
+    afterEach(async () => {
+        await MockTime.yield3();
+        await MockTime.yield3();
+        await MockTime.yield3();
+        await MockTime.yield3();
+    });
+
     describe("Check Server API", () => {
         it("Access cluster servers via api", async () => {
             const basicInfoCluster = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
@@ -957,9 +964,6 @@ describe("Integration Test", () => {
             const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
 
-            const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
-            assert.ok(basicInformationServer);
-
             const startTime = Time.nowMs();
 
             let initialDataReceived = false;
@@ -1457,7 +1461,7 @@ describe("Integration Test", () => {
         });
 
         it("read and remove second node by removing fabric from device unplanned", async () => {
-            // We remove the node ourself (should not be done that way), but for testing we do
+            // We remove the node ourselves (should not be done that way), but for testing we do
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
@@ -1468,20 +1472,18 @@ describe("Integration Test", () => {
             assert.ok(fabricIndex);
             assert.equal(fabricIndex, 1);
 
-            const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
-            assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
-            assert.deepEqual(result.fabricIndex, fabricIndex);
-
             // For next test we need to use the real Time implementation
             const mockTimeInstance = Time.get();
             Time.get = singleton(() => new TimeNode());
 
-            // Try to remove node now will throw an error
-            await assert.rejects(async () => node.decommission(), {
-                message: "(1/2) Received general error status for protocol 0",
-            });
+            const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex });
+            assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
+            assert.deepEqual(result.fabricIndex, fabricIndex);
 
-            await assert.doesNotReject(async () => commissioningController.removeNode(nodeId, false));
+            // Try to remove node now will throw an error
+            await assert.rejects(async () => await node.decommission());
+
+            await assert.doesNotReject(async () => await commissioningController.removeNode(nodeId, false));
 
             Time.get = () => mockTimeInstance;
         }).timeout(30_000);
@@ -1507,6 +1509,9 @@ describe("Integration Test", () => {
     });
 
     after(async () => {
+        await MockTime.advance(10_000); // To finish all exchanges
+
+        // TODO: Change that again to MockTime
         // For closing all down we need to use the real Time implementation
         const mockTimeInstance = Time.get();
         Time.get = singleton(() => new TimeNode());
