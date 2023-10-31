@@ -935,15 +935,26 @@ export class CommissioningServer extends MatterNode {
         }
     }
 
-    /** Get some basic details of all Fabrics the server is commissioned to. */
-    getCommissionedFabricInformation() {
+    /**
+     * Get some basic details of all Fabrics the server is commissioned to.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all fabrics are returned.
+     */
+    getCommissionedFabricInformation(fabricIndex?: FabricIndex) {
         if (!this.isCommissioned()) return [];
-        return this.deviceInstance?.getFabrics().map(fabric => fabric.getExternalInformation()) ?? [];
+        const allFabrics = this.deviceInstance?.getFabrics() ?? [];
+        const fabrics = fabricIndex === undefined ? allFabrics : allFabrics.filter(f => f.fabricIndex === fabricIndex);
+        return fabrics.map(fabric => fabric.getExternalInformation()) ?? [];
     }
 
-    /** Get some basic details of all currently active sessions. */
-    getActiveSessionInformation() {
+    /**
+     * Get some basic details of all currently active sessions.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all sessions are returned.
+     */
+    getActiveSessionInformation(fabricIndex?: FabricIndex) {
         if (!this.isCommissioned()) return [];
-        return this.deviceInstance?.getActiveSessionInformation() ?? [];
+        const allSessions = this.deviceInstance?.getActiveSessionInformation() ?? [];
+        return allSessions.filter(({ fabric }) => fabricIndex === undefined || fabric?.fabricIndex === fabricIndex);
     }
 }
