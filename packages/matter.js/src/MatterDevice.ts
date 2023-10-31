@@ -76,9 +76,14 @@ export class MatterDevice {
         private readonly discriminator: number,
         private readonly initialPasscode: number,
         private readonly storage: StorageContext,
-        private readonly initialCommissioningCallback: () => void,
+        private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
+        private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.fabricManager = new FabricManager(this.storage);
+        this.fabricManager = new FabricManager(this.storage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+            // When fabric is removed, also remove the resumption record
+            this.sessionManager.removeResumptionRecord(peerNodeId);
+            this.commissioningChangedCallback(fabricIndex);
+        });
 
         this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
@@ -93,6 +98,10 @@ export class MatterDevice {
     addScanner(scanner: Scanner) {
         this.scanners.push(scanner);
         return this;
+    }
+
+    hasBroadcaster(broadcaster: InstanceBroadcaster) {
+        return this.broadcasters.includes(broadcaster);
     }
 
     addBroadcaster(broadcaster: InstanceBroadcaster) {
@@ -254,10 +263,20 @@ export class MatterDevice {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
                 }
-
+                if (fabric !== undefined) {
+                    this.sessionChangedCallback(fabric.fabricIndex);
+                }
                 await this.startAnnouncement();
             },
+            () => {
+                if (fabric !== undefined) {
+                    this.sessionChangedCallback(fabric.fabricIndex);
+                }
+            },
         );
+        if (fabric !== undefined) {
+            this.sessionChangedCallback(fabric.fabricIndex);
+        }
         return session;
     }
 
@@ -268,6 +287,7 @@ export class MatterDevice {
     updateFabric(fabric: Fabric) {
         this.fabricManager.updateFabric(fabric);
         this.sessionManager.updateFabricForResumptionRecords(fabric);
+        this.commissioningChangedCallback(fabric.fabricIndex);
     }
 
     getNextFabricIndex() {
@@ -282,14 +302,8 @@ export class MatterDevice {
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
             await this.endCommissioning();
         }
+        this.commissioningChangedCallback(fabric.fabricIndex);
         const fabrics = this.fabricManager.getFabrics();
-        logger.info("Added Fabric", Logger.dict({ fabric: fabric.fabricId }));
-        if (fabrics.length === 1) {
-            // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
-            // TODO Change when refactoring MatterDevice away
-            this.initialCommissioningCallback();
-        }
-        logger.info("Send Fabric announcement", Logger.dict({ fabric: fabric.fabricId }));
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
