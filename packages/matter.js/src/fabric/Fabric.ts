@@ -223,6 +223,7 @@ export class Fabric {
 
     getExternalInformation() {
         return {
+            fabricIndex: this.fabricIndex,
             fabricId: this.fabricId,
             nodeId: this.nodeId,
             rootNodeId: this.rootNodeId,
