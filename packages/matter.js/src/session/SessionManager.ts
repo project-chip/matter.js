@@ -64,7 +64,6 @@ export class SessionManager<ContextT> {
         isResumption: boolean,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
-        closeCallback?: (sendClose: boolean) => Promise<void>,
         closeCallback?: () => Promise<void>,
     ) {
         const session = await SecureSession.create(

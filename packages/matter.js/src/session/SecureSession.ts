@@ -86,7 +86,6 @@ export class SecureSession<T> implements Session<T> {
         private readonly decryptKey: ByteArray,
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,
-        private readonly closeCallback: (sendClose: boolean) => Promise<void>,
         private readonly closeCallback: () => Promise<void>,
         private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
         private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
