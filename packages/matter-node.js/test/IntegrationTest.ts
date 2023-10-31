@@ -1454,7 +1454,7 @@ describe("Integration Test", () => {
             const secondNodeId = commissioningController.getCommissionedNodes()[1];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            await assert.doesNotReject(async () => node.decommission());
+            await assert.doesNotReject(async () => await node.decommission());
 
             assert.equal(commissioningController.getCommissionedNodes().length, 1);
             assert.equal(commissioningController.getCommissionedNodes()[0], secondNodeId);
