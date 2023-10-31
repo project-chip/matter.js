@@ -205,11 +205,6 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             }
         } finally {
             await this.exchange.close();
-
-            // Process any pending sessions to close async after the current interaction was finished
-            // Formally not required, but Matter-SDK does it that way, so lets be compatible
-            const { session } = this.exchange;
-            await session.getContext().processSessionsToClose();
         }
     }
 

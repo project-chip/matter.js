@@ -34,6 +34,8 @@ export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
     timestamp = Time.nowMs();
     activeTimestamp = this.timestamp;
+    private _closingAfterExchangeFinished = false;
+    private _sendCloseMessageWhenClosing = true;
 
     static async create<T>(
         context: T,
@@ -45,7 +47,7 @@ export class SecureSession<T> implements Session<T> {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        closeCallback: (sendClose: boolean) => Promise<void>,
+        closeCallback: () => Promise<void>,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
@@ -84,7 +86,7 @@ export class SecureSession<T> implements Session<T> {
         private readonly decryptKey: ByteArray,
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,
-        private readonly closeCallback: (sendClose: boolean) => Promise<void>,
+        private readonly closeCallback: () => Promise<void>,
         private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
         private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
         private readonly retransmissionRetries: number = DEFAULT_RETRANSMISSION_RETRIES,
@@ -97,6 +99,14 @@ export class SecureSession<T> implements Session<T> {
         );
     }
 
+    get closingAfterExchangeFinished() {
+        return this._closingAfterExchangeFinished;
+    }
+
+    get sendCloseMessageWhenClosing() {
+        return this._sendCloseMessageWhenClosing;
+    }
+
     isSecure(): boolean {
         return true;
     }
@@ -105,8 +115,11 @@ export class SecureSession<T> implements Session<T> {
         return this.peerNodeId === UNDEFINED_NODE_ID;
     }
 
-    async close() {
-        await this.end(true);
+    async close(closeAfterExchangeFinished?: boolean) {
+        if (closeAfterExchangeFinished === undefined) {
+            closeAfterExchangeFinished = this.isPeerActive(); // We delay session close if the peer is actively communicating with us
+        }
+        await this.end(true, closeAfterExchangeFinished);
     }
 
     notifyActivity(messageReceived: boolean) {
@@ -217,16 +230,25 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
-    async end(sendClose: boolean) {
+    async end(sendClose: boolean, closeAfterExchangeFinished = false) {
         await this.clearSubscriptions(true);
-        await this.destroy(sendClose);
+        await this.destroy(sendClose, closeAfterExchangeFinished);
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy(sendClose: boolean) {
+    async destroy(sendClose: boolean, closeAfterExchangeFinished = true) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
-        await this.closeCallback(sendClose);
+        if (!sendClose) {
+            this._sendCloseMessageWhenClosing = false;
+        }
+
+        if (closeAfterExchangeFinished) {
+            logger.info(`Register Session ${this.name} to send a close when exchange is ended.`);
+            this._closingAfterExchangeFinished = true;
+        } else {
+            await this.closeCallback();
+        }
     }
 
     private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {

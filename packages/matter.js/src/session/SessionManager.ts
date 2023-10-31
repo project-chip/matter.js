@@ -43,7 +43,6 @@ export class SessionManager<ContextT> {
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<NodeId, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
-    private readonly sessionsToClose = new Array<SecureSession<any>>();
 
     constructor(
         private readonly context: ContextT,
@@ -65,7 +64,7 @@ export class SessionManager<ContextT> {
         isResumption: boolean,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
-        closeCallback?: (sendClose: boolean) => Promise<void>,
+        closeCallback?: () => Promise<void>,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -77,37 +76,27 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            async (sendClose: boolean) => {
-                if (sendClose) {
-                    logger.info(`Register Session ${session.name} to send a close when interaction is finished.`);
-                    this.sessionsToClose.push(session);
-                } else {
-                    logger.info(`Remove Session ${session.name} from session manager.`);
-                    this.sessions.delete(sessionId);
-                    await closeCallback?.(sendClose);
-                }
+            async () => {
+                logger.info(`Remove Session ${session.name} from session manager.`);
+                await closeCallback?.();
+                this.sessions.delete(sessionId);
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
         );
         this.sessions.set(sessionId, session);
 
-        // TODO: close previous secure channel for ??
+        // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1
         return session;
     }
 
-    getSessionsToClose() {
-        if (this.sessionsToClose.length === 0) return [];
-        const sessions = [...this.sessionsToClose];
-        this.sessionsToClose.length = 0;
-        return sessions;
+    removeSession(sessionId: number) {
+        this.sessions.delete(sessionId);
     }
 
-    async removeSession(sessionId: number, peerNodeId: NodeId) {
-        this.sessions.delete(sessionId);
+    removeResumptionRecord(peerNodeId: NodeId) {
         this.resumptionRecords.delete(peerNodeId);
         this.storeResumptionRecords();
-        // TODO if the last session of a fabric got removed, start announcing the fabric again that controller can discover it
     }
 
     getNextAvailableSessionId() {
@@ -127,7 +116,7 @@ export class SessionManager<ContextT> {
 
     getPaseSession() {
         return [...this.sessions.values()].find(
-            session => session.isSecure() && session.isPase(),
+            session => session.isSecure() && session.isPase() && !session.closingAfterExchangeFinished,
         ) as SecureSession<ContextT>;
     }
 
@@ -140,12 +129,12 @@ export class SessionManager<ContextT> {
         });
     }
 
-    async removeAllSessionsForNode(nodeId: NodeId) {
+    async removeAllSessionsForNode(nodeId: NodeId, sendClose = false) {
         for (const session of this.sessions.values()) {
             if (!session.isSecure()) continue;
             const secureSession = session as SecureSession<any>;
             if (secureSession.getPeerNodeId() === nodeId) {
-                await secureSession.destroy(false);
+                await secureSession.destroy(sendClose, false);
             }
         }
     }

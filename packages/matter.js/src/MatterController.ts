@@ -36,6 +36,7 @@ import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/Ex
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
+import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -170,6 +171,7 @@ export class MatterController {
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
+        this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
         if (netInterfaceIpv4 !== undefined) {
             this.addTransportInterface(netInterfaceIpv4);
         }
@@ -276,7 +278,9 @@ export class MatterController {
     }
 
     async removeNode(nodeId: NodeId) {
+        logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
+        this.sessionManager.removeResumptionRecord(nodeId);
         this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
         this.storeCommisionedNodes();
@@ -556,7 +560,7 @@ export class MatterController {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    createSecureSession(
+    async createSecureSession(
         sessionId: number,
         fabric: Fabric | undefined,
         peerNodeId: NodeId,
@@ -568,7 +572,7 @@ export class MatterController {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
-        return this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession(
             sessionId,
             fabric,
             peerNodeId,
@@ -579,8 +583,16 @@ export class MatterController {
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
-            async () => this.sessionClosedCallback?.(peerNodeId),
+            async () => {
+                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
+                if (!session.closingAfterExchangeFinished) {
+                    // Delayed closing is executed when exchange is closed
+                    await this.exchangeManager.closeSession(session);
+                }
+                this.sessionClosedCallback?.(peerNodeId);
+            },
         );
+        return session;
     }
 
     getResumptionRecord(resumptionId: ByteArray) {

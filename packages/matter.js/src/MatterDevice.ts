@@ -38,8 +38,6 @@ import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { StatusResponseError } from "./protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "./protocol/interaction/InteractionProtocol.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
-import { SecureChannelMessenger } from "./protocol/securechannel/SecureChannelMessenger.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { SecureSession } from "./session/SecureSession.js";
@@ -236,7 +234,7 @@ export class MatterDevice {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
-        return await this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession(
             sessionId,
             fabric,
             peerNodeId,
@@ -248,9 +246,19 @@ export class MatterDevice {
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
             async () => {
+                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
+                if (session.isPase() && this.failSafeContext !== undefined) {
+                    await this.failSafeContext.expire();
+                }
+                if (!session.closingAfterExchangeFinished) {
+                    // Delayed closing is executed when exchange is closed
+                    await this.exchangeManager.closeSession(session);
+                }
+
                 await this.startAnnouncement();
             },
         );
+        return session;
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
@@ -275,14 +283,17 @@ export class MatterDevice {
             await this.endCommissioning();
         }
         const fabrics = this.fabricManager.getFabrics();
+        logger.info("Added Fabric", Logger.dict({ fabric: fabric.fabricId }));
         if (fabrics.length === 1) {
             // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
             // TODO Change when refactoring MatterDevice away
             this.initialCommissioningCallback();
         }
+        logger.info("Send Fabric announcement", Logger.dict({ fabric: fabric.fabricId }));
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
+        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId }));
         return fabric.fabricIndex;
     }
 
@@ -312,39 +323,8 @@ export class MatterDevice {
     async removePaseSession() {
         const session = this.sessionManager.getPaseSession();
         if (session) {
-            await this.closeSession(session);
+            await session.close(true);
         }
-    }
-
-    // TODO This is called by InteractionMessenger after an Interaction has finished only. If there are cases where we
-    //      need to close a session from somewhere else, we should refactor this to be more generic.
-    async processSessionsToClose() {
-        const sessionsToClose = this.sessionManager.getSessionsToClose();
-        for (const session of sessionsToClose) {
-            await this.closeSession(session);
-        }
-    }
-
-    private async closeSession(session: SecureSession<any>) {
-        logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-        if (session.isPase() && this.failSafeContext !== undefined) {
-            await this.failSafeContext.expire();
-        }
-        const channel = this.channelManager.getChannelForSession(session);
-        if (channel !== undefined) {
-            const exchange = this.exchangeManager.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-            if (exchange !== undefined) {
-                try {
-                    const messenger = new SecureChannelMessenger(exchange);
-                    await messenger.sendCloseSession();
-                    await messenger.close();
-                } catch (error) {
-                    logger.error("Error closing session", error);
-                }
-            }
-        }
-        await session.destroy(false);
-        await this.sessionManager.removeSession(session.getId(), session.getPeerNodeId());
     }
 
     assertFailSafeArmed(message?: string) {
@@ -379,7 +359,7 @@ export class MatterDevice {
             if (fabric !== undefined) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session !== undefined && session.isSecure()) {
-                    await this.closeSession(session as SecureSession<any>);
+                    await (session as SecureSession<any>).close(false);
                 }
             }
         }
@@ -445,7 +425,7 @@ export class MatterDevice {
     ) {
         if (this.failSafeContext === undefined) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
-            // to a success response with no side-effects against the fail-safe context.
+            // to a success response with no side effect against the fail-safe context.
             if (expiryLengthSeconds === 0) return;
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
@@ -565,6 +545,7 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();
         }
+        logger.info("All Announcements expired");
     }
 
     existsOpenPaseSession() {
