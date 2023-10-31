@@ -129,12 +129,12 @@ export class SessionManager<ContextT> {
         });
     }
 
-    async removeAllSessionsForNode(nodeId: NodeId) {
+    async removeAllSessionsForNode(nodeId: NodeId, sendClose = false) {
         for (const session of this.sessions.values()) {
             if (!session.isSecure()) continue;
             const secureSession = session as SecureSession<any>;
             if (secureSession.getPeerNodeId() === nodeId) {
-                await secureSession.destroy(false);
+                await secureSession.destroy(sendClose, false);
             }
         }
     }
