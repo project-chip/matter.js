@@ -90,18 +90,13 @@ export class SessionManager<ContextT> {
         return session;
     }
 
-    getSessionsToClose() {
-        if (this.sessionsToClose.length === 0) return [];
-        const sessions = [...this.sessionsToClose];
-        this.sessionsToClose.length = 0;
-        return sessions;
+    removeSession(sessionId: number) {
+        this.sessions.delete(sessionId);
     }
 
-    async removeSession(sessionId: number, peerNodeId: NodeId) {
-        this.sessions.delete(sessionId);
+    removeResumptionRecord(peerNodeId: NodeId) {
         this.resumptionRecords.delete(peerNodeId);
         this.storeResumptionRecords();
-        // TODO if the last session of a fabric got removed, start announcing the fabric again that controller can discover it
     }
 
     getNextAvailableSessionId() {
