@@ -585,7 +585,7 @@ export class MatterController {
             activeRetransTimeoutMs,
             async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-                if (!session.closingDelayed) {
+                if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
                 }

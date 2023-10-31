@@ -56,7 +56,7 @@ export class ExchangeManager<ContextT> {
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
     private readonly transportListeners = new Array<Listener>();
-    private readonly sessionsInClosing = new Set<number>();
+    private readonly closingSessions = new Set<number>();
 
     constructor(
         private readonly sessionManager: SessionManager<ContextT>,
@@ -132,7 +132,7 @@ export class ExchangeManager<ContextT> {
         if (exchange !== undefined) {
             await exchange.onMessageReceived(message);
         } else {
-            if (session.closingDelayed) {
+            if (session.closingAfterExchangeFinished) {
                 throw new MatterFlowError(
                     `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,
                 );
@@ -158,7 +158,7 @@ export class ExchangeManager<ContextT> {
             throw new MatterFlowError(`Exchange with index ${exchangeIndex} to delete not found.`);
         }
         const { session } = exchange;
-        if (session.isSecure() && session.closingDelayed) {
+        if (session.isSecure() && session.closingAfterExchangeFinished) {
             logger.debug(
                 `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
             );
@@ -178,11 +178,11 @@ export class ExchangeManager<ContextT> {
             // Session already removed, so we do not need to close again
             return;
         }
-        if (this.sessionsInClosing.has(sessionId)) {
+        if (this.closingSessions.has(sessionId)) {
             logger.info(`Session ${sessionName} is already in closing`);
             return;
         }
-        this.sessionsInClosing.add(sessionId);
+        this.closingSessions.add(sessionId);
         for (const [exchangeIndex, exchange] of this.exchanges.entries()) {
             if (exchange.session.getId() === sessionId) {
                 logger.info(`Close exchange ${exchangeIndex} for session ${sessionName}`);
@@ -207,11 +207,11 @@ export class ExchangeManager<ContextT> {
                 await exchange.destroy();
             }
         }
-        if (session.closingDelayed) {
+        if (session.closingAfterExchangeFinished) {
             await session.destroy(false, false);
         }
         this.sessionManager.removeSession(sessionId);
-        this.sessionsInClosing.delete(sessionId);
+        this.closingSessions.delete(sessionId);
     }
 }
 

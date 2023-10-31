@@ -160,10 +160,10 @@ describe("Fabric", () => {
             await fabric.remove(secureSession2.getId());
 
             assert.equal(session1Destroyed, true);
-            assert.equal(secureSession1.closingDelayed, false);
+            assert.equal(secureSession1.closingAfterExchangeFinished, false);
             assert.equal(secureSession1.sendCloseMessageWhenClosing, false);
             assert.equal(session2Destroyed, false); // Not destroyed directly because delayed because was session of fabric removal
-            assert.equal(secureSession2.closingDelayed, true);
+            assert.equal(secureSession2.closingAfterExchangeFinished, true);
             assert.equal(secureSession2.sendCloseMessageWhenClosing, false);
             assert.equal(removeCallbackCalled, true);
         });

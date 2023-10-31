@@ -34,7 +34,7 @@ export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
     timestamp = Time.nowMs();
     activeTimestamp = this.timestamp;
-    private _closingDelayed = false;
+    private _closingAfterExchangeFinished = false;
     private _sendCloseMessageWhenClosing = true;
 
     static async create<T>(
@@ -99,8 +99,8 @@ export class SecureSession<T> implements Session<T> {
         );
     }
 
-    get closingDelayed() {
-        return this._closingDelayed;
+    get closingAfterExchangeFinished() {
+        return this._closingAfterExchangeFinished;
     }
 
     get sendCloseMessageWhenClosing() {
@@ -115,11 +115,11 @@ export class SecureSession<T> implements Session<T> {
         return this.peerNodeId === UNDEFINED_NODE_ID;
     }
 
-    async close(delayClose?: boolean) {
-        if (delayClose === undefined) {
-            delayClose = this.isPeerActive(); // We delay session close if the peer is actively communicating with us
+    async close(closeAfterExchangeFinished?: boolean) {
+        if (closeAfterExchangeFinished === undefined) {
+            closeAfterExchangeFinished = this.isPeerActive(); // We delay session close if the peer is actively communicating with us
         }
-        await this.end(true, delayClose);
+        await this.end(true, closeAfterExchangeFinished);
     }
 
     notifyActivity(messageReceived: boolean) {
@@ -230,22 +230,22 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
-    async end(sendClose: boolean, delayClose = false) {
+    async end(sendClose: boolean, closeAfterExchangeFinished = false) {
         await this.clearSubscriptions(true);
-        await this.destroy(sendClose, delayClose);
+        await this.destroy(sendClose, closeAfterExchangeFinished);
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy(sendClose: boolean, delayClose = true) {
+    async destroy(sendClose: boolean, closeAfterExchangeFinished = true) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
         if (!sendClose) {
             this._sendCloseMessageWhenClosing = false;
         }
 
-        if (delayClose) {
+        if (closeAfterExchangeFinished) {
             logger.info(`Register Session ${this.name} to send a close when exchange is ended.`);
-            this._closingDelayed = true;
+            this._closingAfterExchangeFinished = true;
         } else {
             await this.closeCallback();
         }

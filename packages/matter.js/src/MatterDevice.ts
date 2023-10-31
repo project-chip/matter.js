@@ -250,7 +250,7 @@ export class MatterDevice {
                 if (session.isPase() && this.failSafeContext !== undefined) {
                     await this.failSafeContext.expire();
                 }
-                if (!session.closingDelayed) {
+                if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
                 }

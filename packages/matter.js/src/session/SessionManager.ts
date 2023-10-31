@@ -116,7 +116,7 @@ export class SessionManager<ContextT> {
 
     getPaseSession() {
         return [...this.sessions.values()].find(
-            session => session.isSecure() && session.isPase() && !session.closingDelayed,
+            session => session.isSecure() && session.isPase() && !session.closingAfterExchangeFinished,
         ) as SecureSession<ContextT>;
     }
 
