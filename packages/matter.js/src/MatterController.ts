@@ -36,6 +36,7 @@ import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/Ex
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
+import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -170,6 +171,7 @@ export class MatterController {
         this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
+        this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
         if (netInterfaceIpv4 !== undefined) {
             this.addTransportInterface(netInterfaceIpv4);
         }
