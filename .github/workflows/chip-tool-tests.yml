@@ -19,7 +19,7 @@ concurrency:
 jobs:
   # Find out what is needed to be done by this test workflow
   chip-tests-needed:
-    if: github.repository == 'project-chip/matter.js'  
+    if: github.repository == 'project-chip/matter.js'
     runs-on: ubuntu-latest
     outputs:
       chip-changes: ${{ steps.changes.outputs.src }}
@@ -65,7 +65,7 @@ jobs:
         run: |
           echo "DOW=$(date +%u)" >> $GITHUB_ENV
 
-      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || steps.changes-long-tests.outputs.src == 'true' }}
+      - if: ${{ (env.DOW == 6 && github.event_name == 'schedule') || (github.event_name != 'schedule' && (steps.changes-long-tests.outputs.src == 'true' || contains(github.event.head_commit.message, '[execute-chiptests-long]') == true)) }}
         name: Enable Long tests if needed
         id: check-long-tests
         run: |
