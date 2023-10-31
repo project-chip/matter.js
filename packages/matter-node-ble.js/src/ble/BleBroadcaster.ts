@@ -13,7 +13,7 @@ import {
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
-import { BlenoBleServer } from "./BlenoBleServer";
+import { BlenoBleServer } from "./BlenoBleServer.js";
 
 const logger = Logger.get("BleBroadcaster");
 

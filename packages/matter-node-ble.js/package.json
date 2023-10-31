@@ -49,13 +49,25 @@
         "LICENSE",
         "README.md"
     ],
+    "type": "module",
     "main": "dist/cjs/ble/export.js",
     "types": "dist/cjs/ble/export.d.ts",
     "exports": {
         "./package.json": "./package.json",
         "./*": {
-            "types": "./dist/cjs/*/export.d.ts",
-            "default": "./dist/cjs/*/export.js"
+            "import": {
+                "types": "./dist/esm/*/export.d.ts",
+                "default": "./dist/esm/*/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/*/export.d.ts",
+                "default": "./dist/cjs/*/export.js"
+            }
+        },
+        "./require": {
+            "types": "./require/require.d.ts",
+            "import": "./require/require.mjs",
+            "require": "./require/require.cjs"
         }
     },
     "typesVersions": {
