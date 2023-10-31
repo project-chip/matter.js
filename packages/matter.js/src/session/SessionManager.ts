@@ -43,7 +43,6 @@ export class SessionManager<ContextT> {
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<NodeId, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
-    private readonly sessionsToClose = new Array<SecureSession<any>>();
 
     constructor(
         private readonly context: ContextT,
@@ -66,6 +65,7 @@ export class SessionManager<ContextT> {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
         closeCallback?: (sendClose: boolean) => Promise<void>,
+        closeCallback?: () => Promise<void>,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -77,22 +77,17 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            async (sendClose: boolean) => {
-                if (sendClose) {
-                    logger.info(`Register Session ${session.name} to send a close when interaction is finished.`);
-                    this.sessionsToClose.push(session);
-                } else {
-                    logger.info(`Remove Session ${session.name} from session manager.`);
-                    this.sessions.delete(sessionId);
-                    await closeCallback?.(sendClose);
-                }
+            async () => {
+                logger.info(`Remove Session ${session.name} from session manager.`);
+                await closeCallback?.();
+                this.sessions.delete(sessionId);
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
         );
         this.sessions.set(sessionId, session);
 
-        // TODO: close previous secure channel for ??
+        // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1
         return session;
     }
 
