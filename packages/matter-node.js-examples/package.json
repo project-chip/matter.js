@@ -60,6 +60,7 @@
         "LICENSE",
         "README.md"
     ],
+    "type": "module",
     "publishConfig": {
         "access": "public"
     }

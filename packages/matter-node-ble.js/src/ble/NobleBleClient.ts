@@ -5,10 +5,11 @@
  */
 
 import type { Peripheral } from "@abandonware/noble";
+import { require } from "@project-chip/matter-node-ble.js/require";
 import { BLE_MATTER_SERVICE_UUID } from "@project-chip/matter.js/ble";
 import { Logger } from "@project-chip/matter.js/log";
 import { ByteArray } from "@project-chip/matter.js/util";
-import { BleOptions } from "./BleNode";
+import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("NobleBleClient");
 let noble: typeof import("@abandonware/noble");

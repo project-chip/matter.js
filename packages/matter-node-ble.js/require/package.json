@@ -1,0 +1,4 @@
+{
+    "main": "./require.cjs",
+    "module": "./require.mjs"
+}
