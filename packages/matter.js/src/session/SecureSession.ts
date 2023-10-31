@@ -34,6 +34,8 @@ export class SecureSession<T> implements Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
     timestamp = Time.nowMs();
     activeTimestamp = this.timestamp;
+    private _closingDelayed = false;
+    private _sendCloseMessageWhenClosing = true;
 
     static async create<T>(
         context: T,
@@ -97,6 +99,14 @@ export class SecureSession<T> implements Session<T> {
         );
     }
 
+    get closingDelayed() {
+        return this._closingDelayed;
+    }
+
+    get sendCloseMessageWhenClosing() {
+        return this._sendCloseMessageWhenClosing;
+    }
+
     isSecure(): boolean {
         return true;
     }
@@ -105,8 +115,11 @@ export class SecureSession<T> implements Session<T> {
         return this.peerNodeId === UNDEFINED_NODE_ID;
     }
 
-    async close() {
-        await this.end(true);
+    async close(delayClose?: boolean) {
+        if (delayClose === undefined) {
+            delayClose = this.isPeerActive(); // We delay session close if the peer is actively communicating with us
+        }
+        await this.end(true, delayClose);
     }
 
     notifyActivity(messageReceived: boolean) {
@@ -217,16 +230,25 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Ends a session. Outstanding subscription data will be flushed before the session is destroyed. */
-    async end(sendClose: boolean) {
+    async end(sendClose: boolean, delayClose = false) {
         await this.clearSubscriptions(true);
-        await this.destroy(sendClose);
+        await this.destroy(sendClose, delayClose);
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy(sendClose: boolean) {
+    async destroy(sendClose: boolean, delayClose = true) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
-        await this.closeCallback(sendClose);
+        if (!sendClose) {
+            this._sendCloseMessageWhenClosing = false;
+        }
+
+        if (delayClose) {
+            logger.info(`Register Session ${this.name} to send a close when exchange is ended.`);
+            this._closingDelayed = true;
+        } else {
+            await this.closeCallback();
+        }
     }
 
     private generateNonce(securityFlags: number, messageId: number, nodeId: NodeId) {

@@ -29,6 +29,7 @@ interface MrpParameters {
 
 export interface Session<T> {
     name: string;
+    closingDelayed: boolean;
 
     isSecure(): boolean;
     isPase(): boolean;
