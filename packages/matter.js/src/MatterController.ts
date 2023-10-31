@@ -558,7 +558,7 @@ export class MatterController {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    createSecureSession(
+    async createSecureSession(
         sessionId: number,
         fabric: Fabric | undefined,
         peerNodeId: NodeId,
@@ -570,7 +570,7 @@ export class MatterController {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
     ) {
-        return this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession(
             sessionId,
             fabric,
             peerNodeId,
@@ -581,8 +581,16 @@ export class MatterController {
             isResumption,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
-            async () => this.sessionClosedCallback?.(peerNodeId),
+            async () => {
+                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
+                if (!session.closingDelayed) {
+                    // Delayed closing is executed when exchange is closed
+                    await this.exchangeManager.closeSession(session);
+                }
+                this.sessionClosedCallback?.(peerNodeId);
+            },
         );
+        return session;
     }
 
     getResumptionRecord(resumptionId: ByteArray) {
