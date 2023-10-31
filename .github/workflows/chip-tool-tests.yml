@@ -51,7 +51,7 @@ jobs:
 
       - name: Get head commit text
         id: head_commit_message
-        run: echo "head_commit_message=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+        run: echo "head_commit_message=$(git show -s --format=%s)" >> $GITHUB_ENV
 
       - if: ${{ github.event_name == 'schedule' || ((github.event_name == 'push' || github.event_name == 'pull_request') && steps.changes.outputs.src == 'true') || github.event_name == 'workflow_dispatch' || contains(env.head_commit_message, '[execute-chiptests]') == true }}
         name: Chip Tool tests required to run?
