@@ -138,7 +138,7 @@ describe("Fabric", () => {
             fabric.addSession(secureSession1);
             const secureSession2 = new SecureSession(
                 {} as any,
-                1,
+                2,
                 undefined,
                 UNDEFINED_NODE_ID,
                 0x8d4b,
@@ -157,10 +157,14 @@ describe("Fabric", () => {
                 removeCallbackCalled = true;
             });
 
-            await fabric.remove();
+            await fabric.remove(secureSession2.getId());
 
             assert.equal(session1Destroyed, true);
-            assert.equal(session2Destroyed, true);
+            assert.equal(secureSession1.closingDelayed, false);
+            assert.equal(secureSession1.sendCloseMessageWhenClosing, false);
+            assert.equal(session2Destroyed, false); // Not destroyed directly because delayed because was session of fabric removal
+            assert.equal(secureSession2.closingDelayed, true);
+            assert.equal(secureSession2.sendCloseMessageWhenClosing, false);
             assert.equal(removeCallbackCalled, true);
         });
 
