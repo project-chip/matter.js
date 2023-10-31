@@ -4,6 +4,7 @@ pull_request_rules:
       - or:
         - "check-success=pullapprove"
         - label="fast track"
+        - label="automated pr"
       - "#approved-reviews-by>=1"
       - "#review-threads-unresolved=0"
       - "-draft"
