@@ -50,6 +50,7 @@ export class SecureSession<T> implements Session<T> {
         closeCallback: () => Promise<void>,
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
+        subscriptionChangedCallback?: () => void,
     ) {
         const keys = await Crypto.hkdf(
             sharedSecret,
@@ -71,6 +72,7 @@ export class SecureSession<T> implements Session<T> {
             encryptKey,
             attestationKey,
             closeCallback,
+            subscriptionChangedCallback,
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
         );
@@ -87,6 +89,7 @@ export class SecureSession<T> implements Session<T> {
         private readonly encryptKey: ByteArray,
         private readonly attestationKey: ByteArray,
         private readonly closeCallback: () => Promise<void>,
+        private readonly subscriptionChangedCallback: () => void = () => {},
         private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
         private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
         private readonly retransmissionRetries: number = DEFAULT_RETRANSMISSION_RETRIES,
@@ -208,6 +211,7 @@ export class SecureSession<T> implements Session<T> {
     addSubscription(subscription: SubscriptionHandler) {
         this.subscriptions.push(subscription);
         logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
+        this.subscriptionChangedCallback();
     }
 
     get numberOfActiveSubscriptions() {
@@ -219,6 +223,7 @@ export class SecureSession<T> implements Session<T> {
         if (index !== -1) {
             this.subscriptions.splice(index, 1);
             logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.id}`);
+            this.subscriptionChangedCallback();
         }
     }
 

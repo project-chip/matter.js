@@ -65,6 +65,7 @@ export class SessionManager<ContextT> {
         idleRetransTimeoutMs?: number,
         activeRetransTimeoutMs?: number,
         closeCallback?: () => Promise<void>,
+        subscriptionChangedCallback?: () => void,
     ) {
         const session = await SecureSession.create(
             this.context,
@@ -83,6 +84,7 @@ export class SessionManager<ContextT> {
             },
             idleRetransTimeoutMs,
             activeRetransTimeoutMs,
+            () => subscriptionChangedCallback?.(),
         );
         this.sessions.set(sessionId, session);
 
