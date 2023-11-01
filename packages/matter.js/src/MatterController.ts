@@ -281,7 +281,7 @@ export class MatterController {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
         this.sessionManager.removeResumptionRecord(nodeId);
-        this.channelManager.removeChannel(this.fabric, nodeId);
+        await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
         this.storeCommisionedNodes();
     }
@@ -497,7 +497,7 @@ export class MatterController {
             }, // Convert error
         );
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
-        this.channelManager.setChannel(this.fabric, peerNodeId, channel);
+        await this.channelManager.setChannel(this.fabric, peerNodeId, channel);
         return channel;
     }
 
@@ -548,7 +548,7 @@ export class MatterController {
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
-                this.channelManager.removeChannel(this.fabric, peerNodeId);
+                await this.channelManager.removeChannel(this.fabric, peerNodeId);
                 await this.resume(peerNodeId);
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
