@@ -27,10 +27,11 @@ import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.j
 const logger = Logger.get("ExchangeManager");
 
 export class MessageChannel<ContextT> implements Channel<Message> {
+    public closed = false;
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
-        private readonly closeCallback?: () => void,
+        private readonly closeCallback?: () => Promise<void>,
     ) {}
 
     send(message: Message): Promise<void> {
@@ -45,8 +46,12 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     }
 
     async close() {
+        const wasAlreadyClosed = this.closed;
+        this.closed = true;
         await this.channel.close();
-        this.closeCallback?.();
+        if (!wasAlreadyClosed) {
+            await this.closeCallback?.();
+        }
     }
 }
 
