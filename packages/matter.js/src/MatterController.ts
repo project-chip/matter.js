@@ -281,7 +281,7 @@ export class MatterController {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
         this.sessionManager.removeResumptionRecord(nodeId);
-        this.channelManager.removeChannel(this.fabric, nodeId);
+        await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
         this.storeCommisionedNodes();
     }
