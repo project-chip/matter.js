@@ -21,6 +21,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Handles event data correctly on subscription initially and also on updates to trigger the listeners
   * Enhance (vilic): Added MDNS Memberships to sockets for better operation on Windows and other platforms
   * Enhance: Refactor session management and make sure also controller handle session close requests from devices
+  * Enhance: Refactor close handing for exchanges and channels to make sure they are closed correctly
   * Feature: Added detection of missing Subscription updates from a device and allow to react to such a timeout with callback
   * Feature: Added generation method for random passcodes to PaseClient
   * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel

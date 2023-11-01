@@ -240,10 +240,10 @@ export class MatterDevice {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        idleRetransTimeoutMs?: number,
-        activeRetransTimeoutMs?: number,
+        idleRetransmissionTimeoutMs?: number,
+        activeRetransmissionTimeoutMs?: number,
     ) {
-        const session = await this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession({
             sessionId,
             fabric,
             peerNodeId,
@@ -252,9 +252,9 @@ export class MatterDevice {
             salt,
             isInitiator,
             isResumption,
-            idleRetransTimeoutMs,
-            activeRetransTimeoutMs,
-            async () => {
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
                 if (session.isPase() && this.failSafeContext !== undefined) {
                     await this.failSafeContext.expire();
@@ -269,14 +269,14 @@ export class MatterDevice {
                 }
                 await this.startAnnouncement();
             },
-            () => {
+            subscriptionChangedCallback: () => {
                 const currentFabric = session.getFabric();
                 logger.warn(`Session ${session.name} with fabric ${!!currentFabric}!`);
                 if (currentFabric !== undefined) {
                     this.sessionChangedCallback(currentFabric.fabricIndex);
                 }
             },
-        );
+        });
         if (fabric !== undefined) {
             this.sessionChangedCallback(fabric.fabricIndex);
         }

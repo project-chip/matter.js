@@ -22,7 +22,7 @@ export class FabricManager {
 
     constructor(
         storage: StorageContext,
-        private readonly fabricRemoveCallback: (fabricIndex: FabricIndex, peerNodeId: NodeId) => void,
+        private readonly fabricRemoveCallback?: (fabricIndex: FabricIndex, peerNodeId: NodeId) => void,
     ) {
         this.fabricStorage = storage.createContext("FabricManager");
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
@@ -67,7 +67,7 @@ export class FabricManager {
             );
         this.fabrics.delete(fabricIndex);
         this.persistFabrics();
-        this.fabricRemoveCallback(fabricIndex, fabric.rootNodeId);
+        this.fabricRemoveCallback?.(fabricIndex, fabric.rootNodeId);
     }
 
     getFabrics() {

@@ -20,9 +20,7 @@ describe("FabricManager", () => {
         storage = new StorageBackendMemory();
         storageManager = new StorageManager(storage);
         await storageManager.initialize();
-        fabricManager = new FabricManager(storageManager.createContext("Context"), () => {
-            /** noop */
-        });
+        fabricManager = new FabricManager(storageManager.createContext("Context"));
     });
 
     describe("adding Fabrics", () => {
@@ -38,9 +36,7 @@ describe("FabricManager", () => {
         it("adding a fabric with same index twice throws error", async () => {
             const storage = new StorageManager(new StorageBackendMemory());
             await storage.initialize();
-            const fabricManager = new FabricManager(storage.createContext("Context"), () => {
-                /** noop */
-            });
+            const fabricManager = new FabricManager(storage.createContext("Context"));
             const fabric = await buildFabric();
             fabricManager.addFabric(fabric);
 
@@ -66,9 +62,7 @@ describe("FabricManager", () => {
             const fabric = await buildFabric();
             storage.set(["Context", "FabricManager"], "fabrics", [fabric.toStorageObject()]);
 
-            fabricManager = new FabricManager(storageManager.createContext("Context"), () => {
-                /** noop */
-            });
+            fabricManager = new FabricManager(storageManager.createContext("Context"));
             assert.equal(fabricManager.getFabrics().length, 1);
             assert.deepEqual(fabricManager.getFabrics()[0].toStorageObject(), fabric.toStorageObject());
         });

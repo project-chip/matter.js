@@ -121,35 +121,33 @@ describe("Fabric", () => {
 
             let session1Destroyed = false;
             let session2Destroyed = false;
-            const secureSession1 = new SecureSession(
-                {} as any,
-                1,
-                undefined,
-                UNDEFINED_NODE_ID,
-                0x8d4b,
-                Buffer.alloc(0),
-                DECRYPT_KEY,
-                ENCRYPT_KEY,
-                Buffer.alloc(0),
-                async () => {
+            const secureSession1 = new SecureSession({
+                context: {} as any,
+                id: 1,
+                fabric: undefined,
+                peerNodeId: UNDEFINED_NODE_ID,
+                peerSessionId: 0x8d4b,
+                decryptKey: DECRYPT_KEY,
+                encryptKey: ENCRYPT_KEY,
+                attestationKey: Buffer.alloc(0),
+                closeCallback: async () => {
                     session1Destroyed = true;
                 },
-            );
+            });
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureSession(
-                {} as any,
-                2,
-                undefined,
-                UNDEFINED_NODE_ID,
-                0x8d4b,
-                Buffer.alloc(0),
-                DECRYPT_KEY,
-                ENCRYPT_KEY,
-                Buffer.alloc(0),
-                async () => {
+            const secureSession2 = new SecureSession({
+                context: {} as any,
+                id: 2,
+                fabric: undefined,
+                peerNodeId: UNDEFINED_NODE_ID,
+                peerSessionId: 0x8d4b,
+                decryptKey: DECRYPT_KEY,
+                encryptKey: ENCRYPT_KEY,
+                attestationKey: Buffer.alloc(0),
+                closeCallback: async () => {
                     session2Destroyed = true;
                 },
-            );
+            });
             fabric.addSession(secureSession2);
 
             let removeCallbackCalled = false;
@@ -176,35 +174,33 @@ describe("Fabric", () => {
 
             let session1Destroyed = false;
             let session2Destroyed = false;
-            const secureSession1 = new SecureSession(
-                {} as any,
-                1,
-                undefined,
-                UNDEFINED_NODE_ID,
-                0x8d4b,
-                Buffer.alloc(0),
-                DECRYPT_KEY,
-                ENCRYPT_KEY,
-                Buffer.alloc(0),
-                async () => {
+            const secureSession1 = new SecureSession({
+                context: {} as any,
+                id: 1,
+                fabric: undefined,
+                peerNodeId: UNDEFINED_NODE_ID,
+                peerSessionId: 0x8d4b,
+                decryptKey: DECRYPT_KEY,
+                encryptKey: ENCRYPT_KEY,
+                attestationKey: Buffer.alloc(0),
+                closeCallback: async () => {
                     session1Destroyed = true;
                 },
-            );
+            });
             fabric.addSession(secureSession1);
-            const secureSession2 = new SecureSession(
-                {} as any,
-                1,
-                undefined,
-                UNDEFINED_NODE_ID,
-                0x8d4b,
-                Buffer.alloc(0),
-                DECRYPT_KEY,
-                ENCRYPT_KEY,
-                Buffer.alloc(0),
-                async () => {
+            const secureSession2 = new SecureSession({
+                context: {} as any,
+                id: 2,
+                fabric: undefined,
+                peerNodeId: UNDEFINED_NODE_ID,
+                peerSessionId: 0x8d4b,
+                decryptKey: DECRYPT_KEY,
+                encryptKey: ENCRYPT_KEY,
+                attestationKey: Buffer.alloc(0),
+                closeCallback: async () => {
                     session2Destroyed = true;
                 },
-            );
+            });
             fabric.addSession(secureSession2);
             fabric.removeSession(secureSession1);
 
