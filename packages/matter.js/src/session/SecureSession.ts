@@ -36,21 +36,50 @@ export class SecureSession<T> implements Session<T> {
     activeTimestamp = this.timestamp;
     private _closingAfterExchangeFinished = false;
     private _sendCloseMessageWhenClosing = true;
+    private readonly context: T;
+    private readonly id: number;
+    private fabric: Fabric | undefined;
+    private readonly peerNodeId: NodeId;
+    private readonly peerSessionId: number;
+    private readonly decryptKey: ByteArray;
+    private readonly encryptKey: ByteArray;
+    private readonly attestationKey: ByteArray;
+    private readonly closeCallback: () => Promise<void>;
+    private readonly subscriptionChangedCallback: () => void;
+    private readonly idleRetransmissionTimeoutMs: number;
+    private readonly activeRetransmissionTimeoutMs: number;
+    private readonly retransmissionRetries: number;
 
-    static async create<T>(
-        context: T,
-        id: number,
-        fabric: Fabric | undefined,
-        peerNodeId: NodeId,
-        peerSessionId: number,
-        sharedSecret: ByteArray,
-        salt: ByteArray,
-        isInitiator: boolean,
-        isResumption: boolean,
-        closeCallback: () => Promise<void>,
-        idleRetransTimeoutMs?: number,
-        activeRetransTimeoutMs?: number,
-    ) {
+    static async create<T>(args: {
+        context: T;
+        id: number;
+        fabric: Fabric | undefined;
+        peerNodeId: NodeId;
+        peerSessionId: number;
+        sharedSecret: ByteArray;
+        salt: ByteArray;
+        isInitiator: boolean;
+        isResumption: boolean;
+        closeCallback: () => Promise<void>;
+        subscriptionChangedCallback?: () => void;
+        idleRetransmissionTimeoutMs?: number;
+        activeRetransmissionTimeoutMs?: number;
+    }) {
+        const {
+            context,
+            id,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            salt,
+            isInitiator,
+            isResumption,
+            closeCallback,
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            subscriptionChangedCallback,
+        } = args;
         const keys = await Crypto.hkdf(
             sharedSecret,
             salt,
@@ -60,37 +89,67 @@ export class SecureSession<T> implements Session<T> {
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
         const attestationKey = keys.slice(32, 48);
-        return new SecureSession(
+        return new SecureSession({
             context,
             id,
             fabric,
             peerNodeId,
             peerSessionId,
-            sharedSecret,
             decryptKey,
             encryptKey,
             attestationKey,
             closeCallback,
-            idleRetransTimeoutMs,
-            activeRetransTimeoutMs,
-        );
+            subscriptionChangedCallback,
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+        });
     }
 
-    constructor(
-        private readonly context: T,
-        private readonly id: number,
-        private fabric: Fabric | undefined,
-        private readonly peerNodeId: NodeId,
-        private readonly peerSessionId: number,
-        _sharedSecret: ByteArray,
-        private readonly decryptKey: ByteArray,
-        private readonly encryptKey: ByteArray,
-        private readonly attestationKey: ByteArray,
-        private readonly closeCallback: () => Promise<void>,
-        private readonly idleRetransmissionTimeoutMs: number = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-        private readonly activeRetransmissionTimeoutMs: number = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-        private readonly retransmissionRetries: number = DEFAULT_RETRANSMISSION_RETRIES,
-    ) {
+    constructor(args: {
+        context: T;
+        id: number;
+        fabric: Fabric | undefined;
+        peerNodeId: NodeId;
+        peerSessionId: number;
+        decryptKey: ByteArray;
+        encryptKey: ByteArray;
+        attestationKey: ByteArray;
+        closeCallback: () => Promise<void>;
+        subscriptionChangedCallback?: () => void;
+        idleRetransmissionTimeoutMs?: number;
+        activeRetransmissionTimeoutMs?: number;
+        retransmissionRetries?: number;
+    }) {
+        const {
+            context,
+            id,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            decryptKey,
+            encryptKey,
+            attestationKey,
+            closeCallback,
+            subscriptionChangedCallback = () => {},
+            idleRetransmissionTimeoutMs = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
+            activeRetransmissionTimeoutMs = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
+            retransmissionRetries = DEFAULT_RETRANSMISSION_RETRIES,
+        } = args;
+
+        this.context = context;
+        this.id = id;
+        this.fabric = fabric;
+        this.peerNodeId = peerNodeId;
+        this.peerSessionId = peerSessionId;
+        this.decryptKey = decryptKey;
+        this.encryptKey = encryptKey;
+        this.attestationKey = attestationKey;
+        this.closeCallback = closeCallback;
+        this.subscriptionChangedCallback = subscriptionChangedCallback;
+        this.idleRetransmissionTimeoutMs = idleRetransmissionTimeoutMs;
+        this.activeRetransmissionTimeoutMs = activeRetransmissionTimeoutMs;
+        this.retransmissionRetries = retransmissionRetries;
+
         fabric?.addSession(this);
 
         logger.debug(
@@ -208,6 +267,7 @@ export class SecureSession<T> implements Session<T> {
     addSubscription(subscription: SubscriptionHandler) {
         this.subscriptions.push(subscription);
         logger.debug(`Added subscription ${subscription.subscriptionId} to ${this.name}/${this.id}`);
+        this.subscriptionChangedCallback();
     }
 
     get numberOfActiveSubscriptions() {
@@ -219,6 +279,7 @@ export class SecureSession<T> implements Session<T> {
         if (index !== -1) {
             this.subscriptions.splice(index, 1);
             logger.debug(`Removed subscription ${subscriptionId} from ${this.name}/${this.id}`);
+            this.subscriptionChangedCallback();
         }
     }
 

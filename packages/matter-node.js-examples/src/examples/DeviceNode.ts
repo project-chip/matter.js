@@ -186,6 +186,18 @@ class Device {
                 serialNumber: `node-matter-${uniqueId}`,
             },
             delayedAnnouncement: hasParameter("ble"), // Delay announcement when BLE is used to show how limited advertisement works
+            activeSessionsChangedCallback: fabricIndex => {
+                console.log(
+                    `activeSessionsChangedCallback: Active sessions changed on Fabric ${fabricIndex}`,
+                    commissioningServer.getActiveSessionInformation(fabricIndex),
+                );
+            },
+            commissioningChangedCallback: fabricIndex => {
+                console.log(
+                    `commissioningChangedCallback: Commissioning changed on Fabric ${fabricIndex}`,
+                    commissioningServer.getCommissionedFabricInformation(fabricIndex)[0],
+                );
+            },
         });
 
         // optionally add a listener for the testEventTrigger command from the GeneralDiagnostics cluster

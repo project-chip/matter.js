@@ -178,6 +178,10 @@ export class MatterController {
         this.addTransportInterface(netInterfaceIpv6);
     }
 
+    get nodeId() {
+        return this.fabric.rootNodeId;
+    }
+
     public addTransportInterface(netInterface: NetInterface) {
         this.exchangeManager.addTransportInterface(netInterface);
     }
@@ -569,10 +573,10 @@ export class MatterController {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        idleRetransTimeoutMs?: number,
-        activeRetransTimeoutMs?: number,
+        idleRetransmissionTimeoutMs?: number,
+        activeRetransmissionTimeoutMs?: number,
     ) {
-        const session = await this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession({
             sessionId,
             fabric,
             peerNodeId,
@@ -581,9 +585,9 @@ export class MatterController {
             salt,
             isInitiator,
             isResumption,
-            idleRetransTimeoutMs,
-            activeRetransTimeoutMs,
-            async () => {
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
                 if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
@@ -591,7 +595,7 @@ export class MatterController {
                 }
                 this.sessionClosedCallback?.(peerNodeId);
             },
-        );
+        });
         return session;
     }
 

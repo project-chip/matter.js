@@ -83,6 +83,10 @@ describe("Integration Test", () => {
     let serverMdnsScanner: MdnsScanner;
     let clientMdnsScanner: MdnsScanner;
     let mdnsBroadcaster: MdnsBroadcaster;
+    const commissioningChangedCallsServer = new Array<{ fabricIndex: FabricIndex; time: number }>();
+    const commissioningChangedCallsServer2 = new Array<{ fabricIndex: FabricIndex; time: number }>();
+    const sessionChangedCallsServer = new Array<{ fabricIndex: FabricIndex; time: number }>();
+    const sessionChangedCallsServer2 = new Array<{ fabricIndex: FabricIndex; time: number }>();
 
     before(async () => {
         MockTime.reset(TIME_START);
@@ -133,6 +137,10 @@ describe("Integration Test", () => {
                 reachable: true,
             },
             delayedAnnouncement: true, // delay because we need to override Mdns classes
+            commissioningChangedCallback: (fabricIndex: FabricIndex) =>
+                commissioningChangedCallsServer.push({ fabricIndex, time: MockTime.nowMs() }),
+            activeSessionsChangedCallback: (fabricIndex: FabricIndex) =>
+                sessionChangedCallsServer.push({ fabricIndex, time: MockTime.nowMs() }),
         });
         assert.equal(commissioningServer.getPort(), undefined);
 
@@ -245,6 +253,9 @@ describe("Integration Test", () => {
             const mockTimeInstance = Time.get();
             Time.get = singleton(() => new TimeNode());
 
+            assert.equal(commissioningChangedCallsServer.length, 0);
+            assert.equal(sessionChangedCallsServer.length, 0);
+
             await commissioningController.start();
             const node = await commissioningController.commissionNode({
                 discovery: {
@@ -265,12 +276,30 @@ describe("Integration Test", () => {
             };
 
             assert.deepEqual(commissioningController.getCommissionedNodes(), [node.nodeId]);
+            assert.equal(commissioningChangedCallsServer.length, 1);
+            assert.equal(commissioningChangedCallsServer[0].fabricIndex, FabricIndex(1));
+            assert.equal(sessionChangedCallsServer.length, 1);
+            assert.equal(sessionChangedCallsServer[0].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
+            assert.equal(sessionInfo[0].nodeId, node.nodeId);
         });
 
-        it("We can connect to the new comissioned device", async () => {
+        it("We can connect to the new commissioned device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
 
             await commissioningController.connectNode(nodeId);
+
+            assert.equal(commissioningChangedCallsServer.length, 1);
+            assert.equal(sessionChangedCallsServer.length, 1);
+            assert.equal(sessionChangedCallsServer[0].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
         });
 
         it("Subscribe to all Attributes and bind updates to them", async () => {
@@ -281,6 +310,15 @@ describe("Integration Test", () => {
 
             assert.equal(Array.isArray(data.attributeReports), true);
             assert.equal(Array.isArray(data.eventReports), true);
+
+            assert.equal(commissioningChangedCallsServer.length, 1);
+            assert.equal(sessionChangedCallsServer.length, 2);
+            assert.equal(sessionChangedCallsServer[1].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 1);
         });
 
         it("Verify that commissioning changed the Regulatory Config/Location values", async () => {
@@ -827,6 +865,14 @@ describe("Integration Test", () => {
             const lastReport = await lastPromise;
 
             assert.deepEqual(lastReport, { value: false, time: startTime + (10 + 2) * 1000 + 200 });
+
+            assert.equal(commissioningChangedCallsServer.length, 1);
+            assert.equal(sessionChangedCallsServer.length, 3);
+            assert.equal(sessionChangedCallsServer[2].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 2);
         });
 
         it("another additional subscription of one attribute with known data version only sends updates when the value changes", async () => {
@@ -1024,6 +1070,16 @@ describe("Integration Test", () => {
                 time: startTime + 200 + 101,
             });
         });
+
+        it("Check callback info", async () => {
+            assert.equal(commissioningChangedCallsServer.length, 1);
+            assert.ok(sessionChangedCallsServer.length >= 6); // not 100% accurate because of MockTime and not 100% finished responses and stuff like that
+            assert.equal(sessionChangedCallsServer[4].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.ok(sessionInfo[0].numberOfActiveSubscriptions >= 5);
+        });
     });
 
     describe("Access Control server fabric scoped attribute storage", () => {
@@ -1149,6 +1205,10 @@ describe("Integration Test", () => {
                     reachable: true,
                 },
                 delayedAnnouncement: true, // delay because we need to override Mdns classes
+                commissioningChangedCallback: (fabricIndex: FabricIndex) =>
+                    commissioningChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
+                activeSessionsChangedCallback: (fabricIndex: FabricIndex) =>
+                    sessionChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
             });
 
             onOffLightDeviceServer = new OnOffLightDevice();
@@ -1161,6 +1221,9 @@ describe("Integration Test", () => {
             commissioningServer2.setMdnsBroadcaster(mdnsBroadcaster);
 
             await assert.doesNotReject(async () => commissioningServer2.advertise());
+
+            assert.equal(commissioningChangedCallsServer2.length, 0);
+            assert.equal(sessionChangedCallsServer2.length, 0);
         });
 
         it("the client commissions the second device", async () => {
@@ -1186,12 +1249,28 @@ describe("Integration Test", () => {
             Time.get = () => mockTimeInstance;
 
             assert.deepEqual(commissioningController.getCommissionedNodes(), [...existingNodes, node.nodeId]);
+
+            assert.equal(commissioningChangedCallsServer2.length, 1);
+            assert.equal(sessionChangedCallsServer2.length, 1);
+            assert.equal(sessionChangedCallsServer2[0].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer2.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
         });
 
         it("We can connect to the new commissioned device", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[1];
 
             await commissioningController.connectNode(nodeId);
+
+            assert.equal(commissioningChangedCallsServer2.length, 1);
+            assert.equal(sessionChangedCallsServer2.length, 1);
+            assert.equal(sessionChangedCallsServer2[0].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer2.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 0);
         });
 
         it("Subscribe to all Attributes and bind updates to them for second device", async () => {
@@ -1202,6 +1281,14 @@ describe("Integration Test", () => {
 
             assert.equal(Array.isArray(data.attributeReports), true);
             assert.equal(Array.isArray(data.eventReports), true);
+
+            assert.equal(commissioningChangedCallsServer2.length, 1);
+            assert.equal(sessionChangedCallsServer2.length, 2);
+            assert.equal(sessionChangedCallsServer2[0].fabricIndex, FabricIndex(1));
+            const sessionInfo = commissioningServer2.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 1);
+            assert.ok(sessionInfo[0].fabric);
+            assert.equal(sessionInfo[0].numberOfActiveSubscriptions, 1);
         });
 
         it("controller storage is updated for second device", async () => {
@@ -1319,6 +1406,9 @@ describe("Integration Test", () => {
                         passcode,
                     }),
             ); // We can not check the real exception because text is dynamic
+
+            assert.equal(commissioningChangedCallsServer2.length, 1);
+            assert.equal(commissioningChangedCallsServer.length, 1);
         });
 
         it("connect this device to a new controller", async () => {
@@ -1352,6 +1442,15 @@ describe("Integration Test", () => {
                         passcode,
                     }),
             );
+
+            assert.equal(commissioningChangedCallsServer.length, 2);
+            assert.ok(sessionChangedCallsServer.length >= 7);
+            assert.equal(sessionChangedCallsServer[7].fabricIndex, FabricIndex(2));
+            const sessionInfo = commissioningServer.getActiveSessionInformation();
+            assert.equal(sessionInfo.length, 2);
+            assert.ok(sessionInfo[1].fabric);
+            assert.equal(sessionInfo[1].numberOfActiveSubscriptions, 0);
+            assert.equal(commissioningChangedCallsServer2.length, 1);
         }).timeout(10_000);
 
         it("verify that the server storage got updated", async () => {
@@ -1454,13 +1553,17 @@ describe("Integration Test", () => {
             const secondNodeId = commissioningController.getCommissionedNodes()[1];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            await assert.doesNotReject(async () => node.decommission());
+            await assert.doesNotReject(async () => await node.decommission());
 
             assert.equal(commissioningController.getCommissionedNodes().length, 1);
             assert.equal(commissioningController.getCommissionedNodes()[0], secondNodeId);
+
+            assert.equal(commissioningChangedCallsServer.length, 3);
+            assert.equal(commissioningChangedCallsServer[2].fabricIndex, FabricIndex(1));
+            assert.equal(commissioningChangedCallsServer2.length, 1);
         });
 
-        it("read and remove second node by removing fabric from device unplanned", async () => {
+        it("read and remove second node by removing fabric from device unplanned and doing factory reset", async () => {
             // We remove the node ourselves (should not be done that way), but for testing we do
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
@@ -1480,12 +1583,29 @@ describe("Integration Test", () => {
             assert.equal(result.statusCode, OperationalCredentials.NodeOperationalCertStatus.Ok);
             assert.deepEqual(result.fabricIndex, fabricIndex);
 
+            let i;
+            for (i = 0; i < 20; i++) {
+                if (commissioningChangedCallsServer2.length === 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                } else {
+                    break;
+                }
+            }
+            assert.ok(i !== 0);
+            assert.equal(commissioningChangedCallsServer2.length, 2);
+
+            assert.equal(commissioningController.getCommissionedNodes().length, 1);
+
             // Try to remove node now will throw an error
             await assert.rejects(async () => await node.decommission());
 
             await assert.doesNotReject(async () => await commissioningController.removeNode(nodeId, false));
 
             Time.get = () => mockTimeInstance;
+
+            assert.equal(commissioningController.getCommissionedNodes().length, 0);
+            assert.equal(commissioningChangedCallsServer2.length, 2);
+            assert.equal(commissioningChangedCallsServer2[1].fabricIndex, FabricIndex(1));
         }).timeout(30_000);
 
         it("controller storage is updated for removed nodes", async () => {

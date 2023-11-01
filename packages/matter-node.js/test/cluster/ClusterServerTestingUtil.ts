@@ -56,20 +56,20 @@ export async function createTestSessionWithFabric() {
         ZERO,
         "",
     );
-    return await SecureSession.create(
-        {} as any,
-        1,
-        testFabric,
-        NodeId(BigInt(1)),
-        1,
-        ZERO,
-        ZERO,
-        false,
-        false,
-        async () => {
+    return await SecureSession.create({
+        context: {} as any,
+        id: 1,
+        fabric: testFabric,
+        peerNodeId: NodeId(BigInt(1)),
+        peerSessionId: 1,
+        sharedSecret: ZERO,
+        salt: ZERO,
+        isInitiator: false,
+        isResumption: false,
+        closeCallback: async () => {
             /* */
         },
-        1,
-        2,
-    );
+        idleRetransmissionTimeoutMs: 1,
+        activeRetransmissionTimeoutMs: 2,
+    });
 }

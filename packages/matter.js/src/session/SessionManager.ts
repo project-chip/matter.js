@@ -53,21 +53,21 @@ export class SessionManager<ContextT> {
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }
 
-    async createSecureSession(
-        sessionId: number,
-        fabric: Fabric | undefined,
-        peerNodeId: NodeId,
-        peerSessionId: number,
-        sharedSecret: ByteArray,
-        salt: ByteArray,
-        isInitiator: boolean,
-        isResumption: boolean,
-        idleRetransTimeoutMs?: number,
-        activeRetransTimeoutMs?: number,
-        closeCallback?: () => Promise<void>,
-    ) {
-        const session = await SecureSession.create(
-            this.context,
+    async createSecureSession(args: {
+        sessionId: number;
+        fabric: Fabric | undefined;
+        peerNodeId: NodeId;
+        peerSessionId: number;
+        sharedSecret: ByteArray;
+        salt: ByteArray;
+        isInitiator: boolean;
+        isResumption: boolean;
+        idleRetransmissionTimeoutMs?: number;
+        activeRetransmissionTimeoutMs?: number;
+        closeCallback?: () => Promise<void>;
+        subscriptionChangedCallback?: () => void;
+    }) {
+        const {
             sessionId,
             fabric,
             peerNodeId,
@@ -76,14 +76,30 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            async () => {
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            closeCallback,
+            subscriptionChangedCallback,
+        } = args;
+        const session = await SecureSession.create({
+            context: this.context,
+            id: sessionId,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            salt,
+            isInitiator,
+            isResumption,
+            closeCallback: async () => {
                 logger.info(`Remove Session ${session.name} from session manager.`);
                 await closeCallback?.();
                 this.sessions.delete(sessionId);
             },
-            idleRetransTimeoutMs,
-            activeRetransTimeoutMs,
-        );
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            subscriptionChangedCallback: () => subscriptionChangedCallback?.(),
+        });
         this.sessions.set(sessionId, session);
 
         // TODO: Add a maximum of sessions and respect/close the "least recently used" session. See Core Specs 4.10.1.1

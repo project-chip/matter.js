@@ -122,6 +122,10 @@ export class CommissioningController extends MatterNode {
         super();
     }
 
+    get nodeId() {
+        return this.controllerInstance?.nodeId;
+    }
+
     assertIsAddedToMatterServer() {
         if (this.mdnsScanner === undefined || this.storage === undefined) {
             throw new ImplementationError("Add the node to the Matter instance before.");
