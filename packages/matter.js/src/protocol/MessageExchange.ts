@@ -345,7 +345,7 @@ export class MessageExchange<ContextT> {
     }
 
     async destroy() {
-        if (this.receivedMessageToAck !== undefined) {
+        if (this.closeTimer === undefined && this.receivedMessageToAck !== undefined) {
             try {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
             } catch (error) {
@@ -394,6 +394,7 @@ export class MessageExchange<ContextT> {
     }
 
     async close() {
+        if (this.closeTimer !== undefined) return; // close was already called
         if (this.receivedMessageToAck !== undefined) {
             try {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
