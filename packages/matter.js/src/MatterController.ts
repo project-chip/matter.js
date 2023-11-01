@@ -178,6 +178,10 @@ export class MatterController {
         this.addTransportInterface(netInterfaceIpv6);
     }
 
+    get nodeId() {
+        return this.fabric.rootNodeId;
+    }
+
     public addTransportInterface(netInterface: NetInterface) {
         this.exchangeManager.addTransportInterface(netInterface);
     }
