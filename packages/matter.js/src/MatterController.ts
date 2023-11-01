@@ -497,7 +497,7 @@ export class MatterController {
             }, // Convert error
         );
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
-        this.channelManager.setChannel(this.fabric, peerNodeId, channel);
+        await this.channelManager.setChannel(this.fabric, peerNodeId, channel);
         return channel;
     }
 
@@ -548,8 +548,8 @@ export class MatterController {
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
-                this.channelManager.removeChannel(this.fabric, peerNodeId);
                 await this.resume(peerNodeId);
+                await this.channelManager.removeChannel(this.fabric, peerNodeId);
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
             peerNodeId,
