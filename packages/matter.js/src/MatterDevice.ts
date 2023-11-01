@@ -159,7 +159,7 @@ export class MatterDevice {
         }
         const fabrics = this.fabricManager.getFabrics();
         if (fabrics.length) {
-            let fabricsToAnnounce = 0;
+            let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (
@@ -167,13 +167,13 @@ export class MatterDevice {
                     !session.isSecure() ||
                     (session as SecureSession<this>).numberOfActiveSubscriptions === 0
                 ) {
-                    fabricsToAnnounce++;
+                    fabricsWithoutSessions++;
                     logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
                 }
             }
             for (const broadcaster of this.broadcasters) {
                 await broadcaster.setFabrics(fabrics);
-                if (fabricsToAnnounce > 0) {
+                if (fabricsWithoutSessions > 0) {
                     await broadcaster.announce();
                 }
             }
