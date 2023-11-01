@@ -263,14 +263,17 @@ export class MatterDevice {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
                 }
-                if (fabric !== undefined) {
-                    this.sessionChangedCallback(fabric.fabricIndex);
+                const currentFabric = session.getFabric();
+                if (currentFabric !== undefined) {
+                    this.sessionChangedCallback(currentFabric.fabricIndex);
                 }
                 await this.startAnnouncement();
             },
             () => {
-                if (fabric !== undefined) {
-                    this.sessionChangedCallback(fabric.fabricIndex);
+                const currentFabric = session.getFabric();
+                logger.warn(`Session ${session.name} with fabric ${!!currentFabric}!`);
+                if (currentFabric !== undefined) {
+                    this.sessionChangedCallback(currentFabric.fabricIndex);
                 }
             },
         );
