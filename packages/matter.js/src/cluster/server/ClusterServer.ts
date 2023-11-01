@@ -335,7 +335,7 @@ export function ClusterServer<
                     : undefined,
             );
 
-            // Add the relevant convenient methods to the CLusterServerObj
+            // Add the relevant convenient methods to the ClusterServerObj
             if (fixed) {
                 result[`get${capitalizedAttributeName}Attribute`] = () => (attributes as any)[attributeName].getLocal();
             } else if (fabricScoped) {
