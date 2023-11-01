@@ -143,7 +143,7 @@ export class ExchangeManager<ContextT> {
                 );
             }
             const exchange = MessageExchange.fromInitialMessage(
-                this.channelManager.getOrCreateChannel(channel, session),
+                await this.channelManager.getOrCreateChannel(channel, session),
                 this.messageCounter,
                 message,
                 async () => await this.deleteExchange(exchangeIndex),
