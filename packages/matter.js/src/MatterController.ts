@@ -548,8 +548,8 @@ export class MatterController {
         }
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
-                await this.resume(peerNodeId);
                 await this.channelManager.removeChannel(this.fabric, peerNodeId);
+                await this.resume(peerNodeId);
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
             peerNodeId,
