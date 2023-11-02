@@ -1,5 +1,7 @@
 /**
- * Import needed modules from @project-chip/matter-node.js
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
