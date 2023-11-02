@@ -638,7 +638,7 @@ export class MatterController {
         return new InteractionClient(
             new ExchangeProvider(this.exchangeManager, channel, async () => {
                 await this.channelManager.removeChannel(this.fabric, peerNodeId);
-                await this.resume(peerNodeId);
+                await this.resume(peerNodeId, 60); // Channel reconnection only waits limited time
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
             peerNodeId,
