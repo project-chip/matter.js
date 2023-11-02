@@ -54,6 +54,32 @@ import { logEndpoint } from "./EndpointStructureLogger.js";
 
 const logger = Logger.get("PairedNode");
 
+export enum NodeStateInformation {
+    /** Node is connected and all data is up-to-date. */
+    Connected,
+
+    /**
+     * Node is disconnected. Data are stale and interactions will most likely return an error. If controller instance
+     * is still active then the device will be reconnected once it is available again.
+     */
+    Disconnected,
+
+    /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
+    Reconnecting,
+
+    /**
+     * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
+     * minutes to reconnect.
+     */
+    WaitingForDeviceDiscovery,
+
+    /**
+     * Node structure has changed (Endpoints got added or also removed). Data are up-to-date.
+     * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
+     */
+    StructureChanged,
+}
+
 export type CommissioningControllerNodeOptions = {
     /**
      * Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient
@@ -76,13 +102,19 @@ export type CommissioningControllerNodeOptions = {
      * Optional additional callback method which is called for each Attribute change reported by the device. Use this
      * if subscribing to all relevant attributes is too much effort.
      */
-    readonly attributeChangedCallback?: (data: DecodedAttributeReportValue<any>) => void;
+    readonly attributeChangedCallback?: (nodeId: NodeId, data: DecodedAttributeReportValue<any>) => void;
 
     /**
      * Optional additional callback method which is called for each Event reported by the device. Use this if
      * subscribing to all relevant events is too much effort.
      */
-    readonly eventTriggeredCallback?: (data: DecodedEventReportValue<any>) => void;
+    readonly eventTriggeredCallback?: (nodeId: NodeId, data: DecodedEventReportValue<any>) => void;
+
+    /**
+     * Optional callback method which is called when the state of the node changes. This can be used to detect when
+     * the node goes offline or comes back online.
+     */
+    readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
 
 /**
@@ -92,6 +124,12 @@ export type CommissioningControllerNodeOptions = {
 export class PairedNode {
     private readonly endpoints = new Map<EndpointNumber, Endpoint>();
     private interactionClient?: InteractionClient;
+    private readonly reconnectDelayTimer = Time.getTimer(5_000, async () => await this.reconnect());
+    private readonly updateEndpointStructureTimer = Time.getTimer(
+        5_000,
+        async () => await this.updateEndpointStructure(),
+    );
+    private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
 
     static async create(
         nodeId: NodeId,
