@@ -14,6 +14,8 @@ import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
  * The properties are named identical as in the Matter specification.
  */
 export type CommissionableDevice = {
+    deviceIdentifier: string;
+
     /** The device's addresses IP/port pairs */
     addresses: ServerAddress[];
 
