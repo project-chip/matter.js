@@ -51,7 +51,7 @@ import { PaseClient } from "../session/pase/PaseClient.js";
 import { Time } from "../time/Time.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
-import { logEndpoint } from "./EndpointStructureLogger.js";
+import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.js";
 
 const logger = Logger.get("PairedNode");
 
@@ -252,13 +252,13 @@ export class PairedNode {
     }
 
     /** Method to log the structure of this node with all endpoint and clusters. */
-    logStructure() {
+    logStructure(options?: EndpointLoggingOptions) {
         const rootEndpoint = this.endpoints.get(EndpointNumber(0));
         if (rootEndpoint === undefined) {
             logger.info(`Node ${this.nodeId} has not yet been initialized!`);
             return;
         }
-        logEndpoint(rootEndpoint);
+        logEndpoint(rootEndpoint, options);
     }
 
     /**
