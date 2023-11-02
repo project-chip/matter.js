@@ -65,6 +65,8 @@ const DEFAULT_FABRIC_INDEX = FabricIndex(1);
 const DEFAULT_FABRIC_ID = FabricId(1);
 const DEFAULT_ADMIN_VENDOR_ID = VendorId(0xfff1);
 
+const RECONNECTION_POLLING_INTERVAL = 10 * 60 * 1000; // 10 minutes
+
 const logger = Logger.get("MatterController");
 
 /**
@@ -425,7 +427,7 @@ export class MatterController {
                 await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.connect(peerNodeId, 120);
+                return await this.connect(peerNodeId, 120); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
@@ -442,13 +444,18 @@ export class MatterController {
      * device is discovered again using its operational instance details.
      * It returns the operational MessageChannel on success.
      */
-    private async resume(peerNodeId: NodeId, timeoutSeconds = 60) {
+    private async resume(peerNodeId: NodeId, timeoutSeconds?: number) {
         const operationalAddress = this.getLastOperationalAddress(peerNodeId);
-        if (operationalAddress !== undefined) {
+
+        const reconnectLastKnownAddress = async (
+            operationalAddress: ServerAddressIp,
+        ): Promise<MessageChannel<MatterController> | undefined> => {
             const { ip, port } = operationalAddress;
             try {
                 logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
-                return await this.pair(peerNodeId, operationalAddress);
+                const channel = await this.pair(peerNodeId, operationalAddress);
+                this.setOperationalServerAddress(peerNodeId, operationalAddress);
+                return channel;
             } catch (error) {
                 if (
                     error instanceof RetransmissionLimitReachedError ||
@@ -458,31 +465,83 @@ export class MatterController {
                         `Failed to resume device connection with ${ip}:${port}, discover the device ...`,
                         error,
                     );
-                    // TODO do not clear address if the device is "just" offline, but still try to discover it
-                    this.clearOperationalServerAddress(peerNodeId);
+                    return undefined;
                 } else {
                     throw error;
                 }
             }
+        };
+
+        const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
+
+        // Additionally to general discovery we also try to poll the formerly known operational address
+        let reconnectionPollingTimer: Timer | undefined;
+
+        if (operationalAddress !== undefined) {
+            const directReconnection = await reconnectLastKnownAddress(operationalAddress);
+            if (directReconnection !== undefined) {
+                return directReconnection;
+            }
+
+            if (timeoutSeconds === undefined) {
+                const { promise, resolver, rejecter } = createPromise<MessageChannel<MatterController>>();
+
+                reconnectionPollingTimer = Time.getPeriodicTimer(RECONNECTION_POLLING_INTERVAL, async () => {
+                    try {
+                        logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
+                        const result = await reconnectLastKnownAddress(operationalAddress);
+                        if (result !== undefined && reconnectionPollingTimer?.isRunning) {
+                            reconnectionPollingTimer?.stop();
+                            resolver(result);
+                        }
+                    } catch (error) {
+                        if (reconnectionPollingTimer?.isRunning) {
+                            reconnectionPollingTimer?.stop();
+                            rejecter(error);
+                        }
+                    }
+                }).start();
+
+                discoveryPromises.push(() => promise);
+            }
         }
 
-        const scanResult = await this.mdnsScanner.findOperationalDevice(this.fabric, peerNodeId, timeoutSeconds);
-        if (!scanResult.length) {
-            throw new NetworkError(
-                "The operational device cannot be found on the network. Please make sure it is online.",
+        discoveryPromises.push(async () => {
+            const scanResult = await ControllerDiscovery.discoverOperationalDevice(
+                this.fabric,
+                peerNodeId,
+                this.mdnsScanner,
+                timeoutSeconds,
+                timeoutSeconds === undefined,
             );
+            if (reconnectionPollingTimer?.isRunning) {
+                reconnectionPollingTimer?.stop();
+            }
+
+            const { result, resultAddress } = await ControllerDiscovery.iterateServerAddresses(
+                scanResult,
+                PairRetransmissionLimitReachedError,
+                async () => this.mdnsScanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
+                async address => await this.pair(peerNodeId, address),
+            );
+
+            this.setOperationalServerAddress(peerNodeId, resultAddress);
+            return result;
+        });
+
+        try {
+            return await anyPromise(discoveryPromises);
+        } catch (error) {
+            if (
+                (error instanceof DiscoveryError || error instanceof PairRetransmissionLimitReachedError) &&
+                this.commissionedNodes.has(peerNodeId)
+            ) {
+                logger.info(`Resume failed, remove all sessions for node ${peerNodeId}`);
+                // We remove all sessions, this also informs the PairedNode class
+                await this.sessionManager.removeAllSessionsForNode(peerNodeId);
+            }
+            throw error;
         }
-
-        const { result, resultAddress } = await ControllerDiscovery.iterateServerAddresses(
-            scanResult,
-            PairRetransmissionLimitReachedError,
-            async () => this.mdnsScanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
-            async address => await this.pair(peerNodeId, address),
-        );
-
-        this.setOperationalServerAddress(peerNodeId, resultAddress);
-
-        return result;
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
