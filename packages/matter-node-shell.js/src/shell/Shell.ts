@@ -46,7 +46,6 @@ export class Shell {
      *
      * @param {MatterNode} theNode MatterNode object to use for all commands.
      * @param {string} prompt Prompt string to use for each command line.
-     * @param {Array} commandList Array of JSON commands dispatch structures.
      */
     constructor(
         public theNode: MatterNode,

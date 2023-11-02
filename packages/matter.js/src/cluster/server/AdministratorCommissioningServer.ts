@@ -155,7 +155,7 @@ class AdministratorCommissioningManager {
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
         this.endCommissioning();
-        session.getContext().endCommissioning();
+        await session.getContext().endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
