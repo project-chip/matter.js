@@ -82,7 +82,10 @@ export class MdnsScanner implements Scanner {
 
     private readonly operationalDeviceRecords = new Map<string, Map<string, MatterServerRecordWithExpire>>();
     private readonly commissionableDeviceRecords = new Map<string, CommissionableDeviceRecordWithExpire>();
-    private readonly recordWaiters = new Map<string, { resolver: () => void; timer: Timer }>();
+    private readonly recordWaiters = new Map<
+        string,
+        { resolver: () => void; timer?: Timer; resolveOnUpdatedRecords: boolean }
+    >();
     private readonly periodicTimer: Timer;
 
     constructor(
@@ -252,11 +255,18 @@ export class MdnsScanner implements Scanner {
      * Registers a deferred promise for a specific queryId together with a timeout and return the promise.
      * The promise will be resolved when the timer runs out latest.
      */
-    private async registerWaiterPromise(queryId: string, timeoutSeconds: number) {
+    private async registerWaiterPromise(queryId: string, timeoutSeconds?: number, resolveOnUpdatedRecords = true) {
         const { promise, resolver } = createPromise<void>();
-        const timer = Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start();
-        this.recordWaiters.set(queryId, { resolver, timer });
-        logger.debug(`Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds`);
+        const timer =
+            timeoutSeconds !== undefined
+                ? Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start()
+                : undefined;
+        this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
+        logger.debug(
+            `Registered waiter for query ${queryId} with ${
+                timeoutSeconds !== undefined ? `timeout ${timeoutSeconds} seconds` : "no timeout"
+            }${resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"}`,
+        );
         return { promise };
     }
 
@@ -264,12 +274,15 @@ export class MdnsScanner implements Scanner {
      * Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the
      * promise.
      */
-    private finishWaiter(queryId: string, resolvePromise = false) {
+    private finishWaiter(queryId: string, resolvePromise: boolean, isUpdatedRecord = false) {
         const waiter = this.recordWaiters.get(queryId);
         if (waiter === undefined) return;
-        const { timer, resolver } = waiter;
+        const { timer, resolver, resolveOnUpdatedRecords } = waiter;
+        if (isUpdatedRecord && !resolveOnUpdatedRecords) return;
         logger.debug(`Finishing waiter for query ${queryId}, resolving: ${resolvePromise}`);
-        timer.stop();
+        if (timer !== undefined) {
+            timer.stop();
+        }
         if (resolvePromise) {
             resolver();
         }
@@ -288,11 +301,12 @@ export class MdnsScanner implements Scanner {
     async findOperationalDevice(
         { operationalId }: Fabric,
         nodeId: NodeId,
-        timeoutSeconds = 5,
+        timeoutSeconds?: number,
+        ignoreExistingRecords = false,
     ): Promise<ServerAddressIp[]> {
         const deviceMatterQname = this.createOperationalMatterQName(operationalId, nodeId);
 
-        let storedRecords = this.getOperationalDeviceRecords(deviceMatterQname);
+        let storedRecords = ignoreExistingRecords ? [] : this.getOperationalDeviceRecords(deviceMatterQname);
         if (storedRecords.length === 0) {
             const { promise } = await this.registerWaiterPromise(deviceMatterQname, timeoutSeconds);
 
@@ -376,7 +390,7 @@ export class MdnsScanner implements Scanner {
         throw new ImplementationError(`Invalid commissionable device identifier : ${JSON.stringify(identifier)}`); // Should neven happen
     }
 
-    extractInstanceId(instanceName: string) {
+    private extractInstanceId(instanceName: string) {
         const instanceNameSeparator = instanceName.indexOf(".");
         if (instanceNameSeparator !== -1) {
             return instanceName.substring(0, instanceNameSeparator);
@@ -434,71 +448,76 @@ export class MdnsScanner implements Scanner {
         return undefined;
     }
 
+    private getCommissionableQueryRecords(identifier: CommissionableDeviceIdentifiers) {
+        const queries = new Array<DnsQuery>();
+
+        queries.push({
+            name: MATTER_COMMISSION_SERVICE_QNAME,
+            recordClass: DnsRecordClass.IN,
+            recordType: DnsRecordType.PTR,
+        });
+
+        if ("instanceId" in identifier) {
+            queries.push({
+                name: getDeviceInstanceQname(identifier.instanceId),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        } else if ("longDiscriminator" in identifier) {
+            queries.push({
+                name: getLongDiscriminatorQname(identifier.longDiscriminator),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        } else if ("shortDiscriminator" in identifier) {
+            queries.push({
+                name: getShortDiscriminatorQname(identifier.shortDiscriminator),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        } else if ("vendorId" in identifier) {
+            queries.push({
+                name: getVendorQname(identifier.vendorId),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        } else if ("deviceType" in identifier) {
+            queries.push({
+                name: getDeviceTypeQname(identifier.deviceType),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        } else {
+            // Other queries just scan for commissionable devices
+            queries.push({
+                name: getCommissioningModeQname(),
+                recordClass: DnsRecordClass.IN,
+                recordType: DnsRecordType.PTR,
+            });
+        }
+
+        return queries;
+    }
+
     /**
-     * Discovers commissionalble devices based on a defined identifier. If an already discovered device matched the
-     * query it is returned directly and no query is triggered. This works because the commissionable device records
-     * that are announced into the network are always stored already. If no record can be found a query is registered
-     * and sent out and  the promise gets fulfilled as soon as one device is found. More might be added later and can
-     * be requested ny the getCommissionableDevices method. If no device is discovered the promise is fulfilled after
-     * the timeout period.
+     * Discovers commissionable devices based on a defined identifier for ma maximal given timeout, but returns the
+     * first found entries. If already a discovered device matches in the cache the query it is returned directly and
+     * no query is triggered. If no record exists a query is sent out and the promise gets fulfilled as soon as at least
+     * one device is found. If no device is discovered in the defined timeframe an empty array is returned. When the
+     * promise got fulfilled no more queries are send out, but more device entries might be added when discovered later.
+     * These can be requested by the getCommissionableDevices method.
      */
     async findCommissionableDevices(
         identifier: CommissionableDeviceIdentifiers,
         timeoutSeconds = 5,
+        ignoreExistingRecords = false,
     ): Promise<CommissionableDevice[]> {
-        let storedRecords = this.getCommissionableDeviceRecords(identifier);
+        let storedRecords = ignoreExistingRecords ? [] : this.getCommissionableDeviceRecords(identifier);
         if (storedRecords.length === 0) {
             const queryId = this.buildCommissionableQueryIdentifier(identifier);
             const { promise } = await this.registerWaiterPromise(queryId, timeoutSeconds);
 
-            const queries = [
-                {
-                    name: MATTER_COMMISSION_SERVICE_QNAME,
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                },
-            ];
-
-            if ("instanceId" in identifier) {
-                queries.push({
-                    name: getDeviceInstanceQname(identifier.instanceId),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            } else if ("longDiscriminator" in identifier) {
-                queries.push({
-                    name: getLongDiscriminatorQname(identifier.longDiscriminator),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            } else if ("shortDiscriminator" in identifier) {
-                queries.push({
-                    name: getShortDiscriminatorQname(identifier.shortDiscriminator),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            } else if ("vendorId" in identifier) {
-                queries.push({
-                    name: getVendorQname(identifier.vendorId),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            } else if ("deviceType" in identifier) {
-                queries.push({
-                    name: getDeviceTypeQname(identifier.deviceType),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            } else {
-                // Other queries just scan for commissionable devices
-                queries.push({
-                    name: getCommissioningModeQname(),
-                    recordClass: DnsRecordClass.IN,
-                    recordType: DnsRecordType.PTR,
-                });
-            }
-
-            this.setQueryRecords(queryId, queries);
+            this.setQueryRecords(queryId, this.getCommissionableQueryRecords(identifier));
 
             await promise;
             storedRecords = this.getCommissionableDeviceRecords(identifier);
@@ -506,6 +525,42 @@ export class MdnsScanner implements Scanner {
         }
 
         return storedRecords;
+    }
+
+    /**
+     * Discovers commissionable devices based on a defined identifier and returns the first found entries. If already a
+     * @param identifier
+     * @param callback
+     * @param timeoutSeconds
+     */
+    async findCommissionableDevicesContinuously(
+        identifier: CommissionableDeviceIdentifiers,
+        callback: (device: CommissionableDevice) => void,
+        timeoutSeconds = 900,
+    ): Promise<CommissionableDevice[]> {
+        const discoveredDevices = new Set<string>();
+
+        const discoveryEndTime = Time.nowMs() + timeoutSeconds * 1000;
+        const queryId = this.buildCommissionableQueryIdentifier(identifier);
+        this.setQueryRecords(queryId, this.getCommissionableQueryRecords(identifier));
+
+        while (true) {
+            this.getCommissionableDeviceRecords(identifier).forEach(device => {
+                const { deviceIdentifier } = device;
+                if (!discoveredDevices.has(deviceIdentifier)) {
+                    discoveredDevices.add(deviceIdentifier);
+                    callback(device);
+                }
+            });
+
+            const remainingTime = Math.ceil((discoveryEndTime - Time.nowMs()) / 1000);
+            if (remainingTime <= 0) {
+                break;
+            }
+            const { promise } = await this.registerWaiterPromise(queryId, remainingTime, false);
+            await promise;
+        }
+        return this.getCommissionableDeviceRecords(identifier);
     }
 
     getDiscoveredCommissionableDevices(identifier: CommissionableDeviceIdentifiers) {
@@ -519,7 +574,10 @@ export class MdnsScanner implements Scanner {
         this.periodicTimer.stop();
         this.queryTimer?.stop();
         await this.multicastServer.close();
-        [...this.recordWaiters.keys()].forEach(queryId => this.finishWaiter(queryId, true));
+        // Resolve all pending promises where logic waits for the response (aka: has a timer)
+        [...this.recordWaiters.keys()].forEach(queryId =>
+            this.finishWaiter(queryId, !!this.recordWaiters.get(queryId)?.timer),
+        );
     }
 
     /**
@@ -736,7 +794,7 @@ export class MdnsScanner implements Scanner {
             if (queryId === undefined) continue;
 
             queryMissingDataForInstances.delete(record.name); // No need to query anymore, we have anything we need
-            this.finishWaiter(queryId, true);
+            this.finishWaiter(queryId, true, recordExisting);
         }
 
         // We have to query for the SRV records for the missing commissionable devices where we only had TXT records
