@@ -17,7 +17,7 @@ import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioning
 import { Channel } from "./common/Channel.js";
 import { NoProviderError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
-import { ServerAddress, ServerAddressIp } from "./common/ServerAddress.js";
+import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricId } from "./datatype/FabricId.js";
@@ -28,25 +28,28 @@ import { Fabric, FabricBuilder, FabricJsonObject } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { NetInterface } from "./net/NetInterface.js";
-import { NetworkError } from "./net/Network.js";
 import { ChannelManager, NoChannelError } from "./protocol/ChannelManager.js";
 import { CommissioningOptions, ControllerCommissioner } from "./protocol/ControllerCommissioner.js";
-import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
+import { ControllerDiscovery, DiscoveryError } from "./protocol/ControllerDiscovery.js";
 import { ExchangeManager, ExchangeProvider, MessageChannel } from "./protocol/ExchangeManager.js";
 import { RetransmissionLimitReachedError } from "./protocol/MessageExchange.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
+import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
+import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvString } from "./tlv/TlvString.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { isIPv6 } from "./util/Ip.js";
+import { anyPromise, createPromise } from "./util/Promises.js";
 
 const TlvCommissioningSuccessFailureResponse = TlvObject({
     /** Contain the result of the operation. */
@@ -601,13 +604,6 @@ export class MatterController {
     private setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
         const nodeDetails = this.commissionedNodes.get(nodeId) ?? { operationalServerAddress };
         nodeDetails.operationalServerAddress = operationalServerAddress;
-        this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommisionedNodes();
-    }
-
-    private clearOperationalServerAddress(nodeId: NodeId) {
-        const nodeDetails = this.commissionedNodes.get(nodeId) ?? {};
-        delete nodeDetails.operationalServerAddress;
         this.commissionedNodes.set(nodeId, nodeDetails);
         this.storeCommisionedNodes();
     }
