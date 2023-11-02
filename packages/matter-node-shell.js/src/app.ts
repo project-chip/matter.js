@@ -75,7 +75,7 @@ async function main() {
 
                 const { nodeNum, ble, nodeType, resetStorage } = argv;
 
-                const theNode = new MatterNode(nodeNum);
+                theNode = new MatterNode(nodeNum);
                 await theNode.initialize(resetStorage);
                 const theShell = new Shell(theNode, PROMPT);
 

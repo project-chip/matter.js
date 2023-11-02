@@ -68,8 +68,12 @@ export class Shell {
                 });
             })
             .on("close", () => {
-                process.stdout.write("goodbye\n");
-                process.exit(0);
+                exit()
+                    .then(() => process.exit(0))
+                    .catch(e => {
+                        process.stderr.write(`Close error: ${e}\n`);
+                        process.exit(1);
+                    });
             });
 
         this.readline.prompt();
@@ -116,6 +120,8 @@ export class Shell {
                 if (argv.unhandled) {
                     process.stderr.write(`Unknown command: ${line}\n`);
                     yargsInstance.showHelp();
+                } else {
+                    console.log("Done.");
                 }
             } catch (error) {
                 process.stderr.write(`Error happened during command: ${error}\n`);
