@@ -48,6 +48,7 @@ import {
     QrPairingCodeCodec,
 } from "../schema/PairingCodeSchema.js";
 import { PaseClient } from "../session/pase/PaseClient.js";
+import { Time } from "../time/Time.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
 import { logEndpoint } from "./EndpointStructureLogger.js";
@@ -156,20 +157,52 @@ export class PairedNode {
         private readonly reconnectInteractionClient: () => Promise<InteractionClient>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
     ) {
-        assignDisconnectedHandler(async () => await this.reconnect());
+        assignDisconnectedHandler(async () => {
+            logger.info(
+                `Node ${this.nodeId}: Session disconnected${
+                    this.connectionState !== NodeStateInformation.Disconnected ? ", trying to reconnect ..." : ""
+                }`,
+            );
+            if (this.connectionState === NodeStateInformation.Connected) {
+                await this.reconnect();
+            }
+        });
     }
 
-    /** Reconnect to the device after the active Session was closed. */
-    private async reconnect() {
+    get isConnencted() {
+        return this.connectionState === NodeStateInformation.Connected;
+    }
+
+    private setConnectionState(state: NodeStateInformation) {
+        if (
+            this.connectionState === state ||
+            (this.connectionState === NodeStateInformation.Disconnected &&
+                state === NodeStateInformation.Reconnecting) ||
+            (this.connectionState === NodeStateInformation.WaitingForDeviceDiscovery &&
+                state === NodeStateInformation.Reconnecting)
+        )
+            return;
+        this.connectionState = state;
+        this.options.stateInformationCallback?.(this.nodeId, state);
+    }
+
+    /**
+     * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
+     * was closed or the device wen offline and was detected as being online again.
+     */
+    async reconnect() {
         if (this.interactionClient !== undefined) {
             this.interactionClient.close();
             this.interactionClient = undefined;
         }
+        this.setConnectionState(NodeStateInformation.Reconnecting);
         try {
             await this.initialize();
         } catch (error) {
-            logger.warn(`Node ${this.nodeId}: Error reconnecting to device`, error);
-            // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
+            if (this.connectionState === NodeStateInformation.Disconnected) return;
+            logger.warn(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+            this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+            await this.reconnect();
         }
     }
 
@@ -201,6 +234,7 @@ export class PairedNode {
             const allClusterAttributes = await interactionClient.getAllAttributes();
             await this.initializeEndpointStructure(allClusterAttributes);
         }
+        this.setConnectionState(NodeStateInformation.Connected);
     }
 
     /**
@@ -327,7 +361,17 @@ export class PairedNode {
     /** Handles a node shutDown event (if supported by the node and received). */
     private async handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
-        await this.reconnect();
+        if (!this.reconnectDelayTimer.isRunning) {
+            this.reconnectDelayTimer.start();
+        }
+        this.setConnectionState(NodeStateInformation.Reconnecting);
+    }
+
+    async updateEndpointStructure() {
+        const interactionClient = await this.ensureConnection();
+        const allClusterAttributes = await interactionClient.getAllAttributes();
+        await this.initializeEndpointStructure(allClusterAttributes, true);
+        this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
@@ -545,6 +589,7 @@ export class PairedNode {
                 `Removing node ${this.nodeId} failed with status ${result.statusCode} "${result.debugText}".`,
             );
         }
+        this.setConnectionState(NodeStateInformation.Disconnected);
         await this.commissioningController.removeNode(this.nodeId, false);
     }
 
@@ -640,6 +685,16 @@ export class PairedNode {
             }),
             qrPairingCode,
         };
+    }
+
+    async disconnect() {
+        this.close();
+        await this.commissioningController.disconnectNode(this.nodeId);
+    }
+
+    close() {
+        this.interactionClient?.close();
+        this.setConnectionState(NodeStateInformation.Disconnected);
     }
 
     /**
