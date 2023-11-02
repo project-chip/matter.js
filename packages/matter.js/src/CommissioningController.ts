@@ -83,6 +83,12 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
         identifierData: CommissionableDeviceIdentifiers;
 
         /**
+         * Commissionable device object returned by a discovery run.
+         * If this property is provided then identifierData and knownAddress are ignored.
+         */
+        commissionableDevice?: CommissionableDevice;
+
+        /**
          * Discovery capabilities to use for discovery. These are included in the QR code normally and defined if BLE
          * is supported for initial commissioning.
          */
