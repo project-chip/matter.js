@@ -541,15 +541,20 @@ export class MdnsScanner implements Scanner {
         this.handleCommissionableRecords(answers, this.getActiveQueryEarlierAnswers(), netInterface);
     }
 
-    private handleIpRecords(answers: DnsRecord<any>[], target: string, netInterface: string) {
+    private handleIpRecords(
+        answers: DnsRecord<any>[],
+        target: string,
+        netInterface: string,
+    ): { value: string; ttl: number }[] {
         const ipRecords = answers.filter(
             ({ name, recordType }) =>
                 ((recordType === DnsRecordType.A && this.enableIpv4) || recordType === DnsRecordType.AAAA) &&
                 name === target,
         );
-        return (ipRecords as DnsRecord<string>[]).map(({ value }) =>
-            value.startsWith("fe80::") ? `${value}%${netInterface}` : value,
-        );
+        return (ipRecords as DnsRecord<string>[]).map(({ value, ttl }) => ({
+            value: value.startsWith("fe80::") ? `${value}%${netInterface}` : value,
+            ttl,
+        }));
     }
 
     private handleOperationalSrvRecord(
