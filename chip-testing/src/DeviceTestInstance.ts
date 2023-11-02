@@ -26,6 +26,7 @@ export abstract class DeviceTestInstance {
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
+            console.log((error as Error).stack);
             throw error;
         }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Setup done\n`);
