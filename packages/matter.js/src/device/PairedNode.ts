@@ -230,6 +230,12 @@ export class PairedNode {
                 throw new InternalError("No attribute reports received when subscribing to all values!");
             }
             await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
+
+            const rootDescriptorCluster = this.getRootClusterClient(DescriptorCluster);
+            rootDescriptorCluster?.addPartsListAttributeListener(() => {
+                logger.info(`Node ${this.nodeId}: PartsList changed, reinitializing endpoint structure ...`);
+                this.updateEndpointStructureTimer.stop().start(); // Restart timer
+            });
         } else {
             const allClusterAttributes = await interactionClient.getAllAttributes();
             await this.initializeEndpointStructure(allClusterAttributes);
@@ -375,11 +381,33 @@ export class PairedNode {
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
-    private async initializeEndpointStructure(allClusterAttributes: DecodedAttributeReportValue<any>[]) {
+    private async initializeEndpointStructure(
+        allClusterAttributes: DecodedAttributeReportValue<any>[],
+        updateStructure = false,
+    ) {
         const interactionClient = await this.ensureConnection();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
-        this.endpoints.clear();
+        if (updateStructure) {
+            // Find out what we need to remove or retain
+            const endpointsToRemove = new Set<EndpointNumber>(this.endpoints.keys());
+            for (const [endpointId] of Object.entries(allData)) {
+                const endpointIdNumber = EndpointNumber(parseInt(endpointId));
+                if (this.endpoints.has(endpointIdNumber)) {
+                    logger.debug("Retaining device", endpointId);
+                    endpointsToRemove.delete(endpointIdNumber);
+                }
+            }
+            // And remove all endpoints no longer in the structure
+            for (const endpointId of endpointsToRemove.values()) {
+                logger.debug("Removing device", endpointId);
+                this.endpoints.get(endpointId)?.removeFromStructure();
+                this.endpoints.delete(endpointId);
+            }
+        } else {
+            this.endpoints.clear();
+        }
+
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
             const endpointIdNumber = EndpointNumber(parseInt(endpointId));
@@ -388,6 +416,11 @@ export class PairedNode {
             >;
 
             partLists.set(endpointIdNumber, descriptorData.partsList);
+
+            if (this.endpoints.has(endpointIdNumber)) {
+                // Endpoint exists already, so mo need to create device instance again
+                continue;
+            }
 
             logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
             this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
@@ -423,17 +456,21 @@ export class PairedNode {
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
-                const childEndpoint = this.endpoints.get(EndpointNumber(parseInt(childId)));
+                const childEndpointId = EndpointNumber(parseInt(childId));
+                const childEndpoint = this.endpoints.get(childEndpointId);
                 const parentEndpoint = this.endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
                     throw new InternalError(`Node ${this.nodeId}: Endpoint not found!`); // Should never happen!
                 }
 
-                logger.debug(
-                    `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`,
-                );
+                if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
+                    logger.debug(
+                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.id}`,
+                    );
 
-                parentEndpoint.addChildEndpoint(childEndpoint);
+                    parentEndpoint.addChildEndpoint(childEndpoint);
+                }
+
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
