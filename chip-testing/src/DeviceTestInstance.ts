@@ -16,8 +16,10 @@ export abstract class DeviceTestInstance {
     }
 
     /** Set up the test instance MatterServer. */
-    async setup() {
-        await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
+    async setup(nextTest = true) {
+        if (nextTest) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
+        }
         try {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager);
@@ -70,7 +72,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped for reboot ...\n`);
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart instance now ...\n`);
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
                 break;
@@ -86,7 +88,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Factory Reset done ...\n`);
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart instance now ...\n`);
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
                 break;
@@ -97,7 +99,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped ...\n`);
                 break;
             case "Start":
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance started\n`);
                 break;
