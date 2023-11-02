@@ -1074,7 +1074,7 @@ describe("Integration Test", () => {
         it("Check callback info", async () => {
             assert.equal(commissioningChangedCallsServer.length, 1);
             assert.ok(sessionChangedCallsServer.length >= 6); // not 100% accurate because of MockTime and not 100% finished responses and stuff like that
-            assert.equal(sessionChangedCallsServer[4].fabricIndex, FabricIndex(1));
+            assert.equal(sessionChangedCallsServer[sessionChangedCallsServer.length - 1].fabricIndex, FabricIndex(1));
             const sessionInfo = commissioningServer.getActiveSessionInformation();
             assert.equal(sessionInfo.length, 1);
             assert.ok(sessionInfo[0].fabric);
@@ -1445,7 +1445,7 @@ describe("Integration Test", () => {
 
             assert.equal(commissioningChangedCallsServer.length, 2);
             assert.ok(sessionChangedCallsServer.length >= 7);
-            assert.equal(sessionChangedCallsServer[7].fabricIndex, FabricIndex(2));
+            assert.equal(sessionChangedCallsServer[sessionChangedCallsServer.length - 1].fabricIndex, FabricIndex(2));
             const sessionInfo = commissioningServer.getActiveSessionInformation();
             assert.equal(sessionInfo.length, 2);
             assert.ok(sessionInfo[1].fabric);
