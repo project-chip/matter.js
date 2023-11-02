@@ -35,13 +35,13 @@ export default function commands(theNode: MatterNode) {
                                 value,
                             }) =>
                                 console.log(
-                                    `Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                                    `${nodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
                                         value,
                                     )}`,
                                 ),
                             eventTriggeredCallback: ({ path: { nodeId, clusterId, endpointId, eventName }, events }) =>
                                 console.log(
-                                    `Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                                    `${nodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
                                         events,
                                     )}`,
                                 ),
