@@ -51,8 +51,9 @@ class AdministratorCommissioningManager {
             throw new InternalError("Commissioning window already initialized.");
         }
         logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${session.name}.`);
-        this.commissioningWindowTimeout = Time.getTimer(commissioningTimeout * 1000, () =>
-            this.closeCommissioningWindow(session),
+        this.commissioningWindowTimeout = Time.getTimer(
+            commissioningTimeout * 1000,
+            async () => await this.closeCommissioningWindow(session),
         ).start();
 
         this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);
@@ -154,7 +155,7 @@ class AdministratorCommissioningManager {
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
         this.endCommissioning();
-        await session.getContext().endCommissioning();
+        session.getContext().endCommissioning();
     }
 
     /** This method is used to revoke a commissioning window. */
