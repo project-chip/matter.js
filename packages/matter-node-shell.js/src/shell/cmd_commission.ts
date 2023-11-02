@@ -287,6 +287,23 @@ export default function commands(theNode: MatterNode) {
                         );
                         console.log(`Manual pairing code: ${manualPairingCode}`);
                     },
+                )
+                .command(
+                    "unpair <node-id>",
+                    "Unpair/Decommission a node",
+                    yargs => {
+                        return yargs.positional("node-id", {
+                            describe: "node id",
+                            type: "string",
+                            demandOption: true,
+                        });
+                    },
+                    async argv => {
+                        await theNode.start();
+                        const { nodeId } = argv;
+                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        await node.decommission();
+                    },
                 ),
         handler: async (argv: any) => {
             argv.unhandled = true;
