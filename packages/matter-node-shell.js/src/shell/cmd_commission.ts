@@ -44,7 +44,14 @@ export default function commands(theNode: MatterNode) {
                                         });
                                 },
                                 async argv => {
-                                    const { pairingCode, nodeId: nodeIdStr, ipPort, ip, ble = false } = argv;
+                                    const {
+                                        pairingCode,
+                                        nodeId: nodeIdStr,
+                                        ipPort,
+                                        ip,
+                                        ble = false,
+                                        instanceId,
+                                    } = argv;
                                     let { setupPinCode, discriminator, shortDiscriminator } = argv;
 
                                     if (typeof pairingCode === "string") {
@@ -70,7 +77,9 @@ export default function commands(theNode: MatterNode) {
                                                     ? { ip, port: ipPort, type: "udp" }
                                                     : undefined,
                                             identifierData:
-                                                discriminator !== undefined
+                                                instanceId !== undefined
+                                                    ? { instanceId }
+                                                    : discriminator !== undefined
                                                     ? { longDiscriminator: discriminator }
                                                     : shortDiscriminator !== undefined
                                                     ? { shortDiscriminator }
@@ -147,6 +156,11 @@ export default function commands(theNode: MatterNode) {
                                     describe: "setup pin code",
                                     default: 20202021,
                                     type: "number",
+                                },
+                                instanceId: {
+                                    alias: "i",
+                                    describe: "instance id",
+                                    type: "string",
                                 },
                                 discriminator: {
                                     alias: "d",
