@@ -27,6 +27,7 @@ import {
     OnOffCluster,
 } from "@project-chip/matter-node.js/cluster";
 import { NodeId } from "@project-chip/matter-node.js/datatype";
+import { NodeStateInformation } from "@project-chip/matter-node.js/device";
 import { Format, Level, Logger } from "@project-chip/matter-node.js/log";
 import { CommissioningOptions } from "@project-chip/matter-node.js/protocol";
 import { ManualPairingCodeCodec } from "@project-chip/matter-node.js/schema";
@@ -222,7 +223,44 @@ class ControllerNode {
                 throw new Error(`Node ${nodeId} not found in commissioned nodes`);
             }
 
-            const node = await commissioningController.connectNode(nodeId);
+            const node = await commissioningController.connectNode(nodeId, {
+                attributeChangedCallback: (
+                    peerNodeId,
+                    { path: { nodeId, clusterId, endpointId, attributeName }, value },
+                ) =>
+                    console.log(
+                        `attributeChangedCallback ${peerNodeId}: Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
+                            value,
+                        )}`,
+                    ),
+                eventTriggeredCallback: (peerNodeId, { path: { nodeId, clusterId, endpointId, eventName }, events }) =>
+                    console.log(
+                        `eventTriggeredCallback ${peerNodeId}: Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
+                            events,
+                        )}`,
+                    ),
+                stateInformationCallback: (peerNodeId, info) => {
+                    switch (info) {
+                        case NodeStateInformation.Connected:
+                            console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} connected`);
+                            break;
+                        case NodeStateInformation.Disconnected:
+                            console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} disconnected`);
+                            break;
+                        case NodeStateInformation.Reconnecting:
+                            console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} reconnecting`);
+                            break;
+                        case NodeStateInformation.WaitingForDeviceDiscovery:
+                            console.log(
+                                `stateInformationCallback ${peerNodeId}: Node ${nodeId} waiting for device discovery`,
+                            );
+                            break;
+                        case NodeStateInformation.StructureChanged:
+                            console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} structure changed`);
+                            break;
+                    }
+                },
+            });
 
             // Important: This is a temporary API to proof the methods working and this will change soon and is NOT stable!
             // It is provided to proof the concept
