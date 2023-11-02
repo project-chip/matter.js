@@ -186,29 +186,11 @@ export class MatterController {
         this.exchangeManager.addTransportInterface(netInterface);
     }
 
-    /**
-     * Commission a device by its identifier and the Passcode. If a known address is provided this is tried first
-     * before discovering devices in the network. If multiple addresses or devices are found, they are tried all after
-     * each other. It returns the NodeId of the commissioned device.
-     * If it throws an PairRetransmissionLimitReachedError that means that no found device responded to the pairing
-     * request or the passode did not match to any discovered device/address.
-     */
-    async commission(options: NodeCommissioningOptions): Promise<NodeId> {
-        const {
-            commissioning: commissioningOptions = {
-                regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
-                regulatoryCountryCode: "XX",
-            },
-            discovery: {
-                identifierData,
-                discoveryCapabilities = { onIpNetwork: true },
-                knownAddress,
-                timeoutSeconds = 30,
-            },
-            passcode,
-        } = options;
-
+    public collectScanners(
+        discoveryCapabilities: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap> = { onIpNetwork: true },
+    ) {
         const scannersToUse = new Array<Scanner>();
+
         scannersToUse.push(this.mdnsScanner); // Scan always on IP Network
 
         if (discoveryCapabilities.ble) {
@@ -235,6 +217,50 @@ export class MatterController {
         if (discoveryCapabilities.softAccessPoint) {
             logger.info("SoftAP is not supported yet");
         }
+        return scannersToUse;
+    }
+
+    /**
+     * Commission a device by its identifier and the Passcode. If a known address is provided this is tried first
+     * before discovering devices in the network. If multiple addresses or devices are found, they are tried all after
+     * each other. It returns the NodeId of the commissioned device.
+     * If it throws an PairRetransmissionLimitReachedError that means that no found device responded to the pairing
+     * request or the passode did not match to any discovered device/address.
+     */
+    async commission(options: NodeCommissioningOptions): Promise<NodeId> {
+        const {
+            commissioning: commissioningOptions = {
+                regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
+                regulatoryCountryCode: "XX",
+            },
+            discovery: { commissionableDevice, timeoutSeconds = 30 },
+            passcode,
+        } = options;
+        let {
+            discovery: { identifierData, discoveryCapabilities, knownAddress },
+        } = options;
+
+        if (commissionableDevice !== undefined) {
+            let { addresses } = commissionableDevice;
+            if (discoveryCapabilities !== undefined && discoveryCapabilities.ble !== true) {
+                // do not use BLE if not specified
+                addresses = addresses.filter(address => address.type !== "ble");
+            } else if (discoveryCapabilities === undefined) {
+                discoveryCapabilities = { onIpNetwork: true, ble: addresses.some(address => address.type === "ble") };
+            }
+            addresses.sort(a => (a.type === "udp" ? -1 : 1)); // Sort addresses to use UDP first
+            knownAddress = addresses[0];
+            if ("instanceId" in commissionableDevice && commissionableDevice.instanceId !== undefined) {
+                // it is an UDP discovery
+                identifierData = { instanceId: commissionableDevice.instanceId as string };
+            } else {
+                identifierData = { longDiscriminator: commissionableDevice.D };
+            }
+        }
+
+        discoveryCapabilities = discoveryCapabilities ?? { onIpNetwork: true };
+
+        const scannersToUse = this.collectScanners(discoveryCapabilities);
 
         logger.info(
             `Commissioning device with identifier ${Logger.toJSON(identifierData)} and ${
