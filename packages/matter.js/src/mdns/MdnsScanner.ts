@@ -562,6 +562,7 @@ export class MdnsScanner implements Scanner {
         formerAnswers: DnsRecord<any>[],
         netInterface: string,
     ) {
+        // Does the message contain data for an operational service we already know?
         let operationalSrvRecord = answers.find(
             ({ name, recordType }) => recordType === DnsRecordType.SRV && name.endsWith(MATTER_SERVICE_QNAME),
         );
@@ -578,30 +579,53 @@ export class MdnsScanner implements Scanner {
             value: { target, port },
         } = operationalSrvRecord;
 
-        const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
-        if (ips.length === 0 && !this.operationalDeviceRecords.has(matterName)) {
-            const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
-            if (this.enableIpv4) {
-                queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
+        // we got an expiry info, so we can remove the record if we know it already and are done
+        if (ttl === 0) {
+            if (this.operationalDeviceRecords.has(matterName)) {
+                logger.debug(
+                    `Removing operational device ${matterName} from cache on interface ${netInterface} because of ttl=0`,
+                );
+                this.operationalDeviceRecords.delete(matterName);
             }
-            this.setQueryRecords(matterName, queries, answers);
+            return true;
         }
+
+        const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
+        const recordExists = this.operationalDeviceRecords.has(matterName);
         const storedRecords =
             this.operationalDeviceRecords.get(matterName) ?? new Map<string, MatterServerRecordWithExpire>();
         if (ips.length > 0) {
-            for (const ip of ips) {
+            for (const { value: ip, ttl } of ips) {
+                if (ttl === 0) {
+                    logger.debug(
+                        `Removing IP ${ip} for operational device ${matterName} from cache on interface ${netInterface} because of ttl=0`,
+                    );
+                    storedRecords.delete(ip);
+                    continue;
+                }
                 const matterServer = storedRecords.get(ip) ?? { ip, port, type: "udp", expires: 0 };
                 matterServer.expires = Time.nowMs() + ttl * 1000;
 
                 storedRecords.set(matterServer.ip, matterServer);
             }
-            this.operationalDeviceRecords.set(matterName, storedRecords);
-
-            if (storedRecords.size > 0) {
-                this.finishWaiter(matterName, true);
-                return true;
+            if (!this.operationalDeviceRecords.has(matterName)) {
+                logger.debug(`Added operational device ${matterName} to cache on interface ${netInterface}.`);
             }
+            this.operationalDeviceRecords.set(matterName, storedRecords);
         }
+
+        if (storedRecords.size === 0 && this.hasWaiter(matterName)) {
+            // We have no or no more (because expired) IPs, and we are interested in this particular service name, request them
+            const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
+            if (this.enableIpv4) {
+                queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
+            }
+            logger.debug(`Requesting IP addresses for operational device ${matterName} on interface ${netInterface}.`);
+            this.setQueryRecords(matterName, queries, answers);
+        } else if (storedRecords.size > 0) {
+            this.finishWaiter(matterName, true, recordExists);
+        }
+        return true;
     }
 
     private handleCommissionableRecords(
@@ -609,6 +633,7 @@ export class MdnsScanner implements Scanner {
         formerAnswers: DnsRecord<any>[],
         netInterface: string,
     ) {
+        // Does the message contain a SRV record for an operational service we are interested in?
         let commissionableRecords = answers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
         if (!commissionableRecords.length) {
             commissionableRecords = formerAnswers.filter(({ name }) => name.endsWith(MATTER_COMMISSION_SERVICE_QNAME));
@@ -620,26 +645,40 @@ export class MdnsScanner implements Scanner {
         // First process the TXT records
         const txtRecords = commissionableRecords.filter(({ recordType }) => recordType === DnsRecordType.TXT);
         for (const record of txtRecords) {
+            const { name, ttl } = record;
+            if (ttl === 0) {
+                if (this.commissionableDeviceRecords.has(name)) {
+                    logger.debug(
+                        `Removing commissionable device ${name} from cache on interface ${netInterface} because of ttl=0`,
+                    );
+                    this.commissionableDeviceRecords.delete(name);
+                }
+                continue;
+            }
             const parsedRecord = this.parseCommissionableTxtRecord(record);
             if (parsedRecord === undefined) continue;
-            const storedRecord = this.commissionableDeviceRecords.get(record.name);
+            parsedRecord.instanceId = this.extractInstanceId(name);
+            parsedRecord.deviceIdentifier = parsedRecord.instanceId;
+            if (parsedRecord.D !== undefined && parsedRecord.SD === undefined) {
+                parsedRecord.SD = (parsedRecord.D >> 8) & 0x0f;
+            }
+            if (parsedRecord.VP !== undefined) {
+                const VpValueArr = parsedRecord.VP.split("+");
+                parsedRecord.V = VpValueArr[0] !== undefined ? parseInt(VpValueArr[0]) : undefined;
+                parsedRecord.P = VpValueArr[1] !== undefined ? parseInt(VpValueArr[1]) : undefined;
+            }
+
+            const storedRecord = this.commissionableDeviceRecords.get(name);
             if (storedRecord === undefined) {
-                queryMissingDataForInstances.add(record.name);
-                parsedRecord.instanceId = this.extractInstanceId(record.name);
-                if (parsedRecord.D !== undefined && parsedRecord.SD === undefined) {
-                    parsedRecord.SD = (parsedRecord.D >> 8) & 0x0f;
-                }
-                if (parsedRecord.VP !== undefined) {
-                    const VpValueArr = parsedRecord.VP.split("+");
-                    parsedRecord.V = VpValueArr[0] !== undefined ? parseInt(VpValueArr[0]) : undefined;
-                    parsedRecord.P = VpValueArr[1] !== undefined ? parseInt(VpValueArr[1]) : undefined;
-                }
+                queryMissingDataForInstances.add(name);
 
                 logger.debug(
-                    `Found commissionable device ${record.name} with discriminator ${parsedRecord.D}/${parsedRecord.SD} ...`,
+                    `Found commissionable device ${name} with discriminator ${parsedRecord.D}/${parsedRecord.SD} ...`,
                 );
-                this.commissionableDeviceRecords.set(record.name, parsedRecord);
+            } else {
+                parsedRecord.addresses = storedRecord.addresses;
             }
+            this.commissionableDeviceRecords.set(name, parsedRecord);
         }
 
         // We got SRV records for the instance ID, so we know the host name now and can collect the IP addresses
@@ -651,18 +690,26 @@ export class MdnsScanner implements Scanner {
                 value: { target, port },
                 ttl,
             } = record as DnsRecord<SrvRecordValue>;
+            if (ttl === 0) {
+                logger.debug(
+                    `Removing commissionable device ${record.name} from cache on interface ${netInterface} because of ttl=0`,
+                );
+                this.commissionableDeviceRecords.delete(record.name);
+                continue;
+            }
+
+            const recordExisting = storedRecord.addresses.size > 0;
 
             const ips = this.handleIpRecords([...answers, ...formerAnswers], target, netInterface);
-            if (ips.length === 0) {
-                const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
-                if (queryId === undefined) continue;
-                const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
-                if (this.enableIpv4) {
-                    queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
-                }
-                this.setQueryRecords(queryId, queries, answers);
-            } else {
-                for (const ip of ips) {
+            if (ips.length > 0) {
+                for (const { value: ip, ttl } of ips) {
+                    if (ttl === 0) {
+                        logger.debug(
+                            `Removing IP ${ip} for commissionable device ${record.name} from cache on interface ${netInterface} because of ttl=0`,
+                        );
+                        storedRecord.addresses.delete(ip);
+                        continue;
+                    }
                     const matterServer = storedRecord.addresses.get(ip) ?? { ip, port, type: "udp", expires: 0 };
                     matterServer.expires = Time.nowMs() + ttl * 1000;
 
@@ -670,7 +717,20 @@ export class MdnsScanner implements Scanner {
                 }
             }
             this.commissionableDeviceRecords.set(record.name, storedRecord);
-            if (storedRecord.addresses.size == 0) return;
+            if (storedRecord.addresses.size === 0) {
+                const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
+                if (queryId === undefined) continue;
+                // We have no or no more (because expired) IPs and we are interested in such a service name, request them
+                const queries = [{ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.AAAA }];
+                if (this.enableIpv4) {
+                    queries.push({ name: target, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.A });
+                }
+                logger.debug(
+                    `Requesting IP addresses for commissionable device ${record.name} on interface ${netInterface}.`,
+                );
+                this.setQueryRecords(queryId, queries, answers);
+            }
+            if (storedRecord.addresses.size === 0) continue;
 
             const queryId = this.findCommissionableQueryIdentifier(record.name, storedRecord);
             if (queryId === undefined) continue;
@@ -686,6 +746,7 @@ export class MdnsScanner implements Scanner {
                 if (storedRecord === undefined) continue;
                 const queryId = this.findCommissionableQueryIdentifier("", storedRecord);
                 if (queryId === undefined) continue;
+                logger.debug(`Requesting more records for commissionable device ${name} on interface ${netInterface}.`);
                 this.setQueryRecords(
                     queryId,
                     [{ name, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.ANY }],
@@ -733,7 +794,9 @@ export class MdnsScanner implements Scanner {
                     addresses.delete(key);
                 });
             }
-            this.commissionableDeviceRecords.delete(recordKey);
+            if (now >= expires || addresses.size === 0) {
+                this.commissionableDeviceRecords.delete(recordKey);
+            }
         });
     }
 }
