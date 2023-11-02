@@ -180,6 +180,7 @@ export class CommissioningController extends MatterNode {
         const nodeId = await controller.commission(nodeOptions);
 
         return this.connectNode(nodeId, {
+            ...nodeOptions,
             autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
             subscribeMinIntervalFloorSeconds:
                 nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
