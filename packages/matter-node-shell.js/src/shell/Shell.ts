@@ -12,6 +12,7 @@ import { MatterNode } from "../MatterNode.js";
 import { exit } from "../app";
 import cmdCommission from "./cmd_commission.js";
 import cmdConfig from "./cmd_config.js";
+import cmdDiscover from "./cmd_discover.js";
 import cmdIdentify from "./cmd_identify.js";
 import cmdLock from "./cmd_lock.js";
 import cmdNodes from "./cmd_nodes.js";
@@ -92,6 +93,7 @@ export class Shell {
                     cmdOnOff(this.theNode),
                     cmdSubscribe(this.theNode),
                     cmdIdentify(this.theNode),
+                    cmdDiscover(this.theNode),
                     exitCommand(),
                 ])
                 .command({
