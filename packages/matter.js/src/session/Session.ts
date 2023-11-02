@@ -42,7 +42,7 @@ export interface Session<T> {
     getNodeId(): NodeId | undefined;
     getPeerNodeId(): NodeId | undefined;
     end(sendClose: boolean): Promise<void>;
-    destroy(sendClose: boolean): Promise<void>;
+    destroy(sendClose: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
     getAssociatedFabric(): Fabric;

@@ -169,10 +169,15 @@ describe("Chip-Tool-Tests", () => {
     /** Collect and execute all tests that are exported from the suites folder. */
     for (const suiteName in Tests) {
         if (process.env.LIMIT_TESTS !== undefined) {
-            const limitTests = process.env.LIMIT_TESTS;
+            const limitTests = process.env.LIMIT_TESTS.trim();
             const isWildcard = limitTests.endsWith("*");
+            console.log(
+                `====> Chip test Runner: Limiting tests to ${limitTests} vs ${suiteName}: ${isWildcard} - ${suiteName.startsWith(
+                    limitTests.substring(0, limitTests.length - 2),
+                )}`,
+            );
             if (
-                (isWildcard && !suiteName.startsWith(limitTests.substring(0, limitTests.length - 2))) ||
+                (isWildcard && !suiteName.startsWith(limitTests.substring(0, limitTests.length - 1))) ||
                 (!isWildcard && suiteName !== limitTests)
             ) {
                 continue;

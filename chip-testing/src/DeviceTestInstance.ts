@@ -26,6 +26,7 @@ export abstract class DeviceTestInstance {
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
+            throw error;
         }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Setup done\n`);
     }
@@ -35,7 +36,7 @@ export abstract class DeviceTestInstance {
 
     /** Start the test instance MatterServer with the included device. */
     async start() {
-        if (!this.matterServer) throw new Error("matterServer not initialized");
+        if (!this.matterServer) throw new Error("matterServer not initialized on start");
         try {
             await this.matterServer.start();
         } catch (error) {
@@ -47,7 +48,7 @@ export abstract class DeviceTestInstance {
 
     /** Stop the test instance MatterServer and the device. */
     async stop() {
-        if (!this.matterServer) throw new Error("matterServer not initialized");
+        if (!this.matterServer) throw new Error("matterServer not initialized on close");
         await this.matterServer.close();
         this.matterServer = undefined;
         process.stdout.write(`====> Chip test Runner "${this.testName}": Stop instance\n`);
