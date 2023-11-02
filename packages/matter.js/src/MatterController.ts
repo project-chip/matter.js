@@ -312,6 +312,11 @@ export class MatterController {
         return await this.commissionDevice(paseSecureChannel, commissioningOptions);
     }
 
+    async disconnect(nodeId: NodeId) {
+        await this.sessionManager.removeAllSessionsForNode(nodeId, true);
+        await this.channelManager.removeChannel(this.fabric, nodeId);
+    }
+
     async removeNode(nodeId: NodeId) {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);

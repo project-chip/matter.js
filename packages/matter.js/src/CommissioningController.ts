@@ -209,9 +209,9 @@ export class CommissioningController extends MatterNode {
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
+        const node = this.connectedNodes.get(nodeId);
         if (tryDecommissioning) {
             try {
-                const node = this.connectedNodes.get(nodeId);
                 if (node == undefined) {
                     throw new ImplementationError(`Node ${nodeId} is not connected.`);
                 }
@@ -220,8 +220,19 @@ export class CommissioningController extends MatterNode {
                 logger.warn(`Decommissioning node ${nodeId} failed with error, remove node anyway: ${error}`);
             }
         }
+        if (node !== undefined) {
+            node.close();
+        }
         await controller.removeNode(nodeId);
         this.connectedNodes.delete(nodeId);
+    }
+
+    async disconnectNode(nodeId: NodeId) {
+        const node = this.connectedNodes.get(nodeId);
+        if (node === undefined) {
+            throw new ImplementationError(`Node ${nodeId} is not connected!`);
+        }
+        await this.controllerInstance?.disconnect(nodeId);
     }
 
     /**
@@ -237,6 +248,9 @@ export class CommissioningController extends MatterNode {
 
         const existingNode = this.connectedNodes.get(nodeId);
         if (existingNode !== undefined) {
+            if (!existingNode.isConnencted) {
+                await existingNode.reconnect();
+            }
             return existingNode;
         }
 
@@ -325,8 +339,11 @@ export class CommissioningController extends MatterNode {
         return controller.getCommissionedNodes() ?? [];
     }
 
-    /** Close network connections of the controller. */
+    /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
     async close() {
+        for (const node of this.connectedNodes.values()) {
+            node.close();
+        }
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
         this.connectedNodes.clear();
