@@ -87,6 +87,7 @@ export class MdnsScanner implements Scanner {
         { resolver: () => void; timer?: Timer; resolveOnUpdatedRecords: boolean }
     >();
     private readonly periodicTimer: Timer;
+    private closing = false;
 
     constructor(
         private readonly multicastServer: UdpMulticastServer,
@@ -304,6 +305,9 @@ export class MdnsScanner implements Scanner {
         timeoutSeconds?: number,
         ignoreExistingRecords = false,
     ): Promise<ServerAddressIp[]> {
+        if (this.closing) {
+            throw new ImplementationError("Cannot discover operational device because scanner is closing.");
+        }
         const deviceMatterQname = this.createOperationalMatterQName(operationalId, nodeId);
 
         let storedRecords = ignoreExistingRecords ? [] : this.getOperationalDeviceRecords(deviceMatterQname);
@@ -402,6 +406,9 @@ export class MdnsScanner implements Scanner {
      * Check all options for a query identifier and return the most relevant one with an active query
      */
     private findCommissionableQueryIdentifier(instanceName: string, record: CommissionableDeviceRecordWithExpire) {
+        if (this.closing) {
+            throw new ImplementationError("Cannot discover commissionable device because scanner is closing.");
+        }
         const instanceQueryId = this.buildCommissionableQueryIdentifier({
             instanceId: this.extractInstanceId(instanceName),
         });
@@ -571,6 +578,7 @@ export class MdnsScanner implements Scanner {
      * Close all connects, end all timers and resolve all pending promises.
      */
     async close() {
+        this.closing = true;
         this.periodicTimer.stop();
         this.queryTimer?.stop();
         await this.multicastServer.close();
@@ -585,6 +593,7 @@ export class MdnsScanner implements Scanner {
      * It will parse the message and check if it contains relevant discovery records.
      */
     private handleDnsMessage(messageBytes: ByteArray, _remoteIp: string, netInterface: string) {
+        if (this.closing) return;
         const message = DnsCodec.decode(messageBytes);
         if (message === undefined) return; // The message cannot be parsed
         if (message.messageType !== DnsMessageType.Response && message.messageType !== DnsMessageType.TruncatedResponse)
