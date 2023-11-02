@@ -290,6 +290,11 @@ export class MdnsScanner implements Scanner {
         this.recordWaiters.delete(queryId);
     }
 
+    /** Returns weather a waiter promise is registered for a specific queryId. */
+    private hasWaiter(queryId: string) {
+        return this.recordWaiters.has(queryId);
+    }
+
     private createOperationalMatterQName(operationalId: ByteArray, nodeId: NodeId) {
         const operationalIdString = operationalId.toHex().toUpperCase();
         return getDeviceMatterQname(operationalIdString, NodeId.toHexString(nodeId));
@@ -327,6 +332,16 @@ export class MdnsScanner implements Scanner {
             this.removeQuery(deviceMatterQname);
         }
         return storedRecords;
+    }
+
+    cancelOperationalDeviceDiscovery(fabric: Fabric, nodeId: NodeId) {
+        const deviceMatterQname = this.createOperationalMatterQName(fabric.operationalId, nodeId);
+        this.finishWaiter(deviceMatterQname, true);
+    }
+
+    cancelCommissionableDeviceDiscovery(identifier: CommissionableDeviceIdentifiers) {
+        const queryId = this.buildCommissionableQueryIdentifier(identifier);
+        this.finishWaiter(queryId, true);
     }
 
     getDiscoveredOperationalDevices({ operationalId }: Fabric, nodeId: NodeId) {
