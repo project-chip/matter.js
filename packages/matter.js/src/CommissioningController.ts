@@ -3,8 +3,10 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { MatterController } from "./MatterController.js";
+import { MatterNode } from "./MatterNode.js";
 import { ImplementationError } from "./common/MatterError.js";
-import { CommissionableDeviceIdentifiers } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -12,12 +14,11 @@ import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
 import { Logger } from "./log/Logger.js";
-import { MatterController } from "./MatterController.js";
-import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
+import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
@@ -336,6 +337,22 @@ export class CommissioningController extends MatterNode {
         if (this.options.autoConnect !== false) {
             await this.connect();
         }
+    }
+
+    async discoverCommissionableDevices(
+        identifierData: CommissionableDeviceIdentifiers,
+        discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+        discoveredCallback?: (device: CommissionableDevice) => void,
+        timeoutSeconds = 900,
+    ) {
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
+        return await ControllerDiscovery.discoverCommissionableDevices(
+            controller.collectScanners(discoveryCapabilities),
+            timeoutSeconds,
+            identifierData,
+            discoveredCallback,
+        );
     }
 
     resetStorage() {
