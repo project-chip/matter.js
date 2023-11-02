@@ -222,8 +222,8 @@ export class PairedNode {
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
                 ignoreInitialTriggers: true,
-                attributeChangedCallback,
-                eventTriggeredCallback,
+                attributeChangedCallback: data => attributeChangedCallback?.(this.nodeId, data),
+                eventTriggeredCallback: data => eventTriggeredCallback?.(this.nodeId, data),
             }); // Ignore Triggers from Subscribing during initialization
 
             if (initialSubscriptionData.attributeReports === undefined) {
