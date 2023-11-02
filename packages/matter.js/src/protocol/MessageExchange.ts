@@ -395,6 +395,10 @@ export class MessageExchange<ContextT> {
 
     async close() {
         if (this.closeTimer !== undefined) return; // close was already called
+
+        // Wait until all potential Resubmissions are done, also for Standalone-Acks
+        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
+
         if (this.receivedMessageToAck !== undefined) {
             try {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
@@ -402,16 +406,13 @@ export class MessageExchange<ContextT> {
                 logger.error("An error happened when closing the exchange", error);
             }
         }
-
-        // Wait until all potential Resubmissions are done, also for Standalone-Acks
-        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
     }
 
     private async closeInternal() {
         this.retransmissionTimer?.stop();
         this.closeTimer?.stop();
-        this.messagesQueue.close();
         this.timedInteractionTimer?.stop();
+        this.messagesQueue.close();
         await this.closeCallback();
     }
 }

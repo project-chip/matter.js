@@ -184,13 +184,11 @@ export class ExchangeManager<ContextT> {
             return;
         }
         if (this.closingSessions.has(sessionId)) {
-            logger.info(`Session ${sessionName} is already in closing`);
             return;
         }
         this.closingSessions.add(sessionId);
-        for (const [exchangeIndex, exchange] of this.exchanges.entries()) {
+        for (const [_exchangeIndex, exchange] of this.exchanges.entries()) {
             if (exchange.session.getId() === sessionId) {
-                logger.info(`Close exchange ${exchangeIndex} for session ${sessionName}`);
                 await exchange.destroy();
             }
         }

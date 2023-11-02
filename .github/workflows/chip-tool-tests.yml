@@ -120,7 +120,7 @@ jobs:
         shell: bash
         run: |
           cd chip-testing
-          npm run test-chip
+          npm run test-chip -- --all-logs
 
   # Execute the long running tests (if needed)
   chip-tests-long:

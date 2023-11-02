@@ -88,7 +88,7 @@ export class UnsecureSession<T> implements Session<T> {
         return undefined;
     }
 
-    async destroy(_sendClose: boolean) {
+    async destroy() {
         throw new InternalError("The unsecure session should never be destroyed.");
     }
 

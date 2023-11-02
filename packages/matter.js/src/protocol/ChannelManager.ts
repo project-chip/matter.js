@@ -35,7 +35,7 @@ export class ChannelManager {
                 logger.debug(
                     `Existing channel for fabricIndex ${fabric.fabricIndex} and node ${nodeId} with session ${session.name} gets replaced. Consider former session already inactive and so close it.`,
                 );
-                await session.destroy(false);
+                await session.destroy(false, false);
             }
             await currentChannel.close();
         }
