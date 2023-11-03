@@ -64,7 +64,6 @@ import {
     ManualPairingCodeCodec,
     QrPairingCodeCodec,
 } from "./schema/PairingCodeSchema.js";
-import { QrCode } from "./schema/QrCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
 import { StorageContext } from "./storage/StorageContext.js";
@@ -91,7 +90,6 @@ const MATTER_DATAMODEL_VERSION = 16;
 export interface DevicePairingInformation {
     manualPairingCode: string;
     qrPairingCode: string;
-    qrCode: string;
 }
 
 /**
@@ -797,7 +795,6 @@ export class CommissioningServer extends MatterNode {
                 passcode: this.passcode,
             }),
             qrPairingCode,
-            qrCode: QrCode.encode(qrPairingCode), // TODO: Really export that always?
         };
     }
 
