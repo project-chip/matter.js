@@ -95,7 +95,7 @@ The following parameters are available:
 * -productid: the product ID as number to use for pairing (default: 32768 (0x8000))
 * -uniqueid: a unique ID for this device to be used in naming and to store structure information (default: ms time now)
 * -type: the device type to use for pairing (default: light, alternative value is "socket")
-* -announceinterface: limit mdns announcements to the provided network interface, e.g. "en0" (default: all interfaces available)
+* -netinterface: limit mdns announcements and scanning to the provided network interface, e.g. "en0" (default: all interfaces available)
 * -ble: enable BLE support (default: false) If this is enabled the device will announce itself _only_ via BLE if not commissioned and also presents a "Wifi only" device for commissioning to show this feature!
 * -ble-hci-id: Optionally, HCI ID to use (Linux only, default 0)
 * -port: the port to listen on for the device (default: 5540)

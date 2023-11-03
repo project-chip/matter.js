@@ -33,11 +33,14 @@ The main work (all changes without a GitHub username in brackets in the below li
     * Introducing class PairedNode with the High level API for a paired Node
     * Restructured CommissioningController to handle multiple nodes and offer new high level API
     * Changed name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
+  * Breaking: option "mdnsAnnounceInterface" was deprecated and replaced by "mdnsInterface" and now used to limit announcements and scanning to a specific interface
   * Feature: Makes Port for CommissioningServer optional and add automatic port handling in MatterServer
   * Feature: Allows removal of Controller or Server instances from Matter server, optionally with deleting the storage
   * Enhance: Makes passcode and discriminator for CommissioningServer optional and randomly generate them if not provided 
 * matter-node-shell.js
   * Feature: Completely refactored and enhances shell to support commissioning, identify and many more new commands. See Readme, try it
+* matter-node.js-examples
+  * Breaking: Rename parameter -announceinterface to -netinterface and use for announcements and scanning
 
 ## 0.6.0 (2023-10-08)
 * Matter-Core functionality:
