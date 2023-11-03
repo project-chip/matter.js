@@ -36,6 +36,7 @@ The main work (all changes without a GitHub username in brackets in the below li
     * Changed name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
     * Adjusted subscription callbacks to also provide the nodeId of the affected device reporting the changes to allow callbacks to be used generically when connecting to all nodes
     * Introduces a node state information callback to inform about the connection status but also when the node structure changed (for bridges) or such.
+  * Feature: Enhanced CommissioningServer API and CommissioningController for improved practical usage
   * Feature: Makes Port for CommissioningServer optional and add automatic port handling in MatterServer
   * Feature: Allows removal of Controller or Server instances from Matter server, optionally with deleting the storage
   * Enhance: Makes passcode and discriminator for CommissioningServer optional and randomly generate them if not provided 
