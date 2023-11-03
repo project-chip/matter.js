@@ -6,6 +6,7 @@
 
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
+import { NodeId } from "../datatype/NodeId.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
@@ -19,7 +20,10 @@ export class FabricManager {
     private readonly fabrics = new Map<FabricIndex, Fabric>();
     private readonly fabricStorage: StorageContext;
 
-    constructor(storage: StorageContext) {
+    constructor(
+        storage: StorageContext,
+        private readonly fabricRemoveCallback?: (fabricIndex: FabricIndex, peerNodeId: NodeId) => void,
+    ) {
         this.fabricStorage = storage.createContext("FabricManager");
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
@@ -56,12 +60,14 @@ export class FabricManager {
     }
 
     removeFabric(fabricIndex: FabricIndex) {
-        if (!this.fabrics.has(fabricIndex))
+        const fabric = this.fabrics.get(fabricIndex);
+        if (fabric === undefined)
             throw new FabricNotFoundError(
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
         this.fabrics.delete(fabricIndex);
         this.persistFabrics();
+        this.fabricRemoveCallback?.(fabricIndex, fabric.rootNodeId);
     }
 
     getFabrics() {

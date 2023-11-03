@@ -170,11 +170,11 @@ export class Fabric {
         this.persistCallback = callback;
     }
 
-    async remove() {
-        for (const session of [...this.sessions]) {
-            await session.close();
-        }
+    async remove(currentSessionId?: number) {
         this.removeCallbacks.forEach(callback => callback());
+        for (const session of [...this.sessions]) {
+            await session.destroy(false, session.getId() === currentSessionId); // Delay Close for current session only
+        }
     }
 
     persist() {
@@ -223,6 +223,7 @@ export class Fabric {
 
     getExternalInformation() {
         return {
+            fabricIndex: this.fabricIndex,
             fabricId: this.fabricId,
             nodeId: this.nodeId,
             rootNodeId: this.rootNodeId,

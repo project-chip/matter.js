@@ -16,8 +16,10 @@ export abstract class DeviceTestInstance {
     }
 
     /** Set up the test instance MatterServer. */
-    async setup() {
-        await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
+    async setup(nextTest = true) {
+        if (nextTest) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); //Add a short delay
+        }
         try {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager);
@@ -26,6 +28,8 @@ export abstract class DeviceTestInstance {
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
+            console.log((error as Error).stack);
+            throw error;
         }
         process.stdout.write(`====> Chip test Runner "${this.testName}": Setup done\n`);
     }
@@ -35,7 +39,7 @@ export abstract class DeviceTestInstance {
 
     /** Start the test instance MatterServer with the included device. */
     async start() {
-        if (!this.matterServer) throw new Error("matterServer not initialized");
+        if (!this.matterServer) throw new Error("matterServer not initialized on start");
         try {
             await this.matterServer.start();
         } catch (error) {
@@ -47,7 +51,7 @@ export abstract class DeviceTestInstance {
 
     /** Stop the test instance MatterServer and the device. */
     async stop() {
-        if (!this.matterServer) throw new Error("matterServer not initialized");
+        if (!this.matterServer) throw new Error("matterServer not initialized on close");
         await this.matterServer.close();
         this.matterServer = undefined;
         process.stdout.write(`====> Chip test Runner "${this.testName}": Stop instance\n`);
@@ -68,7 +72,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped for reboot ...\n`);
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart instance now ...\n`);
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
                 break;
@@ -84,7 +88,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Factory Reset done ...\n`);
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart instance now ...\n`);
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Restart done\n`);
                 break;
@@ -95,7 +99,7 @@ export abstract class DeviceTestInstance {
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance stopped ...\n`);
                 break;
             case "Start":
-                await this.setup();
+                await this.setup(false);
                 await this.start();
                 process.stdout.write(`====> Chip test Runner "${this.testName}": Instance started\n`);
                 break;

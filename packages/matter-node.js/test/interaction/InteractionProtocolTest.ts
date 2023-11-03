@@ -673,22 +673,22 @@ async function getDummyMessageExchange(
     timedInteractionExpired = false,
     clearTimedInteractionCallback?: () => void,
 ) {
-    const session = await SecureSession.create(
-        { getFabrics: () => [] } as any,
-        1,
-        testFabric,
-        NodeId(1),
-        1,
-        ByteArray.fromHex("00"),
-        ByteArray.fromHex("00"),
-        false,
-        false,
-        async () => {
-            /* nothing */
+    const session = await SecureSession.create({
+        context: { getFabrics: () => [] } as any,
+        id: 1,
+        fabric: testFabric,
+        peerNodeId: NodeId(BigInt(1)),
+        peerSessionId: 1,
+        sharedSecret: ByteArray.fromHex("00"),
+        salt: ByteArray.fromHex("00"),
+        isInitiator: false,
+        isResumption: false,
+        closeCallback: async () => {
+            /* */
         },
-        1000,
-        1000,
-    );
+        idleRetransmissionTimeoutMs: 1000,
+        activeRetransmissionTimeoutMs: 1000,
+    });
     return {
         channel: { name: "test" },
         clearTimedInteraction: () => clearTimedInteractionCallback?.(),

@@ -631,6 +631,7 @@ export class SubscriptionHandler {
                         logger.info(`Subscription ${this.subscriptionId} cancelled by peer.`);
                         await this.cancel(false, true);
                     } else {
+                        await this.cancel(false);
                         throw error;
                     }
                 },

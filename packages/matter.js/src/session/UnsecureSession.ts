@@ -20,6 +20,7 @@ import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
 export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
+    readonly closingAfterExchangeFinished = false;
 
     constructor(private readonly context: T) {}
 
@@ -87,7 +88,7 @@ export class UnsecureSession<T> implements Session<T> {
         return undefined;
     }
 
-    async destroy(_sendClose: boolean) {
+    async destroy() {
         throw new InternalError("The unsecure session should never be destroyed.");
     }
 

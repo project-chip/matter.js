@@ -38,8 +38,6 @@ import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { StatusResponseError } from "./protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "./protocol/interaction/InteractionProtocol.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChannelMessages.js";
-import { SecureChannelMessenger } from "./protocol/securechannel/SecureChannelMessenger.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { SecureSession } from "./session/SecureSession.js";
@@ -78,9 +76,14 @@ export class MatterDevice {
         private readonly discriminator: number,
         private readonly initialPasscode: number,
         private readonly storage: StorageContext,
-        private readonly initialCommissioningCallback: () => void,
+        private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
+        private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.fabricManager = new FabricManager(this.storage);
+        this.fabricManager = new FabricManager(this.storage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+            // When fabric is removed, also remove the resumption record
+            this.sessionManager.removeResumptionRecord(peerNodeId);
+            this.commissioningChangedCallback(fabricIndex);
+        });
 
         this.sessionManager = new SessionManager(this, this.storage);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
@@ -95,6 +98,10 @@ export class MatterDevice {
     addScanner(scanner: Scanner) {
         this.scanners.push(scanner);
         return this;
+    }
+
+    hasBroadcaster(broadcaster: InstanceBroadcaster) {
+        return this.broadcasters.includes(broadcaster);
     }
 
     addBroadcaster(broadcaster: InstanceBroadcaster) {
@@ -152,7 +159,7 @@ export class MatterDevice {
         }
         const fabrics = this.fabricManager.getFabrics();
         if (fabrics.length) {
-            let fabricsToAnnounce = 0;
+            let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (
@@ -160,13 +167,13 @@ export class MatterDevice {
                     !session.isSecure() ||
                     (session as SecureSession<this>).numberOfActiveSubscriptions === 0
                 ) {
-                    fabricsToAnnounce++;
+                    fabricsWithoutSessions++;
                     logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
                 }
             }
             for (const broadcaster of this.broadcasters) {
                 await broadcaster.setFabrics(fabrics);
-                if (fabricsToAnnounce > 0) {
+                if (fabricsWithoutSessions > 0) {
                     await broadcaster.announce();
                 }
             }
@@ -233,10 +240,10 @@ export class MatterDevice {
         salt: ByteArray,
         isInitiator: boolean,
         isResumption: boolean,
-        idleRetransTimeoutMs?: number,
-        activeRetransTimeoutMs?: number,
+        idleRetransmissionTimeoutMs?: number,
+        activeRetransmissionTimeoutMs?: number,
     ) {
-        return await this.sessionManager.createSecureSession(
+        const session = await this.sessionManager.createSecureSession({
             sessionId,
             fabric,
             peerNodeId,
@@ -245,12 +252,35 @@ export class MatterDevice {
             salt,
             isInitiator,
             isResumption,
-            idleRetransTimeoutMs,
-            activeRetransTimeoutMs,
-            async () => {
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+            closeCallback: async () => {
+                logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
+                if (session.isPase() && this.failSafeContext !== undefined) {
+                    await this.failSafeContext.expire();
+                }
+                if (!session.closingAfterExchangeFinished) {
+                    // Delayed closing is executed when exchange is closed
+                    await this.exchangeManager.closeSession(session);
+                }
+                const currentFabric = session.getFabric();
+                if (currentFabric !== undefined) {
+                    this.sessionChangedCallback(currentFabric.fabricIndex);
+                }
                 await this.startAnnouncement();
             },
-        );
+            subscriptionChangedCallback: () => {
+                const currentFabric = session.getFabric();
+                logger.warn(`Session ${session.name} with fabric ${!!currentFabric}!`);
+                if (currentFabric !== undefined) {
+                    this.sessionChangedCallback(currentFabric.fabricIndex);
+                }
+            },
+        });
+        if (fabric !== undefined) {
+            this.sessionChangedCallback(fabric.fabricIndex);
+        }
+        return session;
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
@@ -260,6 +290,7 @@ export class MatterDevice {
     updateFabric(fabric: Fabric) {
         this.fabricManager.updateFabric(fabric);
         this.sessionManager.updateFabricForResumptionRecords(fabric);
+        this.commissioningChangedCallback(fabric.fabricIndex);
     }
 
     getNextFabricIndex() {
@@ -274,15 +305,12 @@ export class MatterDevice {
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
             await this.endCommissioning();
         }
+        this.commissioningChangedCallback(fabric.fabricIndex);
         const fabrics = this.fabricManager.getFabrics();
-        if (fabrics.length === 1) {
-            // Inform upper layer to add MDNS Broadcaster delayed if we limited announcements to BLE till now
-            // TODO Change when refactoring MatterDevice away
-            this.initialCommissioningCallback();
-        }
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
+        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId }));
         return fabric.fabricIndex;
     }
 
@@ -312,39 +340,8 @@ export class MatterDevice {
     async removePaseSession() {
         const session = this.sessionManager.getPaseSession();
         if (session) {
-            await this.closeSession(session);
+            await session.close(true);
         }
-    }
-
-    // TODO This is called by InteractionMessenger after an Interaction has finished only. If there are cases where we
-    //      need to close a session from somewhere else, we should refactor this to be more generic.
-    async processSessionsToClose() {
-        const sessionsToClose = this.sessionManager.getSessionsToClose();
-        for (const session of sessionsToClose) {
-            await this.closeSession(session);
-        }
-    }
-
-    private async closeSession(session: SecureSession<any>) {
-        logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-        if (session.isPase() && this.failSafeContext !== undefined) {
-            await this.failSafeContext.expire();
-        }
-        const channel = this.channelManager.getChannelForSession(session);
-        if (channel !== undefined) {
-            const exchange = this.exchangeManager.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
-            if (exchange !== undefined) {
-                try {
-                    const messenger = new SecureChannelMessenger(exchange);
-                    await messenger.sendCloseSession();
-                    await messenger.close();
-                } catch (error) {
-                    logger.error("Error closing session", error);
-                }
-            }
-        }
-        await session.destroy(false);
-        await this.sessionManager.removeSession(session.getId(), session.getPeerNodeId());
     }
 
     assertFailSafeArmed(message?: string) {
@@ -379,7 +376,7 @@ export class MatterDevice {
             if (fabric !== undefined) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session !== undefined && session.isSecure()) {
-                    await this.closeSession(session as SecureSession<any>);
+                    await (session as SecureSession<any>).close(false);
                 }
             }
         }
@@ -445,7 +442,7 @@ export class MatterDevice {
     ) {
         if (this.failSafeContext === undefined) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
-            // to a success response with no side-effects against the fail-safe context.
+            // to a success response with no side effect against the fail-safe context.
             if (expiryLengthSeconds === 0) return;
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
@@ -565,6 +562,7 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();
         }
+        logger.info("All Announcements expired");
     }
 
     existsOpenPaseSession() {

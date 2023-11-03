@@ -370,16 +370,11 @@ export const OperationalCredentialsClusterHandler: (
 
         assertSecureSession(session);
 
-        await fabric.remove();
+        await fabric.remove(session.getId());
         nocs.updated(session);
         commissionedFabrics.updated(session);
         fabrics.updated(session);
         trustedRootCertificates.updated(session);
-
-        if (device.getFabrics().length === 0) {
-            // TODO If the FabricIndex matches the last remaining entry in the Fabrics list, then the device SHALL delete all Matter related data on the node which was created since it was commissioned. This includes all Fabric-Scoped data, including Access Control List, bindings, scenes, group keys, operational certificates, etc. All Trusted Roots SHALL also be removed. Any Matter related data including logs, secure sessions, exchanges and interaction model constructs SHALL also be removed. Since this operation involves the removal of the secure session data that may underpin the current set of exchanges, the Node invoking the command SHOULD NOT expect a response before terminating its secure session with the target.
-            //  --> basically do a factory reset
-        }
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,

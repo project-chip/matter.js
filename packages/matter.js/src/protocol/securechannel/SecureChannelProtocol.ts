@@ -7,12 +7,11 @@
 import { Message } from "../../codec/MessageCodec.js";
 import { MatterFlowError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { CaseServer } from "../../session/case/CaseServer.js";
 import { MaximumPasePairingErrorsReachedError, PaseServer } from "../../session/pase/PaseServer.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
 import {
     GeneralStatusCode,
     MessageType,
@@ -24,51 +23,15 @@ import { TlvSecureChannelStatusMessage } from "./SecureChannelStatusMessageSchem
 
 const logger = Logger.get("SecureChannelProtocol");
 
-export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
-    private paseCommissioner: PaseServer | undefined;
-    private readonly caseCommissioner = new CaseServer();
-
-    constructor(private commissioningCancelledCallback: () => Promise<void>) {}
-
+export class StatusReportOnlySecureChannelProtocol implements ProtocolHandler<any> {
     getId(): number {
         return SECURE_CHANNEL_PROTOCOL_ID;
     }
 
-    setPaseCommissioner(paseServer: PaseServer) {
-        this.paseCommissioner = paseServer;
-    }
-
-    removePaseCommissioner() {
-        this.paseCommissioner = undefined;
-    }
-
-    async onNewExchange(exchange: MessageExchange<MatterDevice>, message: Message) {
+    async onNewExchange(exchange: MessageExchange<any>, message: Message) {
         const messageType = message.payloadHeader.messageType;
 
         switch (messageType) {
-            case MessageType.PbkdfParamRequest:
-                if (this.paseCommissioner === undefined) {
-                    // Cleaner to return an error (ok for chip-tool as it seems)?
-                    // Formally we should not respond at all which leads to retries and such
-                    const messenger = new SecureChannelMessenger(exchange);
-                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
-                    await messenger.close(); // also closes exchange
-                    return;
-                }
-                try {
-                    await this.paseCommissioner.onNewExchange(exchange);
-                } catch (error) {
-                    if (error instanceof MaximumPasePairingErrorsReachedError) {
-                        logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
-                        await this.commissioningCancelledCallback();
-                    } else {
-                        throw error;
-                    }
-                }
-                break;
-            case MessageType.Sigma1:
-                await this.caseCommissioner.onNewExchange(exchange);
-                break;
             case MessageType.StatusReport:
                 await this.handleInitialStatusReport(exchange, message);
                 break;
@@ -79,7 +42,7 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
         }
     }
 
-    async handleInitialStatusReport(exchange: MessageExchange<MatterDevice>, message: Message) {
+    async handleInitialStatusReport(exchange: MessageExchange<any>, message: Message) {
         const {
             payloadHeader: { messageType },
             payload,
@@ -112,14 +75,63 @@ export class SecureChannelProtocol implements ProtocolHandler<MatterDevice> {
         assertSecureSession(session);
         logger.debug(`Peer requested to close session ${session.name}. Remove session now.`);
         // TODO: and do more - see Core Specs 5.5
-        await session.destroy(true);
-    }
-
-    static isStandaloneAck(protocolId: number, messageType: number) {
-        return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === MessageType.StandaloneAck;
+        await session.destroy(false, false);
     }
 
     async close() {
         // Nothing to do
+    }
+}
+
+export class SecureChannelProtocol extends StatusReportOnlySecureChannelProtocol {
+    private paseCommissioner: PaseServer | undefined;
+    private readonly caseCommissioner = new CaseServer();
+
+    constructor(private commissioningCancelledCallback: () => Promise<void>) {
+        super();
+    }
+
+    setPaseCommissioner(paseServer: PaseServer) {
+        this.paseCommissioner = paseServer;
+    }
+
+    removePaseCommissioner() {
+        this.paseCommissioner = undefined;
+    }
+
+    override async onNewExchange(exchange: MessageExchange<any>, message: Message) {
+        const messageType = message.payloadHeader.messageType;
+
+        switch (messageType) {
+            case MessageType.PbkdfParamRequest:
+                if (this.paseCommissioner === undefined) {
+                    // Cleaner to return an error (ok for chip-tool as it seems)?
+                    // Formally we should not respond at all which leads to retries and such
+                    const messenger = new SecureChannelMessenger(exchange);
+                    await messenger.sendError(ProtocolStatusCode.InvalidParam);
+                    await messenger.close(); // also closes exchange
+                    return;
+                }
+                try {
+                    await this.paseCommissioner.onNewExchange(exchange);
+                } catch (error) {
+                    if (error instanceof MaximumPasePairingErrorsReachedError) {
+                        logger.info("Maximum number of PASE pairing errors reached, cancelling commissioning.");
+                        await this.commissioningCancelledCallback();
+                    } else {
+                        throw error;
+                    }
+                }
+                break;
+            case MessageType.Sigma1:
+                await this.caseCommissioner.onNewExchange(exchange);
+                break;
+            default:
+                await super.onNewExchange(exchange, message);
+        }
+    }
+
+    static isStandaloneAck(protocolId: number, messageType: number) {
+        return protocolId === SECURE_CHANNEL_PROTOCOL_ID && messageType === MessageType.StandaloneAck;
     }
 }
