@@ -87,12 +87,13 @@ groups:
     required-review:
         type: required
         reviews:
-            required: 10
+            required: 1
+            request: 10
         reviewers:
             users:
               - lauckhart
               - Apollon77
-              - Wes
+              - vves
             teams:
               - matter-js-reviewers
         labels:

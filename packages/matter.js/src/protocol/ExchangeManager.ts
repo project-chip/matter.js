@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterController } from "../MatterController.js";
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
@@ -12,22 +13,25 @@ import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
-import { MatterController } from "../MatterController.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
+import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { SessionManager } from "../session/SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ChannelManager } from "./ChannelManager.js";
 import { MessageExchange } from "./MessageExchange.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
+import { SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
+import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.js";
 
 const logger = Logger.get("ExchangeManager");
 
 export class MessageChannel<ContextT> implements Channel<Message> {
+    public closed = false;
     constructor(
         readonly channel: Channel<ByteArray>,
         readonly session: Session<ContextT>,
-        private readonly closeCallback?: () => void,
+        private readonly closeCallback?: () => Promise<void>,
     ) {}
 
     send(message: Message): Promise<void> {
@@ -42,8 +46,12 @@ export class MessageChannel<ContextT> implements Channel<Message> {
     }
 
     async close() {
+        const wasAlreadyClosed = this.closed;
+        this.closed = true;
         await this.channel.close();
-        this.closeCallback?.();
+        if (!wasAlreadyClosed) {
+            await this.closeCallback?.();
+        }
     }
 }
 
@@ -53,6 +61,7 @@ export class ExchangeManager<ContextT> {
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
     private readonly transportListeners = new Array<Listener>();
+    private readonly closingSessions = new Set<number>();
 
     constructor(
         private readonly sessionManager: SessionManager<ContextT>,
@@ -90,7 +99,7 @@ export class ExchangeManager<ContextT> {
         const exchangeId = this.exchangeCounter.getIncrementedCounter();
         const exchangeIndex = exchangeId | 0x10000; // Ensure initiated and received exchange index are different, since the exchangeID can be the same
         const exchange = MessageExchange.initiate(channel, exchangeId, protocolId, this.messageCounter, () =>
-            this.exchanges.delete(exchangeIndex),
+            this.deleteExchange(exchangeIndex),
         );
         // Ensure exchangeIds are not colliding in the Map by adding 1 in front of exchanges initiated by this device.
         this.exchanges.set(exchangeIndex, exchange);
@@ -128,11 +137,16 @@ export class ExchangeManager<ContextT> {
         if (exchange !== undefined) {
             await exchange.onMessageReceived(message);
         } else {
+            if (session.closingAfterExchangeFinished) {
+                throw new MatterFlowError(
+                    `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,
+                );
+            }
             const exchange = MessageExchange.fromInitialMessage(
-                this.channelManager.getOrCreateChannel(channel, session),
+                await this.channelManager.getOrCreateChannel(channel, session),
                 this.messageCounter,
                 message,
-                () => this.exchanges.delete(exchangeIndex),
+                async () => await this.deleteExchange(exchangeIndex),
             );
             this.exchanges.set(exchangeIndex, exchange);
             await exchange.onMessageReceived(message);
@@ -141,6 +155,66 @@ export class ExchangeManager<ContextT> {
                 throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
             await protocolHandler.onNewExchange(exchange, message);
         }
+    }
+
+    async deleteExchange(exchangeIndex: number) {
+        const exchange = this.exchanges.get(exchangeIndex);
+        if (exchange === undefined) {
+            throw new MatterFlowError(`Exchange with index ${exchangeIndex} to delete not found.`);
+        }
+        const { session } = exchange;
+        if (session.isSecure() && session.closingAfterExchangeFinished) {
+            logger.debug(
+                `Exchange index ${exchangeIndex} Session ${session.name} is already marked for closure. Close session now.`,
+            );
+            try {
+                await this.closeSession(session as SecureSession<any>);
+            } catch (error) {
+                logger.error(`Error closing session ${session.name}. Ignoring.`, error);
+            }
+        }
+        this.exchanges.delete(exchangeIndex);
+    }
+
+    async closeSession(session: SecureSession<any>) {
+        const sessionId = session.getId();
+        const sessionName = session.name;
+        if (this.sessionManager.getSession(sessionId) === undefined) {
+            // Session already removed, so we do not need to close again
+            return;
+        }
+        if (this.closingSessions.has(sessionId)) {
+            return;
+        }
+        this.closingSessions.add(sessionId);
+        for (const [_exchangeIndex, exchange] of this.exchanges.entries()) {
+            if (exchange.session.getId() === sessionId) {
+                await exchange.destroy();
+            }
+        }
+        if (session.sendCloseMessageWhenClosing) {
+            const channel = this.channelManager.getChannelForSession(session);
+            logger.debug(`Channel for session ${session.name} is ${channel?.name}`);
+            if (channel !== undefined) {
+                const exchange = this.initiateExchangeWithChannel(channel, SECURE_CHANNEL_PROTOCOL_ID);
+                logger.debug(`Initiated exchange ${!!exchange} to close session ${sessionName}`);
+                if (exchange !== undefined) {
+                    try {
+                        const messenger = new SecureChannelMessenger(exchange);
+                        await messenger.sendCloseSession();
+                        await messenger.close();
+                    } catch (error) {
+                        logger.error("Error closing session", error);
+                    }
+                }
+                await exchange.destroy();
+            }
+        }
+        if (session.closingAfterExchangeFinished) {
+            await session.destroy(false, false);
+        }
+        this.sessionManager.removeSession(sessionId);
+        this.closingSessions.delete(sessionId);
     }
 }
 

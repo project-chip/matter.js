@@ -71,7 +71,7 @@ export class MessageExchange<ContextT> {
         channel: MessageChannel<ContextT>,
         messageCounter: MessageCounter,
         initialMessage: Message,
-        closeCallback: () => void,
+        closeCallback: () => Promise<void>,
     ) {
         const { session } = channel;
         return new MessageExchange<ContextT>(
@@ -93,7 +93,7 @@ export class MessageExchange<ContextT> {
         exchangeId: number,
         protocolId: number,
         messageCounter: MessageCounter,
-        closeCallback: () => void,
+        closeCallback: () => Promise<void>,
     ) {
         const { session } = channel;
         return new MessageExchange(
@@ -132,7 +132,7 @@ export class MessageExchange<ContextT> {
         private readonly peerNodeId: NodeId | undefined,
         private readonly exchangeId: number,
         private readonly protocolId: number,
-        private readonly closeCallback: () => void,
+        private readonly closeCallback: () => Promise<void>,
     ) {
         const { activeRetransmissionTimeoutMs, idleRetransmissionTimeoutMs, retransmissionRetries } =
             session.getMrpParameters();
@@ -144,6 +144,8 @@ export class MessageExchange<ContextT> {
             Logger.dict({
                 protocol: this.protocolId,
                 id: this.exchangeId,
+                session: session.name,
+                peerSessionId: this.peerSessionId,
                 "active retransmit ms": this.activeRetransmissionTimeoutMs,
                 "idle retransmit ms": this.idleRetransmissionTimeoutMs,
                 retries: this.retransmissionRetries,
@@ -343,14 +345,14 @@ export class MessageExchange<ContextT> {
     }
 
     async destroy() {
-        if (this.receivedMessageToAck !== undefined) {
+        if (this.closeTimer === undefined && this.receivedMessageToAck !== undefined) {
             try {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
         }
-        this.closeInternal();
+        await this.closeInternal();
     }
 
     startTimedInteraction(timeoutMs: number) {
@@ -392,6 +394,11 @@ export class MessageExchange<ContextT> {
     }
 
     async close() {
+        if (this.closeTimer !== undefined) return; // close was already called
+
+        // Wait until all potential Resubmissions are done, also for Standalone-Acks
+        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
+
         if (this.receivedMessageToAck !== undefined) {
             try {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
@@ -399,16 +406,13 @@ export class MessageExchange<ContextT> {
                 logger.error("An error happened when closing the exchange", error);
             }
         }
-
-        // Wait until all potential Resubmissions are done, also for Standalone-Acks
-        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, () => this.closeInternal()).start();
     }
 
-    private closeInternal() {
+    private async closeInternal() {
         this.retransmissionTimer?.stop();
         this.closeTimer?.stop();
-        this.messagesQueue.close();
         this.timedInteractionTimer?.stop();
-        this.closeCallback();
+        this.messagesQueue.close();
+        await this.closeCallback();
     }
 }

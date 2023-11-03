@@ -7,7 +7,13 @@
 import { MatterController } from "../../MatterController.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { MatterError, MatterFlowError, NotImplementedError, UnexpectedDataError } from "../../common/MatterError.js";
+import {
+    ImplementationError,
+    MatterError,
+    MatterFlowError,
+    NotImplementedError,
+    UnexpectedDataError,
+} from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
 import { ExchangeProvider } from "../../protocol/ExchangeManager.js";
@@ -205,11 +211,6 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
             }
         } finally {
             await this.exchange.close();
-
-            // Process any pending sessions to close async after the current interaction was finished
-            // Formally not required, but Matter-SDK does it that way, so lets be compatible
-            const { session } = this.exchange;
-            await session.getContext().processSessionsToClose();
         }
     }
 
@@ -381,6 +382,9 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
 
     /** Implements a send method with an automatic reconnection mechanism */
     override async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
+        if (this.exchange.channel.closed) {
+            throw new ImplementationError("The exchange channel is closed. Please connect the device first.");
+        }
         try {
             return await this.exchange.send(messageType, payload, options);
         } catch (error) {

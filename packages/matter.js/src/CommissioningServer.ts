@@ -178,6 +178,20 @@ export interface CommissioningServerOptions {
         allowCountryCodeChange?: boolean; // Default true if not set
         countryCodeWhitelist?: string[]; // Default all countries are allowed
     };
+
+    /**
+     * This callback is called when the device is commissioned or decommissioned to a fabric/controller. The provided
+     * fabricIndex can be used together with getCommissionedFabricInformation() to get more details about the fabric
+     * (or if this fabricIndex is missing it was deleted).
+     */
+    commissioningChangedCallback?: (fabricIndex: FabricIndex) => void;
+
+    /**
+     * This callback is called when sessions to the device are established, closed or subscriptions get added or
+     * removed. The provided fabricIndex can be used together with getActiveSessionInformation() to get more details
+     * about the open sessions and their status.
+     */
+    activeSessionsChangedCallback?: (fabricIndex: FabricIndex) => void;
 }
 
 /**
@@ -572,15 +586,28 @@ export class CommissioningServer extends MatterNode {
             this.discriminator,
             this.passcode,
             this.storage,
-            () => {
-                // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
-                // TODO Refactor this out when we remove MatterDevice class
-                if (limitTo !== undefined && !limitTo.onIpNetwork) {
-                    if (this.mdnsInstanceBroadcaster !== undefined) {
+            (fabricIndex: FabricIndex) => {
+                const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
+                if (fabricsCount === 1) {
+                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
+                    // TODO Refactor this out when we remove MatterDevice class
+                    if (
+                        this.mdnsInstanceBroadcaster !== undefined &&
+                        !this.deviceInstance?.hasBroadcaster(this.mdnsInstanceBroadcaster)
+                    ) {
                         this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
                     }
                 }
+                if (fabricsCount === 0) {
+                    // When last fabric gets deleted we do a factory reset
+                    this.factoryReset()
+                        .then(() => this.options.commissioningChangedCallback?.(fabricIndex))
+                        .catch(error => logger.error("Error while doing factory reset of the device", error));
+                } else {
+                    this.options.commissioningChangedCallback?.(fabricIndex);
+                }
             },
+            (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
         )
             .addTransportInterface(await UdpInterface.create("udp6", this.port, this.options.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
@@ -905,15 +932,26 @@ export class CommissioningServer extends MatterNode {
         }
     }
 
-    /** Get some basic details of all Fabrics the server is commissioned to. */
-    getCommissionedFabricInformation() {
+    /**
+     * Get some basic details of all Fabrics the server is commissioned to.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all fabrics are returned.
+     */
+    getCommissionedFabricInformation(fabricIndex?: FabricIndex) {
         if (!this.isCommissioned()) return [];
-        return this.deviceInstance?.getFabrics().map(fabric => fabric.getExternalInformation()) ?? [];
+        const allFabrics = this.deviceInstance?.getFabrics() ?? [];
+        const fabrics = fabricIndex === undefined ? allFabrics : allFabrics.filter(f => f.fabricIndex === fabricIndex);
+        return fabrics.map(fabric => fabric.getExternalInformation()) ?? [];
     }
 
-    /** Get some basic details of all currently active sessions. */
-    getActiveSessionInformation() {
+    /**
+     * Get some basic details of all currently active sessions.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all sessions are returned.
+     */
+    getActiveSessionInformation(fabricIndex?: FabricIndex) {
         if (!this.isCommissioned()) return [];
-        return this.deviceInstance?.getActiveSessionInformation() ?? [];
+        const allSessions = this.deviceInstance?.getActiveSessionInformation() ?? [];
+        return allSessions.filter(({ fabric }) => fabricIndex === undefined || fabric?.fabricIndex === fabricIndex);
     }
 }

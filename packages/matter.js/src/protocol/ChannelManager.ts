@@ -8,10 +8,13 @@ import { Channel } from "../common/Channel.js";
 import { MatterError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { Logger } from "../log/Logger.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { MessageChannel } from "./ExchangeManager.js";
+
+const logger = Logger.get("ChannelManager");
 
 export class NoChannelError extends MatterError {}
 
@@ -23,8 +26,20 @@ export class ChannelManager {
         return `${fabric.fabricId}/${nodeId}`;
     }
 
-    setChannel(fabric: Fabric, nodeId: NodeId, channel: MessageChannel<any>) {
-        this.channels.set(this.getChannelKey(fabric, nodeId), channel);
+    async setChannel(fabric: Fabric, nodeId: NodeId, channel: MessageChannel<any>) {
+        const channelKey = this.getChannelKey(fabric, nodeId);
+        const currentChannel = this.channels.get(channelKey);
+        if (currentChannel !== undefined) {
+            const { session } = currentChannel;
+            if (session.getId() !== channel.session.getId()) {
+                logger.debug(
+                    `Existing channel for fabricIndex ${fabric.fabricIndex} and node ${nodeId} with session ${session.name} gets replaced. Consider former session already inactive and so close it.`,
+                );
+                await session.destroy(false, false);
+            }
+            await currentChannel.close();
+        }
+        this.channels.set(channelKey, channel);
     }
 
     getChannel(fabric: Fabric, nodeId: NodeId) {
@@ -41,34 +56,53 @@ export class ChannelManager {
             if (fabric === undefined) {
                 return this.paseChannels.get(session);
             }
-            return this.getChannel(fabric, nodeId);
+            const channel = this.getChannel(fabric, nodeId);
+            if (channel.session.getId() !== session.getId()) {
+                return undefined;
+            }
+            return channel;
         }
         return this.paseChannels.get(session);
     }
 
-    removeChannel(fabric: Fabric, nodeId: NodeId) {
-        this.channels.delete(this.getChannelKey(fabric, nodeId));
+    async removeChannel(fabric: Fabric, nodeId: NodeId) {
+        const channelKey = this.getChannelKey(fabric, nodeId);
+        const channel = this.channels.get(channelKey);
+        if (channel !== undefined) {
+            await channel.close();
+            this.channels.delete(channelKey);
+        }
     }
 
-    getOrCreateChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
+    private getOrCreateAsPaseChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
+        const msgChannel = new MessageChannel(
+            byteArrayChannel,
+            session,
+            async () => void this.paseChannels.delete(session),
+        );
+        this.paseChannels.set(session, msgChannel);
+        return msgChannel;
+    }
+
+    async getOrCreateChannel(byteArrayChannel: Channel<ByteArray>, session: Session<any>) {
         if (!session.isSecure()) {
-            const msgChannel = new MessageChannel(byteArrayChannel, session, () => this.paseChannels.delete(session));
-            this.paseChannels.set(session, msgChannel);
-            return msgChannel;
+            return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
         const secureSession = session as SecureSession<any>;
         const fabric = secureSession.getFabric();
         const nodeId = secureSession.getPeerNodeId();
         if (fabric === undefined) {
-            const msgChannel = new MessageChannel(byteArrayChannel, session, () => this.paseChannels.delete(session));
-            this.paseChannels.set(session, msgChannel);
-            return msgChannel;
+            return this.getOrCreateAsPaseChannel(byteArrayChannel, session);
         }
 
         let result = this.channels.get(this.getChannelKey(fabric, nodeId));
         if (result === undefined || result.session.getId() !== session.getId()) {
-            result = new MessageChannel(byteArrayChannel, session, () => this.removeChannel(fabric, nodeId));
-            this.setChannel(fabric, nodeId, result);
+            result = new MessageChannel(
+                byteArrayChannel,
+                session,
+                async () => await this.removeChannel(fabric, nodeId),
+            );
+            await this.setChannel(fabric, nodeId, result);
         }
         return result;
     }

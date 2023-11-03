@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { require } from "@project-chip/matter-node-ble.js/require";
 import {
     BLE_MATTER_C1_CHARACTERISTIC_UUID,
     BLE_MATTER_C2_CHARACTERISTIC_UUID,
@@ -18,7 +19,7 @@ import { Channel, InternalError } from "@project-chip/matter.js/common";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time } from "@project-chip/matter.js/time";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
-import { BleOptions } from "./BleNode";
+import { BleOptions } from "./BleNode.js";
 
 const logger = Logger.get("BlenoBleServer");
 let Bleno: typeof import("@abandonware/bleno");
