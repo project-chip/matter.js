@@ -92,7 +92,7 @@ groups:
             users:
               - lauckhart
               - Apollon77
-              - Wes
+              - vves
             teams:
               - matter-js-reviewers
         labels:
