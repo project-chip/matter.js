@@ -29,7 +29,7 @@ runs:
     - name: Install dependencies (Non-Windows)
       if: ${{ inputs.os != 'windows-latest' && inputs.os != 'windows-2019' }}
       shell: bash
-      run: npm ci
+      run: npm ci --foreground-scripts
 
     - name: Install dependencies (Windows)
       if: ${{ inputs.os == 'windows-latest' || inputs.os == 'windows-2019' }}
