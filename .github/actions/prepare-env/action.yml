@@ -26,6 +26,12 @@ runs:
         npm install --global node-gyp@latest
         npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
 
-    - name: Install dependencies
+    - name: Install dependencies (Non-Windows)
+      if: ${{ inputs.os != 'windows-latest' && inputs.os != 'windows-2019' }}
+      shell: bash
+      run: npm ci --foreground-scripts
+
+    - name: Install dependencies (Windows)
+      if: ${{ inputs.os == 'windows-latest' || inputs.os == 'windows-2019' }}
       shell: powershell
       run: npm ci --foreground-scripts
