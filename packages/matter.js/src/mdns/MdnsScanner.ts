@@ -84,7 +84,11 @@ export class MdnsScanner implements Scanner {
     private readonly commissionableDeviceRecords = new Map<string, CommissionableDeviceRecordWithExpire>();
     private readonly recordWaiters = new Map<
         string,
-        { resolver: () => void; timer?: Timer; resolveOnUpdatedRecords: boolean }
+        {
+            resolver: () => void;
+            timer?: Timer;
+            resolveOnUpdatedRecords: boolean;
+        }
     >();
     private readonly periodicTimer: Timer;
     private closing = false;
@@ -470,60 +474,32 @@ export class MdnsScanner implements Scanner {
         return undefined;
     }
 
-    private getCommissionableQueryRecords(identifier: CommissionableDeviceIdentifiers) {
-        const queries = new Array<DnsQuery>();
+    private getCommissionableQueryRecords(identifier: CommissionableDeviceIdentifiers): DnsQuery[] {
+        const names = new Array<string>();
 
-        queries.push({
-            name: MATTER_COMMISSION_SERVICE_QNAME,
-            recordClass: DnsRecordClass.IN,
-            recordType: DnsRecordType.PTR,
-        });
+        names.push(MATTER_COMMISSION_SERVICE_QNAME);
 
         if ("instanceId" in identifier) {
-            queries.push({
-                name: getDeviceInstanceQname(identifier.instanceId),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getDeviceInstanceQname(identifier.instanceId));
         } else if ("longDiscriminator" in identifier) {
-            queries.push({
-                name: getLongDiscriminatorQname(identifier.longDiscriminator),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getLongDiscriminatorQname(identifier.longDiscriminator));
         } else if ("shortDiscriminator" in identifier) {
-            queries.push({
-                name: getShortDiscriminatorQname(identifier.shortDiscriminator),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getShortDiscriminatorQname(identifier.shortDiscriminator));
         } else if ("vendorId" in identifier) {
-            queries.push({
-                name: getVendorQname(identifier.vendorId),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getVendorQname(identifier.vendorId));
         } else if ("deviceType" in identifier) {
-            queries.push({
-                name: getDeviceTypeQname(identifier.deviceType),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getDeviceTypeQname(identifier.deviceType));
         } else {
             // Other queries just scan for commissionable devices
-            queries.push({
-                name: getCommissioningModeQname(),
-                recordClass: DnsRecordClass.IN,
-                recordType: DnsRecordType.PTR,
-            });
+            names.push(getCommissioningModeQname());
         }
 
-        return queries;
+        return names.map(name => ({ name, recordClass: DnsRecordClass.IN, recordType: DnsRecordType.PTR }));
     }
 
     /**
-     * Discovers commissionable devices based on a defined identifier for ma maximal given timeout, but returns the
-     * first found entries. If already a discovered device matches in the cache the query it is returned directly and
+     * Discovers commissionable devices based on a defined identifier for maximal given timeout, but returns the
+     * first found entries. If already a discovered device matches in the cache the response is returned directly and
      * no query is triggered. If no record exists a query is sent out and the promise gets fulfilled as soon as at least
      * one device is found. If no device is discovered in the defined timeframe an empty array is returned. When the
      * promise got fulfilled no more queries are send out, but more device entries might be added when discovered later.

@@ -55,6 +55,9 @@ import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.j
 
 const logger = Logger.get("PairedNode");
 
+/** Delay after receiving a changed partList  from a device to update the device structure */
+const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
+
 export enum NodeStateInformation {
     /** Node is connected and all data is up-to-date. */
     Connected,
@@ -125,7 +128,10 @@ export type CommissioningControllerNodeOptions = {
 export class PairedNode {
     private readonly endpoints = new Map<EndpointNumber, Endpoint>();
     private interactionClient?: InteractionClient;
-    private readonly reconnectDelayTimer = Time.getTimer(5_000, async () => await this.reconnect());
+    private readonly reconnectDelayTimer = Time.getTimer(
+        STRUCTURE_UPDATE_TIMEOUT_MS,
+        async () => await this.reconnect(),
+    );
     private readonly updateEndpointStructureTimer = Time.getTimer(
         5_000,
         async () => await this.updateEndpointStructure(),
@@ -169,7 +175,7 @@ export class PairedNode {
         });
     }
 
-    get isConnencted() {
+    get isConnected() {
         return this.connectionState === NodeStateInformation.Connected;
     }
 
@@ -199,10 +205,17 @@ export class PairedNode {
         try {
             await this.initialize();
         } catch (error) {
-            if (this.connectionState === NodeStateInformation.Disconnected) return;
-            logger.warn(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
-            this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
-            await this.reconnect();
+            if (error instanceof MatterError) {
+                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                if (this.connectionState === NodeStateInformation.Disconnected) {
+                    return;
+                }
+                logger.warn(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+                await this.reconnect();
+            } else {
+                throw error;
+            }
         }
     }
 

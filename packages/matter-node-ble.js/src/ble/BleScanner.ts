@@ -34,7 +34,11 @@ type CommissionableDeviceData = CommissionableDevice & {
 export class BleScanner implements Scanner {
     private readonly recordWaiters = new Map<
         string,
-        { resolver: () => void; timer: Timer; resolveOnUpdatedRecords: boolean }
+        {
+            resolver: () => void;
+            timer: Timer;
+            resolveOnUpdatedRecords: boolean;
+        }
     >();
     private readonly discoveredMatterDevices = new Map<string, DiscoveredBleDevice>();
 
@@ -65,7 +69,7 @@ export class BleScanner implements Scanner {
                 resolveOnUpdatedRecords ? "" : " (not resolving on updated records)"
             }`,
         );
-        return { promise };
+        await promise;
     }
 
     /**
@@ -221,11 +225,9 @@ export class BleScanner implements Scanner {
         let storedRecords = this.getCommissionableDevices(identifier);
         if (storedRecords.length === 0) {
             const queryKey = this.buildCommissionableQueryIdentifier(identifier);
-            const { promise } = await this.registerWaiterPromise(queryKey, timeoutSeconds);
 
             await this.nobleClient.startScanning();
-
-            await promise;
+            await this.registerWaiterPromise(queryKey, timeoutSeconds);
 
             storedRecords = this.getCommissionableDevices(identifier);
             await this.nobleClient.stopScanning();
@@ -257,8 +259,7 @@ export class BleScanner implements Scanner {
             if (remainingTime <= 0) {
                 break;
             }
-            const { promise } = await this.registerWaiterPromise(queryKey, remainingTime, false);
-            await promise;
+            await this.registerWaiterPromise(queryKey, remainingTime, false);
         }
         await this.nobleClient.stopScanning();
         return this.getCommissionableDevices(identifier).map(({ deviceData }) => deviceData);

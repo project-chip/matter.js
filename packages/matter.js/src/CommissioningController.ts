@@ -75,19 +75,23 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
     commissioning?: CommissioningOptions;
 
     /** Discovery related options. */
-    discovery: {
-        /**
-         * Device identifiers (Short or Long Discriminator, Product/Vendor-Ids, Device-type or a pre-discovered
-         * instance Id, or "nothing" to discover all commissionable matter devices) to use for discovery.
-         */
-        identifierData: CommissionableDeviceIdentifiers;
-
-        /**
-         * Commissionable device object returned by a discovery run.
-         * If this property is provided then identifierData and knownAddress are ignored.
-         */
-        commissionableDevice?: CommissionableDevice;
-
+    discovery: (
+        | {
+              /**
+               * Device identifiers (Short or Long Discriminator, Product/Vendor-Ids, Device-type or a pre-discovered
+               * instance Id, or "nothing" to discover all commissionable matter devices) to use for discovery.
+               * If the property commissionableDevice is provided this property is ignored.
+               */
+              identifierData: CommissionableDeviceIdentifiers;
+          }
+        | {
+              /**
+               * Commissionable device object returned by a discovery run.
+               * If this property is provided then identifierData and knownAddress are ignored.
+               */
+              commissionableDevice: CommissionableDevice;
+          }
+    ) & {
         /**
          * Discovery capabilities to use for discovery. These are included in the QR code normally and defined if BLE
          * is supported for initial commissioning.
@@ -248,7 +252,7 @@ export class CommissioningController extends MatterNode {
 
         const existingNode = this.connectedNodes.get(nodeId);
         if (existingNode !== undefined) {
-            if (!existingNode.isConnencted) {
+            if (!existingNode.isConnected) {
                 await existingNode.reconnect();
             }
             return existingNode;

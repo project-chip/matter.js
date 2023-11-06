@@ -7,11 +7,11 @@
 import { NodeCommissioningOptions } from "@project-chip/matter-node.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
 import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { NodeStateInformation } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter-node.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
+import { createDiagnosticCallbacks } from "./cmd_nodes";
 
 export default function commands(theNode: MatterNode) {
     return {
@@ -92,53 +92,7 @@ export default function commands(theNode: MatterNode) {
                                             },
                                         },
                                         passcode: setupPinCode,
-                                        attributeChangedCallback: (
-                                            peerNodeId,
-                                            { path: { nodeId, clusterId, endpointId, attributeName }, value },
-                                        ) =>
-                                            console.log(
-                                                `attributeChangedCallback ${peerNodeId} Attribute ${nodeId}/${endpointId}/${clusterId}/${attributeName} changed to ${Logger.toJSON(
-                                                    value,
-                                                )}`,
-                                            ),
-                                        eventTriggeredCallback: (
-                                            peerNodeId,
-                                            { path: { nodeId, clusterId, endpointId, eventName }, events },
-                                        ) =>
-                                            console.log(
-                                                `eventTriggeredCallback ${peerNodeId} Event ${nodeId}/${endpointId}/${clusterId}/${eventName} triggered with ${Logger.toJSON(
-                                                    events,
-                                                )}`,
-                                            ),
-                                        stateInformationCallback: (peerNodeId, info) => {
-                                            switch (info) {
-                                                case NodeStateInformation.Connected:
-                                                    console.log(
-                                                        `stateInformationCallback: Node ${peerNodeId} connected`,
-                                                    );
-                                                    break;
-                                                case NodeStateInformation.Disconnected:
-                                                    console.log(
-                                                        `stateInformationCallback: Node ${peerNodeId} disconnected`,
-                                                    );
-                                                    break;
-                                                case NodeStateInformation.Reconnecting:
-                                                    console.log(
-                                                        `stateInformationCallback: Node ${peerNodeId} reconnecting`,
-                                                    );
-                                                    break;
-                                                case NodeStateInformation.WaitingForDeviceDiscovery:
-                                                    console.log(
-                                                        `stateInformationCallback: Node ${peerNodeId} waiting that device gets discovered again`,
-                                                    );
-                                                    break;
-                                                case NodeStateInformation.StructureChanged:
-                                                    console.log(
-                                                        `stateInformationCallback: Node ${peerNodeId} structure changed`,
-                                                    );
-                                                    break;
-                                            }
-                                        },
+                                        ...createDiagnosticCallbacks(),
                                     } as NodeCommissioningOptions;
 
                                     options.commissioning = {

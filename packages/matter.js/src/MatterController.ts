@@ -238,12 +238,15 @@ export class MatterController {
                 regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.Outdoor, // Set to the most restrictive if relevant
                 regulatoryCountryCode: "XX",
             },
-            discovery: { commissionableDevice, timeoutSeconds = 30 },
+            discovery: { timeoutSeconds = 30 },
             passcode,
         } = options;
+        const commissionableDevice =
+            "commissionableDevice" in options.discovery ? options.discovery.commissionableDevice : undefined;
         let {
-            discovery: { identifierData, discoveryCapabilities, knownAddress },
+            discovery: { discoveryCapabilities, knownAddress },
         } = options;
+        let identifierData = "identifierData" in options.discovery ? options.discovery.identifierData : {};
 
         if (commissionableDevice !== undefined) {
             let { addresses } = commissionableDevice;
@@ -446,47 +449,41 @@ export class MatterController {
         return peerNodeId;
     }
 
-    /**
-     * Resume a device connection and establish a CASE session that was previously paired with the controller. This
-     * method will try to connect to the device using the previously used server address (if set). If that fails, the
-     * device is discovered again using its operational instance details.
-     * It returns the operational MessageChannel on success.
-     */
-    private async resume(peerNodeId: NodeId, timeoutSeconds?: number) {
-        const operationalAddress = this.getLastOperationalAddress(peerNodeId);
-
-        const reconnectLastKnownAddress = async (
-            operationalAddress: ServerAddressIp,
-        ): Promise<MessageChannel<MatterController> | undefined> => {
-            const { ip, port } = operationalAddress;
-            try {
-                logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
-                const channel = await this.pair(peerNodeId, operationalAddress);
-                this.setOperationalServerAddress(peerNodeId, operationalAddress);
-                return channel;
-            } catch (error) {
-                if (
-                    error instanceof RetransmissionLimitReachedError ||
-                    (error instanceof Error && error.message.includes("EHOSTUNREACH"))
-                ) {
-                    logger.debug(
-                        `Failed to resume device connection with ${ip}:${port}, discover the device ...`,
-                        error,
-                    );
-                    return undefined;
-                } else {
-                    throw error;
-                }
+    private async reconnectLastKnownAddress(
+        peerNodeId: NodeId,
+        operationalAddress: ServerAddressIp,
+    ): Promise<MessageChannel<MatterController> | undefined> {
+        const { ip, port } = operationalAddress;
+        try {
+            logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
+            const channel = await this.pair(peerNodeId, operationalAddress);
+            this.setOperationalServerAddress(peerNodeId, operationalAddress);
+            return channel;
+        } catch (error) {
+            if (
+                error instanceof RetransmissionLimitReachedError ||
+                (error instanceof Error && error.message.includes("EHOSTUNREACH"))
+            ) {
+                logger.debug(`Failed to resume device connection with ${ip}:${port}, discover the device ...`, error);
+                return undefined;
+            } else {
+                throw error;
             }
-        };
+        }
+    }
 
+    private async connectOrDiscoverNode(
+        peerNodeId: NodeId,
+        operationalAddress?: ServerAddressIp,
+        timeoutSeconds?: number,
+    ) {
         const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
 
         // Additionally to general discovery we also try to poll the formerly known operational address
         let reconnectionPollingTimer: Timer | undefined;
 
         if (operationalAddress !== undefined) {
-            const directReconnection = await reconnectLastKnownAddress(operationalAddress);
+            const directReconnection = await this.reconnectLastKnownAddress(peerNodeId, operationalAddress);
             if (directReconnection !== undefined) {
                 return directReconnection;
             }
@@ -497,7 +494,7 @@ export class MatterController {
                 reconnectionPollingTimer = Time.getPeriodicTimer(RECONNECTION_POLLING_INTERVAL, async () => {
                     try {
                         logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
-                        const result = await reconnectLastKnownAddress(operationalAddress);
+                        const result = await this.reconnectLastKnownAddress(peerNodeId, operationalAddress);
                         if (result !== undefined && reconnectionPollingTimer?.isRunning) {
                             reconnectionPollingTimer?.stop();
                             resolver(result);
@@ -537,8 +534,20 @@ export class MatterController {
             return result;
         });
 
+        return await anyPromise(discoveryPromises);
+    }
+
+    /**
+     * Resume a device connection and establish a CASE session that was previously paired with the controller. This
+     * method will try to connect to the device using the previously used server address (if set). If that fails, the
+     * device is discovered again using its operational instance details.
+     * It returns the operational MessageChannel on success.
+     */
+    private async resume(peerNodeId: NodeId, timeoutSeconds?: number) {
+        const operationalAddress = this.getLastOperationalAddress(peerNodeId);
+
         try {
-            return await anyPromise(discoveryPromises);
+            return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, timeoutSeconds);
         } catch (error) {
             if (
                 (error instanceof DiscoveryError || error instanceof PairRetransmissionLimitReachedError) &&
