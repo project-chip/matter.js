@@ -9,6 +9,7 @@
 import { Time, Timer } from "../time/Time.js";
 
 export class Cache<T> {
+    private readonly knownKeys = new Set<string>();
     private readonly values = new Map<string, T>();
     private readonly timestamps = new Map<string, number>();
     private readonly periodicTimer: Timer;
@@ -27,13 +28,14 @@ export class Cache<T> {
         if (value === undefined) {
             value = this.generator(...params);
             this.values.set(key, value);
+            this.knownKeys.add(key);
         }
         this.timestamps.set(key, Time.nowMs());
         return value;
     }
 
     keys() {
-        return Array.from(this.values.keys());
+        return Array.from(this.knownKeys.values());
     }
 
     private async deleteEntry(key: string) {
@@ -55,6 +57,7 @@ export class Cache<T> {
 
     async close() {
         await this.clear();
+        this.knownKeys.clear();
         this.periodicTimer.stop();
     }
 

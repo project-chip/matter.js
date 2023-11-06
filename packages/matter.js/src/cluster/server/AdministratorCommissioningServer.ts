@@ -51,8 +51,9 @@ class AdministratorCommissioningManager {
             throw new InternalError("Commissioning window already initialized.");
         }
         logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${session.name}.`);
-        this.commissioningWindowTimeout = Time.getTimer(commissioningTimeout * 1000, () =>
-            this.closeCommissioningWindow(session),
+        this.commissioningWindowTimeout = Time.getTimer(
+            commissioningTimeout * 1000,
+            async () => await this.closeCommissioningWindow(session),
         ).start();
 
         this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);

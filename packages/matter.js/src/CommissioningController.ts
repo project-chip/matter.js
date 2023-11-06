@@ -3,8 +3,10 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { MatterController } from "./MatterController.js";
+import { MatterNode } from "./MatterNode.js";
 import { ImplementationError } from "./common/MatterError.js";
-import { CommissionableDeviceIdentifiers } from "./common/Scanner.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -12,12 +14,11 @@ import { NodeId } from "./datatype/NodeId.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedNode.js";
 import { Logger } from "./log/Logger.js";
-import { MatterController } from "./MatterController.js";
-import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
+import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
 import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
@@ -74,13 +75,23 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
     commissioning?: CommissioningOptions;
 
     /** Discovery related options. */
-    discovery: {
-        /**
-         * Device identifiers (Short or Long Discriminator, Product/Vendor-Ids, Device-type or a pre-discovered
-         * instance Id, or "nothing" to discover all commissionable matter devices) to use for discovery.
-         */
-        identifierData: CommissionableDeviceIdentifiers;
-
+    discovery: (
+        | {
+              /**
+               * Device identifiers (Short or Long Discriminator, Product/Vendor-Ids, Device-type or a pre-discovered
+               * instance Id, or "nothing" to discover all commissionable matter devices) to use for discovery.
+               * If the property commissionableDevice is provided this property is ignored.
+               */
+              identifierData: CommissionableDeviceIdentifiers;
+          }
+        | {
+              /**
+               * Commissionable device object returned by a discovery run.
+               * If this property is provided then identifierData and knownAddress are ignored.
+               */
+              commissionableDevice: CommissionableDevice;
+          }
+    ) & {
         /**
          * Discovery capabilities to use for discovery. These are included in the QR code normally and defined if BLE
          * is supported for initial commissioning.
@@ -179,6 +190,7 @@ export class CommissioningController extends MatterNode {
         const nodeId = await controller.commission(nodeOptions);
 
         return this.connectNode(nodeId, {
+            ...nodeOptions,
             autoSubscribe: nodeOptions.autoSubscribe ?? this.options.autoSubscribe,
             subscribeMinIntervalFloorSeconds:
                 nodeOptions.subscribeMinIntervalFloorSeconds ?? this.options.subscribeMinIntervalFloorSeconds,
@@ -201,9 +213,9 @@ export class CommissioningController extends MatterNode {
      */
     async removeNode(nodeId: NodeId, tryDecommissioning = true) {
         const controller = this.assertControllerIsStarted();
+        const node = this.connectedNodes.get(nodeId);
         if (tryDecommissioning) {
             try {
-                const node = this.connectedNodes.get(nodeId);
                 if (node == undefined) {
                     throw new ImplementationError(`Node ${nodeId} is not connected.`);
                 }
@@ -212,8 +224,19 @@ export class CommissioningController extends MatterNode {
                 logger.warn(`Decommissioning node ${nodeId} failed with error, remove node anyway: ${error}`);
             }
         }
+        if (node !== undefined) {
+            node.close();
+        }
         await controller.removeNode(nodeId);
         this.connectedNodes.delete(nodeId);
+    }
+
+    async disconnectNode(nodeId: NodeId) {
+        const node = this.connectedNodes.get(nodeId);
+        if (node === undefined) {
+            throw new ImplementationError(`Node ${nodeId} is not connected!`);
+        }
+        await this.controllerInstance?.disconnect(nodeId);
     }
 
     /**
@@ -229,6 +252,9 @@ export class CommissioningController extends MatterNode {
 
         const existingNode = this.connectedNodes.get(nodeId);
         if (existingNode !== undefined) {
+            if (!existingNode.isConnected) {
+                await existingNode.reconnect();
+            }
             return existingNode;
         }
 
@@ -317,8 +343,11 @@ export class CommissioningController extends MatterNode {
         return controller.getCommissionedNodes() ?? [];
     }
 
-    /** Close network connections of the controller. */
+    /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
     async close() {
+        for (const node of this.connectedNodes.values()) {
+            node.close();
+        }
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
         this.connectedNodes.clear();
@@ -336,6 +365,22 @@ export class CommissioningController extends MatterNode {
         if (this.options.autoConnect !== false) {
             await this.connect();
         }
+    }
+
+    async discoverCommissionableDevices(
+        identifierData: CommissionableDeviceIdentifiers,
+        discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+        discoveredCallback?: (device: CommissionableDevice) => void,
+        timeoutSeconds = 900,
+    ) {
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
+        return await ControllerDiscovery.discoverCommissionableDevices(
+            controller.collectScanners(discoveryCapabilities),
+            timeoutSeconds,
+            identifierData,
+            discoveredCallback,
+        );
     }
 
     resetStorage() {
