@@ -114,7 +114,7 @@ class ComposedDevice {
         const productName = `node-matter OnOff-Bridge`;
         const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
 
-        const netAnnounceInterface = getParameter("announceinterface");
+        const netInterface = getParameter("netinterface");
         const port = getIntParameter("port") ?? 5540;
 
         const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
@@ -139,7 +139,7 @@ class ComposedDevice {
          * are called.
          */
 
-        this.matterServer = new MatterServer(storageManager, { mdnsAnnounceInterface: netAnnounceInterface });
+        this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
 
         const commissioningServer = new CommissioningServer({
             port,

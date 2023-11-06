@@ -26,7 +26,10 @@ export class MatterNode {
     commissioningController?: CommissioningController;
     private matterController?: MatterServer;
 
-    constructor(private nodeNum: number) {}
+    constructor(
+        private readonly nodeNum: number,
+        private readonly netInterface?: string,
+    ) {}
 
     async initialize(resetStorage: boolean) {
         /**
@@ -88,7 +91,7 @@ export class MatterNode {
          * are called.
          */
 
-        this.matterController = new MatterServer(this.storageManager);
+        this.matterController = new MatterServer(this.storageManager, { mdnsInterface: this.netInterface });
         this.commissioningController = new CommissioningController({
             autoConnect: false,
         });

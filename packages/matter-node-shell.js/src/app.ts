@@ -63,20 +63,26 @@ async function main() {
                             description: "Enable BLE support",
                             type: "boolean",
                         },
-                        "reset-storage": {
-                            description: "Reset storage of this node",
+                        "factory-reset": {
+                            description: "Factory-Reset storage of this node",
                             default: false,
                             type: "boolean",
+                        },
+                        "net-interface": {
+                            description: "Network interface to use for MDNS announcements and scanning",
+                            type: "string",
+                            default: undefined,
                         },
                     });
             },
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, nodeType, resetStorage } = argv;
+                const { nodeNum, ble, nodeType, factoryReset, netInterface } = argv;
 
-                theNode = new MatterNode(nodeNum);
-                await theNode.initialize(resetStorage);
+                theNode = new MatterNode(nodeNum, netInterface);
+                await theNode.initialize(factoryReset);
+
                 const theShell = new Shell(theNode, PROMPT);
 
                 if (ble) {

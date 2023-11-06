@@ -34,8 +34,16 @@ export type MatterServerOptions = {
 
     /**
      * Interface to use for MDNS announcements. If not provided announcements will be sent from all network interfaces
+     * TODO: Remove in later versions then 0.7
+     * @deprecated
      */
     mdnsAnnounceInterface?: string;
+
+    /**
+     * Interface to use for MDNS announcements and scanning. If not provided announcements/scanning will be done on all
+     * network interfaces
+     */
+    mdnsInterface?: string;
 };
 
 /**
@@ -180,11 +188,14 @@ export class MatterServer {
         if (this.mdnsBroadcaster === undefined) {
             this.mdnsBroadcaster = await MdnsBroadcaster.create({
                 enableIpv4: !this.ipv4Disabled,
-                multicastInterface: this.options?.mdnsAnnounceInterface,
+                multicastInterface: this.options?.mdnsInterface ?? this.options?.mdnsAnnounceInterface,
             });
         }
         if (this.mdnsScanner === undefined) {
-            this.mdnsScanner = await MdnsScanner.create({ enableIpv4: !this.ipv4Disabled });
+            this.mdnsScanner = await MdnsScanner.create({
+                enableIpv4: !this.ipv4Disabled,
+                netInterface: this.options?.mdnsInterface,
+            });
         }
         // TODO the mdns classes will later be in this class and assigned differently!!
         for (const node of this.nodes) {
