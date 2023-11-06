@@ -1,6 +1,9 @@
 /**
- * Import needed modules from @project-chip/matter-node.js
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
+
 // Include this first to auto-register Crypto, Network and Time Node.js implementations
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
 
@@ -21,7 +24,7 @@ export class MatterNode {
     private storageContext?: StorageContext;
 
     commissioningController?: CommissioningController;
-    private matterDevice?: MatterServer;
+    private matterController?: MatterServer;
 
     constructor(
         private readonly nodeNum: number,
@@ -55,7 +58,7 @@ export class MatterNode {
     }
 
     async close() {
-        await this.matterDevice?.close();
+        await this.matterController?.close();
         this.closeStorage();
     }
 
@@ -70,7 +73,7 @@ export class MatterNode {
         if (this.storageManager === undefined) {
             throw new Error("StorageManager not initialized"); // Should never happen
         }
-        if (this.matterDevice !== undefined) {
+        if (this.matterController !== undefined) {
             return;
         }
         logger.info(`matter.js shell controller started for node ${this.nodeNum}`);
@@ -88,11 +91,11 @@ export class MatterNode {
          * are called.
          */
 
-        this.matterDevice = new MatterServer(this.storageManager, { mdnsInterface: this.netInterface });
+        this.matterController = new MatterServer(this.storageManager, { mdnsInterface: this.netInterface });
         this.commissioningController = new CommissioningController({
             autoConnect: false,
         });
-        this.matterDevice.addCommissioningController(this.commissioningController);
+        this.matterController.addCommissioningController(this.commissioningController);
 
         /**
          * Start the Matter Server
@@ -101,7 +104,7 @@ export class MatterNode {
          * CommissioningServer node then this command also starts the announcement of the device into the network.
          */
 
-        await this.matterDevice.start();
+        await this.matterController.start();
     }
 
     async connectAndGetNodes(nodeIdStr?: string) {

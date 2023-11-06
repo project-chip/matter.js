@@ -5,14 +5,21 @@
  */
 
 import { PairRetransmissionLimitReachedError } from "../MatterController.js";
-import { CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
-import { ServerAddress, serverAddressToString } from "../common/ServerAddress.js";
+import { MatterError } from "../common/MatterError.js";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
+import { ServerAddress, ServerAddressIp, serverAddressToString } from "../common/ServerAddress.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
+import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { CommissioningError } from "../protocol/ControllerCommissioner.js";
 import { isDeepEqual } from "../util/DeepEqual.js";
+import { anyPromise } from "../util/Promises.js";
 import { ClassExtends } from "../util/Type.js";
 
 const logger = Logger.get("ControllerDiscovery");
+
+export class DiscoveryError extends MatterError {}
 
 export class ControllerDiscovery {
     /**
@@ -20,14 +27,14 @@ export class ControllerDiscovery {
      * It returns after the timeout or if at least one device was found.
      * The method returns a list of addresses of the discovered devices.
      */
-    static discoverDeviceAddressesByIdentifier(
+    static async discoverDeviceAddressesByIdentifier(
         scanners: Array<Scanner>,
         identifier: CommissionableDeviceIdentifiers,
         timeoutSeconds = 30,
     ): Promise<ServerAddress[]> {
         logger.info(`Start Discovering devices using identifier ${Logger.toJSON(identifier)} ...`);
 
-        const scanResults = scanners.map(scanner => async () => {
+        const scanResults = scanners.map(async scanner => {
             const foundDevices = await scanner.findCommissionableDevices(identifier, timeoutSeconds);
             logger.info(`Found ${foundDevices.length} devices using identifier ${Logger.toJSON(identifier)}`);
             if (foundDevices.length === 0) {
@@ -49,27 +56,79 @@ export class ControllerDiscovery {
             return addresses;
         });
 
-        // Work around unavailable Promise.any :-)
-        return new Promise((resolve, reject) => {
-            let numberRejected = 0;
-            let wasResolved = false;
+        return await anyPromise(scanResults);
+    }
 
-            for (const scanResult of scanResults) {
-                scanResult()
-                    .then(addresses => {
-                        if (!wasResolved) {
-                            wasResolved = true;
-                            resolve(addresses);
+    static async discoverCommissionableDevices(
+        scanners: Array<Scanner>,
+        timeoutSeconds: number,
+        identifier: CommissionableDeviceIdentifiers = {},
+        discoveredCallback?: (device: CommissionableDevice) => void,
+    ): Promise<CommissionableDevice[]> {
+        const discoveredDevices = new Map<string, CommissionableDevice>();
+
+        await Promise.all(
+            scanners.map(async scanner => {
+                await scanner.findCommissionableDevicesContinuously(
+                    identifier,
+                    device => {
+                        const { deviceIdentifier } = device;
+                        if (!discoveredDevices.has(deviceIdentifier)) {
+                            discoveredDevices.set(deviceIdentifier, device);
+                            discoveredCallback?.(device);
                         }
-                    })
-                    .catch(error => {
-                        numberRejected++;
-                        if (!wasResolved && numberRejected === scanners.length) {
-                            reject(error);
-                        }
-                    });
-            }
+                    },
+                    timeoutSeconds,
+                );
+            }),
+        );
+
+        // The final answer only consists the devices still left, so expired ones will be excluded
+        const finalDiscoveredDevices = new Map<string, CommissionableDevice>();
+        scanners.forEach(scanner => {
+            const devices = scanner.getDiscoveredCommissionableDevices(identifier);
+            devices.forEach(device => {
+                const { deviceIdentifier } = device;
+                if (!discoveredDevices.has(deviceIdentifier)) {
+                    discoveredDevices.set(deviceIdentifier, device);
+                    discoveredCallback?.(device);
+                }
+                if (!finalDiscoveredDevices.has(deviceIdentifier)) {
+                    finalDiscoveredDevices.set(deviceIdentifier, device);
+                }
+            });
         });
+
+        return Array.from(finalDiscoveredDevices.values());
+    }
+
+    static async discoverOperationalDevice(
+        fabric: Fabric,
+        peerNodeId: NodeId,
+        scanner: MdnsScanner,
+        timeoutSeconds?: number,
+        ignoreExistingRecords?: boolean,
+    ): Promise<ServerAddressIp[]> {
+        const scanResult = await scanner.findOperationalDevice(
+            fabric,
+            peerNodeId,
+            timeoutSeconds,
+            ignoreExistingRecords,
+        );
+        if (!scanResult.length) {
+            throw new DiscoveryError(
+                "The operational device cannot be found on the network. Please make sure it is online.",
+            );
+        }
+        return scanResult;
+    }
+
+    static cancelOperationalDeviceDiscovery(fabric: Fabric, peerNodeId: NodeId, scanner: MdnsScanner) {
+        scanner.cancelOperationalDeviceDiscovery(fabric, peerNodeId);
+    }
+
+    static cancelCommissionableDeviceDiscovery(scanner: Scanner, identifier: CommissionableDeviceIdentifiers = {}) {
+        scanner.cancelCommissionableDeviceDiscovery(identifier);
     }
 
     /**
@@ -123,7 +182,7 @@ export class ControllerDiscovery {
                 }
             }
             if (!triedOne) {
-                throw new PairRetransmissionLimitReachedError(`Failed to connect on any found server`);
+                throw new PairRetransmissionLimitReachedError(`Failed to connect on any discovered server`);
             }
         }
     }
