@@ -1445,7 +1445,7 @@ describe("Integration Test", () => {
 
             assert.equal(commissioningChangedCallsServer.length, 2);
             assert.ok(sessionChangedCallsServer.length >= 7);
-            assert.equal(sessionChangedCallsServer[7].fabricIndex, FabricIndex(2));
+            assert.equal(sessionChangedCallsServer[sessionChangedCallsServer.length - 1].fabricIndex, FabricIndex(2));
             const sessionInfo = commissioningServer.getActiveSessionInformation();
             assert.equal(sessionInfo.length, 2);
             assert.ok(sessionInfo[1].fabric);
