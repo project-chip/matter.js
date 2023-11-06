@@ -34,3 +34,30 @@ export function createPromise<T>(): {
         rejecter,
     };
 }
+
+/**
+ * Use all promises or promise returning methods and return the first resolved promise or reject when all promises
+ * rejected
+ */
+export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Promise<T> {
+    return new Promise((resolve, reject) => {
+        let numberRejected = 0;
+        let wasResolved = false;
+        for (const entry of promises) {
+            const promise = typeof entry === "function" ? entry() : entry;
+            promise
+                .then(value => {
+                    if (!wasResolved) {
+                        wasResolved = true;
+                        resolve(value);
+                    }
+                })
+                .catch(reason => {
+                    numberRejected++;
+                    if (!wasResolved && numberRejected === promises.length) {
+                        reject(reason);
+                    }
+                });
+        }
+    });
+}

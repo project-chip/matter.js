@@ -26,6 +26,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Feature: Added generation method for random passcodes to PaseClient
   * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel
   * Feature: Added functionality to clear session contexts including data in sub-contexts or not
+  * Feature: Enhance discovery methods to allow continuous discovery for operational devices
   * Feature: Upgrade Interaction protocol revision to 11 (Matter 1.2) and adjust event error handling in DataReports
 * matter.js API:
   * Breaking: Rename resetStorage() on CommissioningServer to factoryReset() and add logic to restart the device if currently running
@@ -34,11 +35,17 @@ The main work (all changes without a GitHub username in brackets in the below li
     * Introducing class PairedNode with the High level API for a paired Node
     * Restructured CommissioningController to handle multiple nodes and offer new high level API
     * Changed name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
+    * Adjusted subscription callbacks to also provide the nodeId of the affected device reporting the changes to allow callbacks to be used generically when connecting to all nodes
+    * Introduces a node state information callback to inform about the connection status but also when the node structure changed (for bridges) or such.
+  * Breaking: option "mdnsAnnounceInterface" was deprecated and replaced by "mdnsInterface" and now used to limit announcements and scanning to a specific interface
+  * Feature: Enhanced CommissioningServer API and CommissioningController for improved practical usage
   * Feature: Makes Port for CommissioningServer optional and add automatic port handling in MatterServer
   * Feature: Allows removal of Controller or Server instances from Matter server, optionally with deleting the storage
   * Enhance: Makes passcode and discriminator for CommissioningServer optional and randomly generate them if not provided 
 * matter-node-shell.js
   * Feature: Completely refactored and enhances shell to support commissioning, identify and many more new commands. See Readme, try it
+* matter-node.js-examples
+  * Breaking: Rename parameter -announceinterface to -netinterface and use for announcements and scanning
 
 ## 0.6.0 (2023-10-08)
 * Matter-Core functionality:

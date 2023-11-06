@@ -821,7 +821,7 @@ const NODE_ID = NodeId(BigInt(1));
         });
 
         describe("integration", () => {
-            it("the client directly returns server record if it has been announced before", async () => {
+            it("the client directly returns server record if it has been announced before and records are removed on cancel", async () => {
                 let queryReceived = false;
                 let dataWereSent = false;
                 const listener = scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => {
@@ -848,8 +848,18 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result).deep.equal(IPIntegrationResultsPort1);
                 await listener.close();
 
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(IPIntegrationResultsPort1);
+
                 // And expire the announcement
                 await processRecordExpiry(PORT);
+
+                // And empty result after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal([]);
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
@@ -887,8 +897,18 @@ const NODE_ID = NodeId(BigInt(1));
                 expect(result).deep.equal(IPIntegrationResultsPort1);
                 await listener.close();
 
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(IPIntegrationResultsPort1);
+
                 // And expire the announcement
                 await processRecordExpiry(PORT);
+
+                // And empty result after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal([]);
             });
 
             it("the client queries the server record and get correct response also with multiple announced instances", async () => {
@@ -965,9 +985,22 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await listener.close();
 
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(IPIntegrationResultsPort2);
+
+                // No commissionable devices because never queried
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
+
                 // And expire the announcement
                 await processRecordExpiry(PORT);
                 await processRecordExpiry(PORT2);
+
+                // And empty result after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal([]);
             });
 
             it("the client queries the server record and get correct response when announced before", async () => {
@@ -992,13 +1025,13 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await broadcaster.announce(PORT);
                 await broadcaster.announce(PORT2);
-
                 await MockTime.yield3();
                 await MockTime.yield3();
 
                 const result = await scanner.findOperationalDevice(
                     { operationalId: OPERATIONAL_ID } as Fabric,
                     NODE_ID,
+                    10,
                 );
 
                 expect(dataWereSent).equal(true);
@@ -1007,9 +1040,44 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await listener.close();
 
+                // Same result when we just get the records
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(IPIntegrationResultsPort2);
+
+                // Also commissionable devices known now
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([
+                    {
+                        CM: 1,
+                        D: 1234,
+                        DN: "Test Device",
+                        DT: 1,
+                        P: 32768,
+                        PH: 33,
+                        PI: "",
+                        SAI: 300,
+                        SD: 4,
+                        SII: 5000,
+                        T: 0,
+                        V: 1,
+                        VP: "1+32768",
+                        addresses: IPIntegrationResultsPort1,
+                        deviceIdentifier: "0000000000000000",
+                        expires: undefined,
+                        instanceId: "0000000000000000",
+                    },
+                ]);
+
                 // And expire the announcement
                 await processRecordExpiry(PORT);
                 await processRecordExpiry(PORT2);
+
+                // And removed after expiry
+                expect(
+                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal([]);
+
+                expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
             });
         });
     });
