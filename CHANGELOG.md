@@ -26,6 +26,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Feature: Added generation method for random passcodes to PaseClient
   * Feature: Generalized Discovery logic and allow discoveries via different methods (BLE+IP) in parallel
   * Feature: Added functionality to clear session contexts including data in sub-contexts or not
+  * Feature: Upgrade Interaction protocol revision to 11 (Matter 1.2) and adjust event error handling in DataReports
 * matter.js API:
   * Breaking: Rename resetStorage() on CommissioningServer to factoryReset() and add logic to restart the device if currently running
   * Breaking: Restructure the CommissioningController to allow pairing with multiple nodes

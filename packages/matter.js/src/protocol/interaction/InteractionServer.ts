@@ -59,7 +59,7 @@ import {
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
-export const INTERACTION_MODEL_REVISION = 10;
+export const INTERACTION_MODEL_REVISION = 11;
 
 const logger = Logger.get("InteractionServer");
 
@@ -218,13 +218,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             (path: TypeFromSchema<typeof TlvAttributePath>): AttributeReportPayload[] => {
                 const attributes = this.endpointStructure.getAttributes([path]);
                 if (attributes.length === 0) {
+                    // TODO Add checks for nodeId
                     const { endpointId, clusterId, attributeId } = path;
                     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                         // Wildcard path: Just leave out values
                         logger.debug(
-                            `Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                                path,
-                            )}: ignore non-existing attribute`,
+                            `Read attribute from ${
+                                exchange.channel.name
+                            }: ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`,
                         );
                     } else {
                         // Else return correct status
@@ -279,13 +280,32 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         const eventReportsPayload = eventRequests?.flatMap(
             (path: TypeFromSchema<typeof TlvEventPath>): EventReportPayload[] => {
                 const events = this.endpointStructure.getEvents([path]);
+                // Requested event path not found in any cluster server on any endpoint
                 if (events.length === 0) {
-                    logger.debug(
-                        `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
-                            path,
-                        )}: unsupported path`,
-                    );
-                    return [{ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }]; // TODO: Find correct status code
+                    // TODO Add checks for nodeId
+                    const { endpointId, clusterId, eventId } = path;
+                    if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
+                        // Wildcard path: Just leave out values
+                        logger.debug(
+                            `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
+                                path,
+                            )}: ignore non-existing event`,
+                        );
+                    } else {
+                        // Else return correct status
+                        let status = StatusCode.UnsupportedEvent;
+                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                            status = StatusCode.UnsupportedEndpoint;
+                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                            status = StatusCode.UnsupportedCluster;
+                        }
+                        logger.debug(
+                            `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
+                                path,
+                            )}: unsupported path: Status=${status}`,
+                        );
+                        return [{ eventStatus: { path, status: { status } } }];
+                    }
                 }
 
                 return events
