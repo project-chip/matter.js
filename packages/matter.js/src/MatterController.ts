@@ -88,6 +88,7 @@ export class MatterController {
         adminVendorId: VendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
         adminFabricId: FabricId = FabricId(DEFAULT_FABRIC_ID),
         adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
+        interactionModelRevision?: number,
     ): Promise<MatterController> {
         const certificateManager = new RootCertificateManager(storage);
 
@@ -104,6 +105,7 @@ export class MatterController {
                 storage,
                 storedFabric.rootVendorId,
                 sessionClosedCallback,
+                interactionModelRevision,
             );
         } else {
             const rootNodeId = NodeId.getRandomOperationalNodeId();
@@ -126,6 +128,7 @@ export class MatterController {
                 storage,
                 adminVendorId,
                 sessionClosedCallback,
+                interactionModelRevision,
             );
         }
     }
@@ -149,6 +152,7 @@ export class MatterController {
         private readonly storage: StorageContext,
         private readonly adminVendorId: VendorId,
         private readonly sessionClosedCallback?: (peerNodeId: NodeId) => void,
+        private readonly interactionModelRevision?: number,
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
@@ -419,7 +423,11 @@ export class MatterController {
         const peerNodeId = commissioningOptions.nodeId ?? NodeId.getRandomOperationalNodeId();
         const commissioningManager = new ControllerCommissioner(
             // Use the created secure session to do the commissioning
-            new InteractionClient(new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel), peerNodeId),
+            new InteractionClient(
+                new ExchangeProvider(this.exchangeManager, paseSecureMessageChannel),
+                peerNodeId,
+                this.interactionModelRevision,
+            ),
             this.certificateManager,
             this.fabric,
             commissioningOptions,
@@ -652,6 +660,7 @@ export class MatterController {
                 return this.channelManager.getChannel(this.fabric, peerNodeId);
             }),
             peerNodeId,
+            this.interactionModelRevision,
         );
     }
 

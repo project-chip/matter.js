@@ -64,7 +64,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
     private readonly subscriptionListeners = new Map<number, (dataReport: DataReport) => void>();
     private readonly subscriptionUpdateTimers = new Map<number, Timer>();
 
-    constructor() {}
+    constructor(private readonly interactionModelRevision: number) {}
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
@@ -88,17 +88,17 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
     }
 
     async onNewExchange(exchange: MessageExchange<MatterController>) {
-        const messenger = new IncomingInteractionClientMessenger(exchange);
+        const messenger = new IncomingInteractionClientMessenger(exchange, this.interactionModelRevision);
         const dataReport = await messenger.readDataReport();
         const subscriptionId = dataReport.subscriptionId;
         if (subscriptionId === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
+            await messenger.sendStatus(StatusCode.InvalidSubscription, this.interactionModelRevision);
             throw new UnexpectedDataError("Invalid Data report without Subscription ID");
         }
         const listener = this.subscriptionListeners.get(subscriptionId);
         const timer = this.subscriptionUpdateTimers.get(subscriptionId);
         if (listener === undefined) {
-            await messenger.sendStatus(StatusCode.InvalidSubscription);
+            await messenger.sendStatus(StatusCode.InvalidSubscription, this.interactionModelRevision);
             logger.info(`Received data for unknown subscription ID ${subscriptionId}. Cancel this subscription.`);
             if (timer !== undefined) {
                 // Should not happen but let's make sure to clean up
@@ -107,7 +107,7 @@ export class SubscriptionClient implements ProtocolHandler<MatterController> {
             await messenger.close();
             return;
         }
-        await messenger.sendStatus(StatusCode.Success);
+        await messenger.sendStatus(StatusCode.Success, this.interactionModelRevision);
         await messenger.close();
 
         if (timer !== undefined) {
@@ -133,6 +133,7 @@ export class InteractionClient {
     constructor(
         private readonly exchangeProvider: ExchangeProvider,
         readonly nodeId: NodeId,
+        readonly interactionModelRevision = INTERACTION_MODEL_REVISION,
     ) {
         if (this.exchangeProvider.hasProtocolHandler(INTERACTION_PROTOCOL_ID)) {
             const client = this.exchangeProvider.getProtocolHandler(INTERACTION_PROTOCOL_ID);
@@ -143,7 +144,7 @@ export class InteractionClient {
             }
             this.subscriptionClient = client;
         } else {
-            this.subscriptionClient = new SubscriptionClient();
+            this.subscriptionClient = new SubscriptionClient(this.interactionModelRevision);
             this.exchangeProvider.addProtocolHandler(this.subscriptionClient);
         }
     }
@@ -276,7 +277,7 @@ export class InteractionClient {
                 eventRequests,
                 eventFilters,
                 isFabricFiltered,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
             });
         });
     }
@@ -370,7 +371,7 @@ export class InteractionClient {
                 eventReports.push(...response.eventReports);
             }
             if (!response.suppressResponse) {
-                await messenger.sendStatus(StatusCode.Success);
+                await messenger.sendStatus(StatusCode.Success, this.interactionModelRevision);
             }
             if (!response.moreChunkedMessages) break;
             response = await messenger.readDataReport();
@@ -475,7 +476,7 @@ export class InteractionClient {
                 timedRequest,
                 writeRequests,
                 moreChunkedMessages: false,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
             });
             if (response === undefined) {
                 if (!suppressResponse) {
@@ -533,7 +534,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
                 attributeRequests: [{ endpointId, clusterId, attributeId }],
                 dataVersionFilters:
                     knownDataVersion !== undefined
@@ -613,7 +614,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
                 eventRequests: [{ endpointId, clusterId, eventId, isUrgent }],
                 eventFilters: minimumEventNumber !== undefined ? [{ eventMin: minimumEventNumber }] : undefined,
                 keepSubscriptions: true,
@@ -741,7 +742,7 @@ export class InteractionClient {
                 report,
                 subscribeResponse: { subscriptionId, maxInterval },
             } = await messenger.sendSubscribeRequest({
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
                 attributeRequests,
                 eventRequests,
                 keepSubscriptions,
@@ -875,7 +876,7 @@ export class InteractionClient {
                     invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
                     timedRequest,
                     suppressResponse: false,
-                    interactionModelRevision: INTERACTION_MODEL_REVISION,
+                    interactionModelRevision: this.interactionModelRevision,
                 },
                 useExtendedFailSafeMessageResponseTimeout
                     ? DEFAULT_MINIMUM_RESPONSE_TIMEOUT_WITH_FAILSAFE_MS
@@ -970,7 +971,7 @@ export class InteractionClient {
                 invokeRequests: [{ commandPath: { endpointId, clusterId, commandId: requestId }, commandFields }],
                 timedRequest,
                 suppressResponse: true,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision: this.interactionModelRevision,
             });
             if (invokeResponse !== undefined) {
                 throw new MatterFlowError(
@@ -989,7 +990,7 @@ export class InteractionClient {
     }
 
     private async withMessenger<T>(invoke: (messenger: InteractionClientMessenger) => Promise<T>): Promise<T> {
-        const messenger = new InteractionClientMessenger(this.exchangeProvider);
+        const messenger = new InteractionClientMessenger(this.exchangeProvider, this.interactionModelRevision);
         try {
             return await invoke(messenger);
         } finally {

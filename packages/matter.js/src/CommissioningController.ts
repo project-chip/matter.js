@@ -67,6 +67,14 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * Default: 1
      */
     readonly adminFabricIndex?: FabricIndex;
+
+    /**
+     * Define the Matter Interaction Model Revision as defined in the Matter specification to use for the device
+     * communication. This should normally not be needed to be set. If not set, the latest supported revision (11) will
+     * be used (which is "Matter 1.2"). Please only change this value if you know what you are doing and require a
+     * different revision!
+     */
+    readonly interactionModelRevision?: number;
 };
 
 /** Options needed to commission a new node */
@@ -176,6 +184,7 @@ export class CommissioningController extends MatterNode {
             adminVendorId,
             adminFabricId,
             adminFabricIndex,
+            this.options.interactionModelRevision,
         );
     }
 

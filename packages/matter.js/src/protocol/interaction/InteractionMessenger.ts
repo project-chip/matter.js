@@ -347,6 +347,13 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
 }
 
 export class IncomingInteractionClientMessenger extends InteractionMessenger<MatterController> {
+    constructor(
+        exchange: MessageExchange<MatterController>,
+        protected readonly interactionModelRevision: number,
+    ) {
+        super(exchange);
+    }
+
     async readDataReport(): Promise<DataReport> {
         let subscriptionId: number | undefined;
         const attributeValues: TypeFromSchema<typeof TlvAttributeReport>[] = [];
@@ -376,14 +383,17 @@ export class IncomingInteractionClientMessenger extends InteractionMessenger<Mat
                 return report;
             }
 
-            await this.sendStatus(StatusCode.Success);
+            await this.sendStatus(StatusCode.Success, this.interactionModelRevision);
         }
     }
 }
 
 export class InteractionClientMessenger extends IncomingInteractionClientMessenger {
-    constructor(private readonly exchangeProvider: ExchangeProvider) {
-        super(exchangeProvider.initiateExchange());
+    constructor(
+        private readonly exchangeProvider: ExchangeProvider,
+        interactionModelRevision: number,
+    ) {
+        super(exchangeProvider.initiateExchange(), interactionModelRevision);
     }
 
     /** Implements a send method with an automatic reconnection mechanism */
@@ -427,7 +437,7 @@ export class InteractionClientMessenger extends IncomingInteractionClientMesseng
             throw new UnexpectedDataError(`Subscription ID not provided in report`);
         }
 
-        await this.sendStatus(StatusCode.Success);
+        await this.sendStatus(StatusCode.Success, this.interactionModelRevision);
 
         const subscribeResponseMessage = await this.nextMessage(MessageType.SubscribeResponse);
         const subscribeResponse = TlvSubscribeResponse.decode(subscribeResponseMessage.payload);
