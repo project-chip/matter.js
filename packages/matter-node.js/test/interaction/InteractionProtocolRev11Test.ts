@@ -64,6 +64,8 @@ import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 import { KEY } from "../cluster/ClusterServerTestingUtil.js";
 
+const TEST_INTERACTIONMODEL_REVISION = 11;
+
 const DummyTestDevice = DeviceTypeDefinition({
     code: 0,
     name: "DummyTestDevice",
@@ -72,7 +74,7 @@ const DummyTestDevice = DeviceTypeDefinition({
 });
 
 const READ_REQUEST: ReadRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -93,7 +95,7 @@ const READ_REQUEST: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -116,7 +118,7 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
 };
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), attributeId: AttributeId(2) },
@@ -139,7 +141,7 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
 };
 
 const READ_RESPONSE: DataReportPayload = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     attributeReportsPayload: [
         {
@@ -254,7 +256,7 @@ const READ_RESPONSE: DataReportPayload = {
 };
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     attributeReportsPayload: [
         {
@@ -328,7 +330,7 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
 };
 
 const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     isFabricFiltered: true,
     attributeRequests: [
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), attributeId: AttributeId(2) },
@@ -344,7 +346,7 @@ const INVALID_SUBSCRIBE_REQUEST: SubscribeRequest = {
 };
 
 const WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -381,7 +383,7 @@ const WRITE_REQUEST: WriteRequest = {
 };
 
 const WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(100), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -411,7 +413,7 @@ const WRITE_RESPONSE: WriteResponse = {
 };
 
 const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -425,7 +427,7 @@ const WRITE_REQUEST_TIMED_REQUIRED: WriteRequest = {
 };
 
 const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -435,7 +437,7 @@ const WRITE_RESPONSE_TIMED_REQUIRED: WriteResponse = {
 };
 
 const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -445,7 +447,7 @@ const WRITE_RESPONSE_TIMED_ERROR: WriteResponse = {
 };
 
 const MASS_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -469,7 +471,7 @@ const MASS_WRITE_REQUEST: WriteRequest = {
 };
 
 const MASS_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(5), clusterId: ClusterId(40), endpointId: EndpointNumber(0) },
@@ -495,7 +497,7 @@ const TlvAclTestSchema = TlvObject({
 });
 
 const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     writeRequests: [
@@ -556,7 +558,7 @@ const CHUNKED_ARRAY_WRITE_REQUEST: WriteRequest = {
 };
 
 const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     writeResponses: [
         {
             path: { attributeId: AttributeId(0), clusterId: ClusterId(31), endpointId: EndpointNumber(0) },
@@ -566,7 +568,7 @@ const CHUNKED_ARRAY_WRITE_RESPONSE: WriteResponse = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -582,7 +584,7 @@ const INVOKE_COMMAND_REQUEST_WITH_EMPTY_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -598,7 +600,7 @@ const INVOKE_COMMAND_REQUEST_TIMED_REQUIRED: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -611,7 +613,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -624,7 +626,7 @@ const INVOKE_COMMAND_RESPONSE_TIMED_REQUIRED_SUCCESS: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -635,7 +637,7 @@ const INVOKE_COMMAND_REQUEST_WITH_NO_ARGS: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -661,7 +663,7 @@ const INVOKE_COMMAND_REQUEST_MULTI: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     timedRequest: false,
     invokeRequests: [
@@ -672,7 +674,7 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
 };
 
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -685,7 +687,7 @@ const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -698,7 +700,7 @@ const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -711,7 +713,7 @@ const INVOKE_COMMAND_RESPONSE_INVALID: InvokeResponse = {
 };
 
 const INVOKE_COMMAND_RESPONSE_MULTI: InvokeResponse = {
-    interactionModelRevision: 11,
+    interactionModelRevision: TEST_INTERACTIONMODEL_REVISION,
     suppressResponse: false,
     invokeResponses: [
         {
@@ -808,7 +810,7 @@ async function getDummyMessageExchange(
     } as unknown as MessageExchange<any>;
 }
 
-describe("InteractionProtocol", () => {
+describe("InteractionProtocol Revision 11", () => {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     let realGetRandomData = Crypto.get().getRandomData;
 
@@ -818,6 +820,7 @@ describe("InteractionProtocol", () => {
         Crypto.get().getRandomData = (length: number) => {
             return new Uint8Array(length);
         };
+        MockTime.reset();
     });
 
     after(() => {
@@ -964,7 +967,7 @@ describe("InteractionProtocol", () => {
                 await getDummyMessageExchange(),
                 INVALID_SUBSCRIBE_REQUEST,
                 {
-                    sendStatus: code => {
+                    sendStatus: (code: StatusCode, _interactionModelRevision: number) => {
                         statusSent = code;
                     },
 
