@@ -619,7 +619,7 @@ describe("Integration Test", () => {
             let checked = false;
             MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendReadRequest", async ({ resolve }) => {
                 assert.ok(resolve);
-                // @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 assert.equal(resolve.interactionModelRevision, 11); // We did not provide one, so default is used
                 checked = true;
@@ -1599,7 +1599,7 @@ describe("Integration Test", () => {
             let checked = false;
             MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendReadRequest", async ({ resolve }) => {
                 assert.ok(resolve);
-                // @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 assert.equal(resolve.interactionModelRevision, 10);
                 checked = true;
