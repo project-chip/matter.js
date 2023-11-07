@@ -32,15 +32,15 @@
         "matter-composeddevice": "run src/examples/ComposedDeviceNode.ts",
         "matter-multidevice": "run src/examples/MultiDeviceNode.ts",
         "matter-controller": "run src/examples/ControllerNode.ts",
-        "bundle-device": "esbuild dist/cjs/examples/DeviceNode.js --bundle --platform=node --external:@abandonware/bleno --external:@abandonware/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.js",
-        "matter-device-bundled": "node --enable-source-maps dist/cjs/examples/DeviceNode.js"
+        "bundle-device": "esbuild src/examples/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@abandonware/bleno --external:@abandonware/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.cjs",
+        "matter-device-bundled": "node --enable-source-maps build/bundle/DeviceNode.cjs"
     },
     "bin": {
-        "matter-device": "./dist/cjs/examples/DeviceNode.js",
-        "matter-bridge": "./dist/cjs/examples/BridgedDevicesNode.js",
-        "matter-composeddevice": "./dist/cjs/examples/ComposedDeviceNode.js",
-        "matter-multidevice": "./dist/cjs/examples/MultiDeviceNode.js",
-        "matter-controller": "./dist/cjs/examples/ControllerNode.js"
+        "matter-device": "./dist/esm/examples/DeviceNode.js",
+        "matter-bridge": "./dist/esm/examples/BridgedDevicesNode.js",
+        "matter-composeddevice": "./dist/esm/examples/ComposedDeviceNode.js",
+        "matter-multidevice": "./dist/esm/examples/MultiDeviceNode.js",
+        "matter-controller": "./dist/esm/examples/ControllerNode.js"
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231107-8ef79b7",
