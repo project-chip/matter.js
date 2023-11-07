@@ -15,7 +15,8 @@ import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { InternalError } from "../../common/MatterError.js";
+import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
@@ -201,8 +202,6 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
 
-        // TODO UnsupportedNode
-
         const dataVersionFilterMap = new Map<string, number>(
             dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
@@ -218,7 +217,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             (path: TypeFromSchema<typeof TlvAttributePath>): AttributeReportPayload[] => {
                 const attributes = this.endpointStructure.getAttributes([path]);
                 if (attributes.length === 0) {
-                    // TODO Add checks for nodeId
+                    // TODO Add checks for nodeId -> UnknownNode
                     const { endpointId, clusterId, attributeId } = path;
                     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                         // Wildcard path: Just leave out values
@@ -228,21 +227,30 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             }: ${this.endpointStructure.resolveAttributeName(path)}: ignore non-existing attribute`,
                         );
                     } else {
-                        // Else return correct status
-                        let status = StatusCode.UnsupportedAttribute;
-                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
-                            status = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
-                            status = StatusCode.UnsupportedCluster;
-                        }
-                        logger.debug(
-                            `Read attribute from ${
-                                exchange.channel.name
-                            }: ${this.endpointStructure.resolveAttributeName(
-                                path,
-                            )}: unsupported path: Status=${status}`,
+                        // was a concrete path
+                        return tryCatch(
+                            () => {
+                                this.endpointStructure.validateConcreteAttributePath(
+                                    endpointId,
+                                    clusterId,
+                                    attributeId,
+                                );
+                                throw new InternalError(
+                                    "validateConcreteAttributePath should throw StatusResponseError but did not.",
+                                );
+                            },
+                            StatusResponseError,
+                            error => {
+                                logger.debug(
+                                    `Read attribute from ${
+                                        exchange.channel.name
+                                    }: ${this.endpointStructure.resolveAttributeName(path)}: unsupported path: Status=${
+                                        error.code
+                                    }`,
+                                );
+                                return [{ attributeStatus: { path, status: { status: error.code } } }];
+                            },
                         );
-                        return [{ attributeStatus: { path, status: { status } } }];
                     }
                 }
 
@@ -292,19 +300,29 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             )}: ignore non-existing event`,
                         );
                     } else {
-                        // Else return correct status
-                        let status = StatusCode.UnsupportedEvent;
-                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
-                            status = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
-                            status = StatusCode.UnsupportedCluster;
-                        }
-                        logger.debug(
-                            `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
-                                path,
-                            )}: unsupported path: Status=${status}`,
+                        return tryCatch(
+                            () => {
+                                this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                                throw new InternalError(
+                                    "validateConcreteEventPath should throw StatusResponseError but did not.",
+                                );
+                            },
+                            StatusResponseError,
+                            error => {
+                                if (interactionModelRevision <= 10) {
+                                    return [{ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }];
+                                }
+
+                                logger.debug(
+                                    `Read event from ${
+                                        exchange.channel.name
+                                    }: ${this.endpointStructure.resolveEventName(path)}: unsupported path: Status=${
+                                        error.code
+                                    }`,
+                                );
+                                return [{ eventStatus: { path, status: { status: error.code } } }];
+                            },
                         );
-                        return [{ eventStatus: { path, status: { status } } }];
                     }
                 }
 
@@ -402,7 +420,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 const { path, dataVersion } = values[0];
                 const attributes = this.endpointStructure.getAttributes([path], true);
                 const { endpointId, clusterId, attributeId } = path;
+
                 if (attributes.length === 0) {
+                    // No existing attribute matches the given path and is writable
                     // No attribute found
                     // TODO: Also check nodeId
                     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
@@ -410,31 +430,38 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         logger.debug(
                             `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
                                 path,
-                            )}: ignore non-existing attribute`,
+                            )}: ignore non-existing (wildcard) attribute`,
                         );
                     } else {
-                        // Else return correct status
-                        let statusCode = StatusCode.UnsupportedAttribute;
-                        if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) {
-                            // If attribute exists but was not returned above, it is not writeable
-                            statusCode = StatusCode.UnsupportedWrite;
-                        } else if (!this.endpointStructure.hasEndpoint(endpointId)) {
-                            statusCode = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
-                            statusCode = StatusCode.UnsupportedCluster;
-                        } else {
-                            // check if concrete path and just "not writable"
-                            const allAttributes = this.endpointStructure.getAttributes([path]);
-                            if (allAttributes.length > 0) {
-                                statusCode = StatusCode.UnsupportedWrite;
-                            }
-                        }
-                        logger.debug(
-                            `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                                path,
-                            )} not allowed: Status=${statusCode}`,
+                        // was a concrete path
+                        return tryCatch(
+                            () => {
+                                if (
+                                    this.endpointStructure.validateConcreteAttributePath(
+                                        endpointId,
+                                        clusterId,
+                                        attributeId,
+                                    )
+                                ) {
+                                    throw new StatusResponseError(
+                                        `Attribute ${attributeId} is not writable.`,
+                                        StatusCode.UnsupportedWrite,
+                                    );
+                                }
+                                throw new InternalError(
+                                    "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                                );
+                            },
+                            StatusResponseError,
+                            error => {
+                                logger.debug(
+                                    `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                                        path,
+                                    )} not allowed: Status=${error.code}`,
+                                );
+                                return [{ path, statusCode: error.code }];
+                            },
                         );
-                        return [{ path, statusCode }];
                     }
                 } else if (
                     attributes.length === 1 &&
@@ -768,21 +795,33 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                             )} ignore non-existing attribute`,
                         );
                     } else {
-                        // Else return correct status
-                        let status = StatusCode.UnsupportedCommand;
-                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
-                            status = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
-                            status = StatusCode.UnsupportedCluster;
-                        }
-                        logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
-                                commandPath,
-                            )} unsupported path: Status=${status}`,
+                        invokeResponses.push(
+                            tryCatch(
+                                () => {
+                                    this.endpointStructure.validateConcreteCommandPath(
+                                        endpointId,
+                                        clusterId,
+                                        commandId,
+                                    );
+                                    throw new InternalError(
+                                        "validateConcreteCommandPath should throw StatusResponseError but did not.",
+                                    );
+                                },
+                                StatusResponseError,
+                                error => {
+                                    logger.debug(
+                                        `Invoke from ${
+                                            exchange.channel.name
+                                        }: ${this.endpointStructure.resolveCommandName(
+                                            commandPath,
+                                        )} unsupported path: Status=${error.code}`,
+                                    );
+                                    return { status: { commandPath, status: { status: error.code } } };
+                                },
+                            ),
                         );
-                        invokeResponses.push({ status: { commandPath, status: { status } } });
-                        return;
                     }
+                    return;
                 }
 
                 for (const { command, path } of commands) {

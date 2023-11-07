@@ -17,7 +17,8 @@ import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
-import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
+import { StatusResponseError } from "./InteractionMessenger.js";
+import { StatusCode, TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
     AttributePath,
     AttributeWithPath,
@@ -201,12 +202,34 @@ export class InteractionEndpointStructure {
         return !!this.getAttribute(endpointId, clusterId, attributeId);
     }
 
+    validateConcreteAttributePath(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId) {
+        if (!this.hasEndpoint(endpointId)) {
+            throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
+        }
+        if (!this.hasClusterServer(endpointId, clusterId)) {
+            throw new StatusResponseError(`Cluster ${clusterId} does not exist.`, StatusCode.UnsupportedCluster);
+        }
+        if (this.hasAttribute(endpointId, clusterId, attributeId)) return true;
+        throw new StatusResponseError(`Attribute ${attributeId} does not exist`, StatusCode.UnsupportedAttribute);
+    }
+
     getEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): EventServer<any> | undefined {
         return this.events.get(eventPathToId({ endpointId, clusterId, eventId }));
     }
 
     hasEvent(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId): boolean {
         return !!this.getEvent(endpointId, clusterId, eventId);
+    }
+
+    validateConcreteEventPath(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId) {
+        if (!this.hasEndpoint(endpointId)) {
+            throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
+        }
+        if (!this.hasClusterServer(endpointId, clusterId)) {
+            throw new StatusResponseError(`Cluster ${clusterId} does not exist.`, StatusCode.UnsupportedCluster);
+        }
+        if (this.hasEvent(endpointId, clusterId, eventId)) return true;
+        throw new StatusResponseError(`Event ${eventId} does not exist`, StatusCode.UnsupportedEvent);
     }
 
     getCommand(
@@ -219,6 +242,17 @@ export class InteractionEndpointStructure {
 
     hasCommand(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId): boolean {
         return !!this.getCommand(endpointId, clusterId, commandId);
+    }
+
+    validateConcreteCommandPath(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId) {
+        if (!this.hasEndpoint(endpointId)) {
+            throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
+        }
+        if (!this.hasClusterServer(endpointId, clusterId)) {
+            throw new StatusResponseError(`Cluster ${clusterId} does not exist.`, StatusCode.UnsupportedCluster);
+        }
+        if (this.hasCommand(endpointId, clusterId, commandId)) return true;
+        throw new StatusResponseError(`Command ${commandId} does not exist`, StatusCode.UnsupportedCommand);
     }
 
     getAttributes(filters: TypeFromSchema<typeof TlvAttributePath>[], onlyWritable = false): AttributeWithPath[] {
