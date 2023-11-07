@@ -108,6 +108,7 @@ export class SubscriptionHandler {
         private readonly isFabricFiltered: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
+        private readonly interactionModelRevision: number,
         subscriptionMaxIntervalSeconds: number | undefined,
         subscriptionMinIntervalSeconds: number | undefined,
         subscriptionRandomizationWindowSeconds: number | undefined,
@@ -553,7 +554,7 @@ export class SubscriptionHandler {
         await messenger.sendDataReport({
             suppressResponse: false,
             subscriptionId: this.subscriptionId,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision: this.interactionModelRevision,
             attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
             eventReportsPayload,
         });
@@ -642,13 +643,13 @@ export class SubscriptionHandler {
                         await messenger.sendDataReport({
                             suppressResponse: true, // suppressResponse ok for empty DataReports
                             subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
+                            interactionModelRevision: this.interactionModelRevision,
                         });
                     } else {
                         await messenger.sendDataReport({
                             suppressResponse: false,
                             subscriptionId: this.subscriptionId,
-                            interactionModelRevision: INTERACTION_MODEL_REVISION,
+                            interactionModelRevision: this.interactionModelRevision,
                             // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
                             attributeReportsPayload: attributes.map(({ path, schema, value, version }) => ({
                                 attributeData: {

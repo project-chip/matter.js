@@ -352,7 +352,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         // TODO support suppressResponse for responses
         return {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision,
             suppressResponse: false,
             attributeReportsPayload, // TODO Return compressed response once https://github.com/project-chip/connectedhomeip/issues/29359 is solved
             eventReportsPayload,
@@ -573,7 +573,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         );
 
         return {
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision,
             writeResponses: writeResults.map(({ path, statusCode, clusterStatusCode }) => ({
                 path,
                 status: { status: statusCode, clusterStatus: clusterStatusCode },
@@ -683,6 +683,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             isFabricFiltered,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
+            interactionModelRevision,
             this.options?.subscriptionMaxIntervalSeconds,
             this.options?.subscriptionMinIntervalSeconds,
             this.options?.subscriptionRandomizationWindowSeconds,
@@ -700,7 +701,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             await subscriptionHandler.cancel(); // Cleanup
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
-                await messenger.sendStatus(error.code);
+                await messenger.sendStatus(error.code, interactionModelRevision);
             }
             await messenger.close();
             return; // Make sure to not bubble up the exception
@@ -721,7 +722,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             TlvSubscribeResponse.encode({
                 subscriptionId,
                 maxInterval,
-                interactionModelRevision: INTERACTION_MODEL_REVISION,
+                interactionModelRevision,
             }),
         );
 
@@ -902,7 +903,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO support suppressResponse for responses
         return {
             suppressResponse: false,
-            interactionModelRevision: INTERACTION_MODEL_REVISION,
+            interactionModelRevision,
             invokeResponses,
         };
     }

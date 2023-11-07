@@ -98,11 +98,8 @@ class InteractionMessenger<ContextT> {
         return this.exchange.send(messageType, payload, options);
     }
 
-    sendStatus(status: StatusCode) {
-        return this.send(
-            MessageType.StatusResponse,
-            TlvStatusResponse.encode({ status, interactionModelRevision: INTERACTION_MODEL_REVISION }),
-        );
+    sendStatus(status: StatusCode, interactionModelRevision: number) {
+        return this.send(MessageType.StatusResponse, TlvStatusResponse.encode({ status, interactionModelRevision }));
     }
 
     async waitForSuccess() {
@@ -151,6 +148,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         handleTimedRequest: (request: TimedRequest) => void,
     ) {
         let continueExchange = true; // are more messages expected in this "transaction"?
+        let currentInteractionModelRevision = INTERACTION_MODEL_REVISION;
         try {
             while (continueExchange) {
                 const message = await this.exchange.nextMessage();
@@ -159,12 +157,15 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
+                        const { interactionModelRevision } = readRequest;
+                        currentInteractionModelRevision = interactionModelRevision;
                         await this.sendDataReport(handleReadRequest(readRequest));
                         break;
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
-                        const { suppressResponse } = writeRequest;
+                        const { suppressResponse, interactionModelRevision } = writeRequest;
+                        currentInteractionModelRevision = interactionModelRevision;
                         const writeResponse = handleWriteRequest(writeRequest, message);
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
@@ -173,13 +174,16 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.SubscribeRequest: {
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
+                        const { interactionModelRevision } = subscribeRequest;
+                        currentInteractionModelRevision = interactionModelRevision;
                         await handleSubscribeRequest(subscribeRequest, this);
                         // response is sent by handler
                         break;
                     }
                     case MessageType.InvokeCommandRequest: {
                         const invokeRequest = TlvInvokeRequest.decode(message.payload);
-                        const { suppressResponse } = invokeRequest;
+                        const { suppressResponse, interactionModelRevision } = invokeRequest;
+                        currentInteractionModelRevision = interactionModelRevision;
                         const invokeResponse = await handleInvokeRequest(invokeRequest, message);
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(
@@ -192,8 +196,10 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
+                        const { interactionModelRevision } = timedRequest;
+                        currentInteractionModelRevision = interactionModelRevision;
                         handleTimedRequest(timedRequest);
-                        await this.sendStatus(StatusCode.Success);
+                        await this.sendStatus(StatusCode.Success, interactionModelRevision);
                         continueExchange = true;
                         break;
                     }
@@ -204,10 +210,10 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
         } catch (error: any) {
             if (error instanceof StatusResponseError) {
                 logger.info(`Sending status response ${error.code} for interaction error: ${error.message}`);
-                await this.sendStatus(error.code);
+                await this.sendStatus(error.code, currentInteractionModelRevision);
             } else {
                 logger.error(error);
-                await this.sendStatus(StatusCode.Failure);
+                await this.sendStatus(StatusCode.Failure, currentInteractionModelRevision);
             }
         } finally {
             await this.exchange.close();
