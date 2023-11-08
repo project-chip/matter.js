@@ -48,11 +48,41 @@ import {
     QrPairingCodeCodec,
 } from "../schema/PairingCodeSchema.js";
 import { PaseClient } from "../session/pase/PaseClient.js";
+import { Time } from "../time/Time.js";
 import { DeviceTypeDefinition, DeviceTypes, UnknownDeviceType, getDeviceTypeDefinitionByCode } from "./DeviceTypes.js";
 import { Endpoint } from "./Endpoint.js";
-import { logEndpoint } from "./EndpointStructureLogger.js";
+import { EndpointLoggingOptions, logEndpoint } from "./EndpointStructureLogger.js";
 
 const logger = Logger.get("PairedNode");
+
+/** Delay after receiving a changed partList  from a device to update the device structure */
+const STRUCTURE_UPDATE_TIMEOUT_MS = 5_000; // 5 seconds, TODO: Verify if this value makes sense in practice
+
+export enum NodeStateInformation {
+    /** Node is connected and all data is up-to-date. */
+    Connected,
+
+    /**
+     * Node is disconnected. Data are stale and interactions will most likely return an error. If controller instance
+     * is still active then the device will be reconnected once it is available again.
+     */
+    Disconnected,
+
+    /** Node is reconnecting. Data are stale. It is yet unknown if the reconnection is successful. */
+    Reconnecting,
+
+    /**
+     * The node could not be connected and the controller is now waiting for a MDNS announcement and tries every 10
+     * minutes to reconnect.
+     */
+    WaitingForDeviceDiscovery,
+
+    /**
+     * Node structure has changed (Endpoints got added or also removed). Data are up-to-date.
+     * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
+     */
+    StructureChanged,
+}
 
 export type CommissioningControllerNodeOptions = {
     /**
@@ -76,13 +106,19 @@ export type CommissioningControllerNodeOptions = {
      * Optional additional callback method which is called for each Attribute change reported by the device. Use this
      * if subscribing to all relevant attributes is too much effort.
      */
-    readonly attributeChangedCallback?: (data: DecodedAttributeReportValue<any>) => void;
+    readonly attributeChangedCallback?: (nodeId: NodeId, data: DecodedAttributeReportValue<any>) => void;
 
     /**
      * Optional additional callback method which is called for each Event reported by the device. Use this if
      * subscribing to all relevant events is too much effort.
      */
-    readonly eventTriggeredCallback?: (data: DecodedEventReportValue<any>) => void;
+    readonly eventTriggeredCallback?: (nodeId: NodeId, data: DecodedEventReportValue<any>) => void;
+
+    /**
+     * Optional callback method which is called when the state of the node changes. This can be used to detect when
+     * the node goes offline or comes back online.
+     */
+    readonly stateInformationCallback?: (nodeId: NodeId, state: NodeStateInformation) => void;
 };
 
 /**
@@ -92,6 +128,15 @@ export type CommissioningControllerNodeOptions = {
 export class PairedNode {
     private readonly endpoints = new Map<EndpointNumber, Endpoint>();
     private interactionClient?: InteractionClient;
+    private readonly reconnectDelayTimer = Time.getTimer(
+        STRUCTURE_UPDATE_TIMEOUT_MS,
+        async () => await this.reconnect(),
+    );
+    private readonly updateEndpointStructureTimer = Time.getTimer(
+        5_000,
+        async () => await this.updateEndpointStructure(),
+    );
+    private connectionState: NodeStateInformation = NodeStateInformation.Disconnected;
 
     static async create(
         nodeId: NodeId,
@@ -118,20 +163,59 @@ export class PairedNode {
         private readonly reconnectInteractionClient: () => Promise<InteractionClient>,
         assignDisconnectedHandler: (handler: () => Promise<void>) => void,
     ) {
-        assignDisconnectedHandler(async () => await this.reconnect());
+        assignDisconnectedHandler(async () => {
+            logger.info(
+                `Node ${this.nodeId}: Session disconnected${
+                    this.connectionState !== NodeStateInformation.Disconnected ? ", trying to reconnect ..." : ""
+                }`,
+            );
+            if (this.connectionState === NodeStateInformation.Connected) {
+                await this.reconnect();
+            }
+        });
     }
 
-    /** Reconnect to the device after the active Session was closed. */
-    private async reconnect() {
+    get isConnected() {
+        return this.connectionState === NodeStateInformation.Connected;
+    }
+
+    private setConnectionState(state: NodeStateInformation) {
+        if (
+            this.connectionState === state ||
+            (this.connectionState === NodeStateInformation.Disconnected &&
+                state === NodeStateInformation.Reconnecting) ||
+            (this.connectionState === NodeStateInformation.WaitingForDeviceDiscovery &&
+                state === NodeStateInformation.Reconnecting)
+        )
+            return;
+        this.connectionState = state;
+        this.options.stateInformationCallback?.(this.nodeId, state);
+    }
+
+    /**
+     * Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
+     * was closed or the device wen offline and was detected as being online again.
+     */
+    async reconnect() {
         if (this.interactionClient !== undefined) {
             this.interactionClient.close();
             this.interactionClient = undefined;
         }
+        this.setConnectionState(NodeStateInformation.Reconnecting);
         try {
             await this.initialize();
         } catch (error) {
-            logger.warn(`Node ${this.nodeId}: Error reconnecting to device`, error);
-            // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
+            if (error instanceof MatterError) {
+                // When we already know that the node is disconnected ignore all MatterErrors and rethrow all others
+                if (this.connectionState === NodeStateInformation.Disconnected) {
+                    return;
+                }
+                logger.warn(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
+                await this.reconnect();
+            } else {
+                throw error;
+            }
         }
     }
 
@@ -151,18 +235,25 @@ export class PairedNode {
         if (autoSubscribe !== false) {
             const initialSubscriptionData = await this.subscribeAllAttributesAndEvents({
                 ignoreInitialTriggers: true,
-                attributeChangedCallback,
-                eventTriggeredCallback,
+                attributeChangedCallback: data => attributeChangedCallback?.(this.nodeId, data),
+                eventTriggeredCallback: data => eventTriggeredCallback?.(this.nodeId, data),
             }); // Ignore Triggers from Subscribing during initialization
 
             if (initialSubscriptionData.attributeReports === undefined) {
                 throw new InternalError("No attribute reports received when subscribing to all values!");
             }
             await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
+
+            const rootDescriptorCluster = this.getRootClusterClient(DescriptorCluster);
+            rootDescriptorCluster?.addPartsListAttributeListener(() => {
+                logger.info(`Node ${this.nodeId}: PartsList changed, reinitializing endpoint structure ...`);
+                this.updateEndpointStructureTimer.stop().start(); // Restart timer
+            });
         } else {
             const allClusterAttributes = await interactionClient.getAllAttributes();
             await this.initializeEndpointStructure(allClusterAttributes);
         }
+        this.setConnectionState(NodeStateInformation.Connected);
     }
 
     /**
@@ -174,13 +265,13 @@ export class PairedNode {
     }
 
     /** Method to log the structure of this node with all endpoint and clusters. */
-    logStructure() {
+    logStructure(options?: EndpointLoggingOptions) {
         const rootEndpoint = this.endpoints.get(EndpointNumber(0));
         if (rootEndpoint === undefined) {
             logger.info(`Node ${this.nodeId} has not yet been initialized!`);
             return;
         }
-        logEndpoint(rootEndpoint);
+        logEndpoint(rootEndpoint, options);
     }
 
     /**
@@ -289,15 +380,47 @@ export class PairedNode {
     /** Handles a node shutDown event (if supported by the node and received). */
     private async handleNodeShutdown() {
         logger.info(`Node ${this.nodeId}: Node shutdown detected, trying to reconnect ...`);
-        await this.reconnect();
+        if (!this.reconnectDelayTimer.isRunning) {
+            this.reconnectDelayTimer.start();
+        }
+        this.setConnectionState(NodeStateInformation.Reconnecting);
+    }
+
+    async updateEndpointStructure() {
+        const interactionClient = await this.ensureConnection();
+        const allClusterAttributes = await interactionClient.getAllAttributes();
+        await this.initializeEndpointStructure(allClusterAttributes, true);
+        this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.StructureChanged);
     }
 
     /** Reads all data from the device and create a device object structure out of it. */
-    private async initializeEndpointStructure(allClusterAttributes: DecodedAttributeReportValue<any>[]) {
+    private async initializeEndpointStructure(
+        allClusterAttributes: DecodedAttributeReportValue<any>[],
+        updateStructure = false,
+    ) {
         const interactionClient = await this.ensureConnection();
         const allData = structureReadAttributeDataToClusterObject(allClusterAttributes);
 
-        this.endpoints.clear();
+        if (updateStructure) {
+            // Find out what we need to remove or retain
+            const endpointsToRemove = new Set<EndpointNumber>(this.endpoints.keys());
+            for (const [endpointId] of Object.entries(allData)) {
+                const endpointIdNumber = EndpointNumber(parseInt(endpointId));
+                if (this.endpoints.has(endpointIdNumber)) {
+                    logger.debug("Retaining device", endpointId);
+                    endpointsToRemove.delete(endpointIdNumber);
+                }
+            }
+            // And remove all endpoints no longer in the structure
+            for (const endpointId of endpointsToRemove.values()) {
+                logger.debug("Removing device", endpointId);
+                this.endpoints.get(endpointId)?.removeFromStructure();
+                this.endpoints.delete(endpointId);
+            }
+        } else {
+            this.endpoints.clear();
+        }
+
         const partLists = new Map<EndpointNumber, EndpointNumber[]>();
         for (const [endpointId, clusters] of Object.entries(allData)) {
             const endpointIdNumber = EndpointNumber(parseInt(endpointId));
@@ -306,6 +429,11 @@ export class PairedNode {
             >;
 
             partLists.set(endpointIdNumber, descriptorData.partsList);
+
+            if (this.endpoints.has(endpointIdNumber)) {
+                // Endpoint exists already, so mo need to create device instance again
+                continue;
+            }
 
             logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
             this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
@@ -341,17 +469,21 @@ export class PairedNode {
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
             singleUsageEndpoints.forEach(([childId, usages]) => {
-                const childEndpoint = this.endpoints.get(EndpointNumber(parseInt(childId)));
+                const childEndpointId = EndpointNumber(parseInt(childId));
+                const childEndpoint = this.endpoints.get(childEndpointId);
                 const parentEndpoint = this.endpoints.get(usages[0]);
                 if (childEndpoint === undefined || parentEndpoint === undefined) {
                     throw new InternalError(`Node ${this.nodeId}: Endpoint not found!`); // Should never happen!
                 }
 
-                logger.debug(
-                    `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpoint.id} -> Parent: ${parentEndpoint.id}`,
-                );
+                if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
+                    logger.debug(
+                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.id}`,
+                    );
 
-                parentEndpoint.addChildEndpoint(childEndpoint);
+                    parentEndpoint.addChildEndpoint(childEndpoint);
+                }
+
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
             });
@@ -507,6 +639,7 @@ export class PairedNode {
                 `Removing node ${this.nodeId} failed with status ${result.statusCode} "${result.debugText}".`,
             );
         }
+        this.setConnectionState(NodeStateInformation.Disconnected);
         await this.commissioningController.removeNode(this.nodeId, false);
     }
 
@@ -602,6 +735,16 @@ export class PairedNode {
             }),
             qrPairingCode,
         };
+    }
+
+    async disconnect() {
+        this.close();
+        await this.commissioningController.disconnectNode(this.nodeId);
+    }
+
+    close() {
+        this.interactionClient?.close();
+        this.setConnectionState(NodeStateInformation.Disconnected);
     }
 
     /**
