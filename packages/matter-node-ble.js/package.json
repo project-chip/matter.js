@@ -46,6 +46,7 @@
     "files": [
         "dist/**/*",
         "src/**/*",
+        "require/**/*",
         "LICENSE",
         "README.md"
     ],
