@@ -4,42 +4,55 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "@project-chip/matter.js/log";
 import { Network, NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
 import { Cache, isIPv6, onSameNetwork } from "@project-chip/matter.js/util";
 
 import { NetworkInterfaceInfo, networkInterfaces } from "os";
 import { UdpChannelNode } from "./UdpChannelNode.js";
 
+const logger = Logger.get("NetworkNode");
+
 export class NetworkNode extends Network {
-    static getMulticastInterface(netInterface: string, ipv4: boolean) {
+    static getMulticastInterfaceIpv4(netInterface: string): string | undefined {
         const netInterfaceInfo = networkInterfaces()[netInterface];
         if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
-        if (ipv4) {
-            for (const { address, family } of netInterfaceInfo) {
-                if (family === "IPv4") {
-                    return address;
-                }
+        for (const { address, family } of netInterfaceInfo) {
+            if (family === "IPv4") {
+                return address;
             }
-            throw new NetworkError(`No IPv4 addresses on interface: ${netInterface}`);
-        } else {
-            const multicastInterface = this.getMulticastInterfaceIpv6(netInterface, netInterfaceInfo);
-            if (multicastInterface === undefined) {
-                throw new NetworkError(`No IPv6 addresses on interface: ${netInterface}`);
-            }
-            return multicastInterface;
         }
+        return undefined;
     }
 
-    static getMembershipMulticastInterfaces(ipv4: boolean): (string | undefined)[] {
+    static getMembershipMulticastInterfaces(netInterface: string | undefined, ipv4: boolean): (string | undefined)[] {
         if (ipv4) {
             return [undefined];
         } else {
-            return Object.entries(networkInterfaces()).flatMap(([netInterface, netInterfaceInfo]) => {
+            let networkInterfaceEntries = Object.entries(networkInterfaces());
+            if (netInterface !== undefined) {
+                networkInterfaceEntries = networkInterfaceEntries.filter(([name]) => name === netInterface);
+            }
+            const multicastInterfaces = networkInterfaceEntries.flatMap(([netInterface, netInterfaceInfo]) => {
                 if (netInterfaceInfo === undefined) return [];
-                const multicastInterface = this.getMulticastInterfaceIpv6(netInterface, netInterfaceInfo);
-                return multicastInterface === undefined ? [] : [multicastInterface];
+                const zone = this.getNetInterfaceZoneIpv6Internal(netInterface, netInterfaceInfo);
+                return zone === undefined ? [] : [`::%${zone}`];
             });
+            if (multicastInterfaces.length === 0) {
+                logger.warn(
+                    `No IPv6 multicast interface found${
+                        netInterface !== undefined ? ` for interface ${netInterface}` : ""
+                    }.`,
+                );
+            }
+            return multicastInterfaces;
         }
+    }
+
+    static getNetInterfaceZoneIpv6(netInterface: string): string | undefined {
+        const netInterfaceInfo = networkInterfaces()[netInterface];
+        if (netInterfaceInfo === undefined) throw new NetworkError(`Unknown interface: ${netInterface}`);
+        return this.getNetInterfaceZoneIpv6Internal(netInterface, netInterfaceInfo);
     }
 
     static getNetInterfaceForIp(ip: string) {
@@ -49,7 +62,7 @@ export class NetworkNode extends Network {
     }
 
     private static readonly netInterfaces = new Cache<string | undefined>(
-        (ip: string) => this.getNetInterfaceForIpInternal(ip),
+        (ip: string) => this.getNetInterfaceForRemoveAddress(ip),
         5 * 60 * 1000 /* 5mn */,
     );
 
@@ -57,7 +70,7 @@ export class NetworkNode extends Network {
         await NetworkNode.netInterfaces.close();
     }
 
-    private static getNetInterfaceForIpInternal(ip: string) {
+    private static getNetInterfaceForRemoveAddress(ip: string) {
         if (ip.includes("%")) {
             // IPv6 address with scope
             return ip.split("%")[1];
@@ -67,7 +80,7 @@ export class NetworkNode extends Network {
                 const netInterfaces = interfaces[name] as NetworkInterfaceInfo[];
                 for (const { address, netmask } of netInterfaces) {
                     if (onSameNetwork(ip, address, netmask)) {
-                        return name;
+                        return this.getNetInterfaceZoneIpv6Internal(name, netInterfaces);
                     }
                 }
             }
@@ -81,19 +94,17 @@ export class NetworkNode extends Network {
         }
     }
 
-    private static getMulticastInterfaceIpv6(
+    private static getNetInterfaceZoneIpv6Internal(
         netInterface: string,
-        netInterfaceInfo: NetworkInterfaceInfo[],
+        netInterfaceInfos: NetworkInterfaceInfo[] | undefined,
     ): string | undefined {
         if (process.platform !== "win32") {
-            return `::%${netInterface}`;
+            return netInterface;
         }
-        for (const { address, family, scopeid } of netInterfaceInfo) {
-            if (family === "IPv6" && address.startsWith("fe80::")) {
-                return `::%${scopeid}`;
-            }
-        }
-        return undefined;
+        if (netInterfaceInfos === undefined) return undefined;
+        return netInterfaceInfos
+            .find(({ address, family }) => family === "IPv6" && address.startsWith("fe80::"))
+            ?.scopeid?.toString();
     }
 
     getNetInterfaces(): string[] {

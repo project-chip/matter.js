@@ -96,7 +96,7 @@ class Device {
          * and easy reuse. When you also do that be careful to not overlap with Matter-Server own contexts
          * (so maybe better not ;-)).
          */
-        const netAnnounceInterface = getParameter("announceinterface");
+        const netInterface = getParameter("netinterface");
 
         const deviceStorage = storageManager.createContext("Device");
 
@@ -113,7 +113,7 @@ class Device {
          * are called.
          */
 
-        this.matterServer = new MatterServer(storageManager, { mdnsAnnounceInterface: netAnnounceInterface });
+        this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
 
         /**
          * Create Device instance and add needed Listener

@@ -1,25 +1,17 @@
 /**
- * Copyright 2022 Project CHIP Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 import { NodeCommissioningOptions } from "@project-chip/matter-node.js";
 import { BasicInformationCluster, DescriptorCluster, GeneralCommissioning } from "@project-chip/matter-node.js/cluster";
 import { NodeId } from "@project-chip/matter-node.js/datatype";
+import { Logger } from "@project-chip/matter-node.js/log";
 import { ManualPairingCodeCodec, QrCode } from "@project-chip/matter-node.js/schema";
 import type { Argv } from "yargs";
 import { MatterNode } from "../MatterNode";
+import { createDiagnosticCallbacks } from "./cmd_nodes";
 
 export default function commands(theNode: MatterNode) {
     return {
@@ -54,7 +46,14 @@ export default function commands(theNode: MatterNode) {
                                         });
                                 },
                                 async argv => {
-                                    const { pairingCode, nodeId: nodeIdStr, ipPort, ip, ble = false } = argv;
+                                    const {
+                                        pairingCode,
+                                        nodeId: nodeIdStr,
+                                        ipPort,
+                                        ip,
+                                        ble = false,
+                                        instanceId,
+                                    } = argv;
                                     let { setupPinCode, discriminator, shortDiscriminator } = argv;
 
                                     if (typeof pairingCode === "string") {
@@ -80,7 +79,9 @@ export default function commands(theNode: MatterNode) {
                                                     ? { ip, port: ipPort, type: "udp" }
                                                     : undefined,
                                             identifierData:
-                                                discriminator !== undefined
+                                                instanceId !== undefined
+                                                    ? { instanceId }
+                                                    : discriminator !== undefined
                                                     ? { longDiscriminator: discriminator }
                                                     : shortDiscriminator !== undefined
                                                     ? { shortDiscriminator }
@@ -91,6 +92,7 @@ export default function commands(theNode: MatterNode) {
                                             },
                                         },
                                         passcode: setupPinCode,
+                                        ...createDiagnosticCallbacks(),
                                     } as NodeCommissioningOptions;
 
                                     options.commissioning = {
@@ -99,7 +101,7 @@ export default function commands(theNode: MatterNode) {
                                         regulatoryCountryCode: "XX",
                                     };
 
-                                    console.log(JSON.stringify(options));
+                                    console.log(Logger.toJSON(options));
 
                                     if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
                                         options.commissioning.wifiNetwork = {
@@ -157,6 +159,11 @@ export default function commands(theNode: MatterNode) {
                                     describe: "setup pin code",
                                     default: 20202021,
                                     type: "number",
+                                },
+                                instanceId: {
+                                    alias: "i",
+                                    describe: "instance id",
+                                    type: "string",
                                 },
                                 discriminator: {
                                     alias: "d",
@@ -233,6 +240,23 @@ export default function commands(theNode: MatterNode) {
                             `QR Code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
                         );
                         console.log(`Manual pairing code: ${manualPairingCode}`);
+                    },
+                )
+                .command(
+                    "unpair <node-id>",
+                    "Unpair/Decommission a node",
+                    yargs => {
+                        return yargs.positional("node-id", {
+                            describe: "node id",
+                            type: "string",
+                            demandOption: true,
+                        });
+                    },
+                    async argv => {
+                        await theNode.start();
+                        const { nodeId } = argv;
+                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        await node.decommission();
                     },
                 ),
         handler: async (argv: any) => {
