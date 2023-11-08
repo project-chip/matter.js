@@ -271,7 +271,6 @@ export class MatterDevice {
             },
             subscriptionChangedCallback: () => {
                 const currentFabric = session.getFabric();
-                logger.warn(`Session ${session.name} with fabric ${!!currentFabric}!`);
                 if (currentFabric !== undefined) {
                     this.sessionChangedCallback(currentFabric.fabricIndex);
                 }
