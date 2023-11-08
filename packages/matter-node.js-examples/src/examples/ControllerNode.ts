@@ -298,6 +298,7 @@ class ControllerNode {
 new ControllerNode().start().catch(error => logger.error(error));
 
 process.on("SIGINT", () => {
+    // Clean up on CTRL-C
     // Pragmatic way to make sure the storage is correctly closed before the process ends.
     storage
         .close()
