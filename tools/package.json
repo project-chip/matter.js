@@ -65,5 +65,8 @@
         "@types/mocha": "^10.0.3",
         "@types/npmcli__map-workspaces": "^3.0.3",
         "@types/yargs": "^17.0.29"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
