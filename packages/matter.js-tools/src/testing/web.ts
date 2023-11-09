@@ -127,7 +127,7 @@ function buildIndex(files: string[]) {
     const importMap = JSON.stringify({
         imports: Object.fromEntries(
             libraries.map(name => {
-                let path = `/tools/build/lib/${name}`;
+                let path = `/packages/matter.js-tools/build/lib/${name}`;
                 if (!path.endsWith(".js")) {
                     path = `${path}.js`;
                 }

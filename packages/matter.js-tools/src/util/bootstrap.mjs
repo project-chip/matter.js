@@ -27,7 +27,7 @@ if (platform() === "win32") {
     options.shell = true;
 }
 
-let esbuild = resolve(toolRoot, "../node_modules/.bin/esbuild");
+let esbuild = resolve(toolRoot, "../../node_modules/.bin/esbuild");
 if (!await stat(esbuild)) {
     esbuild = "esbuild";
 }

@@ -1,10 +1,10 @@
 {
-    "extends": "../../../tools/tsconfig.base.json",
+    "extends": "../../matter.js-tools/tsconfig.base.json",
     "compilerOptions": {
         "outDir": "../dist/esm",
         "types": ["@project-chip/matter.js-tools"]
     },
-    "references": [{ "path": "../../../tools/src" }],
+    "references": [{ "path": "../../matter.js-tools/src" }],
     "typedocOptions": {
         "entryPoints": [
             "ble/export.ts",

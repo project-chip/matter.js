@@ -24,14 +24,14 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "build clean",
-        "build": "build",
-        "build-clean": "build --clean",
-        "matter-device": "run src/examples/DeviceNode.ts",
-        "matter-bridge": "run src/examples/BridgedDevicesNode.ts",
-        "matter-composeddevice": "run src/examples/ComposedDeviceNode.ts",
-        "matter-multidevice": "run src/examples/MultiDeviceNode.ts",
-        "matter-controller": "run src/examples/ControllerNode.ts",
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "matter-device": "matter-run src/examples/DeviceNode.ts",
+        "matter-bridge": "matter-run src/examples/BridgedDevicesNode.ts",
+        "matter-composeddevice": "matter-run src/examples/ComposedDeviceNode.ts",
+        "matter-multidevice": "matter-run src/examples/MultiDeviceNode.ts",
+        "matter-controller": "matter-run src/examples/ControllerNode.ts",
         "bundle-device": "esbuild src/examples/DeviceNode.ts --bundle --platform=node --conditions=esbuild --external:@abandonware/bleno --external:@abandonware/bluetooth-hci-socket --sourcemap --minify --outfile=build/bundle/DeviceNode.cjs",
         "matter-device-bundled": "node --enable-source-maps build/bundle/DeviceNode.cjs"
     },

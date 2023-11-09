@@ -1,7 +1,7 @@
 {
     "files": [],
     "references": [
-        { "path": "tools" },
+        { "path": "packages/matter.js-tools" },
         { "path": "packages/matter.js" },
         { "path": "packages/matter-node.js" },
         { "path": "packages/matter-node-ble.js" },
