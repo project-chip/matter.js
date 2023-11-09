@@ -39,11 +39,15 @@ jobs:
     strategy:
       matrix:
         node-version: [ 16.x, 18.x, 20.x ]
-        # os: [ macos-latest, windows-2019 ]
-        os: [ windows-2019 ]
+        os: [ macos-latest, windows-2019 ]
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
+      - uses: actions/setup-python@v4
+        if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
+        # needed as long as we test Node.js 16 and npm <10.2.2 is used for Node.js 18/20
+        with:
+          python-version: '3.11'
       - name: Build on ${{ matrix.os }}
         if: ${{ needs.check-and-lint.outputs.package-changes == 'true' }}
         uses: ./.github/actions/prepare-env
