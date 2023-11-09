@@ -23,10 +23,10 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "build clean",
-        "build": "build",
-        "build-clean": "build --clean",
-        "shell": "run src/app.ts"
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "shell": "matter-run src/app.ts"
     },
     "bin": {
         "shell": "./dist/cjs/app.js"
