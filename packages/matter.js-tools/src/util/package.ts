@@ -132,7 +132,7 @@ export class Package {
 
     static get tools() {
         if (!tools) {
-            tools = new Package({ path: this.workspace.resolve("tools") });
+            tools = new Package({ path: this.workspace.resolve("packages/matter.js-tools") });
         }
         return tools;
     }

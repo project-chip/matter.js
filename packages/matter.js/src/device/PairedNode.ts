@@ -210,7 +210,7 @@ export class PairedNode {
                 if (this.connectionState === NodeStateInformation.Disconnected) {
                     return;
                 }
-                logger.warn(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
+                logger.info(`Node ${this.nodeId}: Error waiting for device rediscovery`, error);
                 this.setConnectionState(NodeStateInformation.WaitingForDeviceDiscovery);
                 await this.reconnect();
             } else {
@@ -363,11 +363,11 @@ export class PairedNode {
                 }
             },
             updateTimeoutHandler: async () => {
-                logger.warn(`Node ${this.nodeId}: Subscription update not received ...`);
+                logger.info(`Node ${this.nodeId}: Subscription update not received ...`);
                 try {
                     await this.subscribeAllAttributesAndEvents();
                 } catch (error) {
-                    logger.warn(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
+                    logger.info(`Node ${this.nodeId}: Error resubscribing to all attributes and events`, error);
                     // TODO resume logic right now retries and discovers for 60s .. prolong this but without command repeating
                     this.interactionClient = undefined;
                 }

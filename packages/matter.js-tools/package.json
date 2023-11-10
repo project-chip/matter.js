@@ -1,8 +1,7 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.6.1-alpha.0-20231107-ecff055",
+    "version": "0.6.1-alpha.0-20231110-2ec0f70",
     "description": "Matter.js tooling",
-    "private": true,
     "type": "module",
     "scripts": {
         "clean": "node bin/build.js clean",
@@ -11,9 +10,9 @@
         "test": "node bin/test.js"
     },
     "bin": {
-        "build": "./bin/build.js",
+        "matter-build": "./bin/build.js",
         "matter-test": "./bin/test.js",
-        "run": "./bin/run.js"
+        "matter-run": "./bin/run.js"
     },
     "exports": {
         ".": {
@@ -27,8 +26,8 @@
             }
         }
     },
-    "main": "dist/cjs/index.ts",
-    "module": "dist/esm/index.ts",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
     "types": "dist/esm/index.d.ts",
     "repository": {
         "type": "git",
@@ -42,7 +41,6 @@
     "homepage": "https://github.com/project-chip/matter.js#readme",
     "dependencies": {
         "@npmcli/map-workspaces": "^3.0.4",
-        "@project-chip/matter.js-tools": "file:",
         "@types/express": "^4.17.20",
         "ansi-colors": "^4.1.3",
         "c8": "^8.0.1",
@@ -66,5 +64,8 @@
         "@types/mocha": "^10.0.3",
         "@types/npmcli__map-workspaces": "^3.0.3",
         "@types/yargs": "^17.0.29"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

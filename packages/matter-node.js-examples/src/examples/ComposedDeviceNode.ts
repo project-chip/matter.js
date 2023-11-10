@@ -233,6 +233,7 @@ device
     .catch(err => console.error(err));
 
 process.on("SIGINT", () => {
+    // Clean up on CTRL-C
     device
         .stop()
         .then(() => {

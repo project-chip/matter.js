@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-ble.js",
-    "version": "0.6.1-alpha.0-20231107-ecff055",
+    "version": "0.6.1-alpha.0-20231110-2ec0f70",
     "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
@@ -23,18 +23,18 @@
         "url": "https://github.com/project-chip/matter.js.git"
     },
     "scripts": {
-        "clean": "build clean",
-        "build": "build",
-        "build-clean": "build --clean",
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231107-ecff055",
+        "@project-chip/matter.js-tools": "0.6.1-alpha.0-20231110-2ec0f70",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@project-chip/matter.js": "0.6.1-alpha.0-20231107-ecff055"
+        "@project-chip/matter.js": "0.6.1-alpha.0-20231110-2ec0f70"
     },
     "optionalDependencies": {
         "@abandonware/bleno": "^0.6.1",
@@ -46,6 +46,7 @@
     "files": [
         "dist/**/*",
         "src/**/*",
+        "require/**/*",
         "LICENSE",
         "README.md"
     ],

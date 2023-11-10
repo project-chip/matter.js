@@ -16,7 +16,7 @@ try {
     if (error instanceof NoProviderError) {
         Network.get = singleton(() => new NetworkNode());
         // When we initialize anything we also need to make st is closed correctly
-        process.on("SIGINT", () => void Network.get().close());
+        process.on("beforeExit", () => void Network.get().close());
     } else {
         throw error;
     }
