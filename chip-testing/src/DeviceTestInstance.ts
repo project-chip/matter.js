@@ -24,7 +24,7 @@ export abstract class DeviceTestInstance {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager);
 
-            this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
+            await this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);

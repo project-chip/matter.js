@@ -186,7 +186,7 @@ class ComposedDevice {
             commissioningServer.addDevice(onOffDevice);
         }
 
-        this.matterServer.addCommissioningServer(commissioningServer);
+        await this.matterServer.addCommissioningServer(commissioningServer);
 
         /**
          * Start the Matter Server

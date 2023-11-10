@@ -114,6 +114,8 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
 export class CommissioningController extends MatterNode {
+    private started = false;
+    private ipv4Disabled?: boolean;
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
 
@@ -140,6 +142,9 @@ export class CommissioningController extends MatterNode {
     assertIsAddedToMatterServer() {
         if (this.mdnsScanner === undefined || this.storage === undefined) {
             throw new ImplementationError("Add the node to the Matter instance before.");
+        }
+        if (!this.started) {
+            throw new ImplementationError("The node needs to be started before interacting with the controller.");
         }
         return { mdnsScanner: this.mdnsScanner, storage: this.storage };
     }
@@ -351,14 +356,32 @@ export class CommissioningController extends MatterNode {
         await this.controllerInstance?.close();
         this.controllerInstance = undefined;
         this.connectedNodes.clear();
+        this.ipv4Disabled = undefined;
+        this.started = false;
     }
 
     getPort(): number | undefined {
         return this.options.localPort;
     }
 
+    initialize(ipv4Disabled: boolean) {
+        if (this.started) {
+            throw new ImplementationError("Controller instance already started.");
+        }
+        if (this.ipv4Disabled !== undefined && this.ipv4Disabled !== ipv4Disabled) {
+            throw new ImplementationError(
+                "Changing the IPv4 disabled flag after starting the controller is not supported.",
+            );
+        }
+        this.ipv4Disabled = ipv4Disabled;
+    }
+
     /** Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false. */
     async start() {
+        if (this.ipv4Disabled === undefined) {
+            throw new ImplementationError("Initialization not done. Add the controller to the MatterServer first.");
+        }
+        this.started = true;
         if (this.controllerInstance === undefined) {
             this.controllerInstance = await this.initializeController();
         }

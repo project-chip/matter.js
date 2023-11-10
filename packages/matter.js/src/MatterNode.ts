@@ -11,11 +11,11 @@ import { MdnsScanner } from "./mdns/MdnsScanner.js";
  * Abstract base class that represents a node in the matter ecosystem.
  */
 export abstract class MatterNode {
-    ipv4Disabled: boolean = false;
-
     abstract close(): Promise<void>;
 
     abstract getPort(): number | undefined;
+
+    abstract initialize(ipv4Disabled: boolean): void;
 
     abstract start(): Promise<void>;
 
