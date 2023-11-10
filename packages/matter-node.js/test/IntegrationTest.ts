@@ -117,7 +117,7 @@ describe("Integration Test", () => {
             autoConnect: false,
             autoSubscribe: false,
         });
-        matterClient.addCommissioningController(commissioningController);
+        await matterClient.addCommissioningController(commissioningController);
 
         Network.get = () => serverNetwork;
 
@@ -210,7 +210,7 @@ describe("Integration Test", () => {
             ),
         );
 
-        matterServer.addCommissioningServer(commissioningServer);
+        await matterServer.addCommissioningServer(commissioningServer);
         assert.equal(commissioningServer.getPort(), matterPort);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
@@ -1237,7 +1237,7 @@ describe("Integration Test", () => {
             onOffLightDeviceServer = new OnOffLightDevice();
             commissioningServer2.addDevice(onOffLightDeviceServer);
 
-            matterServer.addCommissioningServer(commissioningServer2, { uniqueStorageKey: "second" });
+            await matterServer.addCommissioningServer(commissioningServer2, { uniqueStorageKey: "second" });
             assert.equal(commissioningServer2.getPort(), matterPort2);
 
             commissioningServer2.setMdnsScanner(serverMdnsScanner);
@@ -1453,7 +1453,9 @@ describe("Integration Test", () => {
                 adminFabricIndex: FabricIndex(1001),
                 adminVendorId: VendorId(0x1234),
             });
-            matterClient.addCommissioningController(commissioningController2, { uniqueStorageKey: "another-second" });
+            await matterClient.addCommissioningController(commissioningController2, {
+                uniqueStorageKey: "another-second",
+            });
             commissioningController2.setMdnsScanner(clientMdnsScanner);
 
             Network.get = () => serverNetwork;

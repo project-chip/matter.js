@@ -51,6 +51,7 @@ export type MatterServerOptions = {
  * by reusing MDNS scanner and broadcaster
  */
 export class MatterServer {
+    private started = false;
     private readonly nodes: MatterNode[] = [];
 
     private mdnsScanner?: MdnsScanner;
@@ -104,12 +105,12 @@ export class MatterServer {
      * @param commissioningServer CommissioningServer node to add
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
+    async addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
         commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
         const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
         commissioningServer.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
-        this.prepareNode(commissioningServer);
+        await this.prepareNode(commissioningServer);
         this.nodes.push(commissioningServer);
     }
 
@@ -143,7 +144,7 @@ export class MatterServer {
      * @param commissioningController Controller node to add
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
+    async addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
         const localPort = commissioningController.getPort();
         if (localPort !== undefined) {
             // If a local port for controller is defined verify that the port is not overlapping with other nodes
@@ -153,7 +154,7 @@ export class MatterServer {
         const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
         commissioningController.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningController using storage key "${storageKey}".`);
-        this.prepareNode(commissioningController);
+        await this.prepareNode(commissioningController);
         this.nodes.push(commissioningController);
     }
 
@@ -197,21 +198,23 @@ export class MatterServer {
                 netInterface: this.options?.mdnsInterface,
             });
         }
-        // TODO the mdns classes will later be in this class and assigned differently!!
+        this.started = true;
         for (const node of this.nodes) {
-            this.prepareNode(node);
-            await node.start();
+            await this.prepareNode(node);
         }
     }
 
-    private prepareNode(node: MatterNode) {
-        node.ipv4Disabled = this.ipv4Disabled;
+    private async prepareNode(node: MatterNode) {
+        node.initialize(this.ipv4Disabled);
         if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined) {
-            logger.debug("Mdns instances not yet created, delaying node preparation");
+            logger.debug("Mdns instances not yet created, delaying node preparation.");
             return;
         }
         node.setMdnsBroadcaster(this.mdnsBroadcaster);
         node.setMdnsScanner(this.mdnsScanner);
+        if (this.started) {
+            await node.start();
+        }
     }
 
     /**
@@ -225,5 +228,6 @@ export class MatterServer {
         this.mdnsBroadcaster = undefined;
         await this.mdnsScanner?.close();
         this.mdnsScanner = undefined;
+        this.started = false;
     }
 }

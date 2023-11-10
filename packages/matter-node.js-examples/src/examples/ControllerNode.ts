@@ -180,7 +180,7 @@ class ControllerNode {
         const commissioningController = new CommissioningController({
             autoConnect: false,
         });
-        matterServer.addCommissioningController(commissioningController);
+        await matterServer.addCommissioningController(commissioningController);
 
         /**
          * Start the Matter Server

@@ -192,7 +192,7 @@ class Device {
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             commissioningServer.addDevice(onOffDevice);
 
-            this.matterServer.addCommissioningServer(commissioningServer);
+            await this.matterServer.addCommissioningServer(commissioningServer);
 
             commissioningServers.push(commissioningServer);
         }

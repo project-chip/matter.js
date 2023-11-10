@@ -210,6 +210,7 @@ type CommissioningServerCommands = {
  * host
  */
 export class CommissioningServer extends MatterNode {
+    private ipv4Disabled?: boolean;
     private port?: number;
     private readonly passcode: number;
     private readonly discriminator: number;
@@ -925,8 +926,21 @@ export class CommissioningServer extends MatterNode {
         }
     }
 
+    /** used internally by MatterServer to initialize the state of the device. */
+    initialize(ipv4Disabled: boolean) {
+        if (this.ipv4Disabled !== undefined && this.ipv4Disabled !== ipv4Disabled) {
+            throw new ImplementationError(
+                "Changing the IPv4 disabled flag after starting the device is not supported.",
+            );
+        }
+        this.ipv4Disabled = ipv4Disabled;
+    }
+
     /** Starts the Matter device and advertises it. */
     async start() {
+        if (this.ipv4Disabled === undefined) {
+            throw new ImplementationError("Add the device to the MatterServer first.");
+        }
         if (this.delayedAnnouncement !== true) {
             return this.advertise();
         }
