@@ -57,6 +57,8 @@ export class MatterServer {
     private mdnsScanner?: MdnsScanner;
     private mdnsBroadcaster?: MdnsBroadcaster;
 
+    private readonly formerlyUsedPorts = new Array<number>();
+
     /**
      * Create a new Matter server instance
      *
@@ -91,11 +93,27 @@ export class MatterServer {
             return desiredPort;
         }
 
-        // Try to find a free port
+        // Try to find a free port with consideration of currently blocked ports, we start at the matter default port
         let portToCheck = MATTER_PORT;
-        while (portCheckMap.has(portToCheck)) {
+        while ((portCheckMap.has(portToCheck) || this.formerlyUsedPorts.includes(portToCheck)) && portToCheck < 65536) {
             portToCheck++;
         }
+        // If we did not find an available port, check the oldest blocked ones
+        if (portToCheck === 65536) {
+            for (let i = 0; i < this.formerlyUsedPorts.length; i++) {
+                const port = this.formerlyUsedPorts[i];
+                this.formerlyUsedPorts.splice(i, 1); // Irrelevant of next check result, remove from blocked ports
+                if (!portCheckMap.has(port)) {
+                    // Should normally be always the case, but lets make sure
+                    portToCheck = port;
+                    break;
+                }
+            }
+            if (portToCheck === 65536) {
+                throw new NetworkError("No free port available for Matter server.");
+            }
+        }
+
         return portToCheck;
     }
 
@@ -128,6 +146,12 @@ export class MatterServer {
             throw new Error("CommissioningServer not found");
         }
         this.nodes.splice(index, 1);
+
+        const port = commissioningServer.getPort();
+        if (port !== undefined) {
+            // Remember port to not reuse for this run if not needed to prevent issues with controllers
+            this.formerlyUsedPorts.push(port);
+        }
 
         // Close instance
         await commissioningServer.close();
