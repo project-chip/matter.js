@@ -16,52 +16,84 @@ import { spawn } from "child_process";
 import { platform } from "os";
 import { stat } from "fs/promises";
 
-const toolRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-
-const options = {
-    stdio: "inherit",
-    cwd: toolRoot,
-};
-
-if (platform() === "win32") {
-    options.shell = true;
+function fatal(why, error) {
+    console.error(`Cannot bootstrap matter.js tooling because ${why}.`);
+    if (error) {
+        console.error(error);
+    }
+    process.exit(1);
 }
 
-let esbuild = resolve(toolRoot, "../../node_modules/.bin/esbuild");
-if (!await stat(esbuild)) {
-    esbuild = "esbuild";
+async function findFile(name) {
+    let dir = dirname(fileURLToPath(import.meta.url));
+    while (true) {
+        const path = resolve(dir, name);
+        try {
+            await stat(path);
+            return path;
+        } catch (e) {
+            if (e.code !== "ENOENT") {
+                fatal("there was an unexpected error searching the filesystem", e);
+            }
+        }
+
+        const nextDir = dirname(dir);
+        if (nextDir === dir) {
+            break;
+        }
+
+        dir = nextDir;
+    }
 }
 
-await new Promise((resolve) => {
-    const proc = spawn(
-        esbuild,
-        [
-            "src/**/*.ts",
-            "--outdir=dist/esm",
-            "--format=esm",
-            "--log-level=warning",
-        ],
-        options
-    );
+try {
+    const pkg = await findFile("package.json");
+    if (pkg === undefined) {
+        fatal("the bootstrap script does not appear to be installed in a package");
+    }
 
-    proc.on("error", e => {
-        if (e.code === "ENOENT") {
-            console.error("Cannot bootstrap matter.js tooling because esbuild is not found.")
-            console.error("You probably need to run \"npm install\" in the root of the repository.");
-            process.exit(1);
-        }
-        console.error("Unable to bootstrap matter.js tooling.");
-        console.error(e);
-        process.exit(1);
-    });
+    const options = {
+        stdio: "inherit",
+        cwd: dirname(pkg),
+    };
 
-    proc.on("close", code => {
-        if (code === 0) {
-            resolve();
-        } else {
-            console.error("Unable to bootstrap matter.js tooling.");
-            console.error(`Error: esbuild exited with code ${code}`);
-            process.exit(1);
-        }
-    });
-})
+    if (platform() === "win32") {
+        options.shell = true;
+    }
+
+    let esbuild = await findFile("node_modules/.bin/esbuild");
+    if (esbuild === undefined) {
+        // As a last resort, attempt to rely on the system PATH
+        esbuild = "esbuild";
+    }
+
+    await new Promise((resolve) => {
+        const proc = spawn(
+            esbuild,
+            [
+                "src/**/*.ts",
+                "--outdir=dist/esm",
+                "--format=esm",
+                "--log-level=warning",
+            ],
+            options
+        );
+
+        proc.on("error", e => {
+            if (e.code === "ENOENT") {
+                fatal("esbuild is not found.\nYou probably need to run \"npm install\" in the root of the repository");
+            }
+            fatal("an unexpected error occurred running esbuild", e);
+        });
+
+        proc.on("close", code => {
+            if (code === 0) {
+                resolve();
+            } else {
+                fatal(`esbuild existing with code ${code}`);
+            }
+        });
+    })
+} catch (e) {
+    fatal("an unexpected error occurred", e);
+}
