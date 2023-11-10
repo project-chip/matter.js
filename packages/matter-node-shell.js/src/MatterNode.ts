@@ -95,7 +95,7 @@ export class MatterNode {
         this.commissioningController = new CommissioningController({
             autoConnect: false,
         });
-        this.matterController.addCommissioningController(this.commissioningController);
+        await this.matterController.addCommissioningController(this.commissioningController);
 
         /**
          * Start the Matter Server

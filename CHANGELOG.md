@@ -37,7 +37,8 @@ The main work (all changes without a GitHub username in brackets in the below li
     * Changed name of the unique storage id for servers or controllers added to MatterServer to "uniqueStorageKey"
     * Adjusted subscription callbacks to also provide the nodeId of the affected device reporting the changes to allow callbacks to be used generically when connecting to all nodes
     * Introduces a node state information callback to inform about the connection status but also when the node structure changed (for bridges) or such.
-  * Breaking: option "mdnsAnnounceInterface" was deprecated and replaced by "mdnsInterface" and now used to limit announcements and scanning to a specific interface
+  * Breaking: Deprecated the option "mdnsAnnounceInterface" and replaced by "mdnsInterface" and now used to limit announcements and scanning to a specific interface
+  * Breaking: Makes sure that also nodes added to a MatterServer after it was started are also started to behave the same. "add" methods are now async. 
   * Feature: Enhanced CommissioningServer API and CommissioningController for improved practical usage
   * Feature: Makes Port for CommissioningServer optional and add automatic port handling in MatterServer
   * Feature: Allows removal of Controller or Server instances from Matter server, optionally with deleting the storage

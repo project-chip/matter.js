@@ -188,7 +188,7 @@ class BridgedDevice {
 
         commissioningServer.addDevice(aggregator);
 
-        this.matterServer.addCommissioningServer(commissioningServer);
+        await this.matterServer.addCommissioningServer(commissioningServer);
 
         /**
          * Start the Matter Server
