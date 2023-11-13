@@ -67,7 +67,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:11
+matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:13
+matter.js/dist/esm/schema/Schema.d.ts:13
 
 ___
 
@@ -109,7 +109,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:9
+matter.js/dist/esm/schema/Schema.d.ts:9
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:12
+matter.js/dist/esm/schema/Schema.d.ts:12
 
 ___
 
@@ -151,4 +151,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:15
+matter.js/dist/esm/schema/Schema.d.ts:15

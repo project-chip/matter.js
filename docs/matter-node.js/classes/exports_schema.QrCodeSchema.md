@@ -28,6 +28,7 @@ Define a schema to encode / decode convert type T to type E.
 - [decodeInternal](exports_schema.QrCodeSchema.md#decodeinternal)
 - [encode](exports_schema.QrCodeSchema.md#encode)
 - [encodeInternal](exports_schema.QrCodeSchema.md#encodeinternal)
+- [get](exports_schema.QrCodeSchema.md#get)
 - [validate](exports_schema.QrCodeSchema.md#validate)
 
 ## Constructors
@@ -150,6 +151,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/schema/QrCodeSchema.d.ts:8
+
+___
+
+### get
+
+▸ **get**(`code`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `code` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/schema/QrCodeSchema.d.ts:11
 
 ___
 

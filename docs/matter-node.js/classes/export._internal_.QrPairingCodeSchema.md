@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:47
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:48
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:46
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:47
 
 ___
 

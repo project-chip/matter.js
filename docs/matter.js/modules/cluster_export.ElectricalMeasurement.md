@@ -25,7 +25,7 @@ metering cluster..
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:32
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L32)
 
 ___
 
@@ -37,4 +37,4 @@ Input to the ElectricalMeasurement getMeasurementProfileCommand command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:19
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L19)

@@ -68,7 +68,7 @@ Base class for all attribute servers.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:43
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:43
 
 ## Properties
 
@@ -78,7 +78,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:43
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:37
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:31
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:32
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:36
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -160,7 +160,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ## Methods
 
@@ -180,7 +180,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:45
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
 
 ___
 
@@ -203,7 +203,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:50
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:50
 
 ___
 
@@ -223,4 +223,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:44
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44

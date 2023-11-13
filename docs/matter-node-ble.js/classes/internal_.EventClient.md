@@ -60,7 +60,7 @@ General class for EventClients
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:27
+matter.js/dist/esm/cluster/client/EventClient.d.ts:27
 
 ## Properties
 
@@ -70,7 +70,7 @@ matter.js/dist/cjs/cluster/client/EventClient.d.ts:27
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:23
+matter.js/dist/esm/cluster/client/EventClient.d.ts:23
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:22
+matter.js/dist/esm/cluster/client/EventClient.d.ts:22
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:20
+matter.js/dist/esm/cluster/client/EventClient.d.ts:20
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:26
+matter.js/dist/esm/cluster/client/EventClient.d.ts:26
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:24
+matter.js/dist/esm/cluster/client/EventClient.d.ts:24
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:25
+matter.js/dist/esm/cluster/client/EventClient.d.ts:25
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:21
+matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 ## Methods
 
@@ -150,7 +150,7 @@ matter.js/dist/cjs/cluster/client/EventClient.d.ts:21
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:31
+matter.js/dist/esm/cluster/client/EventClient.d.ts:31
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:28
+matter.js/dist/esm/cluster/client/EventClient.d.ts:28
 
 ___
 
@@ -191,7 +191,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:32
+matter.js/dist/esm/cluster/client/EventClient.d.ts:32
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:29
+matter.js/dist/esm/cluster/client/EventClient.d.ts:29
 
 ___
 
@@ -235,4 +235,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/EventClient.d.ts:30
+matter.js/dist/esm/cluster/client/EventClient.d.ts:30

@@ -101,11 +101,11 @@
 - [FixedAttributeServer](../classes/exports_cluster.FixedAttributeServer.md)
 - [GroupsManager](../classes/exports_cluster.GroupsManager.md)
 - [IllegalClusterError](../classes/exports_cluster.IllegalClusterError.md)
-- [PresentAttributeClient](../classes/exports_cluster.PresentAttributeClient.md)
-- [PresentEventClient](../classes/exports_cluster.PresentEventClient.md)
 - [ScenesManager](../classes/exports_cluster.ScenesManager.md)
-- [UnknownPresentAttributeClient](../classes/exports_cluster.UnknownPresentAttributeClient.md)
-- [UnknownPresentEventClient](../classes/exports_cluster.UnknownPresentEventClient.md)
+- [SupportedAttributeClient](../classes/exports_cluster.SupportedAttributeClient.md)
+- [SupportedEventClient](../classes/exports_cluster.SupportedEventClient.md)
+- [UnknownSupportedAttributeClient](../classes/exports_cluster.UnknownSupportedAttributeClient.md)
+- [UnknownSupportedEventClient](../classes/exports_cluster.UnknownSupportedEventClient.md)
 
 ### Interfaces
 
@@ -473,9 +473,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1231
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1230
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1232
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1231
 
 ___
 
@@ -492,7 +492,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:19
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:20
 
 ___
 
@@ -510,7 +510,7 @@ Initial values for the cluster attribute
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:32
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:35
 
 ___
 
@@ -542,7 +542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:37
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:40
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:30
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:33
 
 ___
 
@@ -684,7 +684,7 @@ ___
 
 ### ClusterClientObj
 
-Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](exports_cluster.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](export._internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](exports_cluster.md#eventclients)<`E`\> ; `id`: [`ClusterId`](exports_datatype.md#clusterid) ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventFilter`](exports_interaction.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](export._internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](export._internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](export._internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](export._internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](export._internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](export._internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](export._internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](export._internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](export._internal_.md#clienteventlisteners)<`E`\>
+Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](exports_cluster.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](export._internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](exports_cluster.md#eventclients)<`E`\> ; `id`: [`ClusterId`](exports_datatype.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](exports_datatype.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](exports_datatype.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](exports_datatype.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventFilter`](exports_interaction.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](export._internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](export._internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](export._internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](export._internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](export._internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](export._internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](export._internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](export._internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](export._internal_.md#clienteventlisteners)<`E`\>
 
 Strongly typed interface of a cluster client
 
@@ -699,7 +699,7 @@ Strongly typed interface of a cluster client
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:77
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:78
 
 ___
 
@@ -715,7 +715,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:75
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:76
 
 ___
 
@@ -734,7 +734,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:150
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:163
 
 ___
 
@@ -750,13 +750,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:85
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:88
 
 ___
 
 ### ClusterServerObj
 
-Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](exports_cluster.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](exports_datatype.md#clusterid) ; `name`: `string`  } & [`ServerAttributeGetters`](export._internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](export._internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](export._internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](export._internal_.md#servereventtriggers)<`E`\>
+Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](exports_cluster.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](exports_datatype.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](exports_datatype.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](exports_datatype.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](exports_datatype.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](export._internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](export._internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](export._internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](export._internal_.md#servereventtriggers)<`E`\>
 
 #### Type parameters
 
@@ -767,7 +767,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:149
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:152
 
 ___
 
@@ -783,7 +783,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:148
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:151
 
 ___
 
@@ -803,7 +803,7 @@ Strongly typed interface of a cluster server
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:178
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:193
 
 ___
 
@@ -833,7 +833,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:70
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:73
 
 ___
 
@@ -849,7 +849,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:93
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:96
 
 ___
 
@@ -875,9 +875,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1991
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1999
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1992
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2000
 
 ___
 
@@ -953,7 +953,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:26
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:27
 
 ___
 
@@ -969,7 +969,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:133
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:136
 
 ___
 
@@ -1001,7 +1001,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:109
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112
 
 ___
 
@@ -1180,9 +1180,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:381
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:385
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:382
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:386
 
 ___
 
@@ -1204,9 +1204,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1406
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1410
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1407
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1411
 
 ___
 
@@ -1284,9 +1284,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1460
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1496
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1461
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1497
 
 ___
 
@@ -1308,9 +1308,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2259
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2128
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2260
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2129
 
 ___
 
@@ -1326,7 +1326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
 
 ___
 
@@ -1348,9 +1348,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:630
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:560
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:631
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:561
 
 ___
 
@@ -1604,7 +1604,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:31
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:32
 
 ___
 
@@ -1644,7 +1644,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:143
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:146
 
 ___
 
@@ -1714,9 +1714,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2915
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2923
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2916
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2924
 
 ___
 
@@ -1738,9 +1738,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1023
-
 packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1024
+
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1025
 
 ___
 
@@ -1798,9 +1798,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:858
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:877
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:859
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:878
 
 ___
 
@@ -1896,9 +1896,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1231
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1230
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1232
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:1231
 
 ___
 
@@ -1940,7 +1940,7 @@ ___
 
 ### BasicInformationCluster
 
-• **BasicInformationCluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `capabilityMinima`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `location`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`FabricIndex`](exports_datatype.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](exports_cluster.md#event)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``40`` ; `name`: ``"BasicInformation"`` ; `revision`: ``2``  }\>
+• **BasicInformationCluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `capabilityMinima`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`boolean`, `any`\> ; `location`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`FabricIndex`](exports_datatype.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](exports_cluster.md#event)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``40`` ; `name`: ``"BasicInformation"`` ; `revision`: ``2``  }\>
 
 #### Defined in
 
@@ -1988,7 +1988,7 @@ ___
 
 ### BridgedDeviceBasicInformationCluster
 
-• **BridgedDeviceBasicInformationCluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](exports_cluster.md#event)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``57`` ; `name`: ``"BridgedDeviceBasicInformation"`` ; `revision`: ``2``  }\>
+• **BridgedDeviceBasicInformationCluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ProductFinish`](../enums/exports_cluster.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<``null`` \| [`Color`](../enums/exports_cluster.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<[`VendorId`](exports_datatype.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](exports_cluster.md#event)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](exports_cluster.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](exports_cluster.md#optionalevent)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``57`` ; `name`: ``"BridgedDeviceBasicInformation"`` ; `revision`: ``2``  }\>
 
 #### Defined in
 
@@ -2040,9 +2040,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1991
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1999
 
-packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:1992
+packages/matter.js/dist/esm/cluster/definitions/ContentLauncherCluster.d.ts:2000
 
 ___
 
@@ -2232,9 +2232,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:381
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:385
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:382
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:386
 
 ___
 
@@ -2256,9 +2256,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1406
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1410
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1407
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1411
 
 ___
 
@@ -2324,9 +2324,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1460
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1496
 
-packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1461
+packages/matter.js/dist/esm/cluster/definitions/MediaPlaybackCluster.d.ts:1497
 
 ___
 
@@ -2348,9 +2348,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2259
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2128
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2260
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:2129
 
 ___
 
@@ -2372,9 +2372,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:630
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:560
 
-packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:631
+packages/matter.js/dist/esm/cluster/definitions/OnOffCluster.d.ts:561
 
 ___
 
@@ -2624,9 +2624,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2915
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2923
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2916
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2924
 
 ___
 
@@ -2648,9 +2648,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1023
-
 packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1024
+
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:1025
 
 ___
 
@@ -2746,9 +2746,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:858
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:877
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:859
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:878
 
 ___
 
@@ -3684,7 +3684,7 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:111
 
 ___
 
@@ -3803,7 +3803,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:164
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:177
 
 ___
 
@@ -3830,7 +3830,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:233
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:248
 
 ___
 
@@ -3950,7 +3950,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `commandHandler` | [`NamedHandler`](../classes/export._internal_.NamedHandler.md)<`any`\> |
+| `commandHandler` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> |
 | `attributeInitialValues?` | [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<[`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentLevel`: [`Attribute`](exports_cluster.md#attribute)<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](exports_cluster.md#optionalattribute)<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](exports_cluster.md#writableattribute)<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](exports_cluster.md#writableattribute)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<{ `coupleColorTempToLevel`: [`BitFlag`](exports_schema.md#bitflag-1) ; `executeIfOff`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<{ `frequency`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lighting`: [`BitFlag`](exports_schema.md#bitflag-1) ; `onOff`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<{ `frequency`: [`BitFlag`](exports_schema.md#bitflag-1) ; `lighting`: [`BitFlag`](exports_schema.md#bitflag-1) ; `onOff`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>\>\> |
 
 #### Returns
@@ -3971,7 +3971,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `commandHandler?` | [`NamedHandler`](../classes/export._internal_.NamedHandler.md)<`any`\> |
+| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> |
 | `attributeInitialValues?` | [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<[`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `onOff`: [`Attribute`](exports_cluster.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](exports_schema.md#bitflag-1)  }\>\>\> |
 
 #### Returns
@@ -4159,7 +4159,7 @@ obj is ClusterClientObj<F, A, C, E\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:162
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:175
 
 ___
 
@@ -4188,7 +4188,7 @@ obj is ClusterClientObjInternal<F, A, C, E\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:163
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:176
 
 ___
 
@@ -4217,7 +4217,7 @@ obj is ClusterServerObj<A, E\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:231
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:246
 
 ___
 
@@ -4246,7 +4246,7 @@ obj is ClusterServerObjInternal<A, C, E\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:232
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:247
 
 ___
 

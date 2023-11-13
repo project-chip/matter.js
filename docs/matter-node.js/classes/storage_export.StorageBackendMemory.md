@@ -28,10 +28,12 @@
 ### Methods
 
 - [clear](storage_export.StorageBackendMemory.md#clear)
+- [clearAll](storage_export.StorageBackendMemory.md#clearall)
 - [close](storage_export.StorageBackendMemory.md#close)
 - [delete](storage_export.StorageBackendMemory.md#delete)
 - [get](storage_export.StorageBackendMemory.md#get)
 - [initialize](storage_export.StorageBackendMemory.md#initialize)
+- [keys](storage_export.StorageBackendMemory.md#keys)
 - [set](storage_export.StorageBackendMemory.md#set)
 
 ## Constructors
@@ -83,6 +85,30 @@ packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:9
 #### Defined in
 
 packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:14
+
+___
+
+### clearAll
+
+▸ **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[clearAll](storage_export.Storage.md#clearall)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
 
 ___
 
@@ -175,6 +201,30 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:12
+
+___
+
+### keys
+
+▸ **keys**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[keys](storage_export.Storage.md#keys)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
 
 ___
 

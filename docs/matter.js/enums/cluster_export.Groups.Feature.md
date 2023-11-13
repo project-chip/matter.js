@@ -28,4 +28,4 @@ The ability to store a name for a group.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GroupsCluster.ts:152
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:152](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L152)

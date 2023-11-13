@@ -32,7 +32,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/ExchangeManager.ts:134
+[packages/matter.js/src/protocol/ExchangeManager.ts:222](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ExchangeManager.ts#L222)
 
 ## Methods
 
@@ -46,4 +46,4 @@ packages/matter.js/src/protocol/ExchangeManager.ts:134
 
 #### Defined in
 
-packages/matter.js/src/protocol/ExchangeManager.ts:136
+[packages/matter.js/src/protocol/ExchangeManager.ts:224](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ExchangeManager.ts#L224)

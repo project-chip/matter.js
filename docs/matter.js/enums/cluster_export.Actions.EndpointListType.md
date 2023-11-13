@@ -37,7 +37,7 @@ not use this for anything else than just to know which endpoints would be affect
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:278
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:278](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L278)
 
 ___
 
@@ -59,7 +59,7 @@ adds a bridged device or creates a new room).
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:291
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:291](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L291)
 
 ___
 
@@ -82,4 +82,4 @@ control as a group, so Matter controllers could provide the user with a way to d
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:305
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:305](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L305)

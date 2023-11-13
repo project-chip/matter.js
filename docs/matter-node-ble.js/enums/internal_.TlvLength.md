@@ -23,7 +23,7 @@ Byte length of the encoded value or length.
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:32
+matter.js/dist/esm/tlv/TlvCodec.d.ts:32
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:31
+matter.js/dist/esm/tlv/TlvCodec.d.ts:31
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:29
+matter.js/dist/esm/tlv/TlvCodec.d.ts:29
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:30
+matter.js/dist/esm/tlv/TlvCodec.d.ts:30

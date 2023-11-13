@@ -21,6 +21,7 @@
 - [getChannel](protocol_export.ChannelManager.md#getchannel)
 - [getChannelForSession](protocol_export.ChannelManager.md#getchannelforsession)
 - [getChannelKey](protocol_export.ChannelManager.md#getchannelkey)
+- [getOrCreateAsPaseChannel](protocol_export.ChannelManager.md#getorcreateaspasechannel)
 - [getOrCreateChannel](protocol_export.ChannelManager.md#getorcreatechannel)
 - [removeChannel](protocol_export.ChannelManager.md#removechannel)
 - [setChannel](protocol_export.ChannelManager.md#setchannel)
@@ -39,7 +40,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:19
+[packages/matter.js/src/protocol/ChannelManager.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L22)
 
 ___
 
@@ -49,7 +50,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:20
+[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L23)
 
 ## Methods
 
@@ -63,7 +64,7 @@ packages/matter.js/src/protocol/ChannelManager.ts:20
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:76
+[packages/matter.js/src/protocol/ChannelManager.ts:110](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L110)
 
 ___
 
@@ -84,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:30
+[packages/matter.js/src/protocol/ChannelManager.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L45)
 
 ___
 
@@ -104,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:36
+[packages/matter.js/src/protocol/ChannelManager.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L51)
 
 ___
 
@@ -125,13 +126,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:22
+[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L25)
 
 ___
 
-### getOrCreateChannel
+### getOrCreateAsPaseChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+▸ `Private` **getOrCreateAsPaseChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
 
 #### Parameters
 
@@ -146,13 +147,34 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:53
+[packages/matter.js/src/protocol/ChannelManager.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L77)
+
+___
+
+### getOrCreateChannel
+
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)<`any`\> |
+
+#### Returns
+
+`Promise`<[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/ChannelManager.ts:87](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L87)
 
 ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `void`
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -163,17 +185,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:49
+[packages/matter.js/src/protocol/ChannelManager.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L68)
 
 ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `void`
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -185,8 +207,8 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/protocol/ChannelManager.ts:26
+[packages/matter.js/src/protocol/ChannelManager.ts:29](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ChannelManager.ts#L29)

@@ -29,7 +29,7 @@ Indoor only
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:58
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L58)
 
 ___
 
@@ -41,7 +41,7 @@ Indoor/Outdoor
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:68
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L68)
 
 ___
 
@@ -53,4 +53,4 @@ Outdoor only
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:63
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L63)

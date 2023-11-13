@@ -37,7 +37,7 @@ Data of one Event
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:18
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:18
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:22
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:22
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:17
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:17
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:20
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:20
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:19
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:19
 
 ___
 
@@ -87,4 +87,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:21
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:21

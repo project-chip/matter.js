@@ -16,9 +16,9 @@ General class for EventClients
 
 - **`EventClient`**
 
-  ↳ [`PresentEventClient`](exports_cluster.PresentEventClient.md)
+  ↳ [`SupportedEventClient`](exports_cluster.SupportedEventClient.md)
 
-  ↳ [`UnknownPresentEventClient`](exports_cluster.UnknownPresentEventClient.md)
+  ↳ [`UnknownSupportedEventClient`](exports_cluster.UnknownSupportedEventClient.md)
 
 ## Table of contents
 

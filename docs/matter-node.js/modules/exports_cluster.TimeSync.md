@@ -44,7 +44,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:816
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:817
 
 ## Variables
 
@@ -99,7 +99,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:831
+packages/matter.js/dist/esm/cluster/definitions/TimeSyncCluster.d.ts:832
 
 ___
 

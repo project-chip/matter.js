@@ -43,6 +43,7 @@
 
 ### Functions
 
+- [serverAddressToString](exports_common.md#serveraddresstostring)
 - [tryCatch](exports_common.md#trycatch)
 - [tryCatchAsync](exports_common.md#trycatchasync)
 
@@ -71,6 +72,7 @@ The properties are named identical as in the Matter specification.
 | `T?` | `number` | TCP supported |
 | `VP?` | `string` | VendorId + ProductId |
 | `addresses` | [`ServerAddress`](exports_common.md#serveraddress)[] | The device's addresses IP/port pairs |
+| `deviceIdentifier` | `string` | - |
 
 #### Defined in
 
@@ -87,7 +89,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-packages/matter.js/dist/esm/common/Scanner.d.ts:44
+packages/matter.js/dist/esm/common/Scanner.d.ts:45
 
 ___
 
@@ -247,6 +249,26 @@ ___
 packages/matter.js/dist/esm/common/InstanceBroadcaster.d.ts:109
 
 ## Functions
+
+### serverAddressToString
+
+▸ **serverAddressToString**(`address`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | [`ServerAddress`](exports_common.md#serveraddress) |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/common/ServerAddress.d.ts:16
+
+___
 
 ### tryCatch
 

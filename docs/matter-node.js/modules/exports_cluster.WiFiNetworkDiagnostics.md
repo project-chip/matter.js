@@ -43,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:686
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:705
 
 ## Variables
 
@@ -93,7 +93,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:699
+packages/matter.js/dist/esm/cluster/definitions/WiFiNetworkDiagnosticsCluster.d.ts:718
 
 ___
 

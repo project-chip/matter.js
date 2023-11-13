@@ -32,7 +32,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:48
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:55
 
 ## Methods
 
@@ -46,4 +46,4 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:48
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:49
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:56

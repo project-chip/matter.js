@@ -30,7 +30,7 @@ Supports CEC keys 0x0A (Settings) and 0x09 (Home)
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:172
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:172](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L172)
 
 ___
 
@@ -44,7 +44,7 @@ Supports UP, DOWN, LEFT, RIGHT, SELECT, BACK, EXIT, MENU
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:165
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:165](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L165)
 
 ___
 
@@ -58,4 +58,4 @@ Supports numeric input 0..9
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:179
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:179](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L179)

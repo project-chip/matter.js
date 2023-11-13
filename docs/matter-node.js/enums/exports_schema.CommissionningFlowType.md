@@ -24,7 +24,7 @@ Interaction with a vendor-specified means is needed before commissioning.
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:15
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:16
 
 ___
 
@@ -36,7 +36,7 @@ When not commissioned, the device always enters commissioning mode upon power-up
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:11
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:12
 
 ___
 
@@ -48,4 +48,4 @@ User action required to enter commissioning mode.
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:13
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:14

@@ -9,6 +9,8 @@
 - [ChannelManager](../classes/protocol_export.ChannelManager.md)
 - [CommissioningError](../classes/protocol_export.CommissioningError.md)
 - [ControllerCommissioner](../classes/protocol_export.ControllerCommissioner.md)
+- [ControllerDiscovery](../classes/protocol_export.ControllerDiscovery.md)
+- [DiscoveryError](../classes/protocol_export.DiscoveryError.md)
 - [ExchangeCounter](../classes/protocol_export.ExchangeCounter.md)
 - [ExchangeManager](../classes/protocol_export.ExchangeManager.md)
 - [ExchangeProvider](../classes/protocol_export.ExchangeProvider.md)
@@ -38,21 +40,21 @@ User specific options for the Commissioning process
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `adminVendorId?` | `number` |
-| `regulatoryCountryCode` | `string` |
-| `regulatoryLocation` | [`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md) |
-| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } |
-| `threadNetwork.networkName` | `string` |
-| `threadNetwork.operationalDataset` | `string` |
-| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } |
-| `wifiNetwork.wifiCredentials` | `string` |
-| `wifiNetwork.wifiSsid` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nodeId?` | [`NodeId`](datatype_export.md#nodeid) | - |
+| `regulatoryCountryCode` | `string` | Country Code where the device is used. |
+| `regulatoryLocation` | [`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md) | Regulatory Location (Indoor/Outdoor) where the device is used. |
+| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
+| `threadNetwork.networkName` | `string` | - |
+| `threadNetwork.operationalDataset` | `string` | - |
+| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
+| `wifiNetwork.wifiCredentials` | `string` | - |
+| `wifiNetwork.wifiSsid` | `string` | - |
 
 #### Defined in
 
-packages/matter.js/src/protocol/ControllerCommissioner.ts:39
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
 
 ___
 
@@ -70,4 +72,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:36
+[packages/matter.js/src/protocol/MessageExchange.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L36)

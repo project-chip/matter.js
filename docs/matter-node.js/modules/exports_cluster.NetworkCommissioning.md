@@ -52,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1691
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1688
 
 ## Variables
 
@@ -112,7 +112,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1721
+packages/matter.js/dist/esm/cluster/definitions/NetworkCommissioningCluster.d.ts:1718
 
 ___
 

@@ -25,7 +25,7 @@ Is true if this timer is running.
 
 #### Defined in
 
-matter.js/dist/cjs/time/Time.d.ts:23
+matter.js/dist/esm/time/Time.d.ts:23
 
 ## Methods
 
@@ -41,7 +41,7 @@ Starts this timer, chainable.
 
 #### Defined in
 
-matter.js/dist/cjs/time/Time.d.ts:25
+matter.js/dist/esm/time/Time.d.ts:25
 
 ___
 
@@ -57,4 +57,4 @@ Stops this timer, chainable.
 
 #### Defined in
 
-matter.js/dist/cjs/time/Time.d.ts:27
+matter.js/dist/esm/time/Time.d.ts:27

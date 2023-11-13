@@ -22,6 +22,7 @@
 
 ### Properties
 
+- [closingAfterExchangeFinished](exports_session.UnsecureSession.md#closingafterexchangefinished)
 - [context](exports_session.UnsecureSession.md#context)
 - [initiatorNodeId](exports_session.UnsecureSession.md#initiatornodeid)
 
@@ -69,9 +70,23 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:14
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:15
 
 ## Properties
+
+### closingAfterExchangeFinished
+
+• `Readonly` **closingAfterExchangeFinished**: ``false``
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[closingAfterExchangeFinished](../interfaces/exports_session.Session.md#closingafterexchangefinished)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:14
+
+___
 
 ### context
 
@@ -107,7 +122,7 @@ packages/matter.js/dist/esm/session/UnsecureSession.d.ts:13
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:23
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 ## Methods
 
@@ -131,19 +146,13 @@ packages/matter.js/dist/esm/session/UnsecureSession.d.ts:23
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:19
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:20
 
 ___
 
 ### destroy
 
-▸ **destroy**(`_sendClose`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `_sendClose` | `boolean` |
+▸ **destroy**(): `Promise`<`void`\>
 
 #### Returns
 
@@ -155,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:34
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:35
 
 ___
 
@@ -179,7 +188,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:20
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:21
 
 ___
 
@@ -203,7 +212,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:35
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:36
 
 ___
 
@@ -221,7 +230,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:36
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:37
 
 ___
 
@@ -235,7 +244,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:21
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:22
 
 ___
 
@@ -253,7 +262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:29
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:30
 
 ___
 
@@ -271,7 +280,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:30
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:31
 
 ___
 
@@ -295,7 +304,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:24
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:25
 
 ___
 
@@ -313,7 +322,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:32
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:33
 
 ___
 
@@ -331,7 +340,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:33
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:34
 
 ___
 
@@ -349,7 +358,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:31
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:32
 
 ___
 
@@ -367,7 +376,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:16
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:17
 
 ___
 
@@ -385,7 +394,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:18
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:19
 
 ___
 
@@ -403,7 +412,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:15
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:16
 
 ___
 
@@ -427,7 +436,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:17
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:18
 
 ___
 
@@ -447,4 +456,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/UnsecureSession.d.ts:22
+packages/matter.js/dist/esm/session/UnsecureSession.d.ts:23

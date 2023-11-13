@@ -15,11 +15,14 @@ by reusing MDNS scanner and broadcaster
 
 ### Properties
 
+- [formerlyUsedPorts](export.MatterServer.md#formerlyusedports)
+- [getNextMatterPort](export.MatterServer.md#getnextmatterport)
 - [mdnsBroadcaster](export.MatterServer.md#mdnsbroadcaster)
 - [mdnsScanner](export.MatterServer.md#mdnsscanner)
 - [nodes](export.MatterServer.md#nodes)
 - [options](export.MatterServer.md#options)
 - [prepareNode](export.MatterServer.md#preparenode)
+- [started](export.MatterServer.md#started)
 - [storageManager](export.MatterServer.md#storagemanager)
 
 ### Accessors
@@ -31,6 +34,8 @@ by reusing MDNS scanner and broadcaster
 - [addCommissioningController](export.MatterServer.md#addcommissioningcontroller)
 - [addCommissioningServer](export.MatterServer.md#addcommissioningserver)
 - [close](export.MatterServer.md#close)
+- [removeCommissioningController](export.MatterServer.md#removecommissioningcontroller)
+- [removeCommissioningServer](export.MatterServer.md#removecommissioningserver)
 - [start](export.MatterServer.md#start)
 
 ## Constructors
@@ -50,9 +55,29 @@ Create a new Matter server instance
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:37
+packages/matter.js/dist/esm/MatterServer.d.ts:52
 
 ## Properties
+
+### formerlyUsedPorts
+
+• `Private` `Readonly` **formerlyUsedPorts**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:45
+
+___
+
+### getNextMatterPort
+
+• `Private` **getNextMatterPort**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:54
+
+___
 
 ### mdnsBroadcaster
 
@@ -60,7 +85,7 @@ packages/matter.js/dist/esm/MatterServer.d.ts:37
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:30
+packages/matter.js/dist/esm/MatterServer.d.ts:44
 
 ___
 
@@ -70,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:29
+packages/matter.js/dist/esm/MatterServer.d.ts:43
 
 ___
 
@@ -80,7 +105,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:28
+packages/matter.js/dist/esm/MatterServer.d.ts:42
 
 ___
 
@@ -90,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:27
+packages/matter.js/dist/esm/MatterServer.d.ts:40
 
 ___
 
@@ -100,7 +125,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:58
+packages/matter.js/dist/esm/MatterServer.d.ts:89
+
+___
+
+### started
+
+• `Private` **started**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:41
 
 ___
 
@@ -110,7 +145,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:26
+packages/matter.js/dist/esm/MatterServer.d.ts:39
 
 ## Accessors
 
@@ -124,13 +159,13 @@ packages/matter.js/dist/esm/MatterServer.d.ts:26
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:38
+packages/matter.js/dist/esm/MatterServer.d.ts:53
 
 ## Methods
 
 ### addCommissioningController
 
-▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `void`
+▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `Promise`<`void`\>
 
 Add a Controller node to the server
 
@@ -143,17 +178,17 @@ Add a Controller node to the server
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:52
+packages/matter.js/dist/esm/MatterServer.d.ts:76
 
 ___
 
 ### addCommissioningServer
 
-▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `void`
+▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `Promise`<`void`\>
 
 Add a CommissioningServer node to the server
 
@@ -166,11 +201,11 @@ Add a CommissioningServer node to the server
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:45
+packages/matter.js/dist/esm/MatterServer.d.ts:61
 
 ___
 
@@ -186,7 +221,54 @@ Close the server and all nodes
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:62
+packages/matter.js/dist/esm/MatterServer.d.ts:93
+
+___
+
+### removeCommissioningController
+
+▸ **removeCommissioningController**(`commissioningController`, `destroyStorage?`): `Promise`<`void`\>
+
+Remove a Controller node from the server, close the Controller and optionally destroy the storage context.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commissioningController` | [`CommissioningController`](export.CommissioningController.md) | Controller node to remove |
+| `destroyStorage?` | `boolean` | If true the storage context will be destroyed |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:83
+
+___
+
+### removeCommissioningServer
+
+▸ **removeCommissioningServer**(`commissioningServer`, `destroyStorage?`): `Promise`<`void`\>
+
+Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
+storage context.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commissioningServer` | [`CommissioningServer`](export.CommissioningServer.md) | CommissioningServer node to remove |
+| `destroyStorage?` | `boolean` | If true the storage context will be destroyed |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/MatterServer.d.ts:69
 
 ___
 
@@ -203,4 +285,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterServer.d.ts:57
+packages/matter.js/dist/esm/MatterServer.d.ts:88

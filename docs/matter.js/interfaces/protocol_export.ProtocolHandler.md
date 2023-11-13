@@ -15,17 +15,32 @@
 - [`CaseServer`](../classes/session_export.CaseServer.md)
 - [`InteractionServer`](../classes/protocol_interaction_export.InteractionServer.md)
 - [`PaseServer`](../classes/session_export.PaseServer.md)
-- [`SecureChannelProtocol`](../classes/protocol_securechannel_export.SecureChannelProtocol.md)
+- [`StatusReportOnlySecureChannelProtocol`](../classes/protocol_securechannel_export.StatusReportOnlySecureChannelProtocol.md)
 - [`SubscriptionClient`](../classes/protocol_interaction_export.SubscriptionClient.md)
 
 ## Table of contents
 
 ### Methods
 
+- [close](protocol_export.ProtocolHandler.md#close)
 - [getId](protocol_export.ProtocolHandler.md#getid)
 - [onNewExchange](protocol_export.ProtocolHandler.md#onnewexchange)
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/ProtocolHandler.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ProtocolHandler.ts#L13)
+
+___
 
 ### getId
 
@@ -37,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/ProtocolHandler.ts:11
+[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
 
 ___
 
@@ -58,4 +73,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ProtocolHandler.ts:12
+[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)

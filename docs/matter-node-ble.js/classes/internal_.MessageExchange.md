@@ -84,11 +84,11 @@
 | `peerNodeId` | `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:57
+matter.js/dist/esm/protocol/MessageExchange.d.ts:57
 
 ## Properties
 
@@ -98,7 +98,7 @@ matter.js/dist/cjs/protocol/MessageExchange.d.ts:57
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:46
+matter.js/dist/esm/protocol/MessageExchange.d.ts:46
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:35
+matter.js/dist/esm/protocol/MessageExchange.d.ts:35
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:43
+matter.js/dist/esm/protocol/MessageExchange.d.ts:43
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:72
+matter.js/dist/esm/protocol/MessageExchange.d.ts:72
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:55
+matter.js/dist/esm/protocol/MessageExchange.d.ts:55
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:41
+matter.js/dist/esm/protocol/MessageExchange.d.ts:41
 
 ___
 
@@ -162,7 +162,7 @@ MatterCoreSpecificationV1_0, section 4.11.2.1
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:63
+matter.js/dist/esm/protocol/MessageExchange.d.ts:63
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:47
+matter.js/dist/esm/protocol/MessageExchange.d.ts:47
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:37
+matter.js/dist/esm/protocol/MessageExchange.d.ts:37
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:36
+matter.js/dist/esm/protocol/MessageExchange.d.ts:36
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:49
+matter.js/dist/esm/protocol/MessageExchange.d.ts:49
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:39
+matter.js/dist/esm/protocol/MessageExchange.d.ts:39
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:40
+matter.js/dist/esm/protocol/MessageExchange.d.ts:40
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:38
+matter.js/dist/esm/protocol/MessageExchange.d.ts:38
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:42
+matter.js/dist/esm/protocol/MessageExchange.d.ts:42
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:50
+matter.js/dist/esm/protocol/MessageExchange.d.ts:50
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:48
+matter.js/dist/esm/protocol/MessageExchange.d.ts:48
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:54
+matter.js/dist/esm/protocol/MessageExchange.d.ts:54
 
 ___
 
@@ -282,7 +282,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:64
+matter.js/dist/esm/protocol/MessageExchange.d.ts:64
 
 ___
 
@@ -292,7 +292,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:53
+matter.js/dist/esm/protocol/MessageExchange.d.ts:53
 
 ___
 
@@ -302,7 +302,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:52
+matter.js/dist/esm/protocol/MessageExchange.d.ts:52
 
 ___
 
@@ -312,7 +312,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:51
+matter.js/dist/esm/protocol/MessageExchange.d.ts:51
 
 ___
 
@@ -322,7 +322,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:34
+matter.js/dist/esm/protocol/MessageExchange.d.ts:34
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:56
+matter.js/dist/esm/protocol/MessageExchange.d.ts:56
 
 ## Methods
 
@@ -346,7 +346,7 @@ matter.js/dist/cjs/protocol/MessageExchange.d.ts:56
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:67
+matter.js/dist/esm/protocol/MessageExchange.d.ts:67
 
 ___
 
@@ -360,7 +360,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:71
+matter.js/dist/esm/protocol/MessageExchange.d.ts:71
 
 ___
 
@@ -374,7 +374,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:65
+matter.js/dist/esm/protocol/MessageExchange.d.ts:65
 
 ___
 
@@ -388,7 +388,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:69
+matter.js/dist/esm/protocol/MessageExchange.d.ts:69
 
 ___
 
@@ -402,7 +402,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:70
+matter.js/dist/esm/protocol/MessageExchange.d.ts:70
 
 ___
 
@@ -416,7 +416,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:68
+matter.js/dist/esm/protocol/MessageExchange.d.ts:68
 
 ___
 
@@ -430,7 +430,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:60
+matter.js/dist/esm/protocol/MessageExchange.d.ts:60
 
 ___
 
@@ -450,7 +450,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:58
+matter.js/dist/esm/protocol/MessageExchange.d.ts:58
 
 ___
 
@@ -472,7 +472,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:59
+matter.js/dist/esm/protocol/MessageExchange.d.ts:59
 
 ___
 
@@ -492,7 +492,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:66
+matter.js/dist/esm/protocol/MessageExchange.d.ts:66
 
 ___
 
@@ -513,7 +513,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:61
+matter.js/dist/esm/protocol/MessageExchange.d.ts:61
 
 ___
 
@@ -534,7 +534,7 @@ ___
 | `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
 | `initialMessage` | [`Message`](../interfaces/internal_.Message.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -542,7 +542,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:44
+matter.js/dist/esm/protocol/MessageExchange.d.ts:44
 
 ___
 
@@ -564,7 +564,7 @@ ___
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -572,4 +572,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:45
+matter.js/dist/esm/protocol/MessageExchange.d.ts:45

@@ -45,7 +45,7 @@ Command.invokeAcl
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:129
+matter.js/dist/esm/cluster/Cluster.d.ts:129
 
 ___
 
@@ -59,7 +59,7 @@ Command.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:131
+matter.js/dist/esm/cluster/Cluster.d.ts:131
 
 ___
 
@@ -73,7 +73,7 @@ Command.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:132
+matter.js/dist/esm/cluster/Cluster.d.ts:132
 
 ___
 
@@ -87,7 +87,7 @@ Command.optional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:136
+matter.js/dist/esm/cluster/Cluster.d.ts:136
 
 ___
 
@@ -101,7 +101,7 @@ Command.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:133
+matter.js/dist/esm/cluster/Cluster.d.ts:133
 
 ___
 
@@ -115,7 +115,7 @@ Command.requestId
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:125
+matter.js/dist/esm/cluster/Cluster.d.ts:125
 
 ___
 
@@ -129,7 +129,7 @@ Command.requestSchema
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:126
+matter.js/dist/esm/cluster/Cluster.d.ts:126
 
 ___
 
@@ -143,7 +143,7 @@ Command.responseId
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:127
+matter.js/dist/esm/cluster/Cluster.d.ts:127
 
 ___
 
@@ -157,7 +157,7 @@ Command.responseSchema
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:128
+matter.js/dist/esm/cluster/Cluster.d.ts:128
 
 ___
 
@@ -171,4 +171,4 @@ Command.timed
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:130
+matter.js/dist/esm/cluster/Cluster.d.ts:130

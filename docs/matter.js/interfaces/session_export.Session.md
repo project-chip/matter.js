@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [closingAfterExchangeFinished](session_export.Session.md#closingafterexchangefinished)
 - [name](session_export.Session.md#name)
 
 ### Methods
@@ -41,13 +42,23 @@
 
 ## Properties
 
+### closingAfterExchangeFinished
+
+• **closingAfterExchangeFinished**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L32)
+
+___
+
 ### name
 
 • **name**: `string`
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:31
+[packages/matter.js/src/session/Session.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L31)
 
 ## Methods
 
@@ -67,19 +78,20 @@ packages/matter.js/src/session/Session.ts:31
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:35
+[packages/matter.js/src/session/Session.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L36)
 
 ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`): `Promise`<`void`\>
+▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `sendClose` | `boolean` |
+| `closeAfterExchangeFinished?` | `boolean` |
 
 #### Returns
 
@@ -87,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:44
+[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L45)
 
 ___
 
@@ -107,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:36
+[packages/matter.js/src/session/Session.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L37)
 
 ___
 
@@ -127,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:43
+[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L44)
 
 ___
 
@@ -141,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:47
+[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L48)
 
 ___
 
@@ -155,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:38
+[packages/matter.js/src/session/Session.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L39)
 
 ___
 
@@ -169,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:39
+[packages/matter.js/src/session/Session.ts:40](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L40)
 
 ___
 
@@ -183,7 +195,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:37
+[packages/matter.js/src/session/Session.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L38)
 
 ___
 
@@ -197,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:41
+[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L42)
 
 ___
 
@@ -211,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:42
+[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L43)
 
 ___
 
@@ -225,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:40
+[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L41)
 
 ___
 
@@ -239,7 +251,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:34
+[packages/matter.js/src/session/Session.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L35)
 
 ___
 
@@ -253,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:46
+[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L47)
 
 ___
 
@@ -267,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:33
+[packages/matter.js/src/session/Session.ts:34](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L34)
 
 ___
 
@@ -287,4 +299,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:45
+[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L46)

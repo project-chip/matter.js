@@ -42,7 +42,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:308
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:308](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L308)
 
 ## Variables
 
@@ -54,7 +54,7 @@ A ApplicationLauncherCluster supports these elements if it supports feature Appl
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:261
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:261](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L261)
 
 ___
 
@@ -66,7 +66,7 @@ These elements and properties are present in all ApplicationLauncher clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:171
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:171](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L171)
 
 ___
 
@@ -87,7 +87,7 @@ ApplicationLauncherCluster.with() factory method.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:286
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:286](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L286)
 
 ___
 
@@ -102,7 +102,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:320
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:320](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L320)
 
 ___
 
@@ -118,7 +118,7 @@ This specifies an app along with its corresponding endpoint.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:53
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L53)
 
 ___
 
@@ -134,7 +134,7 @@ This indicates a global identifier for an Application given a catalog.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:26
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L26)
 
 ___
 
@@ -150,7 +150,7 @@ Input to the ApplicationLauncher hideApp command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:144
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:144](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L144)
 
 ___
 
@@ -166,7 +166,7 @@ Input to the ApplicationLauncher launchApp command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:63
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L63)
 
 ___
 
@@ -182,7 +182,7 @@ This command shall be generated in response to LaunchApp/StopApp/HideApp command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:109
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:109](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L109)
 
 ___
 
@@ -198,4 +198,4 @@ Input to the ApplicationLauncher stopApp command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:130
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L130)

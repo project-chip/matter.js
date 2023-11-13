@@ -60,7 +60,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:23
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:23
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:22
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:22
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:27
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:27
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:26
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:26
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:21
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:21
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:25
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:25
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:24
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:24
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:31
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:31
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:32
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 ## Methods
 
@@ -154,7 +154,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:32
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:28
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:28
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:29
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:29
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:42
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:42
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:40
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:40
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -274,7 +274,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
 
 ___
 
@@ -294,7 +294,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:38
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:38
 
 ___
 
@@ -316,7 +316,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:44
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
 
 ___
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
 
 ___
 
@@ -358,7 +358,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:43
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:43
 
 ___
 
@@ -379,7 +379,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:41
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:41
 
 ___
 
@@ -401,7 +401,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
 
 ___
 
@@ -421,7 +421,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:39
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:39
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -463,7 +463,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:30
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:30
 
 ___
 
@@ -483,7 +483,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:35
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:35
 
 ___
 
@@ -503,7 +503,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:37
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:37
 
 ___
 
@@ -523,7 +523,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:36
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:36
 
 ___
 
@@ -547,7 +547,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:34
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:34
 
 ___
 
@@ -567,4 +567,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionEndpointStructure.d.ts:33
+matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33

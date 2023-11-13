@@ -58,7 +58,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ## Properties
 
@@ -85,7 +85,7 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:21
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:20
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:20
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:14
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:14
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:16
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:16
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:17
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:17
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:19
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:19
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:15
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:15
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ## Methods
 
@@ -168,4 +168,4 @@ matter.js/dist/cjs/cluster/server/CommandServer.d.ts:18
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/CommandServer.d.ts:22
+matter.js/dist/esm/cluster/server/CommandServer.d.ts:22

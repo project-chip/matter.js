@@ -50,6 +50,7 @@ host
 - [advertise](export.CommissioningServer.md#advertise)
 - [assignEndpointIds](export.CommissioningServer.md#assignendpointids)
 - [close](export.CommissioningServer.md#close)
+- [factoryReset](export.CommissioningServer.md#factoryreset)
 - [getActiveSessionInformation](export.CommissioningServer.md#getactivesessioninformation)
 - [getChildEndpoint](export.CommissioningServer.md#getchildendpoint)
 - [getCommissionedFabricInformation](export.CommissioningServer.md#getcommissionedfabricinformation)
@@ -59,10 +60,13 @@ host
 - [getRootClusterClient](export.CommissioningServer.md#getrootclusterclient)
 - [getRootClusterServer](export.CommissioningServer.md#getrootclusterserver)
 - [getRootEndpoint](export.CommissioningServer.md#getrootendpoint)
+- [initialize](export.CommissioningServer.md#initialize)
 - [isCommissioned](export.CommissioningServer.md#iscommissioned)
 - [removeCommandHandler](export.CommissioningServer.md#removecommandhandler)
 - [setMdnsBroadcaster](export.CommissioningServer.md#setmdnsbroadcaster)
 - [setMdnsScanner](export.CommissioningServer.md#setmdnsscanner)
+- [setPort](export.CommissioningServer.md#setport)
+- [setReachability](export.CommissioningServer.md#setreachability)
 - [setStorage](export.CommissioningServer.md#setstorage)
 - [start](export.CommissioningServer.md#start)
 - [updateStructure](export.CommissioningServer.md#updatestructure)
@@ -87,7 +91,7 @@ Creates a new CommissioningServer node and add all needed Root clusters
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:131
+packages/matter.js/dist/esm/CommissioningServer.d.ts:148
 
 ## Properties
 
@@ -97,7 +101,7 @@ packages/matter.js/dist/esm/CommissioningServer.d.ts:131
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:125
+packages/matter.js/dist/esm/CommissioningServer.d.ts:142
 
 ___
 
@@ -107,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:124
+packages/matter.js/dist/esm/CommissioningServer.d.ts:141
 
 ___
 
@@ -117,7 +121,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:121
+packages/matter.js/dist/esm/CommissioningServer.d.ts:137
 
 ___
 
@@ -127,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:115
+packages/matter.js/dist/esm/CommissioningServer.d.ts:131
 
 ___
 
@@ -137,7 +141,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:118
+packages/matter.js/dist/esm/CommissioningServer.d.ts:134
 
 ___
 
@@ -147,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:151
+packages/matter.js/dist/esm/CommissioningServer.d.ts:204
 
 ___
 
@@ -157,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:116
+packages/matter.js/dist/esm/CommissioningServer.d.ts:132
 
 ___
 
@@ -167,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:150
+packages/matter.js/dist/esm/CommissioningServer.d.ts:203
 
 ___
 
@@ -177,21 +181,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:122
+packages/matter.js/dist/esm/CommissioningServer.d.ts:138
 
 ___
 
 ### ipv4Disabled
 
-• **ipv4Disabled**: `boolean`
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[ipv4Disabled](export.MatterNode.md#ipv4disabled)
+• `Private` `Optional` **ipv4Disabled**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:20
+packages/matter.js/dist/esm/CommissioningServer.d.ts:128
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:120
+packages/matter.js/dist/esm/CommissioningServer.d.ts:136
 
 ___
 
@@ -211,7 +211,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:119
+packages/matter.js/dist/esm/CommissioningServer.d.ts:135
 
 ___
 
@@ -221,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:123
+packages/matter.js/dist/esm/CommissioningServer.d.ts:140
 
 ___
 
@@ -231,7 +231,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:112
+packages/matter.js/dist/esm/CommissioningServer.d.ts:127
 
 ___
 
@@ -241,17 +241,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:114
+packages/matter.js/dist/esm/CommissioningServer.d.ts:130
 
 ___
 
 ### port
 
-• `Private` `Readonly` **port**: `any`
+• `Private` `Optional` **port**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:113
+packages/matter.js/dist/esm/CommissioningServer.d.ts:129
 
 ___
 
@@ -259,13 +259,9 @@ ___
 
 • `Protected` `Readonly` **rootEndpoint**: [`RootEndpoint`](exports_device.RootEndpoint.md)
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[rootEndpoint](export.MatterNode.md#rootendpoint)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:19
+packages/matter.js/dist/esm/CommissioningServer.d.ts:139
 
 ___
 
@@ -275,7 +271,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:117
+packages/matter.js/dist/esm/CommissioningServer.d.ts:133
 
 ## Methods
 
@@ -304,7 +300,7 @@ Add a new command handler for the given command
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:197
+packages/matter.js/dist/esm/CommissioningServer.d.ts:253
 
 ___
 
@@ -326,7 +322,7 @@ Add a new device to the node
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:182
+packages/matter.js/dist/esm/CommissioningServer.d.ts:235
 
 ___
 
@@ -346,13 +342,9 @@ Add a child endpoint to the root endpoint. This is mainly used internally and no
 
 `void`
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[addEndpoint](export.MatterNode.md#addendpoint)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:55
+packages/matter.js/dist/esm/CommissioningServer.d.ts:177
 
 ___
 
@@ -381,13 +373,9 @@ Add a cluster client to the root endpoint. This is mainly used internally and no
 
 `void`
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[addRootClusterClient](export.MatterNode.md#addrootclusterclient)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:38
+packages/matter.js/dist/esm/CommissioningServer.d.ts:160
 
 ___
 
@@ -416,13 +404,9 @@ added in the constructor
 
 `void`
 
-#### Overrides
-
-[MatterNode](export.MatterNode.md).[addRootClusterServer](export.MatterNode.md#addrootclusterserver)
-
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:139
+packages/matter.js/dist/esm/CommissioningServer.d.ts:192
 
 ___
 
@@ -444,7 +428,7 @@ Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and st
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:146
+packages/matter.js/dist/esm/CommissioningServer.d.ts:199
 
 ___
 
@@ -458,7 +442,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:149
+packages/matter.js/dist/esm/CommissioningServer.d.ts:202
 
 ___
 
@@ -466,7 +450,7 @@ ___
 
 ▸ **close**(): `Promise`<`void`\>
 
-close network connections of the device
+Close network connections of the device and stop responding to requests
 
 #### Returns
 
@@ -478,23 +462,43 @@ close network connections of the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:190
+packages/matter.js/dist/esm/CommissioningServer.d.ts:245
+
+___
+
+### factoryReset
+
+▸ **factoryReset**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningServer.d.ts:246
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(`fabricIndex?`): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 Get some basic details of all currently active sessions.
 
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fabricIndex?` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) | Optional fabric index to filter for. If not set all sessions are returned. |
+
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:215
+packages/matter.js/dist/esm/CommissioningServer.d.ts:290
 
 ___
 
@@ -514,29 +518,31 @@ Get a child endpoint from the root endpoint. This is mainly used internally and 
 
 `undefined` \| [`Endpoint`](exports_device.Endpoint.md)
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getChildEndpoint](export.MatterNode.md#getchildendpoint)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:62
+packages/matter.js/dist/esm/CommissioningServer.d.ts:184
 
 ___
 
 ### getCommissionedFabricInformation
 
-▸ **getCommissionedFabricInformation**(): { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  }[]
+▸ **getCommissionedFabricInformation**(`fabricIndex?`): { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  }[]
 
 Get some basic details of all Fabrics the server is commissioned to.
 
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fabricIndex?` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) | Optional fabric index to filter for. If not set all fabrics are returned. |
+
 #### Returns
 
-{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  }[]
+{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:207
+packages/matter.js/dist/esm/CommissioningServer.d.ts:277
 
 ___
 
@@ -556,7 +562,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:148
+packages/matter.js/dist/esm/CommissioningServer.d.ts:201
 
 ___
 
@@ -578,19 +584,19 @@ Return the pairing information for the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:159
+packages/matter.js/dist/esm/CommissioningServer.d.ts:212
 
 ___
 
 ### getPort
 
-▸ **getPort**(): `number`
+▸ **getPort**(): `undefined` \| `number`
 
 Return the port the device is listening on
 
 #### Returns
 
-`number`
+`undefined` \| `number`
 
 #### Overrides
 
@@ -598,7 +604,7 @@ Return the port the device is listening on
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:186
+packages/matter.js/dist/esm/CommissioningServer.d.ts:239
 
 ___
 
@@ -628,13 +634,9 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getRootClusterClient](export.MatterNode.md#getrootclusterclient)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:44
+packages/matter.js/dist/esm/CommissioningServer.d.ts:166
 
 ___
 
@@ -664,13 +666,9 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getRootClusterServer](export.MatterNode.md#getrootclusterserver)
-
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:32
+packages/matter.js/dist/esm/CommissioningServer.d.ts:154
 
 ___
 
@@ -684,13 +682,35 @@ Get the root endpoint of the node.
 
 [`RootEndpoint`](exports_device.RootEndpoint.md)
 
-#### Inherited from
+#### Defined in
 
-[MatterNode](export.MatterNode.md).[getRootEndpoint](export.MatterNode.md#getrootendpoint)
+packages/matter.js/dist/esm/CommissioningServer.d.ts:170
+
+___
+
+### initialize
+
+▸ **initialize**(`ipv4Disabled`): `void`
+
+used internally by MatterServer to initialize the state of the device.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ipv4Disabled` | `boolean` |
+
+#### Returns
+
+`void`
+
+#### Overrides
+
+[MatterNode](export.MatterNode.md).[initialize](export.MatterNode.md#initialize)
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:48
+packages/matter.js/dist/esm/CommissioningServer.d.ts:269
 
 ___
 
@@ -706,7 +726,7 @@ Return info if the device is paired with at least one controller
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:155
+packages/matter.js/dist/esm/CommissioningServer.d.ts:208
 
 ___
 
@@ -735,7 +755,7 @@ Remove a command handler for the given command
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:204
+packages/matter.js/dist/esm/CommissioningServer.d.ts:260
 
 ___
 
@@ -761,7 +781,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:171
+packages/matter.js/dist/esm/CommissioningServer.d.ts:224
 
 ___
 
@@ -787,7 +807,52 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:165
+packages/matter.js/dist/esm/CommissioningServer.d.ts:218
+
+___
+
+### setPort
+
+▸ **setPort**(`port`): `void`
+
+Set the port the device is listening on. Can only be called before the device is initialized.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `port` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningServer.d.ts:241
+
+___
+
+### setReachability
+
+▸ **setReachability**(`reachable`): `void`
+
+Set the reachability of the commissioning server aka "the main matter device". This call only has effect when
+the reachability flag was set in the BasicInformationCluster or in the BasicInformation data in the constructor!
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `reachable` | `boolean` | true if reachable, false otherwise |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningServer.d.ts:267
 
 ___
 
@@ -809,13 +874,15 @@ Set the StorageManager instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:176
+packages/matter.js/dist/esm/CommissioningServer.d.ts:229
 
 ___
 
 ### start
 
 ▸ **start**(): `Promise`<`void`\>
+
+Starts the Matter device and advertises it.
 
 #### Returns
 
@@ -827,7 +894,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:205
+packages/matter.js/dist/esm/CommissioningServer.d.ts:271
 
 ___
 
@@ -841,4 +908,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:147
+packages/matter.js/dist/esm/CommissioningServer.d.ts:200

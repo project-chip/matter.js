@@ -17,10 +17,13 @@
 
 ### Methods
 
+- [clear](internal_.StorageContext.md#clear)
+- [clearAll](internal_.StorageContext.md#clearall)
 - [createContext](internal_.StorageContext.md#createcontext)
 - [delete](internal_.StorageContext.md#delete)
 - [get](internal_.StorageContext.md#get)
 - [has](internal_.StorageContext.md#has)
+- [keys](internal_.StorageContext.md#keys)
 - [set](internal_.StorageContext.md#set)
 
 ## Constructors
@@ -38,7 +41,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:11
+matter.js/dist/esm/storage/StorageContext.d.ts:11
 
 ## Properties
 
@@ -48,7 +51,7 @@ matter.js/dist/cjs/storage/StorageContext.d.ts:11
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:10
+matter.js/dist/esm/storage/StorageContext.d.ts:10
 
 ___
 
@@ -58,9 +61,41 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:9
+matter.js/dist/esm/storage/StorageContext.d.ts:9
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+Clears all keys in this context
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:19
+
+___
+
+### clearAll
+
+▸ **clearAll**(): `void`
+
+Clears all keys in this context and all created sub-contexts.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:21
+
+___
 
 ### createContext
 
@@ -78,7 +113,7 @@ matter.js/dist/cjs/storage/StorageContext.d.ts:9
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:16
+matter.js/dist/esm/storage/StorageContext.d.ts:16
 
 ___
 
@@ -98,7 +133,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:15
+matter.js/dist/esm/storage/StorageContext.d.ts:15
 
 ___
 
@@ -125,7 +160,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:12
+matter.js/dist/esm/storage/StorageContext.d.ts:12
 
 ___
 
@@ -145,7 +180,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:13
+matter.js/dist/esm/storage/StorageContext.d.ts:13
+
+___
+
+### keys
+
+▸ **keys**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+matter.js/dist/esm/storage/StorageContext.d.ts:17
 
 ___
 
@@ -172,4 +221,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StorageContext.d.ts:14
+matter.js/dist/esm/storage/StorageContext.d.ts:14
