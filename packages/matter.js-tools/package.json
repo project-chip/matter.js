@@ -59,7 +59,7 @@
     },
     "devDependencies": {
         "@types/chai": "^4.3.10",
-        "@types/chai-as-promised": "^7.1.6",
+        "@types/chai-as-promised": "^7.1.8",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.3",
         "@types/npmcli__map-workspaces": "^3.0.3",
