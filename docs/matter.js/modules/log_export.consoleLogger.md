@@ -20,4 +20,4 @@ The target for consoleLogger.
 
 #### Defined in
 
-packages/matter.js/src/log/Logger.ts:198
+[packages/matter.js/src/log/Logger.ts:198](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L198)

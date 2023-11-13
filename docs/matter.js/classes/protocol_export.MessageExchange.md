@@ -84,11 +84,11 @@
 | `peerNodeId` | `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:125
+[packages/matter.js/src/protocol/MessageExchange.ts:125](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L125)
 
 ## Properties
 
@@ -98,7 +98,7 @@ packages/matter.js/src/protocol/MessageExchange.ts:125
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:113
+[packages/matter.js/src/protocol/MessageExchange.ts:113](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L113)
 
 ___
 
@@ -108,25 +108,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:127
+[packages/matter.js/src/protocol/MessageExchange.ts:127](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L127)
 
 ___
 
 ### closeCallback
 
-• `Private` `Readonly` **closeCallback**: () => `void`
+• `Private` `Readonly` **closeCallback**: () => `Promise`<`void`\>
 
 #### Type declaration
 
-▸ (): `void`
+▸ (): `Promise`<`void`\>
 
 ##### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:135
+[packages/matter.js/src/protocol/MessageExchange.ts:135](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L135)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:122
+[packages/matter.js/src/protocol/MessageExchange.ts:122](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L122)
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:133
+[packages/matter.js/src/protocol/MessageExchange.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L133)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:114
+[packages/matter.js/src/protocol/MessageExchange.ts:114](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L114)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:129
+[packages/matter.js/src/protocol/MessageExchange.ts:129](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L129)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:128
+[packages/matter.js/src/protocol/MessageExchange.ts:128](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L128)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:116
+[packages/matter.js/src/protocol/MessageExchange.ts:116](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L116)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:131
+[packages/matter.js/src/protocol/MessageExchange.ts:131](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L131)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:132
+[packages/matter.js/src/protocol/MessageExchange.ts:132](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L132)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:130
+[packages/matter.js/src/protocol/MessageExchange.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L130)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:134
+[packages/matter.js/src/protocol/MessageExchange.ts:134](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L134)
 
 ___
 
@@ -236,7 +236,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:117
+[packages/matter.js/src/protocol/MessageExchange.ts:117](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L117)
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:115
+[packages/matter.js/src/protocol/MessageExchange.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L115)
 
 ___
 
@@ -256,7 +256,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:121
+[packages/matter.js/src/protocol/MessageExchange.ts:121](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L121)
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:120
+[packages/matter.js/src/protocol/MessageExchange.ts:120](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L120)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:119
+[packages/matter.js/src/protocol/MessageExchange.ts:119](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L119)
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:118
+[packages/matter.js/src/protocol/MessageExchange.ts:118](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L118)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:126
+[packages/matter.js/src/protocol/MessageExchange.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L126)
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:123
+[packages/matter.js/src/protocol/MessageExchange.ts:123](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L123)
 
 ## Methods
 
@@ -320,7 +320,7 @@ packages/matter.js/src/protocol/MessageExchange.ts:123
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:374
+[packages/matter.js/src/protocol/MessageExchange.ts:376](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L376)
 
 ___
 
@@ -334,21 +334,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:394
+[packages/matter.js/src/protocol/MessageExchange.ts:396](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L396)
 
 ___
 
 ### closeInternal
 
-▸ `Private` **closeInternal**(): `void`
+▸ `Private` **closeInternal**(): `Promise`<`void`\>
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:407
+[packages/matter.js/src/protocol/MessageExchange.ts:411](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L411)
 
 ___
 
@@ -362,7 +362,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:345
+[packages/matter.js/src/protocol/MessageExchange.ts:347](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L347)
 
 ___
 
@@ -386,7 +386,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:298
+[packages/matter.js/src/protocol/MessageExchange.ts:300](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L300)
 
 ___
 
@@ -400,7 +400,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:386
+[packages/matter.js/src/protocol/MessageExchange.ts:388](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L388)
 
 ___
 
@@ -414,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:390
+[packages/matter.js/src/protocol/MessageExchange.ts:392](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L392)
 
 ___
 
@@ -428,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:382
+[packages/matter.js/src/protocol/MessageExchange.ts:384](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L384)
 
 ___
 
@@ -442,7 +442,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:279
+[packages/matter.js/src/protocol/MessageExchange.ts:281](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L281)
 
 ___
 
@@ -462,7 +462,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:154
+[packages/matter.js/src/protocol/MessageExchange.ts:156](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L156)
 
 ___
 
@@ -484,7 +484,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:310
+[packages/matter.js/src/protocol/MessageExchange.ts:312](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L312)
 
 ___
 
@@ -506,7 +506,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:214
+[packages/matter.js/src/protocol/MessageExchange.ts:216](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L216)
 
 ___
 
@@ -526,7 +526,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:356
+[packages/matter.js/src/protocol/MessageExchange.ts:358](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L358)
 
 ___
 
@@ -547,7 +547,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:283
+[packages/matter.js/src/protocol/MessageExchange.ts:285](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L285)
 
 ___
 
@@ -568,7 +568,7 @@ ___
 | `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
 | `initialMessage` | [`Message`](../interfaces/codec_export.Message.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -576,7 +576,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:70
+[packages/matter.js/src/protocol/MessageExchange.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L70)
 
 ___
 
@@ -598,7 +598,7 @@ ___
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -606,4 +606,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/MessageExchange.ts:91
+[packages/matter.js/src/protocol/MessageExchange.ts:91](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/MessageExchange.ts#L91)

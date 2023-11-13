@@ -28,4 +28,4 @@ limited to, leaf wetness, relative humidity, and soil moisture.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:25
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L25)

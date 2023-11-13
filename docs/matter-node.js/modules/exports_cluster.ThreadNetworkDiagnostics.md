@@ -46,7 +46,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2272
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2280
 
 ## Variables
 
@@ -97,7 +97,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2287
+packages/matter.js/dist/esm/cluster/definitions/ThreadNetworkDiagnosticsCluster.d.ts:2295
 
 ___
 

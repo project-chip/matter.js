@@ -4,7 +4,7 @@
 
 [export](../modules/export.md).CommissioningController
 
-Abstract base class that represents a node in the matter ecosystem.
+Controller class to commission and connect multiple nodes into one fabric.
 
 ## Hierarchy
 
@@ -20,46 +20,46 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ### Properties
 
+- [connectedNodes](export.CommissioningController.md#connectednodes)
 - [controllerInstance](export.CommissioningController.md#controllerinstance)
-- [createDevice](export.CommissioningController.md#createdevice)
-- [createInteractionClient](export.CommissioningController.md#createinteractionclient)
-- [endpoints](export.CommissioningController.md#endpoints)
-- [initializeEndpointStructure](export.CommissioningController.md#initializeendpointstructure)
-- [interactionClient](export.CommissioningController.md#interactionclient)
+- [initializeController](export.CommissioningController.md#initializecontroller)
 - [ipv4Disabled](export.CommissioningController.md#ipv4disabled)
 - [listeningAddressIpv4](export.CommissioningController.md#listeningaddressipv4)
 - [listeningAddressIpv6](export.CommissioningController.md#listeningaddressipv6)
 - [mdnsScanner](export.CommissioningController.md#mdnsscanner)
-- [nodeId](export.CommissioningController.md#nodeid)
 - [options](export.CommissioningController.md#options)
-- [rootEndpoint](export.CommissioningController.md#rootendpoint)
-- [serverAddress](export.CommissioningController.md#serveraddress)
+- [sessionDisconnectedHandler](export.CommissioningController.md#sessiondisconnectedhandler)
+- [started](export.CommissioningController.md#started)
 - [storage](export.CommissioningController.md#storage)
-- [structureEndpoints](export.CommissioningController.md#structureendpoints)
+
+### Accessors
+
+- [nodeId](export.CommissioningController.md#nodeid)
 
 ### Methods
 
-- [addEndpoint](export.CommissioningController.md#addendpoint)
-- [addRootClusterClient](export.CommissioningController.md#addrootclusterclient)
-- [addRootClusterServer](export.CommissioningController.md#addrootclusterserver)
+- [assertControllerIsStarted](export.CommissioningController.md#assertcontrollerisstarted)
+- [assertIsAddedToMatterServer](export.CommissioningController.md#assertisaddedtomatterserver)
 - [close](export.CommissioningController.md#close)
+- [commissionNode](export.CommissioningController.md#commissionnode)
 - [connect](export.CommissioningController.md#connect)
+- [connectNode](export.CommissioningController.md#connectnode)
+- [createInteractionClient](export.CommissioningController.md#createinteractionclient)
+- [disconnectNode](export.CommissioningController.md#disconnectnode)
+- [discoverCommissionableDevices](export.CommissioningController.md#discovercommissionabledevices)
 - [getActiveSessionInformation](export.CommissioningController.md#getactivesessioninformation)
-- [getChildEndpoint](export.CommissioningController.md#getchildendpoint)
-- [getDevices](export.CommissioningController.md#getdevices)
-- [getFabric](export.CommissioningController.md#getfabric)
-- [getInteractionClient](export.CommissioningController.md#getinteractionclient)
+- [getCommissionedNodes](export.CommissioningController.md#getcommissionednodes)
+- [getConnectedNode](export.CommissioningController.md#getconnectednode)
 - [getPort](export.CommissioningController.md#getport)
-- [getRootClusterClient](export.CommissioningController.md#getrootclusterclient)
-- [getRootClusterServer](export.CommissioningController.md#getrootclusterserver)
-- [getRootEndpoint](export.CommissioningController.md#getrootendpoint)
-- [initializeAfterConnect](export.CommissioningController.md#initializeafterconnect)
+- [initialize](export.CommissioningController.md#initialize)
 - [isCommissioned](export.CommissioningController.md#iscommissioned)
+- [isNodeCommissioned](export.CommissioningController.md#isnodecommissioned)
+- [removeNode](export.CommissioningController.md#removenode)
+- [resetStorage](export.CommissioningController.md#resetstorage)
 - [setMdnsBroadcaster](export.CommissioningController.md#setmdnsbroadcaster)
 - [setMdnsScanner](export.CommissioningController.md#setmdnsscanner)
 - [setStorage](export.CommissioningController.md#setstorage)
 - [start](export.CommissioningController.md#start)
-- [subscribeAllAttributesAndEvents](export.CommissioningController.md#subscribeallattributesandevents)
 
 ## Constructors
 
@@ -73,7 +73,7 @@ Creates a new CommissioningController instance
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `options` | [`CommissioningControllerOptions`](../interfaces/export.CommissioningControllerOptions.md) | The options for the CommissioningController |
+| `options` | [`CommissioningControllerOptions`](../modules/export.md#commissioningcontrolleroptions) | The options for the CommissioningController |
 
 #### Overrides
 
@@ -81,9 +81,19 @@ Creates a new CommissioningController instance
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:44
+packages/matter.js/dist/esm/CommissioningController.d.ts:106
 
 ## Properties
+
+### connectedNodes
+
+• `Private` **connectedNodes**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:99
+
+___
 
 ### controllerInstance
 
@@ -91,85 +101,29 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:44
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:35
+packages/matter.js/dist/esm/CommissioningController.d.ts:98
 
 ___
 
-### createDevice
+### initializeController
 
-• `Private` **createDevice**: `any`
+• `Private` **initializeController**: `any`
 
-Create a device object from the data read from the device.
-
-**`Param`**
-
-Endpoint ID
-
-**`Param`**
-
-Data of all clusters read from the device
+Internal method to initialize a MatterController instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:104
-
-___
-
-### createInteractionClient
-
-• `Private` **createInteractionClient**: `any`
-
-Creates and Return a new InteractionClient to communicate with the device.
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:83
-
-___
-
-### endpoints
-
-• `Private` **endpoints**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:38
-
-___
-
-### initializeEndpointStructure
-
-• `Private` **initializeEndpointStructure**: `any`
-
-Read all data from the device and create a device object structure out of it.
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:89
-
-___
-
-### interactionClient
-
-• `Private` `Optional` **interactionClient**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:36
+packages/matter.js/dist/esm/CommissioningController.d.ts:114
 
 ___
 
 ### ipv4Disabled
 
-• **ipv4Disabled**: `boolean`
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[ipv4Disabled](export.MatterNode.md#ipv4disabled)
+• `Private` `Optional` **ipv4Disabled**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:20
+packages/matter.js/dist/esm/CommissioningController.d.ts:93
 
 ___
 
@@ -179,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:31
+packages/matter.js/dist/esm/CommissioningController.d.ts:94
 
 ___
 
@@ -189,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:32
+packages/matter.js/dist/esm/CommissioningController.d.ts:95
 
 ___
 
@@ -199,17 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:34
-
-___
-
-### nodeId
-
-• `Private` `Optional` **nodeId**: `any`
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:37
+packages/matter.js/dist/esm/CommissioningController.d.ts:97
 
 ___
 
@@ -219,31 +163,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:29
+packages/matter.js/dist/esm/CommissioningController.d.ts:91
 
 ___
 
-### rootEndpoint
+### sessionDisconnectedHandler
 
-• `Protected` `Readonly` **rootEndpoint**: [`RootEndpoint`](exports_device.RootEndpoint.md)
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[rootEndpoint](export.MatterNode.md#rootendpoint)
+• `Private` **sessionDisconnectedHandler**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:19
+packages/matter.js/dist/esm/CommissioningController.d.ts:100
 
 ___
 
-### serverAddress
+### started
 
-• `Optional` **serverAddress**: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)
+• `Private` **started**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:30
+packages/matter.js/dist/esm/CommissioningController.d.ts:92
 
 ___
 
@@ -253,117 +193,60 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:33
+packages/matter.js/dist/esm/CommissioningController.d.ts:96
 
-___
+## Accessors
 
-### structureEndpoints
+### nodeId
 
-• `Private` **structureEndpoints**: `any`
+• `get` **nodeId**(): `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
-Bring the endpoints in a structure based on their partsList attribute.
+#### Returns
 
-**`Param`**
-
-A Map  of the partsList attributes of all endpoints to structure
+`undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:96
+packages/matter.js/dist/esm/CommissioningController.d.ts:107
 
 ## Methods
 
-### addEndpoint
+### assertControllerIsStarted
 
-▸ `Protected` **addEndpoint**(`endpoint`): `void`
-
-Add a child endpoint to the root endpoint. This is mainly used internally and not needed to be called by the user.
+▸ **assertControllerIsStarted**(`errorText?`): [`MatterController`](export._internal_.MatterController.md)
 
 #### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `endpoint` | [`Endpoint`](exports_device.Endpoint.md) | Endpoint to add |
-
-#### Returns
-
-`void`
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[addEndpoint](export.MatterNode.md#addendpoint)
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterNode.d.ts:55
-
-___
-
-### addRootClusterClient
-
-▸ **addRootClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
-
-Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the user.
-
-#### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\> | ClusterClient object to add |
+| `errorText?` | `string` |
 
 #### Returns
 
-`void`
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[addRootClusterClient](export.MatterNode.md#addrootclusterclient)
+[`MatterController`](export._internal_.MatterController.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:38
+packages/matter.js/dist/esm/CommissioningController.d.ts:112
 
 ___
 
-### addRootClusterServer
+### assertIsAddedToMatterServer
 
-▸ **addRootClusterServer**<`A`, `E`\>(`cluster`): `void`
-
-Add a cluster to the root endpoint. This is mainly used internally and not needed to be called by the user.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\> | ClusterServer object to add |
+▸ **assertIsAddedToMatterServer**(): `Object`
 
 #### Returns
 
-`void`
+`Object`
 
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[addRootClusterServer](export.MatterNode.md#addrootclusterserver)
+| Name | Type |
+| :------ | :------ |
+| `mdnsScanner` | [`MdnsScanner`](exports_mdns.MdnsScanner.md) |
+| `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:26
+packages/matter.js/dist/esm/CommissioningController.d.ts:108
 
 ___
 
@@ -371,7 +254,7 @@ ___
 
 ▸ **close**(): `Promise`<`void`\>
 
-close network connections of the device
+Disconnects all connected nodes and Closes the network connections and other resources of the controller.
 
 #### Returns
 
@@ -383,16 +266,106 @@ close network connections of the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:112
+packages/matter.js/dist/esm/CommissioningController.d.ts:170
+
+___
+
+### commissionNode
+
+▸ **commissionNode**(`nodeOptions`): `Promise`<[`PairedNode`](exports_device.PairedNode.md)\>
+
+Commissions/Pairs a new device into the controller fabric. The method returns a PairedNode instance of the
+paired node on success.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeOptions` | [`NodeCommissioningOptions`](../modules/export.md#nodecommissioningoptions) |
+
+#### Returns
+
+`Promise`<[`PairedNode`](exports_device.PairedNode.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:119
 
 ___
 
 ### connect
 
-▸ **connect**(): `Promise`<`void`\>
+▸ **connect**(): `Promise`<[`PairedNode`](exports_device.PairedNode.md)[]\>
 
-Connects to the device. This includes pairing with the device if not yet paired.
+Connects to all paired nodes.
 After connection the endpoint data of the device is analyzed and an object structure is created.
+
+#### Returns
+
+`Promise`<[`PairedNode`](exports_device.PairedNode.md)[]\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:139
+
+___
+
+### connectNode
+
+▸ **connectNode**(`nodeId`, `connectOptions?`): `Promise`<[`PairedNode`](exports_device.PairedNode.md)\>
+
+Connect to an already paired Node.
+After connection the endpoint data of the device is analyzed and an object structure is created.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `connectOptions?` | [`CommissioningControllerNodeOptions`](../modules/exports_device.md#commissioningcontrollernodeoptions) |
+
+#### Returns
+
+`Promise`<[`PairedNode`](exports_device.PairedNode.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:134
+
+___
+
+### createInteractionClient
+
+▸ **createInteractionClient**(`nodeId`): `Promise`<[`InteractionClient`](exports_interaction.InteractionClient.md)\>
+
+Creates and Return a new InteractionClient to communicate with a node. This is mainly used internally and should
+not be used directly. See the PairedNode class for the public API.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+
+#### Returns
+
+`Promise`<[`InteractionClient`](exports_interaction.InteractionClient.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:164
+
+___
+
+### disconnectNode
+
+▸ **disconnectNode**(`nodeId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
@@ -400,103 +373,94 @@ After connection the endpoint data of the device is analyzed and an object struc
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:49
+packages/matter.js/dist/esm/CommissioningController.d.ts:129
+
+___
+
+### discoverCommissionableDevices
+
+▸ **discoverCommissionableDevices**(`identifierData`, `discoveryCapabilities?`, `discoveredCallback?`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+| `discoveredCallback?` | (`device`: [`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)) => `void` |
+| `timeoutSeconds?` | `number` |
+
+#### Returns
+
+`Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:175
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+
+Returns active session information for all connected nodes.
 
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:115
+packages/matter.js/dist/esm/CommissioningController.d.ts:178
 
 ___
 
-### getChildEndpoint
+### getCommissionedNodes
 
-▸ `Protected` **getChildEndpoint**(`endpointId`): `undefined` \| [`Endpoint`](exports_device.Endpoint.md)
+▸ **getCommissionedNodes**(): [`NodeId`](../modules/exports_datatype.md#nodeid)[]
 
-Get a child endpoint from the root endpoint. This is mainly used internally and not needed to be called by the user.
+Returns an array with the Node Ids for all commissioned nodes.
+
+#### Returns
+
+[`NodeId`](../modules/exports_datatype.md#nodeid)[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:168
+
+___
+
+### getConnectedNode
+
+▸ **getConnectedNode**(`nodeId`): `undefined` \| [`PairedNode`](exports_device.PairedNode.md)
+
+Returns the PairedNode instance for a given node id, if this node is connected.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | Endpoint ID of the child endpoint to get |
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
-`undefined` \| [`Endpoint`](exports_device.Endpoint.md)
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getChildEndpoint](export.MatterNode.md#getchildendpoint)
+`undefined` \| [`PairedNode`](exports_device.PairedNode.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:62
-
-___
-
-### getDevices
-
-▸ **getDevices**(): [`Endpoint`](exports_device.Endpoint.md)[]
-
-Returns the devices known to the controller.
-
-#### Returns
-
-[`Endpoint`](exports_device.Endpoint.md)[]
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:108
-
-___
-
-### getFabric
-
-▸ **getFabric**(): [`Fabric`](exports_fabric.Fabric.md)
-
-Returns the paired Fabric object of the node
-
-#### Returns
-
-[`Fabric`](exports_fabric.Fabric.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:75
-
-___
-
-### getInteractionClient
-
-▸ **getInteractionClient**(): [`InteractionClient`](exports_interaction.InteractionClient.md)
-
-#### Returns
-
-[`InteractionClient`](exports_interaction.InteractionClient.md)
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:132
+packages/matter.js/dist/esm/CommissioningController.d.ts:166
 
 ___
 
 ### getPort
 
-▸ **getPort**(): `undefined`
+▸ **getPort**(): `undefined` \| `number`
 
 #### Returns
 
-`undefined`
+`undefined` \| `number`
 
 #### Overrides
 
@@ -504,113 +468,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:113
+packages/matter.js/dist/esm/CommissioningController.d.ts:171
 
 ___
 
-### getRootClusterClient
+### initialize
 
-▸ **getRootClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
-
-Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+▸ **initialize**(`ipv4Disabled`): `void`
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
-
-#### Returns
-
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getRootClusterClient](export.MatterNode.md#getrootclusterclient)
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterNode.d.ts:44
-
-___
-
-### getRootClusterServer
-
-▸ **getRootClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
-
-Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
-
-#### Type parameters
-
 | Name | Type |
 | :------ | :------ |
-| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
-| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+| `ipv4Disabled` | `boolean` |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+`void`
 
-#### Inherited from
+#### Overrides
 
-[MatterNode](export.MatterNode.md).[getRootClusterServer](export.MatterNode.md#getrootclusterserver)
-
-#### Defined in
-
-packages/matter.js/dist/esm/MatterNode.d.ts:32
-
-___
-
-### getRootEndpoint
-
-▸ **getRootEndpoint**(): [`RootEndpoint`](exports_device.RootEndpoint.md)
-
-Get the root endpoint of the node.
-
-#### Returns
-
-[`RootEndpoint`](exports_device.RootEndpoint.md)
-
-#### Inherited from
-
-[MatterNode](export.MatterNode.md).[getRootEndpoint](export.MatterNode.md#getrootendpoint)
+[MatterNode](export.MatterNode.md).[initialize](export.MatterNode.md#initialize)
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterNode.d.ts:48
-
-___
-
-### initializeAfterConnect
-
-▸ **initializeAfterConnect**(): `Promise`<`void`\>
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:54
+packages/matter.js/dist/esm/CommissioningController.d.ts:172
 
 ___
 
@@ -618,7 +500,7 @@ ___
 
 ▸ **isCommissioned**(): `boolean`
 
-Return info if a device is successfully paired.
+Returns true if t least one node is commissioned/paired with this controller instance.
 
 #### Returns
 
@@ -626,7 +508,69 @@ Return info if a device is successfully paired.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:79
+packages/matter.js/dist/esm/CommissioningController.d.ts:159
+
+___
+
+### isNodeCommissioned
+
+▸ **isNodeCommissioned**(`nodeId`): `boolean`
+
+Check if a given node id is commissioned on this controller.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:121
+
+___
+
+### removeNode
+
+▸ **removeNode**(`nodeId`, `tryDecommissioning?`): `Promise`<`void`\>
+
+Remove a Node id from the controller. This method should only be used if the decommission method on the
+PairedNode instance returns an error. By default it tries to decommission the node from the controller but will
+remove it also in case of an error during decommissioning. Ideally try to decommission the node before and only
+use this in case of an error.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `tryDecommissioning?` | `boolean` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:128
+
+___
+
+### resetStorage
+
+▸ **resetStorage**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:176
 
 ___
 
@@ -652,7 +596,7 @@ Set the MDNS Broadcaster instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:66
+packages/matter.js/dist/esm/CommissioningController.d.ts:151
 
 ___
 
@@ -678,7 +622,7 @@ Set the MDNS Scanner instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:60
+packages/matter.js/dist/esm/CommissioningController.d.ts:145
 
 ___
 
@@ -700,13 +644,15 @@ Set the Storage instance. Should be only used internally
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:71
+packages/matter.js/dist/esm/CommissioningController.d.ts:157
 
 ___
 
 ### start
 
 ▸ **start**(): `Promise`<`void`\>
+
+Initialize the controller and connect to all commissioned nodes if autoConnect is not set to false.
 
 #### Returns
 
@@ -718,24 +664,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:114
-
-___
-
-### subscribeAllAttributesAndEvents
-
-▸ **subscribeAllAttributesAndEvents**(`ignoreInitialTriggers`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/exports_interaction.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/exports_interaction.md#decodedeventreportvalue)<`any`\>[]  }\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `ignoreInitialTriggers` | `boolean` |
-
-#### Returns
-
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/exports_interaction.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/exports_interaction.md#decodedeventreportvalue)<`any`\>[]  }\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/CommissioningController.d.ts:50
+packages/matter.js/dist/esm/CommissioningController.d.ts:174

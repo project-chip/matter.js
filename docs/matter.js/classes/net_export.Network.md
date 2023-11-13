@@ -49,7 +49,7 @@
 
 #### Defined in
 
-packages/matter.js/src/net/Network.ts:13
+[packages/matter.js/src/net/Network.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/Network.ts#L13)
 
 ## Methods
 
@@ -63,7 +63,7 @@ packages/matter.js/src/net/Network.ts:13
 
 #### Defined in
 
-packages/matter.js/src/net/Network.ts:21
+[packages/matter.js/src/net/Network.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/Network.ts#L21)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/Network.ts:19
+[packages/matter.js/src/net/Network.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/Network.ts#L19)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/Network.ts:18
+[packages/matter.js/src/net/Network.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/Network.ts#L18)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/Network.ts:17
+[packages/matter.js/src/net/Network.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/Network.ts#L17)

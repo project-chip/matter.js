@@ -16,6 +16,7 @@
 - [SecureChannelMessenger](../classes/exports_securechannel.SecureChannelMessenger.md)
 - [SecureChannelProtocol](../classes/exports_securechannel.SecureChannelProtocol.md)
 - [SecureChannelStatusMessageSchema](../classes/exports_securechannel.SecureChannelStatusMessageSchema.md)
+- [StatusReportOnlySecureChannelProtocol](../classes/exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
 
 ### Type Aliases
 

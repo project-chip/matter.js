@@ -14,6 +14,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 ### Properties
 
+- [adminVendorId](exports_protocol.ControllerCommissioner.md#adminvendorid)
 - [armFailsafe](exports_protocol.ControllerCommissioner.md#armfailsafe)
 - [certificateManager](exports_protocol.ControllerCommissioner.md#certificatemanager)
 - [certificates](exports_protocol.ControllerCommissioner.md#certificates)
@@ -31,6 +32,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 - [configureRegulatoryInformation](exports_protocol.ControllerCommissioner.md#configureregulatoryinformation)
 - [deviceAttestation](exports_protocol.ControllerCommissioner.md#deviceattestation)
 - [ensureGeneralCommissioningSuccess](exports_protocol.ControllerCommissioner.md#ensuregeneralcommissioningsuccess)
+- [ensureOperationalCredentialsSuccess](exports_protocol.ControllerCommissioner.md#ensureoperationalcredentialssuccess)
 - [fabric](exports_protocol.ControllerCommissioner.md#fabric)
 - [failSafeTimeMs](exports_protocol.ControllerCommissioner.md#failsafetimems)
 - [getClusterClient](exports_protocol.ControllerCommissioner.md#getclusterclient)
@@ -39,6 +41,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 - [interactionClient](exports_protocol.ControllerCommissioner.md#interactionclient)
 - [lastBreadcrumb](exports_protocol.ControllerCommissioner.md#lastbreadcrumb)
 - [lastFailSafeTime](exports_protocol.ControllerCommissioner.md#lastfailsafetime)
+- [nodeId](exports_protocol.ControllerCommissioner.md#nodeid)
 - [reconnectWithDevice](exports_protocol.ControllerCommissioner.md#reconnectwithdevice)
 - [reconnectWithDeviceCallback](exports_protocol.ControllerCommissioner.md#reconnectwithdevicecallback)
 - [resetFailsafeTimer](exports_protocol.ControllerCommissioner.md#resetfailsafetimer)
@@ -56,7 +59,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 ### constructor
 
-• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `reconnectWithDeviceCallback`)
+• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `nodeId`, `adminVendorId`, `reconnectWithDeviceCallback`)
 
 #### Parameters
 
@@ -66,13 +69,25 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 | `certificateManager` | [`RootCertificateManager`](exports_certificate.RootCertificateManager.md) |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `commissioningOptions` | [`CommissioningOptions`](../modules/exports_protocol.md#commissioningoptions) |
-| `reconnectWithDeviceCallback` | (`peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid)) => `Promise`<[`InteractionClient`](exports_interaction.InteractionClient.md)\> |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `adminVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
+| `reconnectWithDeviceCallback` | () => `Promise`<[`InteractionClient`](exports_interaction.InteractionClient.md)\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:65
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:70
 
 ## Properties
+
+### adminVendorId
+
+• `Private` `Readonly` **adminVendorId**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:59
+
+___
 
 ### armFailsafe
 
@@ -88,7 +103,7 @@ invoking the ArmFailSafe command.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:99
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:106
 
 ___
 
@@ -98,7 +113,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:52
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:55
 
 ___
 
@@ -119,7 +134,7 @@ the Commissionee using the AddTrustedRootCertificate and AddNOC commands.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:137
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:144
 
 ___
 
@@ -129,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:58
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:63
 
 ___
 
@@ -139,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:63
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:68
 
 ___
 
@@ -149,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:60
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:65
 
 ___
 
@@ -159,7 +174,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:54
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:57
 
 ___
 
@@ -169,7 +184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:59
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:64
 
 ___
 
@@ -179,7 +194,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:57
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:62
 
 ___
 
@@ -189,7 +204,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:56
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:61
 
 ___
 
@@ -205,7 +220,7 @@ the commissioning process.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:178
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:185
 
 ___
 
@@ -221,7 +236,7 @@ its desired access control policies.
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:145
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:152
 
 ___
 
@@ -231,7 +246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:160
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:167
 
 ___
 
@@ -241,7 +256,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:159
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:166
 
 ___
 
@@ -258,7 +273,7 @@ The regulatory information is configured using SetRegulatoryConfig (see Section 
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:109
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:116
 
 ___
 
@@ -272,7 +287,7 @@ Commissioner SHALL establish the authenticity of the Commissionee as a certified
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:124
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:131
 
 ___
 
@@ -284,7 +299,19 @@ Helper method to check for errorCode/debugTest responses and throw error on fail
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:85
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:92
+
+___
+
+### ensureOperationalCredentialsSuccess
+
+• `Private` **ensureOperationalCredentialsSuccess**: `any`
+
+Helper method to check for errorCode/debugTest responses and throw error on failure
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:90
 
 ___
 
@@ -294,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:53
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:56
 
 ___
 
@@ -304,7 +331,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:64
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:69
 
 ___
 
@@ -316,7 +343,7 @@ Helper method to create ClusterClients. If not feature specific and for the Root
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:69
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:74
 
 ___
 
@@ -328,7 +355,7 @@ Initial Step to receive some common data used by other steps
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:89
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:96
 
 ___
 
@@ -340,7 +367,7 @@ Initialize commissioning steps and add them in the default order
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:73
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:78
 
 ___
 
@@ -350,7 +377,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:51
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:54
 
 ___
 
@@ -360,7 +387,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:62
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:67
 
 ___
 
@@ -370,7 +397,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:61
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:66
+
+___
+
+### nodeId
+
+• `Private` `Readonly` **nodeId**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:58
 
 ___
 
@@ -387,7 +424,7 @@ the Commissioner itself, or another Node to which the Commissioner has delegated
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:170
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:177
 
 ___
 
@@ -397,7 +434,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:55
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:60
 
 ___
 
@@ -407,7 +444,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:100
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:107
 
 ___
 
@@ -417,7 +454,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:82
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:87
 
 ___
 
@@ -427,7 +464,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:81
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:86
 
 ___
 
@@ -444,7 +481,7 @@ command (see Section 11.16.9.1, “SetUtcTime Command”) while timezone and DST
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:118
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:125
 
 ___
 
@@ -465,7 +502,7 @@ command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissi
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:158
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:165
 
 ## Methods
 
@@ -476,7 +513,7 @@ packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:158
 Execute the commissioning process in the defined order. The steps are sorted before execution based on the step
 number and sub step number.
 If >50% of the failsafe time has passed, the failsafe timer is re-armed (50% of 60s default are 30s and each
-action is allowed to take 30s at minimum based on specs)
+action is allowed to take 30s at minimum based on specs).
 
 #### Returns
 
@@ -484,7 +521,7 @@ action is allowed to take 30s at minimum based on specs)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:80
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:85
 
 ___
 
@@ -505,4 +542,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:83
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:88

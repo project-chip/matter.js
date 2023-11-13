@@ -42,7 +42,6 @@
 - [ManualPairingCodeSchema](../classes/export._internal_.ManualPairingCodeSchema.md)
 - [MatterController](../classes/export._internal_.MatterController.md)
 - [MatterDevice](../classes/export._internal_.MatterDevice.md)
-- [NamedHandler](../classes/export._internal_.NamedHandler.md)
 - [QrPairingCodeSchema](../classes/export._internal_.QrPairingCodeSchema.md)
 - [UdpConnection](../classes/export._internal_.UdpConnection.md)
 
@@ -73,6 +72,7 @@
 - [AttributeSetters](export._internal_.md#attributesetters)
 - [AttributeValidators](export._internal_.md#attributevalidators)
 - [BitRange](export._internal_.md#bitrange)
+- [BuildArrayMinLength](export._internal_.md#buildarrayminlength)
 - [ClientAttributeGetters](export._internal_.md#clientattributegetters)
 - [ClientAttributeListeners](export._internal_.md#clientattributelisteners)
 - [ClientAttributeSetters](export._internal_.md#clientattributesetters)
@@ -89,12 +89,11 @@
 - [CommissioningStepResult](export._internal_.md#commissioningstepresult)
 - [DimmableDeviceCommands](export._internal_.md#dimmabledevicecommands)
 - [ElementSelector](export._internal_.md#elementselector)
-- [EndpointLoggingOptions](export._internal_.md#endpointloggingoptions)
 - [ErrorHandler](export._internal_.md#errorhandler)
 - [EventDataPayload](export._internal_.md#eventdatapayload)
+- [ExtendPublicHandlerMethods](export._internal_.md#extendpublichandlermethods)
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec-1)
-- [HandlerFunction](export._internal_.md#handlerfunction)
 - [LengthConstraints](export._internal_.md#lengthconstraints)
 - [LengthConstraints](export._internal_.md#lengthconstraints-1)
 - [MakeAttributeMandatory](export._internal_.md#makeattributemandatory)
@@ -207,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:48
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:51
 
 ___
 
@@ -225,7 +224,7 @@ Handlers to process cluster commands
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:84
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:87
 
 ___
 
@@ -241,7 +240,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:56
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:59
 
 ___
 
@@ -257,7 +256,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:63
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:66
 
 ___
 
@@ -289,6 +288,24 @@ packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
+### BuildArrayMinLength
+
+Ƭ **BuildArrayMinLength**<`T`, `N`, `Current`\>: `Current`[``"length"``] extends `N` ? [...Current, ...T[]] : [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)<`T`, `N`, [...Current, `T`]\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `N` | extends `number` |
+| `Current` | extends `T`[] |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Array.d.ts:9
+
+___
+
 ### ClientAttributeGetters
 
 Ƭ **ClientAttributeGetters**<`A`\>: `Omit`<{ [P in keyof A as \`get${Capitalize<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<`any`\>\>
@@ -301,7 +318,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:43
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:44
 
 ___
 
@@ -317,7 +334,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:60
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:61
 
 ___
 
@@ -333,7 +350,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:54
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:55
 
 ___
 
@@ -349,7 +366,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:57
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:58
 
 ___
 
@@ -365,7 +382,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:66
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:67
 
 ___
 
@@ -381,7 +398,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:72
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:73
 
 ___
 
@@ -397,7 +414,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:69
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:70
 
 ___
 
@@ -413,7 +430,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:46
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:47
 
 ___
 
@@ -480,7 +497,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:78
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:81
 
 ___
 
@@ -496,7 +513,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:63
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:64
 
 ___
 
@@ -514,7 +531,7 @@ Commands exposed by the CommissioningServer
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningServer.d.ts:103
+packages/matter.js/dist/esm/CommissioningServer.d.ts:118
 
 ___
 
@@ -534,7 +551,7 @@ Breadcrump value is stored for each step for transparency
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:40
+packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:43
 
 ___
 
@@ -568,38 +585,6 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/model/logic/ModelTraversal.d.ts:129
-
-___
-
-### EndpointLoggingOptions
-
-Ƭ **EndpointLoggingOptions**: `Object`
-
-Options for logging endpoint structure. The default is that anything is logged beside "Non present" attributes and
-events on ClusterClients. The Filter methods can be used to filter out specific endpoints or clusters if wanted.
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterClientObj`](exports_cluster.md#clusterclientobj)<`any`, `any`, `any`, `any`\>) => `boolean` |
-| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterServerObj`](exports_cluster.md#clusterserverobj)<`any`, `any`\>) => `boolean` |
-| `endpointFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md)) => `boolean` |
-| `logAttributeObjectValues?` | `boolean` |
-| `logAttributePrimitiveValues?` | `boolean` |
-| `logChildEndpoints?` | `boolean` |
-| `logClusterAttributes?` | `boolean` |
-| `logClusterClients?` | `boolean` |
-| `logClusterCommands?` | `boolean` |
-| `logClusterEvents?` | `boolean` |
-| `logClusterGlobalAttributes?` | `boolean` |
-| `logClusterServers?` | `boolean` |
-| `logNotPresentClusterAttributes?` | `boolean` |
-| `logNotPresentClusterEvents?` | `boolean` |
-
-#### Defined in
-
-packages/matter.js/dist/esm/device/EndpointStructureLogger.d.ts:13
 
 ___
 
@@ -646,19 +631,20 @@ packages/matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21
 
 ___
 
-### GetterTypeFromSpec
+### ExtendPublicHandlerMethods
 
-Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\>
+Ƭ **ExtendPublicHandlerMethods**<`ParentClass`, `H`\>: `ParentClass` extends (...`args`: infer TArgs) => infer T ? (...`args`: `TArgs`) => `T` & { `_executeHandler`: <K\>(`action`: `K`, ...`args`: `Parameters`<`H`[`K`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: `H`[`K`]) => `void` ; `removeCommandHandler`: <K\>(`action`: `K`, `handler`: `H`[`K`]) => `void`  } : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`\> |
+| `ParentClass` | extends (...`args`: `any`[]) => `any` |
+| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:42
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:14
 
 ___
 
@@ -674,36 +660,23 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:43
 
 ___
 
-### HandlerFunction
+### GetterTypeFromSpec
 
-Ƭ **HandlerFunction**: (...`args`: `any`[]) => `any`
+Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\>
 
-#### Type declaration
-
-▸ (`...args`): `any`
-
-##### Parameters
+#### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `...args` | `any`[] |
-
-##### Returns
-
-`any`
-
-**`License`**
-
-Copyright 2022 The matter.js Authors
-SPDX-License-Identifier: Apache-2.0
+| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/NamedHandler.d.ts:6
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:118
 
 ___
 
@@ -755,7 +728,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:101
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:104
 
 ___
 
@@ -772,9 +745,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:102
-
 packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
+
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
 
 ___
 
@@ -792,7 +765,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:24
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
 
 ___
 
@@ -808,7 +781,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:42
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:45
 
 ___
 
@@ -869,7 +842,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:98
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:101
 
 ___
 
@@ -885,7 +858,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:30
 
 ___
 
@@ -901,7 +874,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:45
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:48
 
 ___
 
@@ -933,7 +906,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:116
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
 
 ___
 
@@ -949,7 +922,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:123
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:126
 
 ___
 
@@ -965,7 +938,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:128
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:131
 
 ___
 
@@ -981,7 +954,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:138
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:141
 
 ___
 
@@ -1088,9 +1061,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:106
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:109
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:111
 
 ___
 
@@ -1106,7 +1079,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:49
+packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 ## Variables
 
@@ -1161,7 +1134,7 @@ See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecifica
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:35
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:36
 
 ## Functions
 
@@ -1253,7 +1226,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:105
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
 
 ___
 
@@ -1283,4 +1256,4 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:108
+packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:111

@@ -48,7 +48,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1144
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1148
 
 ## Variables
 
@@ -97,7 +97,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1157
+packages/matter.js/dist/esm/cluster/definitions/LevelControlCluster.d.ts:1161
 
 ___
 

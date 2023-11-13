@@ -26,6 +26,7 @@
 ### Methods
 
 - [cancelPairing](exports_session.PaseServer.md#cancelpairing)
+- [close](exports_session.PaseServer.md#close)
 - [getId](exports_session.PaseServer.md#getid)
 - [onNewExchange](exports_session.PaseServer.md#onnewexchange)
 - [fromPin](exports_session.PaseServer.md#frompin)
@@ -129,6 +130,24 @@ packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 #### Defined in
 
 packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:28
+
+___
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[ProtocolHandler](../interfaces/exports_protocol.ProtocolHandler.md).[close](../interfaces/exports_protocol.ProtocolHandler.md#close)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseServer.d.ts:29
 
 ___
 

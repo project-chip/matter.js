@@ -25,7 +25,7 @@ Time conveyed with a 12-hour clock
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:25
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L25)
 
 ___
 
@@ -37,4 +37,4 @@ Time conveyed with a 24-hour clock
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:30
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L30)

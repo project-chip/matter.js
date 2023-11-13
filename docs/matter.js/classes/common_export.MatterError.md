@@ -50,6 +50,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`CommissioningError`](protocol_export.CommissioningError.md)
 
+  ↳↳ [`DiscoveryError`](protocol_export.DiscoveryError.md)
+
   ↳↳ [`RetransmissionLimitReachedError`](protocol_export.RetransmissionLimitReachedError.md)
 
   ↳↳ [`UnexpectedMessageError`](protocol_export.UnexpectedMessageError.md)

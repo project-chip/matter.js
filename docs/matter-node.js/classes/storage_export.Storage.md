@@ -17,10 +17,12 @@
 
 ### Methods
 
+- [clearAll](storage_export.Storage.md#clearall)
 - [close](storage_export.Storage.md#close)
 - [delete](storage_export.Storage.md#delete)
 - [get](storage_export.Storage.md#get)
 - [initialize](storage_export.Storage.md#initialize)
+- [keys](storage_export.Storage.md#keys)
 - [set](storage_export.Storage.md#set)
 
 ## Constructors
@@ -30,6 +32,26 @@
 • **new Storage**()
 
 ## Methods
+
+### clearAll
+
+▸ `Abstract` **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/Storage.d.ts:17
+
+___
 
 ### close
 
@@ -104,6 +126,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/storage/Storage.d.ts:11
+
+___
+
+### keys
+
+▸ `Abstract` **keys**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/Storage.d.ts:16
 
 ___
 

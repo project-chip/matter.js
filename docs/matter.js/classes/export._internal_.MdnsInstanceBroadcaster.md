@@ -46,7 +46,7 @@ This class is handing MDNS Announcements for one instance of a device aka "port"
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:19
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L19)
 
 ## Properties
 
@@ -56,7 +56,7 @@ packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:19
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:20
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L20)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:21
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L21)
 
 ## Methods
 
@@ -86,7 +86,7 @@ Send out announcements for this instance.
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:41
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L41)
 
 ___
 
@@ -106,7 +106,7 @@ Expire all announcements.
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:53
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L53)
 
 ___
 
@@ -126,7 +126,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:49
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L49)
 
 ___
 
@@ -146,7 +146,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:45
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L45)
 
 ___
 
@@ -173,7 +173,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:24
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L24)
 
 ___
 
@@ -199,7 +199,7 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:37
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L37)
 
 ___
 
@@ -226,4 +226,4 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Defined in
 
-packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:29
+[packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts:29](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsInstanceBroadcaster.ts#L29)

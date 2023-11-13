@@ -33,4 +33,4 @@ thermostat controller device, that supports a keypad and LCD screen.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:94
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L94)

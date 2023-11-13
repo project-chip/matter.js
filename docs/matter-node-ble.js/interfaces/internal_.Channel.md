@@ -39,7 +39,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-matter.js/dist/cjs/common/Channel.d.ts:7
+matter.js/dist/esm/common/Channel.d.ts:7
 
 ## Methods
 
@@ -53,7 +53,7 @@ matter.js/dist/cjs/common/Channel.d.ts:7
 
 #### Defined in
 
-matter.js/dist/cjs/common/Channel.d.ts:9
+matter.js/dist/esm/common/Channel.d.ts:9
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/Channel.d.ts:8
+matter.js/dist/esm/common/Channel.d.ts:8

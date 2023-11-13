@@ -10,6 +10,7 @@
 
 - [listeningAddress](net_export.UdpChannelOptions.md#listeningaddress)
 - [listeningPort](net_export.UdpChannelOptions.md#listeningport)
+- [membershipAddresses](net_export.UdpChannelOptions.md#membershipaddresses)
 - [netInterface](net_export.UdpChannelOptions.md#netinterface)
 - [type](net_export.UdpChannelOptions.md#type)
 
@@ -32,6 +33,16 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/net/UdpChannel.d.ts:9
+
+___
+
+### membershipAddresses
+
+• `Optional` **membershipAddresses**: `string`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/net/UdpChannel.d.ts:13
 
 ___
 

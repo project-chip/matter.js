@@ -41,7 +41,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:22
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Properties
 
@@ -51,7 +51,7 @@ packages/matter.js/src/net/UdpInterface.ts:22
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:22
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Methods
 
@@ -69,7 +69,7 @@ packages/matter.js/src/net/UdpInterface.ts:22
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:37
+[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L37)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:32
+[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L32)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:24
+[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L24)
 
 ___
 
@@ -140,4 +140,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpInterface.ts:16
+[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpInterface.ts#L16)

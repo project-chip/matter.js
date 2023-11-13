@@ -15,10 +15,12 @@ by reusing MDNS scanner and broadcaster
 
 ### Properties
 
+- [formerlyUsedPorts](export.MatterServer.md#formerlyusedports)
 - [mdnsBroadcaster](export.MatterServer.md#mdnsbroadcaster)
 - [mdnsScanner](export.MatterServer.md#mdnsscanner)
 - [nodes](export.MatterServer.md#nodes)
 - [options](export.MatterServer.md#options)
+- [started](export.MatterServer.md#started)
 - [storageManager](export.MatterServer.md#storagemanager)
 
 ### Accessors
@@ -30,7 +32,10 @@ by reusing MDNS scanner and broadcaster
 - [addCommissioningController](export.MatterServer.md#addcommissioningcontroller)
 - [addCommissioningServer](export.MatterServer.md#addcommissioningserver)
 - [close](export.MatterServer.md#close)
+- [getNextMatterPort](export.MatterServer.md#getnextmatterport)
 - [prepareNode](export.MatterServer.md#preparenode)
+- [removeCommissioningController](export.MatterServer.md#removecommissioningcontroller)
+- [removeCommissioningServer](export.MatterServer.md#removecommissioningserver)
 - [start](export.MatterServer.md#start)
 
 ## Constructors
@@ -50,9 +55,19 @@ Create a new Matter server instance
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:51
+[packages/matter.js/src/MatterServer.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L68)
 
 ## Properties
+
+### formerlyUsedPorts
+
+• `Private` `Readonly` **formerlyUsedPorts**: `number`[]
+
+#### Defined in
+
+[packages/matter.js/src/MatterServer.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L60)
+
+___
 
 ### mdnsBroadcaster
 
@@ -60,7 +75,7 @@ packages/matter.js/src/MatterServer.ts:51
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:43
+[packages/matter.js/src/MatterServer.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L58)
 
 ___
 
@@ -70,7 +85,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:42
+[packages/matter.js/src/MatterServer.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L57)
 
 ___
 
@@ -80,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:40
+[packages/matter.js/src/MatterServer.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L55)
 
 ___
 
@@ -92,7 +107,17 @@ Optional MatterServer options
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:53
+[packages/matter.js/src/MatterServer.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L70)
+
+___
+
+### started
+
+• `Private` **started**: `boolean` = `false`
+
+#### Defined in
+
+[packages/matter.js/src/MatterServer.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L54)
 
 ___
 
@@ -104,7 +129,7 @@ Storage manager instance to use for all nodes
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:52
+[packages/matter.js/src/MatterServer.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L69)
 
 ## Accessors
 
@@ -118,13 +143,13 @@ packages/matter.js/src/MatterServer.ts:52
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:56
+[packages/matter.js/src/MatterServer.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L73)
 
 ## Methods
 
 ### addCommissioningController
 
-▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `void`
+▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `Promise`<`void`\>
 
 Add a Controller node to the server
 
@@ -137,17 +162,17 @@ Add a Controller node to the server
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:90
+[packages/matter.js/src/MatterServer.ts:171](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L171)
 
 ___
 
 ### addCommissioningServer
 
-▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `void`
+▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `Promise`<`void`\>
 
 Add a CommissioningServer node to the server
 
@@ -160,11 +185,11 @@ Add a CommissioningServer node to the server
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:66
+[packages/matter.js/src/MatterServer.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L126)
 
 ___
 
@@ -180,13 +205,33 @@ Close the server and all nodes
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:132
+[packages/matter.js/src/MatterServer.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L247)
+
+___
+
+### getNextMatterPort
+
+▸ `Private` **getNextMatterPort**(`desiredPort?`): `number`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `desiredPort?` | `number` |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[packages/matter.js/src/MatterServer.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L77)
 
 ___
 
 ### prepareNode
 
-▸ `Private` **prepareNode**(`node`): `void`
+▸ `Private` **prepareNode**(`node`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -196,11 +241,58 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:119
+[packages/matter.js/src/MatterServer.ts:231](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L231)
+
+___
+
+### removeCommissioningController
+
+▸ **removeCommissioningController**(`commissioningController`, `destroyStorage?`): `Promise`<`void`\>
+
+Remove a Controller node from the server, close the Controller and optionally destroy the storage context.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `commissioningController` | [`CommissioningController`](export.CommissioningController.md) | `undefined` | Controller node to remove |
+| `destroyStorage` | `boolean` | `false` | If true the storage context will be destroyed |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterServer.ts:191](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L191)
+
+___
+
+### removeCommissioningServer
+
+▸ **removeCommissioningServer**(`commissioningServer`, `destroyStorage?`): `Promise`<`void`\>
+
+Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
+storage context.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `commissioningServer` | [`CommissioningServer`](export.CommissioningServer.md) | `undefined` | CommissioningServer node to remove |
+| `destroyStorage` | `boolean` | `false` | If true the storage context will be destroyed |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[packages/matter.js/src/MatterServer.ts:142](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L142)
 
 ___
 
@@ -217,4 +309,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-packages/matter.js/src/MatterServer.ts:102
+[packages/matter.js/src/MatterServer.ts:212](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L212)

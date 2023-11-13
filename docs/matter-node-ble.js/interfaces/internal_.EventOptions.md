@@ -18,4 +18,4 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:178
+matter.js/dist/esm/cluster/Cluster.d.ts:178

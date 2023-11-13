@@ -51,6 +51,7 @@ A ComposedDevice is a special endpoint that allows to combine multiple sub devic
 - [hasClusterServer](exports_device.ComposedDevice.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.ComposedDevice.md#removechildendpoint)
 - [removeFromStructure](exports_device.ComposedDevice.md#removefromstructure)
+- [setBridgedDeviceReachability](exports_device.ComposedDevice.md#setbridgeddevicereachability)
 - [setDeviceTypes](exports_device.ComposedDevice.md#setdevicetypes)
 - [setStructureChangedCallback](exports_device.ComposedDevice.md#setstructurechangedcallback)
 - [updatePartsList](exports_device.ComposedDevice.md#updatepartslist)
@@ -78,7 +79,7 @@ Creates a new ComposedDevice.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/ComposedDevice.d.ts:21
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:16
 
 ## Properties
 
@@ -244,7 +245,7 @@ Add a sub-device to the composed device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/ComposedDevice.d.ts:26
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:21
 
 ___
 
@@ -560,7 +561,7 @@ Array with all sub-devices
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/ComposedDevice.d.ts:32
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:27
 
 ___
 
@@ -692,6 +693,28 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
+### setBridgedDeviceReachability
+
+▸ **setBridgedDeviceReachability**(`reachable`): `void`
+
+Set the reachability of the Composed device exposed via the bridge.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `reachable` | `boolean` | true if reachable, false otherwise |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:37
+
+___
+
 ### setDeviceTypes
 
 ▸ **setDeviceTypes**(`deviceTypes`): `void`
@@ -774,4 +797,4 @@ Verify that the required clusters exists on the device.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/ComposedDevice.d.ts:36
+packages/matter.js/dist/esm/device/ComposedDevice.d.ts:31

@@ -28,7 +28,7 @@ A "typed component" is a component with detailed type information.
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterFactory.ts:84
+[packages/matter.js/src/cluster/ClusterFactory.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L84)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterFactory.ts:85
+[packages/matter.js/src/cluster/ClusterFactory.ts:85](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L85)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterFactory.ts:86
+[packages/matter.js/src/cluster/ClusterFactory.ts:86](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L86)

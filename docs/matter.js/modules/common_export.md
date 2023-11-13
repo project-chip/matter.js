@@ -43,6 +43,7 @@
 
 ### Functions
 
+- [serverAddressToString](common_export.md#serveraddresstostring)
 - [tryCatch](common_export.md#trycatch)
 - [tryCatchAsync](common_export.md#trycatchasync)
 
@@ -71,10 +72,11 @@ The properties are named identical as in the Matter specification.
 | `T?` | `number` | TCP supported |
 | `VP?` | `string` | VendorId + ProductId |
 | `addresses` | [`ServerAddress`](common_export.md#serveraddress)[] | The device's addresses IP/port pairs |
+| `deviceIdentifier` | `string` | - |
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:16
+[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L16)
 
 ___
 
@@ -87,7 +89,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:58
+[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L60)
 
 ___
 
@@ -108,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:162
+[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
 
 ___
 
@@ -132,7 +134,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:133
+[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
 
 ___
 
@@ -149,7 +151,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:182
+[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
 
 ___
 
@@ -159,7 +161,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/ServerAddress.ts:18
+[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/ServerAddress.ts#L18)
 
 ___
 
@@ -176,7 +178,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/ServerAddress.ts:13
+[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/ServerAddress.ts#L13)
 
 ___
 
@@ -199,7 +201,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/src/common/ServerAddress.ts:7
+[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/ServerAddress.ts#L7)
 
 ## Variables
 
@@ -234,7 +236,7 @@ packages/matter.js/src/common/ServerAddress.ts:7
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:11
+[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
 
 ___
 
@@ -244,9 +246,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:131
+[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
 
 ## Functions
+
+### serverAddressToString
+
+▸ **serverAddressToString**(`address`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | [`ServerAddress`](common_export.md#serveraddress) |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/ServerAddress.ts#L20)
+
+___
 
 ### tryCatch
 
@@ -277,7 +299,7 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-packages/matter.js/src/common/TryCatchHandler.ts:19
+[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/TryCatchHandler.ts#L19)
 
 ___
 
@@ -310,4 +332,4 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-packages/matter.js/src/common/TryCatchHandler.ts:47
+[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/TryCatchHandler.ts#L47)

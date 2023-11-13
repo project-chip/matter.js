@@ -21,6 +21,7 @@
 - [expirationMs](util_export.Cache.md#expirationms)
 - [expireCallback](util_export.Cache.md#expirecallback)
 - [generator](util_export.Cache.md#generator)
+- [knownKeys](util_export.Cache.md#knownkeys)
 - [periodicTimer](util_export.Cache.md#periodictimer)
 - [timestamps](util_export.Cache.md#timestamps)
 - [values](util_export.Cache.md#values)
@@ -56,7 +57,7 @@
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:16
+[packages/matter.js/src/util/Cache.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L17)
 
 ## Properties
 
@@ -66,7 +67,7 @@ packages/matter.js/src/util/Cache.ts:16
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:18
+[packages/matter.js/src/util/Cache.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L19)
 
 ___
 
@@ -91,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:19
+[packages/matter.js/src/util/Cache.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L20)
 
 ___
 
@@ -115,7 +116,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:17
+[packages/matter.js/src/util/Cache.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L18)
+
+___
+
+### knownKeys
+
+• `Private` `Readonly` **knownKeys**: `Set`<`string`\>
+
+#### Defined in
+
+[packages/matter.js/src/util/Cache.ts:12](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L12)
 
 ___
 
@@ -125,7 +136,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:14
+[packages/matter.js/src/util/Cache.ts:15](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L15)
 
 ___
 
@@ -135,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:13
+[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L14)
 
 ___
 
@@ -145,7 +156,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:12
+[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L13)
 
 ## Methods
 
@@ -159,7 +170,7 @@ packages/matter.js/src/util/Cache.ts:12
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:48
+[packages/matter.js/src/util/Cache.ts:50](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L50)
 
 ___
 
@@ -173,7 +184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:56
+[packages/matter.js/src/util/Cache.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L58)
 
 ___
 
@@ -193,7 +204,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:39
+[packages/matter.js/src/util/Cache.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L41)
 
 ___
 
@@ -207,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:61
+[packages/matter.js/src/util/Cache.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L64)
 
 ___
 
@@ -227,7 +238,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:24
+[packages/matter.js/src/util/Cache.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L25)
 
 ___
 
@@ -241,4 +252,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/util/Cache.ts:35
+[packages/matter.js/src/util/Cache.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Cache.ts#L37)

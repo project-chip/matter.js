@@ -36,7 +36,7 @@ Failure, may be due to a concurrency error.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:66
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:66](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L66)
 
 ___
 
@@ -48,7 +48,7 @@ The sender attempted to create something that already exists.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:75
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L75)
 
 ___
 
@@ -60,7 +60,7 @@ Operation was rejected by the system because the system is in an invalid state.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:39
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L39)
 
 ___
 
@@ -72,7 +72,7 @@ A request was unrecognized or malformed
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:45
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L45)
 
 ___
 
@@ -84,7 +84,7 @@ Device is busy and cannot handle this request at this time.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:57
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L57)
 
 ___
 
@@ -96,7 +96,7 @@ Context-specific signal to proceed
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:63
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L63)
 
 ___
 
@@ -108,7 +108,7 @@ Unrecoverable data loss or corruption has occurred.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:81
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:81](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L81)
 
 ___
 
@@ -120,7 +120,7 @@ Generic failure, additional details may be included in the protocol specific sta
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:36
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L36)
 
 ___
 
@@ -132,7 +132,7 @@ An invalid/unsupported argument was provided.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:69
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L69)
 
 ___
 
@@ -144,7 +144,7 @@ Some requested entity was not found.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:72
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:72](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L72)
 
 ___
 
@@ -156,7 +156,7 @@ A value was out of a required range
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:42
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L42)
 
 ___
 
@@ -168,7 +168,7 @@ The sender does not have sufficient permissions to execute the requested operati
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:78
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L78)
 
 ___
 
@@ -180,7 +180,7 @@ Insufficient resources to process the given request.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:54
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L54)
 
 ___
 
@@ -192,7 +192,7 @@ Operation completed successfully.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:33
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:33](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L33)
 
 ___
 
@@ -204,7 +204,7 @@ A timeout occurred.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:60
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L60)
 
 ___
 
@@ -216,7 +216,7 @@ A request was not expected at this time.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:51
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L51)
 
 ___
 
@@ -228,4 +228,4 @@ An unrecognized or unsupported request was received.
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:48
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L48)

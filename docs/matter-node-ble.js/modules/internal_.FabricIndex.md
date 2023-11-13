@@ -19,7 +19,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:21
+matter.js/dist/esm/datatype/FabricIndex.d.ts:21
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:22
+matter.js/dist/esm/datatype/FabricIndex.d.ts:22
