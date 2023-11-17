@@ -390,6 +390,17 @@ export class CommissioningController extends MatterNode {
         }
     }
 
+    cancelCommissionableDeviceDiscovery(
+        identifierData: CommissionableDeviceIdentifiers,
+        discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+    ) {
+        this.assertIsAddedToMatterServer();
+        const controller = this.assertControllerIsStarted();
+        controller
+            .collectScanners(discoveryCapabilities)
+            .forEach(scanner => ControllerDiscovery.cancelCommissionableDeviceDiscovery(scanner, identifierData));
+    }
+
     async discoverCommissionableDevices(
         identifierData: CommissionableDeviceIdentifiers,
         discoveryCapabilities?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>,
