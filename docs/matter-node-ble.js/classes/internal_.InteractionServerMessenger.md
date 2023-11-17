@@ -51,7 +51,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
 
 ## Properties
 
@@ -65,7 +65,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:45
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:44
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
 
 ## Methods
 
@@ -83,7 +83,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:44
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:50
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:52
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:52
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:55
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:55
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:49
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
 
 ___
 
@@ -198,7 +198,7 @@ messages and send them out based on the size.
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:60
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:60
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:61
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:61
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:47
 
 ___
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:51
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:51
 
 ___
 
@@ -284,4 +284,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionMessenger.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:48

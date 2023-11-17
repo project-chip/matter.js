@@ -183,7 +183,7 @@ ___
 
 ### computeW0L
 
-▸ `Static` **computeW0L**(`pbkdfParameters`, `pin`): `Promise`<{ `L`: `any` ; `w0`: `BN`  }\>
+▸ `Static` **computeW0L**(`pbkdfParameters`, `pin`): `Promise`<{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
 
 #### Parameters
 
@@ -194,7 +194,7 @@ ___
 
 #### Returns
 
-`Promise`<{ `L`: `any` ; `w0`: `BN`  }\>
+`Promise`<{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
 
 #### Defined in
 

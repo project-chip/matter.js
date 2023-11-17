@@ -133,6 +133,10 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:69
 
 `Promise`<`void`\>
 
+#### Implementation of
+
+[ProtocolHandler](../interfaces/exports_protocol.ProtocolHandler.md).[close](../interfaces/exports_protocol.ProtocolHandler.md#close)
+
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/InteractionServer.d.ts:80

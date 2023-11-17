@@ -19,6 +19,7 @@
 
 ### Properties
 
+- [closingAfterExchangeFinished](exports_session.Session.md#closingafterexchangefinished)
 - [name](exports_session.Session.md#name)
 
 ### Methods
@@ -40,6 +41,16 @@
 - [notifyActivity](exports_session.Session.md#notifyactivity)
 
 ## Properties
+
+### closingAfterExchangeFinished
+
+• **closingAfterExchangeFinished**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/Session.d.ts:25
+
+___
 
 ### name
 
@@ -67,19 +78,20 @@ packages/matter.js/dist/esm/session/Session.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:27
+packages/matter.js/dist/esm/session/Session.d.ts:28
 
 ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`): `Promise`<`void`\>
+▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `sendClose` | `boolean` |
+| `closeAfterExchangeFinished?` | `boolean` |
 
 #### Returns
 
@@ -87,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:36
+packages/matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
@@ -107,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:28
+packages/matter.js/dist/esm/session/Session.d.ts:29
 
 ___
 
@@ -127,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:35
+packages/matter.js/dist/esm/session/Session.d.ts:36
 
 ___
 
@@ -141,7 +153,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:39
+packages/matter.js/dist/esm/session/Session.d.ts:40
 
 ___
 
@@ -155,7 +167,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:30
+packages/matter.js/dist/esm/session/Session.d.ts:31
 
 ___
 
@@ -169,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:31
+packages/matter.js/dist/esm/session/Session.d.ts:32
 
 ___
 
@@ -183,7 +195,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:29
+packages/matter.js/dist/esm/session/Session.d.ts:30
 
 ___
 
@@ -197,7 +209,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:33
+packages/matter.js/dist/esm/session/Session.d.ts:34
 
 ___
 
@@ -211,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:34
+packages/matter.js/dist/esm/session/Session.d.ts:35
 
 ___
 
@@ -225,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:32
+packages/matter.js/dist/esm/session/Session.d.ts:33
 
 ___
 
@@ -239,7 +251,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:26
+packages/matter.js/dist/esm/session/Session.d.ts:27
 
 ___
 
@@ -253,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:38
+packages/matter.js/dist/esm/session/Session.d.ts:39
 
 ___
 
@@ -267,7 +279,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:25
+packages/matter.js/dist/esm/session/Session.d.ts:26
 
 ___
 
@@ -287,4 +299,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:37
+packages/matter.js/dist/esm/session/Session.d.ts:38

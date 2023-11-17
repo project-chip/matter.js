@@ -28,7 +28,7 @@ subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignme
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L33)
 
 ___
 
@@ -44,4 +44,4 @@ Encapsulates the Node ID of a Valid Proxy.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L23)

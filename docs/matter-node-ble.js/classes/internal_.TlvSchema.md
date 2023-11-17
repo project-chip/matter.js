@@ -16,7 +16,7 @@
 
   ↳ **`TlvSchema`**
 
-  ↳↳ [`ObjectSchema`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.ObjectSchema.md)
+  ↳↳ [`ObjectSchema`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.ObjectSchema.md)
 
 ## Implements
 
@@ -92,7 +92,7 @@ Schema.decode
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:11
+matter.js/dist/esm/schema/Schema.d.ts:11
 
 ___
 
@@ -120,7 +120,7 @@ Schema.decodeInternal
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:10
+matter.js/dist/esm/tlv/TlvSchema.d.ts:10
 
 ___
 
@@ -144,7 +144,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:13
+matter.js/dist/esm/tlv/TlvSchema.d.ts:13
 
 ___
 
@@ -173,7 +173,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:14
+matter.js/dist/esm/tlv/TlvSchema.d.ts:14
 
 ___
 
@@ -198,7 +198,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:18
+matter.js/dist/esm/tlv/TlvSchema.d.ts:18
 
 ___
 
@@ -228,7 +228,7 @@ Schema.encode
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:9
+matter.js/dist/esm/schema/Schema.d.ts:9
 
 ___
 
@@ -256,7 +256,7 @@ Schema.encodeInternal
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:11
+matter.js/dist/esm/tlv/TlvSchema.d.ts:11
 
 ___
 
@@ -280,7 +280,7 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:12
+matter.js/dist/esm/tlv/TlvSchema.d.ts:12
 
 ___
 
@@ -306,7 +306,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:19
+matter.js/dist/esm/tlv/TlvSchema.d.ts:19
 
 ___
 
@@ -333,7 +333,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:20
+matter.js/dist/esm/tlv/TlvSchema.d.ts:20
 
 ___
 
@@ -359,7 +359,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:21
+matter.js/dist/esm/tlv/TlvSchema.d.ts:21
 
 ___
 
@@ -389,4 +389,4 @@ Schema.validate
 
 #### Defined in
 
-matter.js/dist/cjs/schema/Schema.d.ts:15
+matter.js/dist/esm/schema/Schema.d.ts:15

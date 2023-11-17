@@ -22,7 +22,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:25
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:25
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:24
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:24
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:23
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:23
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:22
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:22
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessages.d.ts:21
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessages.d.ts:21

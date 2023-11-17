@@ -43,7 +43,7 @@ OptionalEvent.id
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:714
+[packages/matter.js/src/cluster/Cluster.ts:714](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L714)
 
 ___
 
@@ -57,7 +57,7 @@ OptionalEvent.isConditional
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:743
+[packages/matter.js/src/cluster/Cluster.ts:743](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L743)
 
 ___
 
@@ -71,7 +71,7 @@ OptionalEvent.mandatoryIf
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:721
+[packages/matter.js/src/cluster/Cluster.ts:721](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L721)
 
 ___
 
@@ -85,7 +85,7 @@ OptionalEvent.optional
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:739
+[packages/matter.js/src/cluster/Cluster.ts:739](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L739)
 
 ___
 
@@ -99,7 +99,7 @@ OptionalEvent.optionalIf
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:720
+[packages/matter.js/src/cluster/Cluster.ts:720](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L720)
 
 ___
 
@@ -113,7 +113,7 @@ OptionalEvent.priority
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:716
+[packages/matter.js/src/cluster/Cluster.ts:716](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L716)
 
 ___
 
@@ -127,7 +127,7 @@ OptionalEvent.readAcl
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:718
+[packages/matter.js/src/cluster/Cluster.ts:718](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L718)
 
 ___
 
@@ -141,7 +141,7 @@ OptionalEvent.schema
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:715
+[packages/matter.js/src/cluster/Cluster.ts:715](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L715)
 
 ___
 
@@ -155,4 +155,4 @@ OptionalEvent.unknown
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:722
+[packages/matter.js/src/cluster/Cluster.ts:722](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L722)

@@ -12,13 +12,38 @@
 
 ### Methods
 
+- [cancelCommissionableDeviceDiscovery](common_export.Scanner.md#cancelcommissionabledevicediscovery)
 - [close](common_export.Scanner.md#close)
 - [findCommissionableDevices](common_export.Scanner.md#findcommissionabledevices)
+- [findCommissionableDevicesContinuously](common_export.Scanner.md#findcommissionabledevicescontinuously)
 - [findOperationalDevice](common_export.Scanner.md#findoperationaldevice)
 - [getDiscoveredCommissionableDevices](common_export.Scanner.md#getdiscoveredcommissionabledevices)
 - [getDiscoveredOperationalDevices](common_export.Scanner.md#getdiscoveredoperationaldevices)
 
 ## Methods
+
+### cancelCommissionableDeviceDiscovery
+
+▸ **cancelCommissionableDeviceDiscovery**(`identifier`): `void`
+
+Cancel a running discovery of commissionable devices. The waiter promises are resolved as if the timeout would
+be over.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/common_export.md#commissionabledeviceidentifiers) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:136](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L136)
+
+___
 
 ### close
 
@@ -32,22 +57,49 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:114
+[packages/matter.js/src/common/Scanner.ts:139](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L139)
 
 ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
 
-Send DNS-SD queries to discover commissionable devices by an provided identifier (e.g. discriminator,
-vendorId, etc.) and return them.
+Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
+vendorId, etc.) and returns as soon as minimum one was found or the timeout is over.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `identifier` | [`CommissionableDeviceIdentifiers`](../modules/common_export.md#commissionabledeviceidentifiers) |
+| `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
+
+#### Returns
+
+`Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
+
+#### Defined in
+
+[packages/matter.js/src/common/Scanner.ts:112](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L112)
+
+___
+
+### findCommissionableDevicesContinuously
+
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
+
+Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
+vendorId, etc.) and returns after the timeout is over. For each new discovered device the provided callback is
+called when it is discovered.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/common_export.md#commissionabledeviceidentifiers) |
+| `callback` | (`device`: [`CommissionableDevice`](../modules/common_export.md#commissionabledevice)) => `void` |
 | `timeoutSeconds?` | `number` |
 
 #### Returns
@@ -56,13 +108,13 @@ vendorId, etc.) and return them.
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:105
+[packages/matter.js/src/common/Scanner.ts:123](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L123)
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`): `Promise`<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
@@ -74,6 +126,7 @@ and return them.
 | `fabric` | [`Fabric`](../classes/fabric_export.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
 
 #### Returns
 
@@ -81,7 +134,7 @@ and return them.
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:93
+[packages/matter.js/src/common/Scanner.ts:95](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L95)
 
 ___
 
@@ -103,7 +156,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:111
+[packages/matter.js/src/common/Scanner.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L130)
 
 ___
 
@@ -127,4 +180,4 @@ DNS-SD queries.
 
 #### Defined in
 
-packages/matter.js/src/common/Scanner.ts:99
+[packages/matter.js/src/common/Scanner.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/Scanner.ts#L106)

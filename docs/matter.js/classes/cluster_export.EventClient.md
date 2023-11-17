@@ -16,9 +16,9 @@ General class for EventClients
 
 - **`EventClient`**
 
-  ↳ [`PresentEventClient`](cluster_export.PresentEventClient.md)
+  ↳ [`SupportedEventClient`](cluster_export.SupportedEventClient.md)
 
-  ↳ [`UnknownPresentEventClient`](cluster_export.UnknownPresentEventClient.md)
+  ↳ [`UnknownSupportedEventClient`](cluster_export.UnknownSupportedEventClient.md)
 
 ## Table of contents
 
@@ -68,7 +68,7 @@ General class for EventClients
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:41
+[packages/matter.js/src/cluster/client/EventClient.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L41)
 
 ## Properties
 
@@ -78,7 +78,7 @@ packages/matter.js/src/cluster/client/EventClient.ts:41
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:45
+[packages/matter.js/src/cluster/client/EventClient.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L45)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:44
+[packages/matter.js/src/cluster/client/EventClient.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L44)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:42
+[packages/matter.js/src/cluster/client/EventClient.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L42)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:39
+[packages/matter.js/src/cluster/client/EventClient.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L39)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:46
+[packages/matter.js/src/cluster/client/EventClient.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L46)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:38
+[packages/matter.js/src/cluster/client/EventClient.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L38)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:43
+[packages/matter.js/src/cluster/client/EventClient.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L43)
 
 ## Methods
 
@@ -158,7 +158,7 @@ packages/matter.js/src/cluster/client/EventClient.ts:43
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:90
+[packages/matter.js/src/cluster/client/EventClient.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L90)
 
 ___
 
@@ -179,7 +179,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:51
+[packages/matter.js/src/cluster/client/EventClient.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L51)
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:94
+[packages/matter.js/src/cluster/client/EventClient.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L94)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:64
+[packages/matter.js/src/cluster/client/EventClient.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L64)
 
 ___
 
@@ -243,4 +243,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:84
+[packages/matter.js/src/cluster/client/EventClient.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L84)

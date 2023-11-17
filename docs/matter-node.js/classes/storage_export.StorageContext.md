@@ -17,10 +17,13 @@
 
 ### Methods
 
+- [clear](storage_export.StorageContext.md#clear)
+- [clearAll](storage_export.StorageContext.md#clearall)
 - [createContext](storage_export.StorageContext.md#createcontext)
 - [delete](storage_export.StorageContext.md#delete)
 - [get](storage_export.StorageContext.md#get)
 - [has](storage_export.StorageContext.md#has)
+- [keys](storage_export.StorageContext.md#keys)
 - [set](storage_export.StorageContext.md#set)
 
 ## Constructors
@@ -61,6 +64,38 @@ ___
 packages/matter.js/dist/esm/storage/StorageContext.d.ts:9
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+Clears all keys in this context
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:19
+
+___
+
+### clearAll
+
+▸ **clearAll**(): `void`
+
+Clears all keys in this context and all created sub-contexts.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:21
+
+___
 
 ### createContext
 
@@ -146,6 +181,20 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/storage/StorageContext.d.ts:13
+
+___
+
+### keys
+
+▸ **keys**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageContext.d.ts:17
 
 ___
 

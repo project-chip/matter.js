@@ -64,7 +64,7 @@ Creates a new BTP session handler
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:46
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:46
 
 ## Properties
 
@@ -74,7 +74,7 @@ matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:46
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:25
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:25
 
 ___
 
@@ -87,7 +87,7 @@ the peer SHALL close the BTP session and report an error to the application.
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:76
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:76
 
 ___
 
@@ -100,7 +100,7 @@ acknowledgement
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:71
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:71
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:17
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:17
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:21
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:21
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:22
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:22
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:19
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:19
 
 ___
 
@@ -152,7 +152,7 @@ Checks if incoming ackNumber and sent sequence number exceeds the client window 
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:84
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:84
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:16
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:16
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:20
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:20
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:31
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:31
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:27
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:27
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:24
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:24
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:23
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:23
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:62
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:62
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:28
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:28
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:30
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:30
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:29
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:29
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:26
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:26
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:18
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:18
 
 ## Methods
 
@@ -288,7 +288,7 @@ Close the BTP session. This method is called when the BLE transport is disconnec
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:66
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:66
 
 ___
 
@@ -304,7 +304,7 @@ Increments sequence number for the packets and round it off to 0 when it reaches
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:80
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:80
 
 ___
 
@@ -327,7 +327,7 @@ ExchangeManager layer
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:53
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:53
 
 ___
 
@@ -351,7 +351,7 @@ should be sent.
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:61
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:61
 
 ___
 
@@ -374,7 +374,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:34
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:34
 
 ___
 
@@ -400,4 +400,4 @@ Factory method to create a new BTPSessionHandler from a received handshake reque
 
 #### Defined in
 
-matter.js/dist/cjs/ble/BtpSessionHandler.d.ts:33
+matter.js/dist/esm/ble/BtpSessionHandler.d.ts:33

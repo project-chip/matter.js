@@ -26,7 +26,7 @@ Interfaces and helper methods to define a cluster event
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:710
+[packages/matter.js/src/cluster/Cluster.ts:710](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L710)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:708
+[packages/matter.js/src/cluster/Cluster.ts:708](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L708)
 
 ___
 
@@ -46,4 +46,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:709
+[packages/matter.js/src/cluster/Cluster.ts:709](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L709)

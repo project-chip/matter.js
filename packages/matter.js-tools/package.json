@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-tools",
-    "version": "0.6.1-alpha.0-20231111-0f49576",
+    "version": "0.7.1-alpha.0-20231116-47f3a17",
     "description": "Matter.js tooling",
     "type": "module",
     "scripts": {
@@ -58,8 +58,8 @@
         "v8-profiler-next": "^1.9.0"
     },
     "devDependencies": {
-        "@types/chai": "^4.3.9",
-        "@types/chai-as-promised": "^7.1.6",
+        "@types/chai": "^4.3.10",
+        "@types/chai-as-promised": "^7.1.8",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.3",
         "@types/npmcli__map-workspaces": "^3.0.3",

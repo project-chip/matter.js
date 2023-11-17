@@ -38,7 +38,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:16
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 ## Properties
 
@@ -48,7 +48,7 @@ matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:16
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:18
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:15
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:14
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:11
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:11
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:13
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:12
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 
 ## Methods
 
@@ -120,7 +120,7 @@ matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:12
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:19
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
 
 ___
 
@@ -134,4 +134,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/certificate/RootCertificateManager.d.ts:17
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17

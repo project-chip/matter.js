@@ -43,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:428
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:428](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L428)
 
 ## Variables
 
@@ -55,7 +55,7 @@ These elements and properties are present in all PulseWidthModulation clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:147
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:147](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L147)
 
 ___
 
@@ -77,7 +77,7 @@ PulseWidthModulationCluster.with() factory method.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:405
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:405](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L405)
 
 ___
 
@@ -92,7 +92,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:442
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:442](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L442)
 
 ___
 
@@ -104,7 +104,7 @@ A PulseWidthModulationCluster supports these elements if it supports feature Fre
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:359
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:359](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L359)
 
 ___
 
@@ -116,7 +116,7 @@ A PulseWidthModulationCluster supports these elements if it supports feature Lig
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:326
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:326](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L326)
 
 ___
 
@@ -139,7 +139,7 @@ The value of the PulseWidthModulation options attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:32
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L32)
 
 ___
 
@@ -155,7 +155,7 @@ Input to the PulseWidthModulation move command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:61
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L61)
 
 ___
 
@@ -171,7 +171,7 @@ Input to the PulseWidthModulation moveToClosestFrequency command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:113
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:113](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L113)
 
 ___
 
@@ -187,7 +187,7 @@ Input to the PulseWidthModulation moveToLevel command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:39
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L39)
 
 ___
 
@@ -203,7 +203,7 @@ Input to the PulseWidthModulation step command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:90
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L90)
 
 ___
 
@@ -219,4 +219,4 @@ Input to the PulseWidthModulation stop command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:103
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:103](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L103)

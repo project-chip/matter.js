@@ -441,4 +441,4 @@ asserts session is SecureSession<T\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:64
+packages/matter.js/dist/esm/session/SecureSession.d.ts:97

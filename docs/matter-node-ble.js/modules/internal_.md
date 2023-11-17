@@ -6,7 +6,7 @@
 
 ### Namespaces
 
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject&quot;](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject&quot;](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 - [FabricIndex](internal_.FabricIndex.md)
 - [NodeId](internal_.NodeId.md)
 
@@ -19,6 +19,7 @@
 - [DeviceClasses](../enums/internal_.DeviceClasses.md)
 - [EventPriority](../enums/internal_.EventPriority.md)
 - [KeyType](../enums/internal_.KeyType.md)
+- [NodeStateInformation](../enums/internal_.NodeStateInformation.md)
 - [ProtocolStatusCode](../enums/internal_.ProtocolStatusCode.md)
 - [RegulatoryLocationType](../enums/internal_.RegulatoryLocationType.md)
 - [SessionType](../enums/internal_.SessionType.md)
@@ -72,6 +73,7 @@
 - [InteractionServerMessenger](../classes/internal_.InteractionServerMessenger.md)
 - [MatterController](../classes/internal_.MatterController.md)
 - [MatterDevice](../classes/internal_.MatterDevice.md)
+- [MdnsScanner](../classes/internal_.MdnsScanner.md)
 - [MessageChannel](../classes/internal_.MessageChannel.md)
 - [MessageCounter](../classes/internal_.MessageCounter.md)
 - [MessageExchange](../classes/internal_.MessageExchange.md)
@@ -87,6 +89,7 @@
 - [StorageContext](../classes/internal_.StorageContext.md)
 - [SubscriptionHandler](../classes/internal_.SubscriptionHandler.md)
 - [TlvSchema](../classes/internal_.TlvSchema.md)
+- [UdpMulticastServer](../classes/internal_.UdpMulticastServer.md)
 - [UnsecureSession](../classes/internal_.UnsecureSession.md)
 
 ### Interfaces
@@ -141,6 +144,7 @@
 - [TlvReader](../interfaces/internal_.TlvReader.md)
 - [TlvWriter](../interfaces/internal_.TlvWriter.md)
 - [TransportInterface](../interfaces/internal_.TransportInterface.md)
+- [UdpMulticastServerOptions](../interfaces/internal_.UdpMulticastServerOptions.md)
 - [WritableAttribute](../interfaces/internal_.WritableAttribute.md)
 - [WritableFabricScopedAttribute](../interfaces/internal_.WritableFabricScopedAttribute.md)
 
@@ -162,7 +166,6 @@
 - [Brand](internal_.md#brand)
 - [Branded](internal_.md#branded)
 - [ByteArray](internal_.md#bytearray)
-- [ClassExtends](internal_.md#classextends)
 - [ClientAttributeGetters](internal_.md#clientattributegetters)
 - [ClientAttributeListeners](internal_.md#clientattributelisteners)
 - [ClientAttributeSetters](internal_.md#clientattributesetters)
@@ -180,6 +183,7 @@
 - [CommissionableDeviceData](internal_.md#commissionabledevicedata)
 - [CommissionableDeviceIdentifiers](internal_.md#commissionabledeviceidentifiers)
 - [CommissionerInstanceData](internal_.md#commissionerinstancedata)
+- [CommissioningControllerNodeOptions](internal_.md#commissioningcontrollernodeoptions)
 - [CommissioningModeInstanceData](internal_.md#commissioningmodeinstancedata)
 - [CommissioningOptions](internal_.md#commissioningoptions)
 - [ConditionalFeatureList](internal_.md#conditionalfeaturelist)
@@ -209,6 +213,7 @@
 - [MandatoryEventNames](internal_.md#mandatoryeventnames)
 - [MandatoryFieldNames](internal_.md#mandatoryfieldnames)
 - [Merge](internal_.md#merge)
+- [NodeCommissioningOptions](internal_.md#nodecommissioningoptions)
 - [NodeId](internal_.md#nodeid)
 - [NonFixedAttributeNames](internal_.md#nonfixedattributenames)
 - [OptionalAttributeNames](internal_.md#optionalattributenames)
@@ -229,6 +234,7 @@
 - [SupportedComplexStorageTypes](internal_.md#supportedcomplexstoragetypes)
 - [SupportedStorageBaseTypes](internal_.md#supportedstoragebasetypes)
 - [SupportedStorageTypes](internal_.md#supportedstoragetypes)
+- [TimerCallback](internal_.md#timercallback)
 - [TlvElement](internal_.md#tlvelement)
 - [TlvFields](internal_.md#tlvfields)
 - [TlvStream](internal_.md#tlvstream)
@@ -247,6 +253,7 @@
 ### Variables
 
 - [ByteArray](internal_.md#bytearray-1)
+- [DiscoveryCapabilitiesBitmap](internal_.md#discoverycapabilitiesbitmap)
 - [PairingHintBitmap](internal_.md#pairinghintbitmap)
 - [TlvAttributeReport](internal_.md#tlvattributereport)
 - [TlvAttributeReportData](internal_.md#tlvattributereportdata)
@@ -299,7 +306,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:23
+matter.js/dist/esm/tlv/TlvCodec.d.ts:23
 
 ___
 
@@ -309,7 +316,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:17
+matter.js/dist/esm/tlv/TlvCodec.d.ts:17
 
 ___
 
@@ -319,7 +326,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:20
+matter.js/dist/esm/tlv/TlvCodec.d.ts:20
 
 ___
 
@@ -329,7 +336,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:32
+matter.js/dist/esm/tlv/TlvCodec.d.ts:32
 
 ___
 
@@ -339,7 +346,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:25
+matter.js/dist/esm/tlv/TlvCodec.d.ts:25
 
 ___
 
@@ -349,7 +356,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:12
+matter.js/dist/esm/schema/BitmapSchema.d.ts:12
 
 ___
 
@@ -359,7 +366,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:10
+matter.js/dist/esm/schema/BitmapSchema.d.ts:10
 
 ___
 
@@ -369,7 +376,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:18
+matter.js/dist/esm/tlv/TlvCodec.d.ts:18
 
 ___
 
@@ -379,7 +386,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:31
+matter.js/dist/esm/tlv/TlvCodec.d.ts:31
 
 ___
 
@@ -389,7 +396,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:24
+matter.js/dist/esm/tlv/TlvCodec.d.ts:24
 
 ___
 
@@ -399,7 +406,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:21
+matter.js/dist/esm/tlv/TlvCodec.d.ts:21
 
 ___
 
@@ -409,7 +416,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:11
+matter.js/dist/esm/schema/BitmapSchema.d.ts:11
 
 ___
 
@@ -419,7 +426,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:15
+matter.js/dist/esm/tlv/TlvCodec.d.ts:15
 
 ___
 
@@ -429,7 +436,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:22
+matter.js/dist/esm/tlv/TlvCodec.d.ts:22
 
 ___
 
@@ -439,7 +446,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:16
+matter.js/dist/esm/tlv/TlvCodec.d.ts:16
 
 ___
 
@@ -449,7 +456,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:19
+matter.js/dist/esm/tlv/TlvCodec.d.ts:19
 
 ## Type Aliases
 
@@ -465,7 +472,7 @@ matter.js/dist/cjs/tlv/TlvCodec.d.ts:19
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:22
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:22
 
 ___
 
@@ -482,7 +489,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:19
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:20
 
 ___
 
@@ -494,7 +501,7 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:12
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:12
 
 ___
 
@@ -510,9 +517,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.15
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/AttributeId.d.ts:14
+matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
-matter.js/dist/cjs/datatype/AttributeId.d.ts:13
+matter.js/dist/esm/datatype/AttributeId.d.ts:13
 
 ___
 
@@ -528,7 +535,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:83
+matter.js/dist/esm/cluster/Cluster.d.ts:83
 
 ___
 
@@ -540,7 +547,7 @@ Type for TlvAttributeReport where the real data are represented with the schema 
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:8
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:8
 
 ___
 
@@ -556,7 +563,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:30
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:33
 
 ___
 
@@ -573,7 +580,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:17
+matter.js/dist/esm/crypto/Key.d.ts:17
 
 ___
 
@@ -585,9 +592,9 @@ Defines the bit position and bit length of a numeric value.
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:25
+matter.js/dist/esm/schema/BitmapSchema.d.ts:25
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:26
+matter.js/dist/esm/schema/BitmapSchema.d.ts:26
 
 ___
 
@@ -605,9 +612,9 @@ Defines the bit position and bit length of an enum flag.
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:28
+matter.js/dist/esm/schema/BitmapSchema.d.ts:28
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:29
+matter.js/dist/esm/schema/BitmapSchema.d.ts:29
 
 ___
 
@@ -619,9 +626,9 @@ Defines the bit position of a boolean flag.
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:22
+matter.js/dist/esm/schema/BitmapSchema.d.ts:22
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:23
+matter.js/dist/esm/schema/BitmapSchema.d.ts:23
 
 ___
 
@@ -647,9 +654,9 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:14
+matter.js/dist/esm/schema/BitmapSchema.d.ts:14
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:20
+matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
@@ -663,7 +670,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:30
+matter.js/dist/esm/schema/BitmapSchema.d.ts:30
 
 ___
 
@@ -685,7 +692,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/util/Type.d.ts:29
+matter.js/dist/esm/util/Type.d.ts:29
 
 ___
 
@@ -702,7 +709,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/util/Type.d.ts:32
+matter.js/dist/esm/util/Type.d.ts:32
 
 ___
 
@@ -714,41 +721,9 @@ Array of bytes, alias of Uint8Array.
 
 #### Defined in
 
-matter.js/dist/cjs/util/ByteArray.d.ts:25
+matter.js/dist/esm/util/ByteArray.d.ts:25
 
-matter.js/dist/cjs/util/ByteArray.d.ts:26
-
-___
-
-### ClassExtends
-
-Ƭ **ClassExtends**<`C`\>: (...`args`: `any`[]) => `C`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `C` |
-
-#### Type declaration
-
-• **new ClassExtends**(`...args`): `C`
-
-Type that represents a class constructor of a defined type or extend of it
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `...args` | `any`[] |
-
-##### Returns
-
-`C`
-
-#### Defined in
-
-matter.js/dist/cjs/util/Type.d.ts:15
+matter.js/dist/esm/util/ByteArray.d.ts:26
 
 ___
 
@@ -764,7 +739,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:43
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:44
 
 ___
 
@@ -780,7 +755,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:60
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:61
 
 ___
 
@@ -796,7 +771,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:54
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:55
 
 ___
 
@@ -812,7 +787,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:57
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:58
 
 ___
 
@@ -828,7 +803,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:66
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:67
 
 ___
 
@@ -844,7 +819,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:72
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:73
 
 ___
 
@@ -860,7 +835,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:69
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:70
 
 ___
 
@@ -876,13 +851,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:46
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:47
 
 ___
 
 ### ClusterClientObj
 
-Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](internal_.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](internal_.md#eventclients)<`E`\> ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventFilter`](internal_.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](internal_.md#clienteventlisteners)<`E`\>
+Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](internal_.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](internal_.md#eventclients)<`E`\> ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventFilter`](internal_.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](internal_.md#clienteventlisteners)<`E`\>
 
 Strongly typed interface of a cluster client
 
@@ -897,7 +872,7 @@ Strongly typed interface of a cluster client
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:77
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:78
 
 ___
 
@@ -914,15 +889,15 @@ MatterCoreSpecificationV1_0 § 7.10
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/ClusterId.d.ts:15
+matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
-matter.js/dist/cjs/datatype/ClusterId.d.ts:14
+matter.js/dist/esm/datatype/ClusterId.d.ts:14
 
 ___
 
 ### ClusterServerObj
 
-Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](internal_.md#clusterid) ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)<`E`\>
+Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)<`E`\>
 
 #### Type parameters
 
@@ -933,7 +908,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:149
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:152
 
 ___
 
@@ -949,9 +924,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.18
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/CommandId.d.ts:14
+matter.js/dist/esm/datatype/CommandId.d.ts:14
 
-matter.js/dist/cjs/datatype/CommandId.d.ts:13
+matter.js/dist/esm/datatype/CommandId.d.ts:13
 
 ___
 
@@ -967,7 +942,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:63
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:64
 
 ___
 
@@ -994,10 +969,11 @@ The properties are named identical as in the Matter specification.
 | `T?` | `number` | TCP supported |
 | `VP?` | `string` | VendorId + ProductId |
 | `addresses` | [`ServerAddress`](internal_.md#serveraddress)[] | The device's addresses IP/port pairs |
+| `deviceIdentifier` | `string` | - |
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:14
+matter.js/dist/esm/common/Scanner.d.ts:14
 
 ___
 
@@ -1007,7 +983,7 @@ ___
 
 #### Defined in
 
-matter-node-ble.js/src/ble/BleScanner.ts:30
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ___
 
@@ -1020,7 +996,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:44
+matter.js/dist/esm/common/Scanner.d.ts:45
 
 ___
 
@@ -1041,7 +1017,28 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:229
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:229
+
+___
+
+### CommissioningControllerNodeOptions
+
+Ƭ **CommissioningControllerNodeOptions**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedAttributeReportValue`](internal_.md#decodedattributereportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedEventReportValue`](internal_.md#decodedeventreportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
+| `stateInformationCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `state`: [`NodeStateInformation`](../enums/internal_.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
+| `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
+| `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
+
+#### Defined in
+
+matter.js/dist/esm/device/PairedNode.d.ts:38
 
 ___
 
@@ -1065,7 +1062,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:209
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:209
 
 ___
 
@@ -1077,21 +1074,21 @@ User specific options for the Commissioning process
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `adminVendorId?` | `number` |
-| `regulatoryCountryCode` | `string` |
-| `regulatoryLocation` | [`RegulatoryLocationType`](../enums/internal_.RegulatoryLocationType.md) |
-| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } |
-| `threadNetwork.networkName` | `string` |
-| `threadNetwork.operationalDataset` | `string` |
-| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } |
-| `wifiNetwork.wifiCredentials` | `string` |
-| `wifiNetwork.wifiSsid` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `nodeId?` | [`NodeId`](internal_.md#nodeid) | - |
+| `regulatoryCountryCode` | `string` | Country Code where the device is used. |
+| `regulatoryLocation` | [`RegulatoryLocationType`](../enums/internal_.RegulatoryLocationType.md) | Regulatory Location (Indoor/Outdoor) where the device is used. |
+| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
+| `threadNetwork.networkName` | `string` | - |
+| `threadNetwork.operationalDataset` | `string` | - |
+| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
+| `wifiNetwork.wifiCredentials` | `string` | - |
+| `wifiNetwork.wifiSsid` | `string` | - |
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ControllerCommissioner.d.ts:15
+matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:16
 
 ___
 
@@ -1107,7 +1104,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:24
+matter.js/dist/esm/cluster/Cluster.d.ts:24
 
 ___
 
@@ -1119,7 +1116,7 @@ Type for TlvDataReport where the real data are represented with the schema and t
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:26
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:26
 
 ___
 
@@ -1150,7 +1147,7 @@ Represents a fully qualified and decoded attribute value from a received DataRep
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataDecoder.d.ts:13
+matter.js/dist/esm/protocol/interaction/AttributeDataDecoder.d.ts:13
 
 ___
 
@@ -1178,7 +1175,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:13
+matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:13
 
 ___
 
@@ -1206,7 +1203,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventDataDecoder.d.ts:22
+matter.js/dist/esm/protocol/interaction/EventDataDecoder.d.ts:22
 
 ___
 
@@ -1222,9 +1219,9 @@ MatterCoreSpecificationV1_0 § 7.15
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:14
+matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
-matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:13
+matter.js/dist/esm/datatype/DeviceTypeId.d.ts:13
 
 ___
 
@@ -1240,9 +1237,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.11
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/EndpointNumber.d.ts:14
+matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
-matter.js/dist/cjs/datatype/EndpointNumber.d.ts:13
+matter.js/dist/esm/datatype/EndpointNumber.d.ts:13
 
 ___
 
@@ -1258,7 +1255,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:26
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:27
 
 ___
 
@@ -1270,7 +1267,7 @@ Type for TlvEventData where the real data are represented with the schema and th
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:21
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:21
 
 ___
 
@@ -1286,9 +1283,9 @@ MatterCoreSpecificationV1_0 § 7.18.2.17
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/EventId.d.ts:14
+matter.js/dist/esm/datatype/EventId.d.ts:14
 
-matter.js/dist/cjs/datatype/EventId.d.ts:13
+matter.js/dist/esm/datatype/EventId.d.ts:13
 
 ___
 
@@ -1300,7 +1297,7 @@ Type for TlvEventReport where the real data are represented with the schema and 
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/AttributeDataEncoder.d.ts:17
+matter.js/dist/esm/protocol/interaction/AttributeDataEncoder.d.ts:17
 
 ___
 
@@ -1316,7 +1313,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:194
+matter.js/dist/esm/cluster/Cluster.d.ts:194
 
 ___
 
@@ -1334,7 +1331,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/MessageExchange.d.ts:18
+matter.js/dist/esm/protocol/MessageExchange.d.ts:18
 
 ___
 
@@ -1351,9 +1348,9 @@ MatterCoreSpecificationV1_0 § 2.5.1
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricId.d.ts:15
+matter.js/dist/esm/datatype/FabricId.d.ts:15
 
-matter.js/dist/cjs/datatype/FabricId.d.ts:14
+matter.js/dist/esm/datatype/FabricId.d.ts:14
 
 ___
 
@@ -1374,11 +1371,11 @@ MatterCoreSpecificationV1_0 § 7.5.2
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:19
+matter.js/dist/esm/datatype/FabricIndex.d.ts:19
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:18
+matter.js/dist/esm/datatype/FabricIndex.d.ts:18
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:20
+matter.js/dist/esm/datatype/FabricIndex.d.ts:20
 
 ___
 
@@ -1408,7 +1405,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/fabric/Fabric.d.ts:15
+matter.js/dist/esm/fabric/Fabric.d.ts:15
 
 ___
 
@@ -1424,7 +1421,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:109
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:112
 
 ___
 
@@ -1440,7 +1437,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:115
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:118
 
 ___
 
@@ -1456,7 +1453,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:42
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:43
 
 ___
 
@@ -1472,7 +1469,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:121
+matter.js/dist/esm/cluster/Cluster.d.ts:121
 
 ___
 
@@ -1503,9 +1500,9 @@ MatterCoreSpecificationV1_1 § 7.13
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:211
+matter.js/dist/esm/cluster/Cluster.d.ts:211
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:225
+matter.js/dist/esm/cluster/Cluster.d.ts:225
 
 ___
 
@@ -1528,9 +1525,9 @@ MatterCoreSpecificationV1_0 § 2.5.4
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/GroupId.d.ts:21
+matter.js/dist/esm/datatype/GroupId.d.ts:21
 
-matter.js/dist/cjs/datatype/GroupId.d.ts:20
+matter.js/dist/esm/datatype/GroupId.d.ts:20
 
 ___
 
@@ -1546,7 +1543,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:115
+matter.js/dist/esm/cluster/Cluster.d.ts:115
 
 ___
 
@@ -1564,7 +1561,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:24
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:27
 
 ___
 
@@ -1580,7 +1577,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:195
+matter.js/dist/esm/cluster/Cluster.d.ts:195
 
 ___
 
@@ -1596,7 +1593,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:21
+matter.js/dist/esm/tlv/TlvObject.d.ts:21
 
 ___
 
@@ -1615,9 +1612,21 @@ Merges two types into one.
 
 #### Defined in
 
-matter.js/dist/cjs/util/Type.d.ts:13
+matter.js/dist/esm/util/Type.d.ts:13
 
-matter.js/dist/cjs/util/Type.d.ts:10
+matter.js/dist/esm/util/Type.d.ts:10
+
+___
+
+### NodeCommissioningOptions
+
+Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](internal_.md#commissioningcontrollernodeoptions) & { `commissioning?`: [`CommissioningOptions`](internal_.md#commissioningoptions) ; `discovery`: { `identifierData`: [`CommissionableDeviceIdentifiers`](internal_.md#commissionabledeviceidentifiers)  } \| { `commissionableDevice`: [`CommissionableDevice`](internal_.md#commissionabledevice)  } & { `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<typeof [`DiscoveryCapabilitiesBitmap`](internal_.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](internal_.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
+
+Options needed to commission a new node
+
+#### Defined in
+
+matter.js/dist/esm/CommissioningController.d.ts:55
 
 ___
 
@@ -1634,11 +1643,11 @@ MatterCoreSpecificationV1_0 § 2.5.5
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/NodeId.d.ts:15
+matter.js/dist/esm/datatype/NodeId.d.ts:15
 
-matter.js/dist/cjs/datatype/NodeId.d.ts:14
+matter.js/dist/esm/datatype/NodeId.d.ts:14
 
-matter.js/dist/cjs/datatype/NodeId.d.ts:16
+matter.js/dist/esm/datatype/NodeId.d.ts:16
 
 ___
 
@@ -1654,7 +1663,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:112
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:115
 
 ___
 
@@ -1670,7 +1679,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:118
+matter.js/dist/esm/cluster/Cluster.d.ts:118
 
 ___
 
@@ -1686,7 +1695,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:27
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:30
 
 ___
 
@@ -1702,7 +1711,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:198
+matter.js/dist/esm/cluster/Cluster.d.ts:198
 
 ___
 
@@ -1718,7 +1727,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:24
+matter.js/dist/esm/tlv/TlvObject.d.ts:24
 
 ___
 
@@ -1737,7 +1746,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-matter.js/dist/cjs/util/Type.d.ts:6
+matter.js/dist/esm/util/Type.d.ts:6
 
 ___
 
@@ -1753,7 +1762,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:142
+matter.js/dist/esm/cluster/Cluster.d.ts:142
 
 ___
 
@@ -1769,7 +1778,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:141
+matter.js/dist/esm/cluster/Cluster.d.ts:141
 
 ___
 
@@ -1779,7 +1788,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/ServerAddress.d.ts:15
+matter.js/dist/esm/common/ServerAddress.d.ts:15
 
 ___
 
@@ -1796,7 +1805,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/ServerAddress.d.ts:11
+matter.js/dist/esm/common/ServerAddress.d.ts:11
 
 ___
 
@@ -1819,7 +1828,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-matter.js/dist/cjs/common/ServerAddress.d.ts:6
+matter.js/dist/esm/common/ServerAddress.d.ts:6
 
 ___
 
@@ -1835,7 +1844,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:116
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:119
 
 ___
 
@@ -1851,7 +1860,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:123
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:126
 
 ___
 
@@ -1867,7 +1876,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:128
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:131
 
 ___
 
@@ -1883,7 +1892,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/ClusterServerTypes.d.ts:138
+matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:141
 
 ___
 
@@ -1917,7 +1926,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:31
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:32
 
 ___
 
@@ -1929,7 +1938,7 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StringifyTools.d.ts:20
+matter.js/dist/esm/storage/StringifyTools.d.ts:20
 
 ___
 
@@ -1941,7 +1950,7 @@ Supported base types to stringify the data for the storage that can be used as k
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StringifyTools.d.ts:18
+matter.js/dist/esm/storage/StringifyTools.d.ts:18
 
 ___
 
@@ -1951,7 +1960,30 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/StringifyTools.d.ts:23
+matter.js/dist/esm/storage/StringifyTools.d.ts:23
+
+___
+
+### TimerCallback
+
+Ƭ **TimerCallback**: () => `any`
+
+#### Type declaration
+
+▸ (): `any`
+
+##### Returns
+
+`any`
+
+**`License`**
+
+Copyright 2022-2023 Project CHIP Authors
+SPDX-License-Identifier: Apache-2.0
+
+#### Defined in
+
+matter.js/dist/esm/time/Time.d.ts:6
 
 ___
 
@@ -1975,7 +2007,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:24
+matter.js/dist/esm/tlv/TlvSchema.d.ts:24
 
 ___
 
@@ -1989,7 +2021,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:18
+matter.js/dist/esm/tlv/TlvObject.d.ts:18
 
 ___
 
@@ -1999,7 +2031,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:23
+matter.js/dist/esm/tlv/TlvSchema.d.ts:23
 
 ___
 
@@ -2018,7 +2050,7 @@ MatterCoreSpecificationV1_0 § A.2
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:79
+matter.js/dist/esm/tlv/TlvCodec.d.ts:79
 
 ___
 
@@ -2046,7 +2078,7 @@ Converts TlvType to the js primitive type.
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:65
+matter.js/dist/esm/tlv/TlvCodec.d.ts:65
 
 ___
 
@@ -2058,7 +2090,7 @@ Type and length or value, when applicable.
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvCodec.d.ts:35
+matter.js/dist/esm/tlv/TlvCodec.d.ts:35
 
 ___
 
@@ -2075,7 +2107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:28
+matter.js/dist/esm/tlv/TlvObject.d.ts:28
 
 ___
 
@@ -2092,7 +2124,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:31
+matter.js/dist/esm/tlv/TlvObject.d.ts:31
 
 ___
 
@@ -2108,7 +2140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:27
+matter.js/dist/esm/tlv/TlvObject.d.ts:27
 
 ___
 
@@ -2124,7 +2156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:34
+matter.js/dist/esm/tlv/TlvObject.d.ts:34
 
 ___
 
@@ -2140,7 +2172,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:36
+matter.js/dist/esm/schema/BitmapSchema.d.ts:36
 
 ___
 
@@ -2158,7 +2190,7 @@ Type defined by the TLV schema.
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvSchema.d.ts:43
+matter.js/dist/esm/tlv/TlvSchema.d.ts:43
 
 ___
 
@@ -2176,9 +2208,9 @@ MatterCoreSpecificationV1_0 § 2.5.2
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/VendorId.d.ts:16
+matter.js/dist/esm/datatype/VendorId.d.ts:16
 
-matter.js/dist/cjs/datatype/VendorId.d.ts:15
+matter.js/dist/esm/datatype/VendorId.d.ts:15
 
 ___
 
@@ -2194,7 +2226,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:49
+matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 ## Variables
 
@@ -2204,9 +2236,29 @@ matter.js/dist/cjs/cluster/client/ClusterClientTypes.d.ts:49
 
 #### Defined in
 
-matter.js/dist/cjs/util/ByteArray.d.ts:25
+matter.js/dist/esm/util/ByteArray.d.ts:25
 
-matter.js/dist/cjs/util/ByteArray.d.ts:26
+matter.js/dist/esm/util/ByteArray.d.ts:26
+
+___
+
+### DiscoveryCapabilitiesBitmap
+
+• `Const` **DiscoveryCapabilitiesBitmap**: `Object`
+
+See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `ble` | [`BitFlag`](internal_.md#bitflag-1) | Device supports BLE for discovery when not commissioned. |
+| `onIpNetwork` | [`BitFlag`](internal_.md#bitflag-1) | Device is already on the IP network. |
+| `softAccessPoint` | [`BitFlag`](internal_.md#bitflag-1) | Device supports hosting a Soft-AP when not commissioned. |
+
+#### Defined in
+
+matter.js/dist/esm/schema/PairingCodeSchema.d.ts:19
 
 ___
 
@@ -2241,13 +2293,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/InstanceBroadcaster.d.ts:9
+matter.js/dist/esm/common/InstanceBroadcaster.d.ts:9
 
 ___
 
 ### TlvAttributeReport
 
-• `Const` **TlvAttributeReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2255,23 +2307,23 @@ MatterCoreSpecificationV1_0, section 10.5.5
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:137
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:137
 
 ___
 
 ### TlvAttributeReportData
 
-• `Const` **TlvAttributeReportData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvAttributeReportData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:124
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:124
 
 ___
 
 ### TlvDataReport
 
-• `Const` **TlvDataReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvDataReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2279,13 +2331,13 @@ MatterCoreSpecificationV1_0, section 10.6.3
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:298
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:298
 
 ___
 
 ### TlvEventData
 
-• `Const` **TlvEventData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventData**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2293,13 +2345,13 @@ MatterCoreSpecificationV1_0, section 10.5.9
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:55
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:55
 
 ___
 
 ### TlvEventFilter
 
-• `Const` **TlvEventFilter**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventFilter**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2307,13 +2359,13 @@ MatterCoreSpecificationV1_0, section 10.5.6
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:72
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:72
 
 ___
 
 ### TlvEventReport
 
-• `Const` **TlvEventReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/cjs/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_cjs_tlv_TlvObject_.md)
+• `Const` **TlvEventReport**: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
 
 **`See`**
 
@@ -2321,7 +2373,7 @@ MatterCoreSpecificationV1_0, section 10.5.10
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:180
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:180
 
 ## Functions
 
@@ -2351,7 +2403,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionProtocol.d.ts:180
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:97
+matter.js/dist/esm/cluster/Cluster.d.ts:97
 
 ___
 
@@ -2371,7 +2423,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/AttributeId.d.ts:14
+matter.js/dist/esm/datatype/AttributeId.d.ts:14
 
 ___
 
@@ -2392,7 +2444,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:26
+matter.js/dist/esm/schema/BitmapSchema.d.ts:26
 
 ___
 
@@ -2419,7 +2471,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:29
+matter.js/dist/esm/schema/BitmapSchema.d.ts:29
 
 ___
 
@@ -2439,7 +2491,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:23
+matter.js/dist/esm/schema/BitmapSchema.d.ts:23
 
 ___
 
@@ -2468,7 +2520,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/schema/BitmapSchema.d.ts:20
+matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
@@ -2507,7 +2559,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:237
+matter.js/dist/esm/cluster/Cluster.d.ts:237
 
 ___
 
@@ -2527,7 +2579,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/ClusterId.d.ts:15
+matter.js/dist/esm/datatype/ClusterId.d.ts:15
 
 ___
 
@@ -2559,7 +2611,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:151
+matter.js/dist/esm/cluster/Cluster.d.ts:151
 
 ___
 
@@ -2579,7 +2631,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/CommandId.d.ts:14
+matter.js/dist/esm/datatype/CommandId.d.ts:14
 
 ___
 
@@ -2609,7 +2661,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:62
+matter.js/dist/esm/device/DeviceTypes.d.ts:62
 
 ___
 
@@ -2629,7 +2681,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/DeviceTypeId.d.ts:14
+matter.js/dist/esm/datatype/DeviceTypeId.d.ts:14
 
 ___
 
@@ -2649,7 +2701,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/EndpointNumber.d.ts:14
+matter.js/dist/esm/datatype/EndpointNumber.d.ts:14
 
 ___
 
@@ -2679,7 +2731,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:190
+matter.js/dist/esm/cluster/Cluster.d.ts:190
 
 ___
 
@@ -2699,7 +2751,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/EventId.d.ts:14
+matter.js/dist/esm/datatype/EventId.d.ts:14
 
 ___
 
@@ -2719,7 +2771,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricId.d.ts:15
+matter.js/dist/esm/datatype/FabricId.d.ts:15
 
 ___
 
@@ -2739,7 +2791,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/FabricIndex.d.ts:19
+matter.js/dist/esm/datatype/FabricIndex.d.ts:19
 
 ___
 
@@ -2769,7 +2821,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:103
+matter.js/dist/esm/cluster/Cluster.d.ts:103
 
 ___
 
@@ -2799,7 +2851,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:107
+matter.js/dist/esm/cluster/Cluster.d.ts:107
 
 ___
 
@@ -2825,7 +2877,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:225
+matter.js/dist/esm/cluster/Cluster.d.ts:225
 
 ___
 
@@ -2845,7 +2897,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/GroupId.d.ts:21
+matter.js/dist/esm/datatype/GroupId.d.ts:21
 
 ___
 
@@ -2867,7 +2919,7 @@ Generic key factory.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:159
+matter.js/dist/esm/crypto/Key.d.ts:159
 
 ___
 
@@ -2895,7 +2947,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/util/Type.d.ts:13
+matter.js/dist/esm/util/Type.d.ts:13
 
 ___
 
@@ -2915,7 +2967,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/NodeId.d.ts:15
+matter.js/dist/esm/datatype/NodeId.d.ts:15
 
 ___
 
@@ -2945,7 +2997,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:98
+matter.js/dist/esm/cluster/Cluster.d.ts:98
 
 ___
 
@@ -2977,7 +3029,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:152
+matter.js/dist/esm/cluster/Cluster.d.ts:152
 
 ___
 
@@ -3007,7 +3059,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:191
+matter.js/dist/esm/cluster/Cluster.d.ts:191
 
 ___
 
@@ -3037,7 +3089,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:109
+matter.js/dist/esm/cluster/Cluster.d.ts:109
 
 ___
 
@@ -3067,7 +3119,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:101
+matter.js/dist/esm/cluster/Cluster.d.ts:101
 
 ___
 
@@ -3097,7 +3149,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:105
+matter.js/dist/esm/cluster/Cluster.d.ts:105
 
 ___
 
@@ -3117,7 +3169,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/datatype/VendorId.d.ts:16
+matter.js/dist/esm/datatype/VendorId.d.ts:16
 
 ___
 
@@ -3147,7 +3199,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:100
+matter.js/dist/esm/cluster/Cluster.d.ts:100
 
 ___
 
@@ -3177,4 +3229,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:104
+matter.js/dist/esm/cluster/Cluster.d.ts:104

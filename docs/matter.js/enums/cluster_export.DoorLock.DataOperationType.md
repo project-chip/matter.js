@@ -28,7 +28,7 @@ Data is being added or was added
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:588
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:588](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L588)
 
 ___
 
@@ -40,7 +40,7 @@ Data is being cleared or was cleared
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:593
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:593](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L593)
 
 ___
 
@@ -52,4 +52,4 @@ Data is being modified or was modified
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:598
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:598](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L598)

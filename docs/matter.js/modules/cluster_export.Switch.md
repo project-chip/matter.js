@@ -46,7 +46,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:371
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:371](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L371)
 
 ## Variables
 
@@ -58,7 +58,7 @@ These elements and properties are present in all Switch clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:107
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:107](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L107)
 
 ___
 
@@ -89,7 +89,7 @@ SwitchCluster supports optional features that you can enable with the SwitchClus
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:333
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:333](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L333)
 
 ___
 
@@ -104,7 +104,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:399
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:399](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L399)
 
 ___
 
@@ -116,7 +116,7 @@ A SwitchCluster supports these elements if it supports feature LatchingSwitch.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:227
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:227](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L227)
 
 ___
 
@@ -128,7 +128,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitch.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:244
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:244](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L244)
 
 ___
 
@@ -140,7 +140,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchLo
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:260
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:260](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L260)
 
 ___
 
@@ -152,7 +152,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchMu
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:163
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:163](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L163)
 
 ___
 
@@ -164,7 +164,7 @@ A SwitchCluster supports these elements if it supports feature MomentarySwitchRe
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:290
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:290](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L290)
 
 ___
 
@@ -180,7 +180,7 @@ Body of the Switch initialPress event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:49
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L49)
 
 ___
 
@@ -196,7 +196,7 @@ Body of the Switch longPress event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:56
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:56](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L56)
 
 ___
 
@@ -212,7 +212,7 @@ Body of the Switch longRelease event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:63
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L63)
 
 ___
 
@@ -228,7 +228,7 @@ Body of the Switch multiPressComplete event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:32
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L32)
 
 ___
 
@@ -244,7 +244,7 @@ Body of the Switch multiPressOngoing event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:22
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L22)
 
 ___
 
@@ -260,7 +260,7 @@ Body of the Switch shortRelease event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:70
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L70)
 
 ___
 
@@ -276,4 +276,4 @@ Body of the Switch switchLatched event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:42
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L42)

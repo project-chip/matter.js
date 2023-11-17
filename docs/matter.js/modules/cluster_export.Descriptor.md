@@ -37,7 +37,7 @@ type.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:61
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L61)
 
 ___
 
@@ -54,4 +54,4 @@ Model specification for more information.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:26
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L26)

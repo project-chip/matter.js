@@ -30,7 +30,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:89
+matter.js/dist/esm/cluster/Cluster.d.ts:89
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:87
+matter.js/dist/esm/cluster/Cluster.d.ts:87
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:86
+matter.js/dist/esm/cluster/Cluster.d.ts:86
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:90
+matter.js/dist/esm/cluster/Cluster.d.ts:90
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:85
+matter.js/dist/esm/cluster/Cluster.d.ts:85
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:88
+matter.js/dist/esm/cluster/Cluster.d.ts:88
 
 ___
 
@@ -90,4 +90,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:91
+matter.js/dist/esm/cluster/Cluster.d.ts:91

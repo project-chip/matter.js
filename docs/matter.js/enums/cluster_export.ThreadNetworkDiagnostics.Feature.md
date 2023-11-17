@@ -32,7 +32,7 @@ of packets on the Thread interface.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:460
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:460](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L460)
 
 ___
 
@@ -46,7 +46,7 @@ Server supports the counts for various MAC layer happenings.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:474
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:474](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L474)
 
 ___
 
@@ -60,7 +60,7 @@ Server supports the counts for various MLE layer happenings.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:467
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:467](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L467)
 
 ___
 
@@ -74,4 +74,4 @@ Server supports the counts for the number of received and transmitted packets on
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:452
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:452](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L452)

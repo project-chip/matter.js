@@ -7,18 +7,44 @@
 ## Implemented by
 
 - [`BleScanner`](../classes/BleScanner.md)
+- [`MdnsScanner`](../classes/internal_.MdnsScanner.md)
 
 ## Table of contents
 
 ### Methods
 
+- [cancelCommissionableDeviceDiscovery](internal_.Scanner.md#cancelcommissionabledevicediscovery)
 - [close](internal_.Scanner.md#close)
 - [findCommissionableDevices](internal_.Scanner.md#findcommissionabledevices)
+- [findCommissionableDevicesContinuously](internal_.Scanner.md#findcommissionabledevicescontinuously)
 - [findOperationalDevice](internal_.Scanner.md#findoperationaldevice)
 - [getDiscoveredCommissionableDevices](internal_.Scanner.md#getdiscoveredcommissionabledevices)
 - [getDiscoveredOperationalDevices](internal_.Scanner.md#getdiscoveredoperationaldevices)
 
 ## Methods
+
+### cancelCommissionableDeviceDiscovery
+
+▸ **cancelCommissionableDeviceDiscovery**(`identifier`): `void`
+
+Cancel a running discovery of commissionable devices. The waiter promises are resolved as if the timeout would
+be over.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/common/Scanner.d.ts:94
+
+___
 
 ### close
 
@@ -32,22 +58,49 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:84
+matter.js/dist/esm/common/Scanner.d.ts:96
 
 ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
-Send DNS-SD queries to discover commissionable devices by an provided identifier (e.g. discriminator,
-vendorId, etc.) and return them.
+Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
+vendorId, etc.) and returns as soon as minimum one was found or the timeout is over.
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
+
+#### Returns
+
+`Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+
+#### Defined in
+
+matter.js/dist/esm/common/Scanner.d.ts:81
+
+___
+
+### findCommissionableDevicesContinuously
+
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+
+Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
+vendorId, etc.) and returns after the timeout is over. For each new discovered device the provided callback is
+called when it is discovered.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
+| `callback` | (`device`: [`CommissionableDevice`](../modules/internal_.md#commissionabledevice)) => `void` |
 | `timeoutSeconds?` | `number` |
 
 #### Returns
@@ -56,13 +109,13 @@ vendorId, etc.) and return them.
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:80
+matter.js/dist/esm/common/Scanner.d.ts:87
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`): `Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
@@ -74,6 +127,7 @@ and return them.
 | `fabric` | [`Fabric`](../classes/internal_.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
 
 #### Returns
 
@@ -81,7 +135,7 @@ and return them.
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:70
+matter.js/dist/esm/common/Scanner.d.ts:71
 
 ___
 
@@ -103,7 +157,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:82
+matter.js/dist/esm/common/Scanner.d.ts:89
 
 ___
 
@@ -127,4 +181,4 @@ DNS-SD queries.
 
 #### Defined in
 
-matter.js/dist/cjs/common/Scanner.d.ts:75
+matter.js/dist/esm/common/Scanner.d.ts:76

@@ -27,7 +27,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:55
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:62](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L62)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:56
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L63)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:49
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:56](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L56)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:52
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:59](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L59)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:48
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L55)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:50
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L57)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:51
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L58)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:57
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L64)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:53
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L60)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:54
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L61)

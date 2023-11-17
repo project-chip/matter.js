@@ -52,7 +52,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:557
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:557](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L557)
 
 ## Variables
 
@@ -64,7 +64,7 @@ These elements and properties are present in all Scenes clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:338
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L338)
 
 ___
 
@@ -96,7 +96,7 @@ ScenesCluster supports optional features that you can enable with the ScenesClus
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:536
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:536](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L536)
 
 ___
 
@@ -119,7 +119,7 @@ The value of Scenes.mode
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:231
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:231](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L231)
 
 ___
 
@@ -141,7 +141,7 @@ The value of the Scenes nameSupport attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:39
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L39)
 
 ___
 
@@ -157,7 +157,7 @@ Input to the Scenes addScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:88
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:88](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L88)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:99
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L99)
 
 ___
 
@@ -187,7 +187,7 @@ This data type indicates a combination of an identifier and the value of an attr
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:51
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L51)
 
 ___
 
@@ -203,7 +203,7 @@ Input to the Scenes copyScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:238
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:238](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L238)
 
 ___
 
@@ -219,7 +219,7 @@ The CopySceneResponse command allows a server to respond to a CopyScene command.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:293
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:293](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L293)
 
 ___
 
@@ -237,7 +237,7 @@ field.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:78
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L78)
 
 ___
 
@@ -253,7 +253,7 @@ Input to the Scenes getSceneMembership command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:190
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:190](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L190)
 
 ___
 
@@ -291,7 +291,7 @@ frame to be exceeded, then the SceneList field shall contain only as many scenes
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:219
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:219](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L219)
 
 ___
 
@@ -307,7 +307,7 @@ Input to the Scenes recallScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:179
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:179](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L179)
 
 ___
 
@@ -323,7 +323,7 @@ Input to the Scenes removeAllScenes command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:148
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:148](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L148)
 
 ___
 
@@ -337,7 +337,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:153
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:153](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L153)
 
 ___
 
@@ -353,7 +353,7 @@ Input to the Scenes removeScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:129
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:129](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L129)
 
 ___
 
@@ -367,7 +367,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:137
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:137](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L137)
 
 ___
 
@@ -383,7 +383,7 @@ Input to the Scenes storeScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:163
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:163](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L163)
 
 ___
 
@@ -397,7 +397,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:168
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:168](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L168)
 
 ___
 
@@ -413,7 +413,7 @@ Input to the Scenes viewScene command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:110
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:110](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L110)
 
 ___
 
@@ -427,4 +427,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:115
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L115)

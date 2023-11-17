@@ -26,4 +26,4 @@ Attributes and commands for configuring the measurement of illuminance, and repo
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:23
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L23)

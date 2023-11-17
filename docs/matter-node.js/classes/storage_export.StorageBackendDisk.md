@@ -22,10 +22,13 @@
 
 - [buildStorageKey](storage_export.StorageBackendDisk.md#buildstoragekey)
 - [clear](storage_export.StorageBackendDisk.md#clear)
+- [clearAll](storage_export.StorageBackendDisk.md#clearall)
 - [close](storage_export.StorageBackendDisk.md#close)
 - [delete](storage_export.StorageBackendDisk.md#delete)
 - [get](storage_export.StorageBackendDisk.md#get)
+- [getContextBaseKey](storage_export.StorageBackendDisk.md#getcontextbasekey)
 - [initialize](storage_export.StorageBackendDisk.md#initialize)
+- [keys](storage_export.StorageBackendDisk.md#keys)
 - [set](storage_export.StorageBackendDisk.md#set)
 
 ## Constructors
@@ -43,7 +46,7 @@
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:14
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:14](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L14)
 
 ## Properties
 
@@ -53,7 +56,7 @@ packages/matter-node.js/src/storage/StorageBackendDisk.ts:14
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:12
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:12](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L12)
 
 ## Methods
 
@@ -74,7 +77,7 @@ packages/matter-node.js/src/storage/StorageBackendDisk.ts:12
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:31
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L43)
 
 ___
 
@@ -88,7 +91,31 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:27
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L27)
+
+___
+
+### clearAll
+
+▸ **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[clearAll](storage_export.Storage.md#clearall)
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L78)
 
 ___
 
@@ -106,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:23
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L23)
 
 ___
 
@@ -131,7 +158,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:56
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L61)
 
 ___
 
@@ -162,7 +189,28 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:44
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L51)
+
+___
+
+### getContextBaseKey
+
+▸ **getContextBaseKey**(`contexts`, `allowEmptyContext?`): `string`
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `contexts` | `string`[] | `undefined` |
+| `allowEmptyContext` | `boolean` | `false` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L31)
 
 ___
 
@@ -180,7 +228,33 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:19
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L19)
+
+___
+
+### keys
+
+▸ **keys**(`contexts`): `string`[]
+
+Returns all keys of a storage context without keys of sub-contexts
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[keys](storage_export.Storage.md#keys)
+
+#### Defined in
+
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:66](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L66)
 
 ___
 
@@ -212,4 +286,4 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendDisk.ts:51
+[packages/matter-node.js/src/storage/StorageBackendDisk.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendDisk.ts#L57)

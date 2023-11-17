@@ -26,6 +26,7 @@
 ### Methods
 
 - [cancelPairing](internal_.PaseServer.md#cancelpairing)
+- [close](internal_.PaseServer.md#close)
 - [getId](internal_.PaseServer.md#getid)
 - [onNewExchange](internal_.PaseServer.md#onnewexchange)
 - [fromPin](internal_.PaseServer.md#frompin)
@@ -47,7 +48,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:24
+matter.js/dist/esm/session/pase/PaseServer.d.ts:24
 
 ## Properties
 
@@ -57,7 +58,7 @@ matter.js/dist/cjs/session/pase/PaseServer.d.ts:24
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:18
+matter.js/dist/esm/session/pase/PaseServer.d.ts:18
 
 ___
 
@@ -67,7 +68,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:27
+matter.js/dist/esm/session/pase/PaseServer.d.ts:27
 
 ___
 
@@ -77,7 +78,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:21
+matter.js/dist/esm/session/pase/PaseServer.d.ts:21
 
 ___
 
@@ -87,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:20
+matter.js/dist/esm/session/pase/PaseServer.d.ts:20
 
 ___
 
@@ -97,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:19
+matter.js/dist/esm/session/pase/PaseServer.d.ts:19
 
 ___
 
@@ -107,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:17
+matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 ## Methods
 
@@ -128,7 +129,25 @@ matter.js/dist/cjs/session/pase/PaseServer.d.ts:17
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:28
+matter.js/dist/esm/session/pase/PaseServer.d.ts:28
+
+___
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[ProtocolHandler](../interfaces/internal_.ProtocolHandler.md).[close](../interfaces/internal_.ProtocolHandler.md#close)
+
+#### Defined in
+
+matter.js/dist/esm/session/pase/PaseServer.d.ts:29
 
 ___
 
@@ -146,7 +165,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:25
+matter.js/dist/esm/session/pase/PaseServer.d.ts:25
 
 ___
 
@@ -170,7 +189,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:26
+matter.js/dist/esm/session/pase/PaseServer.d.ts:26
 
 ___
 
@@ -191,7 +210,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:22
+matter.js/dist/esm/session/pase/PaseServer.d.ts:22
 
 ___
 
@@ -212,4 +231,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseServer.d.ts:23
+matter.js/dist/esm/session/pase/PaseServer.d.ts:23

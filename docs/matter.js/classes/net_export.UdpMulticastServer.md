@@ -49,7 +49,7 @@
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:50
+[packages/matter.js/src/net/UdpMulticastServer.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L60)
 
 ## Properties
 
@@ -59,7 +59,7 @@ packages/matter.js/src/net/UdpMulticastServer.ts:50
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:52
+[packages/matter.js/src/net/UdpMulticastServer.ts:62](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L62)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:53
+[packages/matter.js/src/net/UdpMulticastServer.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L63)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:44
+[packages/matter.js/src/net/UdpMulticastServer.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L54)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:54
+[packages/matter.js/src/net/UdpMulticastServer.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L64)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:57
+[packages/matter.js/src/net/UdpMulticastServer.ts:67](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L67)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:51
+[packages/matter.js/src/net/UdpMulticastServer.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L61)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:55
+[packages/matter.js/src/net/UdpMulticastServer.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L65)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:56
+[packages/matter.js/src/net/UdpMulticastServer.ts:66](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L66)
 
 ## Methods
 
@@ -143,7 +143,7 @@ packages/matter.js/src/net/UdpMulticastServer.ts:56
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:116
+[packages/matter.js/src/net/UdpMulticastServer.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L126)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:108
+[packages/matter.js/src/net/UdpMulticastServer.ts:118](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L118)
 
 ___
 
@@ -184,7 +184,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:60
+[packages/matter.js/src/net/UdpMulticastServer.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L70)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:69
+[packages/matter.js/src/net/UdpMulticastServer.ts:79](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L79)
 
 ___
 
@@ -226,4 +226,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:24
+[packages/matter.js/src/net/UdpMulticastServer.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L24)

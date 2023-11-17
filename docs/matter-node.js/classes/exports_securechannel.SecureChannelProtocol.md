@@ -4,9 +4,11 @@
 
 [exports/securechannel](../modules/exports_securechannel.md).SecureChannelProtocol
 
-## Implements
+## Hierarchy
 
-- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`StatusReportOnlySecureChannelProtocol`](exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
+
+  ↳ **`SecureChannelProtocol`**
 
 ## Table of contents
 
@@ -22,6 +24,7 @@
 
 ### Methods
 
+- [close](exports_securechannel.SecureChannelProtocol.md#close)
 - [getId](exports_securechannel.SecureChannelProtocol.md#getid)
 - [handleInitialStatusReport](exports_securechannel.SecureChannelProtocol.md#handleinitialstatusreport)
 - [onNewExchange](exports_securechannel.SecureChannelProtocol.md#onnewexchange)
@@ -41,9 +44,13 @@
 | :------ | :------ |
 | `commissioningCancelledCallback` | () => `Promise`<`void`\> |
 
+#### Overrides
+
+[StatusReportOnlySecureChannelProtocol](exports_securechannel.StatusReportOnlySecureChannelProtocol.md).[constructor](exports_securechannel.StatusReportOnlySecureChannelProtocol.md#constructor)
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:15
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:20
 
 ## Properties
 
@@ -53,7 +60,7 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:14
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:19
 
 ___
 
@@ -63,7 +70,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:12
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:17
 
 ___
 
@@ -73,9 +80,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:13
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:18
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Inherited from
+
+[StatusReportOnlySecureChannelProtocol](exports_securechannel.StatusReportOnlySecureChannelProtocol.md).[close](exports_securechannel.StatusReportOnlySecureChannelProtocol.md#close)
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:14
+
+___
 
 ### getId
 
@@ -85,13 +110,13 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:13
 
 `number`
 
-#### Implementation of
+#### Inherited from
 
-[ProtocolHandler](../interfaces/exports_protocol.ProtocolHandler.md).[getId](../interfaces/exports_protocol.ProtocolHandler.md#getid)
+[StatusReportOnlySecureChannelProtocol](exports_securechannel.StatusReportOnlySecureChannelProtocol.md).[getId](exports_securechannel.StatusReportOnlySecureChannelProtocol.md#getid)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:16
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:11
 
 ___
 
@@ -103,16 +128,20 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
 `Promise`<`void`\>
 
+#### Inherited from
+
+[StatusReportOnlySecureChannelProtocol](exports_securechannel.StatusReportOnlySecureChannelProtocol.md).[handleInitialStatusReport](exports_securechannel.StatusReportOnlySecureChannelProtocol.md#handleinitialstatusreport)
+
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:20
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:13
 
 ___
 
@@ -124,20 +153,20 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
 `Promise`<`void`\>
 
-#### Implementation of
+#### Overrides
 
-[ProtocolHandler](../interfaces/exports_protocol.ProtocolHandler.md).[onNewExchange](../interfaces/exports_protocol.ProtocolHandler.md#onnewexchange)
+[StatusReportOnlySecureChannelProtocol](exports_securechannel.StatusReportOnlySecureChannelProtocol.md).[onNewExchange](exports_securechannel.StatusReportOnlySecureChannelProtocol.md#onnewexchange)
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:19
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:23
 
 ___
 
@@ -151,7 +180,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:18
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:22
 
 ___
 
@@ -171,7 +200,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:17
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:21
 
 ___
 
@@ -192,4 +221,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:21
+packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:24

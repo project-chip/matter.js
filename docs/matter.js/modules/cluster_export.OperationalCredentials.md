@@ -46,7 +46,7 @@ the associated Fabrics.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:515
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:515](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L515)
 
 ___
 
@@ -62,7 +62,7 @@ Input to the OperationalCredentials addNoc command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:234
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:234](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L234)
 
 ___
 
@@ -78,7 +78,7 @@ Input to the OperationalCredentials addTrustedRootCertificate command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:503
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:503](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L503)
 
 ___
 
@@ -94,7 +94,7 @@ Input to the OperationalCredentials attestationRequest command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:122
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:122](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L122)
 
 ___
 
@@ -115,7 +115,7 @@ See Section F.2, “Device Attestation Response test vector” for an example co
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:136
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:136](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L136)
 
 ___
 
@@ -131,7 +131,7 @@ Input to the OperationalCredentials certificateChainRequest command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:176
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:176](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L176)
 
 ___
 
@@ -147,7 +147,7 @@ This command shall be generated in response to a CertificateChainRequest command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:185
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:185](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L185)
 
 ___
 
@@ -163,7 +163,7 @@ Input to the OperationalCredentials csrRequest command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:200
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:200](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L200)
 
 ___
 
@@ -184,7 +184,7 @@ See Section F.3, “Node Operational CSR Response test vector” for an example 
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:215
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:215](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L215)
 
 ___
 
@@ -200,7 +200,7 @@ This structure encodes a Fabric Reference for a fabric within which a given Node
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:65
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L65)
 
 ___
 
@@ -219,7 +219,7 @@ TrustedRootCertificates attribute of the Node Operational Credentials cluster.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:40
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:40](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L40)
 
 ___
 
@@ -245,7 +245,7 @@ It provides status information about the success or failure of those commands.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:444
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:444](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L444)
 
 ___
 
@@ -261,7 +261,7 @@ Input to the OperationalCredentials removeFabric command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:496
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:496](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L496)
 
 ___
 
@@ -277,7 +277,7 @@ Input to the OperationalCredentials updateFabricLabel command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:486
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:486](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L486)
 
 ___
 
@@ -293,4 +293,4 @@ Input to the OperationalCredentials updateNoc command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:475
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:475](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L475)

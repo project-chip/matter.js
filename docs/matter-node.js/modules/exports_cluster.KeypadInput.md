@@ -37,7 +37,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:377
+packages/matter.js/dist/esm/cluster/definitions/KeypadInputCluster.d.ts:381
 
 ## Variables
 

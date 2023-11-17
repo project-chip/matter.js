@@ -60,7 +60,7 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:23
+matter.js/dist/esm/common/FailSafeManager.d.ts:23
 
 ## Properties
 
@@ -70,7 +70,7 @@ matter.js/dist/cjs/common/FailSafeManager.d.ts:23
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:14
+matter.js/dist/esm/common/FailSafeManager.d.ts:14
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:21
+matter.js/dist/esm/common/FailSafeManager.d.ts:21
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:13
+matter.js/dist/esm/common/FailSafeManager.d.ts:13
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:15
+matter.js/dist/esm/common/FailSafeManager.d.ts:15
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:17
+matter.js/dist/esm/common/FailSafeManager.d.ts:17
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:18
+matter.js/dist/esm/common/FailSafeManager.d.ts:18
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:22
+matter.js/dist/esm/common/FailSafeManager.d.ts:22
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:19
+matter.js/dist/esm/common/FailSafeManager.d.ts:19
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:16
+matter.js/dist/esm/common/FailSafeManager.d.ts:16
 
 ___
 
@@ -162,7 +162,7 @@ Store required CLuster data when opening the FailSafe context to allow to restor
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:25
+matter.js/dist/esm/common/FailSafeManager.d.ts:25
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:20
+matter.js/dist/esm/common/FailSafeManager.d.ts:20
 
 ## Accessors
 
@@ -186,7 +186,7 @@ matter.js/dist/cjs/common/FailSafeManager.d.ts:20
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:28
+matter.js/dist/esm/common/FailSafeManager.d.ts:28
 
 ## Methods
 
@@ -213,7 +213,7 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:48
+matter.js/dist/esm/common/FailSafeManager.d.ts:48
 
 ___
 
@@ -237,7 +237,7 @@ cluster.
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:46
+matter.js/dist/esm/common/FailSafeManager.d.ts:46
 
 ___
 
@@ -253,7 +253,7 @@ Complete the FailSafe context. This is called when the commissioning is complete
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:34
+matter.js/dist/esm/common/FailSafeManager.d.ts:34
 
 ___
 
@@ -277,7 +277,7 @@ validity checks.
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:39
+matter.js/dist/esm/common/FailSafeManager.d.ts:39
 
 ___
 
@@ -293,7 +293,7 @@ Expire the FailSafe context. This is called by the timer and can also be called 
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:32
+matter.js/dist/esm/common/FailSafeManager.d.ts:32
 
 ___
 
@@ -316,7 +316,7 @@ Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or f
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:30
+matter.js/dist/esm/common/FailSafeManager.d.ts:30
 
 ___
 
@@ -338,7 +338,7 @@ Restore Cluster data when the FailSafe context expired.
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:27
+matter.js/dist/esm/common/FailSafeManager.d.ts:27
 
 ___
 
@@ -360,4 +360,4 @@ Handles adding a trusted root certificate from Operational Credentials cluster.
 
 #### Defined in
 
-matter.js/dist/cjs/common/FailSafeManager.d.ts:41
+matter.js/dist/esm/common/FailSafeManager.d.ts:41

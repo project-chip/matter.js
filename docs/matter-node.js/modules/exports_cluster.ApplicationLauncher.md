@@ -42,7 +42,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:975
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:974
 
 ## Variables
 
@@ -102,7 +102,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:986
+packages/matter.js/dist/esm/cluster/definitions/ApplicationLauncherCluster.d.ts:985
 
 ___
 
