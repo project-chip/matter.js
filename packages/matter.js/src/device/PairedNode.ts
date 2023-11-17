@@ -608,7 +608,7 @@ export class PairedNode {
         }
     }
 
-    /** Returns the devices/endpoints known for this node. */
+    /** Returns the functional devices/endpoints (those below the Root Endpoint) known for this node. */
     getDevices(): Endpoint[] {
         return this.endpoints.get(EndpointNumber(0))?.getChildEndpoints() ?? [];
     }
@@ -616,6 +616,10 @@ export class PairedNode {
     /** Returns the device/endpoint with the given endpoint ID. */
     getDeviceById(endpointId: number) {
         return this.endpoints.get(EndpointNumber(endpointId));
+    }
+
+    getRootEndpoint() {
+        return this.getDeviceById(0);
     }
 
     /** De-Commission (unpair) the device from this controller by removing the fabric from the device. */
@@ -775,5 +779,37 @@ export class PairedNode {
         E extends Events,
     >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
         return this.endpoints.get(EndpointNumber(0))?.getClusterClient(cluster);
+    }
+
+    /**
+     * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param endpointId EndpointNumber to get the cluster from
+     * @param cluster ClusterServer to get or undefined if not existing
+     */
+    getClusterServerForDevice<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+        return this.getDeviceById(endpointId)?.getClusterServer(cluster);
+    }
+
+    /**
+     * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param endpointId EndpointNumber to get the cluster from
+     * @param cluster ClusterClient to get or undefined if not existing
+     */
+    getClusterClientForDevice<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+        return this.getDeviceById(endpointId)?.getClusterClient(cluster);
     }
 }
