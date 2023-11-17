@@ -21,7 +21,7 @@
 
 #### Defined in
 
-packages/matter.js/src/codec/DnsCodec.ts:103
+[packages/matter.js/src/codec/DnsCodec.ts:103](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/DnsCodec.ts#L103)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/codec/DnsCodec.ts:105
+[packages/matter.js/src/codec/DnsCodec.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/DnsCodec.ts#L105)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/codec/DnsCodec.ts:104
+[packages/matter.js/src/codec/DnsCodec.ts:104](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/DnsCodec.ts#L104)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/codec/DnsCodec.ts:106
+[packages/matter.js/src/codec/DnsCodec.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/DnsCodec.ts#L106)

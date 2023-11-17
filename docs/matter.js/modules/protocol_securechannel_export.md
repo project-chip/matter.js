@@ -16,6 +16,7 @@
 - [SecureChannelMessenger](../classes/protocol_securechannel_export.SecureChannelMessenger.md)
 - [SecureChannelProtocol](../classes/protocol_securechannel_export.SecureChannelProtocol.md)
 - [SecureChannelStatusMessageSchema](../classes/protocol_securechannel_export.SecureChannelStatusMessageSchema.md)
+- [StatusReportOnlySecureChannelProtocol](../classes/protocol_securechannel_export.StatusReportOnlySecureChannelProtocol.md)
 
 ### Type Aliases
 
@@ -42,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:13
+[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L13)
 
 ## Variables
 
@@ -57,7 +58,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:7
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts:7](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelMessages.ts#L7)
 
 ___
 
@@ -67,4 +68,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:37
+[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L37)

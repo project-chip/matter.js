@@ -29,7 +29,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpChannel.d.ts:17
+packages/matter.js/dist/esm/net/UdpChannel.d.ts:18
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpChannel.d.ts:15
+packages/matter.js/dist/esm/net/UdpChannel.d.ts:16
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/net/UdpChannel.d.ts:16
+packages/matter.js/dist/esm/net/UdpChannel.d.ts:17

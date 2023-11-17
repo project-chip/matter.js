@@ -55,6 +55,7 @@ Base class for all devices. This class should be extended by all devices.
 - [removeChildEndpoint](exports_device.Device.md#removechildendpoint)
 - [removeCommandHandler](exports_device.Device.md#removecommandhandler)
 - [removeFromStructure](exports_device.Device.md#removefromstructure)
+- [setBridgedDeviceReachability](exports_device.Device.md#setbridgeddevicereachability)
 - [setDeviceTypes](exports_device.Device.md#setdevicetypes)
 - [setStructureChangedCallback](exports_device.Device.md#setstructurechangedcallback)
 - [updatePartsList](exports_device.Device.md#updatepartslist)
@@ -81,17 +82,17 @@ Create a new Device instance.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:71
+packages/matter.js/dist/esm/device/Device.d.ts:89
 
 ## Properties
 
 ### commandHandler
 
-• `Protected` **commandHandler**: [`NamedHandler`](export._internal_.NamedHandler.md)<`any`\>
+• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:64
+packages/matter.js/dist/esm/device/Device.d.ts:82
 
 ___
 
@@ -101,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:63
+packages/matter.js/dist/esm/device/Device.d.ts:81
 
 ___
 
@@ -181,7 +182,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:96
+packages/matter.js/dist/esm/device/Device.d.ts:114
 
 ___
 
@@ -285,7 +286,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to add a handler for |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be executed when the command is received |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be executed when the command is received |
 
 #### Returns
 
@@ -293,7 +294,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:79
+packages/matter.js/dist/esm/device/Device.d.ts:97
 
 ___
 
@@ -373,7 +374,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:98
+packages/matter.js/dist/esm/device/Device.d.ts:116
 
 ___
 
@@ -403,7 +404,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:97
+packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
@@ -551,7 +552,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:100
+packages/matter.js/dist/esm/device/Device.d.ts:118
 
 ___
 
@@ -609,7 +610,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:99
+packages/matter.js/dist/esm/device/Device.d.ts:117
 
 ___
 
@@ -777,7 +778,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to remove the handler from |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be removed |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be removed |
 
 #### Returns
 
@@ -785,7 +786,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:87
+packages/matter.js/dist/esm/device/Device.d.ts:105
 
 ___
 
@@ -804,6 +805,29 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+
+___
+
+### setBridgedDeviceReachability
+
+▸ **setBridgedDeviceReachability**(`reachable`): `void`
+
+Set the reachability of the device exposed via the bridge. If this is a device inside  a composed device the
+reachability needs to be set there.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `reachable` | `boolean` | true if reachable, false otherwise |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Device.d.ts:125
 
 ___
 

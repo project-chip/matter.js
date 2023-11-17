@@ -13,6 +13,9 @@
 ### Methods
 
 - [pair](exports_session.PaseClient.md#pair)
+- [generatePakePasscodeVerifier](exports_session.PaseClient.md#generatepakepasscodeverifier)
+- [generateRandomDiscriminator](exports_session.PaseClient.md#generaterandomdiscriminator)
+- [generateRandomPasscode](exports_session.PaseClient.md#generaterandompasscode)
 
 ## Constructors
 
@@ -40,4 +43,53 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:9
+packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:13
+
+___
+
+### generatePakePasscodeVerifier
+
+▸ `Static` **generatePakePasscodeVerifier**(`setupPinCode`, `pbkdfParameters`): `Promise`<`Uint8Array`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `setupPinCode` | `number` |
+| `pbkdfParameters` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
+
+#### Returns
+
+`Promise`<`Uint8Array`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:10
+
+___
+
+### generateRandomDiscriminator
+
+▸ `Static` **generateRandomDiscriminator**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:12
+
+___
+
+### generateRandomPasscode
+
+▸ `Static` **generateRandomPasscode**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/pase/PaseClient.d.ts:11

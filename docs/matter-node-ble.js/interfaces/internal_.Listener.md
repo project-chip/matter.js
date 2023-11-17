@@ -22,4 +22,4 @@
 
 #### Defined in
 
-matter.js/dist/cjs/common/TransportInterface.d.ts:9
+matter.js/dist/esm/common/TransportInterface.d.ts:9

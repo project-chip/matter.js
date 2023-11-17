@@ -18,10 +18,25 @@
 
 ### Methods
 
+- [close](internal_.ProtocolHandler.md#close)
 - [getId](internal_.ProtocolHandler.md#getid)
 - [onNewExchange](internal_.ProtocolHandler.md#onnewexchange)
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ProtocolHandler.d.ts:11
+
+___
 
 ### getId
 
@@ -33,7 +48,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ProtocolHandler.d.ts:9
+matter.js/dist/esm/protocol/ProtocolHandler.d.ts:9
 
 ___
 
@@ -54,4 +69,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ProtocolHandler.d.ts:10
+matter.js/dist/esm/protocol/ProtocolHandler.d.ts:10

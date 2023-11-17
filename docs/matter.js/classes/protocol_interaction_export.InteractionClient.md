@@ -13,9 +13,11 @@
 ### Properties
 
 - [exchangeProvider](protocol_interaction_export.InteractionClient.md#exchangeprovider)
+- [nodeId](protocol_interaction_export.InteractionClient.md#nodeid)
+- [ownSubscriptionIds](protocol_interaction_export.InteractionClient.md#ownsubscriptionids)
 - [subscribedClusterDataVersions](protocol_interaction_export.InteractionClient.md#subscribedclusterdataversions)
 - [subscribedLocalValues](protocol_interaction_export.InteractionClient.md#subscribedlocalvalues)
-- [subscriptionListeners](protocol_interaction_export.InteractionClient.md#subscriptionlisteners)
+- [subscriptionClient](protocol_interaction_export.InteractionClient.md#subscriptionclient)
 
 ### Accessors
 
@@ -23,6 +25,7 @@
 
 ### Methods
 
+- [close](protocol_interaction_export.InteractionClient.md#close)
 - [getAllAttributes](protocol_interaction_export.InteractionClient.md#getallattributes)
 - [getAllAttributesAndEvents](protocol_interaction_export.InteractionClient.md#getallattributesandevents)
 - [getAllEvents](protocol_interaction_export.InteractionClient.md#getallevents)
@@ -35,6 +38,9 @@
 - [invoke](protocol_interaction_export.InteractionClient.md#invoke)
 - [invokeWithSuppressedResponse](protocol_interaction_export.InteractionClient.md#invokewithsuppressedresponse)
 - [processReadRequest](protocol_interaction_export.InteractionClient.md#processreadrequest)
+- [registerSubscriptionListener](protocol_interaction_export.InteractionClient.md#registersubscriptionlistener)
+- [registerSubscriptionUpdateTimer](protocol_interaction_export.InteractionClient.md#registersubscriptionupdatetimer)
+- [removeSubscription](protocol_interaction_export.InteractionClient.md#removesubscription)
 - [setAttribute](protocol_interaction_export.InteractionClient.md#setattribute)
 - [setMultipleAttributes](protocol_interaction_export.InteractionClient.md#setmultipleattributes)
 - [subscribeAllAttributesAndEvents](protocol_interaction_export.InteractionClient.md#subscribeallattributesandevents)
@@ -47,17 +53,18 @@
 
 ### constructor
 
-• **new InteractionClient**(`exchangeProvider`)
+• **new InteractionClient**(`exchangeProvider`, `nodeId`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `exchangeProvider` | [`ExchangeProvider`](protocol_export.ExchangeProvider.md) |
+| `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:96
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L133)
 
 ## Properties
 
@@ -67,7 +74,27 @@ packages/matter.js/src/protocol/interaction/InteractionClient.ts:96
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:96
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:134](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L134)
+
+___
+
+### nodeId
+
+• `Readonly` **nodeId**: [`NodeId`](../modules/datatype_export.md#nodeid)
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:135](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L135)
+
+___
+
+### ownSubscriptionIds
+
+• `Private` `Readonly` **ownSubscriptionIds**: `Set`<`number`\>
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L130)
 
 ___
 
@@ -77,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:94
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:129](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L129)
 
 ___
 
@@ -87,17 +114,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:93
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:128](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L128)
 
 ___
 
-### subscriptionListeners
+### subscriptionClient
 
-• `Private` `Readonly` **subscriptionListeners**: `Map`<`number`, (`dataReport`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EventPriority`](../enums/cluster_export.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>) => `void`\>
+• `Private` `Readonly` **subscriptionClient**: [`SubscriptionClient`](protocol_interaction_export.SubscriptionClient.md)
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:92
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:131](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L131)
 
 ## Accessors
 
@@ -111,9 +138,23 @@ packages/matter.js/src/protocol/interaction/InteractionClient.ts:92
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:920
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1030](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1030)
 
 ## Methods
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1022](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1022)
+
+___
 
 ### getAllAttributes
 
@@ -133,7 +174,7 @@ packages/matter.js/src/protocol/interaction/InteractionClient.ts:920
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:101
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:162](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L162)
 
 ___
 
@@ -156,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:128
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:189](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L189)
 
 ___
 
@@ -178,7 +219,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:117
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:178](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L178)
 
 ___
 
@@ -209,7 +250,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:223
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:284](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L284)
 
 ___
 
@@ -240,7 +281,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:241
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:302](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L302)
 
 ___
 
@@ -272,7 +313,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:272
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:333](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L333)
 
 ___
 
@@ -295,7 +336,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:152
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L213)
 
 ___
 
@@ -320,7 +361,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:175
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:236](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L236)
 
 ___
 
@@ -343,7 +384,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:164
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:225](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L225)
 
 ___
 
@@ -376,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:759
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:839](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L839)
 
 ___
 
@@ -408,7 +449,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:857
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:937](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L937)
 
 ___
 
@@ -429,7 +470,70 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:289
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:350](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L350)
+
+___
+
+### registerSubscriptionListener
+
+▸ **registerSubscriptionListener**(`subscriptionId`, `listener`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+| `listener` | (`dataReport`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`AttributeId`](../modules/datatype_export.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TlvStream`](../modules/tlv_export.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EventPriority`](../enums/cluster_export.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](../modules/datatype_export.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EventId`](../modules/datatype_export.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](../modules/datatype_export.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`boolean`\>  }\>) => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:151](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L151)
+
+___
+
+### registerSubscriptionUpdateTimer
+
+▸ `Private` **registerSubscriptionUpdateTimer**(`subscriptionId`, `maxInterval`, `updateTimeoutHandler`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+| `maxInterval` | `number` |
+| `updateTimeoutHandler` | [`TimerCallback`](../modules/time_export.md#timercallback) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:1000](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L1000)
+
+___
+
+### removeSubscription
+
+▸ **removeSubscription**(`subscriptionId`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:156](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L156)
 
 ___
 
@@ -464,7 +568,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:333
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:394](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L394)
 
 ___
 
@@ -488,7 +592,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:369
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:430](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L430)
 
 ___
 
@@ -510,6 +614,7 @@ ___
 | `options.keepSubscriptions?` | `boolean` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
 #### Returns
 
@@ -517,7 +622,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:583
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:654](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L654)
 
 ___
 
@@ -545,6 +650,7 @@ ___
 | `options.listener?` | (`value`: [`AttributeJsType`](../modules/cluster_export.md#attributejstype)<`A`\>, `version`: `number`) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
 #### Returns
 
@@ -552,7 +658,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:438
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:499](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L499)
 
 ___
 
@@ -581,6 +687,7 @@ ___
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
 | `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
 #### Returns
 
@@ -588,7 +695,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:517
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:583](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L583)
 
 ___
 
@@ -611,6 +718,7 @@ ___
 | `options.keepSubscriptions?` | `boolean` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/time_export.md#timercallback) |
 
 #### Returns
 
@@ -618,7 +726,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:622
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:696](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L696)
 
 ___
 
@@ -644,4 +752,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionClient.ts:911
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:991](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L991)

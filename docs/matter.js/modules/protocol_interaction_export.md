@@ -118,7 +118,7 @@ Type for TlvAttributeReport where the real data are represented with the schema 
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:32
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L32)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:61
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L68)
 
 ___
 
@@ -140,7 +140,7 @@ Type for TlvDataReport where the real data are represented with the schema and t
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:54
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L54)
 
 ___
 
@@ -171,7 +171,7 @@ Represents a fully qualified and decoded attribute value from a received DataRep
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:24
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L24)
 
 ___
 
@@ -189,7 +189,7 @@ Represents a decoded attribute value from a received DataReport where data versi
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:37
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L37)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:22
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L22)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:32
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L32)
 
 ___
 
@@ -257,7 +257,7 @@ Type for TlvEventReport where the real data are represented with the schema and 
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:43
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L43)
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:123
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:123](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L123)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:64
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L71)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:65
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:72](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L72)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:60
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:67](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L67)
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:62
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L69)
 
 ___
 
@@ -325,7 +325,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:63
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L70)
 
 ___
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:66
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L73)
 
 ___
 
@@ -345,7 +345,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:67
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L74)
 
 ___
 
@@ -355,7 +355,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:68
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L75)
 
 ## Variables
 
@@ -365,7 +365,7 @@ packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:68
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:62
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:62](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L62)
 
 ___
 
@@ -375,7 +375,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:61
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L61)
 
 ___
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:126
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L126)
 
 ___
 
@@ -403,7 +403,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:56
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:56](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L56)
 
 ___
 
@@ -417,7 +417,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:141
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:141](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L141)
 
 ___
 
@@ -427,7 +427,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:133
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L133)
 
 ___
 
@@ -441,7 +441,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:119
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:119](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L119)
 
 ___
 
@@ -455,7 +455,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:97
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:97](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L97)
 
 ___
 
@@ -469,7 +469,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:170
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:170](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L170)
 
 ___
 
@@ -483,7 +483,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:162
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:162](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L162)
 
 ___
 
@@ -497,7 +497,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:177
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:177](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L177)
 
 ___
 
@@ -511,7 +511,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:209
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:209](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L209)
 
 ___
 
@@ -523,7 +523,7 @@ Special version of the DataReport Message with pre-encoded report entries used b
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:219
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:219](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L219)
 
 ___
 
@@ -537,7 +537,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:105
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L105)
 
 ___
 
@@ -551,7 +551,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:77
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L77)
 
 ___
 
@@ -565,7 +565,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:90
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L90)
 
 ___
 
@@ -579,7 +579,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:67
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:67](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L67)
 
 ___
 
@@ -593,7 +593,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:155
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:155](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L155)
 
 ___
 
@@ -607,7 +607,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:148
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:148](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L148)
 
 ___
 
@@ -621,7 +621,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:249
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:249](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L249)
 
 ___
 
@@ -635,7 +635,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:257
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:257](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L257)
 
 ___
 
@@ -649,7 +649,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:184
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:184](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L184)
 
 ___
 
@@ -663,7 +663,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:199
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:199](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L199)
 
 ___
 
@@ -677,7 +677,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:112
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:112](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L112)
 
 ___
 
@@ -691,7 +691,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:193
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:193](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L193)
 
 ___
 
@@ -705,7 +705,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:229
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:229](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L229)
 
 ___
 
@@ -719,7 +719,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:242
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:242](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L242)
 
 ___
 
@@ -733,7 +733,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:264
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L264)
 
 ___
 
@@ -747,7 +747,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:270
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:270](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L270)
 
 ___
 
@@ -761,7 +761,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:279
+[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:279](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L279)
 
 ## Functions
 
@@ -781,7 +781,7 @@ packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:279
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:111
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:111](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L111)
 
 ___
 
@@ -803,7 +803,7 @@ Return if an AttributeReportPayload can be chunked or not.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:103
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:103](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L103)
 
 ___
 
@@ -825,7 +825,7 @@ Chunk an AttributeReportPayload into multiple AttributeReportPayloads.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:117
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:117](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L117)
 
 ___
 
@@ -845,7 +845,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:119
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:119](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L119)
 
 ___
 
@@ -865,7 +865,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:107
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:107](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L107)
 
 ___
 
@@ -887,7 +887,7 @@ Sort and use Tag compression to compress a list of AttributeReportPayloads.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:183
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:183](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L183)
 
 ___
 
@@ -917,7 +917,7 @@ Decodes the data for one attribute via a schema including array un-chunking.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:184
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:184](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L184)
 
 ___
 
@@ -939,7 +939,7 @@ Decodes the data for one unknown attribute via the AnySchema including array un-
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:209
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:209](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L209)
 
 ___
 
@@ -959,7 +959,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:120
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:120](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L120)
 
 ___
 
@@ -981,7 +981,7 @@ Encodes an AttributeReportPayload into a TlvStream (used for TlvAny type).
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:60
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L60)
 
 ___
 
@@ -1003,7 +1003,7 @@ Encodes an EventReportPayload into a TlvStream (used for TlvAny type).
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:71
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L71)
 
 ___
 
@@ -1023,7 +1023,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:115
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L115)
 
 ___
 
@@ -1045,7 +1045,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:99
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L99)
 
 ___
 
@@ -1068,7 +1068,7 @@ DataReport.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:116
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:116](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L116)
 
 ___
 
@@ -1088,7 +1088,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:71
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L71)
 
 ___
 
@@ -1111,7 +1111,7 @@ a received DataReport.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:45
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L45)
 
 ___
 
@@ -1131,7 +1131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:43
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L43)
 
 ___
 
@@ -1155,7 +1155,7 @@ a received DataReport.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:58
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L58)
 
 ___
 
@@ -1175,7 +1175,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:52
+[packages/matter.js/src/protocol/interaction/EventDataDecoder.ts:52](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/EventDataDecoder.ts#L52)
 
 ___
 
@@ -1199,7 +1199,7 @@ ground for tag compression.
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:160
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:160](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L160)
 
 ___
 
@@ -1221,4 +1221,4 @@ Structure the data of a received DataReport into an endpointId/clusterId/attribu
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:230
+[packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts:230](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/AttributeDataDecoder.ts#L230)

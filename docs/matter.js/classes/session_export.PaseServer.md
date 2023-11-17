@@ -25,6 +25,7 @@
 ### Methods
 
 - [cancelPairing](session_export.PaseServer.md#cancelpairing)
+- [close](session_export.PaseServer.md#close)
 - [getId](session_export.PaseServer.md#getid)
 - [handlePairingRequest](session_export.PaseServer.md#handlepairingrequest)
 - [onNewExchange](session_export.PaseServer.md#onnewexchange)
@@ -47,7 +48,7 @@
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:44
+[packages/matter.js/src/session/pase/PaseServer.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L44)
 
 ## Properties
 
@@ -57,7 +58,7 @@ packages/matter.js/src/session/pase/PaseServer.ts:44
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:46
+[packages/matter.js/src/session/pase/PaseServer.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L46)
 
 ___
 
@@ -67,7 +68,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:31
+[packages/matter.js/src/session/pase/PaseServer.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L31)
 
 ___
 
@@ -77,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:30
+[packages/matter.js/src/session/pase/PaseServer.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L30)
 
 ___
 
@@ -87,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:47
+[packages/matter.js/src/session/pase/PaseServer.ts:47](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L47)
 
 ___
 
@@ -97,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:45
+[packages/matter.js/src/session/pase/PaseServer.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L45)
 
 ## Methods
 
@@ -118,7 +119,25 @@ packages/matter.js/src/session/pase/PaseServer.ts:45
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:149
+[packages/matter.js/src/session/pase/PaseServer.ts:149](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L149)
+
+___
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[ProtocolHandler](../interfaces/protocol_export.ProtocolHandler.md).[close](../interfaces/protocol_export.ProtocolHandler.md#close)
+
+#### Defined in
+
+[packages/matter.js/src/session/pase/PaseServer.ts:159](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L159)
 
 ___
 
@@ -136,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:50
+[packages/matter.js/src/session/pase/PaseServer.ts:50](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L50)
 
 ___
 
@@ -157,7 +176,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:74
+[packages/matter.js/src/session/pase/PaseServer.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L74)
 
 ___
 
@@ -181,7 +200,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:54
+[packages/matter.js/src/session/pase/PaseServer.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L54)
 
 ___
 
@@ -202,7 +221,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:33
+[packages/matter.js/src/session/pase/PaseServer.ts:33](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L33)
 
 ___
 
@@ -223,4 +242,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/pase/PaseServer.ts:38
+[packages/matter.js/src/session/pase/PaseServer.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseServer.ts#L38)

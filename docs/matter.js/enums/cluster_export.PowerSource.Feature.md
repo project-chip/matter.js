@@ -31,7 +31,7 @@ A battery power source
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:879
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:879](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L879)
 
 ___
 
@@ -45,7 +45,7 @@ A rechargeable battery power source (requires Battery feature)
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:886
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:886](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L886)
 
 ___
 
@@ -59,7 +59,7 @@ A replaceable battery power source (requires Battery feature)
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:893
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:893](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L893)
 
 ___
 
@@ -73,4 +73,4 @@ A wired power source
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:872
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:872](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L872)

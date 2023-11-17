@@ -27,7 +27,7 @@ The LockOperationType enumeration shall indicate the type of Lock operation perf
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:322
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:322](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L322)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:319
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:319](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L319)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:321
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:321](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L321)
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:320
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:320](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L320)

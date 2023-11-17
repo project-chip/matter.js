@@ -19,6 +19,7 @@
 - [log/export](modules/log_export.md)
 - [math/export](modules/math_export.md)
 - [mdns/export](modules/mdns_export.md)
+- [model](modules/model.md)
 - [net/export](modules/net_export.md)
 - [protocol/export](modules/protocol_export.md)
 - [protocol/interaction/export](modules/protocol_interaction_export.md)

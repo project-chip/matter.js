@@ -163,11 +163,11 @@ ___
 | `passcode` | `number` |
 | `productId?` | `number` |
 | `shortDiscriminator?` | `number` |
-| `vendorId?` | `number` |
+| `vendorId?` | [`VendorId`](exports_datatype.md#vendorid) |
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:50
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:51
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:44
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:45
 
 ___
 
@@ -255,7 +255,7 @@ See MatterCoreSpecificationV1_0 § 5.1.3.1 Table 36
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:18
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:19
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:26
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:27
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:62
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:63
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/QrCodeSchema.d.ts:12
+packages/matter.js/dist/esm/schema/QrCodeSchema.d.ts:13
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:49
+packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:50
 
 ## Functions
 

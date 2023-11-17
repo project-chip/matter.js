@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:22
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:23
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:28
+packages/matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:29

@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.7.0 (2023-11-13)
 * General
   * Breaking: Changed ES target from ES5 to ES2018 (affected environments probably already didn't support matter.js)
   * Feature (vilic): Added project references and additional tsconfigs to support standard tsc development workflows

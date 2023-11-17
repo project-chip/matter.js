@@ -22,7 +22,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:21
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L21)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:20
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L20)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:19
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L19)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:18
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L18)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:17
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L17)

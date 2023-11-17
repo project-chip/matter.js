@@ -28,7 +28,7 @@ The OperationError enumeration shall indicate the error cause of the Lock/Unlock
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:451
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:451](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L451)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:453
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:453](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L453)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:450
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:450](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L450)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:452
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:452](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L452)
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:449
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:449](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L449)

@@ -44,6 +44,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 - [dict](exports_log.Logger.md#dict)
 - [get](exports_log.Logger.md#get)
+- [maskString](exports_log.Logger.md#maskstring)
 - [nest](exports_log.Logger.md#nest)
 - [nestAsync](exports_log.Logger.md#nestasync)
 - [toJSON](exports_log.Logger.md#tojson)
@@ -62,7 +63,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:116
+packages/matter.js/dist/esm/log/Logger.d.ts:125
 
 ## Properties
 
@@ -86,7 +87,7 @@ packages/matter.js/dist/esm/log/Logger.d.ts:116
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:117
+packages/matter.js/dist/esm/log/Logger.d.ts:126
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:120
+packages/matter.js/dist/esm/log/Logger.d.ts:129
 
 ___
 
@@ -134,7 +135,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:121
+packages/matter.js/dist/esm/log/Logger.d.ts:130
 
 ___
 
@@ -158,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:118
+packages/matter.js/dist/esm/log/Logger.d.ts:127
 
 ___
 
@@ -168,7 +169,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:122
+packages/matter.js/dist/esm/log/Logger.d.ts:131
 
 ___
 
@@ -202,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:119
+packages/matter.js/dist/esm/log/Logger.d.ts:128
 
 ___
 
@@ -332,7 +333,7 @@ Shortcut for new DiagnosticDictionary().
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:104
+packages/matter.js/dist/esm/log/Logger.d.ts:113
 
 ___
 
@@ -357,6 +358,31 @@ a new facility
 #### Defined in
 
 packages/matter.js/dist/esm/log/Logger.d.ts:91
+
+___
+
+### maskString
+
+▸ `Static` **maskString**(`str`, `maskChar?`, `unmaskedLength?`): `string`
+
+Mask a string with a given character. If unmaskedLength is provided then these number of characters will be
+shown unmasked.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `str` | `string` | String to mask |
+| `maskChar?` | `string` | character to mask with |
+| `unmaskedLength?` | `number` | number of characters to show unmasked in the beginning |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+packages/matter.js/dist/esm/log/Logger.d.ts:107
 
 ___
 
@@ -385,7 +411,7 @@ indented while the context executes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:111
+packages/matter.js/dist/esm/log/Logger.d.ts:120
 
 ___
 
@@ -407,7 +433,7 @@ Async version of nest().
 
 #### Defined in
 
-packages/matter.js/dist/esm/log/Logger.d.ts:115
+packages/matter.js/dist/esm/log/Logger.d.ts:124
 
 ___
 

@@ -14,6 +14,7 @@
 
 - [channels](internal_.ChannelManager.md#channels)
 - [getChannelKey](internal_.ChannelManager.md#getchannelkey)
+- [getOrCreateAsPaseChannel](internal_.ChannelManager.md#getorcreateaspasechannel)
 - [paseChannels](internal_.ChannelManager.md#pasechannels)
 
 ### Methods
@@ -39,7 +40,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:16
+matter.js/dist/esm/protocol/ChannelManager.d.ts:16
 
 ___
 
@@ -49,7 +50,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:18
+matter.js/dist/esm/protocol/ChannelManager.d.ts:18
+
+___
+
+### getOrCreateAsPaseChannel
+
+• `Private` **getOrCreateAsPaseChannel**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ChannelManager.d.ts:23
 
 ___
 
@@ -59,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
+matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 ## Methods
 
@@ -73,7 +84,7 @@ matter.js/dist/cjs/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:24
+matter.js/dist/esm/protocol/ChannelManager.d.ts:25
 
 ___
 
@@ -94,7 +105,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:20
+matter.js/dist/esm/protocol/ChannelManager.d.ts:20
 
 ___
 
@@ -114,13 +125,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:21
+matter.js/dist/esm/protocol/ChannelManager.d.ts:21
 
 ___
 
 ### getOrCreateChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`any`\>\>
 
 #### Parameters
 
@@ -131,17 +142,17 @@ ___
 
 #### Returns
 
-[`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`any`\>\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:23
+matter.js/dist/esm/protocol/ChannelManager.d.ts:24
 
 ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `void`
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -152,17 +163,17 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:22
+matter.js/dist/esm/protocol/ChannelManager.d.ts:22
 
 ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `void`
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -174,8 +185,8 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ChannelManager.d.ts:19
+matter.js/dist/esm/protocol/ChannelManager.d.ts:19

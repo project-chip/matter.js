@@ -16,7 +16,7 @@ General class for AttributeClients
 
 - **`AttributeClient`**
 
-  ↳ [`PresentAttributeClient`](exports_cluster.PresentAttributeClient.md)
+  ↳ [`SupportedAttributeClient`](exports_cluster.SupportedAttributeClient.md)
 
 ## Table of contents
 

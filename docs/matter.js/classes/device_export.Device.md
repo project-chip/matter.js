@@ -55,6 +55,7 @@ Base class for all devices. This class should be extended by all devices.
 - [removeChildEndpoint](device_export.Device.md#removechildendpoint)
 - [removeCommandHandler](device_export.Device.md#removecommandhandler)
 - [removeFromStructure](device_export.Device.md#removefromstructure)
+- [setBridgedDeviceReachability](device_export.Device.md#setbridgeddevicereachability)
 - [setDeviceTypes](device_export.Device.md#setdevicetypes)
 - [setStructureChangedCallback](device_export.Device.md#setstructurechangedcallback)
 - [updatePartsList](device_export.Device.md#updatepartslist)
@@ -81,17 +82,17 @@ Create a new Device instance.
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:134
+[packages/matter.js/src/device/Device.ts:176](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L176)
 
 ## Properties
 
 ### commandHandler
 
-• `Protected` **commandHandler**: [`NamedHandler`](export._internal_.NamedHandler.md)<`any`\>
+• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)<`any`\>
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:126
+[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L168)
 
 ___
 
@@ -101,7 +102,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:125
+[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L167)
 
 ___
 
@@ -117,7 +118,7 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:53
+[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L53)
 
 ___
 
@@ -131,7 +132,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:37
+[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L37)
 
 ___
 
@@ -145,7 +146,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:39
+[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L39)
 
 ___
 
@@ -159,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:38
+[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L38)
 
 ## Methods
 
@@ -183,7 +184,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:183
+[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L225)
 
 ___
 
@@ -207,7 +208,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:256
+[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L256)
 
 ___
 
@@ -240,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:173
+[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L173)
 
 ___
 
@@ -271,7 +272,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:146
+[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L146)
 
 ___
 
@@ -287,7 +288,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to add a handler for |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be executed when the command is received |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be executed when the command is received |
 
 #### Returns
 
@@ -295,7 +296,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:160
+[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L202)
 
 ___
 
@@ -320,7 +321,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:106
+[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L106)
 
 ___
 
@@ -345,7 +346,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:126
+[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L126)
 
 ___
 
@@ -375,7 +376,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:198
+[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L240)
 
 ___
 
@@ -405,7 +406,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:187
+[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L229)
 
 ___
 
@@ -423,7 +424,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:93
+[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L93)
 
 ___
 
@@ -441,7 +442,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:280
+[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L283)
 
 ___
 
@@ -459,7 +460,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:340
+[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L343)
 
 ___
 
@@ -477,7 +478,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:336
+[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L339)
 
 ___
 
@@ -501,7 +502,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:262
+[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L265)
 
 ___
 
@@ -519,7 +520,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:266
+[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L269)
 
 ___
 
@@ -553,7 +554,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:229
+[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L271)
 
 ___
 
@@ -577,7 +578,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:212
+[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L212)
 
 ___
 
@@ -611,7 +612,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:209
+[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L251)
 
 ___
 
@@ -635,7 +636,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:208
+[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L208)
 
 ___
 
@@ -653,7 +654,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:236
+[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L236)
 
 ___
 
@@ -671,7 +672,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:99
+[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L99)
 
 ___
 
@@ -705,7 +706,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:226
+[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L226)
 
 ___
 
@@ -739,7 +740,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:216
+[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L216)
 
 ___
 
@@ -763,7 +764,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:270
+[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L273)
 
 ___
 
@@ -779,7 +780,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to remove the handler from |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be removed |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be removed |
 
 #### Returns
 
@@ -787,7 +788,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/src/device/Device.ts:171
+[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L213)
 
 ___
 
@@ -805,7 +806,30 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:85
+[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L85)
+
+___
+
+### setBridgedDeviceReachability
+
+▸ **setBridgedDeviceReachability**(`reachable`): `void`
+
+Set the reachability of the device exposed via the bridge. If this is a device inside  a composed device the
+reachability needs to be set there.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `reachable` | `boolean` | true if reachable, false otherwise |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L296)
 
 ___
 
@@ -829,7 +853,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:240
+[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L240)
 
 ___
 
@@ -853,7 +877,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:80
+[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L80)
 
 ___
 
@@ -871,7 +895,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:344
+[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L347)
 
 ___
 
@@ -889,4 +913,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/Endpoint.ts:302
+[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Endpoint.ts#L305)

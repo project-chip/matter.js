@@ -30,6 +30,7 @@ SPDX-License-Identifier: Apache-2.0
 - [expire](util_export.Cache.md#expire)
 - [expireCallback](util_export.Cache.md#expirecallback)
 - [generator](util_export.Cache.md#generator)
+- [knownKeys](util_export.Cache.md#knownkeys)
 - [periodicTimer](util_export.Cache.md#periodictimer)
 - [timestamps](util_export.Cache.md#timestamps)
 - [values](util_export.Cache.md#values)
@@ -63,7 +64,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:15
+packages/matter.js/dist/esm/util/Cache.d.ts:16
 
 ## Properties
 
@@ -73,7 +74,7 @@ packages/matter.js/dist/esm/util/Cache.d.ts:15
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:18
+packages/matter.js/dist/esm/util/Cache.d.ts:19
 
 ___
 
@@ -93,7 +94,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:21
+packages/matter.js/dist/esm/util/Cache.d.ts:22
 
 ___
 
@@ -117,13 +118,23 @@ packages/matter.js/dist/esm/util/Cache.d.ts:9
 
 ___
 
+### knownKeys
+
+• `Private` `Readonly` **knownKeys**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Cache.d.ts:12
+
+___
+
 ### periodicTimer
 
 • `Private` `Readonly` **periodicTimer**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:14
+packages/matter.js/dist/esm/util/Cache.d.ts:15
 
 ___
 
@@ -133,7 +144,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:13
+packages/matter.js/dist/esm/util/Cache.d.ts:14
 
 ___
 
@@ -143,7 +154,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:12
+packages/matter.js/dist/esm/util/Cache.d.ts:13
 
 ## Methods
 
@@ -157,7 +168,7 @@ packages/matter.js/dist/esm/util/Cache.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:19
+packages/matter.js/dist/esm/util/Cache.d.ts:20
 
 ___
 
@@ -171,7 +182,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:20
+packages/matter.js/dist/esm/util/Cache.d.ts:21
 
 ___
 
@@ -191,7 +202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:16
+packages/matter.js/dist/esm/util/Cache.d.ts:17
 
 ___
 
@@ -205,4 +216,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/util/Cache.d.ts:17
+packages/matter.js/dist/esm/util/Cache.d.ts:18

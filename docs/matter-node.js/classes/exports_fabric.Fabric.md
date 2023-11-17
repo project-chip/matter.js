@@ -401,6 +401,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
+| `fabricIndex` | [`FabricIndex`](../modules/exports_datatype.md#fabricindex) |
 | `label` | `string` |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `rootNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
@@ -531,7 +532,13 @@ ___
 
 ### remove
 
-▸ **remove**(): `Promise`<`void`\>
+▸ **remove**(`currentSessionId?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `currentSessionId?` | `number` |
 
 #### Returns
 

@@ -30,12 +30,14 @@
 ### Methods
 
 - [clear](storage_export.StorageBackendJsonFile.md#clear)
+- [clearAll](storage_export.StorageBackendJsonFile.md#clearall)
 - [close](storage_export.StorageBackendJsonFile.md#close)
 - [commit](storage_export.StorageBackendJsonFile.md#commit)
 - [delete](storage_export.StorageBackendJsonFile.md#delete)
 - [fromJson](storage_export.StorageBackendJsonFile.md#fromjson)
 - [get](storage_export.StorageBackendJsonFile.md#get)
 - [initialize](storage_export.StorageBackendJsonFile.md#initialize)
+- [keys](storage_export.StorageBackendJsonFile.md#keys)
 - [set](storage_export.StorageBackendJsonFile.md#set)
 - [toJson](storage_export.StorageBackendJsonFile.md#tojson)
 - [triggerCommit](storage_export.StorageBackendJsonFile.md#triggercommit)
@@ -58,7 +60,7 @@
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L27)
 
 ## Properties
 
@@ -68,7 +70,7 @@ packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:23
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L23)
 
 ___
 
@@ -78,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L22)
 
 ___
 
@@ -88,7 +90,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:20
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L20)
 
 ___
 
@@ -98,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:24
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L24)
 
 ___
 
@@ -108,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L27)
 
 ___
 
@@ -126,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:25
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L25)
 
 ___
 
@@ -152,7 +154,7 @@ We store changes after a value was set to the storage, but not more often than t
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L19)
 
 ## Methods
 
@@ -170,7 +172,31 @@ packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:19
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:63
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L63)
+
+___
+
+### clearAll
+
+▸ **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[clearAll](storage_export.StorageBackendMemory.md#clearall)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:19
 
 ___
 
@@ -188,7 +214,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:82
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:82](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L82)
 
 ___
 
@@ -202,7 +228,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:68
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L68)
 
 ___
 
@@ -227,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:58
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L58)
 
 ___
 
@@ -247,7 +273,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:92
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:92](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L92)
 
 ___
 
@@ -296,7 +322,31 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:31
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L31)
+
+___
+
+### keys
+
+▸ **keys**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Inherited from
+
+[StorageBackendMemory](storage_export.StorageBackendMemory.md).[keys](storage_export.StorageBackendMemory.md#keys)
+
+#### Defined in
+
+packages/matter.js/dist/esm/storage/StorageBackendMemory.d.ts:18
 
 ___
 
@@ -328,7 +378,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:53
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L53)
 
 ___
 
@@ -348,7 +398,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:88
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:88](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L88)
 
 ___
 
@@ -362,4 +412,4 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:44
+[packages/matter-node.js/src/storage/StorageBackendJsonFile.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/storage/StorageBackendJsonFile.ts#L44)

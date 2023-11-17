@@ -29,6 +29,7 @@ SPDX-License-Identifier: Apache-2.0
 
 - [channel](exports_protocol.MessageChannel.md#channel)
 - [closeCallback](exports_protocol.MessageChannel.md#closecallback)
+- [closed](exports_protocol.MessageChannel.md#closed)
 - [session](exports_protocol.MessageChannel.md#session)
 
 ### Accessors
@@ -58,11 +59,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\> |
-| `closeCallback?` | () => `void` |
+| `closeCallback?` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 ## Properties
 
@@ -72,7 +73,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:19
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
 
 ___
 
@@ -82,7 +83,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
+
+___
+
+### closed
+
+• **closed**: `boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:23
 
 ___
 
@@ -92,7 +103,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
 
 ## Accessors
 
@@ -110,7 +121,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
 
 ## Methods
 
@@ -128,7 +139,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:25
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:27
 
 ___
 
@@ -152,4 +163,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:23
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:25

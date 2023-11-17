@@ -36,7 +36,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-matter.js/dist/cjs/common/TransportInterface.d.ts:17
+matter.js/dist/esm/common/TransportInterface.d.ts:17
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/common/TransportInterface.d.ts:16
+matter.js/dist/esm/common/TransportInterface.d.ts:16
 
 ___
 
@@ -80,4 +80,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/net/NetInterface.d.ts:14
+matter.js/dist/esm/net/NetInterface.d.ts:14

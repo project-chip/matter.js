@@ -18,6 +18,7 @@
 - [DataReader](../classes/util_export.DataReader.md)
 - [DataWriter](../classes/util_export.DataWriter.md)
 - [EndOfStreamError](../classes/util_export.EndOfStreamError.md)
+- [NamedHandler](../classes/util_export.NamedHandler.md)
 - [NoResponseTimeoutError](../classes/util_export.NoResponseTimeoutError.md)
 - [Queue](../classes/util_export.Queue.md)
 
@@ -27,10 +28,13 @@
 
 ### Type Aliases
 
+- [ArrayMinLength](util_export.md#arrayminlength)
+- [AtLeastOne](util_export.md#atleastone)
 - [Brand](util_export.md#brand)
 - [Branded](util_export.md#branded)
 - [ByteArray](util_export.md#bytearray)
 - [ClassExtends](util_export.md#classextends)
+- [HandlerFunction](util_export.md#handlerfunction)
 - [MakeMandatory](util_export.md#makemandatory)
 - [Merge](util_export.md#merge)
 - [MergeAll](util_export.md#mergeall)
@@ -61,11 +65,13 @@
 - [Merge](util_export.md#merge-1)
 - [MergeAll](util_export.md#mergeall-1)
 - [Pluck](util_export.md#pluck-1)
+- [anyPromise](util_export.md#anypromise)
 - [camelize](util_export.md#camelize)
 - [capitalize](util_export.md#capitalize)
 - [commandExecutor](util_export.md#commandexecutor)
 - [createPromise](util_export.md#createpromise)
 - [describeList](util_export.md#describelist)
+- [extendPublicHandlerMethods](util_export.md#extendpublichandlermethods)
 - [getIntParameter](util_export.md#getintparameter)
 - [getParameter](util_export.md#getparameter)
 - [hasParameter](util_export.md#hasparameter)
@@ -86,6 +92,46 @@
 - [toNumber](util_export.md#tonumber)
 
 ## Type Aliases
+
+### ArrayMinLength
+
+Ƭ **ArrayMinLength**<`T`, `N`\>: [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)<`T`, `N`, []\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `N` | extends `number` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Array.d.ts:10
+
+___
+
+### AtLeastOne
+
+Ƭ **AtLeastOne**<`T`\>: [`ArrayMinLength`](util_export.md#arrayminlength)<`T`, ``1``\>
+
+Array types
+
+**`License`**
+
+Copyright 2022 The node-matter Authors
+SPDX-License-Identifier: Apache-2.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Array.d.ts:8
+
+___
 
 ### Brand
 
@@ -169,6 +215,35 @@ Type that represents a class constructor of a defined type or extend of it
 #### Defined in
 
 packages/matter.js/dist/esm/util/Type.d.ts:15
+
+___
+
+### HandlerFunction
+
+Ƭ **HandlerFunction**: (...`args`: `any`[]) => `any`
+
+#### Type declaration
+
+▸ (`...args`): `any`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `any`[] |
+
+##### Returns
+
+`any`
+
+**`License`**
+
+Copyright 2022 The matter.js Authors
+SPDX-License-Identifier: Apache-2.0
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:6
 
 ___
 
@@ -518,6 +593,35 @@ packages/matter.js/dist/esm/util/Type.d.ts:23
 
 ___
 
+### anyPromise
+
+▸ **anyPromise**<`T`\>(`promises`): `Promise`<`T`\>
+
+Use all promises or promise returning methods and return the first resolved promise or reject when all promises
+rejected
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `promises` | (`Promise`<`T`\> \| () => `Promise`<`T`\>)[] |
+
+#### Returns
+
+`Promise`<`T`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/Promises.d.ts:20
+
+___
+
 ### camelize
 
 ▸ **camelize**(`name`, `upperFirst?`): `string`
@@ -589,7 +693,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/util/CommandLine.ts:30
+[packages/matter-node.js/src/util/CommandLine.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/util/CommandLine.ts#L30)
 
 ___
 
@@ -644,6 +748,33 @@ packages/matter.js/dist/esm/util/String.d.ts:34
 
 ___
 
+### extendPublicHandlerMethods
+
+▸ **extendPublicHandlerMethods**<`ParentClass`, `H`\>(`parentClass`): [`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)<`ParentClass`, `H`\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `ParentClass` | extends (...`args`: `any`[]) => `any` |
+| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `parentClass` | `ParentClass` |
+
+#### Returns
+
+[`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)<`ParentClass`, `H`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/util/NamedHandler.d.ts:19
+
+___
+
 ### getIntParameter
 
 ▸ **getIntParameter**(`name`): `undefined` \| `number`
@@ -660,7 +791,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/util/CommandLine.ts:22
+[packages/matter-node.js/src/util/CommandLine.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/util/CommandLine.ts#L22)
 
 ___
 
@@ -680,7 +811,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/util/CommandLine.ts:12
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -700,7 +831,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/util/CommandLine.ts:18
+[packages/matter-node.js/src/util/CommandLine.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/util/CommandLine.ts#L18)
 
 ___
 
@@ -929,7 +1060,7 @@ ___
 
 #### Defined in
 
-packages/matter-node.js/src/util/Node.ts:11
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 

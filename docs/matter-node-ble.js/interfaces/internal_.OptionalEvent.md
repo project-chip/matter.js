@@ -43,7 +43,7 @@ Event.id
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:164
+matter.js/dist/esm/cluster/Cluster.d.ts:164
 
 ___
 
@@ -57,7 +57,7 @@ Event.isConditional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:169
+matter.js/dist/esm/cluster/Cluster.d.ts:169
 
 ___
 
@@ -71,7 +71,7 @@ Event.mandatoryIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:171
+matter.js/dist/esm/cluster/Cluster.d.ts:171
 
 ___
 
@@ -85,7 +85,7 @@ Event.optional
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:185
+matter.js/dist/esm/cluster/Cluster.d.ts:185
 
 ___
 
@@ -99,7 +99,7 @@ Event.optionalIf
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:170
+matter.js/dist/esm/cluster/Cluster.d.ts:170
 
 ___
 
@@ -113,7 +113,7 @@ Event.priority
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:166
+matter.js/dist/esm/cluster/Cluster.d.ts:166
 
 ___
 
@@ -127,7 +127,7 @@ Event.readAcl
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:168
+matter.js/dist/esm/cluster/Cluster.d.ts:168
 
 ___
 
@@ -141,7 +141,7 @@ Event.schema
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:165
+matter.js/dist/esm/cluster/Cluster.d.ts:165
 
 ___
 
@@ -155,4 +155,4 @@ Event.unknown
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/Cluster.d.ts:172
+matter.js/dist/esm/cluster/Cluster.d.ts:172

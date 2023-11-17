@@ -15,17 +15,32 @@
 - [`CaseServer`](../classes/exports_session.CaseServer.md)
 - [`InteractionServer`](../classes/exports_interaction.InteractionServer.md)
 - [`PaseServer`](../classes/exports_session.PaseServer.md)
-- [`SecureChannelProtocol`](../classes/exports_securechannel.SecureChannelProtocol.md)
+- [`StatusReportOnlySecureChannelProtocol`](../classes/exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
 - [`SubscriptionClient`](../classes/exports_interaction.SubscriptionClient.md)
 
 ## Table of contents
 
 ### Methods
 
+- [close](exports_protocol.ProtocolHandler.md#close)
 - [getId](exports_protocol.ProtocolHandler.md#getid)
 - [onNewExchange](exports_protocol.ProtocolHandler.md#onnewexchange)
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ProtocolHandler.d.ts:11
+
+___
 
 ### getId
 

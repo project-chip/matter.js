@@ -4,7 +4,7 @@
 
 [export](../modules/export.md).[<internal>](../modules/export._internal_.md).CommissioningStepResultCode
 
-Result code of a single commissioning step
+Result code of a single commissioning step.
 
 ## Table of contents
 
@@ -22,7 +22,7 @@ Result code of a single commissioning step
 
 #### Defined in
 
-packages/matter.js/src/protocol/ControllerCommissioner.ts:66
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerCommissioner.ts#L68)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ControllerCommissioner.ts:67
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerCommissioner.ts#L69)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/ControllerCommissioner.ts:65
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:67](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerCommissioner.ts#L67)
