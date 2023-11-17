@@ -102,7 +102,7 @@ Attribute server for normal attributes that can be read and written.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:131
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:131
 
 ## Properties
 
@@ -116,7 +116,7 @@ matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:131
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:37
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:37
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:42
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:42
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:57
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:57
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:59
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:59
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:31
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:31
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:125
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:125
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:126
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:126
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:35
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:35
 
 ___
 
@@ -256,7 +256,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:34
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:34
 
 ___
 
@@ -270,7 +270,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:32
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:32
 
 ___
 
@@ -284,7 +284,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:36
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:36
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:33
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:33
 
 ___
 
@@ -324,7 +324,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:129
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:129
 
 ___
 
@@ -350,7 +350,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:130
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:130
 
 ___
 
@@ -366,7 +366,7 @@ The value is undefined when getter/setter are used. But we still handle the vers
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:41
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:41
 
 ___
 
@@ -376,7 +376,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:127
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:127
 
 ___
 
@@ -386,7 +386,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:128
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:128
 
 ## Methods
 
@@ -413,7 +413,7 @@ new value and the version number.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:205
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:205
 
 ___
 
@@ -440,7 +440,7 @@ new value and the old value.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:214
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:214
 
 ___
 
@@ -464,7 +464,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:45
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:45
 
 ___
 
@@ -493,7 +493,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:74
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:74
 
 ___
 
@@ -515,7 +515,7 @@ If a getter is defined the value is determined by that getter method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:90
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:90
 
 ___
 
@@ -550,7 +550,7 @@ attributes.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:81
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:81
 
 ___
 
@@ -575,7 +575,7 @@ internally.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:186
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:186
 
 ___
 
@@ -602,7 +602,7 @@ adjusted before the Device gets announced. Do not use this method to change valu
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:158
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:158
 
 ___
 
@@ -625,7 +625,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:181
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:181
 
 ___
 
@@ -651,7 +651,7 @@ Remove an internal listener.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:209
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:209
 
 ___
 
@@ -677,7 +677,7 @@ Remove an external listener.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:223
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:223
 
 ___
 
@@ -703,7 +703,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:165
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:165
 
 ___
 
@@ -729,7 +729,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:177
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:177
 
 ___
 
@@ -752,7 +752,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:169
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:169
 
 ___
 
@@ -779,7 +779,7 @@ new value and the old value. This method is a convenient alias for addValueSetLi
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:219
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:219
 
 ___
 
@@ -804,7 +804,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:193
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:193
 
 ___
 
@@ -823,7 +823,7 @@ ACL checks needs to be performed before calling this method.
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:200
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:200
 
 ___
 
@@ -847,4 +847,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/cluster/server/AttributeServer.d.ts:44
+matter.js/dist/esm/cluster/server/AttributeServer.d.ts:44

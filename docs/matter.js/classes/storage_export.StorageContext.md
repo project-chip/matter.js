@@ -17,10 +17,13 @@
 
 ### Methods
 
+- [clear](storage_export.StorageContext.md#clear)
+- [clearAll](storage_export.StorageContext.md#clearall)
 - [createContext](storage_export.StorageContext.md#createcontext)
 - [delete](storage_export.StorageContext.md#delete)
 - [get](storage_export.StorageContext.md#get)
 - [has](storage_export.StorageContext.md#has)
+- [keys](storage_export.StorageContext.md#keys)
 - [set](storage_export.StorageContext.md#set)
 
 ## Constructors
@@ -38,7 +41,7 @@
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:11
+[packages/matter.js/src/storage/StorageContext.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L11)
 
 ## Properties
 
@@ -48,7 +51,7 @@ packages/matter.js/src/storage/StorageContext.ts:11
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:13
+[packages/matter.js/src/storage/StorageContext.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L13)
 
 ___
 
@@ -58,9 +61,41 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:12
+[packages/matter.js/src/storage/StorageContext.ts:12](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L12)
 
 ## Methods
+
+### clear
+
+▸ **clear**(): `void`
+
+Clears all keys in this context
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:50](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L50)
+
+___
+
+### clearAll
+
+▸ **clearAll**(): `void`
+
+Clears all keys in this context and all created sub-contexts.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L57)
+
+___
 
 ### createContext
 
@@ -78,7 +113,7 @@ packages/matter.js/src/storage/StorageContext.ts:12
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:39
+[packages/matter.js/src/storage/StorageContext.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L39)
 
 ___
 
@@ -98,7 +133,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:35
+[packages/matter.js/src/storage/StorageContext.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L35)
 
 ___
 
@@ -125,7 +160,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:16
+[packages/matter.js/src/storage/StorageContext.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L16)
 
 ___
 
@@ -145,7 +180,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:27
+[packages/matter.js/src/storage/StorageContext.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L27)
+
+___
+
+### keys
+
+▸ **keys**(): `string`[]
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageContext.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L45)
 
 ___
 
@@ -172,4 +221,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageContext.ts:31
+[packages/matter.js/src/storage/StorageContext.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageContext.ts#L31)

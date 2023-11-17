@@ -33,7 +33,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:13
+matter.js/dist/esm/tlv/TlvObject.d.ts:13
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:10
+matter.js/dist/esm/tlv/TlvObject.d.ts:10
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:12
+matter.js/dist/esm/tlv/TlvObject.d.ts:12
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/tlv/TlvObject.d.ts:11
+matter.js/dist/esm/tlv/TlvObject.d.ts:11

@@ -56,7 +56,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:19
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:19
 
 ## Properties
 
@@ -70,7 +70,7 @@ matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:19
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:18
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:18
 
 ## Methods
 
@@ -88,7 +88,7 @@ matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:18
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:28
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:28
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:27
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:27
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:20
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:20
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:21
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:21
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:33
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:33
 
 ___
 
@@ -189,7 +189,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:37
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:37
 
 ___
 
@@ -203,7 +203,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:19
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:19
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:23
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:23
 
 ___
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:26
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:26
 
 ___
 
@@ -277,7 +277,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:24
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:24
 
 ___
 
@@ -297,7 +297,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:36
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:36
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/session/pase/PaseMessenger.d.ts:32
+matter.js/dist/esm/session/pase/PaseMessenger.d.ts:32
 
 ___
 
@@ -335,7 +335,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:25
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:25
 
 ___
 
@@ -359,7 +359,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:30
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:30
 
 ___
 
@@ -377,4 +377,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/securechannel/SecureChannelMessenger.d.ts:22
+matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:22

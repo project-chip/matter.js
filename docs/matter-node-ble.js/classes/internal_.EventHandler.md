@@ -40,7 +40,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:39
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:39
 
 ## Properties
 
@@ -50,7 +50,7 @@ matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:39
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:36
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:36
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:35
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:35
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:38
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:38
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:37
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:37
 
 ## Methods
 
@@ -94,7 +94,7 @@ matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:37
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:50
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:50
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:40
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:40
 
 ___
 
@@ -145,4 +145,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/EventHandler.d.ts:41
+matter.js/dist/esm/protocol/interaction/EventHandler.d.ts:41

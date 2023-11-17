@@ -32,7 +32,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:735
+[packages/matter.js/src/cluster/Cluster.ts:735](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L735)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:734
+[packages/matter.js/src/cluster/Cluster.ts:734](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L734)
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:730
+[packages/matter.js/src/cluster/Cluster.ts:730](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L730)

@@ -19,6 +19,7 @@
 ### Properties
 
 - [channelManager](internal_.ExchangeManager.md#channelmanager)
+- [closingSessions](internal_.ExchangeManager.md#closingsessions)
 - [exchangeCounter](internal_.ExchangeManager.md#exchangecounter)
 - [exchanges](internal_.ExchangeManager.md#exchanges)
 - [messageCounter](internal_.ExchangeManager.md#messagecounter)
@@ -32,6 +33,10 @@
 - [addProtocolHandler](internal_.ExchangeManager.md#addprotocolhandler)
 - [addTransportInterface](internal_.ExchangeManager.md#addtransportinterface)
 - [close](internal_.ExchangeManager.md#close)
+- [closeSession](internal_.ExchangeManager.md#closesession)
+- [deleteExchange](internal_.ExchangeManager.md#deleteexchange)
+- [getProtocolHandler](internal_.ExchangeManager.md#getprotocolhandler)
+- [hasProtocolHandler](internal_.ExchangeManager.md#hasprotocolhandler)
 - [initiateExchange](internal_.ExchangeManager.md#initiateexchange)
 - [initiateExchangeWithChannel](internal_.ExchangeManager.md#initiateexchangewithchannel)
 
@@ -56,7 +61,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:35
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:38
 
 ## Properties
 
@@ -66,7 +71,17 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:35
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:29
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:31
+
+___
+
+### closingSessions
+
+• `Private` `Readonly` **closingSessions**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:37
 
 ___
 
@@ -76,7 +91,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:30
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:32
 
 ___
 
@@ -86,7 +101,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:32
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:34
 
 ___
 
@@ -96,7 +111,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:31
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:33
 
 ___
 
@@ -106,7 +121,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:41
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:46
 
 ___
 
@@ -116,7 +131,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:33
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:35
 
 ___
 
@@ -126,7 +141,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:28
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:30
 
 ___
 
@@ -136,7 +151,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:34
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
 
 ## Methods
 
@@ -156,7 +171,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:34
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:37
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:42
 
 ___
 
@@ -176,7 +191,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:36
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:39
 
 ___
 
@@ -190,7 +205,87 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:40
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:45
+
+___
+
+### closeSession
+
+▸ **closeSession**(`session`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `session` | [`SecureSession`](internal_.SecureSession.md)<`any`\> |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:48
+
+___
+
+### deleteExchange
+
+▸ **deleteExchange**(`exchangeIndex`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `exchangeIndex` | `number` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:47
+
+___
+
+### getProtocolHandler
+
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<`ContextT`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `protocolId` | `number` |
+
+#### Returns
+
+`undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<`ContextT`\>
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:41
+
+___
+
+### hasProtocolHandler
+
+▸ **hasProtocolHandler**(`protocolId`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `protocolId` | `number` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:40
 
 ___
 
@@ -212,7 +307,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:38
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:43
 
 ___
 
@@ -233,4 +328,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:39
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:44

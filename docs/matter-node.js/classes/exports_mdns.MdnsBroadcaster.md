@@ -17,6 +17,7 @@ This class is handing MDNS Announcements for multiple instances/devices
 - [activeCommissioningAnnouncements](exports_mdns.MdnsBroadcaster.md#activecommissioningannouncements)
 - [activeOperationalAnnouncements](exports_mdns.MdnsBroadcaster.md#activeoperationalannouncements)
 - [enableIpv4](exports_mdns.MdnsBroadcaster.md#enableipv4)
+- [getIpRecords](exports_mdns.MdnsBroadcaster.md#getiprecords)
 - [mdnsServer](exports_mdns.MdnsBroadcaster.md#mdnsserver)
 - [network](exports_mdns.MdnsBroadcaster.md#network)
 
@@ -82,6 +83,16 @@ packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:15
 
 ___
 
+### getIpRecords
+
+• `Private` **getIpRecords**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:25
+
+___
+
 ### mdnsServer
 
 • `Private` `Readonly` **mdnsServer**: `any`
@@ -118,7 +129,7 @@ packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:31
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:32
 
 ___
 
@@ -132,7 +143,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:35
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:36
 
 ___
 
@@ -152,7 +163,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:34
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:35
 
 ___
 
@@ -172,7 +183,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:33
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:34
 
 ___
 
@@ -192,7 +203,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:32
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:33
 
 ___
 
@@ -216,7 +227,7 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:26
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:27
 
 ___
 
@@ -239,7 +250,7 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:30
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:31
 
 ___
 
@@ -263,7 +274,7 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:28
+packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:29
 
 ___
 

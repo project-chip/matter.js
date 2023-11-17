@@ -32,6 +32,7 @@ Root endpoint of a device. This is used internally and not needed to be instance
 - [addClusterClient](exports_device.RootEndpoint.md#addclusterclient)
 - [addClusterServer](exports_device.RootEndpoint.md#addclusterserver)
 - [addFixedLabel](exports_device.RootEndpoint.md#addfixedlabel)
+- [addRootClusterClient](exports_device.RootEndpoint.md#addrootclusterclient)
 - [addUserLabel](exports_device.RootEndpoint.md#adduserlabel)
 - [destroy](exports_device.RootEndpoint.md#destroy)
 - [determineUniqueID](exports_device.RootEndpoint.md#determineuniqueid)
@@ -45,6 +46,8 @@ Root endpoint of a device. This is used internally and not needed to be instance
 - [getClusterServerById](exports_device.RootEndpoint.md#getclusterserverbyid)
 - [getDeviceTypes](exports_device.RootEndpoint.md#getdevicetypes)
 - [getId](exports_device.RootEndpoint.md#getid)
+- [getRootClusterClient](exports_device.RootEndpoint.md#getrootclusterclient)
+- [getRootClusterServer](exports_device.RootEndpoint.md#getrootclusterserver)
 - [hasClusterClient](exports_device.RootEndpoint.md#hasclusterclient)
 - [hasClusterServer](exports_device.RootEndpoint.md#hasclusterserver)
 - [removeChildEndpoint](exports_device.RootEndpoint.md#removechildendpoint)
@@ -248,6 +251,37 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:39
+
+___
+
+### addRootClusterClient
+
+▸ **addRootClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
+
+Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the user.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\> | ClusterClient object to add |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Device.d.ts:69
 
 ___
 
@@ -539,6 +573,70 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:38
+
+___
+
+### getRootClusterClient
+
+▸ **getRootClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+
+Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+
+#### Returns
+
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Device.d.ts:75
+
+___
+
+### getRootClusterServer
+
+▸ **getRootClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+
+Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+
+#### Returns
+
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Device.d.ts:63
 
 ___
 

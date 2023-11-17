@@ -21,19 +21,23 @@ It sends out queries to discover various types of Matter device types and listen
 
 - [activeAnnounceQueries](exports_mdns.MdnsScanner.md#activeannouncequeries)
 - [buildCommissionableQueryIdentifier](exports_mdns.MdnsScanner.md#buildcommissionablequeryidentifier)
+- [closing](exports_mdns.MdnsScanner.md#closing)
 - [commissionableDeviceRecords](exports_mdns.MdnsScanner.md#commissionabledevicerecords)
 - [createOperationalMatterQName](exports_mdns.MdnsScanner.md#createoperationalmatterqname)
 - [enableIpv4](exports_mdns.MdnsScanner.md#enableipv4)
 - [expire](exports_mdns.MdnsScanner.md#expire)
+- [extractInstanceId](exports_mdns.MdnsScanner.md#extractinstanceid)
 - [findCommissionableQueryIdentifier](exports_mdns.MdnsScanner.md#findcommissionablequeryidentifier)
 - [finishWaiter](exports_mdns.MdnsScanner.md#finishwaiter)
 - [getActiveQueryEarlierAnswers](exports_mdns.MdnsScanner.md#getactivequeryearlieranswers)
 - [getCommissionableDeviceRecords](exports_mdns.MdnsScanner.md#getcommissionabledevicerecords)
+- [getCommissionableQueryRecords](exports_mdns.MdnsScanner.md#getcommissionablequeryrecords)
 - [getOperationalDeviceRecords](exports_mdns.MdnsScanner.md#getoperationaldevicerecords)
 - [handleCommissionableRecords](exports_mdns.MdnsScanner.md#handlecommissionablerecords)
 - [handleDnsMessage](exports_mdns.MdnsScanner.md#handlednsmessage)
 - [handleIpRecords](exports_mdns.MdnsScanner.md#handleiprecords)
 - [handleOperationalSrvRecord](exports_mdns.MdnsScanner.md#handleoperationalsrvrecord)
+- [hasWaiter](exports_mdns.MdnsScanner.md#haswaiter)
 - [multicastServer](exports_mdns.MdnsScanner.md#multicastserver)
 - [nextAnnounceIntervalSeconds](exports_mdns.MdnsScanner.md#nextannounceintervalseconds)
 - [operationalDeviceRecords](exports_mdns.MdnsScanner.md#operationaldevicerecords)
@@ -49,9 +53,11 @@ It sends out queries to discover various types of Matter device types and listen
 
 ### Methods
 
+- [cancelCommissionableDeviceDiscovery](exports_mdns.MdnsScanner.md#cancelcommissionabledevicediscovery)
+- [cancelOperationalDeviceDiscovery](exports_mdns.MdnsScanner.md#canceloperationaldevicediscovery)
 - [close](exports_mdns.MdnsScanner.md#close)
-- [extractInstanceId](exports_mdns.MdnsScanner.md#extractinstanceid)
 - [findCommissionableDevices](exports_mdns.MdnsScanner.md#findcommissionabledevices)
+- [findCommissionableDevicesContinuously](exports_mdns.MdnsScanner.md#findcommissionabledevicescontinuously)
 - [findOperationalDevice](exports_mdns.MdnsScanner.md#findoperationaldevice)
 - [getDiscoveredCommissionableDevices](exports_mdns.MdnsScanner.md#getdiscoveredcommissionabledevices)
 - [getDiscoveredOperationalDevices](exports_mdns.MdnsScanner.md#getdiscoveredoperationaldevices)
@@ -72,7 +78,7 @@ It sends out queries to discover various types of Matter device types and listen
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:29
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:30
 
 ## Properties
 
@@ -95,7 +101,17 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:85
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:90
+
+___
+
+### closing
+
+• `Private` **closing**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:29
 
 ___
 
@@ -115,7 +131,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:69
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:72
 
 ___
 
@@ -135,7 +151,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:132
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:146
+
+___
+
+### extractInstanceId
+
+• `Private` **extractInstanceId**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:91
 
 ___
 
@@ -147,7 +173,7 @@ Check all options for a query identifier and return the most relevant one with a
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:90
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:95
 
 ___
 
@@ -160,7 +186,7 @@ promise.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:68
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:69
 
 ___
 
@@ -170,7 +196,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:43
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:44
 
 ___
 
@@ -183,7 +209,17 @@ record.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:80
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:85
+
+___
+
+### getCommissionableQueryRecords
+
+• `Private` **getCommissionableQueryRecords**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:96
 
 ___
 
@@ -195,7 +231,7 @@ Returns the list of all targets (IP/port) discovered for a queried operational d
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:52
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:53
 
 ___
 
@@ -205,7 +241,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:130
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:144
 
 ___
 
@@ -218,7 +254,7 @@ It will parse the message and check if it contains relevant discovery records.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:127
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:141
 
 ___
 
@@ -228,7 +264,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:128
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:142
 
 ___
 
@@ -238,7 +274,19 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:129
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:143
+
+___
+
+### hasWaiter
+
+• `Private` **hasWaiter**: `any`
+
+Returns weather a waiter promise is registered for a specific queryId.
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:71
 
 ___
 
@@ -278,7 +326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:131
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:145
 
 ___
 
@@ -321,7 +369,7 @@ The promise will be resolved when the timer runs out latest.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:63
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:64
 
 ___
 
@@ -334,7 +382,7 @@ out. If it was the last query announcing will stop completely.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:48
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:49
 
 ___
 
@@ -349,7 +397,7 @@ packets and the query is sent as Truncated query.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:37
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:38
 
 ___
 
@@ -362,7 +410,7 @@ out. When entry already exists the query is overwritten and answers are always a
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:42
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:43
 
 ___
 
@@ -376,9 +424,57 @@ Sort the list of found IP/ports and make sure link-local IPv6 addresses come fir
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:58
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:59
 
 ## Methods
+
+### cancelCommissionableDeviceDiscovery
+
+▸ **cancelCommissionableDeviceDiscovery**(`identifier`): `void`
+
+Cancel a running discovery of commissionable devices. The waiter promises are resolved as if the timeout would
+be over.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Scanner](../interfaces/exports_common.Scanner.md).[cancelCommissionableDeviceDiscovery](../interfaces/exports_common.Scanner.md#cancelcommissionabledevicediscovery)
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:79
+
+___
+
+### cancelOperationalDeviceDiscovery
+
+▸ **cancelOperationalDeviceDiscovery**(`fabric`, `nodeId`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
+| `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:78
+
+___
 
 ### close
 
@@ -396,40 +492,20 @@ Close all connects, end all timers and resolve all pending promises.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:122
-
-___
-
-### extractInstanceId
-
-▸ **extractInstanceId**(`instanceName`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `instanceName` | `string` |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:86
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:136
 
 ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
-Discovers commissionalble devices based on a defined identifier. If an already discovered device matched the
-query it is returned directly and no query is triggered. This works because the commissionable device records
-that are announced into the network are always stored already. If no record can be found a query is registered
-and sent out and  the promise gets fulfilled as soon as one device is found. More might be added later and can
-be requested ny the getCommissionableDevices method. If no device is discovered the promise is fulfilled after
-the timeout period.
+Discovers commissionable devices based on a defined identifier for maximal given timeout, but returns the
+first found entries. If already a discovered device matches in the cache the response is returned directly and
+no query is triggered. If no record exists a query is sent out and the promise gets fulfilled as soon as at least
+one device is found. If no device is discovered in the defined timeframe an empty array is returned. When the
+promise got fulfilled no more queries are send out, but more device entries might be added when discovered later.
+These can be requested by the getCommissionableDevices method.
 
 #### Parameters
 
@@ -437,6 +513,7 @@ the timeout period.
 | :------ | :------ |
 | `identifier` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
 | `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
 
 #### Returns
 
@@ -448,13 +525,41 @@ the timeout period.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:99
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:105
+
+___
+
+### findCommissionableDevicesContinuously
+
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+
+Discovers commissionable devices based on a defined identifier and returns the first found entries. If already a
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifier` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
+| `callback` | (`device`: [`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)) => `void` |
+| `timeoutSeconds?` | `number` |
+
+#### Returns
+
+`Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+
+#### Implementation of
+
+[Scanner](../interfaces/exports_common.Scanner.md).[findCommissionableDevicesContinuously](../interfaces/exports_common.Scanner.md#findcommissionabledevicescontinuously)
+
+#### Defined in
+
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:112
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`): `Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
 
 Method to find an operational device (already commissioned) and return a promise with the list of discovered
 IP/ports or an empty array if not found.
@@ -466,6 +571,7 @@ IP/ports or an empty array if not found.
 | `«destructured»` | [`Fabric`](exports_fabric.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `timeoutSeconds?` | `number` |
+| `ignoreExistingRecords?` | `boolean` |
 
 #### Returns
 
@@ -477,13 +583,13 @@ IP/ports or an empty array if not found.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:74
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:77
 
 ___
 
 ### getDiscoveredCommissionableDevices
 
-▸ **getDiscoveredCommissionableDevices**(`identifier`): { `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `expires`: `undefined` ; `instanceId`: `string`  }[]
+▸ **getDiscoveredCommissionableDevices**(`identifier`): { `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
 
 Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries.
 
@@ -495,7 +601,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Returns
 
-{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `expires`: `undefined` ; `instanceId`: `string`  }[]
+{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
 
 #### Implementation of
 
@@ -503,7 +609,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:100
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:113
 
 ___
 
@@ -531,7 +637,7 @@ DNS-SD queries.
 
 #### Defined in
 
-packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:75
+packages/matter.js/dist/esm/mdns/MdnsScanner.d.ts:80
 
 ___
 

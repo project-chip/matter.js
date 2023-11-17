@@ -58,6 +58,7 @@
 - [removeChildEndpoint](exports_device.DimmableLightDevice.md#removechildendpoint)
 - [removeCommandHandler](exports_device.DimmableLightDevice.md#removecommandhandler)
 - [removeFromStructure](exports_device.DimmableLightDevice.md#removefromstructure)
+- [setBridgedDeviceReachability](exports_device.DimmableLightDevice.md#setbridgeddevicereachability)
 - [setCurrentLevel](exports_device.DimmableLightDevice.md#setcurrentlevel)
 - [setDeviceTypes](exports_device.DimmableLightDevice.md#setdevicetypes)
 - [setOnOff](exports_device.DimmableLightDevice.md#setonoff)
@@ -92,7 +93,7 @@ packages/matter.js/dist/esm/device/DimmableDevices.d.ts:41
 
 ### commandHandler
 
-• `Protected` **commandHandler**: [`NamedHandler`](export._internal_.NamedHandler.md)<`any`\>
+• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)<`any`\>
 
 #### Inherited from
 
@@ -100,7 +101,7 @@ packages/matter.js/dist/esm/device/DimmableDevices.d.ts:41
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:64
+packages/matter.js/dist/esm/device/Device.d.ts:82
 
 ___
 
@@ -114,7 +115,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:63
+packages/matter.js/dist/esm/device/Device.d.ts:81
 
 ___
 
@@ -198,7 +199,7 @@ because needed public for derived classes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:96
+packages/matter.js/dist/esm/device/Device.d.ts:114
 
 ▸ `Protected` **_executeHandler**<`K_2`\>(`action`, `...args`): `Promise`<`void`\>
 
@@ -356,7 +357,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to add a handler for |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be executed when the command is received |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be executed when the command is received |
 
 #### Returns
 
@@ -368,7 +369,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:79
+packages/matter.js/dist/esm/device/Device.d.ts:97
 
 ▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
 
@@ -584,7 +585,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:98
+packages/matter.js/dist/esm/device/Device.d.ts:116
 
 ___
 
@@ -618,7 +619,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:97
+packages/matter.js/dist/esm/device/Device.d.ts:115
 
 ___
 
@@ -766,7 +767,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:100
+packages/matter.js/dist/esm/device/Device.d.ts:118
 
 ___
 
@@ -824,7 +825,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:99
+packages/matter.js/dist/esm/device/Device.d.ts:117
 
 ___
 
@@ -1028,7 +1029,7 @@ The base class do not expose any commands!
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `command` | `never` | Command name to remove the handler from |
-| `handler` | [`HandlerFunction`](../modules/export._internal_.md#handlerfunction) | Handler function to be removed |
+| `handler` | [`HandlerFunction`](../modules/util_export.md#handlerfunction) | Handler function to be removed |
 
 #### Returns
 
@@ -1040,7 +1041,7 @@ The base class do not expose any commands!
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/Device.d.ts:87
+packages/matter.js/dist/esm/device/Device.d.ts:105
 
 ▸ **removeCommandHandler**<`K_1`\>(`action`, `handler`): `void`
 
@@ -1113,6 +1114,33 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/device/Endpoint.d.ts:36
+
+___
+
+### setBridgedDeviceReachability
+
+▸ **setBridgedDeviceReachability**(`reachable`): `void`
+
+Set the reachability of the device exposed via the bridge. If this is a device inside  a composed device the
+reachability needs to be set there.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `reachable` | `boolean` | true if reachable, false otherwise |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[DimmableBaseDevice](export._internal_.DimmableBaseDevice.md).[setBridgedDeviceReachability](export._internal_.DimmableBaseDevice.md#setbridgeddevicereachability)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/Device.d.ts:125
 
 ___
 

@@ -37,7 +37,7 @@ Provides an interface for downloading and applying OTA software updates
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:202
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:202](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L202)
 
 ___
 
@@ -53,7 +53,7 @@ Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:120
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:120](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L120)
 
 ___
 
@@ -69,7 +69,7 @@ Body of the OtaSoftwareUpdateRequestor downloadError event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:188
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:188](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L188)
 
 ___
 
@@ -85,7 +85,7 @@ This structure encodes a fabric-scoped location of an OTA provider on a given fa
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:37
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L37)
 
 ___
 
@@ -101,7 +101,7 @@ Body of the OtaSoftwareUpdateRequestor stateTransition event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:166
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:166](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L166)
 
 ___
 
@@ -117,4 +117,4 @@ Body of the OtaSoftwareUpdateRequestor versionApplied event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:178
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:178](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L178)

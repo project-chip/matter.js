@@ -23,6 +23,8 @@
 ### Methods
 
 - [addProtocolHandler](exports_protocol.ExchangeProvider.md#addprotocolhandler)
+- [getProtocolHandler](exports_protocol.ExchangeProvider.md#getprotocolhandler)
+- [hasProtocolHandler](exports_protocol.ExchangeProvider.md#hasprotocolhandler)
 - [initiateExchange](exports_protocol.ExchangeProvider.md#initiateexchange)
 - [reconnectChannel](exports_protocol.ExchangeProvider.md#reconnectchannel)
 
@@ -42,7 +44,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:55
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:62
 
 ## Properties
 
@@ -52,7 +54,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:55
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:53
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:60
 
 ___
 
@@ -62,7 +64,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:52
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:59
 
 ___
 
@@ -72,7 +74,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:54
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:61
 
 ## Accessors
 
@@ -86,7 +88,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:54
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:59
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:68
 
 ## Methods
 
@@ -106,7 +108,47 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:59
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:56
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:65
+
+___
+
+### getProtocolHandler
+
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `protocolId` | `number` |
+
+#### Returns
+
+`undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:64
+
+___
+
+### hasProtocolHandler
+
+▸ **hasProtocolHandler**(`protocolId`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `protocolId` | `number` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:63
 
 ___
 
@@ -120,7 +162,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:57
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:66
 
 ___
 
@@ -134,4 +176,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:58
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:67

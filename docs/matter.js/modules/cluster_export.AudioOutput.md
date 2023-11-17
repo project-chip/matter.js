@@ -39,7 +39,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:184](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L184)
 
 ## Variables
 
@@ -51,7 +51,7 @@ These elements and properties are present in all AudioOutput clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:97
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:97](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L97)
 
 ___
 
@@ -72,7 +72,7 @@ method.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:162
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:162](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L162)
 
 ___
 
@@ -87,7 +87,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:196](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L196)
 
 ___
 
@@ -99,7 +99,7 @@ A AudioOutputCluster supports these elements if it supports feature NameUpdates.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:138
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:138](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L138)
 
 ___
 
@@ -115,7 +115,7 @@ This contains information about an output.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:42
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L42)
 
 ___
 
@@ -131,7 +131,7 @@ Input to the AudioOutput renameOutput command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:78
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L78)
 
 ___
 
@@ -147,4 +147,4 @@ Input to the AudioOutput selectOutput command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:71
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L71)

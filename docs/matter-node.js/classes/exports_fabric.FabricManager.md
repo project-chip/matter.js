@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [fabricRemoveCallback](exports_fabric.FabricManager.md#fabricremovecallback)
 - [fabricStorage](exports_fabric.FabricManager.md#fabricstorage)
 - [fabrics](exports_fabric.FabricManager.md#fabrics)
 - [nextFabricIndex](exports_fabric.FabricManager.md#nextfabricindex)
@@ -31,19 +32,30 @@
 
 ### constructor
 
-• **new FabricManager**(`storage`)
+• **new FabricManager**(`storage`, `fabricRemoveCallback?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `storage` | [`StorageContext`](storage_export.StorageContext.md) |
+| `fabricRemoveCallback?` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex), `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid)) => `void` |
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:22
 
 ## Properties
+
+### fabricRemoveCallback
+
+• `Private` `Optional` `Readonly` **fabricRemoveCallback**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:18
+
+___
 
 ### fabricStorage
 
@@ -51,7 +63,7 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
 
 ___
 
@@ -61,7 +73,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:18
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:20
 
 ___
 
@@ -71,7 +83,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:17
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:19
 
 ## Methods
 
@@ -91,7 +103,7 @@ packages/matter.js/dist/esm/fabric/FabricManager.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:23
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
 
 ___
 
@@ -112,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:28
 
 ___
 
@@ -126,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:25
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
 
 ___
 
@@ -140,7 +152,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:21
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:23
 
 ___
 
@@ -154,7 +166,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:22
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
 
 ___
 
@@ -174,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:24
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:26
 
 ___
 
@@ -194,7 +206,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:28
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:30
 
 ___
 
@@ -214,4 +226,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/FabricManager.d.ts:27
+packages/matter.js/dist/esm/fabric/FabricManager.d.ts:29

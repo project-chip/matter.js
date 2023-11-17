@@ -27,7 +27,7 @@ This cluster provides an interface to a boolean state called StateValue.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:30
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L30)
 
 ___
 
@@ -43,4 +43,4 @@ Body of the BooleanState stateChange event
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:21
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L21)

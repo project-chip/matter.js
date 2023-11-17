@@ -27,7 +27,7 @@
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:67
+[packages/matter.js/src/device/DeviceTypes.ts:67](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L67)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:68
+[packages/matter.js/src/device/DeviceTypes.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L68)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:66
+[packages/matter.js/src/device/DeviceTypes.ts:66](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L66)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:74
+[packages/matter.js/src/device/DeviceTypes.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L74)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:72
+[packages/matter.js/src/device/DeviceTypes.ts:72](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L72)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:73
+[packages/matter.js/src/device/DeviceTypes.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L73)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:71
+[packages/matter.js/src/device/DeviceTypes.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L71)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:70
+[packages/matter.js/src/device/DeviceTypes.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L70)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:69
+[packages/matter.js/src/device/DeviceTypes.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L69)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/device/DeviceTypes.ts:75
+[packages/matter.js/src/device/DeviceTypes.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L75)

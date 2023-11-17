@@ -20,6 +20,7 @@
 
 ### Methods
 
+- [close](exports_session.CaseServer.md#close)
 - [getId](exports_session.CaseServer.md#getid)
 - [onNewExchange](exports_session.CaseServer.md#onnewexchange)
 
@@ -40,6 +41,24 @@
 packages/matter.js/dist/esm/session/case/CaseServer.d.ts:12
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[ProtocolHandler](../interfaces/exports_protocol.ProtocolHandler.md).[close](../interfaces/exports_protocol.ProtocolHandler.md#close)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/case/CaseServer.d.ts:13
+
+___
 
 ### getId
 

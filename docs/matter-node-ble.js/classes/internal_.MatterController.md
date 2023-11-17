@@ -12,74 +12,101 @@
 
 ### Properties
 
+- [adminVendorId](internal_.MatterController.md#adminvendorid)
+- [bleScanner](internal_.MatterController.md#blescanner)
 - [caseClient](internal_.MatterController.md#caseclient)
 - [certificateManager](internal_.MatterController.md#certificatemanager)
 - [channelManager](internal_.MatterController.md#channelmanager)
 - [commissionDevice](internal_.MatterController.md#commissiondevice)
-- [commissioningOptions](internal_.MatterController.md#commissioningoptions)
+- [commissionedNodes](internal_.MatterController.md#commissionednodes)
+- [connectOrDiscoverNode](internal_.MatterController.md#connectordiscovernode)
 - [controllerStorage](internal_.MatterController.md#controllerstorage)
-- [discoverDeviceAddressesByIdentifier](internal_.MatterController.md#discoverdeviceaddressesbyidentifier)
 - [exchangeManager](internal_.MatterController.md#exchangemanager)
 - [fabric](internal_.MatterController.md#fabric)
+- [getLastOperationalAddress](internal_.MatterController.md#getlastoperationaladdress)
 - [initializePaseSecureChannel](internal_.MatterController.md#initializepasesecurechannel)
 - [mdnsScanner](internal_.MatterController.md#mdnsscanner)
 - [netInterfaceBle](internal_.MatterController.md#netinterfaceble)
 - [netInterfaceIpv4](internal_.MatterController.md#netinterfaceipv4)
 - [netInterfaceIpv6](internal_.MatterController.md#netinterfaceipv6)
-- [operationalServerAddress](internal_.MatterController.md#operationalserveraddress)
+- [pair](internal_.MatterController.md#pair)
 - [paseClient](internal_.MatterController.md#paseclient)
+- [reconnectLastKnownAddress](internal_.MatterController.md#reconnectlastknownaddress)
+- [resume](internal_.MatterController.md#resume)
 - [sessionClosedCallback](internal_.MatterController.md#sessionclosedcallback)
 - [sessionManager](internal_.MatterController.md#sessionmanager)
+- [setOperationalServerAddress](internal_.MatterController.md#setoperationalserveraddress)
 - [storage](internal_.MatterController.md#storage)
+- [storeCommisionedNodes](internal_.MatterController.md#storecommisionednodes)
+
+### Accessors
+
+- [nodeId](internal_.MatterController.md#nodeid)
 
 ### Methods
 
 - [addTransportInterface](internal_.MatterController.md#addtransportinterface)
 - [announce](internal_.MatterController.md#announce)
 - [close](internal_.MatterController.md#close)
+- [collectScanners](internal_.MatterController.md#collectscanners)
 - [commission](internal_.MatterController.md#commission)
-- [commissionViaBle](internal_.MatterController.md#commissionviable)
 - [connect](internal_.MatterController.md#connect)
 - [createSecureSession](internal_.MatterController.md#createsecuresession)
+- [disconnect](internal_.MatterController.md#disconnect)
 - [findResumptionRecordByNodeId](internal_.MatterController.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](internal_.MatterController.md#getactivesessioninformation)
-- [getFabric](internal_.MatterController.md#getfabric)
+- [getCommissionedNodes](internal_.MatterController.md#getcommissionednodes)
 - [getNextAvailableSessionId](internal_.MatterController.md#getnextavailablesessionid)
-- [getOperationalServerAddress](internal_.MatterController.md#getoperationalserveraddress)
 - [getResumptionRecord](internal_.MatterController.md#getresumptionrecord)
 - [isCommissioned](internal_.MatterController.md#iscommissioned)
-- [iterateServerAddresses](internal_.MatterController.md#iterateserveraddresses)
-- [pair](internal_.MatterController.md#pair)
-- [resume](internal_.MatterController.md#resume)
+- [removeNode](internal_.MatterController.md#removenode)
 - [saveResumptionRecord](internal_.MatterController.md#saveresumptionrecord)
-- [setOperationalServerAddress](internal_.MatterController.md#setoperationalserveraddress)
 - [create](internal_.MatterController.md#create)
 
 ## Constructors
 
 ### constructor
 
-• **new MatterController**(`mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `storage`, `operationalServerAddress?`, `commissioningOptions?`, `sessionClosedCallback?`)
+• **new MatterController**(`mdnsScanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `certificateManager`, `fabric`, `storage`, `adminVendorId`, `sessionClosedCallback?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `mdnsScanner` | [`Scanner`](../interfaces/internal_.Scanner.md) |
+| `mdnsScanner` | [`MdnsScanner`](internal_.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `certificateManager` | [`RootCertificateManager`](internal_.RootCertificateManager.md) |
 | `fabric` | [`Fabric`](internal_.Fabric.md) |
 | `storage` | [`StorageContext`](internal_.StorageContext.md) |
-| `operationalServerAddress?` | [`ServerAddressIp`](../modules/internal_.md#serveraddressip) |
-| `commissioningOptions?` | [`CommissioningOptions`](../modules/internal_.md#commissioningoptions) |
+| `adminVendorId` | [`VendorId`](../modules/internal_.md#vendorid) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid)) => `void` |
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:55
+matter.js/dist/esm/MatterController.d.ts:66
 
 ## Properties
+
+### adminVendorId
+
+• `Private` `Readonly` **adminVendorId**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:54
+
+___
+
+### bleScanner
+
+• `Private` **bleScanner**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:64
+
+___
 
 ### caseClient
 
@@ -87,7 +114,7 @@ matter.js/dist/cjs/MatterController.d.ts:55
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:51
+matter.js/dist/esm/MatterController.d.ts:61
 
 ___
 
@@ -97,7 +124,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:41
+matter.js/dist/esm/MatterController.d.ts:51
 
 ___
 
@@ -107,7 +134,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:48
+matter.js/dist/esm/MatterController.d.ts:58
 
 ___
 
@@ -120,17 +147,27 @@ success.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:81
+matter.js/dist/esm/MatterController.d.ts:90
 
 ___
 
-### commissioningOptions
+### commissionedNodes
 
-• `Private` `Readonly` **commissioningOptions**: `any`
+• `Private` `Readonly` **commissionedNodes**: `any`
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:53
+matter.js/dist/esm/MatterController.d.ts:65
+
+___
+
+### connectOrDiscoverNode
+
+• `Private` **connectOrDiscoverNode**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:92
 
 ___
 
@@ -140,20 +177,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:52
-
-___
-
-### discoverDeviceAddressesByIdentifier
-
-• `Private` **discoverDeviceAddressesByIdentifier**: `any`
-
-Discovers devices by a provided identifier. It returns after the timeout or if at least one device was found.
-The method returns a list of addresses of the discovered devices.
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:61
+matter.js/dist/esm/MatterController.d.ts:62
 
 ___
 
@@ -163,7 +187,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:49
+matter.js/dist/esm/MatterController.d.ts:59
 
 ___
 
@@ -173,7 +197,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:42
+matter.js/dist/esm/MatterController.d.ts:52
+
+___
+
+### getLastOperationalAddress
+
+• `Private` **getLastOperationalAddress**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:105
 
 ___
 
@@ -187,7 +221,7 @@ is wrong.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:76
+matter.js/dist/esm/MatterController.d.ts:85
 
 ___
 
@@ -197,7 +231,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:38
+matter.js/dist/esm/MatterController.d.ts:48
 
 ___
 
@@ -207,7 +241,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:54
+matter.js/dist/esm/MatterController.d.ts:63
 
 ___
 
@@ -217,7 +251,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:39
+matter.js/dist/esm/MatterController.d.ts:49
 
 ___
 
@@ -227,17 +261,19 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:40
+matter.js/dist/esm/MatterController.d.ts:50
 
 ___
 
-### operationalServerAddress
+### pair
 
-• `Optional` **operationalServerAddress**: [`ServerAddressIp`](../modules/internal_.md#serveraddressip)
+• `Private` **pair**: `any`
+
+Pair with an operational device (already commissioned) and establish a CASE session.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:44
+matter.js/dist/esm/MatterController.d.ts:101
 
 ___
 
@@ -247,7 +283,32 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:50
+matter.js/dist/esm/MatterController.d.ts:60
+
+___
+
+### reconnectLastKnownAddress
+
+• `Private` **reconnectLastKnownAddress**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:91
+
+___
+
+### resume
+
+• `Private` **resume**: `any`
+
+Resume a device connection and establish a CASE session that was previously paired with the controller. This
+method will try to connect to the device using the previously used server address (if set). If that fails, the
+device is discovered again using its operational instance details.
+It returns the operational MessageChannel on success.
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:99
 
 ___
 
@@ -257,7 +318,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:45
+matter.js/dist/esm/MatterController.d.ts:55
 
 ___
 
@@ -267,7 +328,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:47
+matter.js/dist/esm/MatterController.d.ts:57
+
+___
+
+### setOperationalServerAddress
+
+• `Private` **setOperationalServerAddress**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:104
 
 ___
 
@@ -277,7 +348,31 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:43
+matter.js/dist/esm/MatterController.d.ts:53
+
+___
+
+### storeCommisionedNodes
+
+• `Private` **storeCommisionedNodes**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:106
+
+## Accessors
+
+### nodeId
+
+• `get` **nodeId**(): [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Returns
+
+[`NodeId`](../modules/internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:67
 
 ## Methods
 
@@ -297,7 +392,7 @@ matter.js/dist/cjs/MatterController.d.ts:43
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:56
+matter.js/dist/esm/MatterController.d.ts:68
 
 ___
 
@@ -311,7 +406,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:115
+matter.js/dist/esm/MatterController.d.ts:117
 
 ___
 
@@ -325,13 +420,33 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:116
+matter.js/dist/esm/MatterController.d.ts:118
+
+___
+
+### collectScanners
+
+▸ **collectScanners**(`discoveryCapabilities?`): [`Scanner`](../interfaces/internal_.Scanner.md)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<{ `ble`: [`BitFlag`](../modules/internal_.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/internal_.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/internal_.md#bitflag-1)  }\> |
+
+#### Returns
+
+[`Scanner`](../interfaces/internal_.Scanner.md)[]
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:69
 
 ___
 
 ### commission
 
-▸ **commission**(`identifierData`, `passCode`, `timeoutSeconds?`, `knownAddress?`): `Promise`<[`NodeId`](../modules/internal_.md#nodeid)\>
+▸ **commission**(`options`): `Promise`<[`NodeId`](../modules/internal_.md#nodeid)\>
 
 Commission a device by its identifier and the Passcode. If a known address is provided this is tried first
 before discovering devices in the network. If multiple addresses or devices are found, they are tried all after
@@ -343,10 +458,7 @@ request or the passode did not match to any discovered device/address.
 
 | Name | Type |
 | :------ | :------ |
-| `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
-| `passCode` | `number` |
-| `timeoutSeconds?` | `number` |
-| `knownAddress?` | [`ServerAddress`](../modules/internal_.md#serveraddress) |
+| `options` | [`NodeCommissioningOptions`](../modules/internal_.md#nodecommissioningoptions) |
 
 #### Returns
 
@@ -354,35 +466,13 @@ request or the passode did not match to any discovered device/address.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:70
-
-___
-
-### commissionViaBle
-
-▸ **commissionViaBle**(`identifierData`, `passCode`, `timeoutSeconds?`): `Promise`<[`NodeId`](../modules/internal_.md#nodeid)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/internal_.md#commissionabledeviceidentifiers) |
-| `passCode` | `number` |
-| `timeoutSeconds?` | `number` |
-
-#### Returns
-
-`Promise`<[`NodeId`](../modules/internal_.md#nodeid)\>
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:62
+matter.js/dist/esm/MatterController.d.ts:77
 
 ___
 
 ### connect
 
-▸ **connect**(`nodeId`, `timeoutSeconds?`): `Promise`<[`InteractionClient`](internal_.InteractionClient.md)\>
+▸ **connect**(`peerNodeId`, `timeoutSeconds?`): `Promise`<[`InteractionClient`](internal_.InteractionClient.md)\>
 
 Connect to the device by opening a channel and creating a new CASE session if necessary.
 Returns a InteractionClient on success.
@@ -391,7 +481,7 @@ Returns a InteractionClient on success.
 
 | Name | Type |
 | :------ | :------ |
-| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 | `timeoutSeconds?` | `number` |
 
 #### Returns
@@ -400,13 +490,13 @@ Returns a InteractionClient on success.
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:108
+matter.js/dist/esm/MatterController.d.ts:111
 
 ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransTimeoutMs?`, `activeRetransTimeoutMs?`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterController`](internal_.MatterController.md)\>\>
+▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Parameters
 
@@ -420,8 +510,8 @@ ___
 | `salt` | `Uint8Array` |
 | `isInitiator` | `boolean` |
 | `isResumption` | `boolean` |
-| `idleRetransTimeoutMs?` | `number` |
-| `activeRetransTimeoutMs?` | `number` |
+| `idleRetransmissionTimeoutMs?` | `number` |
+| `activeRetransmissionTimeoutMs?` | `number` |
 
 #### Returns
 
@@ -429,7 +519,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:111
+matter.js/dist/esm/MatterController.d.ts:113
+
+___
+
+### disconnect
+
+▸ **disconnect**(`nodeId`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+matter.js/dist/esm/MatterController.d.ts:78
 
 ___
 
@@ -449,35 +559,35 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:113
+matter.js/dist/esm/MatterController.d.ts:115
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:117
+matter.js/dist/esm/MatterController.d.ts:119
 
 ___
 
-### getFabric
+### getCommissionedNodes
 
-▸ **getFabric**(): [`Fabric`](internal_.Fabric.md)
+▸ **getCommissionedNodes**(): [`NodeId`](../modules/internal_.md#nodeid)[]
 
 #### Returns
 
-[`Fabric`](internal_.Fabric.md)
+[`NodeId`](../modules/internal_.md#nodeid)[]
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:110
+matter.js/dist/esm/MatterController.d.ts:103
 
 ___
 
@@ -491,21 +601,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:109
-
-___
-
-### getOperationalServerAddress
-
-▸ **getOperationalServerAddress**(): `undefined` \| [`ServerAddressIp`](../modules/internal_.md#serveraddressip)
-
-#### Returns
-
-`undefined` \| [`ServerAddressIp`](../modules/internal_.md#serveraddressip)
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:103
+matter.js/dist/esm/MatterController.d.ts:112
 
 ___
 
@@ -525,107 +621,41 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:112
+matter.js/dist/esm/MatterController.d.ts:114
 
 ___
 
 ### isCommissioned
 
-▸ **isCommissioned**(): ``false``
+▸ **isCommissioned**(): `boolean`
 
 #### Returns
 
-``false``
+`boolean`
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:101
+matter.js/dist/esm/MatterController.d.ts:102
 
 ___
 
-### iterateServerAddresses
+### removeNode
 
-▸ **iterateServerAddresses**<`SA`, `T`, `E`\>(`servers`, `errorType`, `updateNetworkInterfaceFunc`, `func`, `lastKnownServer?`): `Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
-
-Helper method to iterate through a list of server addresses and try to execute a method on each of them. If the
-method throws a configurable error (or EHOSTUNREACH), the server address list is updated (to also add later
-discovered addresses or devices) and then next server address is tried.The result of the first successful method
-call is returned. The logic makes sure to only try each unique address (IP/port) once.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `SA` | extends [`ServerAddress`](../modules/internal_.md#serveraddress) |
-| `T` | `T` |
-| `E` | extends `Error` |
+▸ **removeNode**(`nodeId`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `servers` | `SA`[] |
-| `errorType` | [`ClassExtends`](../modules/internal_.md#classextends)<`E`\> |
-| `updateNetworkInterfaceFunc` | () => `Promise`<`SA`[]\> |
-| `func` | (`server`: `SA`) => `Promise`<`T`\> |
-| `lastKnownServer?` | `SA` |
+| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 
 #### Returns
 
-`Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
+`Promise`<`void`\>
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:88
-
-___
-
-### pair
-
-▸ **pair**(`peerNodeId`, `operationalServerAddress`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
-
-Pair with an operational device (already commissioned) and establish a CASE session.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `operationalServerAddress` | [`ServerAddressIp`](../modules/internal_.md#serveraddressip) |
-
-#### Returns
-
-`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:100
-
-___
-
-### resume
-
-▸ **resume**(`peerNodeId`, `timeoutSeconds?`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
-
-Resume a device connection and establish a CASE session that was previously paired with the controller. This
-method will try to connect to the device using the previously used server address (if set). If that fails, the
-device is discovered again using its operational instance details.
-It returns the operational MessageChannel on success.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `timeoutSeconds?` | `number` |
-
-#### Returns
-
-`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\>
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:98
+matter.js/dist/esm/MatterController.d.ts:79
 
 ___
 
@@ -645,45 +675,26 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:114
-
-___
-
-### setOperationalServerAddress
-
-▸ **setOperationalServerAddress**(`address`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `address` | [`ServerAddressIp`](../modules/internal_.md#serveraddressip) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-matter.js/dist/cjs/MatterController.d.ts:102
+matter.js/dist/esm/MatterController.d.ts:116
 
 ___
 
 ### create
 
-▸ `Static` **create**(`scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `storage`, `operationalServerAddress?`, `commissioningOptions?`, `sessionClosedCallback?`): `Promise`<[`MatterController`](internal_.MatterController.md)\>
+▸ `Static` **create**(`scanner`, `netInterfaceIpv4`, `netInterfaceIpv6`, `storage`, `sessionClosedCallback?`, `adminVendorId?`, `adminFabricId?`, `adminFabricIndex?`): `Promise`<[`MatterController`](internal_.MatterController.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `scanner` | [`Scanner`](../interfaces/internal_.Scanner.md) |
+| `scanner` | [`MdnsScanner`](internal_.MdnsScanner.md) |
 | `netInterfaceIpv4` | `undefined` \| [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `netInterfaceIpv6` | [`NetInterface`](../interfaces/internal_.NetInterface.md) |
 | `storage` | [`StorageContext`](internal_.StorageContext.md) |
-| `operationalServerAddress?` | [`ServerAddressIp`](../modules/internal_.md#serveraddressip) |
-| `commissioningOptions?` | [`CommissioningOptions`](../modules/internal_.md#commissioningoptions) |
 | `sessionClosedCallback?` | (`peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid)) => `void` |
+| `adminVendorId?` | [`VendorId`](../modules/internal_.md#vendorid) |
+| `adminFabricId?` | [`FabricId`](../modules/internal_.md#fabricid) |
+| `adminFabricIndex?` | [`FabricIndex`](../modules/internal_.md#fabricindex) |
 
 #### Returns
 
@@ -691,4 +702,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/MatterController.d.ts:46
+matter.js/dist/esm/MatterController.d.ts:56

@@ -31,7 +31,7 @@ control.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:187
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:187](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L187)
 
 ___
 
@@ -45,7 +45,7 @@ Behavior that supports lighting applications
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:179
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:179](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L179)
 
 ___
 
@@ -59,4 +59,4 @@ Dependency with the On/Off cluster
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:172
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:172](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L172)

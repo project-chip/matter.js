@@ -20,7 +20,7 @@
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:26
+[packages/matter.js/src/session/Session.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L26)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:25
+[packages/matter.js/src/session/Session.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L25)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/Session.ts:27
+[packages/matter.js/src/session/Session.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/Session.ts#L27)

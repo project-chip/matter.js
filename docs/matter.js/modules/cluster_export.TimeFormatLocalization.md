@@ -37,7 +37,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:213
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L213)
 
 ## Variables
 
@@ -49,7 +49,7 @@ These elements and properties are present in all TimeFormatLocalization clusters
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:115
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L115)
 
 ___
 
@@ -61,7 +61,7 @@ A TimeFormatLocalizationCluster supports these elements if it supports feature C
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:149
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:149](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L149)
 
 ___
 
@@ -87,7 +87,7 @@ TimeFormatLocalizationCluster.with() factory method.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:191
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:191](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L191)
 
 ___
 
@@ -102,4 +102,4 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:225
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:225](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L225)

@@ -101,11 +101,11 @@
 - [FixedAttributeServer](../classes/cluster_export.FixedAttributeServer.md)
 - [GroupsManager](../classes/cluster_export.GroupsManager.md)
 - [IllegalClusterError](../classes/cluster_export.IllegalClusterError.md)
-- [PresentAttributeClient](../classes/cluster_export.PresentAttributeClient.md)
-- [PresentEventClient](../classes/cluster_export.PresentEventClient.md)
 - [ScenesManager](../classes/cluster_export.ScenesManager.md)
-- [UnknownPresentAttributeClient](../classes/cluster_export.UnknownPresentAttributeClient.md)
-- [UnknownPresentEventClient](../classes/cluster_export.UnknownPresentEventClient.md)
+- [SupportedAttributeClient](../classes/cluster_export.SupportedAttributeClient.md)
+- [SupportedEventClient](../classes/cluster_export.SupportedEventClient.md)
+- [UnknownSupportedAttributeClient](../classes/cluster_export.UnknownSupportedAttributeClient.md)
+- [UnknownSupportedEventClient](../classes/cluster_export.UnknownSupportedEventClient.md)
 
 ### Interfaces
 
@@ -397,9 +397,9 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:463
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:463](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L463)
 
-packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:464
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:464](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L464)
 
 ___
 
@@ -409,9 +409,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:200
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:200](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L200)
 
-packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:201
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:201](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L201)
 
 ___
 
@@ -421,9 +421,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:836
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:836](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L836)
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:837
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:837](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L837)
 
 ___
 
@@ -433,9 +433,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:388
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:388](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L388)
 
-packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:389
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:389](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L389)
 
 ___
 
@@ -451,7 +451,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AttributeServer.ts:29
+[packages/matter.js/src/cluster/server/AttributeServer.ts:29](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AttributeServer.ts#L29)
 
 ___
 
@@ -461,9 +461,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:156
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:156](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L156)
 
-packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:157
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:157](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L157)
 
 ___
 
@@ -473,9 +473,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:338
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L338)
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:339
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:339](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L339)
 
 ___
 
@@ -492,7 +492,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:40
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L41)
 
 ___
 
@@ -510,7 +510,7 @@ Initial values for the cluster attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:73
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:76](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L76)
 
 ___
 
@@ -526,7 +526,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:108
+[packages/matter.js/src/cluster/Cluster.ts:108](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L108)
 
 ___
 
@@ -542,7 +542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:77
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:80](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L80)
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:70
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L73)
 
 ___
 
@@ -568,9 +568,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:213
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L213)
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:214
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:214](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L214)
 
 ___
 
@@ -580,9 +580,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:239
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:239](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L239)
 
-packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:240
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:240](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L240)
 
 ___
 
@@ -592,9 +592,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:51
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L51)
 
-packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:52
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:52](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L52)
 
 ___
 
@@ -604,9 +604,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:435
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:435](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L435)
 
-packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:436
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:436](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L436)
 
 ___
 
@@ -616,9 +616,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:41
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L41)
 
-packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:42
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L42)
 
 ___
 
@@ -628,9 +628,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BindingCluster.ts:114
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:114](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L114)
 
-packages/matter.js/src/cluster/definitions/BindingCluster.ts:115
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L115)
 
 ___
 
@@ -640,9 +640,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:57
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L57)
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:58
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L58)
 
 ___
 
@@ -652,9 +652,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:228
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:227](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L227)
 
-packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:229
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:228](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L228)
 
 ___
 
@@ -664,9 +664,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L404)
 
-packages/matter.js/src/cluster/definitions/ChannelCluster.ts:405
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:405](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L405)
 
 ___
 
@@ -676,15 +676,15 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:84
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L84)
 
-packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:85
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:85](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L85)
 
 ___
 
 ### ClusterClientObj
 
-Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](cluster_export.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](export._internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](cluster_export.md#eventclients)<`E`\> ; `id`: [`ClusterId`](datatype_export.md#clusterid) ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](datatype_export.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](datatype_export.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](tlv_export.md#typefromschema)<typeof [`TlvEventFilter`](protocol_interaction_export.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](export._internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](export._internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](export._internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](export._internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](export._internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](export._internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](export._internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](export._internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](export._internal_.md#clienteventlisteners)<`E`\>
+Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](cluster_export.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](export._internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](cluster_export.md#eventclients)<`E`\> ; `id`: [`ClusterId`](datatype_export.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](datatype_export.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](datatype_export.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](datatype_export.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](datatype_export.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](datatype_export.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](tlv_export.md#typefromschema)<typeof [`TlvEventFilter`](protocol_interaction_export.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](export._internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](export._internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](export._internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](export._internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](export._internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](export._internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](export._internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](export._internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](export._internal_.md#clienteventlisteners)<`E`\>
 
 Strongly typed interface of a cluster client
 
@@ -699,7 +699,7 @@ Strongly typed interface of a cluster client
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:141
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:142](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L142)
 
 ___
 
@@ -715,7 +715,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:133
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:134](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L134)
 
 ___
 
@@ -734,7 +734,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:229
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:248](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L248)
 
 ___
 
@@ -750,13 +750,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:132
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:135](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L135)
 
 ___
 
 ### ClusterServerObj
 
-Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](cluster_export.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](datatype_export.md#clusterid) ; `name`: `string`  } & [`ServerAttributeGetters`](export._internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](export._internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](export._internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](export._internal_.md#servereventtriggers)<`E`\>
+Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](cluster_export.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](datatype_export.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](datatype_export.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](datatype_export.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](datatype_export.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](export._internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](export._internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](export._internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](export._internal_.md#servereventtriggers)<`E`\>
 
 #### Type parameters
 
@@ -767,7 +767,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:260
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:263](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L263)
 
 ___
 
@@ -783,7 +783,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:255
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:258](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L258)
 
 ___
 
@@ -803,7 +803,7 @@ Strongly typed interface of a cluster server
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:297
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:318](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L318)
 
 ___
 
@@ -813,9 +813,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1760
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1760](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1760)
 
-packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1761
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1761](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1761)
 
 ___
 
@@ -833,7 +833,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:108
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:111](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L111)
 
 ___
 
@@ -849,7 +849,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:147
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:150](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L150)
 
 ___
 
@@ -865,7 +865,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:32
+[packages/matter.js/src/cluster/Cluster.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L32)
 
 ___
 
@@ -875,9 +875,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:621
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:621](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L621)
 
-packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:622
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:622](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L622)
 
 ___
 
@@ -887,9 +887,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:105
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L105)
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:106
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L106)
 
 ___
 
@@ -899,9 +899,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:263
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:263](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L263)
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:264
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L264)
 
 ___
 
@@ -911,9 +911,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2780
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2780](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2780)
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2781
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2781](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2781)
 
 ___
 
@@ -923,9 +923,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L181)
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L182)
 
 ___
 
@@ -935,9 +935,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:338
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L338)
 
-packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:339
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:339](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L339)
 
 ___
 
@@ -953,7 +953,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:48
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L49)
 
 ___
 
@@ -969,7 +969,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:243
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:246](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L246)
 
 ___
 
@@ -985,7 +985,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:809
+[packages/matter.js/src/cluster/Cluster.ts:809](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L809)
 
 ___
 
@@ -1001,7 +1001,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:197
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:200](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L200)
 
 ___
 
@@ -1011,9 +1011,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:419
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:419](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L419)
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:420
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:420](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L420)
 
 ___
 
@@ -1023,9 +1023,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:69
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L69)
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:70
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L70)
 
 ___
 
@@ -1035,9 +1035,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:45
+[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L45)
 
-packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:46
+[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L46)
 
 ___
 
@@ -1047,9 +1047,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:70
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L70)
 
-packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:71
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L71)
 
 ___
 
@@ -1059,9 +1059,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:500
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:500](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L500)
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:501
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:501](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L501)
 
 ___
 
@@ -1071,9 +1071,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:616
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:616](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L616)
 
-packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:617
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:617](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L617)
 
 ___
 
@@ -1089,7 +1089,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:593
+[packages/matter.js/src/cluster/Cluster.ts:593](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L593)
 
 ___
 
@@ -1120,9 +1120,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:836
+[packages/matter.js/src/cluster/Cluster.ts:836](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L836)
 
-packages/matter.js/src/cluster/Cluster.ts:856
+[packages/matter.js/src/cluster/Cluster.ts:856](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L856)
 
 ___
 
@@ -1132,9 +1132,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:484
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:484](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L484)
 
-packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:485
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:485](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L485)
 
 ___
 
@@ -1144,9 +1144,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GroupsCluster.ts:301
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:301](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L301)
 
-packages/matter.js/src/cluster/definitions/GroupsCluster.ts:302
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:302](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L302)
 
 ___
 
@@ -1156,9 +1156,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:337
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:337](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L337)
 
-packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:338
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L338)
 
 ___
 
@@ -1168,9 +1168,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:83
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:83](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L83)
 
-packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:84
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L84)
 
 ___
 
@@ -1180,9 +1180,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:264
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L264)
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L265)
 
 ___
 
@@ -1192,9 +1192,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:74
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L74)
 
-packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:75
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L75)
 
 ___
 
@@ -1204,9 +1204,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L528)
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:529
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L529)
 
 ___
 
@@ -1216,9 +1216,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:64
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L64)
 
-packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:65
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L65)
 
 ___
 
@@ -1228,9 +1228,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:38
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L38)
 
-packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:39
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L39)
 
 ___
 
@@ -1246,7 +1246,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:587
+[packages/matter.js/src/cluster/Cluster.ts:587](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L587)
 
 ___
 
@@ -1262,7 +1262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:814
+[packages/matter.js/src/cluster/Cluster.ts:814](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L814)
 
 ___
 
@@ -1272,9 +1272,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:247
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L247)
 
-packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:248
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:248](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L248)
 
 ___
 
@@ -1284,9 +1284,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:555
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:555](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L555)
 
-packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:556
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:556](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L556)
 
 ___
 
@@ -1296,9 +1296,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:303
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:303](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L303)
 
-packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:304
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:304](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L304)
 
 ___
 
@@ -1308,9 +1308,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1188
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1188](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1188)
 
-packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1189
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1189](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1189)
 
 ___
 
@@ -1326,7 +1326,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:206
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:209](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L209)
 
 ___
 
@@ -1336,9 +1336,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:236
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:236](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L236)
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:237
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:237](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L237)
 
 ___
 
@@ -1348,9 +1348,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OnOffCluster.ts:361
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:361](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L361)
 
-packages/matter.js/src/cluster/definitions/OnOffCluster.ts:362
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:362](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L362)
 
 ___
 
@@ -1360,9 +1360,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:48
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L48)
 
-packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:49
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L49)
 
 ___
 
@@ -1372,9 +1372,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:895
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:895](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L895)
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:896
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:896](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L896)
 
 ___
 
@@ -1390,7 +1390,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:590
+[packages/matter.js/src/cluster/Cluster.ts:590](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L590)
 
 ___
 
@@ -1406,7 +1406,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:817
+[packages/matter.js/src/cluster/Cluster.ts:817](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L817)
 
 ___
 
@@ -1416,9 +1416,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:227
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:227](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L227)
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:228
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:228](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L228)
 
 ___
 
@@ -1428,9 +1428,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:316
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:316](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L316)
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:317
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:317](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L317)
 
 ___
 
@@ -1440,9 +1440,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1478
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1478](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1478)
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1479
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1479](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1479)
 
 ___
 
@@ -1452,9 +1452,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:48
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L48)
 
-packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:49
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L49)
 
 ___
 
@@ -1464,9 +1464,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:216
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:216](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L216)
 
-packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:217
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:217](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L217)
 
 ___
 
@@ -1476,9 +1476,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:63
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L63)
 
-packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:64
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L64)
 
 ___
 
@@ -1488,9 +1488,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:38
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L38)
 
-packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:39
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L39)
 
 ___
 
@@ -1500,9 +1500,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:482
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:482](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L482)
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:483
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:483](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L483)
 
 ___
 
@@ -1512,9 +1512,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1028
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1028](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L1028)
 
-packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1029
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1029](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L1029)
 
 ___
 
@@ -1524,9 +1524,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:76
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:76](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L76)
 
-packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:77
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L77)
 
 ___
 
@@ -1542,7 +1542,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:625
+[packages/matter.js/src/cluster/Cluster.ts:625](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L625)
 
 ___
 
@@ -1558,7 +1558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:620
+[packages/matter.js/src/cluster/Cluster.ts:620](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L620)
 
 ___
 
@@ -1568,9 +1568,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:562
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:562](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L562)
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:563
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:563](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L563)
 
 ___
 
@@ -1604,7 +1604,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:53
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L54)
 
 ___
 
@@ -1614,9 +1614,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:277
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:277](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L277)
 
-packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:278
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:278](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L278)
 
 ___
 
@@ -1626,9 +1626,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:74
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L74)
 
-packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:75
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L75)
 
 ___
 
@@ -1644,7 +1644,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:250
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:253](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L253)
 
 ___
 
@@ -1654,9 +1654,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:446
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:446](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L446)
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L447)
 
 ___
 
@@ -1666,9 +1666,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:149
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:149](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L149)
 
-packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:150
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:150](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L150)
 
 ___
 
@@ -1678,9 +1678,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:72
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:72](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L72)
 
-packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:73
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L73)
 
 ___
 
@@ -1690,9 +1690,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1703
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1703](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1703)
 
-packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1704
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1704](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1704)
 
 ___
 
@@ -1702,9 +1702,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:153
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:153](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L153)
 
-packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:154
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:154](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L154)
 
 ___
 
@@ -1714,9 +1714,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1384
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1384](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1384)
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1385
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1385](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1385)
 
 ___
 
@@ -1726,9 +1726,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:245
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:245](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L245)
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:246
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:246](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L246)
 
 ___
 
@@ -1738,9 +1738,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:652
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:652](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L652)
 
-packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:653
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:653](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L653)
 
 ___
 
@@ -1750,9 +1750,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:154
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:154](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L154)
 
-packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:155
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:155](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L155)
 
 ___
 
@@ -1762,9 +1762,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:44
+[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L44)
 
-packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:45
+[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L45)
 
 ___
 
@@ -1774,9 +1774,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:60
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L60)
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:61
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L61)
 
 ___
 
@@ -1786,9 +1786,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:54
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L54)
 
-packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:55
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L55)
 
 ___
 
@@ -1798,9 +1798,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:512
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:512](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L512)
 
-packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:513
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:513](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L513)
 
 ___
 
@@ -1810,9 +1810,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1084
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1084](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1084)
 
-packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1085)
 
 ## Variables
 
@@ -1822,9 +1822,9 @@ packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:463
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:463](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L463)
 
-packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:464
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:464](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L464)
 
 ___
 
@@ -1834,9 +1834,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:200
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:200](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L200)
 
-packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:201
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:201](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L201)
 
 ___
 
@@ -1846,9 +1846,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:836
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:836](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L836)
 
-packages/matter.js/src/cluster/definitions/ActionsCluster.ts:837
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:837](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L837)
 
 ___
 
@@ -1858,9 +1858,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:388
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:388](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L388)
 
-packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:389
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:389](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L389)
 
 ___
 
@@ -1874,7 +1874,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:21
+[packages/matter.js/src/cluster/ClusterHelper.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L21)
 
 ___
 
@@ -1884,9 +1884,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:156
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:156](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L156)
 
-packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:157
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:157](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L157)
 
 ___
 
@@ -1896,9 +1896,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:338
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L338)
 
-packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:339
+[packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts:339](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ApplicationLauncherCluster.ts#L339)
 
 ___
 
@@ -1908,9 +1908,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:213
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L213)
 
-packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:214
+[packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts:214](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/AudioOutputCluster.ts#L214)
 
 ___
 
@@ -1920,9 +1920,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:239
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:239](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L239)
 
-packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:240
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:240](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L240)
 
 ___
 
@@ -1932,21 +1932,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:51
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L51)
 
-packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:52
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:52](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L52)
 
 ___
 
 ### BasicInformationCluster
 
-• **BasicInformationCluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `capabilityMinima`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`boolean`, `any`\> ; `location`: [`WritableAttribute`](cluster_export.md#writableattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](cluster_export.md#writableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``40`` = 0x28; `name`: ``"BasicInformation"`` = "BasicInformation"; `revision`: ``2`` = 2 }\>
+• **BasicInformationCluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `capabilityMinima`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `caseSessionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `subscriptionsPerFabric`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `dataModelRevision`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `hardwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `localConfigDisabled`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`boolean`, `any`\> ; `location`: [`WritableAttribute`](cluster_export.md#writableattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`WritableAttribute`](cluster_export.md#writableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BasicInformation.Color.md)\>  }\>, `any`\> ; `productId`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\>  }\>, `any`\> ; `reachableChanged`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``40`` = 0x28; `name`: ``"BasicInformation"`` = "BasicInformation"; `revision`: ``2`` = 2 }\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:435
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:435](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L435)
 
-packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:436
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:436](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L436)
 
 ___
 
@@ -1956,9 +1956,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:41
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L41)
 
-packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:42
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L42)
 
 ___
 
@@ -1968,9 +1968,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BindingCluster.ts:114
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:114](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L114)
 
-packages/matter.js/src/cluster/definitions/BindingCluster.ts:115
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L115)
 
 ___
 
@@ -1980,21 +1980,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:57
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L57)
 
-packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:58
+[packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BooleanStateCluster.ts#L58)
 
 ___
 
 ### BridgedDeviceBasicInformationCluster
 
-• **BridgedDeviceBasicInformationCluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``57`` = 0x39; `name`: ``"BridgedDeviceBasicInformation"`` = "BridgedDeviceBasicInformation"; `revision`: ``2`` = 2 }\>
+• **BridgedDeviceBasicInformationCluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `hardwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `hardwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `manufacturingDate`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `nodeLabel`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`string`, `any`\> ; `partNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productAppearance`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `finish`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ProductFinish`](../enums/cluster_export.BridgedDeviceBasicInformation.ProductFinish.md)\> ; `primaryColor`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| [`Color`](../enums/cluster_export.BridgedDeviceBasicInformation.Color.md)\>  }\>, `any`\> ; `productLabel`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `productUrl`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `reachable`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `serialNumber`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `softwareVersion`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`number`, `any`\> ; `softwareVersionString`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `uniqueId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\> ; `vendorId`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<[`VendorId`](datatype_export.md#vendorid), `any`\> ; `vendorName`: [`OptionalFixedAttribute`](cluster_export.md#optionalfixedattribute)<`string`, `any`\>  } ; `events`: { `leave`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `reachableChanged`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `reachableNewValue`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\>  }\>, `any`\> ; `shutDown`: [`OptionalEvent`](cluster_export.md#optionalevent)<`void`, `any`\> ; `startUp`: [`OptionalEvent`](cluster_export.md#optionalevent)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``57`` = 0x39; `name`: ``"BridgedDeviceBasicInformation"`` = "BridgedDeviceBasicInformation"; `revision`: ``2`` = 2 }\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:228
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:227](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L227)
 
-packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:229
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:228](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L228)
 
 ___
 
@@ -2004,9 +2004,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:404](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L404)
 
-packages/matter.js/src/cluster/definitions/ChannelCluster.ts:405
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:405](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L405)
 
 ___
 
@@ -2016,9 +2016,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:84
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L84)
 
-packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:85
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:85](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L85)
 
 ___
 
@@ -2028,9 +2028,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1760
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1760](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1760)
 
-packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1761
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1761](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1761)
 
 ___
 
@@ -2040,9 +2040,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:621
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:621](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L621)
 
-packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:622
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:622](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L622)
 
 ___
 
@@ -2052,9 +2052,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:105
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L105)
 
-packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:106
+[packages/matter.js/src/cluster/definitions/DescriptorCluster.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DescriptorCluster.ts#L106)
 
 ___
 
@@ -2064,9 +2064,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:263
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:263](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L263)
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:264
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L264)
 
 ___
 
@@ -2076,9 +2076,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2780
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2780](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2780)
 
-packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2781
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:2781](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L2781)
 
 ___
 
@@ -2088,9 +2088,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:181](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L181)
 
-packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182
+[packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts:182](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ElectricalMeasurementCluster.ts#L182)
 
 ___
 
@@ -2100,9 +2100,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:338
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L338)
 
-packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:339
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:339](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L339)
 
 ___
 
@@ -2112,9 +2112,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:419
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:419](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L419)
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:420
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:420](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L420)
 
 ___
 
@@ -2124,9 +2124,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:69
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L69)
 
-packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:70
+[packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FaultInjectionCluster.ts#L70)
 
 ___
 
@@ -2136,9 +2136,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:45
+[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L45)
 
-packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:46
+[packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FixedLabelCluster.ts#L46)
 
 ___
 
@@ -2148,9 +2148,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:70
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L70)
 
-packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:71
+[packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FlowMeasurementCluster.ts#L71)
 
 ___
 
@@ -2160,9 +2160,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:500
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:500](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L500)
 
-packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:501
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:501](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L501)
 
 ___
 
@@ -2172,9 +2172,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:616
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:616](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L616)
 
-packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:617
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:617](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L617)
 
 ___
 
@@ -2184,9 +2184,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:484
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:484](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L484)
 
-packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:485
+[packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts:485](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupKeyManagementCluster.ts#L485)
 
 ___
 
@@ -2196,9 +2196,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/GroupsCluster.ts:301
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:301](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L301)
 
-packages/matter.js/src/cluster/definitions/GroupsCluster.ts:302
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:302](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L302)
 
 ___
 
@@ -2208,9 +2208,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:337
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:337](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L337)
 
-packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:338
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:338](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L338)
 
 ___
 
@@ -2220,9 +2220,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:83
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:83](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L83)
 
-packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:84
+[packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IlluminanceMeasurementCluster.ts#L84)
 
 ___
 
@@ -2232,9 +2232,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:264
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L264)
 
-packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:265](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L265)
 
 ___
 
@@ -2244,9 +2244,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:74
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L74)
 
-packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:75
+[packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LeafWetnessMeasurementCluster.ts#L75)
 
 ___
 
@@ -2256,9 +2256,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:528](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L528)
 
-packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:529
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L529)
 
 ___
 
@@ -2268,9 +2268,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:64
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L64)
 
-packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:65
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L65)
 
 ___
 
@@ -2280,9 +2280,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:38
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L38)
 
-packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:39
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L39)
 
 ___
 
@@ -2292,7 +2292,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:24
+[packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts#L24)
 
 ___
 
@@ -2302,7 +2302,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:25
+[packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts#L25)
 
 ___
 
@@ -2312,9 +2312,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:247
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L247)
 
-packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:248
+[packages/matter.js/src/cluster/definitions/MediaInputCluster.ts:248](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaInputCluster.ts#L248)
 
 ___
 
@@ -2324,9 +2324,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:555
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:555](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L555)
 
-packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:556
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:556](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L556)
 
 ___
 
@@ -2336,9 +2336,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:303
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:303](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L303)
 
-packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:304
+[packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts:304](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ModeSelectCluster.ts#L304)
 
 ___
 
@@ -2348,9 +2348,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1188
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1188](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1188)
 
-packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1189
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1189](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1189)
 
 ___
 
@@ -2360,9 +2360,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:236
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:236](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L236)
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:237
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:237](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L237)
 
 ___
 
@@ -2372,9 +2372,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OnOffCluster.ts:361
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:361](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L361)
 
-packages/matter.js/src/cluster/definitions/OnOffCluster.ts:362
+[packages/matter.js/src/cluster/definitions/OnOffCluster.ts:362](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffCluster.ts#L362)
 
 ___
 
@@ -2384,9 +2384,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:48
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L48)
 
-packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:49
+[packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OnOffSwitchConfigurationCluster.ts#L49)
 
 ___
 
@@ -2396,9 +2396,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:895
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:895](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L895)
 
-packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:896
+[packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts:896](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OperationalCredentialsCluster.ts#L896)
 
 ___
 
@@ -2408,9 +2408,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:227
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:227](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L227)
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:228
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:228](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L228)
 
 ___
 
@@ -2420,9 +2420,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:316
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:316](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L316)
 
-packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:317
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:317](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L317)
 
 ___
 
@@ -2432,9 +2432,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1478
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1478](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1478)
 
-packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1479
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1479](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1479)
 
 ___
 
@@ -2444,9 +2444,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:48
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L48)
 
-packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:49
+[packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PowerSourceConfigurationCluster.ts#L49)
 
 ___
 
@@ -2456,9 +2456,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:216
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:216](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L216)
 
-packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:217
+[packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts:217](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PressureMeasurementCluster.ts#L217)
 
 ___
 
@@ -2468,9 +2468,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:63
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L63)
 
-packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:64
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:64](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L64)
 
 ___
 
@@ -2480,9 +2480,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:38
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L38)
 
-packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:39
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L39)
 
 ___
 
@@ -2492,9 +2492,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:482
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:482](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L482)
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:483
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:483](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L483)
 
 ___
 
@@ -2504,9 +2504,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1028
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1028](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L1028)
 
-packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1029
+[packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts:1029](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PumpConfigurationAndControlCluster.ts#L1029)
 
 ___
 
@@ -2516,9 +2516,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:76
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:76](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L76)
 
-packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:77
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L77)
 
 ___
 
@@ -2528,9 +2528,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:562
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:562](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L562)
 
-packages/matter.js/src/cluster/definitions/ScenesCluster.ts:563
+[packages/matter.js/src/cluster/definitions/ScenesCluster.ts:563](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ScenesCluster.ts#L563)
 
 ___
 
@@ -2540,9 +2540,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:277
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:277](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L277)
 
-packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:278
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:278](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L278)
 
 ___
 
@@ -2552,9 +2552,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:74
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L74)
 
-packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:75
+[packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoilMoistureMeasurementCluster.ts#L75)
 
 ___
 
@@ -2564,9 +2564,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:446
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:446](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L446)
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:447](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L447)
 
 ___
 
@@ -2576,9 +2576,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:149
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:149](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L149)
 
-packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:150
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:150](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L150)
 
 ___
 
@@ -2588,9 +2588,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:72
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:72](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L72)
 
-packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:73
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L73)
 
 ___
 
@@ -2600,9 +2600,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1703
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1703](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1703)
 
-packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1704
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1704](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1704)
 
 ___
 
@@ -2612,9 +2612,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:153
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:153](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L153)
 
-packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:154
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:154](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L154)
 
 ___
 
@@ -2624,9 +2624,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1384
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1384](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1384)
 
-packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1385
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1385](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1385)
 
 ___
 
@@ -2636,9 +2636,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:245
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:245](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L245)
 
-packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:246
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:246](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L246)
 
 ___
 
@@ -2648,9 +2648,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:652
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:652](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L652)
 
-packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:653
+[packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts:653](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TimeSyncCluster.ts#L653)
 
 ___
 
@@ -2664,7 +2664,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:39
+[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L39)
 
 ___
 
@@ -2678,7 +2678,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:47
+[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:47](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L47)
 
 ___
 
@@ -2688,7 +2688,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:596
+[packages/matter.js/src/cluster/Cluster.ts:596](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L596)
 
 ___
 
@@ -2698,9 +2698,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:154
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:154](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L154)
 
-packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:155
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:155](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L155)
 
 ___
 
@@ -2710,9 +2710,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:44
+[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L44)
 
-packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:45
+[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L45)
 
 ___
 
@@ -2722,9 +2722,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:60
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L60)
 
-packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:61
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L61)
 
 ___
 
@@ -2734,9 +2734,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:54
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L54)
 
-packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:55
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L55)
 
 ___
 
@@ -2746,9 +2746,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:512
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:512](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L512)
 
-packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:513
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:513](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L513)
 
 ___
 
@@ -2758,9 +2758,9 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1084
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1084](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1084)
 
-packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L1085)
 
 ## Functions
 
@@ -2774,7 +2774,7 @@ packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:1085
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:182
+[packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:183](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts#L183)
 
 ___
 
@@ -2804,7 +2804,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:125
+[packages/matter.js/src/cluster/Cluster.ts:125](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L125)
 
 ___
 
@@ -2818,7 +2818,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:212
+[packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts:213](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AdministratorCommissioningServer.ts#L213)
 
 ___
 
@@ -2857,7 +2857,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:884
+[packages/matter.js/src/cluster/Cluster.ts:884](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L884)
 
 ___
 
@@ -2889,7 +2889,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClient.ts:42
+[packages/matter.js/src/cluster/client/ClusterClient.ts:42](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClient.ts#L42)
 
 ___
 
@@ -2924,7 +2924,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:935
+[packages/matter.js/src/cluster/Cluster.ts:935](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L935)
 
 ___
 
@@ -2958,7 +2958,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServer.ts:49
+[packages/matter.js/src/cluster/server/ClusterServer.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServer.ts#L49)
 
 ___
 
@@ -2990,7 +2990,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:641
+[packages/matter.js/src/cluster/Cluster.ts:641](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L641)
 
 ___
 
@@ -3020,7 +3020,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:185
+[packages/matter.js/src/cluster/Cluster.ts:185](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L185)
 
 ___
 
@@ -3052,7 +3052,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:679
+[packages/matter.js/src/cluster/Cluster.ts:679](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L679)
 
 ___
 
@@ -3082,7 +3082,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:780
+[packages/matter.js/src/cluster/Cluster.ts:780](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L780)
 
 ___
 
@@ -3112,7 +3112,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:533
+[packages/matter.js/src/cluster/Cluster.ts:533](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L533)
 
 ___
 
@@ -3142,7 +3142,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:281
+[packages/matter.js/src/cluster/Cluster.ts:281](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L281)
 
 ___
 
@@ -3172,7 +3172,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:409
+[packages/matter.js/src/cluster/Cluster.ts:409](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L409)
 
 ___
 
@@ -3202,7 +3202,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:746
+[packages/matter.js/src/cluster/Cluster.ts:746](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L746)
 
 ___
 
@@ -3232,7 +3232,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:315
+[packages/matter.js/src/cluster/Cluster.ts:315](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L315)
 
 ___
 
@@ -3262,7 +3262,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:443
+[packages/matter.js/src/cluster/Cluster.ts:443](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L443)
 
 ___
 
@@ -3284,7 +3284,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/GeneralCommissioningServer.ts:20
+[packages/matter.js/src/cluster/server/GeneralCommissioningServer.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/GeneralCommissioningServer.ts#L20)
 
 ___
 
@@ -3310,7 +3310,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:856
+[packages/matter.js/src/cluster/Cluster.ts:856](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L856)
 
 ___
 
@@ -3324,7 +3324,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/GroupKeyManagementServer.ts:13
+[packages/matter.js/src/cluster/server/GroupKeyManagementServer.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/GroupKeyManagementServer.ts#L13)
 
 ___
 
@@ -3338,7 +3338,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/GroupsServer.ts:79
+[packages/matter.js/src/cluster/server/GroupsServer.ts:79](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/GroupsServer.ts#L79)
 
 ___
 
@@ -3352,7 +3352,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/LevelControlServer.ts:14
+[packages/matter.js/src/cluster/server/LevelControlServer.ts:14](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/LevelControlServer.ts#L14)
 
 ___
 
@@ -3366,7 +3366,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/OnOffServer.ts:16
+[packages/matter.js/src/cluster/server/OnOffServer.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/OnOffServer.ts#L16)
 
 ___
 
@@ -3386,7 +3386,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:63
+[packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/OperationalCredentialsServer.ts#L63)
 
 ___
 
@@ -3416,7 +3416,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:155
+[packages/matter.js/src/cluster/Cluster.ts:155](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L155)
 
 ___
 
@@ -3448,7 +3448,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:660
+[packages/matter.js/src/cluster/Cluster.ts:660](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L660)
 
 ___
 
@@ -3478,7 +3478,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:763
+[packages/matter.js/src/cluster/Cluster.ts:763](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L763)
 
 ___
 
@@ -3508,7 +3508,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:503
+[packages/matter.js/src/cluster/Cluster.ts:503](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L503)
 
 ___
 
@@ -3538,7 +3538,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:249
+[packages/matter.js/src/cluster/Cluster.ts:249](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L249)
 
 ___
 
@@ -3568,7 +3568,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:377
+[packages/matter.js/src/cluster/Cluster.ts:377](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L377)
 
 ___
 
@@ -3582,7 +3582,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ScenesServer.ts:133
+[packages/matter.js/src/cluster/server/ScenesServer.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ScenesServer.ts#L133)
 
 ___
 
@@ -3608,7 +3608,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:568
+[packages/matter.js/src/cluster/Cluster.ts:568](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L568)
 
 ___
 
@@ -3628,7 +3628,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:113
+[packages/matter.js/src/cluster/ClusterHelper.ts:113](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L113)
 
 ___
 
@@ -3654,7 +3654,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:797
+[packages/matter.js/src/cluster/Cluster.ts:797](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L797)
 
 ___
 
@@ -3684,7 +3684,7 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:189
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
 
 ___
 
@@ -3714,7 +3714,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:217
+[packages/matter.js/src/cluster/Cluster.ts:217](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L217)
 
 ___
 
@@ -3744,7 +3744,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:345
+[packages/matter.js/src/cluster/Cluster.ts:345](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L345)
 
 ___
 
@@ -3774,7 +3774,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/Cluster.ts:473
+[packages/matter.js/src/cluster/Cluster.ts:473](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/Cluster.ts#L473)
 
 ___
 
@@ -3803,7 +3803,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:263
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:282](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L282)
 
 ___
 
@@ -3830,7 +3830,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:380
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:401](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L401)
 
 ___
 
@@ -3863,7 +3863,7 @@ Factory function to create an AttributeClient for a given attribute.
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/AttributeClient.ts:21
+[packages/matter.js/src/cluster/client/AttributeClient.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/AttributeClient.ts#L21)
 
 ___
 
@@ -3904,7 +3904,7 @@ Factory function to create an attribute server.
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/AttributeServer.ts:34
+[packages/matter.js/src/cluster/server/AttributeServer.ts:34](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/AttributeServer.ts#L34)
 
 ___
 
@@ -3918,7 +3918,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/GroupsServer.ts:172
+[packages/matter.js/src/cluster/server/GroupsServer.ts:172](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/GroupsServer.ts#L172)
 
 ___
 
@@ -3938,7 +3938,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/IdentifyServer.ts:10
+[packages/matter.js/src/cluster/server/IdentifyServer.ts:10](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/IdentifyServer.ts#L10)
 
 ___
 
@@ -3950,7 +3950,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `commandHandler` | [`NamedHandler`](../classes/export._internal_.NamedHandler.md)<`any`\> |
+| `commandHandler` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> |
 | `attributeInitialValues?` | [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)<[`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `currentLevel`: [`Attribute`](cluster_export.md#attribute)<``null`` \| `number`, `any`\> ; `defaultMoveRate`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `maxLevel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number`, `any`\> ; `minLevel`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number`, `any`\> ; `offTransitionTime`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `onLevel`: [`WritableAttribute`](cluster_export.md#writableattribute)<``null`` \| `number`, `any`\> ; `onOffTransitionTime`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<`number`, `any`\> ; `onTransitionTime`: [`OptionalWritableAttribute`](cluster_export.md#optionalwritableattribute)<``null`` \| `number`, `any`\> ; `options`: [`WritableAttribute`](cluster_export.md#writableattribute)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `coupleColorTempToLevel`: [`BitFlag`](schema_export.md#bitflag-1) ; `executeIfOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `frequency`: [`BitFlag`](schema_export.md#bitflag-1) ; `lighting`: [`BitFlag`](schema_export.md#bitflag-1) ; `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `frequency`: [`BitFlag`](schema_export.md#bitflag-1) ; `lighting`: [`BitFlag`](schema_export.md#bitflag-1) ; `onOff`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>\> |
 
 #### Returns
@@ -3959,7 +3959,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/LevelControlServer.ts:60
+[packages/matter.js/src/cluster/server/LevelControlServer.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/LevelControlServer.ts#L60)
 
 ___
 
@@ -3971,7 +3971,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `commandHandler?` | [`NamedHandler`](../classes/export._internal_.NamedHandler.md)<`any`\> |
+| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> |
 | `attributeInitialValues?` | [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)<[`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `onOff`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>\> |
 
 #### Returns
@@ -3980,7 +3980,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/OnOffServer.ts:98
+[packages/matter.js/src/cluster/server/OnOffServer.ts:98](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/OnOffServer.ts#L98)
 
 ___
 
@@ -3994,7 +3994,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ScenesServer.ts:501
+[packages/matter.js/src/cluster/server/ScenesServer.ts:501](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ScenesServer.ts#L501)
 
 ___
 
@@ -4027,7 +4027,7 @@ Factory function to create an EVentClient for a given event.
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/EventClient.ts:17
+[packages/matter.js/src/cluster/client/EventClient.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/EventClient.ts#L17)
 
 ___
 
@@ -4048,7 +4048,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:133
+[packages/matter.js/src/cluster/ClusterHelper.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L133)
 
 ___
 
@@ -4068,7 +4068,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:125
+[packages/matter.js/src/cluster/ClusterHelper.ts:125](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L125)
 
 ___
 
@@ -4089,7 +4089,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:183
+[packages/matter.js/src/cluster/ClusterHelper.ts:183](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L183)
 
 ___
 
@@ -4110,7 +4110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:158
+[packages/matter.js/src/cluster/ClusterHelper.ts:158](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L158)
 
 ___
 
@@ -4130,7 +4130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:121
+[packages/matter.js/src/cluster/ClusterHelper.ts:121](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L121)
 
 ___
 
@@ -4159,7 +4159,7 @@ obj is ClusterClientObj<F, A, C, E\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:248
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:267](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L267)
 
 ___
 
@@ -4188,7 +4188,7 @@ obj is ClusterClientObjInternal<F, A, C, E\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/client/ClusterClientTypes.ts:254
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:273](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L273)
 
 ___
 
@@ -4217,7 +4217,7 @@ obj is ClusterServerObj<A, E\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:365
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:386](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L386)
 
 ___
 
@@ -4246,7 +4246,7 @@ obj is ClusterServerObjInternal<A, C, E\>
 
 #### Defined in
 
-packages/matter.js/src/cluster/server/ClusterServerTypes.ts:371
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:392](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L392)
 
 ___
 
@@ -4266,7 +4266,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:234
+[packages/matter.js/src/cluster/ClusterHelper.ts:234](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L234)
 
 ___
 
@@ -4286,7 +4286,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:264
+[packages/matter.js/src/cluster/ClusterHelper.ts:264](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L264)
 
 ___
 
@@ -4306,4 +4306,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/ClusterHelper.ts:252
+[packages/matter.js/src/cluster/ClusterHelper.ts:252](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterHelper.ts#L252)

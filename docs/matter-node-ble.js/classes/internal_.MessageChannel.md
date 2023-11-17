@@ -29,6 +29,7 @@ SPDX-License-Identifier: Apache-2.0
 
 - [channel](internal_.MessageChannel.md#channel)
 - [closeCallback](internal_.MessageChannel.md#closecallback)
+- [closed](internal_.MessageChannel.md#closed)
 - [session](internal_.MessageChannel.md#session)
 
 ### Accessors
@@ -58,11 +59,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `channel` | [`Channel`](../interfaces/internal_.Channel.md)<`Uint8Array`\> |
 | `session` | [`Session`](../interfaces/internal_.Session.md)<`ContextT`\> |
-| `closeCallback?` | () => `void` |
+| `closeCallback?` | () => `Promise`<`void`\> |
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:22
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 ## Properties
 
@@ -72,7 +73,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:22
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:19
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:20
 
 ___
 
@@ -82,7 +83,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:21
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:22
+
+___
+
+### closed
+
+• **closed**: `boolean`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:23
 
 ___
 
@@ -92,7 +103,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:21
 
 ## Accessors
 
@@ -110,7 +121,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:20
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
 
 ## Methods
 
@@ -128,7 +139,7 @@ matter.js/dist/cjs/protocol/ExchangeManager.d.ts:24
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:25
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:27
 
 ___
 
@@ -152,4 +163,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/ExchangeManager.d.ts:23
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:25

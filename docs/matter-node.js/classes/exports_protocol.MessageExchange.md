@@ -84,7 +84,7 @@
 | `peerNodeId` | `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Defined in
 
@@ -534,7 +534,7 @@ ___
 | `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](exports_protocol.MessageCounter.md) |
 | `initialMessage` | [`Message`](../interfaces/exports_codec.Message.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 
@@ -564,7 +564,7 @@ ___
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `messageCounter` | [`MessageCounter`](exports_protocol.MessageCounter.md) |
-| `closeCallback` | () => `void` |
+| `closeCallback` | () => `Promise`<`void`\> |
 
 #### Returns
 

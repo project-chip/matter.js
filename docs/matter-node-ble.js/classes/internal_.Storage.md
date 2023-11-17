@@ -12,10 +12,12 @@
 
 ### Methods
 
+- [clearAll](internal_.Storage.md#clearall)
 - [close](internal_.Storage.md#close)
 - [delete](internal_.Storage.md#delete)
 - [get](internal_.Storage.md#get)
 - [initialize](internal_.Storage.md#initialize)
+- [keys](internal_.Storage.md#keys)
 - [set](internal_.Storage.md#set)
 
 ## Constructors
@@ -25,6 +27,26 @@
 • **new Storage**()
 
 ## Methods
+
+### clearAll
+
+▸ `Abstract` **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/storage/Storage.d.ts:17
+
+___
 
 ### close
 
@@ -36,7 +58,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/storage/Storage.d.ts:12
+matter.js/dist/esm/storage/Storage.d.ts:12
 
 ___
 
@@ -57,7 +79,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/Storage.d.ts:15
+matter.js/dist/esm/storage/Storage.d.ts:15
 
 ___
 
@@ -84,7 +106,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/Storage.d.ts:13
+matter.js/dist/esm/storage/Storage.d.ts:13
 
 ___
 
@@ -98,7 +120,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/Storage.d.ts:11
+matter.js/dist/esm/storage/Storage.d.ts:11
+
+___
+
+### keys
+
+▸ `Abstract` **keys**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+matter.js/dist/esm/storage/Storage.d.ts:16
 
 ___
 
@@ -126,4 +168,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/storage/Storage.d.ts:14
+matter.js/dist/esm/storage/Storage.d.ts:14

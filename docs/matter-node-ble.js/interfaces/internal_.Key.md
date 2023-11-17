@@ -85,7 +85,7 @@ JsonWebKey.alg
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:57
+matter.js/dist/esm/crypto/Key.d.ts:57
 
 ___
 
@@ -97,7 +97,7 @@ The key algorithm, alias for JWK "alg" field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:35
+matter.js/dist/esm/crypto/Key.d.ts:35
 
 ___
 
@@ -111,7 +111,7 @@ JsonWebKey.crv
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:58
+matter.js/dist/esm/crypto/Key.d.ts:58
 
 ___
 
@@ -123,7 +123,7 @@ The elliptic curve type, alias for JWK "crv" field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:39
+matter.js/dist/esm/crypto/Key.d.ts:39
 
 ___
 
@@ -137,7 +137,7 @@ JsonWebKey.d
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:59
+matter.js/dist/esm/crypto/Key.d.ts:59
 
 ___
 
@@ -151,7 +151,7 @@ JsonWebKey.dp
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:60
+matter.js/dist/esm/crypto/Key.d.ts:60
 
 ___
 
@@ -165,7 +165,7 @@ JsonWebKey.dq
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:61
+matter.js/dist/esm/crypto/Key.d.ts:61
 
 ___
 
@@ -179,7 +179,7 @@ JsonWebKey.e
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:62
+matter.js/dist/esm/crypto/Key.d.ts:62
 
 ___
 
@@ -193,7 +193,7 @@ JsonWebKey.ext
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:63
+matter.js/dist/esm/crypto/Key.d.ts:63
 
 ___
 
@@ -206,7 +206,7 @@ field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:56
+matter.js/dist/esm/crypto/Key.d.ts:56
 
 ___
 
@@ -220,7 +220,7 @@ JsonWebKey.k
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:64
+matter.js/dist/esm/crypto/Key.d.ts:64
 
 ___
 
@@ -232,7 +232,7 @@ Alias for keyPairBits that throws if a complete key pair is not present.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:123
+matter.js/dist/esm/crypto/Key.d.ts:123
 
 ___
 
@@ -245,7 +245,7 @@ serialization format for legacy reasons.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:111
+matter.js/dist/esm/crypto/Key.d.ts:111
 
 ___
 
@@ -259,7 +259,7 @@ JsonWebKey.key\_ops
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:65
+matter.js/dist/esm/crypto/Key.d.ts:65
 
 ___
 
@@ -273,7 +273,7 @@ JsonWebKey.kty
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:66
+matter.js/dist/esm/crypto/Key.d.ts:66
 
 ___
 
@@ -287,7 +287,7 @@ JsonWebKey.n
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:67
+matter.js/dist/esm/crypto/Key.d.ts:67
 
 ___
 
@@ -299,7 +299,7 @@ Operations supported by the key, alias for JWK "key_ops" field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:47
+matter.js/dist/esm/crypto/Key.d.ts:47
 
 ___
 
@@ -313,7 +313,7 @@ JsonWebKey.oth
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:68
+matter.js/dist/esm/crypto/Key.d.ts:68
 
 ___
 
@@ -327,7 +327,7 @@ JsonWebKey.p
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:69
+matter.js/dist/esm/crypto/Key.d.ts:69
 
 ___
 
@@ -339,7 +339,7 @@ Import (write-only) of private keys encoded in PKCS #8 format.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:97
+matter.js/dist/esm/crypto/Key.d.ts:97
 
 ___
 
@@ -351,7 +351,7 @@ The private key, alias for JWK "d" field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:51
+matter.js/dist/esm/crypto/Key.d.ts:51
 
 ___
 
@@ -364,7 +364,7 @@ base-64 private key.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:79
+matter.js/dist/esm/crypto/Key.d.ts:79
 
 ___
 
@@ -376,7 +376,7 @@ Alias for privateBits that throws if no private key is present.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:119
+matter.js/dist/esm/crypto/Key.d.ts:119
 
 ___
 
@@ -389,7 +389,7 @@ fields internally.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:106
+matter.js/dist/esm/crypto/Key.d.ts:106
 
 ___
 
@@ -401,7 +401,7 @@ Alias for publicBits that throws if no public key is present.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:115
+matter.js/dist/esm/crypto/Key.d.ts:115
 
 ___
 
@@ -415,7 +415,7 @@ JsonWebKey.q
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:70
+matter.js/dist/esm/crypto/Key.d.ts:70
 
 ___
 
@@ -429,7 +429,7 @@ JsonWebKey.qi
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:71
+matter.js/dist/esm/crypto/Key.d.ts:71
 
 ___
 
@@ -441,7 +441,7 @@ Import (write-only) of private keys encoded in SEC1 format.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:93
+matter.js/dist/esm/crypto/Key.d.ts:93
 
 ___
 
@@ -453,7 +453,7 @@ Import (write-only) of public keys encoded in SPKI format.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:101
+matter.js/dist/esm/crypto/Key.d.ts:101
 
 ___
 
@@ -465,7 +465,7 @@ The key type, alias for JWK "kty" field.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:43
+matter.js/dist/esm/crypto/Key.d.ts:43
 
 ___
 
@@ -479,7 +479,7 @@ JsonWebKey.use
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:72
+matter.js/dist/esm/crypto/Key.d.ts:72
 
 ___
 
@@ -493,7 +493,7 @@ JsonWebKey.x
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:73
+matter.js/dist/esm/crypto/Key.d.ts:73
 
 ___
 
@@ -506,7 +506,7 @@ x-point on EC public keys.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:84
+matter.js/dist/esm/crypto/Key.d.ts:84
 
 ___
 
@@ -520,7 +520,7 @@ JsonWebKey.y
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:74
+matter.js/dist/esm/crypto/Key.d.ts:74
 
 ___
 
@@ -533,4 +533,4 @@ y-point on EC public keys.
 
 #### Defined in
 
-matter.js/dist/cjs/crypto/Key.d.ts:89
+matter.js/dist/esm/crypto/Key.d.ts:89

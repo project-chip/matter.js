@@ -11,7 +11,6 @@ Represents device pairing information.
 ### Properties
 
 - [manualPairingCode](export.DevicePairingInformation.md#manualpairingcode)
-- [qrCode](export.DevicePairingInformation.md#qrcode)
 - [qrPairingCode](export.DevicePairingInformation.md#qrpairingcode)
 
 ## Properties
@@ -22,17 +21,7 @@ Represents device pairing information.
 
 #### Defined in
 
-packages/matter.js/src/CommissioningServer.ts:90
-
-___
-
-### qrCode
-
-• **qrCode**: `string`
-
-#### Defined in
-
-packages/matter.js/src/CommissioningServer.ts:92
+[packages/matter.js/src/CommissioningServer.ts:91](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/CommissioningServer.ts#L91)
 
 ___
 
@@ -42,4 +31,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/CommissioningServer.ts:91
+[packages/matter.js/src/CommissioningServer.ts:92](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/CommissioningServer.ts#L92)

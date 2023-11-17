@@ -25,7 +25,7 @@ The value of PulseWidthModulation.moveMode
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:53
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L53)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:52
+[packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts:52](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/PulseWidthModulationCluster.ts#L52)

@@ -38,7 +38,7 @@ Create a new dictionary with optional entry values.
 
 #### Defined in
 
-packages/matter.js/src/log/Logger.ts:214
+[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L214)
 
 ## Properties
 
@@ -54,7 +54,7 @@ the entries as [ "KEY", value ] tuples
 
 #### Defined in
 
-packages/matter.js/src/log/Logger.ts:214
+[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L214)
 
 ## Methods
 
@@ -79,7 +79,7 @@ the formatted value
 
 #### Defined in
 
-packages/matter.js/src/log/Logger.ts:223
+[packages/matter.js/src/log/Logger.ts:223](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L223)
 
 ___
 
@@ -93,4 +93,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/log/Logger.ts:234
+[packages/matter.js/src/log/Logger.ts:234](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L234)

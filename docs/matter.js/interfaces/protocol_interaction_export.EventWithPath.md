@@ -19,7 +19,7 @@
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:91
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:91](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L91)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/protocol/interaction/InteractionServer.ts:90
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L90)

@@ -14,6 +14,7 @@
 
 - [channels](exports_protocol.ChannelManager.md#channels)
 - [getChannelKey](exports_protocol.ChannelManager.md#getchannelkey)
+- [getOrCreateAsPaseChannel](exports_protocol.ChannelManager.md#getorcreateaspasechannel)
 - [paseChannels](exports_protocol.ChannelManager.md#pasechannels)
 
 ### Methods
@@ -53,6 +54,16 @@ packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:18
 
 ___
 
+### getOrCreateAsPaseChannel
+
+• `Private` **getOrCreateAsPaseChannel**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:23
+
+___
+
 ### paseChannels
 
 • `Private` `Readonly` **paseChannels**: `any`
@@ -73,7 +84,7 @@ packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:24
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:25
 
 ___
 
@@ -120,7 +131,7 @@ ___
 
 ### getOrCreateChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>\>
 
 #### Parameters
 
@@ -131,17 +142,17 @@ ___
 
 #### Returns
 
-[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+`Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:23
+packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:24
 
 ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `void`
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -152,7 +163,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 
@@ -162,7 +173,7 @@ ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `void`
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
 
 #### Parameters
 
@@ -174,7 +185,7 @@ ___
 
 #### Returns
 
-`void`
+`Promise`<`void`\>
 
 #### Defined in
 

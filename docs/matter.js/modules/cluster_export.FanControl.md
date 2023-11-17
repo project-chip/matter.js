@@ -43,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:377
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:377](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L377)
 
 ## Variables
 
@@ -55,7 +55,7 @@ These elements and properties are present in all FanControl clusters.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:169
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:169](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L169)
 
 ___
 
@@ -76,7 +76,7 @@ method.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:353
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:353](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L353)
 
 ___
 
@@ -91,7 +91,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:394
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:394](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L394)
 
 ___
 
@@ -103,7 +103,7 @@ A FanControlCluster supports these elements if it supports feature MultiSpeed.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:247
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L247)
 
 ___
 
@@ -127,7 +127,7 @@ The value of the FanControl rockSetting attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:115
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:115](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L115)
 
 ___
 
@@ -151,7 +151,7 @@ The value of the FanControl rockSupport attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:108
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:108](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L108)
 
 ___
 
@@ -163,7 +163,7 @@ A FanControlCluster supports these elements if it supports feature Rocking.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:280
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:280](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L280)
 
 ___
 
@@ -175,7 +175,7 @@ A FanControlCluster supports these elements if it supports feature Wind.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:313
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:313](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L313)
 
 ___
 
@@ -198,7 +198,7 @@ The value of the FanControl windSetting attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:129
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:129](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L129)
 
 ___
 
@@ -221,4 +221,4 @@ The value of the FanControl windSupport attribute
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/FanControlCluster.ts:122
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:122](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L122)

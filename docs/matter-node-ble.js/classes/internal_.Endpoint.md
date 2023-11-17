@@ -67,7 +67,7 @@ Create a new Endpoint instance.
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:34
+matter.js/dist/esm/device/Endpoint.d.ts:34
 
 ## Properties
 
@@ -77,7 +77,7 @@ matter.js/dist/cjs/device/Endpoint.d.ts:34
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:22
+matter.js/dist/esm/device/Endpoint.d.ts:22
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:21
+matter.js/dist/esm/device/Endpoint.d.ts:21
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:20
+matter.js/dist/esm/device/Endpoint.d.ts:20
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:27
+matter.js/dist/esm/device/Endpoint.d.ts:27
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:19
+matter.js/dist/esm/device/Endpoint.d.ts:19
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:23
+matter.js/dist/esm/device/Endpoint.d.ts:23
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:25
+matter.js/dist/esm/device/Endpoint.d.ts:25
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:26
+matter.js/dist/esm/device/Endpoint.d.ts:26
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:24
+matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ## Methods
 
@@ -177,7 +177,7 @@ matter.js/dist/cjs/device/Endpoint.d.ts:24
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:51
+matter.js/dist/esm/device/Endpoint.d.ts:51
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:42
+matter.js/dist/esm/device/Endpoint.d.ts:42
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:41
+matter.js/dist/esm/device/Endpoint.d.ts:41
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:39
+matter.js/dist/esm/device/Endpoint.d.ts:39
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:40
+matter.js/dist/esm/device/Endpoint.d.ts:40
 
 ___
 
@@ -289,7 +289,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:37
+matter.js/dist/esm/device/Endpoint.d.ts:37
 
 ___
 
@@ -303,7 +303,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:55
+matter.js/dist/esm/device/Endpoint.d.ts:55
 
 ___
 
@@ -317,7 +317,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:58
+matter.js/dist/esm/device/Endpoint.d.ts:58
 
 ___
 
@@ -331,7 +331,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:57
+matter.js/dist/esm/device/Endpoint.d.ts:57
 
 ___
 
@@ -351,7 +351,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:52
+matter.js/dist/esm/device/Endpoint.d.ts:52
 
 ___
 
@@ -365,7 +365,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:53
+matter.js/dist/esm/device/Endpoint.d.ts:53
 
 ___
 
@@ -395,7 +395,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:44
+matter.js/dist/esm/device/Endpoint.d.ts:44
 
 ___
 
@@ -415,7 +415,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:46
+matter.js/dist/esm/device/Endpoint.d.ts:46
 
 ___
 
@@ -445,7 +445,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:43
+matter.js/dist/esm/device/Endpoint.d.ts:43
 
 ___
 
@@ -465,7 +465,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:45
+matter.js/dist/esm/device/Endpoint.d.ts:45
 
 ___
 
@@ -479,7 +479,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:49
+matter.js/dist/esm/device/Endpoint.d.ts:49
 
 ___
 
@@ -493,7 +493,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:38
+matter.js/dist/esm/device/Endpoint.d.ts:38
 
 ___
 
@@ -523,7 +523,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:48
+matter.js/dist/esm/device/Endpoint.d.ts:48
 
 ___
 
@@ -553,7 +553,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:47
+matter.js/dist/esm/device/Endpoint.d.ts:47
 
 ___
 
@@ -573,7 +573,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:54
+matter.js/dist/esm/device/Endpoint.d.ts:54
 
 ___
 
@@ -587,7 +587,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:36
+matter.js/dist/esm/device/Endpoint.d.ts:36
 
 ___
 
@@ -607,7 +607,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:50
+matter.js/dist/esm/device/Endpoint.d.ts:50
 
 ___
 
@@ -627,7 +627,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:35
+matter.js/dist/esm/device/Endpoint.d.ts:35
 
 ___
 
@@ -641,7 +641,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:59
+matter.js/dist/esm/device/Endpoint.d.ts:59
 
 ___
 
@@ -655,4 +655,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/device/Endpoint.d.ts:56
+matter.js/dist/esm/device/Endpoint.d.ts:56

@@ -49,7 +49,7 @@
 
 #### Defined in
 
-matter.js/dist/cjs/ble/Ble.d.ts:15
+matter.js/dist/esm/ble/Ble.d.ts:15
 
 ## Methods
 
@@ -69,7 +69,7 @@ matter.js/dist/cjs/ble/Ble.d.ts:15
 
 #### Defined in
 
-matter.js/dist/cjs/ble/Ble.d.ts:18
+matter.js/dist/esm/ble/Ble.d.ts:18
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/Ble.d.ts:17
+matter.js/dist/esm/ble/Ble.d.ts:17
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/Ble.d.ts:16
+matter.js/dist/esm/ble/Ble.d.ts:16
 
 ___
 
@@ -111,4 +111,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/ble/Ble.d.ts:19
+matter.js/dist/esm/ble/Ble.d.ts:19

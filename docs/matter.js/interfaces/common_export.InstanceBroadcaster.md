@@ -36,7 +36,7 @@ Send out announcements for this instance.
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:205
+[packages/matter.js/src/common/InstanceBroadcaster.ts:205](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L205)
 
 ___
 
@@ -52,7 +52,7 @@ Expire all announcements.
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:214
+[packages/matter.js/src/common/InstanceBroadcaster.ts:214](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L214)
 
 ___
 
@@ -68,7 +68,7 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:211
+[packages/matter.js/src/common/InstanceBroadcaster.ts:211](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L211)
 
 ___
 
@@ -84,7 +84,7 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:208
+[packages/matter.js/src/common/InstanceBroadcaster.ts:208](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L208)
 
 ___
 
@@ -107,7 +107,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:193
+[packages/matter.js/src/common/InstanceBroadcaster.ts:193](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L193)
 
 ___
 
@@ -129,7 +129,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:202
+[packages/matter.js/src/common/InstanceBroadcaster.ts:202](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L202)
 
 ___
 
@@ -153,4 +153,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-packages/matter.js/src/common/InstanceBroadcaster.ts:199
+[packages/matter.js/src/common/InstanceBroadcaster.ts:199](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/common/InstanceBroadcaster.ts#L199)

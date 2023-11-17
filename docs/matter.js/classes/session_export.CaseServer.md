@@ -16,6 +16,7 @@
 
 ### Methods
 
+- [close](session_export.CaseServer.md#close)
 - [getId](session_export.CaseServer.md#getid)
 - [handleSigma1](session_export.CaseServer.md#handlesigma1)
 - [onNewExchange](session_export.CaseServer.md#onnewexchange)
@@ -27,6 +28,24 @@
 • **new CaseServer**()
 
 ## Methods
+
+### close
+
+▸ **close**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[ProtocolHandler](../interfaces/protocol_export.ProtocolHandler.md).[close](../interfaces/protocol_export.ProtocolHandler.md#close)
+
+#### Defined in
+
+[packages/matter.js/src/session/case/CaseServer.ts:212](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/case/CaseServer.ts#L212)
+
+___
 
 ### getId
 
@@ -42,7 +61,7 @@
 
 #### Defined in
 
-packages/matter.js/src/session/case/CaseServer.ts:45
+[packages/matter.js/src/session/case/CaseServer.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/case/CaseServer.ts#L45)
 
 ___
 
@@ -63,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/case/CaseServer.ts:49
+[packages/matter.js/src/session/case/CaseServer.ts:49](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/case/CaseServer.ts#L49)
 
 ___
 
@@ -87,4 +106,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/session/case/CaseServer.ts:35
+[packages/matter.js/src/session/case/CaseServer.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/case/CaseServer.ts#L35)

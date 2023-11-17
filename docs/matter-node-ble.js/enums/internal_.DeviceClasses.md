@@ -37,7 +37,7 @@ Application devices types are typically the most datatype endpoints on a node an
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:19
+matter.js/dist/esm/device/DeviceTypes.d.ts:19
 
 ___
 
@@ -50,7 +50,7 @@ its power source is available to the Bridge
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:48
+matter.js/dist/esm/device/DeviceTypes.d.ts:48
 
 ___
 
@@ -62,7 +62,7 @@ There exists a client application cluster on the endpoint.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:33
+matter.js/dist/esm/device/DeviceTypes.d.ts:33
 
 ___
 
@@ -74,7 +74,7 @@ The device type is composed of 2 or more device types.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:37
+matter.js/dist/esm/device/DeviceTypes.d.ts:37
 
 ___
 
@@ -89,7 +89,7 @@ application device type.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:31
+matter.js/dist/esm/device/DeviceTypes.d.ts:31
 
 ___
 
@@ -101,7 +101,7 @@ The endpoint is an Initiator for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:41
+matter.js/dist/esm/device/DeviceTypes.d.ts:41
 
 ___
 
@@ -113,7 +113,7 @@ The endpoint is a Target for Zigbee EZ-Mode Finding & Binding.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:43
+matter.js/dist/esm/device/DeviceTypes.d.ts:43
 
 ___
 
@@ -125,7 +125,7 @@ Composed device type that is composed of 2 or more endpoints with the same devic
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:39
+matter.js/dist/esm/device/DeviceTypes.d.ts:39
 
 ___
 
@@ -137,7 +137,7 @@ Node device type.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:14
+matter.js/dist/esm/device/DeviceTypes.d.ts:14
 
 ___
 
@@ -149,7 +149,7 @@ There exists a server application cluster on the endpoint.
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:35
+matter.js/dist/esm/device/DeviceTypes.d.ts:35
 
 ___
 
@@ -162,4 +162,4 @@ A Simple device type supports local control that is persistent, independent, and
 
 #### Defined in
 
-matter.js/dist/cjs/device/DeviceTypes.d.ts:24
+matter.js/dist/esm/device/DeviceTypes.d.ts:24

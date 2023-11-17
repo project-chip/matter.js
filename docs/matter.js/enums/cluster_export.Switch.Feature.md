@@ -30,7 +30,7 @@ LatchingSwitch
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:81
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:81](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L81)
 
 ___
 
@@ -42,7 +42,7 @@ MomentarySwitch
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:86](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L86)
 
 ___
 
@@ -54,7 +54,7 @@ MomentarySwitchLongPress
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:96
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:96](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L96)
 
 ___
 
@@ -66,7 +66,7 @@ MomentarySwitchMultiPress
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:101
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:101](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L101)
 
 ___
 
@@ -78,4 +78,4 @@ MomentarySwitchRelease
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/SwitchCluster.ts:91
+[packages/matter.js/src/cluster/definitions/SwitchCluster.ts:91](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SwitchCluster.ts#L91)

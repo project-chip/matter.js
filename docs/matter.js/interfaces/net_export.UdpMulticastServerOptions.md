@@ -21,7 +21,7 @@
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:18
+[packages/matter.js/src/net/UdpMulticastServer.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L18)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:19
+[packages/matter.js/src/net/UdpMulticastServer.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L19)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:17
+[packages/matter.js/src/net/UdpMulticastServer.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L17)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/net/UdpMulticastServer.ts:20
+[packages/matter.js/src/net/UdpMulticastServer.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/net/UdpMulticastServer.ts#L20)

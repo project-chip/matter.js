@@ -13,10 +13,13 @@
 ### Properties
 
 - [exchangeProvider](internal_.InteractionClient.md#exchangeprovider)
+- [nodeId](internal_.InteractionClient.md#nodeid)
+- [ownSubscriptionIds](internal_.InteractionClient.md#ownsubscriptionids)
 - [processReadRequest](internal_.InteractionClient.md#processreadrequest)
+- [registerSubscriptionUpdateTimer](internal_.InteractionClient.md#registersubscriptionupdatetimer)
 - [subscribedClusterDataVersions](internal_.InteractionClient.md#subscribedclusterdataversions)
 - [subscribedLocalValues](internal_.InteractionClient.md#subscribedlocalvalues)
-- [subscriptionListeners](internal_.InteractionClient.md#subscriptionlisteners)
+- [subscriptionClient](internal_.InteractionClient.md#subscriptionclient)
 - [withMessenger](internal_.InteractionClient.md#withmessenger)
 
 ### Accessors
@@ -25,6 +28,7 @@
 
 ### Methods
 
+- [close](internal_.InteractionClient.md#close)
 - [getAllAttributes](internal_.InteractionClient.md#getallattributes)
 - [getAllAttributesAndEvents](internal_.InteractionClient.md#getallattributesandevents)
 - [getAllEvents](internal_.InteractionClient.md#getallevents)
@@ -36,6 +40,8 @@
 - [getMultipleEvents](internal_.InteractionClient.md#getmultipleevents)
 - [invoke](internal_.InteractionClient.md#invoke)
 - [invokeWithSuppressedResponse](internal_.InteractionClient.md#invokewithsuppressedresponse)
+- [registerSubscriptionListener](internal_.InteractionClient.md#registersubscriptionlistener)
+- [removeSubscription](internal_.InteractionClient.md#removesubscription)
 - [setAttribute](internal_.InteractionClient.md#setattribute)
 - [setMultipleAttributes](internal_.InteractionClient.md#setmultipleattributes)
 - [subscribeAllAttributesAndEvents](internal_.InteractionClient.md#subscribeallattributesandevents)
@@ -47,17 +53,18 @@
 
 ### constructor
 
-• **new InteractionClient**(`exchangeProvider`)
+• **new InteractionClient**(`exchangeProvider`, `nodeId`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `exchangeProvider` | [`ExchangeProvider`](internal_.ExchangeProvider.md) |
+| `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:41
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
 
 ## Properties
 
@@ -67,7 +74,27 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:41
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:37
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:44
+
+___
+
+### nodeId
+
+• `Readonly` **nodeId**: [`NodeId`](../modules/internal_.md#nodeid)
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:45
+
+___
+
+### ownSubscriptionIds
+
+• `Private` `Readonly` **ownSubscriptionIds**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:48
 
 ___
 
@@ -77,7 +104,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:134
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:145
+
+___
+
+### registerSubscriptionUpdateTimer
+
+• `Private` **registerSubscriptionUpdateTimer**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
 
 ___
 
@@ -87,7 +124,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:40
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:47
 
 ___
 
@@ -97,17 +134,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:39
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:46
 
 ___
 
-### subscriptionListeners
+### subscriptionClient
 
-• `Private` `Readonly` **subscriptionListeners**: `any`
+• `Private` `Readonly` **subscriptionClient**: `any`
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:38
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:49
 
 ___
 
@@ -117,7 +154,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:244
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:259
 
 ## Accessors
 
@@ -131,9 +168,23 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:244
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:245
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
 
 ## Methods
+
+### close
+
+▸ **close**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:261
+
+___
 
 ### getAllAttributes
 
@@ -153,7 +204,7 @@ matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:245
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:42
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:53
 
 ___
 
@@ -176,7 +227,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:54
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:65
 
 ___
 
@@ -198,7 +249,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:61
 
 ___
 
@@ -229,7 +280,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:110
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:121
 
 ___
 
@@ -260,7 +311,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:117
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:128
 
 ___
 
@@ -292,7 +343,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:127
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:138
 
 ___
 
@@ -315,7 +366,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:66
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:77
 
 ___
 
@@ -340,7 +391,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:88
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:99
 
 ___
 
@@ -363,7 +414,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:79
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:90
 
 ___
 
@@ -396,7 +447,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:227
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:242
 
 ___
 
@@ -428,7 +479,48 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:236
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:251
+
+___
+
+### registerSubscriptionListener
+
+▸ **registerSubscriptionListener**(`subscriptionId`, `listener`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+| `listener` | (`dataReport`: [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`EventPriority`](../enums/internal_.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\>  }\>) => `void` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
+
+___
+
+### removeSubscription
+
+▸ **removeSubscription**(`subscriptionId`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `subscriptionId` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:52
 
 ___
 
@@ -463,7 +555,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:135
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:146
 
 ___
 
@@ -487,7 +579,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:147
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:158
 
 ___
 
@@ -509,6 +601,7 @@ ___
 | `options.keepSubscriptions?` | `boolean` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
 
@@ -516,7 +609,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:181
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:194
 
 ___
 
@@ -544,6 +637,7 @@ ___
 | `options.listener?` | (`value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\>, `version`: `number`) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
 
@@ -551,7 +645,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:159
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:170
 
 ___
 
@@ -580,6 +674,7 @@ ___
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
 | `options.minimumEventNumber?` | `number` \| `bigint` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
 
@@ -587,7 +682,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:170
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:182
 
 ___
 
@@ -610,6 +705,7 @@ ___
 | `options.keepSubscriptions?` | `boolean` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
+| `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
 
@@ -617,4 +713,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/cjs/protocol/interaction/InteractionClient.d.ts:199
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:213

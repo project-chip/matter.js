@@ -21,11 +21,13 @@
 ### Methods
 
 - [clear](storage_export.StorageBackendMemory.md#clear)
+- [clearAll](storage_export.StorageBackendMemory.md#clearall)
 - [close](storage_export.StorageBackendMemory.md#close)
 - [createContextKey](storage_export.StorageBackendMemory.md#createcontextkey)
 - [delete](storage_export.StorageBackendMemory.md#delete)
 - [get](storage_export.StorageBackendMemory.md#get)
 - [initialize](storage_export.StorageBackendMemory.md#initialize)
+- [keys](storage_export.StorageBackendMemory.md#keys)
 - [set](storage_export.StorageBackendMemory.md#set)
 
 ## Constructors
@@ -42,7 +44,7 @@
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:11
+[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
 
 ## Properties
 
@@ -52,7 +54,7 @@ packages/matter.js/src/storage/StorageBackendMemory.ts:11
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:11
+[packages/matter.js/src/storage/StorageBackendMemory.ts:11](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L11)
 
 ## Methods
 
@@ -66,7 +68,31 @@ packages/matter.js/src/storage/StorageBackendMemory.ts:11
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:28
+[packages/matter.js/src/storage/StorageBackendMemory.ts:28](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L28)
+
+___
+
+### clearAll
+
+▸ **clearAll**(`contexts`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[clearAll](storage_export.Storage.md#clearall)
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:56](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L56)
 
 ___
 
@@ -84,7 +110,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:24
+[packages/matter.js/src/storage/StorageBackendMemory.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L24)
 
 ___
 
@@ -104,7 +130,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:13
+[packages/matter.js/src/storage/StorageBackendMemory.ts:13](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L13)
 
 ___
 
@@ -129,7 +155,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:46
+[packages/matter.js/src/storage/StorageBackendMemory.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L46)
 
 ___
 
@@ -160,7 +186,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:32
+[packages/matter.js/src/storage/StorageBackendMemory.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L32)
 
 ___
 
@@ -178,7 +204,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:20
+[packages/matter.js/src/storage/StorageBackendMemory.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L20)
+
+___
+
+### keys
+
+▸ **keys**(`contexts`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `contexts` | `string`[] |
+
+#### Returns
+
+`string`[]
+
+#### Implementation of
+
+[Storage](storage_export.Storage.md).[keys](storage_export.Storage.md#keys)
+
+#### Defined in
+
+[packages/matter.js/src/storage/StorageBackendMemory.ts:51](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L51)
 
 ___
 
@@ -210,4 +260,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/storage/StorageBackendMemory.ts:37
+[packages/matter.js/src/storage/StorageBackendMemory.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/storage/StorageBackendMemory.ts#L37)

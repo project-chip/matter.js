@@ -32,7 +32,7 @@ Attributes and commands for configuring occupancy sensing, and reporting occupan
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:81
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:81](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L81)
 
 ___
 
@@ -54,7 +54,7 @@ All other bits are reserved.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:22
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L22)
 
 ___
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:57
+[packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OccupancySensingCluster.ts#L57)

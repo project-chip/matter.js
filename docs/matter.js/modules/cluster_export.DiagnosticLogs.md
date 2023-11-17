@@ -40,7 +40,7 @@ NOTE Support for Diagnostic Logs cluster is provisional.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:247
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L247)
 
 ___
 
@@ -56,7 +56,7 @@ Input to the DiagnosticLogs retrieveLogsRequest command
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:80
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:80](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L80)
 
 ___
 
@@ -73,4 +73,4 @@ following.
 
 #### Defined in
 
-packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:198
+[packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts:198](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/DiagnosticLogsCluster.ts#L198)
