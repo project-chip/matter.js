@@ -9,6 +9,13 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Optimized Exchange deletion and change a throw to log when a already deleted Exchange should be deleted again 
+* matter.js API:
+  * Added some convenient methods on PairedNode instance to access Clusters on Devices and also the RootEndpoint (if needed)
+  * Added method to cancel a running discovery process for commissionable devices
+
 ## 0.7.0 (2023-11-13)
 * General
   * Breaking: Changed ES target from ES5 to ES2018 (affected environments probably already didn't support matter.js)
