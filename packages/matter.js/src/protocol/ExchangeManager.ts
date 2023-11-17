@@ -98,8 +98,12 @@ export class ExchangeManager<ContextT> {
     initiateExchangeWithChannel(channel: MessageChannel<ContextT>, protocolId: number) {
         const exchangeId = this.exchangeCounter.getIncrementedCounter();
         const exchangeIndex = exchangeId | 0x10000; // Ensure initiated and received exchange index are different, since the exchangeID can be the same
-        const exchange = MessageExchange.initiate(channel, exchangeId, protocolId, this.messageCounter, () =>
-            this.deleteExchange(exchangeIndex),
+        const exchange = MessageExchange.initiate(
+            channel,
+            exchangeId,
+            protocolId,
+            this.messageCounter,
+            async () => await this.deleteExchange(exchangeIndex),
         );
         // Ensure exchangeIds are not colliding in the Map by adding 1 in front of exchanges initiated by this device.
         this.exchanges.set(exchangeIndex, exchange);
@@ -160,7 +164,8 @@ export class ExchangeManager<ContextT> {
     async deleteExchange(exchangeIndex: number) {
         const exchange = this.exchanges.get(exchangeIndex);
         if (exchange === undefined) {
-            throw new MatterFlowError(`Exchange with index ${exchangeIndex} to delete not found.`);
+            logger.warn(`Exchange with index ${exchangeIndex} to delete not found or already deleted.`);
+            return;
         }
         const { session } = exchange;
         if (session.isSecure() && session.closingAfterExchangeFinished) {
