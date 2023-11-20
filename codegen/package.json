@@ -32,7 +32,7 @@
     },
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.7.1-alpha.0-20231118-0ebd1ae",
-        "@types/jsdom": "^21.1.4",
+        "@types/jsdom": "^21.1.5",
         "jsdom": "^22.1.0",
         "typescript": "^5.2.2",
         "word-list": "^3.1.0"
