@@ -25,7 +25,7 @@ Client Monitoring allows for ensuring that listed clients meet the required moni
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:44](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L44)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:44](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L44)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:18](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L18)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:18](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L18)
 
 ___
 
@@ -47,7 +47,7 @@ Input to the ClientMonitoring registerClientMonitoring command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L26)
 
 ___
 
@@ -59,4 +59,4 @@ Input to the ClientMonitoring unregisterClientMonitoring command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:34](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts:34](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ClientMonitoringCluster.ts#L34)

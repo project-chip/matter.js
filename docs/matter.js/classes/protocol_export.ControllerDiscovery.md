@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L130)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:130](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L130)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L126)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:126](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L126)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:62](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L62)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:62](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L62)
 
 ___
 
@@ -115,7 +115,7 @@ The method returns a list of addresses of the discovered devices.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L30)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L30)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L105)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:105](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L105)
 
 ___
 
@@ -176,4 +176,4 @@ call is returned. The logic makes sure to only try each unique address (IP/port)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:140](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/ControllerDiscovery.ts#L140)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:140](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerDiscovery.ts#L140)

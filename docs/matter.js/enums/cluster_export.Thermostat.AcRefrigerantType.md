@@ -29,7 +29,7 @@ R22 Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:291](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:291](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L291)
 
 ___
 
@@ -41,7 +41,7 @@ R407c Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:301](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:301](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L301)
 
 ___
 
@@ -53,7 +53,7 @@ R410a Refrigerant
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:296](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L296)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:296](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L296)
 
 ___
 
@@ -65,4 +65,4 @@ Unknown Refrigerant Type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:286](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L286)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:286](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L286)

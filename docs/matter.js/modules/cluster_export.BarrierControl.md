@@ -23,7 +23,7 @@ This cluster provides control of a barrier (garage door).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L26)
 
 ___
 
@@ -35,4 +35,4 @@ Input to the BarrierControl barrierControlGoToPercent command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L19)
+[packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts:19](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BarrierControlCluster.ts#L19)

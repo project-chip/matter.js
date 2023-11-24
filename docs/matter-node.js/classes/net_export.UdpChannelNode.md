@@ -41,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:98](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L98)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:98](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L98)
 
 ## Properties
 
@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:100](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L100)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:100](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L100)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L99)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:99](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L99)
 
 ## Methods
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:130](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L130)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:130](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L130)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:103](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L103)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:103](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L103)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:118](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L118)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:118](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L118)
 
 ___
 
@@ -153,4 +153,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:41](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node.js/src/net/UdpChannelNode.ts#L41)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:41](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node.js/src/net/UdpChannelNode.ts#L41)

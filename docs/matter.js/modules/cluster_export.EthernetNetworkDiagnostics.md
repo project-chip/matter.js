@@ -38,7 +38,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:283](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:283](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L283)
 
 ## Variables
 
@@ -50,7 +50,7 @@ These elements and properties are present in all EthernetNetworkDiagnostics clus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:99](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L99)
 
 ___
 
@@ -74,7 +74,7 @@ EthernetNetworkDiagnosticsCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L252)
 
 ___
 
@@ -89,7 +89,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:299](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L299)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:299](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L299)
 
 ___
 
@@ -101,7 +101,7 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:183](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L183)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:183](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L183)
 
 ___
 
@@ -113,7 +113,7 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:159](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:159](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L159)
 
 ___
 
@@ -125,4 +125,4 @@ A EthernetNetworkDiagnosticsCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:216](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L216)
+[packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts:216](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/EthernetNetworkDiagnosticsCluster.ts#L216)

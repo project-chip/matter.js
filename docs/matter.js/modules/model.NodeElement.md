@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/NodeElement.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/NodeElement.ts#L27)
+[packages/matter.js/src/model/elements/NodeElement.ts:27](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/NodeElement.ts#L27)
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/NodeElement.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/NodeElement.ts#L25)
+[packages/matter.js/src/model/elements/NodeElement.ts:25](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/NodeElement.ts#L25)
 
-[packages/matter.js/src/model/elements/NodeElement.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/NodeElement.ts#L26)
+[packages/matter.js/src/model/elements/NodeElement.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/NodeElement.ts#L26)
 
 ## Variables
 
@@ -45,6 +45,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/NodeElement.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/NodeElement.ts#L25)
+[packages/matter.js/src/model/elements/NodeElement.ts:25](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/NodeElement.ts#L25)
 
-[packages/matter.js/src/model/elements/NodeElement.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/NodeElement.ts#L26)
+[packages/matter.js/src/model/elements/NodeElement.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/NodeElement.ts#L26)

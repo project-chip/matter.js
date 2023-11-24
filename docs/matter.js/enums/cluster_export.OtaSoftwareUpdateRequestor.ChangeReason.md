@@ -30,7 +30,7 @@ The reason for a state change is a request by the OTA Provider to wait.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:158](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:158](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L158)
 
 ___
 
@@ -42,7 +42,7 @@ The reason for a state change is the failure of a prior operation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:148](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L148)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:148](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L148)
 
 ___
 
@@ -54,7 +54,7 @@ The reason for a state change is the success of a prior operation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:143](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L143)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:143](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L143)
 
 ___
 
@@ -66,7 +66,7 @@ The reason for a state change is a time-out.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:153](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:153](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L153)
 
 ___
 
@@ -78,4 +78,4 @@ The reason for a state change is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:138](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:138](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L138)

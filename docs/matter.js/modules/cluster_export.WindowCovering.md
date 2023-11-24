@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:958](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L958)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:958](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L958)
 
 ## Variables
 
@@ -65,7 +65,7 @@ These elements and properties are present in all WindowCovering clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:365](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L365)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:365](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L365)
 
 ___
 
@@ -87,7 +87,7 @@ factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:913](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L913)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:913](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L913)
 
 ___
 
@@ -102,7 +102,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:988](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L988)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:988](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L988)
 
 ___
 
@@ -130,7 +130,7 @@ The value of the WindowCovering configStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:59](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L59)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:59](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L59)
 
 ___
 
@@ -142,7 +142,7 @@ A WindowCoveringCluster supports these elements if it supports features Lift and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:869](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L869)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:869](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L869)
 
 ___
 
@@ -155,7 +155,7 @@ AbsolutePosition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:562](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L562)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:562](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L562)
 
 ___
 
@@ -167,7 +167,7 @@ A WindowCoveringCluster supports these elements if it supports features Lift and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:734](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L734)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:734](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L734)
 
 ___
 
@@ -179,7 +179,7 @@ A WindowCoveringCluster supports these elements if it supports feature Lift.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:657](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L657)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:657](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L657)
 
 ___
 
@@ -204,7 +204,7 @@ The value of the WindowCovering mode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:181](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L181)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:181](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L181)
 
 ___
 
@@ -228,7 +228,7 @@ The value of the WindowCovering operationalStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:106](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L106)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:106](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L106)
 
 ___
 
@@ -261,7 +261,7 @@ The value of the WindowCovering safetyStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:221](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L221)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:221](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L221)
 
 ___
 
@@ -273,7 +273,7 @@ A WindowCoveringCluster supports these elements if it supports features Tilt and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:887](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L887)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:887](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L887)
 
 ___
 
@@ -286,7 +286,7 @@ AbsolutePosition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:610](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L610)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:610](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L610)
 
 ___
 
@@ -298,7 +298,7 @@ A WindowCoveringCluster supports these elements if it supports features Tilt and
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:801](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L801)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:801](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L801)
 
 ___
 
@@ -310,7 +310,7 @@ A WindowCoveringCluster supports these elements if it supports feature Tilt.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:695](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L695)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:695](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L695)
 
 ___
 
@@ -326,7 +326,7 @@ Input to the WindowCovering goToLiftPercentage command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:291](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:291](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L291)
 
 ___
 
@@ -342,7 +342,7 @@ Input to the WindowCovering goToLiftValue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:311](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L311)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:311](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L311)
 
 ___
 
@@ -358,7 +358,7 @@ Input to the WindowCovering goToTiltPercentage command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:301](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L301)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:301](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L301)
 
 ___
 
@@ -374,4 +374,4 @@ Input to the WindowCovering goToTiltValue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:318](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L318)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:318](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L318)

@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:79](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L79)
+[packages/matter.js/src/codec/MessageCodec.ts:79](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L79)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:109](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L109)
+[packages/matter.js/src/codec/MessageCodec.ts:109](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L109)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:89](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L89)
+[packages/matter.js/src/codec/MessageCodec.ts:89](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L89)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:151](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L151)
+[packages/matter.js/src/codec/MessageCodec.ts:151](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L151)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:105](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L105)
+[packages/matter.js/src/codec/MessageCodec.ts:105](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L105)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:169](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L169)
+[packages/matter.js/src/codec/MessageCodec.ts:169](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L169)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:98](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L98)
+[packages/matter.js/src/codec/MessageCodec.ts:98](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L98)
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:209](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L209)
+[packages/matter.js/src/codec/MessageCodec.ts:209](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L209)
 
 ___
 
@@ -218,4 +218,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:195](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/codec/MessageCodec.ts#L195)
+[packages/matter.js/src/codec/MessageCodec.ts:195](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L195)

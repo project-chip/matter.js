@@ -47,7 +47,7 @@ ClusterElements.constructor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
+[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
+[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
 
 ___
 
@@ -75,4 +75,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
+[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L71)

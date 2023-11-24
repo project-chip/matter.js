@@ -38,7 +38,7 @@ number, which apply to the whole Node.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:151](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:151](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L151)
 
 ___
 
@@ -55,7 +55,7 @@ cluster-specific.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L38)
 
 ___
 
@@ -71,7 +71,7 @@ Body of the BasicInformation leave event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:119](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:119](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L119)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:94](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L94)
 
 ___
 
@@ -97,7 +97,7 @@ Body of the BasicInformation reachableChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:133](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L133)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:133](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L133)
 
 ___
 
@@ -113,4 +113,4 @@ Body of the BasicInformation startUp event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:104](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L104)
+[packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts:104](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BasicInformationCluster.ts#L104)

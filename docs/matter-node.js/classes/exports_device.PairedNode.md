@@ -41,11 +41,14 @@ the CommissioningController on commissioning or when connecting.
 - [close](exports_device.PairedNode.md#close)
 - [decommission](exports_device.PairedNode.md#decommission)
 - [disconnect](exports_device.PairedNode.md#disconnect)
+- [getClusterClientForDevice](exports_device.PairedNode.md#getclusterclientfordevice)
+- [getClusterServerForDevice](exports_device.PairedNode.md#getclusterserverfordevice)
 - [getDeviceById](exports_device.PairedNode.md#getdevicebyid)
 - [getDevices](exports_device.PairedNode.md#getdevices)
 - [getInteractionClient](exports_device.PairedNode.md#getinteractionclient)
 - [getRootClusterClient](exports_device.PairedNode.md#getrootclusterclient)
 - [getRootClusterServer](exports_device.PairedNode.md#getrootclusterserver)
+- [getRootEndpoint](exports_device.PairedNode.md#getrootendpoint)
 - [logStructure](exports_device.PairedNode.md#logstructure)
 - [openBasicCommissioningWindow](exports_device.PairedNode.md#openbasiccommissioningwindow)
 - [openEnhancedCommissioningWindow](exports_device.PairedNode.md#openenhancedcommissioningwindow)
@@ -72,7 +75,7 @@ the CommissioningController on commissioning or when connecting.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:84
+packages/matter.js/dist/esm/device/PairedNode.d.ts:85
 
 ## Properties
 
@@ -82,7 +85,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:84
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:75
+packages/matter.js/dist/esm/device/PairedNode.d.ts:76
 
 ___
 
@@ -92,7 +95,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:82
+packages/matter.js/dist/esm/device/PairedNode.d.ts:83
 
 ___
 
@@ -116,7 +119,7 @@ InteractionClient to use for the device
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:132
+packages/matter.js/dist/esm/device/PairedNode.d.ts:133
 
 ___
 
@@ -126,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:78
+packages/matter.js/dist/esm/device/PairedNode.d.ts:79
 
 ___
 
@@ -138,7 +141,7 @@ Ensure that the node is connected by creating a new InteractionClient if needed.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:93
+packages/matter.js/dist/esm/device/PairedNode.d.ts:94
 
 ___
 
@@ -150,7 +153,7 @@ Handles a node shutDown event (if supported by the node and received).
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:118
+packages/matter.js/dist/esm/device/PairedNode.d.ts:119
 
 ___
 
@@ -162,7 +165,7 @@ Initialize the node after the InteractionClient was created and to subscribe att
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:97
+packages/matter.js/dist/esm/device/PairedNode.d.ts:98
 
 ___
 
@@ -174,7 +177,7 @@ Reads all data from the device and create a device object structure out of it.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:121
+packages/matter.js/dist/esm/device/PairedNode.d.ts:122
 
 ___
 
@@ -184,7 +187,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:79
+packages/matter.js/dist/esm/device/PairedNode.d.ts:80
 
 ___
 
@@ -194,7 +197,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:74
+packages/matter.js/dist/esm/device/PairedNode.d.ts:75
 
 ___
 
@@ -204,7 +207,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:76
+packages/matter.js/dist/esm/device/PairedNode.d.ts:77
 
 ___
 
@@ -214,7 +217,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:80
+packages/matter.js/dist/esm/device/PairedNode.d.ts:81
 
 ___
 
@@ -224,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:77
+packages/matter.js/dist/esm/device/PairedNode.d.ts:78
 
 ___
 
@@ -234,7 +237,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:86
+packages/matter.js/dist/esm/device/PairedNode.d.ts:87
 
 ___
 
@@ -246,7 +249,7 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:123
+packages/matter.js/dist/esm/device/PairedNode.d.ts:124
 
 ___
 
@@ -256,7 +259,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:81
+packages/matter.js/dist/esm/device/PairedNode.d.ts:82
 
 ## Accessors
 
@@ -270,7 +273,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:81
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:85
+packages/matter.js/dist/esm/device/PairedNode.d.ts:86
 
 ## Methods
 
@@ -284,7 +287,7 @@ packages/matter.js/dist/esm/device/PairedNode.d.ts:85
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:147
+packages/matter.js/dist/esm/device/PairedNode.d.ts:149
 
 ___
 
@@ -300,7 +303,7 @@ De-Commission (unpair) the device from this controller by removing the fabric fr
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:138
+packages/matter.js/dist/esm/device/PairedNode.d.ts:140
 
 ___
 
@@ -314,7 +317,73 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:146
+packages/matter.js/dist/esm/device/PairedNode.d.ts:148
+
+___
+
+### getClusterClientForDevice
+
+▸ **getClusterClientForDevice**<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+
+Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | EndpointNumber to get the cluster from |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+
+#### Returns
+
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/PairedNode.d.ts:175
+
+___
+
+### getClusterServerForDevice
+
+▸ **getClusterServerForDevice**<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+
+Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
+| `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
+| `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) | EndpointNumber to get the cluster from |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+
+#### Returns
+
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/PairedNode.d.ts:168
 
 ___
 
@@ -336,7 +405,7 @@ Returns the device/endpoint with the given endpoint ID.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:136
+packages/matter.js/dist/esm/device/PairedNode.d.ts:137
 
 ___
 
@@ -344,7 +413,7 @@ ___
 
 ▸ **getDevices**(): [`Endpoint`](exports_device.Endpoint.md)[]
 
-Returns the devices/endpoints known for this node.
+Returns the functional devices/endpoints (those below the Root Endpoint) known for this node.
 
 #### Returns
 
@@ -352,7 +421,7 @@ Returns the devices/endpoints known for this node.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:134
+packages/matter.js/dist/esm/device/PairedNode.d.ts:135
 
 ___
 
@@ -369,7 +438,7 @@ ClusterClients of the Devices of the node should be used instead.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:102
+packages/matter.js/dist/esm/device/PairedNode.d.ts:103
 
 ___
 
@@ -401,7 +470,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:159
+packages/matter.js/dist/esm/device/PairedNode.d.ts:161
 
 ___
 
@@ -433,7 +502,21 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:153
+packages/matter.js/dist/esm/device/PairedNode.d.ts:155
+
+___
+
+### getRootEndpoint
+
+▸ **getRootEndpoint**(): `undefined` \| [`Endpoint`](exports_device.Endpoint.md)
+
+#### Returns
+
+`undefined` \| [`Endpoint`](exports_device.Endpoint.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/PairedNode.d.ts:138
 
 ___
 
@@ -455,7 +538,7 @@ Method to log the structure of this node with all endpoint and clusters.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:104
+packages/matter.js/dist/esm/device/PairedNode.d.ts:105
 
 ___
 
@@ -477,7 +560,7 @@ Opens a Basic Commissioning Window (uses the original Passcode printed on the de
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:140
+packages/matter.js/dist/esm/device/PairedNode.d.ts:142
 
 ___
 
@@ -499,7 +582,7 @@ Opens an Enhanced Commissioning Window (uses a generated random Passcode) with t
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:142
+packages/matter.js/dist/esm/device/PairedNode.d.ts:144
 
 ___
 
@@ -516,7 +599,7 @@ was closed or the device wen offline and was detected as being online again.
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:91
+packages/matter.js/dist/esm/device/PairedNode.d.ts:92
 
 ___
 
@@ -542,7 +625,7 @@ false this is executed automatically. Alternatively you can manually subscribe b
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:109
+packages/matter.js/dist/esm/device/PairedNode.d.ts:110
 
 ___
 
@@ -556,7 +639,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:119
+packages/matter.js/dist/esm/device/PairedNode.d.ts:120
 
 ___
 
@@ -580,4 +663,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:83
+packages/matter.js/dist/esm/device/PairedNode.d.ts:84

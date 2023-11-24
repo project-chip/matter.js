@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.7.1 (2023-11-24)
 * Matter-Core functionality:
   * Optimized Exchange deletion and change a throw to log when a already deleted Exchange should be deleted again 
 * matter.js API:

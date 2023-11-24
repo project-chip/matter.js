@@ -31,7 +31,7 @@ TLV element tag control.
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:87](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L87)
+[packages/matter.js/src/tlv/TlvCodec.ts:87](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L87)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:89](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L89)
+[packages/matter.js/src/tlv/TlvCodec.ts:89](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L89)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L90)
+[packages/matter.js/src/tlv/TlvCodec.ts:90](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L90)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:88](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L88)
+[packages/matter.js/src/tlv/TlvCodec.ts:88](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L88)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:93](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L93)
+[packages/matter.js/src/tlv/TlvCodec.ts:93](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L93)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L94)
+[packages/matter.js/src/tlv/TlvCodec.ts:94](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L94)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:91](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L91)
+[packages/matter.js/src/tlv/TlvCodec.ts:91](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L91)
 
 ___
 
@@ -101,4 +101,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:92](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/tlv/TlvCodec.ts#L92)
+[packages/matter.js/src/tlv/TlvCodec.ts:92](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/tlv/TlvCodec.ts#L92)

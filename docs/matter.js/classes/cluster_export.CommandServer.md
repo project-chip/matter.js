@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L19)
+[packages/matter.js/src/cluster/server/CommandServer.ts:19](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L19)
 
 ## Properties
 
@@ -85,7 +85,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
+[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:20](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L20)
+[packages/matter.js/src/cluster/server/CommandServer.ts:20](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L20)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
+[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
+[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
+[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
+[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
 
 ## Methods
 
@@ -168,4 +168,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:34](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/server/CommandServer.ts#L34)
+[packages/matter.js/src/cluster/server/CommandServer.ts:34](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/server/CommandServer.ts#L34)

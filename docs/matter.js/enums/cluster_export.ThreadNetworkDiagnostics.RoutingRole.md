@@ -30,7 +30,7 @@ The Node acts as an End Device without RX- off-when-idle sleepy radio behavior.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L53)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:53](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L53)
 
 ___
 
@@ -42,7 +42,7 @@ The Node acts as a Leader Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:68](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L68)
 
 ___
 
@@ -54,7 +54,7 @@ The Node acts as an Router Eligible End Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:58](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L58)
 
 ___
 
@@ -66,7 +66,7 @@ The Node acts as a Router Device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:63](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L63)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:63](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L63)
 
 ___
 
@@ -78,7 +78,7 @@ The Node acts as a Sleepy End Device with RX-off-when-idle sleepy radio behavior
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L48)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:48](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L48)
 
 ___
 
@@ -91,7 +91,7 @@ or operational.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:43](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L43)
 
 ___
 
@@ -103,4 +103,4 @@ Unspecified routing role.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:37](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L37)

@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:474](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L474)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:474](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L474)
 
 ## Variables
 
@@ -60,7 +60,7 @@ These elements and properties are present in all LevelControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:193](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L193)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:193](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L193)
 
 ___
 
@@ -82,7 +82,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:451](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L451)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:451](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L451)
 
 ___
 
@@ -97,7 +97,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:488](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L488)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:488](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L488)
 
 ___
 
@@ -109,7 +109,7 @@ A LevelControlCluster supports these elements if it supports feature Frequency.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:405](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L405)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:405](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L405)
 
 ___
 
@@ -121,7 +121,7 @@ A LevelControlCluster supports these elements if it supports feature Lighting.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:372](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L372)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:372](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L372)
 
 ___
 
@@ -144,7 +144,7 @@ The value of the LevelControl options attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L31)
 
 ___
 
@@ -160,7 +160,7 @@ Input to the LevelControl move command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:55](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L55)
 
 ___
 
@@ -176,7 +176,7 @@ Input to the LevelControl moveToClosestFrequency command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:159](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:159](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L159)
 
 ___
 
@@ -192,7 +192,7 @@ Input to the LevelControl moveToLevel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L38)
 
 ___
 
@@ -208,7 +208,7 @@ Input to the LevelControl moveToLevelWithOnOff command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:112](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:112](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L112)
 
 ___
 
@@ -224,7 +224,7 @@ Input to the LevelControl moveWithOnOff command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:124](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:124](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L124)
 
 ___
 
@@ -240,7 +240,7 @@ Input to the LevelControl step command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:89](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:89](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L89)
 
 ___
 
@@ -256,7 +256,7 @@ Input to the LevelControl stepWithOnOff command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:136](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:136](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L136)
 
 ___
 
@@ -272,7 +272,7 @@ Input to the LevelControl stop command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:102](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:102](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L102)
 
 ___
 
@@ -288,4 +288,4 @@ Input to the LevelControl stopWithOnOff command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:149](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/LevelControlCluster.ts:149](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LevelControlCluster.ts#L149)

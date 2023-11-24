@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:578](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L578)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:578](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L578)
 
 ## Variables
 
@@ -62,7 +62,7 @@ These elements and properties are present in all ContentLauncher clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:456](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L456)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:456](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L456)
 
 ___
 
@@ -84,7 +84,7 @@ factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:547](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L547)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:547](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L547)
 
 ___
 
@@ -99,7 +99,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:594](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L594)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:594](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L594)
 
 ___
 
@@ -111,7 +111,7 @@ A ContentLauncherCluster supports these elements if it supports feature ContentS
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:519](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L519)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:519](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L519)
 
 ___
 
@@ -123,7 +123,7 @@ A ContentLauncherCluster supports these elements if it supports features Content
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:534](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L534)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:534](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L534)
 
 ___
 
@@ -146,7 +146,7 @@ The value of the ContentLauncher supportedStreamingProtocols attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:25](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L25)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:25](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L25)
 
 ___
 
@@ -162,7 +162,7 @@ This object defines additional name=value pairs that can be used for identifying
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:343](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:343](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L343)
 
 ___
 
@@ -179,7 +179,7 @@ the Video Player during playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:134](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:134](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L134)
 
 ___
 
@@ -195,7 +195,7 @@ This object defines inputs to a search for content for display or playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:392](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:392](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L392)
 
 ___
 
@@ -214,7 +214,7 @@ because we don’t have any other usecases which require this datatype.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L68)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:68](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L68)
 
 ___
 
@@ -230,7 +230,7 @@ Input to the ContentLauncher launchContent command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:408](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L408)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:408](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L408)
 
 ___
 
@@ -246,7 +246,7 @@ Input to the ContentLauncher launchUrl command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:186](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:186](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L186)
 
 ___
 
@@ -264,7 +264,7 @@ WARNING TODO: Data in table above needs a max size
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:238](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:238](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L238)
 
 ___
 
@@ -280,7 +280,7 @@ This object defines inputs to a search for content for display or playback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:364](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L364)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:364](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L364)
 
 ___
 
@@ -297,7 +297,7 @@ related properties.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:97](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:97](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L97)
 
 ___
 
@@ -309,4 +309,4 @@ A ContentLauncherCluster supports these elements if it supports feature UrlPlayb
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:481](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L481)
+[packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts:481](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ContentLauncherCluster.ts#L481)

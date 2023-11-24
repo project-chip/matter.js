@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:312](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:312](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L312)
 
 ## Variables
 
@@ -55,7 +55,7 @@ These elements and properties are present in all Identify clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:179](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L179)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:179](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L179)
 
 ___
 
@@ -85,7 +85,7 @@ IdentifyCluster supports optional features that you can enable with the Identify
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:290](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L290)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:290](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L290)
 
 ___
 
@@ -100,7 +100,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:324](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L324)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:324](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L324)
 
 ___
 
@@ -112,7 +112,7 @@ A IdentifyCluster supports these elements if it supports feature Query.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:251](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L251)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:251](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L251)
 
 ___
 
@@ -129,7 +129,7 @@ case that the device is currently identifying itself.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:152](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:152](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L152)
 
 ___
 
@@ -145,7 +145,7 @@ Input to the Identify identify command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:65](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L65)
 
 ___
 
@@ -161,4 +161,4 @@ Input to the Identify triggerEffect command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:120](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/IdentifyCluster.ts:120](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/IdentifyCluster.ts#L120)

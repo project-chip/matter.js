@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:413](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L413)
+[packages/matter.js/src/model/models/Model.ts:413](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L413)
 
 ## Properties
 
@@ -53,7 +53,7 @@ Specification.CrossReference.document
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:409](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L409)
+[packages/matter.js/src/model/models/Model.ts:409](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L409)
 
 ___
 
@@ -67,7 +67,7 @@ Specification.CrossReference.section
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:410](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L410)
+[packages/matter.js/src/model/models/Model.ts:410](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L410)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:411](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L411)
+[packages/matter.js/src/model/models/Model.ts:411](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L411)
 
 ## Methods
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:418](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L418)
+[packages/matter.js/src/model/models/Model.ts:418](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L418)
 
 ___
 
@@ -115,4 +115,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:422](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/Model.ts#L422)
+[packages/matter.js/src/model/models/Model.ts:422](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L422)

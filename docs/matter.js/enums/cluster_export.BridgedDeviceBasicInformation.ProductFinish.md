@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L35)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L31)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L30)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L30)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:33](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:33](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L33)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:34](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:34](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L34)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L32)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:32](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L32)

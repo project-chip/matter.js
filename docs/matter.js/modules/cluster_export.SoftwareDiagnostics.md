@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:240](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L240)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:240](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L240)
 
 ## Variables
 
@@ -49,7 +49,7 @@ These elements and properties are present in all SoftwareDiagnostics clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:112](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L112)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:112](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L112)
 
 ___
 
@@ -72,7 +72,7 @@ SoftwareDiagnosticsCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:218](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L218)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:218](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L218)
 
 ___
 
@@ -87,7 +87,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L252)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:252](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L252)
 
 ___
 
@@ -103,7 +103,7 @@ Body of the SoftwareDiagnostics softwareFault event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:81](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:81](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L81)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L31)
 
 ___
 
@@ -129,4 +129,4 @@ A SoftwareDiagnosticsCluster supports these elements if it supports feature Wate
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:170](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts:170](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/SoftwareDiagnosticsCluster.ts#L170)

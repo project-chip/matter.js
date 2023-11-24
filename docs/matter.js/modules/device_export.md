@@ -66,7 +66,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:87](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/PairedNode.ts#L87)
+[packages/matter.js/src/device/PairedNode.ts:87](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L87)
 
 ___
 
@@ -99,7 +99,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
 
 ## Variables
 
@@ -113,7 +113,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L113)
+[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/DeviceTypes.ts#L113)
 
 ## Functions
 
@@ -143,7 +143,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L78)
+[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/DeviceTypes.ts#L78)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L974)
+[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/DeviceTypes.ts#L974)
 
 ___
 
@@ -193,7 +193,7 @@ the custom ones are used if defined
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/Device.ts#L29)
+[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/Device.ts#L29)
 
 ___
 
@@ -227,7 +227,7 @@ for multiple clusters
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/OnOffDevices.ts#L36)
+[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/OnOffDevices.ts#L36)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/DeviceTypes.ts#L983)
+[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/DeviceTypes.ts#L983)
 
 ___
 
@@ -268,4 +268,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)

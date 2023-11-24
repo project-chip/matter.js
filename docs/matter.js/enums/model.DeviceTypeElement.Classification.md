@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L35)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L35)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L39)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:39](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L39)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L36)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L36)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L38)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L38)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L37)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:37](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L37)

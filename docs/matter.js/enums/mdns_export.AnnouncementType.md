@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsServer.ts#L31)
+[packages/matter.js/src/mdns/MdnsServer.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/mdns/MdnsServer.ts#L31)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/mdns/MdnsServer.ts#L32)
+[packages/matter.js/src/mdns/MdnsServer.ts:32](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/mdns/MdnsServer.ts#L32)

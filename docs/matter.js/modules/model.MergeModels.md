@@ -28,7 +28,7 @@ Priorities define rules that control how values are merged.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/MergeModels.ts:286](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/logic/MergeModels.ts#L286)
+[packages/matter.js/src/model/logic/MergeModels.ts:286](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/MergeModels.ts#L286)
 
 ## Variables
 
@@ -43,4 +43,4 @@ revisit the default at some point.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/MergeModels.ts:304](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/logic/MergeModels.ts#L304)
+[packages/matter.js/src/model/logic/MergeModels.ts:304](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/MergeModels.ts#L304)
