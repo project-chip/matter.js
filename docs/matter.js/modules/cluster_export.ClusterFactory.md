@@ -62,7 +62,7 @@ Definition of a cluster attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:43](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L43)
+[packages/matter.js/src/cluster/ClusterFactory.ts:43](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L43)
 
 ___
 
@@ -80,7 +80,7 @@ Extract the type of a cluster's attributes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:316](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L316)
+[packages/matter.js/src/cluster/ClusterFactory.ts:316](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L316)
 
 ___
 
@@ -92,7 +92,7 @@ Definition of a cluster command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:48](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L48)
+[packages/matter.js/src/cluster/ClusterFactory.ts:48](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L48)
 
 ___
 
@@ -110,7 +110,7 @@ Extract the type of a cluster's commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:323](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L323)
+[packages/matter.js/src/cluster/ClusterFactory.ts:323](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L323)
 
 ___
 
@@ -128,9 +128,9 @@ A "definition" is the fully typed Cluster for a PartialDefinition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
+[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:117](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L117)
+[packages/matter.js/src/cluster/ClusterFactory.ts:117](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L117)
 
 ___
 
@@ -142,7 +142,7 @@ An "element" is a single attribute, command or event of a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:155](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L155)
+[packages/matter.js/src/cluster/ClusterFactory.ts:155](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L155)
 
 ___
 
@@ -161,7 +161,7 @@ events) of a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L38)
+[packages/matter.js/src/cluster/ClusterFactory.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L38)
 
 ___
 
@@ -173,7 +173,7 @@ Definition of a cluster event.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:53](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L53)
+[packages/matter.js/src/cluster/ClusterFactory.ts:53](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L53)
 
 ___
 
@@ -191,7 +191,7 @@ Extract the type of a cluster's events.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:330](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L330)
+[packages/matter.js/src/cluster/ClusterFactory.ts:330](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L330)
 
 ___
 
@@ -218,7 +218,7 @@ features enabled.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:142](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L142)
+[packages/matter.js/src/cluster/ClusterFactory.ts:142](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L142)
 
 ___
 
@@ -230,7 +230,7 @@ A "MutableDefinition" is a Cluster with fields that may be modified.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:134](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L134)
+[packages/matter.js/src/cluster/ClusterFactory.ts:134](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L134)
 
 ___
 
@@ -243,7 +243,7 @@ empty elements to be present.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:107](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L107)
+[packages/matter.js/src/cluster/ClusterFactory.ts:107](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L107)
 
 ## Functions
 
@@ -277,7 +277,7 @@ Create a conditional version of an unconditional element definition.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:298](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L298)
+[packages/matter.js/src/cluster/ClusterFactory.ts:298](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L298)
 
 ___
 
@@ -305,7 +305,7 @@ Define a cluster component.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:160](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L160)
+[packages/matter.js/src/cluster/ClusterFactory.ts:160](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L160)
 
 ___
 
@@ -333,7 +333,7 @@ Define a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
+[packages/matter.js/src/cluster/ClusterFactory.ts:172](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L172)
 
 ___
 
@@ -363,7 +363,7 @@ Define an extensible cluster.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:192](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L192)
+[packages/matter.js/src/cluster/ClusterFactory.ts:192](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L192)
 
 ___
 
@@ -395,7 +395,7 @@ Define a cluster that can only be extended.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:205](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L205)
+[packages/matter.js/src/cluster/ClusterFactory.ts:205](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L205)
 
 ___
 
@@ -422,7 +422,7 @@ This is used by extenders and does not convey type information.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:217](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L217)
+[packages/matter.js/src/cluster/ClusterFactory.ts:217](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L217)
 
 ___
 
@@ -448,7 +448,7 @@ Used by extenders.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:282](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L282)
+[packages/matter.js/src/cluster/ClusterFactory.ts:282](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L282)
 
 ___
 
@@ -474,4 +474,4 @@ Used by extenders.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:268](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L268)
+[packages/matter.js/src/cluster/ClusterFactory.ts:268](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L268)

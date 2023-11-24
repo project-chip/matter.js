@@ -37,7 +37,7 @@ Provides an interface for providing OTA software updates
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:164](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:164](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L164)
 
 ___
 
@@ -53,7 +53,7 @@ Input to the OtaSoftwareUpdateProvider applyUpdateRequest command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:111](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:111](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L111)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:142](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L142)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:142](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L142)
 
 ___
 
@@ -83,7 +83,7 @@ Input to the OtaSoftwareUpdateProvider notifyUpdateApplied command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:152](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:152](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L152)
 
 ___
 
@@ -99,7 +99,7 @@ Input to the OtaSoftwareUpdateProvider queryImage command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:54](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L54)
 
 ___
 
@@ -113,4 +113,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:95](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:95](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L95)

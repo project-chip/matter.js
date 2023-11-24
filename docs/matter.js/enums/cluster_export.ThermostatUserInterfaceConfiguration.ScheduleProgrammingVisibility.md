@@ -27,7 +27,7 @@ Local schedule programming functionality is disabled at the thermostat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:83](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L83)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:83](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L83)
 
 ___
 
@@ -39,4 +39,4 @@ Local schedule programming functionality is enabled at the thermostat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:78](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts:78](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatUserInterfaceConfigurationCluster.ts#L78)

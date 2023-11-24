@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:95](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L95)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:95](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L95)
 
 ## Properties
 
@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:95](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L95)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:95](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L95)
 
 ## Methods
 
@@ -82,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:125](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L125)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:125](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L125)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:140](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L140)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:140](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L140)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:113](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L113)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:113](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L113)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:97](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L97)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:97](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L97)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:101](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L101)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:101](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L101)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:129](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L129)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:129](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L129)
 
 ___
 
@@ -192,4 +192,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:108](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L108)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:108](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L108)

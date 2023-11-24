@@ -40,6 +40,7 @@ Controller class to commission and connect multiple nodes into one fabric.
 
 - [assertControllerIsStarted](export.CommissioningController.md#assertcontrollerisstarted)
 - [assertIsAddedToMatterServer](export.CommissioningController.md#assertisaddedtomatterserver)
+- [cancelCommissionableDeviceDiscovery](export.CommissioningController.md#cancelcommissionabledevicediscovery)
 - [close](export.CommissioningController.md#close)
 - [commissionNode](export.CommissioningController.md#commissionnode)
 - [connect](export.CommissioningController.md#connect)
@@ -250,6 +251,27 @@ packages/matter.js/dist/esm/CommissioningController.d.ts:108
 
 ___
 
+### cancelCommissionableDeviceDiscovery
+
+▸ **cancelCommissionableDeviceDiscovery**(`identifierData`, `discoveryCapabilities?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `identifierData` | [`CommissionableDeviceIdentifiers`](../modules/exports_common.md#commissionabledeviceidentifiers) |
+| `discoveryCapabilities?` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<{ `ble`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `onIpNetwork`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `softAccessPoint`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/CommissioningController.d.ts:175
+
+___
+
 ### close
 
 ▸ **close**(): `Promise`<`void`\>
@@ -396,7 +418,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:175
+packages/matter.js/dist/esm/CommissioningController.d.ts:176
 
 ___
 
@@ -412,7 +434,7 @@ Returns active session information for all connected nodes.
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:178
+packages/matter.js/dist/esm/CommissioningController.d.ts:179
 
 ___
 
@@ -570,7 +592,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:176
+packages/matter.js/dist/esm/CommissioningController.d.ts:177
 
 ___
 

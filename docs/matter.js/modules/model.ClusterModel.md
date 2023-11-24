@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/models/ClusterModel.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/models/ClusterModel.ts#L73)
+[packages/matter.js/src/model/models/ClusterModel.ts:73](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/ClusterModel.ts#L73)

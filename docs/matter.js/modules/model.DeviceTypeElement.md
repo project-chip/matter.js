@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:32](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L32)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:32](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L32)
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L30)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L30)
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L31)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L31)
 
 ## Variables
 
@@ -49,6 +49,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L30)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L30)
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:31](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L31)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L31)

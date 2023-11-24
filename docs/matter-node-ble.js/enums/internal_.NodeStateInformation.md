@@ -24,7 +24,7 @@ Node is connected and all data is up-to-date.
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:19
+matter.js/dist/esm/device/PairedNode.d.ts:20
 
 ___
 
@@ -37,7 +37,7 @@ is still active then the device will be reconnected once it is available again.
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:24
+matter.js/dist/esm/device/PairedNode.d.ts:25
 
 ___
 
@@ -49,7 +49,7 @@ Node is reconnecting. Data are stale. It is yet unknown if the reconnection is s
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:26
+matter.js/dist/esm/device/PairedNode.d.ts:27
 
 ___
 
@@ -62,7 +62,7 @@ This State information will only be fired when the subscribeAllAttributesAndEven
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:36
+matter.js/dist/esm/device/PairedNode.d.ts:37
 
 ___
 
@@ -75,4 +75,4 @@ minutes to reconnect.
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:31
+matter.js/dist/esm/device/PairedNode.d.ts:32

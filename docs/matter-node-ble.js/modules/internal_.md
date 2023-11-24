@@ -983,7 +983,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ___
 
@@ -1038,7 +1038,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:38
+matter.js/dist/esm/device/PairedNode.d.ts:39
 
 ___
 

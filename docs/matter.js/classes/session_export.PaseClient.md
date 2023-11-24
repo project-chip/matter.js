@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseClient.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseClient.ts#L39)
+[packages/matter.js/src/session/pase/PaseClient.ts:39](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/session/pase/PaseClient.ts#L39)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseClient.ts:21](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseClient.ts#L21)
+[packages/matter.js/src/session/pase/PaseClient.ts:21](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/session/pase/PaseClient.ts#L21)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseClient.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseClient.ts#L35)
+[packages/matter.js/src/session/pase/PaseClient.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/session/pase/PaseClient.ts#L35)
 
 ___
 
@@ -92,4 +92,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseClient.ts:26](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/session/pase/PaseClient.ts#L26)
+[packages/matter.js/src/session/pase/PaseClient.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/session/pase/PaseClient.ts#L26)

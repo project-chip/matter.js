@@ -63,7 +63,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Base38Schema.ts#L84)
+[packages/matter.js/src/schema/Base38Schema.ts:84](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Base38Schema.ts#L84)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Base38Schema.ts#L45)
+[packages/matter.js/src/schema/Base38Schema.ts:45](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Base38Schema.ts#L45)
 
 ___
 
@@ -135,7 +135,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Base38Schema.ts#L35)
+[packages/matter.js/src/schema/Base38Schema.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Base38Schema.ts#L35)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Base38Schema.ts#L16)
+[packages/matter.js/src/schema/Base38Schema.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Base38Schema.ts#L16)
 
 ___
 
@@ -206,4 +206,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L28)

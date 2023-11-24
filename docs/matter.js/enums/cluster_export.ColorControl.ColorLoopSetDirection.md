@@ -25,7 +25,7 @@ The value of ColorControl.direction
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:685](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L685)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:685](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L685)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:686](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L686)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:686](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L686)

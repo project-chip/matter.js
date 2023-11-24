@@ -32,7 +32,7 @@ Color loop is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:788](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L788)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:788](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L788)
 
 ___
 
@@ -46,7 +46,7 @@ Supports specification of color temperature.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:802](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L802)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:802](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L802)
 
 ___
 
@@ -60,7 +60,7 @@ Enhanced hue is supported.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:781](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L781)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:781](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L781)
 
 ___
 
@@ -74,7 +74,7 @@ Supports color specification via hue/saturation.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:774](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L774)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:774](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L774)
 
 ___
 
@@ -88,4 +88,4 @@ Supports color specification via XY.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:795](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L795)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:795](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L795)

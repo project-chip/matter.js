@@ -54,7 +54,7 @@ binding target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:94](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L94)
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L24)

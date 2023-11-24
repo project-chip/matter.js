@@ -29,7 +29,7 @@ Indicates OTA Provider may have an update, but it is not ready yet.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:79](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:79](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L79)
 
 ___
 
@@ -41,7 +41,7 @@ Indicates that the requested download protocol is not supported by the OTA Provi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:89](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L89)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:89](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L89)
 
 ___
 
@@ -53,7 +53,7 @@ Indicates that there is definitely no update currently available from the OTA Pr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:84](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L84)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:84](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L84)
 
 ___
 
@@ -65,4 +65,4 @@ Indicates that the OTA Provider has an update available.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:74](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:74](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L74)

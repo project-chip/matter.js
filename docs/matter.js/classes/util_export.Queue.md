@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:17](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L17)
+[packages/matter.js/src/util/Queue.ts:17](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L17)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L16)
+[packages/matter.js/src/util/Queue.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L16)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:15](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L15)
+[packages/matter.js/src/util/Queue.ts:15](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L15)
 
 ## Methods
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:46](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L46)
+[packages/matter.js/src/util/Queue.ts:46](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L46)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:19](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L19)
+[packages/matter.js/src/util/Queue.ts:19](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L19)
 
 ___
 
@@ -142,4 +142,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/util/Queue.ts#L35)
+[packages/matter.js/src/util/Queue.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Queue.ts#L35)

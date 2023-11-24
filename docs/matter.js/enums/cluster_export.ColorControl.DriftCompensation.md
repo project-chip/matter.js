@@ -28,7 +28,7 @@ The value of the ColorControl driftCompensation attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:35](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L35)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:39](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:39](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L39)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L38)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L38)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:36](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L36)
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:37](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:37](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L37)

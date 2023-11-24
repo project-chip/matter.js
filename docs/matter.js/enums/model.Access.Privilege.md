@@ -25,7 +25,7 @@ Administer privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:307](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/aspects/Access.ts#L307)
+[packages/matter.js/src/model/aspects/Access.ts:307](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L307)
 
 ___
 
@@ -37,7 +37,7 @@ Manage privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:302](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/aspects/Access.ts#L302)
+[packages/matter.js/src/model/aspects/Access.ts:302](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L302)
 
 ___
 
@@ -49,7 +49,7 @@ Operate privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:297](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/aspects/Access.ts#L297)
+[packages/matter.js/src/model/aspects/Access.ts:297](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L297)
 
 ___
 
@@ -61,4 +61,4 @@ View privilege.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:292](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/aspects/Access.ts#L292)
+[packages/matter.js/src/model/aspects/Access.ts:292](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L292)

@@ -27,4 +27,4 @@ On Wireless LAN (WLAN) protocol (see [Wake On LAN]).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:23](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts:23](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WakeOnLanCluster.ts#L23)

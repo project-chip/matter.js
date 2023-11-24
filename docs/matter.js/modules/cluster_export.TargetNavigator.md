@@ -33,7 +33,7 @@ This cluster provides an interface for UX navigation within a set of targets on 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:110](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:110](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L110)
 
 ___
 
@@ -49,7 +49,7 @@ Input to the TargetNavigator navigateTarget command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:45](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:45](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L45)
 
 ___
 
@@ -65,7 +65,7 @@ This command shall be generated in response to NavigateTarget command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:87](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L87)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:87](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L87)
 
 ___
 
@@ -81,4 +81,4 @@ This indicates an object describing the navigable target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/TargetNavigatorCluster.ts#L24)

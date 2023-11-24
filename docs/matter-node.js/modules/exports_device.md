@@ -66,7 +66,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:38
+packages/matter.js/dist/esm/device/PairedNode.d.ts:39
 
 ___
 

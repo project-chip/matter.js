@@ -63,7 +63,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:208](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/QrCodeSchema.ts#L208)
+[packages/matter.js/src/schema/QrCodeSchema.ts:208](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/QrCodeSchema.ts#L208)
 
 ___
 
@@ -113,7 +113,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -137,7 +137,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:99](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/QrCodeSchema.ts#L99)
+[packages/matter.js/src/schema/QrCodeSchema.ts:99](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/QrCodeSchema.ts#L99)
 
 ___
 
@@ -157,7 +157,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:212](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/QrCodeSchema.ts#L212)
+[packages/matter.js/src/schema/QrCodeSchema.ts:212](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/QrCodeSchema.ts#L212)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:202](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/QrCodeSchema.ts#L202)
+[packages/matter.js/src/schema/QrCodeSchema.ts:202](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/QrCodeSchema.ts#L202)
 
 ___
 
@@ -203,4 +203,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/schema/Schema.ts#L28)

@@ -25,7 +25,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/BaseElement.ts#L75)
+[packages/matter.js/src/model/elements/BaseElement.ts:75](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/BaseElement.ts#L75)
 
 ___
 
@@ -43,4 +43,4 @@ Element with optional type; used for factory functions and constructors.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:80](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/model/elements/BaseElement.ts#L80)
+[packages/matter.js/src/model/elements/BaseElement.ts:80](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/BaseElement.ts#L80)

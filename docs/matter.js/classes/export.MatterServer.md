@@ -55,7 +55,7 @@ Create a new Matter server instance
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:68](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L68)
+[packages/matter.js/src/MatterServer.ts:68](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L68)
 
 ## Properties
 
@@ -65,7 +65,7 @@ Create a new Matter server instance
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L60)
+[packages/matter.js/src/MatterServer.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L60)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:58](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L58)
+[packages/matter.js/src/MatterServer.ts:58](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L58)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:57](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L57)
+[packages/matter.js/src/MatterServer.ts:57](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L57)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L55)
+[packages/matter.js/src/MatterServer.ts:55](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L55)
 
 ___
 
@@ -107,7 +107,7 @@ Optional MatterServer options
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L70)
+[packages/matter.js/src/MatterServer.ts:70](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L70)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:54](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L54)
+[packages/matter.js/src/MatterServer.ts:54](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L54)
 
 ___
 
@@ -129,7 +129,7 @@ Storage manager instance to use for all nodes
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L69)
+[packages/matter.js/src/MatterServer.ts:69](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L69)
 
 ## Accessors
 
@@ -143,7 +143,7 @@ Storage manager instance to use for all nodes
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:73](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L73)
+[packages/matter.js/src/MatterServer.ts:73](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L73)
 
 ## Methods
 
@@ -166,7 +166,7 @@ Add a Controller node to the server
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:171](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L171)
+[packages/matter.js/src/MatterServer.ts:171](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L171)
 
 ___
 
@@ -189,7 +189,7 @@ Add a CommissioningServer node to the server
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:126](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L126)
+[packages/matter.js/src/MatterServer.ts:126](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L126)
 
 ___
 
@@ -205,7 +205,7 @@ Close the server and all nodes
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:247](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L247)
+[packages/matter.js/src/MatterServer.ts:247](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L247)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:77](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L77)
+[packages/matter.js/src/MatterServer.ts:77](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L77)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:231](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L231)
+[packages/matter.js/src/MatterServer.ts:231](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L231)
 
 ___
 
@@ -268,7 +268,7 @@ Remove a Controller node from the server, close the Controller and optionally de
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:191](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L191)
+[packages/matter.js/src/MatterServer.ts:191](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L191)
 
 ___
 
@@ -292,7 +292,7 @@ storage context.
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:142](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L142)
+[packages/matter.js/src/MatterServer.ts:142](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L142)
 
 ___
 
@@ -309,4 +309,4 @@ be announced/paired immediately.
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:212](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/MatterServer.ts#L212)
+[packages/matter.js/src/MatterServer.ts:212](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L212)

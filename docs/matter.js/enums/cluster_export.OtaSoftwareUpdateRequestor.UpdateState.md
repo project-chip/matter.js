@@ -32,7 +32,7 @@ Indicate a Node currently in the process of verifying and applying a software up
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:75](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:75](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L75)
 
 ___
 
@@ -44,7 +44,7 @@ Indicate a Node waiting caused by AwaitNextAction response.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:80](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:80](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L80)
 
 ___
 
@@ -56,7 +56,7 @@ Indicate a Node waiting after a Busy response.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:65](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:65](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L65)
 
 ___
 
@@ -68,7 +68,7 @@ Indicate a Node is capable of user consent.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:90](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L90)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:90](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L90)
 
 ___
 
@@ -80,7 +80,7 @@ Indicate a Node currently in the process of downloading a software update.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:70](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L70)
 
 ___
 
@@ -92,7 +92,7 @@ Indicate a Node not yet in the process of software update.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:55](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:55](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L55)
 
 ___
 
@@ -104,7 +104,7 @@ Indicate a Node in the process of querying an OTA Provider.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L60)
 
 ___
 
@@ -116,7 +116,7 @@ Indicate a Node in the process of recovering to a previous version.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:85](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:85](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L85)
 
 ___
 
@@ -128,4 +128,4 @@ Current state is not yet determined.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:50](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:50](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L50)

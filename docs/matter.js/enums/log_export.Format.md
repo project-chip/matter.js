@@ -24,7 +24,7 @@ Format log messages using ANSI escape codes
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:27](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L27)
+[packages/matter.js/src/log/Logger.ts:27](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/log/Logger.ts#L27)
 
 ___
 
@@ -36,7 +36,7 @@ Format log messages using HTML tags
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:30](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L30)
+[packages/matter.js/src/log/Logger.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/log/Logger.ts#L30)
 
 ___
 
@@ -48,4 +48,4 @@ Generate text only
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:24](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/log/Logger.ts#L24)
+[packages/matter.js/src/log/Logger.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/log/Logger.ts#L24)

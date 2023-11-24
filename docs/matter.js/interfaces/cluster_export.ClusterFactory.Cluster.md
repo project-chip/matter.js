@@ -44,7 +44,7 @@ A Cluster represents a fully formed cluster with features selected.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
+[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
+[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
+[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
+[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
+[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
+[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L61)
+[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L61)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
+[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
 
 ___
 
@@ -156,4 +156,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/ClusterFactory.ts#L95)
+[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/ClusterFactory.ts#L95)

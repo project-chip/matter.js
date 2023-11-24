@@ -32,4 +32,4 @@ localization information that a Node shall utilize when conveying values to a us
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/be83914/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L29)
