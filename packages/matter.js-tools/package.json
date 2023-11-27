@@ -62,7 +62,7 @@
         "@types/chai-as-promised": "^7.1.8",
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.6",
-        "@types/npmcli__map-workspaces": "^3.0.3",
+        "@types/npmcli__map-workspaces": "^3.0.4",
         "@types/yargs": "^17.0.32"
     },
     "publishConfig": {
