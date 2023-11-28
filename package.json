@@ -36,7 +36,7 @@
         "eslint": "^8.53.0",
         "eslint-import-resolver-typescript": "^3.6.1",
         "eslint-plugin-import": "^2.29.0",
-        "lerna": "^7.4.2",
+        "lerna": "^8.0.0",
         "prettier": "^3.0.3",
         "prettier-plugin-organize-imports": "^3.2.3",
         "semver": "^7.5.4",
