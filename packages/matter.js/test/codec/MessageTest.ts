@@ -4,12 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MessageCodec } from "../../src/codec/MessageCodec.js";
+import { Message, MessageCodec } from "../../src/codec/MessageCodec.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 
 const ENCODED = ByteArray.fromHex(
     "040000000a4ff2177ea0c8a7cb6a63520520d3640000153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",
+);
+
+const ENCODED_WITH_PRIVACY_EXTENSION = ByteArray.fromHex(
+    "040000200a4ff2177ea0c8a7cb6a635203000102030520d3640000153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",
+);
+
+const ENCODED_WITH_SECURED_EXTENSION = ByteArray.fromHex(
+    "040000000a4ff2177ea0c8a7cb6a63520d20d36400000300010203153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",
 );
 
 const DECODED = {
@@ -23,6 +31,7 @@ const DECODED = {
         hasPrivacyEnhancements: false,
         isControlMessage: false,
         hasMessageExtensions: false,
+        securityFlags: 0,
     },
     payloadHeader: {
         protocolId: 0,
@@ -36,6 +45,7 @@ const DECODED = {
     payload: ByteArray.fromHex(
         "153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",
     ),
+    securityExtension: undefined,
 };
 
 const ENCODED_2 = ByteArray.fromHex(
@@ -53,6 +63,7 @@ const DECODED_2 = {
         hasPrivacyEnhancements: false,
         isControlMessage: false,
         hasMessageExtensions: false,
+        securityFlags: 0,
     },
     payloadHeader: {
         protocolId: 0,
@@ -66,6 +77,7 @@ const DECODED_2 = {
     payload: ByteArray.fromHex(
         "153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca3002201783302d95a4a9fb0decb8fdd6564b90a957681459aeee069961bea61d7b247125039d8935042501e80330022099f813dd41bd081a1c63e811828f0662594bca89cd9d4ed26f7427fdb2a027361835052501881325022c011818",
     ),
+    securityExtension: undefined,
 };
 
 describe("MessageCodec", () => {
@@ -81,6 +93,35 @@ describe("MessageCodec", () => {
 
             expect(result).deep.equal(DECODED_2);
         });
+
+        it("decodes message with message extension", () => {
+            const result = MessageCodec.decodePacket(ENCODED_WITH_PRIVACY_EXTENSION);
+
+            expect(result).deep.equal({
+                header: {
+                    ...DECODED.packetHeader,
+                    hasMessageExtensions: true,
+                    securityFlags: 0x20,
+                },
+                applicationPayload: ENCODED.slice(16),
+                messageExtension: ByteArray.fromHex("010203"),
+            });
+        });
+
+        it("decodes message with secured extension", () => {
+            const result = MessageCodec.decodePayload(MessageCodec.decodePacket(ENCODED_WITH_SECURED_EXTENSION));
+
+            const DECODED_WITH_SECURED_EXTENSION = {
+                ...DECODED,
+                payloadHeader: {
+                    ...DECODED.payloadHeader,
+                    hasSecuredExtension: true,
+                },
+                securityExtension: ByteArray.fromHex("010203"),
+            };
+
+            expect(result).deep.equal(DECODED_WITH_SECURED_EXTENSION);
+        });
     });
 
     describe("encode", () => {
@@ -94,6 +135,43 @@ describe("MessageCodec", () => {
             const result = MessageCodec.encodePacket(MessageCodec.encodePayload(DECODED_2));
 
             expect(result).deep.equal(ENCODED_2);
+        });
+
+        it("throws when encoding a message with securityExtensions data", () => {
+            expect(() =>
+                MessageCodec.encodePayload({
+                    ...DECODED,
+                    securityExtension: ByteArray.fromHex("0102030405060708090a0b0c0d0e0f10"),
+                }),
+            ).throws("Security extensions not supported.");
+        });
+
+        it("throws when encoding a message with securityExtensions flag", () => {
+            const decoded = {
+                ...DECODED,
+            } as Message;
+            decoded.payloadHeader = { ...decoded.payloadHeader }; // make copy to not change original value
+            decoded.payloadHeader.hasSecuredExtension = true;
+            expect(() => MessageCodec.encodePayload(decoded)).throws("Security extensions not supported.");
+        });
+
+        it("throws when encoding a message with messageExtension data", () => {
+            expect(() =>
+                MessageCodec.encodePacket({
+                    ...MessageCodec.encodePayload(DECODED),
+                    messageExtension: ByteArray.fromHex("0102030405060708090a0b0c0d0e0f10"),
+                }),
+            ).throws("Message extensions not supported.");
+        });
+
+        it("throws when encoding a message with messageExtension flag", () => {
+            const payload = {
+                ...MessageCodec.encodePayload(DECODED),
+            };
+            payload.header = { ...payload.header }; // make copy to not change original value
+            payload.header.hasMessageExtensions = true;
+
+            expect(() => MessageCodec.encodePacket(payload)).throws("Message extensions not supported.");
         });
     });
 });

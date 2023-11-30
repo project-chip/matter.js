@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { MatterFlowError } from "../common/MatterError.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
@@ -193,12 +193,11 @@ export class SecureSession<T> implements Session<T> {
         return Time.nowMs() - this.activeTimestamp < SLEEPY_ACTIVE_THRESHOLD_MS;
     }
 
-    decode({ header, applicationPayload, messageExtension }: Packet, aad: ByteArray): Message {
+    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: ByteArray): DecodedMessage {
         if (header.hasMessageExtensions) {
             logger.info(`Message extensions are not supported. Ignoring ${messageExtension?.toHex()}`);
         }
-        const securityFlags = aad[3];
-        const nonce = this.generateNonce(securityFlags, header.messageId, this.peerNodeId);
+        const nonce = this.generateNonce(header.securityFlags, header.messageId, this.peerNodeId);
         const message = MessageCodec.decodePayload({
             header,
             applicationPayload: Crypto.decrypt(this.decryptKey, applicationPayload, nonce, aad),

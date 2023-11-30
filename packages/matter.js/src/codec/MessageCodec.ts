@@ -24,6 +24,10 @@ export interface PacketHeader {
     destGroupId?: number;
 }
 
+export interface DecodedPacketHeader extends PacketHeader {
+    securityFlags: number; // The SecurityFlags as pure data field to be used as nonce
+}
+
 export interface PayloadHeader {
     exchangeId: number;
     protocolId: number;
@@ -40,11 +44,19 @@ export interface Packet {
     applicationPayload: ByteArray;
 }
 
+export interface DecodedPacket extends Packet {
+    header: DecodedPacketHeader;
+}
+
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;
     securityExtension?: ByteArray;
     payload: ByteArray;
+}
+
+export interface DecodedMessage extends Message {
+    packetHeader: DecodedPacketHeader;
 }
 
 const HEADER_VERSION = 0x00;
@@ -79,7 +91,7 @@ const enum SecurityFlag {
 }
 
 export class MessageCodec {
-    static decodePacket(data: ByteArray): Packet {
+    static decodePacket(data: ByteArray): DecodedPacket {
         const reader = new DataReader(data, Endian.Little);
         const header = this.decodePacketHeader(reader);
 
@@ -89,14 +101,15 @@ export class MessageCodec {
             messageExtension = reader.readByteArray(extensionLength);
         }
 
+        const applicationPayload = reader.getRemainingBytes();
         return {
             header,
             messageExtension,
-            applicationPayload: reader.getRemainingBytes(),
+            applicationPayload,
         };
     }
 
-    static decodePayload({ header, applicationPayload }: Packet): Message {
+    static decodePayload({ header, applicationPayload }: DecodedPacket): DecodedMessage {
         const reader = new DataReader(applicationPayload, Endian.Little);
         const payloadHeader = this.decodePayloadHeader(reader);
         let securityExtension: ByteArray | undefined = undefined;
@@ -130,7 +143,7 @@ export class MessageCodec {
         return ByteArray.concat(this.encodePacketHeader(header), applicationPayload);
     }
 
-    private static decodePacketHeader(reader: DataReader<Endian.Little>): PacketHeader {
+    private static decodePacketHeader(reader: DataReader<Endian.Little>): DecodedPacketHeader {
         // Read and parse message flags
         const flags = reader.readUInt8();
         const version = (flags & PacketHeaderFlag.VersionMask) >> 4;
@@ -159,9 +172,9 @@ export class MessageCodec {
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
         if (isControlMessage) throw new NotImplementedError(`Control Messages not supported`);
         const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
-        if (hasMessageExtensions) throw new NotImplementedError(`Message extensions not supported`);
 
         return {
+            securityFlags,
             sessionId,
             sourceNodeId,
             messageId,

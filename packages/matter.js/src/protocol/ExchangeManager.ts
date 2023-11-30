@@ -133,7 +133,7 @@ export class ExchangeManager<ContextT> {
         const session = this.sessionManager.getSession(packet.header.sessionId);
         if (session === undefined) throw new MatterFlowError(`Cannot find a session for ID ${packet.header.sessionId}`);
 
-        const aad = messageBytes.slice(messageBytes.length - packet.applicationPayload.length);
+        const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
         const message = session.decode(packet, aad);
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
             ? message.payloadHeader.exchangeId
