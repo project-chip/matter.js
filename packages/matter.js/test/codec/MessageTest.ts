@@ -31,6 +31,7 @@ const DECODED = {
         messageType: 0x20,
         requiresAck: true,
         ackedMessageId: undefined,
+        hasSecuredExtension: false,
     },
     payload: ByteArray.fromHex(
         "153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca250233dc240300280435052501881325022c011818",
@@ -60,6 +61,7 @@ const DECODED_2 = {
         messageType: 0x21,
         requiresAck: true,
         ackedMessageId: 401755914,
+        hasSecuredExtension: false,
     },
     payload: ByteArray.fromHex(
         "153001204715a406c6b0496ad52039e347db8528cb69a1cb2fce6f2318552ae65e103aca3002201783302d95a4a9fb0decb8fdd6564b90a957681459aeee069961bea61d7b247125039d8935042501e80330022099f813dd41bd081a1c63e811828f0662594bca89cd9d4ed26f7427fdb2a027361835052501881325022c011818",
