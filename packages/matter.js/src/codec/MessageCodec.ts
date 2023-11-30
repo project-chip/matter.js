@@ -127,7 +127,7 @@ export class MessageCodec {
 
     static encodePayload({ packetHeader, payloadHeader, payload, securityExtension }: Message): Packet {
         if (securityExtension !== undefined || payloadHeader.hasSecuredExtension) {
-            throw new NotImplementedError(`Security extensions not supported.`);
+            throw new NotImplementedError(`Security extensions not supported when encoding a payload.`);
         }
 
         return {
@@ -138,7 +138,7 @@ export class MessageCodec {
 
     static encodePacket({ header, applicationPayload, messageExtension }: Packet): ByteArray {
         if (messageExtension !== undefined || header.hasMessageExtensions) {
-            throw new NotImplementedError(`Message extensions not supported.`);
+            throw new NotImplementedError(`Message extensions not supported when encoding a packet.`);
         }
         return ByteArray.concat(this.encodePacketHeader(header), applicationPayload);
     }
