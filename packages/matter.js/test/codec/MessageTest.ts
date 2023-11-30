@@ -143,7 +143,7 @@ describe("MessageCodec", () => {
                     ...DECODED,
                     securityExtension: ByteArray.fromHex("0102030405060708090a0b0c0d0e0f10"),
                 }),
-            ).throws("Security extensions not supported.");
+            ).throws("Security extensions not supported when encoding a payload.");
         });
 
         it("throws when encoding a message with securityExtensions flag", () => {
@@ -152,7 +152,9 @@ describe("MessageCodec", () => {
             } as Message;
             decoded.payloadHeader = { ...decoded.payloadHeader }; // make copy to not change original value
             decoded.payloadHeader.hasSecuredExtension = true;
-            expect(() => MessageCodec.encodePayload(decoded)).throws("Security extensions not supported.");
+            expect(() => MessageCodec.encodePayload(decoded)).throws(
+                "Security extensions not supported when encoding a payload.",
+            );
         });
 
         it("throws when encoding a message with messageExtension data", () => {
@@ -161,7 +163,7 @@ describe("MessageCodec", () => {
                     ...MessageCodec.encodePayload(DECODED),
                     messageExtension: ByteArray.fromHex("0102030405060708090a0b0c0d0e0f10"),
                 }),
-            ).throws("Message extensions not supported.");
+            ).throws("Message extensions not supported when encoding a packet.");
         });
 
         it("throws when encoding a message with messageExtension flag", () => {
@@ -171,7 +173,9 @@ describe("MessageCodec", () => {
             payload.header = { ...payload.header }; // make copy to not change original value
             payload.header.hasMessageExtensions = true;
 
-            expect(() => MessageCodec.encodePacket(payload)).throws("Message extensions not supported.");
+            expect(() => MessageCodec.encodePacket(payload)).throws(
+                "Message extensions not supported when encoding a packet.",
+            );
         });
     });
 });
