@@ -6,10 +6,13 @@
 
 import { Logger } from "@project-chip/matter.js/log";
 import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matter.js/net";
+import { MatterCoreSpecificationV1_2 } from "@project-chip/matter.js/spec";
 import { ByteArray } from "@project-chip/matter.js/util";
-
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode.js";
+
+/** @see {@link MatterCoreSpecificationV1_2} § 4.4.4 */
+const MAX_UDP_PAYLOAD_SIZE = 1280;
 
 const logger = Logger.get("UdpChannelNode");
 
@@ -102,6 +105,12 @@ export class UdpChannelNode implements UdpChannel {
 
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void) {
         const messageListener = (data: ByteArray, { address, port }: dgram.RemoteInfo) => {
+            if (data.length > MAX_UDP_PAYLOAD_SIZE) {
+                logger.warn(
+                    `Ignoring UDP message with size ${data.length} from ${address}:${port}, which is larger than the maximum allowed size of ${MAX_UDP_PAYLOAD_SIZE}.`,
+                );
+                return;
+            }
             const netInterface = this.netInterface ?? NetworkNode.getNetInterfaceForIp(address);
             if (netInterface === undefined) return;
             listener(netInterface, address, port, data);
@@ -117,6 +126,14 @@ export class UdpChannelNode implements UdpChannel {
 
     async send(host: string, port: number, data: ByteArray) {
         return new Promise<void>((resolve, reject) => {
+            if (data.length > MAX_UDP_PAYLOAD_SIZE) {
+                reject(
+                    new NetworkError(
+                        `Cannot send UDP message with size ${data.length}, which is larger than the maximum allowed size of ${MAX_UDP_PAYLOAD_SIZE}.`,
+                    ),
+                );
+                return;
+            }
             this.socket.send(data, port, host, error => {
                 if (error !== null) {
                     reject(error);
