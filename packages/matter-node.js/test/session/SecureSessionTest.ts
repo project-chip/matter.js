@@ -34,6 +34,7 @@ const MESSAGE: Message = {
         exchangeId: 0x048d,
         protocolId: 0x0001,
         ackedMessageId: 0x00531422,
+        hasSecuredExtension: false,
     },
     payload: ByteArray.fromHex(
         "1536011535012600799ac60c37012402002403312404031824021418181535012600b771f32f3701240200240328240404182502018018181535012600b771f32f3701240200240328240402182502f1ff18181535012600ddad82d637012402002403302404031824020218181535012600ddad82d637012402002403302404021824020018181535012600ddad82d6370124020024033024040118350224003c1818181535012600ddad82d637012402002403302404001824020018181535012600799ac60c37012402002403312504fcff18240201181818290424ff0118",
@@ -62,7 +63,8 @@ describe("SecureSession", () => {
         it("decrypts a message", () => {
             const packet = MessageCodec.decodePacket(MESSAGE_ENCRYPTED);
 
-            const result = secureSession.decode(packet);
+            const aad = MESSAGE_ENCRYPTED.slice(0, MESSAGE_ENCRYPTED.length - packet.applicationPayload.length);
+            const result = secureSession.decode(packet, aad);
 
             assert.equal(result.payload.toHex(), DECRYPTED_BYTES.toHex());
         });
@@ -72,7 +74,7 @@ describe("SecureSession", () => {
         it("encrypts a message", () => {
             const result = secureSession.encode(MESSAGE);
 
-            assert.deepEqual(result.bytes.toHex(), ENCRYPTED_BYTES.toHex());
+            assert.deepEqual(result.applicationPayload.toHex(), ENCRYPTED_BYTES.toHex());
         });
     });
 });

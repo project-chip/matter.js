@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, Packet } from "../codec/MessageCodec.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { ByteArray } from "../util/ByteArray.js";
 
 export const DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS = 5000;
 export const DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS = 300;
@@ -33,7 +34,7 @@ export interface Session<T> {
 
     isSecure(): boolean;
     isPase(): boolean;
-    decode(packet: Packet): Message;
+    decode(packet: DecodedPacket, aad?: ByteArray): DecodedMessage;
     encode(message: Message): Packet;
     getMrpParameters(): MrpParameters;
     getContext(): T;

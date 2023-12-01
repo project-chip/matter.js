@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { InternalError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -40,7 +40,7 @@ export class UnsecureSession<T> implements Session<T> {
         return true;
     }
 
-    decode(packet: Packet): Message {
+    decode(packet: DecodedPacket): DecodedMessage {
         return MessageCodec.decodePayload(packet);
     }
 

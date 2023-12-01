@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
+import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
 import { MatterFlowError } from "../common/MatterError.js";
-import { Crypto } from "../crypto/Crypto.js";
+import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
@@ -84,7 +84,7 @@ export class SecureSession<T> implements Session<T> {
             sharedSecret,
             salt,
             isResumption ? SESSION_RESUMPTION_KEYS_INFO : SESSION_KEYS_INFO,
-            16 * 3,
+            CRYPTO_SYMMETRIC_KEY_LENGTH * 3,
         );
         const decryptKey = isInitiator ? keys.slice(16, 32) : keys.slice(0, 16);
         const encryptKey = isInitiator ? keys.slice(0, 16) : keys.slice(16, 32);
@@ -193,24 +193,31 @@ export class SecureSession<T> implements Session<T> {
         return Time.nowMs() - this.activeTimestamp < SLEEPY_ACTIVE_THRESHOLD_MS;
     }
 
-    decode({ header, bytes }: Packet): Message {
-        const headerBytes = MessageCodec.encodePacketHeader(header);
-        const securityFlags = headerBytes[3];
-        const nonce = this.generateNonce(securityFlags, header.messageId, this.peerNodeId);
-        return MessageCodec.decodePayload({
+    decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: ByteArray): DecodedMessage {
+        if (header.hasMessageExtensions) {
+            logger.info(`Message extensions are not supported. Ignoring ${messageExtension?.toHex()}`);
+        }
+        const nonce = this.generateNonce(header.securityFlags, header.messageId, this.peerNodeId);
+        const message = MessageCodec.decodePayload({
             header,
-            bytes: Crypto.decrypt(this.decryptKey, bytes, nonce, headerBytes),
+            applicationPayload: Crypto.decrypt(this.decryptKey, applicationPayload, nonce, aad),
         });
+
+        if (message.payloadHeader.hasSecuredExtension) {
+            logger.info(`Secured extensions are not supported. Ignoring ${message.securityExtension?.toHex()}`);
+        }
+
+        return message;
     }
 
     encode(message: Message): Packet {
         message.packetHeader.sessionId = this.peerSessionId;
-        const { header, bytes } = MessageCodec.encodePayload(message);
+        const { header, applicationPayload } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
         const sessionNodeId = this.isPase() ? UNDEFINED_NODE_ID : this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
-        return { header, bytes: Crypto.encrypt(this.encryptKey, bytes, nonce, headerBytes) };
+        return { header, applicationPayload: Crypto.encrypt(this.encryptKey, applicationPayload, nonce, headerBytes) };
     }
 
     getAttestationChallengeKey(): ByteArray {

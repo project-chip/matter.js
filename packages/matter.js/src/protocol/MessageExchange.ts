@@ -238,6 +238,7 @@ export class MessageExchange<ContextT> {
                 isInitiatorMessage: this.isInitiator,
                 requiresAck: requiresAck ?? messageType !== MessageType.StandaloneAck,
                 ackedMessageId: this.receivedMessageToAck?.packetHeader.messageId,
+                hasSecuredExtension: false,
             },
             payload,
         };
