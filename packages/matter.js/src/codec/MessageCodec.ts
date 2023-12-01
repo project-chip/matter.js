@@ -24,6 +24,10 @@ export interface PacketHeader {
     destGroupId?: number;
 }
 
+export interface DecodedPacketHeader extends PacketHeader {
+    securityFlags: number; // The SecurityFlags as pure data field to be used as nonce
+}
+
 export interface PayloadHeader {
     exchangeId: number;
     protocolId: number;
@@ -31,17 +35,28 @@ export interface PayloadHeader {
     isInitiatorMessage: boolean;
     requiresAck: boolean;
     ackedMessageId?: number;
+    hasSecuredExtension: boolean;
 }
 
 export interface Packet {
     header: PacketHeader;
-    bytes: ByteArray;
+    messageExtension?: ByteArray;
+    applicationPayload: ByteArray;
+}
+
+export interface DecodedPacket extends Packet {
+    header: DecodedPacketHeader;
 }
 
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;
+    securityExtension?: ByteArray;
     payload: ByteArray;
+}
+
+export interface DecodedMessage extends Message {
+    packetHeader: DecodedPacketHeader;
 }
 
 const HEADER_VERSION = 0x00;
@@ -76,38 +91,60 @@ const enum SecurityFlag {
 }
 
 export class MessageCodec {
-    static decodePacket(data: ByteArray): Packet {
+    static decodePacket(data: ByteArray): DecodedPacket {
         const reader = new DataReader(data, Endian.Little);
         const header = this.decodePacketHeader(reader);
 
+        let messageExtension: ByteArray | undefined = undefined;
+        if (header.hasMessageExtensions) {
+            const extensionLength = reader.readUInt16();
+            messageExtension = reader.readByteArray(extensionLength);
+        }
+
+        const applicationPayload = reader.getRemainingBytes();
         return {
             header,
-            bytes: reader.getRemainingBytes(),
+            messageExtension,
+            applicationPayload,
         };
     }
 
-    static decodePayload({ header, bytes }: Packet): Message {
-        const reader = new DataReader(bytes, Endian.Little);
+    static decodePayload({ header, applicationPayload }: DecodedPacket): DecodedMessage {
+        const reader = new DataReader(applicationPayload, Endian.Little);
+        const payloadHeader = this.decodePayloadHeader(reader);
+        let securityExtension: ByteArray | undefined = undefined;
+        if (payloadHeader.hasSecuredExtension) {
+            const extensionLength = reader.readUInt16();
+            securityExtension = reader.readByteArray(extensionLength);
+        }
         return {
             packetHeader: header,
-            payloadHeader: this.decodePayloadHeader(reader),
+            payloadHeader,
+            securityExtension,
             payload: reader.getRemainingBytes(),
         };
     }
 
-    static encodePayload({ packetHeader, payloadHeader, payload }: Message): Packet {
+    static encodePayload({ packetHeader, payloadHeader, payload, securityExtension }: Message): Packet {
+        if (securityExtension !== undefined || payloadHeader.hasSecuredExtension) {
+            throw new NotImplementedError(`Security extensions not supported when encoding a payload.`);
+        }
+
         return {
             header: packetHeader,
-            bytes: ByteArray.concat(this.encodePayloadHeader(payloadHeader), payload),
+            applicationPayload: ByteArray.concat(this.encodePayloadHeader(payloadHeader), payload),
         };
     }
 
-    static encodePacket({ header, bytes }: Packet): ByteArray {
-        return ByteArray.concat(this.encodePacketHeader(header), bytes);
+    static encodePacket({ header, applicationPayload, messageExtension }: Packet): ByteArray {
+        if (messageExtension !== undefined || header.hasMessageExtensions) {
+            throw new NotImplementedError(`Message extensions not supported when encoding a packet.`);
+        }
+        return ByteArray.concat(this.encodePacketHeader(header), applicationPayload);
     }
 
-    private static decodePacketHeader(reader: DataReader<Endian.Little>) {
-        // Read and parse flags
+    private static decodePacketHeader(reader: DataReader<Endian.Little>): DecodedPacketHeader {
+        // Read and parse message flags
         const flags = reader.readUInt8();
         const version = (flags & PacketHeaderFlag.VersionMask) >> 4;
         const hasDestNodeId = (flags & PacketHeaderFlag.HasDestNodeId) !== 0;
@@ -115,8 +152,10 @@ export class MessageCodec {
         const hasSourceNodeId = (flags & PacketHeaderFlag.HasSourceNodeId) !== 0;
 
         if (hasDestNodeId && hasDestGroupId)
-            throw new UnexpectedDataError("The header cannot contain destination group and node at the same time");
-        if (version !== HEADER_VERSION) throw new NotImplementedError(`Unsupported header version ${version}`);
+            throw new UnexpectedDataError(
+                "The header cannot contain destination group and node at the same time. Reserved for future use. Discard message.",
+            );
+        if (version !== HEADER_VERSION) throw new NotImplementedError(`Unsupported header version ${version}.`);
 
         const sessionId = reader.readUInt16();
         const securityFlags = reader.readUInt8();
@@ -133,9 +172,9 @@ export class MessageCodec {
         const isControlMessage = (securityFlags & SecurityFlag.IsControlMessage) !== 0;
         if (isControlMessage) throw new NotImplementedError(`Control Messages not supported`);
         const hasMessageExtensions = (securityFlags & SecurityFlag.HasMessageExtension) !== 0;
-        if (hasMessageExtensions) throw new NotImplementedError(`Message extensions not supported`);
 
         return {
+            securityFlags,
             sessionId,
             sourceNodeId,
             messageId,
@@ -155,7 +194,6 @@ export class MessageCodec {
         const requiresAck = (exchangeFlags & PayloadHeaderFlag.RequiresAck) !== 0;
         const hasSecuredExtension = (exchangeFlags & PayloadHeaderFlag.HasSecureExtension) !== 0;
         const hasVendorId = (exchangeFlags & PayloadHeaderFlag.HasVendorId) !== 0;
-        if (hasSecuredExtension) throw new NotImplementedError("Secured extension is not supported");
 
         const messageType = reader.readUInt8();
         const exchangeId = reader.readUInt16();
@@ -163,7 +201,15 @@ export class MessageCodec {
         const protocolId = (vendorId << 16) | reader.readUInt16();
         const ackedMessageId = isAckMessage ? reader.readUInt32() : undefined;
 
-        return { protocolId, exchangeId, messageType, isInitiatorMessage, requiresAck, ackedMessageId };
+        return {
+            protocolId,
+            exchangeId,
+            messageType,
+            isInitiatorMessage,
+            requiresAck,
+            ackedMessageId,
+            hasSecuredExtension,
+        };
     }
 
     static encodePacketHeader({
