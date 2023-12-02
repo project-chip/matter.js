@@ -47,7 +47,7 @@ export namespace TemperatureMeasurement {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.3.4.2
              */
-            minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: 32768 }),
+            minMeasuredValue: Attribute(0x1, TlvNullable(TlvInt16.bound({ min: -27315 })), { default: 32766 }),
 
             /**
              * The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that is capable of being
@@ -57,7 +57,7 @@ export namespace TemperatureMeasurement {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 2.3.4.3
              */
-            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16), { default: 32768 }),
+            maxMeasuredValue: Attribute(0x2, TlvNullable(TlvInt16), { default: 32767 }),
 
             /**
              * See Measured Value.
