@@ -15,13 +15,13 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x0,
             name: "MeasuredValue",
-            constraint: "-27315 to MaxMeasuredValue-1",
+            constraint: "MinMeasuredValue to MaxMeasuredValue",
         },
         {
             tag: "attribute",
             id: 0x1,
             name: "MinMeasuredValue",
-            default: 32766,
+            default: -27315,
             constraint: "-27315 to MaxMeasuredValue-1",
         },
         {

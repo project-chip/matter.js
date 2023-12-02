@@ -34,7 +34,7 @@ Matter.children.push({
 
         {
             tag: "attribute", name: "MinMeasuredValue", id: 0x1, type: "int16", access: "R V", conformance: "M",
-            constraint: "-27315 to MaxMeasuredValue1", default: 32768, quality: "X",
+            constraint: "-27315 to MaxMeasuredValue1", default: -27315, quality: "X",
             details: "The MinMeasuredValue attribute indicates the minimum value of MeasuredValue that is capable of " +
                 "being measured. See Measured Value for more details." +
                 "\n" +
@@ -44,7 +44,7 @@ Matter.children.push({
 
         {
             tag: "attribute", name: "MaxMeasuredValue", id: 0x2, type: "int16", access: "R V", conformance: "M",
-            constraint: "MinMeasuredValue1 to 32767", default: 32768, quality: "X",
+            constraint: "MinMeasuredValue1 to 32767", default: 32767, quality: "X",
             details: "The MaxMeasuredValue attribute indicates the maximum value of MeasuredValue that is capable of " +
                 "being measured. See Measured Value for more details." +
                 "\n" +
