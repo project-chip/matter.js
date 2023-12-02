@@ -9,9 +9,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Corrected default values for TemperatureMeasurement Cluster
+  * Handled Message extensions and Secured extensions in matter messages correctly (means they are ignored for now but read from the data stream)
+  * Handles too huge UDP messages correctly by dropping such messages
+
 ## 0.7.1 (2023-11-24)
 * Matter-Core functionality:
-  * Optimized Exchange deletion and change a throw to log when a already deleted Exchange should be deleted again 
+  * Optimized Exchange deletion and change a throw to log when a already deleted Exchange should be deleted again
 * matter.js API:
   * Added some convenient methods on PairedNode instance to access Clusters on Devices and also the RootEndpoint (if needed)
   * Added method to cancel a running discovery process for commissionable devices
