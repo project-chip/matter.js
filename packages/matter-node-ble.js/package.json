@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter-node-ble.js",
-    "version": "0.7.2-alpha.0-20231202-4c5a6707",
+    "version": "0.7.2-alpha.0-20231202-84053025",
     "description": "Matter BLE support for node.js",
     "keywords": [
         "iot",
@@ -29,12 +29,12 @@
         "build-doc": "typedoc --excludeExternals --plugin typedoc-plugin-missing-exports --plugin typedoc-plugin-markdown --tsconfig src/tsconfig.json"
     },
     "devDependencies": {
-        "@project-chip/matter.js-tools": "0.7.2-alpha.0-20231202-4c5a6707",
+        "@project-chip/matter.js-tools": "0.7.2-alpha.0-20231202-84053025",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@project-chip/matter.js": "0.7.2-alpha.0-20231202-4c5a6707"
+        "@project-chip/matter.js": "0.7.2-alpha.0-20231202-84053025"
     },
     "optionalDependencies": {
         "@abandonware/bleno": "^0.6.1",
