@@ -20,7 +20,7 @@ Matter.children.push({
 
         {
             tag: "attribute", name: "MeasuredValue", id: 0x0, type: "int16", access: "R V", conformance: "M",
-            constraint: "-27315 to MaxMeasuredValue1", quality: "X P",
+            constraint: "MinMeasuredValue to MaxMeasuredValue", quality: "X P",
 
             details: "Represents the temperature in degrees Celsius as follows:" +
                 "\n" +

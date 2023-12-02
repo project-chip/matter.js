@@ -15,7 +15,7 @@ LocalMatter.children.push({
             tag: "attribute",
             id: 0x0,
             name: "MeasuredValue",
-            constraint: "-27315 to MaxMeasuredValue-1",
+            constraint: "MinMeasuredValue to MaxMeasuredValue",
         },
         {
             tag: "attribute",
