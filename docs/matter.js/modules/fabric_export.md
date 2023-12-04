@@ -44,4 +44,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/fabric/Fabric.ts#L31)
+[packages/matter.js/src/fabric/Fabric.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L31)

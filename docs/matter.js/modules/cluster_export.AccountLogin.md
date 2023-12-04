@@ -32,7 +32,7 @@ Client.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:80](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:80](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L80)
 
 ___
 
@@ -48,7 +48,7 @@ Input to the AccountLogin getSetupPin command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:23](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L23)
 
 ___
 
@@ -65,7 +65,7 @@ account identified in the request does not match the active account of the runni
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:39](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L39)
 
 ___
 
@@ -81,4 +81,4 @@ Input to the AccountLogin login command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:54](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L54)

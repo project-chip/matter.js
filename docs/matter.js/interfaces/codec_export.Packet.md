@@ -4,22 +4,29 @@
 
 [codec/export](../modules/codec_export.md).Packet
 
+## Hierarchy
+
+- **`Packet`**
+
+  ↳ [`DecodedPacket`](codec_export.DecodedPacket.md)
+
 ## Table of contents
 
 ### Properties
 
-- [bytes](codec_export.Packet.md#bytes)
+- [applicationPayload](codec_export.Packet.md#applicationpayload)
 - [header](codec_export.Packet.md#header)
+- [messageExtension](codec_export.Packet.md#messageextension)
 
 ## Properties
 
-### bytes
+### applicationPayload
 
-• **bytes**: `Uint8Array`
+• **applicationPayload**: `Uint8Array`
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L38)
+[packages/matter.js/src/codec/MessageCodec.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L44)
 
 ___
 
@@ -29,4 +36,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:37](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L37)
+[packages/matter.js/src/codec/MessageCodec.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L42)
+
+___
+
+### messageExtension
+
+• `Optional` **messageExtension**: `Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/MessageCodec.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L43)

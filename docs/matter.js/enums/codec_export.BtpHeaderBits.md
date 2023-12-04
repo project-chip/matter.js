@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:59](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L59)
+[packages/matter.js/src/codec/BtpCodec.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L59)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:62](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L62)
+[packages/matter.js/src/codec/BtpCodec.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L62)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:61](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L61)
+[packages/matter.js/src/codec/BtpCodec.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L61)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L60)
+[packages/matter.js/src/codec/BtpCodec.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L60)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:57](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L57)
+[packages/matter.js/src/codec/BtpCodec.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L57)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:58](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L58)
+[packages/matter.js/src/codec/BtpCodec.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L58)

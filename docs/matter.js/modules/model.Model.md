@@ -40,7 +40,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:394](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L394)
+[packages/matter.js/src/model/models/Model.ts:394](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L394)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:396](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L396)
+[packages/matter.js/src/model/models/Model.ts:396](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L396)
 
 ___
 
@@ -76,4 +76,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:400](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/models/Model.ts#L400)
+[packages/matter.js/src/model/models/Model.ts:400](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L400)

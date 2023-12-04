@@ -27,7 +27,7 @@ An error occurred during association.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:124](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L124)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:124](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L124)
 
 ___
 
@@ -39,7 +39,7 @@ An error occurred during authentication.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:129](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L129)
 
 ___
 
@@ -51,7 +51,7 @@ The specified SSID could not be found.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:134](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L134)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:134](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L134)
 
 ___
 
@@ -63,4 +63,4 @@ The reason for the failure is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:119](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:119](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L119)

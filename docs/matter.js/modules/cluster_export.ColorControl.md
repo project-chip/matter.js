@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1614](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1614)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1614](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1614)
 
 ## Variables
 
@@ -82,7 +82,7 @@ These elements and properties are present in all ColorControl clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:808](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L808)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:808](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L808)
 
 ___
 
@@ -103,7 +103,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1579](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1579)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1579](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1579)
 
 ___
 
@@ -115,7 +115,7 @@ A ColorControlCluster supports these elements if it supports feature ColorLoop.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1494](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1494)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1494](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1494)
 
 ___
 
@@ -127,7 +127,7 @@ A ColorControlCluster supports these elements if it supports feature ColorTemper
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1328](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1328)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1328](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1328)
 
 ___
 
@@ -142,7 +142,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1636](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1636)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1636](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1636)
 
 ___
 
@@ -154,7 +154,7 @@ A ColorControlCluster supports these elements if it supports feature EnhancedHue
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1433](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1433)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1433](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1433)
 
 ___
 
@@ -180,7 +180,7 @@ The value of the ColorControl featureMap attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:77](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L77)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L77)
 
 ___
 
@@ -192,7 +192,7 @@ A ColorControlCluster supports these elements if it supports feature HueSaturati
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1199](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1199)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1199](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1199)
 
 ___
 
@@ -204,7 +204,7 @@ A ColorControlCluster supports these elements if it supports features HueSaturat
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1555](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1555)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1555](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1555)
 
 ___
 
@@ -226,7 +226,7 @@ The value of the ColorControl options attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:58](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L58)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L58)
 
 ___
 
@@ -242,7 +242,7 @@ Input to the ColorControl colorLoopSet command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:694](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L694)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:694](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L694)
 
 ___
 
@@ -258,7 +258,7 @@ Input to the ColorControl enhancedMoveHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:562](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L562)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:562](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L562)
 
 ___
 
@@ -274,7 +274,7 @@ Input to the ColorControl enhancedMoveToHueAndSaturation command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:627](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L627)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:627](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L627)
 
 ___
 
@@ -290,7 +290,7 @@ Input to the ColorControl enhancedMoveToHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L529)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:529](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L529)
 
 ___
 
@@ -306,7 +306,7 @@ Input to the ColorControl enhancedStepHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:590](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L590)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:590](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L590)
 
 ___
 
@@ -322,7 +322,7 @@ Input to the ColorControl moveColor command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:345](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L345)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:345](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L345)
 
 ___
 
@@ -338,7 +338,7 @@ Input to the ColorControl moveColorTemperature command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:404](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L404)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:404](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L404)
 
 ___
 
@@ -354,7 +354,7 @@ Input to the ColorControl moveHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:170](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:170](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L170)
 
 ___
 
@@ -370,7 +370,7 @@ Input to the ColorControl moveSaturation command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:255](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L255)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:255](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L255)
 
 ___
 
@@ -386,7 +386,7 @@ Input to the ColorControl moveToColor command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:332](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:332](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L332)
 
 ___
 
@@ -402,7 +402,7 @@ Input to the ColorControl moveToColorTemperature command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:392](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:392](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L392)
 
 ___
 
@@ -418,7 +418,7 @@ Input to the ColorControl moveToHueAndSaturation command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:319](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L319)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:319](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L319)
 
 ___
 
@@ -434,7 +434,7 @@ Input to the ColorControl moveToHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:129](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L129)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L129)
 
 ___
 
@@ -450,7 +450,7 @@ Input to the ColorControl moveToSaturation command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:243](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L243)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:243](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L243)
 
 ___
 
@@ -466,7 +466,7 @@ Input to the ColorControl stepColor command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:371](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:371](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L371)
 
 ___
 
@@ -482,7 +482,7 @@ Input to the ColorControl stepColorTemperature command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:464](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L464)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:464](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L464)
 
 ___
 
@@ -498,7 +498,7 @@ Input to the ColorControl stepHue command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:206](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L206)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:206](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L206)
 
 ___
 
@@ -514,7 +514,7 @@ Input to the ColorControl stepSaturation command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:284](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L284)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:284](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L284)
 
 ___
 
@@ -530,7 +530,7 @@ Input to the ColorControl stopMoveStep command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:758](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L758)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:758](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L758)
 
 ___
 
@@ -556,7 +556,7 @@ The value of ColorControl.updateFlags
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:660](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L660)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:660](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L660)
 
 ___
 
@@ -568,4 +568,4 @@ A ColorControlCluster supports these elements if it supports feature Xy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1274](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1274)
+[packages/matter.js/src/cluster/definitions/ColorControlCluster.ts:1274](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ColorControlCluster.ts#L1274)

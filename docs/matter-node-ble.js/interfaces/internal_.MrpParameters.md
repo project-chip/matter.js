@@ -20,7 +20,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:20
+matter.js/dist/esm/session/Session.d.ts:21
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:19
+matter.js/dist/esm/session/Session.d.ts:20
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:21
+matter.js/dist/esm/session/Session.d.ts:22

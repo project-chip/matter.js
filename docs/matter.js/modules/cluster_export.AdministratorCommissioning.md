@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:359](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L359)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:359](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L359)
 
 ## Variables
 
@@ -51,7 +51,7 @@ These elements and properties are present in all AdministratorCommissioning clus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:157](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:157](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L157)
 
 ___
 
@@ -63,7 +63,7 @@ A AdministratorCommissioningCluster supports these elements if it supports featu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:279](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:279](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L279)
 
 ___
 
@@ -88,7 +88,7 @@ AdministratorCommissioningCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:337](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L337)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:337](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L337)
 
 ___
 
@@ -103,7 +103,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
 
 ___
 
@@ -119,7 +119,7 @@ Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:138](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:138](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L138)
 
 ___
 
@@ -135,4 +135,4 @@ Input to the AdministratorCommissioning openCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L47)

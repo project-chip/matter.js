@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/common/TransportInterface.ts:11](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/TransportInterface.ts#L11)
+[packages/matter.js/src/common/TransportInterface.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TransportInterface.ts#L11)

@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1332](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1332)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1332](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1332)
 
 ## Variables
 
@@ -63,7 +63,7 @@ These elements and properties are present in all PowerSource clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:899](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L899)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:899](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L899)
 
 ___
 
@@ -75,7 +75,7 @@ A PowerSourceCluster supports these elements if it supports feature Battery.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1061](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1061)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1061](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1061)
 
 ___
 
@@ -99,7 +99,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1307](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1307)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1307](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1307)
 
 ___
 
@@ -114,7 +114,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1351](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1351)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1351](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1351)
 
 ___
 
@@ -126,7 +126,7 @@ A PowerSourceCluster supports these elements if it supports feature Rechargeable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1225](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1225)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1225](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1225)
 
 ___
 
@@ -138,7 +138,7 @@ A PowerSourceCluster supports these elements if it supports feature Replaceable.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1162](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1162)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:1162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L1162)
 
 ___
 
@@ -154,7 +154,7 @@ Body of the PowerSource batChargeFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:856](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L856)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:856](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L856)
 
 ___
 
@@ -170,7 +170,7 @@ Body of the PowerSource batFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:181](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L181)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:181](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L181)
 
 ___
 
@@ -186,7 +186,7 @@ Body of the PowerSource wiredFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:93](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L93)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:93](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L93)
 
 ___
 
@@ -198,4 +198,4 @@ A PowerSourceCluster supports these elements if it supports feature Wired.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:968](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L968)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:968](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L968)

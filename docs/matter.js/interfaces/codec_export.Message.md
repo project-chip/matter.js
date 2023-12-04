@@ -4,6 +4,12 @@
 
 [codec/export](../modules/codec_export.md).Message
 
+## Hierarchy
+
+- **`Message`**
+
+  ↳ [`DecodedMessage`](codec_export.DecodedMessage.md)
+
 ## Table of contents
 
 ### Properties
@@ -11,6 +17,7 @@
 - [packetHeader](codec_export.Message.md#packetheader)
 - [payload](codec_export.Message.md#payload)
 - [payloadHeader](codec_export.Message.md#payloadheader)
+- [securityExtension](codec_export.Message.md#securityextension)
 
 ## Properties
 
@@ -20,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:42](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L42)
+[packages/matter.js/src/codec/MessageCodec.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L52)
 
 ___
 
@@ -30,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:44](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L44)
+[packages/matter.js/src/codec/MessageCodec.ts:55](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L55)
 
 ___
 
@@ -40,4 +47,14 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:43](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L43)
+[packages/matter.js/src/codec/MessageCodec.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L53)
+
+___
+
+### securityExtension
+
+• `Optional` **securityExtension**: `Uint8Array`
+
+#### Defined in
+
+[packages/matter.js/src/codec/MessageCodec.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L54)

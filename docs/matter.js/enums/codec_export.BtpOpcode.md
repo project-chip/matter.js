@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:66](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/BtpCodec.ts#L66)
+[packages/matter.js/src/codec/BtpCodec.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L66)

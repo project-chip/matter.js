@@ -128,17 +128,17 @@ packages/matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 ### decode
 
-▸ **decode**(`packet`): [`Message`](../interfaces/exports_codec.Message.md)
+▸ **decode**(`packet`): [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `packet` | [`Packet`](../interfaces/exports_codec.Packet.md) |
+| `packet` | [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md) |
 
 #### Returns
 
-[`Message`](../interfaces/exports_codec.Message.md)
+[`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Implementation of
 

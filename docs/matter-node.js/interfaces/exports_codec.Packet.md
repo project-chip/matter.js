@@ -4,22 +4,29 @@
 
 [exports/codec](../modules/exports_codec.md).Packet
 
+## Hierarchy
+
+- **`Packet`**
+
+  ↳ [`DecodedPacket`](exports_codec.DecodedPacket.md)
+
 ## Table of contents
 
 ### Properties
 
-- [bytes](exports_codec.Packet.md#bytes)
+- [applicationPayload](exports_codec.Packet.md#applicationpayload)
 - [header](exports_codec.Packet.md#header)
+- [messageExtension](exports_codec.Packet.md#messageextension)
 
 ## Properties
 
-### bytes
+### applicationPayload
 
-• **bytes**: `Uint8Array`
+• **applicationPayload**: `Uint8Array`
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:30
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:35
 
 ___
 
@@ -29,4 +36,14 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:29
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:33
+
+___
+
+### messageExtension
+
+• `Optional` **messageExtension**: `Uint8Array`
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:34

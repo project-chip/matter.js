@@ -32,7 +32,7 @@
 
 ### decodePacket
 
-▸ `Static` **decodePacket**(`data`): [`Packet`](../interfaces/codec_export.Packet.md)
+▸ `Static` **decodePacket**(`data`): [`DecodedPacket`](../interfaces/codec_export.DecodedPacket.md)
 
 #### Parameters
 
@@ -42,17 +42,17 @@
 
 #### Returns
 
-[`Packet`](../interfaces/codec_export.Packet.md)
+[`DecodedPacket`](../interfaces/codec_export.DecodedPacket.md)
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:79](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L79)
+[packages/matter.js/src/codec/MessageCodec.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L94)
 
 ___
 
 ### decodePacketHeader
 
-▸ `Static` `Private` **decodePacketHeader**(`reader`): `Object`
+▸ `Static` `Private` **decodePacketHeader**(`reader`): [`DecodedPacketHeader`](../interfaces/codec_export.DecodedPacketHeader.md)
 
 #### Parameters
 
@@ -62,43 +62,31 @@ ___
 
 #### Returns
 
-`Object`
-
-| Name | Type |
-| :------ | :------ |
-| `destGroupId` | `undefined` \| [`GroupId`](../modules/datatype_export.md#groupid) |
-| `destNodeId` | `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) |
-| `hasMessageExtensions` | ``false`` |
-| `hasPrivacyEnhancements` | ``false`` |
-| `isControlMessage` | ``false`` |
-| `messageId` | `number` |
-| `sessionId` | `number` |
-| `sessionType` | [`SessionType`](../enums/codec_export.SessionType.md) |
-| `sourceNodeId` | `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) |
+[`DecodedPacketHeader`](../interfaces/codec_export.DecodedPacketHeader.md)
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:109](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L109)
+[packages/matter.js/src/codec/MessageCodec.ts:146](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L146)
 
 ___
 
 ### decodePayload
 
-▸ `Static` **decodePayload**(`«destructured»`): [`Message`](../interfaces/codec_export.Message.md)
+▸ `Static` **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/codec_export.DecodedMessage.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Packet`](../interfaces/codec_export.Packet.md) |
+| `«destructured»` | [`DecodedPacket`](../interfaces/codec_export.DecodedPacket.md) |
 
 #### Returns
 
-[`Message`](../interfaces/codec_export.Message.md)
+[`DecodedMessage`](../interfaces/codec_export.DecodedMessage.md)
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:89](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L89)
+[packages/matter.js/src/codec/MessageCodec.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L112)
 
 ___
 
@@ -118,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:151](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L151)
+[packages/matter.js/src/codec/MessageCodec.ts:190](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L190)
 
 ___
 
@@ -138,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:105](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L105)
+[packages/matter.js/src/codec/MessageCodec.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L139)
 
 ___
 
@@ -158,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:169](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L169)
+[packages/matter.js/src/codec/MessageCodec.ts:215](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L215)
 
 ___
 
@@ -178,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:98](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L98)
+[packages/matter.js/src/codec/MessageCodec.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L128)
 
 ___
 
@@ -198,7 +186,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:209](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L209)
+[packages/matter.js/src/codec/MessageCodec.ts:255](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L255)
 
 ___
 
@@ -218,4 +206,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:195](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L195)
+[packages/matter.js/src/codec/MessageCodec.ts:241](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L241)

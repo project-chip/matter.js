@@ -26,7 +26,7 @@ ID.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:41](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L41)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L41)
 
 ___
 
@@ -38,7 +38,7 @@ The actual variants.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:51](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L51)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L51)
 
 ___
 
@@ -50,7 +50,7 @@ The canonical name to use for the variants.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:46](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L46)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L46)
 
 ___
 
@@ -62,4 +62,4 @@ The shared tag across all variants.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L35)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L35)

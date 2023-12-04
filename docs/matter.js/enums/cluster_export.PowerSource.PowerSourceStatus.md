@@ -27,7 +27,7 @@ Indicate the source is available and currently supplying power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:40](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L40)
 
 ___
 
@@ -39,7 +39,7 @@ Indicate the source is available, but is not currently supplying power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:45](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L45)
 
 ___
 
@@ -51,7 +51,7 @@ Indicate the source is not currently available to supply power
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:50](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L50)
 
 ___
 
@@ -63,4 +63,4 @@ Indicate the source status is not specified
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:35](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L35)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L35)
