@@ -38,7 +38,7 @@
     "devDependencies": {
         "@project-chip/matter.js-tools": "0.7.2",
         "@types/bn.js": "^5.1.5",
-        "@types/chai": "^4.3.10",
+        "@types/chai": "^4.3.11",
         "@types/elliptic": "^6.4.16",
         "@types/mocha": "^10.0.6",
         "chai": "^4.3.10",
