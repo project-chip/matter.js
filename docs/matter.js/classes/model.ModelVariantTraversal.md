@@ -59,7 +59,7 @@ model variants have different names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
 
 ## Properties
 
@@ -69,7 +69,7 @@ model variants have different names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L60)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L60)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:59](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L59)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L59)
 
 ## Methods
 
@@ -121,7 +121,7 @@ Create a VariantDetail from a VariantMap.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:268](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L268)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:268](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L268)
 
 ___
 
@@ -143,7 +143,7 @@ Determine if we are entering a cluster and install cluster state if so.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:128](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L128)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L128)
 
 ___
 
@@ -166,7 +166,7 @@ names may be selected, otherwise the name of the model is returned.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:115](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L115)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L115)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:197](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L197)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:197](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L197)
 
 ___
 
@@ -209,7 +209,7 @@ invoked while traversal is ongoing.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:73](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L73)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L73)
 
 ___
 
@@ -234,7 +234,7 @@ from traverse().
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:109](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L109)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L109)
 
 ___
 
@@ -256,4 +256,4 @@ This is the function that actually recurses during the visit.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:141](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L141)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L141)

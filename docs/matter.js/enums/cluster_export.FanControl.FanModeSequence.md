@@ -29,7 +29,7 @@ The value of the FanControl fanModeSequence attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:96](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:96](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L96)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:98](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L98)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:98](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L98)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:95](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L95)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:95](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L95)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:97](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L97)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L97)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:100](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L100)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:100](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L100)
 
 ___
 
@@ -79,4 +79,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:99](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L99)
+[packages/matter.js/src/cluster/definitions/FanControlCluster.ts:99](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/FanControlCluster.ts#L99)

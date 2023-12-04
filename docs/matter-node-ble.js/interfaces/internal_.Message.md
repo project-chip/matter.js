@@ -4,6 +4,12 @@
 
 [<internal>](../modules/internal_.md).Message
 
+## Hierarchy
+
+- **`Message`**
+
+  ↳ [`DecodedMessage`](internal_.DecodedMessage.md)
+
 ## Table of contents
 
 ### Properties
@@ -11,6 +17,7 @@
 - [packetHeader](internal_.Message.md#packetheader)
 - [payload](internal_.Message.md#payload)
 - [payloadHeader](internal_.Message.md#payloadheader)
+- [securityExtension](internal_.Message.md#securityextension)
 
 ## Properties
 
@@ -20,7 +27,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:33
+matter.js/dist/esm/codec/MessageCodec.d.ts:41
 
 ___
 
@@ -30,7 +37,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:35
+matter.js/dist/esm/codec/MessageCodec.d.ts:44
 
 ___
 
@@ -40,4 +47,14 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:34
+matter.js/dist/esm/codec/MessageCodec.d.ts:42
+
+___
+
+### securityExtension
+
+• `Optional` **securityExtension**: `Uint8Array`
+
+#### Defined in
+
+matter.js/dist/esm/codec/MessageCodec.d.ts:43

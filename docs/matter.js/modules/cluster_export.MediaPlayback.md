@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:501](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L501)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:501](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L501)
 
 ## Variables
 
@@ -55,7 +55,7 @@ A MediaPlaybackCluster supports these elements if it supports feature AdvancedSe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:312](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L312)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:312](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L312)
 
 ___
 
@@ -67,7 +67,7 @@ These elements and properties are present in all MediaPlayback clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:213](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L213)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:213](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L213)
 
 ___
 
@@ -89,7 +89,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:478](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L478)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:478](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L478)
 
 ___
 
@@ -104,7 +104,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:515](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L515)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:515](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L515)
 
 ___
 
@@ -120,7 +120,7 @@ This structure defines a playback position within a media stream being played.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:147](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L147)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:147](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L147)
 
 ___
 
@@ -136,7 +136,7 @@ This command shall be generated in response to various Playback Commands.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:88](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L88)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:88](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L88)
 
 ___
 
@@ -152,7 +152,7 @@ Input to the MediaPlayback seek command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:174](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L174)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:174](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L174)
 
 ___
 
@@ -168,7 +168,7 @@ Input to the MediaPlayback skipBackward command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:128](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L128)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L128)
 
 ___
 
@@ -184,7 +184,7 @@ Input to the MediaPlayback skipForward command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:109](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L109)
 
 ___
 
@@ -196,4 +196,4 @@ A MediaPlaybackCluster supports these elements if it supports feature VariableSp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:427](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L427)
+[packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts:427](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/MediaPlaybackCluster.ts#L427)

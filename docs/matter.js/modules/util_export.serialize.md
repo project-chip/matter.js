@@ -25,7 +25,7 @@ Custom serialization function key.
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:166](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/String.ts#L166)
+[packages/matter.js/src/util/String.ts:166](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/String.ts#L166)
 
 ## Functions
 
@@ -48,7 +48,7 @@ representation.
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:172](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/String.ts#L172)
+[packages/matter.js/src/util/String.ts:172](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/String.ts#L172)
 
 ___
 
@@ -70,4 +70,4 @@ Test whether a value serializes as a structure or a primitive.
 
 #### Defined in
 
-[packages/matter.js/src/util/String.ts:187](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/String.ts#L187)
+[packages/matter.js/src/util/String.ts:187](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/String.ts#L187)

@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1121](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1121)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1121](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1121)
 
 ## Variables
 
@@ -64,7 +64,7 @@ These elements and properties are present in all NetworkCommissioning clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:593](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L593)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:593](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L593)
 
 ___
 
@@ -97,7 +97,7 @@ NetworkCommissioningCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1081](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1081)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1081](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1081)
 
 ___
 
@@ -112,7 +112,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1141](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1141)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1141)
 
 ___
 
@@ -124,7 +124,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature Thr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1029](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1029)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:1029](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L1029)
 
 ___
 
@@ -140,7 +140,7 @@ Input to the NetworkCommissioning addOrUpdateThreadNetwork command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:545](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L545)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:545](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L545)
 
 ___
 
@@ -156,7 +156,7 @@ Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:493](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L493)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:493](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L493)
 
 ___
 
@@ -172,7 +172,7 @@ Input to the NetworkCommissioning connectNetwork command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:409](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L409)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:409](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L409)
 
 ___
 
@@ -217,7 +217,7 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:448](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L448)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:448](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L448)
 
 ___
 
@@ -258,7 +258,7 @@ See Section 11.8.7.2.2, “DebugText Field” for usage.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:390](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L390)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:390](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L390)
 
 ___
 
@@ -274,7 +274,7 @@ NetworkInfoStruct struct describes an existing network configuration, as provide
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:26](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L26)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L26)
 
 ___
 
@@ -290,7 +290,7 @@ Input to the NetworkCommissioning removeNetwork command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:355](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L355)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:355](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L355)
 
 ___
 
@@ -306,7 +306,7 @@ Input to the NetworkCommissioning reorderNetwork command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:482](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L482)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:482](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L482)
 
 ___
 
@@ -322,7 +322,7 @@ Input to the NetworkCommissioning scanNetworks command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L140)
 
 ___
 
@@ -344,7 +344,7 @@ NetworkingStatus matching the response.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:287](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L287)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:287](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L287)
 
 ___
 
@@ -360,7 +360,7 @@ ThreadInterfaceScanResultStruct represents a single Thread network scan result.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:258](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L258)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:258](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L258)
 
 ___
 
@@ -376,7 +376,7 @@ WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:231](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L231)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:231](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L231)
 
 ___
 
@@ -388,7 +388,7 @@ A NetworkCommissioningCluster supports these elements if it supports feature WiF
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:997](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L997)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:997](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L997)
 
 ___
 
@@ -401,7 +401,7 @@ ThreadNetworkInterface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:750](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L750)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:750](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L750)
 
 ___
 
@@ -428,4 +428,4 @@ WiFiInterfaceScanResultStruct.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:166](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts:166](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/NetworkCommissioningCluster.ts#L166)

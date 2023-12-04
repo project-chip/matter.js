@@ -4,22 +4,29 @@
 
 [<internal>](../modules/internal_.md).Packet
 
+## Hierarchy
+
+- **`Packet`**
+
+  ↳ [`DecodedPacket`](internal_.DecodedPacket.md)
+
 ## Table of contents
 
 ### Properties
 
-- [bytes](internal_.Packet.md#bytes)
+- [applicationPayload](internal_.Packet.md#applicationpayload)
 - [header](internal_.Packet.md#header)
+- [messageExtension](internal_.Packet.md#messageextension)
 
 ## Properties
 
-### bytes
+### applicationPayload
 
-• **bytes**: `Uint8Array`
+• **applicationPayload**: `Uint8Array`
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:30
+matter.js/dist/esm/codec/MessageCodec.d.ts:35
 
 ___
 
@@ -29,4 +36,14 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:29
+matter.js/dist/esm/codec/MessageCodec.d.ts:33
+
+___
+
+### messageExtension
+
+• `Optional` **messageExtension**: `Uint8Array`
+
+#### Defined in
+
+matter.js/dist/esm/codec/MessageCodec.d.ts:34

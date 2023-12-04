@@ -10,6 +10,7 @@
 
 - [ackedMessageId](codec_export.PayloadHeader.md#ackedmessageid)
 - [exchangeId](codec_export.PayloadHeader.md#exchangeid)
+- [hasSecuredExtension](codec_export.PayloadHeader.md#hassecuredextension)
 - [isInitiatorMessage](codec_export.PayloadHeader.md#isinitiatormessage)
 - [messageType](codec_export.PayloadHeader.md#messagetype)
 - [protocolId](codec_export.PayloadHeader.md#protocolid)
@@ -23,7 +24,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:33](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L33)
+[packages/matter.js/src/codec/MessageCodec.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L37)
 
 ___
 
@@ -33,7 +34,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:28](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L28)
+[packages/matter.js/src/codec/MessageCodec.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L32)
+
+___
+
+### hasSecuredExtension
+
+• **hasSecuredExtension**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/codec/MessageCodec.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L38)
 
 ___
 
@@ -43,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L31)
+[packages/matter.js/src/codec/MessageCodec.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L35)
 
 ___
 
@@ -53,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L30)
+[packages/matter.js/src/codec/MessageCodec.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L34)
 
 ___
 
@@ -63,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:29](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L29)
+[packages/matter.js/src/codec/MessageCodec.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L33)
 
 ___
 
@@ -73,4 +84,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:32](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/codec/MessageCodec.ts#L32)
+[packages/matter.js/src/codec/MessageCodec.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L36)

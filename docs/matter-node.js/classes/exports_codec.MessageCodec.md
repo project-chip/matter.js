@@ -39,7 +39,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:46
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:58
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:47
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:59
 
 ___
 
@@ -59,13 +59,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:50
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:62
 
 ## Methods
 
 ### decodePacket
 
-▸ `Static` **decodePacket**(`data`): [`Packet`](../interfaces/exports_codec.Packet.md)
+▸ `Static` **decodePacket**(`data`): [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md)
 
 #### Parameters
 
@@ -75,31 +75,31 @@ packages/matter.js/dist/esm/codec/MessageCodec.d.ts:50
 
 #### Returns
 
-[`Packet`](../interfaces/exports_codec.Packet.md)
+[`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:42
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:54
 
 ___
 
 ### decodePayload
 
-▸ `Static` **decodePayload**(`«destructured»`): [`Message`](../interfaces/exports_codec.Message.md)
+▸ `Static` **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Packet`](../interfaces/exports_codec.Packet.md) |
+| `«destructured»` | [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md) |
 
 #### Returns
 
-[`Message`](../interfaces/exports_codec.Message.md)
+[`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:43
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:55
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:45
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:57
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:48
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:60
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:44
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:56
 
 ___
 
@@ -179,4 +179,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:49
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:61

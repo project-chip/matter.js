@@ -43,7 +43,7 @@ any other Endpoint of any Node.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:324](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L324)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:324](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L324)
 
 ___
 
@@ -59,7 +59,7 @@ Body of the AccessControl accessControlEntryChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:256](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L256)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:256](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L256)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:110](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L110)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:110](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L110)
 
 ___
 
@@ -89,7 +89,7 @@ Body of the AccessControl accessControlExtensionChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:303](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:303](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L303)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:212](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L212)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:212](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L212)
 
 ___
 
@@ -117,4 +117,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:101](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L101)
+[packages/matter.js/src/cluster/definitions/AccessControlCluster.ts:101](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccessControlCluster.ts#L101)

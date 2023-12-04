@@ -70,7 +70,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:10
+packages/matter.js/dist/esm/session/Session.d.ts:11
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:9
+packages/matter.js/dist/esm/session/Session.d.ts:10
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:11
+packages/matter.js/dist/esm/session/Session.d.ts:12
 
 ___
 
@@ -172,7 +172,7 @@ Maximum sleep interval of node when in active mode.
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:13
+packages/matter.js/dist/esm/session/Session.d.ts:14
 
 ___
 
@@ -184,7 +184,7 @@ Minimum amount the node SHOULD stay awake after network activity.
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:17
+packages/matter.js/dist/esm/session/Session.d.ts:18
 
 ___
 
@@ -196,7 +196,7 @@ Maximum sleep interval of node when in idle mode.
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/Session.d.ts:15
+packages/matter.js/dist/esm/session/Session.d.ts:16
 
 ___
 

@@ -4,6 +4,12 @@
 
 [<internal>](../modules/internal_.md).PacketHeader
 
+## Hierarchy
+
+- **`PacketHeader`**
+
+  ↳ [`DecodedPacketHeader`](internal_.DecodedPacketHeader.md)
+
 ## Table of contents
 
 ### Properties

@@ -76,7 +76,7 @@ The properties are named identical as in the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/Scanner.ts#L16)
+[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Scanner.ts#L16)
 
 ___
 
@@ -89,7 +89,7 @@ Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/Scanner.ts#L60)
+[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Scanner.ts#L60)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/ServerAddress.ts#L18)
+[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L18)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/ServerAddress.ts#L13)
+[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L13)
 
 ___
 
@@ -201,7 +201,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/ServerAddress.ts#L7)
+[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L7)
 
 ## Variables
 
@@ -236,7 +236,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
 
 ___
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
 
 ## Functions
 
@@ -266,7 +266,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/ServerAddress.ts#L20)
+[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L20)
 
 ___
 
@@ -299,7 +299,7 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/TryCatchHandler.ts#L19)
+[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TryCatchHandler.ts#L19)
 
 ___
 
@@ -332,4 +332,4 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/common/TryCatchHandler.ts#L47)
+[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TryCatchHandler.ts#L47)

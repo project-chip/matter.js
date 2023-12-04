@@ -75,7 +75,7 @@ the CommissioningController on commissioning or when connecting.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:159](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L159)
+[packages/matter.js/src/device/PairedNode.ts:159](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L159)
 
 ## Properties
 
@@ -85,7 +85,7 @@ the CommissioningController on commissioning or when connecting.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:161](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L161)
+[packages/matter.js/src/device/PairedNode.ts:161](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L161)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:139](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L139)
+[packages/matter.js/src/device/PairedNode.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L139)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:129](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L129)
+[packages/matter.js/src/device/PairedNode.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L129)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:130](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L130)
+[packages/matter.js/src/device/PairedNode.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L130)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:160](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L160)
+[packages/matter.js/src/device/PairedNode.ts:160](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L160)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:162](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L162)
+[packages/matter.js/src/device/PairedNode.ts:162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L162)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:131](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L131)
+[packages/matter.js/src/device/PairedNode.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L131)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:163](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L163)
+[packages/matter.js/src/device/PairedNode.ts:163](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L163)
 
 ___
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:135](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L135)
+[packages/matter.js/src/device/PairedNode.ts:135](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L135)
 
 ## Accessors
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:178](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L178)
+[packages/matter.js/src/device/PairedNode.ts:178](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L178)
 
 ## Methods
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:749](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L749)
+[packages/matter.js/src/device/PairedNode.ts:749](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L749)
 
 ___
 
@@ -225,7 +225,7 @@ Create a device object from the data read from the device.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:513](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L513)
+[packages/matter.js/src/device/PairedNode.ts:513](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L513)
 
 ___
 
@@ -241,7 +241,7 @@ De-Commission (unpair) the device from this controller by removing the fabric fr
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:626](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L626)
+[packages/matter.js/src/device/PairedNode.ts:626](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L626)
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:744](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L744)
+[packages/matter.js/src/device/PairedNode.ts:744](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L744)
 
 ___
 
@@ -271,7 +271,7 @@ Ensure that the node is connected by creating a new InteractionClient if needed.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:223](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L223)
+[packages/matter.js/src/device/PairedNode.ts:223](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L223)
 
 ___
 
@@ -304,7 +304,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:806](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L806)
+[packages/matter.js/src/device/PairedNode.ts:806](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L806)
 
 ___
 
@@ -337,7 +337,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:790](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L790)
+[packages/matter.js/src/device/PairedNode.ts:790](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L790)
 
 ___
 
@@ -359,7 +359,7 @@ Returns the device/endpoint with the given endpoint ID.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:617](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L617)
+[packages/matter.js/src/device/PairedNode.ts:617](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L617)
 
 ___
 
@@ -375,7 +375,7 @@ Returns the functional devices/endpoints (those below the Root Endpoint) known f
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:612](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L612)
+[packages/matter.js/src/device/PairedNode.ts:612](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L612)
 
 ___
 
@@ -392,7 +392,7 @@ ClusterClients of the Devices of the node should be used instead.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:263](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L263)
+[packages/matter.js/src/device/PairedNode.ts:263](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L263)
 
 ___
 
@@ -424,7 +424,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:774](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L774)
+[packages/matter.js/src/device/PairedNode.ts:774](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L774)
 
 ___
 
@@ -456,7 +456,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:759](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L759)
+[packages/matter.js/src/device/PairedNode.ts:759](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L759)
 
 ___
 
@@ -470,7 +470,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:621](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L621)
+[packages/matter.js/src/device/PairedNode.ts:621](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L621)
 
 ___
 
@@ -486,7 +486,7 @@ Handles a node shutDown event (if supported by the node and received).
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:381](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L381)
+[packages/matter.js/src/device/PairedNode.ts:381](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L381)
 
 ___
 
@@ -502,7 +502,7 @@ Initialize the node after the InteractionClient was created and to subscribe att
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:232](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L232)
+[packages/matter.js/src/device/PairedNode.ts:232](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L232)
 
 ___
 
@@ -525,7 +525,7 @@ Reads all data from the device and create a device object structure out of it.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:397](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L397)
+[packages/matter.js/src/device/PairedNode.ts:397](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L397)
 
 ___
 
@@ -547,7 +547,7 @@ Method to log the structure of this node with all endpoint and clusters.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:268](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L268)
+[packages/matter.js/src/device/PairedNode.ts:268](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L268)
 
 ___
 
@@ -569,7 +569,7 @@ Opens a Basic Commissioning Window (uses the original Passcode printed on the de
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:651](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L651)
+[packages/matter.js/src/device/PairedNode.ts:651](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L651)
 
 ___
 
@@ -591,7 +591,7 @@ Opens an Enhanced Commissioning Window (uses a generated random Passcode) with t
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:679](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L679)
+[packages/matter.js/src/device/PairedNode.ts:679](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L679)
 
 ___
 
@@ -608,7 +608,7 @@ was closed or the device wen offline and was detected as being online again.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:199](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L199)
+[packages/matter.js/src/device/PairedNode.ts:199](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L199)
 
 ___
 
@@ -628,7 +628,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:182](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L182)
+[packages/matter.js/src/device/PairedNode.ts:182](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L182)
 
 ___
 
@@ -650,7 +650,7 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:446](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L446)
+[packages/matter.js/src/device/PairedNode.ts:446](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L446)
 
 ___
 
@@ -676,7 +676,7 @@ false this is executed automatically. Alternatively you can manually subscribe b
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:281](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L281)
+[packages/matter.js/src/device/PairedNode.ts:281](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L281)
 
 ___
 
@@ -690,7 +690,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:389](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L389)
+[packages/matter.js/src/device/PairedNode.ts:389](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L389)
 
 ___
 
@@ -714,4 +714,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:141](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/device/PairedNode.ts#L141)
+[packages/matter.js/src/device/PairedNode.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L141)

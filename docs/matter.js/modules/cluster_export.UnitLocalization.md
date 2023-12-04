@@ -36,7 +36,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:127](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L127)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L127)
 
 ## Variables
 
@@ -48,7 +48,7 @@ These elements and properties are present in all UnitLocalization clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:54](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L54)
 
 ___
 
@@ -75,7 +75,7 @@ factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:105](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L105)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L105)
 
 ___
 
@@ -90,7 +90,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:139](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L139)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L139)
 
 ___
 
@@ -102,4 +102,4 @@ A UnitLocalizationCluster supports these elements if it supports feature Tempera
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:72](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UnitLocalizationCluster.ts#L72)

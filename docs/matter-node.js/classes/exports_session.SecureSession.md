@@ -448,17 +448,18 @@ ___
 
 ### decode
 
-▸ **decode**(`«destructured»`): [`Message`](../interfaces/exports_codec.Message.md)
+▸ **decode**(`«destructured»`, `aad`): [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Packet`](../interfaces/exports_codec.Packet.md) |
+| `«destructured»` | [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md) |
+| `aad` | `Uint8Array` |
 
 #### Returns
 
-[`Message`](../interfaces/exports_codec.Message.md)
+[`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Implementation of
 

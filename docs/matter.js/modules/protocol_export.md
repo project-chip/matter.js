@@ -54,7 +54,7 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/MessageExchange.ts#L36)
+[packages/matter.js/src/protocol/MessageExchange.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L36)

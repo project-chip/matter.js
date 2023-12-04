@@ -4,6 +4,12 @@
 
 [exports/codec](../modules/exports_codec.md).PacketHeader
 
+## Hierarchy
+
+- **`PacketHeader`**
+
+  ↳ [`DecodedPacketHeader`](exports_codec.DecodedPacketHeader.md)
+
 ## Table of contents
 
 ### Properties

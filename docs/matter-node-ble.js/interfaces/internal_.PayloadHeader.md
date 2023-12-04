@@ -10,6 +10,7 @@
 
 - [ackedMessageId](internal_.PayloadHeader.md#ackedmessageid)
 - [exchangeId](internal_.PayloadHeader.md#exchangeid)
+- [hasSecuredExtension](internal_.PayloadHeader.md#hassecuredextension)
 - [isInitiatorMessage](internal_.PayloadHeader.md#isinitiatormessage)
 - [messageType](internal_.PayloadHeader.md#messagetype)
 - [protocolId](internal_.PayloadHeader.md#protocolid)
@@ -23,7 +24,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:26
+matter.js/dist/esm/codec/MessageCodec.d.ts:29
 
 ___
 
@@ -33,7 +34,17 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:21
+matter.js/dist/esm/codec/MessageCodec.d.ts:24
+
+___
+
+### hasSecuredExtension
+
+• **hasSecuredExtension**: `boolean`
+
+#### Defined in
+
+matter.js/dist/esm/codec/MessageCodec.d.ts:30
 
 ___
 
@@ -43,7 +54,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:24
+matter.js/dist/esm/codec/MessageCodec.d.ts:27
 
 ___
 
@@ -53,7 +64,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:23
+matter.js/dist/esm/codec/MessageCodec.d.ts:26
 
 ___
 
@@ -63,7 +74,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:22
+matter.js/dist/esm/codec/MessageCodec.d.ts:25
 
 ___
 
@@ -73,4 +84,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:25
+matter.js/dist/esm/codec/MessageCodec.d.ts:28
