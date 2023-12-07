@@ -13,6 +13,7 @@ import { Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
 import { toBigInt } from "../util/Number.js";
 import { Branded } from "../util/Type.js";
+import { CaseAuthenticatedTag } from "./CaseAuthenticatedTag.js";
 
 /**
  * A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
@@ -50,6 +51,21 @@ export namespace NodeId {
             throw new UnexpectedDataError(`Invalid group ID: ${groupId}`);
         }
         return NodeId(BigInt("0xFFFFFFFFFFFF" + groupId.toString(16).padStart(4, "0")));
+    };
+
+    /**
+     * This subrange of Node ID is used to assign an access control subject to a group of peer nodes that share a
+     * single CASE session as specified in Section 6.6.2.1.2, “Subjects identified by CASE Authenticated Tag”.
+     */
+    export const getFromCaseAuthenticatedTag = (id: CaseAuthenticatedTag): NodeId => {
+        if (id < 0 || id > 0xffffffff) {
+            throw new UnexpectedDataError(`Invalid CASE Authenticated tag: ${id}`);
+        }
+        return NodeId(BigInt("0xFFFFFFFD" + id.toString(16).padStart(8, "0")));
+    };
+
+    export const extractAsCaseAuthenticatedTag = (nodeId: NodeId): CaseAuthenticatedTag => {
+        return CaseAuthenticatedTag(Number(nodeId.toString(16).slice(8)));
     };
 }
 
