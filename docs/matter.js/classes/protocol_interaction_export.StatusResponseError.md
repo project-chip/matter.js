@@ -43,7 +43,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:79](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L79)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L79)
 
 ## Properties
 
@@ -53,7 +53,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:82](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L82)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:82](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L82)
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)
+[packages/matter.js/src/protocol/interaction/InteractionMessenger.ts:81](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionMessenger.ts#L81)

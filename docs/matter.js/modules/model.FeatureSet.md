@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:47](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/definitions/FeatureSet.ts#L47)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/FeatureSet.ts#L47)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:45](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/definitions/FeatureSet.ts#L45)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/FeatureSet.ts#L45)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FeatureSet.ts:46](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/definitions/FeatureSet.ts#L46)
+[packages/matter.js/src/model/definitions/FeatureSet.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/FeatureSet.ts#L46)

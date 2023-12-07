@@ -23,4 +23,4 @@ measurement.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:22](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/BinaryInputBasicCluster.ts#L22)

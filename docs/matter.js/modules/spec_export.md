@@ -8,7 +8,10 @@
 
 - [MatterApplicationClusterSpecificationV1\_0](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_0.md)
 - [MatterApplicationClusterSpecificationV1\_1](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_1.md)
+- [MatterApplicationClusterSpecificationV1\_2](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_2.md)
 - [MatterCoreSpecificationV1\_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md)
 - [MatterCoreSpecificationV1\_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md)
+- [MatterCoreSpecificationV1\_2](../interfaces/spec_export.MatterCoreSpecificationV1_2.md)
 - [MatterDeviceLibrarySpecificationV1\_0](../interfaces/spec_export.MatterDeviceLibrarySpecificationV1_0.md)
 - [MatterDeviceLibrarySpecificationV1\_1](../interfaces/spec_export.MatterDeviceLibrarySpecificationV1_1.md)
+- [MatterDeviceLibrarySpecificationV1\_2](../interfaces/spec_export.MatterDeviceLibrarySpecificationV1_2.md)

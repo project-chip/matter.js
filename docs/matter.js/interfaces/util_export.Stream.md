@@ -33,7 +33,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Stream.ts:12](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Stream.ts#L12)
+[packages/matter.js/src/util/Stream.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Stream.ts#L12)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Stream.ts:13](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/util/Stream.ts#L13)
+[packages/matter.js/src/util/Stream.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Stream.ts#L13)

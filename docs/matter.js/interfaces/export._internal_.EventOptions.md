@@ -24,4 +24,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:730](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/Cluster.ts#L730)
+[packages/matter.js/src/cluster/Cluster.ts:730](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L730)

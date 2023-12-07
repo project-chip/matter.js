@@ -26,4 +26,4 @@ This cluster provides a feature to tag an endpoint with zero or more labels.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:23](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/UserLabelCluster.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/UserLabelCluster.ts#L23)

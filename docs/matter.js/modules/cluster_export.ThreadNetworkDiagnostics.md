@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1174](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1174)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1174](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1174)
 
 ## Variables
 
@@ -58,7 +58,7 @@ These elements and properties are present in all ThreadNetworkDiagnostics cluste
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:480](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L480)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:480](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L480)
 
 ___
 
@@ -82,7 +82,7 @@ ThreadNetworkDiagnosticsCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1150](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1150)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1150](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1150)
 
 ___
 
@@ -97,7 +97,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1191](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1191)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:1191](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L1191)
 
 ___
 
@@ -109,7 +109,7 @@ A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:714](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L714)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:714](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L714)
 
 ___
 
@@ -121,7 +121,7 @@ A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:821](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L821)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:821](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L821)
 
 ___
 
@@ -133,7 +133,7 @@ A ThreadNetworkDiagnosticsCluster supports these elements if it supports feature
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:744](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L744)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:744](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L744)
 
 ___
 
@@ -149,7 +149,7 @@ Body of the ThreadNetworkDiagnostics connectionStatus event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:416](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L416)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:416](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L416)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:74](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L74)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:74](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L74)
 
 ___
 
@@ -179,7 +179,7 @@ Body of the ThreadNetworkDiagnostics networkFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:423](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L423)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:423](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L423)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:283](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L283)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:283](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L283)
 
 ___
 
@@ -212,7 +212,7 @@ This field shall specify the RLOC16 for the Node for which this route table entr
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:196](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L196)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:196](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L196)
 
 ___
 
@@ -226,4 +226,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:262](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L262)
+[packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts:262](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThreadNetworkDiagnosticsCluster.ts#L262)

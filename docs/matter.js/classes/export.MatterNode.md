@@ -47,7 +47,7 @@ Abstract base class that represents a node in the matter ecosystem.
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:14](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L14)
+[packages/matter.js/src/MatterNode.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L14)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:16](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L16)
+[packages/matter.js/src/MatterNode.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L16)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:18](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L18)
+[packages/matter.js/src/MatterNode.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L18)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:22](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L22)
+[packages/matter.js/src/MatterNode.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L22)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L24)
+[packages/matter.js/src/MatterNode.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L24)
 
 ___
 
@@ -135,4 +135,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:20](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterNode.ts#L20)
+[packages/matter.js/src/MatterNode.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L20)

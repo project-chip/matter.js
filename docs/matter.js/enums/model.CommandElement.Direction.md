@@ -21,7 +21,7 @@ Indicates request vs response command.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:37](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/CommandElement.ts#L37)
+[packages/matter.js/src/model/elements/CommandElement.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L37)
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:38](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/elements/CommandElement.ts#L38)
+[packages/matter.js/src/model/elements/CommandElement.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L38)

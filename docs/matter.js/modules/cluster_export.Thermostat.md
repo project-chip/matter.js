@@ -69,7 +69,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1537](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1537)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1537](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1537)
 
 ## Variables
 
@@ -95,7 +95,7 @@ The value of the Thermostat acErrorCode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:336](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L336)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:336](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L336)
 
 ___
 
@@ -119,7 +119,7 @@ The value of the Thermostat alarmMask attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:136](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:136](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L136)
 
 ___
 
@@ -131,7 +131,7 @@ A ThermostatCluster supports these elements if it supports feature AutoMode.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1274](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1274)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1274](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1274)
 
 ___
 
@@ -143,7 +143,7 @@ These elements and properties are present in all Thermostat clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:579](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L579)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:579](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L579)
 
 ___
 
@@ -164,7 +164,7 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1494](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1494)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1494](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1494)
 
 ___
 
@@ -179,7 +179,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1570](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1570)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1570](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1570)
 
 ___
 
@@ -191,7 +191,7 @@ A ThermostatCluster supports these elements if it supports features Cooling and 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1228](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1228)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1228](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1228)
 
 ___
 
@@ -203,7 +203,7 @@ A ThermostatCluster supports these elements if it supports feature Cooling.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1111](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1111)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1111)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:456](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L456)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:456](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L456)
 
 ___
 
@@ -238,7 +238,7 @@ A ThermostatCluster supports these elements if it supports features Heating and 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1251](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1251)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1251](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1251)
 
 ___
 
@@ -250,7 +250,7 @@ A ThermostatCluster supports these elements if it supports feature Heating.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1019](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1019)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1019](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1019)
 
 ___
 
@@ -267,7 +267,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:467](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L467)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:467](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L467)
 
 ___
 
@@ -279,7 +279,7 @@ A ThermostatCluster supports these elements if doesn't support feature LTNE.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1201](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1201)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1201](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1201)
 
 ___
 
@@ -301,7 +301,7 @@ The value of the Thermostat occupancy attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:428](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L428)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:428](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L428)
 
 ___
 
@@ -313,7 +313,7 @@ A ThermostatCluster supports these elements if it supports feature Occupancy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:999](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L999)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:999](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L999)
 
 ___
 
@@ -337,7 +337,7 @@ The value of the Thermostat remoteSensing attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L36)
 
 ___
 
@@ -349,7 +349,7 @@ A ThermostatCluster supports these elements if it supports feature ScheduleConfi
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1308](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1308)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1308](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1308)
 
 ___
 
@@ -361,7 +361,7 @@ A ThermostatCluster supports these elements if it supports features Setback and 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1426](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1426)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1426](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1426)
 
 ___
 
@@ -373,7 +373,7 @@ A ThermostatCluster supports these elements if it supports feature Setback.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1365](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1365)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:1365](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L1365)
 
 ___
 
@@ -397,7 +397,7 @@ The value of the Thermostat thermostatProgrammingOperationMode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:164](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:164](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L164)
 
 ___
 
@@ -425,7 +425,7 @@ The value of the Thermostat thermostatRunningState attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:186](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L186)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:186](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L186)
 
 ___
 
@@ -441,7 +441,7 @@ Input to the Thermostat getWeeklySchedule command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:505](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L505)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:505](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L505)
 
 ___
 
@@ -455,7 +455,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:513](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L513)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:513](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L513)
 
 ___
 
@@ -471,7 +471,7 @@ Input to the Thermostat setWeeklySchedule command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:493](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L493)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:493](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L493)
 
 ___
 
@@ -487,7 +487,7 @@ Input to the Thermostat setpointRaiseLower command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:418](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L418)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:418](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L418)
 
 ___
 
@@ -503,4 +503,4 @@ This represents a single transition in a Thermostat schedule
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:474](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L474)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:474](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L474)

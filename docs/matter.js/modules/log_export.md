@@ -43,4 +43,4 @@ Log messages to the console.  This is the default logging mechanism.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:171](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/log/Logger.ts#L171)
+[packages/matter.js/src/log/Logger.ts:171](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/log/Logger.ts#L171)

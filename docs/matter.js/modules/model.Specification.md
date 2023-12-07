@@ -31,4 +31,4 @@ Information on the source of an element.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:29](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/definitions/Specification.ts#L29)
+[packages/matter.js/src/model/definitions/Specification.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/Specification.ts#L29)

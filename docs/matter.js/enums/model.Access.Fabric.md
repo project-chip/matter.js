@@ -24,7 +24,7 @@ Writable only by scoped fabric.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:277](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L277)
+[packages/matter.js/src/model/aspects/Access.ts:277](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Access.ts#L277)
 
 ___
 
@@ -36,7 +36,7 @@ Readable and writable only by scoped fabric.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:282](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L282)
+[packages/matter.js/src/model/aspects/Access.ts:282](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Access.ts#L282)
 
 ___
 
@@ -48,4 +48,4 @@ Extension - allows for override of fabric specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Access.ts:272](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/model/aspects/Access.ts#L272)
+[packages/matter.js/src/model/aspects/Access.ts:272](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Access.ts#L272)

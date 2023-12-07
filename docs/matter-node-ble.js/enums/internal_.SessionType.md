@@ -19,7 +19,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:38
+matter.js/dist/esm/codec/MessageCodec.d.ts:50
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:39
+matter.js/dist/esm/codec/MessageCodec.d.ts:51

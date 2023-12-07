@@ -448,17 +448,18 @@ ___
 
 ### decode
 
-▸ **decode**(`«destructured»`): [`Message`](../interfaces/internal_.Message.md)
+▸ **decode**(`«destructured»`, `aad`): [`DecodedMessage`](../interfaces/internal_.DecodedMessage.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Packet`](../interfaces/internal_.Packet.md) |
+| `«destructured»` | [`DecodedPacket`](../interfaces/internal_.DecodedPacket.md) |
+| `aad` | `Uint8Array` |
 
 #### Returns
 
-[`Message`](../interfaces/internal_.Message.md)
+[`DecodedMessage`](../interfaces/internal_.DecodedMessage.md)
 
 #### Implementation of
 

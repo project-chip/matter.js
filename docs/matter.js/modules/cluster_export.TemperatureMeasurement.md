@@ -27,4 +27,4 @@ provision of notifications of temperature measurements.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:24](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/TemperatureMeasurementCluster.ts#L24)

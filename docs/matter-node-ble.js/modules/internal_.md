@@ -107,6 +107,9 @@
 - [CommandPath](../interfaces/internal_.CommandPath.md)
 - [CommandWithPath](../interfaces/internal_.CommandWithPath.md)
 - [Commands](../interfaces/internal_.Commands.md)
+- [DecodedMessage](../interfaces/internal_.DecodedMessage.md)
+- [DecodedPacket](../interfaces/internal_.DecodedPacket.md)
+- [DecodedPacketHeader](../interfaces/internal_.DecodedPacketHeader.md)
 - [DeviceTypeDefinition](../interfaces/internal_.DeviceTypeDefinition.md)
 - [EndpointOptions](../interfaces/internal_.EndpointOptions.md)
 - [Event](../interfaces/internal_.Event.md)
@@ -983,7 +986,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ___
 

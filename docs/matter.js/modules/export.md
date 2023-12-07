@@ -8,10 +8,13 @@
 
 - [MatterApplicationClusterSpecificationV1\_0](export.md#matterapplicationclusterspecificationv1_0)
 - [MatterApplicationClusterSpecificationV1\_1](export.md#matterapplicationclusterspecificationv1_1)
+- [MatterApplicationClusterSpecificationV1\_2](export.md#matterapplicationclusterspecificationv1_2)
 - [MatterCoreSpecificationV1\_0](export.md#mattercorespecificationv1_0)
 - [MatterCoreSpecificationV1\_1](export.md#mattercorespecificationv1_1)
+- [MatterCoreSpecificationV1\_2](export.md#mattercorespecificationv1_2)
 - [MatterDeviceLibrarySpecificationV1\_0](export.md#matterdevicelibraryspecificationv1_0)
 - [MatterDeviceLibrarySpecificationV1\_1](export.md#matterdevicelibraryspecificationv1_1)
+- [MatterDeviceLibrarySpecificationV1\_2](export.md#matterdevicelibraryspecificationv1_2)
 
 ### Modules
 
@@ -54,6 +57,12 @@ Re-exports [MatterApplicationClusterSpecificationV1_1](../interfaces/spec_export
 
 ___
 
+### MatterApplicationClusterSpecificationV1\_2
+
+Re-exports [MatterApplicationClusterSpecificationV1_2](../interfaces/spec_export.MatterApplicationClusterSpecificationV1_2.md)
+
+___
+
 ### MatterCoreSpecificationV1\_0
 
 Re-exports [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md)
@@ -63,6 +72,12 @@ ___
 ### MatterCoreSpecificationV1\_1
 
 Re-exports [MatterCoreSpecificationV1_1](../interfaces/spec_export.MatterCoreSpecificationV1_1.md)
+
+___
+
+### MatterCoreSpecificationV1\_2
+
+Re-exports [MatterCoreSpecificationV1_2](../interfaces/spec_export.MatterCoreSpecificationV1_2.md)
 
 ___
 
@@ -76,6 +91,12 @@ ___
 
 Re-exports [MatterDeviceLibrarySpecificationV1_1](../interfaces/spec_export.MatterDeviceLibrarySpecificationV1_1.md)
 
+___
+
+### MatterDeviceLibrarySpecificationV1\_2
+
+Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/spec_export.MatterDeviceLibrarySpecificationV1_2.md)
+
 ## Type Aliases
 
 ### CommissioningControllerOptions
@@ -86,7 +107,7 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:36](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/CommissioningController.ts#L36)
+[packages/matter.js/src/CommissioningController.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningController.ts#L36)
 
 ___
 
@@ -104,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L31)
+[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterServer.ts#L31)
 
 ___
 
@@ -116,7 +137,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:73](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/CommissioningController.ts#L73)
+[packages/matter.js/src/CommissioningController.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningController.ts#L73)
 
 ___
 
@@ -133,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/MatterServer.ts#L19)
+[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterServer.ts#L19)
 
 ## Variables
 
@@ -143,4 +164,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:75](https://github.com/project-chip/matter.js/blob/ac2c2688/packages/matter.js/src/CommissioningServer.ts#L75)
+[packages/matter.js/src/CommissioningServer.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningServer.ts#L75)

@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.7.2 (2023-12-04)
 * Matter-Core functionality:
   * Corrected default values for TemperatureMeasurement Cluster
   * Handled Message extensions and Secured extensions in matter messages correctly (means they are ignored for now but read from the data stream)
