@@ -32,6 +32,17 @@ export namespace CaseAuthenticatedTag {
         }
         return tag + 1;
     };
+
+    export const validateNocTagList = (tags: CaseAuthenticatedTag[]) => {
+        if (tags.length > 3) {
+            throw new ValidationError(`Too many CaseAuthenticatedTags (${tags.length}).`);
+        }
+        // Get only the tags: upper 16 bits are identifier value, lower 16 bits are tag version
+        const tagIdentifierValues = new Set<number>(tags.map(cat => CaseAuthenticatedTag.getIdentifyValue(cat)));
+        if (tagIdentifierValues.size !== tags.length) {
+            throw new ValidationError("CASE Authenticated Tags field contains duplicate identifier values.");
+        }
+    };
 }
 
 /** Tlv schema for an CASE Authenticated Tag. */

@@ -26,7 +26,7 @@ import {
     SHA256_CMS,
     SubjectKeyIdentifier_X509,
 } from "../codec/DerCodec.js";
-import { ImplementationError, MatterError } from "../common/MatterError.js";
+import { MatterError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Key, PublicKey } from "../crypto/Key.js";
 import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
@@ -390,18 +390,7 @@ export class CertificateManager {
     }: Unsigned<OperationalCertificate>) {
         // If we ever get a second case of repeated elements, solve is more generic
         if (caseAuthenticatedTags !== undefined) {
-            if (caseAuthenticatedTags.length > 3) {
-                throw new ImplementationError(
-                    `Invalid length (${caseAuthenticatedTags.length}) of CASE Authenticated Tags field.`,
-                );
-            }
-            // Get only the tags: upper 16 bits are identifier value, lower 16 bits are tag version
-            const tagIdentifierValues = new Set<number>(
-                caseAuthenticatedTags.map(cat => CaseAuthenticatedTag.getIdentifyValue(cat)),
-            );
-            if (tagIdentifierValues.size !== caseAuthenticatedTags.length) {
-                throw new ImplementationError("CASE Authenticated Tags field contains duplicate identifier values.");
-            }
+            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
         }
 
         const cat0 = caseAuthenticatedTags?.[0];
