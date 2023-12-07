@@ -19,7 +19,8 @@ import { NoProviderError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
 import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
-import { Crypto } from "./crypto/Crypto.js";
+import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
+import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -88,6 +89,7 @@ export class MatterController {
         adminVendorId: VendorId = VendorId(DEFAULT_ADMIN_VENDOR_ID),
         adminFabricId: FabricId = FabricId(DEFAULT_FABRIC_ID),
         adminFabricIndex: FabricIndex = FabricIndex(DEFAULT_FABRIC_INDEX),
+        caseAuthenticatedTags?: CaseAuthenticatedTag[],
     ): Promise<MatterController> {
         const certificateManager = new RootCertificateManager(storage);
 
@@ -107,14 +109,19 @@ export class MatterController {
             );
         } else {
             const rootNodeId = NodeId.getRandomOperationalNodeId();
-            const ipkValue = Crypto.getRandomData(16);
+            const ipkValue = Crypto.getRandomData(CRYPTO_SYMMETRIC_KEY_LENGTH);
             const fabricBuilder = new FabricBuilder()
                 .setRootCert(certificateManager.getRootCert())
                 .setRootNodeId(rootNodeId)
                 .setIdentityProtectionKey(ipkValue)
                 .setRootVendorId(adminVendorId);
             fabricBuilder.setOperationalCert(
-                certificateManager.generateNoc(fabricBuilder.getPublicKey(), adminFabricId, rootNodeId),
+                certificateManager.generateNoc(
+                    fabricBuilder.getPublicKey(),
+                    adminFabricId,
+                    rootNodeId,
+                    caseAuthenticatedTags,
+                ),
             );
 
             return new MatterController(

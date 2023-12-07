@@ -115,6 +115,8 @@ export class Fabric {
             fabricObject.operationalCert,
             fabricObject.label,
             fabricObject.caseAuthenticatedTags,
+            fabricObject.scopedClusterData,
+            fabricObject.groupKeySets,
         );
     }
 
