@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../../src/common/MatterError.js";
 import { CaseAuthenticatedTag } from "../../src/datatype/CaseAuthenticatedTag.js";
 
 describe("CaseAuthenticatedTag", () => {
@@ -33,10 +32,12 @@ describe("CaseAuthenticatedTag", () => {
 
     it("should throw an error when increasing the version of a CaseAuthenticatedTag beyond the limit", () => {
         const tag = CaseAuthenticatedTag(0x1234ffff);
-        expect(() => CaseAuthenticatedTag.increaseVersion(tag)).to.throw(ValidationError);
+        expect(() => CaseAuthenticatedTag.increaseVersion(tag)).to.throw(
+            "CaseAuthenticatedTag version number must not exceed 0xffff.",
+        );
     });
 
     it("should throw an error when creating a CaseAuthenticatedTag with version number 0", () => {
-        expect(() => CaseAuthenticatedTag(0x12340000)).to.throw(ValidationError);
+        expect(() => CaseAuthenticatedTag(0x12340000)).to.throw("CaseAuthenticatedTag version number must not be 0.");
     });
 });

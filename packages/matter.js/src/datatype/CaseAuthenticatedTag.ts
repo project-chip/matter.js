@@ -17,6 +17,9 @@ import { Branded } from "../util/Type.js";
 export type CaseAuthenticatedTag = Branded<number, "CaseAuthenticatedTag">;
 
 export function CaseAuthenticatedTag(id: number): CaseAuthenticatedTag {
+    if ((id & 0xffff) === 0) {
+        throw new ValidationError("CaseAuthenticatedTag version number must not be 0.");
+    }
     return id as CaseAuthenticatedTag;
 }
 
@@ -27,10 +30,10 @@ export namespace CaseAuthenticatedTag {
 
     export const increaseVersion = (tag: CaseAuthenticatedTag) => {
         const version = getVersion(tag);
-        if (version > 0xffff) {
+        if (version === 0xffff) {
             throw new ValidationError("CaseAuthenticatedTag version number must not exceed 0xffff.");
         }
-        return tag + 1;
+        return CaseAuthenticatedTag(tag + 1);
     };
 
     export const validateNocTagList = (tags: CaseAuthenticatedTag[]) => {

@@ -9,7 +9,6 @@ import { ImplementationError } from "./common/MatterError.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
-import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -172,7 +171,7 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
         }
-        const { localPort, adminFabricId, adminVendorId, adminFabricIndex } = this.options;
+        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
 
         return await MatterController.create(
             mdnsScanner,

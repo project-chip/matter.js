@@ -101,7 +101,7 @@ describe("CertificateManager", () => {
             };
             assert.throws(
                 () => CertificateManager.nocCertToAsn1(nocWithCat),
-                new ValidationError("Invalid length (4) of CASE Authenticated Tags field."),
+                new ValidationError("Too many CaseAuthenticatedTags (4)."),
             );
         });
 

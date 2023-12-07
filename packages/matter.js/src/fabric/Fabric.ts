@@ -116,7 +116,6 @@ export class Fabric {
             fabricObject.label,
             fabricObject.caseAuthenticatedTags,
             fabricObject.scopedClusterData,
-            fabricObject.groupKeySets,
         );
     }
 
