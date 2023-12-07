@@ -31,13 +31,24 @@ export namespace NodeId {
     const OPERATIONAL_NODE_MIN = BigInt("0x0000000000000001");
     const OPERATIONAL_NODE_MAX = BigInt("0xFFFFFFEFFFFFFFFF");
 
+    /**
+     * The Unspecified Node ID (0x0000_0000_0000_0000) is a reserved value that never appears in messages or protocol
+     * usage. It exists to mark or detect the presence of uninitialized, missing, or invalid Node IDs.
+     */
+    export const UNSPECIFIED_NODE_ID = NodeId(0);
+
     export const toHexString = (nodeId: NodeId) => {
         const writer = new DataWriter(Endian.Big);
         writer.writeUInt64(nodeId);
         return writer.toByteArray().toHex().toUpperCase();
     };
 
-    export const getRandomOperationalNodeId = () => {
+    /**
+     * An Operational Node ID is a 64-bit number that uniquely identifies an individual Node on a Fabric. All messages
+     * must have an Operational Node ID as the source address. All unicast messages must have an Operational Node ID
+     * as the destination address.
+     */
+    export const getRandomOperationalNodeId = (): NodeId => {
         while (true) {
             const randomBigInt = BigInt("0x" + Crypto.getRandomData(8).toHex());
             if (randomBigInt >= OPERATIONAL_NODE_MIN && randomBigInt <= OPERATIONAL_NODE_MAX) {
@@ -46,11 +57,24 @@ export namespace NodeId {
         }
     };
 
-    export const getGroupNodeId = (groupId: number) => {
+    /** A Group Node ID is a 64-bit Node ID that contains a particular Group ID in the lower half of the Node ID. */
+    export const getFromGroupNodeId = (groupId: number): NodeId => {
         if (groupId < 0 || groupId > 0xffff) {
             throw new UnexpectedDataError(`Invalid group ID: ${groupId}`);
         }
         return NodeId(BigInt("0xFFFFFFFFFFFF" + groupId.toString(16).padStart(4, "0")));
+    };
+
+    /**
+     * A Temporary Local Node ID is a 64-bit Node ID that contains an implementation-dependent value in its lower
+     * 32 bits. This allows implementations to keep track of connections or transport-layer links and similar
+     * housekeeping internal usage purposes in contexts where an Operational Node ID is unavailable.
+     */
+    export const getFromTemporaryLocalNodeId = (id: number): NodeId => {
+        if (id < 0 || id > 0xffffffff) {
+            throw new UnexpectedDataError(`Invalid ID: ${id}`);
+        }
+        return NodeId(BigInt("0xFFFFFFFE" + id.toString(16).padStart(8, "0")));
     };
 
     /**
@@ -66,6 +90,18 @@ export namespace NodeId {
 
     export const extractAsCaseAuthenticatedTag = (nodeId: NodeId): CaseAuthenticatedTag => {
         return CaseAuthenticatedTag(Number(nodeId.toString(16).slice(8)));
+    };
+
+    /**
+     * This subrange of Node ID is used to assign an access control subject to a particular PAKE key as specified in
+     * Section 6.6.2.1.1, “PASE and Group Subjects”. An example usage would be to create an ACL entry to provide
+     * administrative access to any commissioner communicating via a PASE session established with a particular pincode.
+     */
+    export const getFromPakeKeyIdentifier = (id: number): NodeId => {
+        if (id < 0 || id > 0xffffffff) {
+            throw new UnexpectedDataError(`Invalid ID: ${id}`);
+        }
+        return NodeId(BigInt("0xFFFFFFFB" + id.toString(16).padStart(8, "0")));
     };
 }
 
