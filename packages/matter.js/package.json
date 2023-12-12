@@ -43,7 +43,7 @@
         "@types/mocha": "^10.0.6",
         "chai": "^4.3.10",
         "mocha": "^10.2.0",
-        "typescript": "^5.2.2"
+        "typescript": "^5.3.3"
     },
     "files": [
         "dist/**/*",
