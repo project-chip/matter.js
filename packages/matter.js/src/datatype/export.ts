@@ -6,6 +6,7 @@
 
 // Export Common types
 export * from "./AttributeId.js";
+export * from "./CaseAuthenticatedTag.js";
 export * from "./ClusterId.js";
 export * from "./CommandId.js";
 export * from "./DeviceTypeId.js";

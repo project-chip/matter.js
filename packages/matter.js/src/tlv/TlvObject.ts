@@ -8,6 +8,7 @@ import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";
+import { LengthConstraints } from "./TlvArray.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvWriter } from "./TlvSchema.js";
 
@@ -15,11 +16,23 @@ export interface FieldType<T> {
     id: number;
     schema: TlvSchema<T>;
     optional?: boolean;
+    repeated?: boolean;
     fallback?: T;
+}
+
+export interface RepeatedFieldType<T> extends FieldType<T> {
+    repeated: true;
+    minLength?: number;
+    maxLength?: number;
 }
 
 export interface OptionalFieldType<T> extends FieldType<T> {
     optional: true;
+}
+
+export interface OptionalRepeatedFieldType<T> extends OptionalFieldType<T> {
+    repeated: true;
+    maxLength?: number;
 }
 
 export type TlvFields = { [field: string]: FieldType<any> };
@@ -54,6 +67,9 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
 
         for (const name in this.fieldDefinitions) {
             const field = this.fieldDefinitions[name];
+            if (field.repeated && type !== TlvType.List) {
+                throw new Error("Repeated fields are only allowed in TLV List.");
+            }
             this.fieldById[field.id] = { name, field };
         }
     }
@@ -61,7 +77,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
     override encodeTlvInternal(writer: TlvWriter, value: TypeFromFields<F>, tag?: TlvTag): void {
         writer.writeTag({ type: this.type }, tag);
         for (const name in this.fieldDefinitions) {
-            const { id, schema, optional: isOptional } = this.fieldDefinitions[name];
+            const { id, schema, optional: isOptional, repeated: isRepeated } = this.fieldDefinitions[name];
             const fieldValue = (value as any)[name];
             if (fieldValue === undefined) {
                 if (!isOptional) {
@@ -69,7 +85,16 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 }
                 continue;
             }
-            schema.encodeTlvInternal(writer, fieldValue, { id });
+            if (isRepeated) {
+                if (!Array.isArray(fieldValue)) {
+                    throw new ValidationError(`Repeated field ${name} should be an array.`);
+                }
+                for (const element of fieldValue) {
+                    schema.encodeTlvInternal(writer, element, { id });
+                }
+            } else {
+                schema.encodeTlvInternal(writer, fieldValue, { id });
+            }
         }
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
@@ -91,16 +116,29 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
                 continue;
             }
             const { field, name } = fieldName;
-            result[name] = field.schema.decodeTlvInternalValue(reader, elementTypeLength);
+            const decoded = field.schema.decodeTlvInternalValue(reader, elementTypeLength);
+            if (field.repeated) {
+                if (result[name] === undefined) {
+                    result[name] = [decoded];
+                } else {
+                    result[name].push(decoded);
+                }
+            } else {
+                result[name] = decoded;
+            }
         }
         // Check mandatory fields and, if missing, populate with fallback value if defined.
         for (const name in this.fieldDefinitions) {
-            const { optional, fallback } = this.fieldDefinitions[name];
+            const { optional, fallback, repeated } = this.fieldDefinitions[name];
             if (optional) continue;
             const value = result[name];
             if (value !== undefined) continue;
             if (fallback !== undefined) {
-                result[name] = fallback;
+                if (repeated) {
+                    result[name] = [fallback];
+                } else {
+                    result[name] = fallback;
+                }
             }
         }
         return result as TypeFromFields<F>;
@@ -108,14 +146,33 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
 
     override validate(value: TypeFromFields<F>): void {
         for (const name in this.fieldDefinitions) {
-            const { optional, schema } = this.fieldDefinitions[name];
-            if ((value as any)[name] === undefined) {
+            const { optional, schema, repeated: isRepeated } = this.fieldDefinitions[name];
+            const data = (value as any)[name];
+            if (data === undefined) {
                 if (optional) {
                     continue;
                 }
                 throw new ValidationError(`Missing mandatory field ${name}`);
             }
-            schema.validate((value as any)[name]);
+            if (isRepeated) {
+                const { minLength = 2, maxLength = 65535 } = this.fieldDefinitions[name] as RepeatedFieldType<any>;
+                if (!Array.isArray(data)) {
+                    throw new ValidationError(`Repeated field ${name} should be an array.`);
+                }
+                if (data.length > maxLength)
+                    throw new ValidationError(
+                        `Repeated field list for ${name} is too long: ${data.length}, max ${maxLength}.`,
+                    );
+                if (data.length < minLength)
+                    throw new ValidationError(
+                        `Repeated field list for ${name} is too short: ${data.length}, min ${minLength}.`,
+                    );
+                for (const element of data) {
+                    schema.validate(element);
+                }
+            } else {
+                schema.validate(data);
+            }
         }
     }
 
@@ -163,12 +220,23 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
 /** Object TLV schema. */
 export const TlvObject = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.Structure);
 
-/** List TLV schema. */
-export const TlvList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
+/**
+ * List TLV schema with all tagged entries.
+ * List entries that can appear multiple times can be defined using TlvRepeatedField/TlvOptionalRepeatedField and are
+ * represented as Arrays.
+ * TODO: We represent Tlv Lists right now as named object properties. This formally does not match the spec, which
+ *      defines a list as a sequence of TLV elements with optional tag where the order matters. That's ok for now
+ *      (also with the help of "Repeated Fields") because it not makes any real difference for now for the current
+ *      existing data structures. We need to change once this changes.
+ */
+export const TlvTaggedList = <F extends TlvFields>(fields: F) => new ObjectSchema(fields, TlvType.List);
+
+// TODO Implement a real TlvList schema that matches the spec to represent a ordered list of TLV elements with optional
+//      tag.
 
 /**
  * Object TLV mandatory field. Optionally provide a fallback value to initialize the field value when devices omit
- * providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
+ * providing a value against the specifications or in special use cases. Make sure to use a value that is an equivalent
  * to the value being empty.
  */
 export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) =>
@@ -177,3 +245,39 @@ export const TlvField = <T>(id: number, schema: TlvSchema<T>, fallback?: T) =>
 /** Object TLV optional field. */
 export const TlvOptionalField = <T>(id: number, schema: TlvSchema<T>) =>
     ({ id, schema, optional: true }) as OptionalFieldType<T>;
+
+/**
+ * Object TLV mandatory field that can exist repeated in a TLV List structure. The order is preserved on encoding and
+ * decoding.
+ */
+export const TlvRepeatedField = <T>(id: number, schema: TlvSchema<T>, lengthOptions?: LengthConstraints) => {
+    const { minLength, maxLength, length } = lengthOptions ?? {};
+    return {
+        id,
+        schema,
+        optional: false,
+        repeated: true,
+        minLength: length ?? minLength,
+        maxLength: length ?? maxLength,
+    } as RepeatedFieldType<T[]>;
+};
+
+/**
+ * Object TLV optional field that can exist repeated in a TLV List structure. The order is preserved on encoding and
+ * decoding.
+ */
+export const TlvOptionalRepeatedField = <T>(
+    id: number,
+    schema: TlvSchema<T>,
+    lengthOptions?: { maxLength: number },
+) => {
+    const { maxLength } = lengthOptions ?? {};
+    return {
+        id,
+        schema,
+        optional: true,
+        repeated: true,
+        minLength: 0,
+        maxLength,
+    } as OptionalRepeatedFieldType<T[]>;
+};

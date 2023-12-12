@@ -6,6 +6,7 @@
 
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, PrivateKey } from "../crypto/Key.js";
+import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { StorageContext } from "../storage/StorageContext.js";
@@ -82,7 +83,12 @@ export class RootCertificateManager {
         return TlvRootCertificate.encode({ ...unsignedCertificate, signature });
     }
 
-    generateNoc(publicKey: ByteArray, fabricId: FabricId, nodeId: NodeId) {
+    generateNoc(
+        publicKey: ByteArray,
+        fabricId: FabricId,
+        nodeId: NodeId,
+        caseAuthenticatedTags?: CaseAuthenticatedTag[],
+    ) {
         const now = Time.get().now();
         const certId = this.nextCertificateId++;
         const unsignedCertificate = {
@@ -93,7 +99,7 @@ export class RootCertificateManager {
             issuer: { issuerRcacId: this.rootCertId },
             notBefore: jsToMatterDate(now, -1),
             notAfter: jsToMatterDate(now, 10),
-            subject: { fabricId, nodeId },
+            subject: { fabricId, nodeId, caseAuthenticatedTags },
             ellipticCurvePublicKey: publicKey,
             extensions: {
                 basicConstraints: { isCa: false },
