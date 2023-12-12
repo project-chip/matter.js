@@ -8,6 +8,7 @@ import { MatterNode } from "./MatterNode.js";
 import { ImplementationError } from "./common/MatterError.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
+import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -67,6 +68,12 @@ export type CommissioningControllerOptions = CommissioningControllerNodeOptions 
      * Default: 1
      */
     readonly adminFabricIndex?: FabricIndex;
+
+    /**
+     * CASE Authenticated Tags used to initialize the Controller the first time. Can not be changed afterward.
+     * Maximum 3 tags are supported.
+     */
+    readonly caseAuthenticatedTags?: CaseAuthenticatedTag[];
 };
 
 /** Options needed to commission a new node */
@@ -164,7 +171,7 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance !== undefined) {
             return this.controllerInstance;
         }
-        const { localPort, adminFabricId, adminVendorId, adminFabricIndex } = this.options;
+        const { localPort, adminFabricId, adminVendorId, adminFabricIndex, caseAuthenticatedTags } = this.options;
 
         return await MatterController.create(
             mdnsScanner,
@@ -181,6 +188,7 @@ export class CommissioningController extends MatterNode {
             adminVendorId,
             adminFabricId,
             adminFabricIndex,
+            caseAuthenticatedTags,
         );
     }
 

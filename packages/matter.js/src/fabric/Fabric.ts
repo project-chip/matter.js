@@ -13,6 +13,7 @@ import { Cluster } from "../cluster/Cluster.js";
 import { InternalError, MatterFlowError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { BinaryKeyPair, Key, PrivateKey } from "../crypto/Key.js";
+import { CaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
@@ -43,6 +44,7 @@ export type FabricJsonObject = {
     intermediateCACert: ByteArray | undefined;
     operationalCert: ByteArray;
     label: string;
+    caseAuthenticatedTags?: CaseAuthenticatedTag[];
     scopedClusterData: Map<number, Map<string, SupportedStorageTypes>>;
 };
 
@@ -69,6 +71,7 @@ export class Fabric {
         readonly intermediateCACert: ByteArray | undefined,
         readonly operationalCert: ByteArray,
         public label: string,
+        readonly caseAuthenticatedTags = new Array<CaseAuthenticatedTag>(),
         scopedClusterData?: Map<number, Map<string, SupportedStorageTypes>>,
     ) {
         this.scopedClusterData = scopedClusterData ?? new Map<number, Map<string, SupportedStorageTypes>>();
@@ -90,6 +93,7 @@ export class Fabric {
             intermediateCACert: this.intermediateCACert,
             operationalCert: this.operationalCert,
             label: this.label,
+            caseAuthenticatedTags: this.caseAuthenticatedTags,
             scopedClusterData: this.scopedClusterData,
         };
     }
@@ -110,6 +114,8 @@ export class Fabric {
             fabricObject.intermediateCACert,
             fabricObject.operationalCert,
             fabricObject.label,
+            fabricObject.caseAuthenticatedTags,
+            fabricObject.scopedClusterData,
         );
     }
 
@@ -246,6 +252,7 @@ export class FabricBuilder {
     private identityProtectionKey?: ByteArray;
     private fabricIndex?: FabricIndex;
     private label = "";
+    private caseAuthenticatedTags = new Array<CaseAuthenticatedTag>();
 
     getPublicKey() {
         return this.keyPair.publicKey;
@@ -272,11 +279,15 @@ export class FabricBuilder {
     setOperationalCert(operationalCert: ByteArray) {
         this.operationalCert = operationalCert;
         const {
-            subject: { nodeId, fabricId },
+            subject: { nodeId, fabricId, caseAuthenticatedTags },
         } = TlvOperationalCertificate.decode(operationalCert);
         logger.debug(`FabricBuilder setOperationalCert: nodeId=${nodeId}, fabricId=${fabricId}`);
         this.fabricId = FabricId(fabricId);
         this.nodeId = nodeId;
+        if (caseAuthenticatedTags !== undefined) {
+            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+            this.caseAuthenticatedTags = caseAuthenticatedTags;
+        }
         return this;
     }
 
@@ -359,6 +370,7 @@ export class FabricBuilder {
             this.intermediateCACert,
             this.operationalCert,
             this.label,
+            this.caseAuthenticatedTags,
         );
     }
 }
