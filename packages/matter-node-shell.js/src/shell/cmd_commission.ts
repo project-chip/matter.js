@@ -82,10 +82,10 @@ export default function commands(theNode: MatterNode) {
                                                 instanceId !== undefined
                                                     ? { instanceId }
                                                     : discriminator !== undefined
-                                                    ? { longDiscriminator: discriminator }
-                                                    : shortDiscriminator !== undefined
-                                                    ? { shortDiscriminator }
-                                                    : {},
+                                                      ? { longDiscriminator: discriminator }
+                                                      : shortDiscriminator !== undefined
+                                                        ? { shortDiscriminator }
+                                                        : {},
                                             discoveryCapabilities: {
                                                 ble,
                                                 onIpNetwork: true,
