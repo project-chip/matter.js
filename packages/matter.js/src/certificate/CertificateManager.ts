@@ -29,13 +29,14 @@ import {
 import { MatterError } from "../common/MatterError.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { Key, PublicKey } from "../crypto/Key.js";
+import { CaseAuthenticatedTag, TlvCaseAuthenticatedTag } from "../datatype/CaseAuthenticatedTag.js";
 import { FabricId, TlvFabricId } from "../datatype/FabricId.js";
 import { NodeId, TlvNodeId } from "../datatype/NodeId.js";
 import { TlvVendorId, VendorId } from "../datatype/VendorId.js";
 import { TlvArray } from "../tlv/TlvArray.js";
 import { TlvBoolean } from "../tlv/TlvBoolean.js";
 import { TlvUInt16, TlvUInt32, TlvUInt64, TlvUInt8 } from "../tlv/TlvNumber.js";
-import { TlvField, TlvList, TlvObject, TlvOptionalField } from "../tlv/TlvObject.js";
+import { TlvField, TlvObject, TlvOptionalField, TlvOptionalRepeatedField, TlvTaggedList } from "../tlv/TlvObject.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { TlvByteString, TlvString } from "../tlv/TlvString.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -62,6 +63,13 @@ function intTo16Chars(value: bigint | number) {
     return byteArray.toHex().toUpperCase();
 }
 
+function uInt16To8Chars(value: number) {
+    const byteArray = new ByteArray(4);
+    const dataView = byteArray.getDataView();
+    dataView.setUint32(0, value);
+    return byteArray.toHex().toUpperCase();
+}
+
 function uInt16To4Chars(value: number) {
     const byteArray = new ByteArray(2);
     const dataView = byteArray.getDataView();
@@ -75,6 +83,11 @@ export const CommonName_X520 = (name: string) => [DerObject("550403", { value: n
 /** matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1 */
 export const NodeId_Matter = (nodeId: NodeId) => [DerObject("2b0601040182a27c0101", { value: intTo16Chars(nodeId) })];
 
+/** matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2 */
+export const FirmwareSigningId_Matter = (signingId: number) => [
+    DerObject("2b0601040182a27c0102", { value: intTo16Chars(signingId) }),
+];
+
 /** matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3 */
 export const IcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a27c0103", { value: intTo16Chars(id) })];
 
@@ -84,12 +97,15 @@ export const RcacId_Matter = (id: bigint | number) => [DerObject("2b0601040182a2
 /** matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5 */
 export const FabricId_Matter = (id: FabricId) => [DerObject("2b0601040182a27c0105", { value: intTo16Chars(id) })];
 
+/** matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6 */
+export const NocCat_Matter = (cat: number) => [DerObject("2b0601040182a27c0106", { value: uInt16To8Chars(cat) })];
+
 /** matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1 */
 export const VendorId_Matter = (vendorId: VendorId) => [
     DerObject("2b0601040182a27c0201", { value: uInt16To4Chars(vendorId) }),
 ];
 
-/** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2 */
+/** matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2 */
 export const ProductId_Matter = (id: number) => [DerObject("2b0601040182a27c0202", { value: uInt16To4Chars(id) })];
 
 export const TlvRootCertificate = TlvObject({
@@ -97,7 +113,7 @@ export const TlvRootCertificate = TlvObject({
     signatureAlgorithm: TlvField(2, TlvUInt8),
     issuer: TlvField(
         3,
-        TlvList({
+        TlvTaggedList({
             issuerRcacId: TlvOptionalField(20, TlvUInt64),
         }),
     ),
@@ -105,7 +121,7 @@ export const TlvRootCertificate = TlvObject({
     notAfter: TlvField(5, TlvUInt32),
     subject: TlvField(
         6,
-        TlvList({
+        TlvTaggedList({
             rcacId: TlvField(20, TlvUInt64),
         }),
     ),
@@ -114,7 +130,7 @@ export const TlvRootCertificate = TlvObject({
     ellipticCurvePublicKey: TlvField(9, TlvByteString),
     extensions: TlvField(
         10,
-        TlvList({
+        TlvTaggedList({
             basicConstraints: TlvField(
                 1,
                 TlvObject({
@@ -137,7 +153,7 @@ export const TlvOperationalCertificate = TlvObject({
     signatureAlgorithm: TlvField(2, TlvUInt8),
     issuer: TlvField(
         3,
-        TlvList({
+        TlvTaggedList({
             issuerRcacId: TlvOptionalField(20, TlvUInt64),
         }),
     ),
@@ -145,9 +161,10 @@ export const TlvOperationalCertificate = TlvObject({
     notAfter: TlvField(5, TlvUInt32),
     subject: TlvField(
         6,
-        TlvList({
+        TlvTaggedList({
             fabricId: TlvField(21, TlvFabricId),
             nodeId: TlvField(17, TlvNodeId),
+            caseAuthenticatedTags: TlvOptionalRepeatedField(22, TlvCaseAuthenticatedTag, { maxLength: 3 }),
         }),
     ),
     publicKeyAlgorithm: TlvField(7, TlvUInt8),
@@ -155,7 +172,7 @@ export const TlvOperationalCertificate = TlvObject({
     ellipticCurvePublicKey: TlvField(9, TlvByteString),
     extensions: TlvField(
         10,
-        TlvList({
+        TlvTaggedList({
             basicConstraints: TlvField(
                 1,
                 TlvObject({
@@ -179,7 +196,7 @@ export const TlvIntermediateCertificate = TlvObject({
     signatureAlgorithm: TlvField(2, TlvUInt8),
     issuer: TlvField(
         3,
-        TlvList({
+        TlvTaggedList({
             issuerRcacId: TlvOptionalField(20, TlvUInt64),
         }),
     ),
@@ -187,7 +204,7 @@ export const TlvIntermediateCertificate = TlvObject({
     notAfter: TlvField(5, TlvUInt32),
     subject: TlvField(
         6,
-        TlvList({
+        TlvTaggedList({
             fabricId: TlvOptionalField(21, TlvFabricId),
             icacId: TlvField(19, TlvUInt64),
         }),
@@ -197,7 +214,7 @@ export const TlvIntermediateCertificate = TlvObject({
     ellipticCurvePublicKey: TlvField(9, TlvByteString),
     extensions: TlvField(
         10,
-        TlvList({
+        TlvTaggedList({
             basicConstraints: TlvField(
                 1,
                 TlvObject({
@@ -367,10 +384,19 @@ export class CertificateManager {
         notBefore,
         notAfter,
         issuer: { issuerRcacId },
-        subject: { fabricId, nodeId },
+        subject: { fabricId, nodeId, caseAuthenticatedTags },
         ellipticCurvePublicKey,
         extensions: { subjectKeyIdentifier, authorityKeyIdentifier },
     }: Unsigned<OperationalCertificate>) {
+        // If we ever get a second case of repeated elements, solve is more generic
+        if (caseAuthenticatedTags !== undefined) {
+            CaseAuthenticatedTag.validateNocTagList(caseAuthenticatedTags);
+        }
+
+        const cat0 = caseAuthenticatedTags?.[0];
+        const cat1 = caseAuthenticatedTags?.[1];
+        const cat2 = caseAuthenticatedTags?.[2];
+
         return DerCodec.encode({
             version: ContextTagged(0, 2),
             serialNumber: serialNumber[0],
@@ -385,6 +411,9 @@ export class CertificateManager {
             subject: {
                 fabricId: FabricId_Matter(fabricId),
                 nodeId: NodeId_Matter(NodeId(nodeId)),
+                cat0: cat0 !== undefined ? NocCat_Matter(cat0) : undefined,
+                cat1: cat1 !== undefined ? NocCat_Matter(cat1) : undefined,
+                cat2: cat2 !== undefined ? NocCat_Matter(cat2) : undefined,
             },
             publicKey: PublicKeyEcPrime256v1_X962(ellipticCurvePublicKey),
             extensions: ContextTagged(3, {

@@ -158,6 +158,10 @@ export class SecureSession<T> implements Session<T> {
         );
     }
 
+    get caseAuthenticatedTags() {
+        return this.fabric?.caseAuthenticatedTags ?? [];
+    }
+
     get closingAfterExchangeFinished() {
         return this._closingAfterExchangeFinished;
     }

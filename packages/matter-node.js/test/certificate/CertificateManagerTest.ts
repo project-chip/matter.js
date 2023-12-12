@@ -11,7 +11,9 @@ import {
     TlvRootCertificate,
 } from "@project-chip/matter.js/certificate";
 import { BYTES_KEY, DerCodec, DerNode, ELEMENTS_KEY, EcdsaWithSHA256_X962 } from "@project-chip/matter.js/codec";
+import { ValidationError } from "@project-chip/matter.js/common";
 import { Crypto, PrivateKey, PublicKey } from "@project-chip/matter.js/crypto";
+import { CaseAuthenticatedTag } from "@project-chip/matter.js/datatype";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
@@ -31,6 +33,10 @@ const NOC_CERT_TLV = TlvOperationalCertificate.decode(
 );
 const NOC_CERT_ASN1 = ByteArray.fromHex(
     "3082017fa003020102020101300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a30443120301e060a2b0601040182a27c01050c10303030303030303030303030303030313120301e060a2b0601040182a27c01010c10303030303030303030303030303044413059301306072a8648ce3d020106082a8648ce3d03010703420004e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2a38183308180300c0603551d130101ff04023000300e0603551d0f0101ff04040302078030200603551d250101ff0416301406082b0601050507030206082b06010505070301301d0603551d0e04160414c524e05cad04a826ecda84501766732b5f181354301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
+);
+
+const NOC_CERT_CAT_ASN1 = ByteArray.fromHex(
+    "308201cea003020102020101300a06082a8648ce3d04030230223120301e060a2b0601040182a27c01040c1030303030303030303030303030303030301e170d3231303631303030303030305a170d3331303630383030303030305a3081923120301e060a2b0601040182a27c01050c10303030303030303030303030303030313120301e060a2b0601040182a27c01010c103030303030303030303030303030444131183016060a2b0601040182a27c01060c08313233343536373831183016060a2b0601040182a27c01060c08353637383930313231183016060a2b0601040182a27c01060c0839303132333435363059301306072a8648ce3d020106082a8648ce3d03010703420004e0bf14a052dd7ab08d485e20570c6e6ac6fbb99513d3aacd66808c722941ae0538e9323ec89f39228bd228270f1716539cecc64e62b26c58c3355d68935d87b2a38183308180300c0603551d130101ff04023000300e0603551d0f0101ff04040302078030200603551d250101ff0416301406082b0601050507030206082b06010505070301301d0603551d0e04160414c524e05cad04a826ecda84501766732b5f181354301f0603551d23041830168014e766069362d7e35b79687161644d222bdde93a68",
 );
 
 const ICAC_CERT_TLV_SPECS = TlvIntermediateCertificate.decode(
@@ -57,10 +63,64 @@ describe("CertificateManager", () => {
     });
 
     describe("nocCertToAsn1", () => {
-        it("generates the correct ASN1 bytes", () => {
+        it("generates the correct ASN1 bytes without CASE Authenticated Tags", () => {
             const result = CertificateManager.nocCertToAsn1(NOC_CERT_TLV);
 
             assert.equal(result.toHex(), NOC_CERT_ASN1.toHex());
+        });
+
+        it("generates the correct ASN1 bytes with three different CASE Authenticated Tags", () => {
+            const nocWithCat = {
+                ...NOC_CERT_TLV,
+                subject: {
+                    ...NOC_CERT_TLV.subject,
+                    caseAuthenticatedTags: [
+                        CaseAuthenticatedTag(0x12345678),
+                        CaseAuthenticatedTag(0x56789012),
+                        CaseAuthenticatedTag(0x90123456),
+                    ],
+                },
+            };
+            const result = CertificateManager.nocCertToAsn1(nocWithCat);
+
+            assert.equal(result.toHex(), NOC_CERT_CAT_ASN1.toHex());
+        });
+
+        it("throws error if more then 3 tags are provided", () => {
+            const nocWithCat = {
+                ...NOC_CERT_TLV,
+                subject: {
+                    ...NOC_CERT_TLV.subject,
+                    caseAuthenticatedTags: [
+                        CaseAuthenticatedTag(0x12345678),
+                        CaseAuthenticatedTag(0x56789012),
+                        CaseAuthenticatedTag(0x90123456),
+                        CaseAuthenticatedTag(0x12345678),
+                    ],
+                },
+            };
+            assert.throws(
+                () => CertificateManager.nocCertToAsn1(nocWithCat),
+                new ValidationError("Too many CaseAuthenticatedTags (4)."),
+            );
+        });
+
+        it("throws error if tags contain duplicate identifier values", () => {
+            const nocWithCat = {
+                ...NOC_CERT_TLV,
+                subject: {
+                    ...NOC_CERT_TLV.subject,
+                    caseAuthenticatedTags: [
+                        CaseAuthenticatedTag(0x12345678),
+                        CaseAuthenticatedTag(0x56789012),
+                        CaseAuthenticatedTag(0x12341234),
+                    ],
+                },
+            };
+            assert.throws(
+                () => CertificateManager.nocCertToAsn1(nocWithCat),
+                new ValidationError("CASE Authenticated Tags field contains duplicate identifier values."),
+            );
         });
     });
 

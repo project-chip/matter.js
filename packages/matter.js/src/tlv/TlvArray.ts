@@ -9,7 +9,7 @@ import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { TlvTag, TlvType, TlvTypeLength } from "./TlvCodec.js";
 import { TlvReader, TlvSchema, TlvStream, TlvWriter } from "./TlvSchema.js";
 
-type LengthConstraints = {
+export type LengthConstraints = {
     minLength?: number;
     maxLength?: number;
     length?: number;
