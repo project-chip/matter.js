@@ -5,7 +5,7 @@
  */
 
 import { MatterController } from "../MatterController.js";
-import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
+import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
@@ -38,6 +38,13 @@ export class MessageChannel<ContextT> implements Channel<Message> {
         logger.debug("Message »", MessageCodec.messageDiagnostics(message));
         const packet = this.session.encode(message);
         const bytes = MessageCodec.encodePacket(packet);
+        if (bytes.length > MAX_MESSAGE_SIZE) {
+            // TODO: With Matter 1.3 probably find out how to know what he other node can support
+            logger.warn(
+                `Matter message to send to ${this.channel.name} is ${bytes.length}bytes long, which is larger than the maximum allowed size of ${MAX_MESSAGE_SIZE}. This only works if both nodes support it.`,
+            );
+        }
+
         return this.channel.send(bytes);
     }
 
@@ -69,8 +76,16 @@ export class ExchangeManager<ContextT> {
     ) {}
 
     addTransportInterface(netInterface: TransportInterface) {
+        const udpInterface = netInterface instanceof UdpInterface;
         this.transportListeners.push(
             netInterface.onData((socket, data) => {
+                if (udpInterface && data.length > MAX_MESSAGE_SIZE) {
+                    logger.warn(
+                        `Ignoring UDP message with size ${data.length} from ${socket.name}, which is larger than the maximum allowed size of ${MAX_MESSAGE_SIZE}.`,
+                    );
+                    return;
+                }
+
                 this.onMessage(socket, data).catch(error => logger.error(error));
             }),
         );
