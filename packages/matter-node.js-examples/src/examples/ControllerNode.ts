@@ -200,8 +200,8 @@ class ControllerNode {
                         longDiscriminator !== undefined
                             ? { longDiscriminator }
                             : shortDiscriminator !== undefined
-                            ? { shortDiscriminator }
-                            : {},
+                              ? { shortDiscriminator }
+                              : {},
                 },
                 passcode: setupPin,
             } as NodeCommissioningOptions;

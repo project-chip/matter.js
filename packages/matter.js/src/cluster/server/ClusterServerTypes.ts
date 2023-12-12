@@ -56,10 +56,10 @@ type MandatoryAttributeServers<A extends Attributes> = Omit<
         [P in MandatoryAttributeNames<A>]: A[P] extends FabricScopedAttribute<any, any>
             ? FabricScopedAttributeServer<AttributeJsType<A[P]>>
             : A[P] extends WritableFabricScopedAttribute<any, any>
-            ? FabricScopedAttributeServer<AttributeJsType<A[P]>>
-            : A[P] extends FixedAttribute<any, any>
-            ? FixedAttributeServer<AttributeJsType<A[P]>>
-            : AttributeServer<AttributeJsType<A[P]>>;
+              ? FabricScopedAttributeServer<AttributeJsType<A[P]>>
+              : A[P] extends FixedAttribute<any, any>
+                ? FixedAttributeServer<AttributeJsType<A[P]>>
+                : AttributeServer<AttributeJsType<A[P]>>;
     },
     keyof GlobalAttributes<any>
 >;
@@ -67,8 +67,8 @@ type OptionalAttributeServers<A extends Attributes> = {
     [P in OptionalAttributeNames<A>]?: A[P] extends OptionalWritableFabricScopedAttribute<any, any>
         ? FabricScopedAttributeServer<AttributeJsType<A[P]>>
         : A[P] extends OptionalFixedAttribute<any, any>
-        ? FixedAttributeServer<AttributeJsType<A[P]>>
-        : AttributeServer<AttributeJsType<A[P]>>;
+          ? FixedAttributeServer<AttributeJsType<A[P]>>
+          : AttributeServer<AttributeJsType<A[P]>>;
 };
 export type AttributeServers<A extends Attributes> = Merge<MandatoryAttributeServers<A>, OptionalAttributeServers<A>>;
 
@@ -159,10 +159,10 @@ type MakeAttributeMandatory<A extends Attribute<any, any>> = A extends OptionalW
 >
     ? WritableFabricScopedAttribute<T, any>
     : A extends OptionalWritableAttribute<infer T, any>
-    ? WritableAttribute<T, any>
-    : A extends OptionalAttribute<infer T, any>
-    ? Attribute<T, any>
-    : A;
+      ? WritableAttribute<T, any>
+      : A extends OptionalAttribute<infer T, any>
+        ? Attribute<T, any>
+        : A;
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = {
     [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K];
 };
@@ -201,17 +201,17 @@ export type FabricScopedAttributeNames<A extends Attributes> = {
     [K in keyof A]: A[K] extends FabricScopedAttribute<any, any>
         ? K
         : A[K] extends WritableFabricScopedAttribute<any, any>
-        ? K
-        : A[K] extends OptionalWritableFabricScopedAttribute<any, any>
-        ? K
-        : never;
+          ? K
+          : A[K] extends OptionalWritableFabricScopedAttribute<any, any>
+            ? K
+            : never;
 }[keyof A];
 export type NonFixedAttributeNames<A extends Attributes> = {
     [K in keyof A]: A[K] extends FixedAttribute<any, any>
         ? never
         : A[K] extends OptionalFixedAttribute<any, any>
-        ? never
-        : K;
+          ? never
+          : K;
 }[keyof A];
 
 type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>

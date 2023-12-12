@@ -24,8 +24,8 @@ export type MergeAll<T> = T extends [infer O extends Properties | undefined, ...
         ? MergeAll<R>
         : O & MergeAll<R>
     : T extends []
-    ? {}
-    : never;
+      ? {}
+      : never;
 
 export function MergeAll<T extends (Properties | undefined)[]>(...objects: readonly [...T]): MergeAll<T> {
     return Object.assign({}, ...objects);
@@ -37,8 +37,8 @@ export type Pluck<K, T extends readonly [...any]> = T extends [infer O, ...infer
         ? [O[K], ...Pluck<K, R>]
         : Pluck<K, R>
     : T extends []
-    ? T
-    : never;
+      ? T
+      : never;
 
 export function Pluck<T extends Properties[], K extends keyof T[number]>(
     key: K,

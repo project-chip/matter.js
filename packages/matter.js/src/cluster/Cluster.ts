@@ -620,13 +620,13 @@ export interface ConditionalCommand<RequestT, ResponseT, F extends BitSchema>
 export type ResponseType<T extends Command<any, any, any>> = T extends OptionalCommand<any, infer ResponseT, any>
     ? ResponseT
     : T extends Command<any, infer ResponseT, any>
-    ? ResponseT
-    : never;
+      ? ResponseT
+      : never;
 export type RequestType<T extends Command<any, any, any>> = T extends OptionalCommand<infer RequestT, any, any>
     ? RequestT
     : T extends Command<infer RequestT, any, any>
-    ? RequestT
-    : never;
+      ? RequestT
+      : never;
 
 interface CommandOptions {
     invokeAcl?: AccessLevel;
@@ -809,8 +809,8 @@ export const UnknownEvent = <F extends BitSchema>(id: number): Event<unknown, F>
 export type EventType<T extends Event<any, any>> = T extends OptionalEvent<infer EventT, any>
     ? EventT
     : T extends Event<infer EventT, any>
-    ? EventT
-    : never;
+      ? EventT
+      : never;
 export type MandatoryEventNames<E extends Events> = {
     [K in keyof E]: E[K] extends OptionalEvent<any, any> ? never : K;
 }[keyof E];
