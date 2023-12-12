@@ -13,6 +13,7 @@ import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
+import { UdpInterface } from "../net/UdpInterface.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
