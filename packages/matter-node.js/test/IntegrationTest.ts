@@ -23,6 +23,7 @@ import {
     Scenes,
 } from "@project-chip/matter.js/cluster";
 import {
+    CaseAuthenticatedTag,
     ClusterId,
     DeviceTypeId,
     EndpointNumber,
@@ -33,7 +34,7 @@ import {
     VendorId,
 } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation, OnOffLightDevice } from "@project-chip/matter.js/device";
-import { FabricJsonObject } from "@project-chip/matter.js/fabric";
+import { Fabric, FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
 import { DecodedEventData, InteractionClientMessenger } from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
@@ -116,6 +117,7 @@ describe("Integration Test", () => {
             listeningAddressIpv6: CLIENT_IPv6,
             autoConnect: false,
             autoSubscribe: false,
+            caseAuthenticatedTags: [CaseAuthenticatedTag(0x12345678), CaseAuthenticatedTag(0x56781234)],
         });
         await matterClient.addCommissioningController(commissioningController);
 
@@ -271,6 +273,13 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer.length, 0);
             assert.equal(sessionChangedCallsServer.length, 0);
 
+            let commissionedCaseAuthenticatedTags: CaseAuthenticatedTag[] | undefined;
+            // Catch the CASE Authenticated tags commissioned on the Fabric on the device
+            MockTime.interceptOnce(FabricBuilder.prototype, "setOperationalCert", data => {
+                assert.ok(data.resolve);
+                commissionedCaseAuthenticatedTags = (data.resolve as Fabric).caseAuthenticatedTags;
+            });
+
             await commissioningController.start();
             const node = await commissioningController.commissionNode({
                 discovery: {
@@ -303,9 +312,14 @@ describe("Integration Test", () => {
             assert.equal(sessionInfo[0].fabric.fabricIndex, FabricIndex(1));
             assert.equal(sessionInfo[0].nodeId, node.nodeId);
 
-            assert.deepEqual(nodeStateChangesController1Node1.length, 1);
+            assert.equal(nodeStateChangesController1Node1.length, 1);
             assert.equal(nodeStateChangesController1Node1[0].nodeId, node.nodeId);
             assert.equal(nodeStateChangesController1Node1[0].nodeState, NodeStateInformation.Connected);
+
+            assert.deepEqual(commissionedCaseAuthenticatedTags, [
+                CaseAuthenticatedTag(0x12345678),
+                CaseAuthenticatedTag(0x56781234),
+            ]);
         });
 
         it("We can connect to the new commissioned device", async () => {
