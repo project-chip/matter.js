@@ -18,7 +18,7 @@ import { Message, SessionType } from "@project-chip/matter.js/codec";
 import { AttributeId, ClusterId, EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { StatusCode } from "@project-chip/matter.js/interaction";
+import { StatusCode, StatusResponseError } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { TlvBoolean } from "@project-chip/matter.js/tlv";
 import { createPromise } from "@project-chip/matter.js/util";
@@ -735,26 +735,24 @@ describe("Scenes Server test", () => {
         });
 
         it("error on adding scene with too long name", async () => {
-            const result = await callCommandOnClusterServer(
-                scenesServer!,
-                "addScene",
-                {
-                    groupId: GroupId(1),
-                    sceneId: 1,
-                    sceneName: "12345678901234567",
-                    transitionTime: 2,
-                    extensionFieldSets: [],
-                },
-                endpoint!,
-                testSession,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            await assert.rejects(
+                async () =>
+                    callCommandOnClusterServer(
+                        scenesServer!,
+                        "addScene",
+                        {
+                            groupId: GroupId(1),
+                            sceneId: 1,
+                            sceneName: "12345678901234567",
+                            transitionTime: 2,
+                            extensionFieldSets: [],
+                        },
+                        endpoint!,
+                        testSession,
+                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                    ),
+                new StatusResponseError("String is too long: 17, max 16.", StatusCode.ConstraintError),
             );
-
-            assert.ok(result);
-            assert.equal(result.code, StatusCode.Success);
-            assert.equal(result.response.status, StatusCode.ConstraintError);
-            assert.deepEqual(result.response.groupId, GroupId(1));
-            assert.deepEqual(result.response.sceneId, 1);
         });
 
         it("recallScene on not existing group id", async () => {
