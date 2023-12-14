@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { Merge } from "../util/Type.js";
 import { TlvAny } from "./TlvAny.js";

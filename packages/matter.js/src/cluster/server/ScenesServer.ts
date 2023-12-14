@@ -7,8 +7,7 @@
 import { InternalError } from "../../common/MatterError.js";
 import { GroupId } from "../../datatype/GroupId.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Scenes, ScenesCluster } from "../definitions/ScenesCluster.js";

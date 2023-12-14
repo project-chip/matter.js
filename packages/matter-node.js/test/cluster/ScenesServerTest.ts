@@ -751,7 +751,7 @@ describe("Scenes Server test", () => {
                         testSession,
                         { packetHeader: { sessionType: SessionType.Unicast } } as Message,
                     ),
-                new StatusResponseError("String is too long: 17, max 16.", StatusCode.ConstraintError),
+                new StatusResponseError("(Validation/135) String is too long: 17, max 16.", StatusCode.ConstraintError),
             );
         });
 

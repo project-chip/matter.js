@@ -6,29 +6,30 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitField, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
-    Attribute,
-    OptionalAttribute,
-    Command,
     AccessLevel,
+    Attribute,
+    Command,
+    OptionalAttribute,
+    OptionalCommand,
     TlvNoResponse,
-    OptionalCommand
 } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvBitmap, TlvUInt16, TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvGroupId, GroupId } from "../../datatype/GroupId.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
-import { TlvNodeId } from "../../datatype/NodeId.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvString } from "../../tlv/TlvString.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { ClusterFactory } from "../../cluster/ClusterFactory.js";
 import { TlvAttributeId } from "../../datatype/AttributeId.js";
+import { TlvClusterId } from "../../datatype/ClusterId.js";
+import { GroupId, TlvGroupId } from "../../datatype/GroupId.js";
+import { TlvNodeId } from "../../datatype/NodeId.js";
+import { BitField, BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvAny } from "../../tlv/TlvAny.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvBitmap, TlvEnum, TlvUInt16, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvString } from "../../tlv/TlvString.js";
+
+import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 
 export namespace Scenes {
     /**
@@ -40,7 +41,7 @@ export namespace Scenes {
         /**
          * The ability to store a name for a scene.
          */
-        nameSupport: BitFlag(7)
+        nameSupport: BitFlag(7),
     };
 
     /**
@@ -65,7 +66,7 @@ export namespace Scenes {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.6.1.2
          */
-        attributeValue: TlvField(1, TlvAny)
+        attributeValue: TlvField(1, TlvAny),
     });
 
     /**
@@ -77,7 +78,7 @@ export namespace Scenes {
      */
     export const TlvExtensionFieldSet = TlvObject({
         clusterId: TlvField(0, TlvClusterId),
-        attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair))
+        attributeValueList: TlvField(1, TlvArray(TlvAttributeValuePair)),
     });
 
     /**
@@ -90,7 +91,7 @@ export namespace Scenes {
         sceneId: TlvField(1, TlvUInt8),
         transitionTime: TlvField(2, TlvUInt16),
         sceneName: TlvField(3, TlvString.bound({ maxLength: 16 })),
-        extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet))
+        extensionFieldSets: TlvField(4, TlvArray(TlvExtensionFieldSet)),
     });
 
     /**
@@ -99,7 +100,7 @@ export namespace Scenes {
     export const TlvAddSceneResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
         groupId: TlvField(1, TlvGroupId),
-        sceneId: TlvField(2, TlvUInt8)
+        sceneId: TlvField(2, TlvUInt8),
     });
 
     /**
@@ -118,7 +119,7 @@ export namespace Scenes {
         sceneId: TlvField(2, TlvUInt8),
         transitionTime: TlvOptionalField(3, TlvUInt16),
         sceneName: TlvOptionalField(4, TlvString.bound({ maxLength: 16 })),
-        extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet))
+        extensionFieldSets: TlvOptionalField(5, TlvArray(TlvExtensionFieldSet)),
     });
 
     /**
@@ -128,7 +129,7 @@ export namespace Scenes {
      */
     export const TlvRemoveSceneRequest = TlvObject({
         groupId: TlvField(0, TlvGroupId),
-        sceneId: TlvField(1, TlvUInt8)
+        sceneId: TlvField(1, TlvUInt8),
     });
 
     /**
@@ -137,7 +138,7 @@ export namespace Scenes {
     export const TlvRemoveSceneResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
         groupId: TlvField(1, TlvGroupId),
-        sceneId: TlvField(2, TlvUInt8)
+        sceneId: TlvField(2, TlvUInt8),
     });
 
     /**
@@ -152,7 +153,7 @@ export namespace Scenes {
      */
     export const TlvRemoveAllScenesResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
-        groupId: TlvField(1, TlvGroupId)
+        groupId: TlvField(1, TlvGroupId),
     });
 
     /**
@@ -168,7 +169,7 @@ export namespace Scenes {
     export const TlvStoreSceneResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
         groupId: TlvField(1, TlvGroupId),
-        sceneId: TlvField(2, TlvUInt8)
+        sceneId: TlvField(2, TlvUInt8),
     });
 
     /**
@@ -179,7 +180,7 @@ export namespace Scenes {
     export const TlvRecallSceneRequest = TlvObject({
         groupId: TlvField(0, TlvGroupId),
         sceneId: TlvField(1, TlvUInt8),
-        transitionTime: TlvOptionalField(2, TlvNullable(TlvUInt16))
+        transitionTime: TlvOptionalField(2, TlvNullable(TlvUInt16)),
     });
 
     /**
@@ -220,7 +221,7 @@ export namespace Scenes {
         status: TlvField(0, TlvEnum<StatusCode>()),
         capacity: TlvField(1, TlvNullable(TlvUInt8)),
         groupId: TlvField(2, TlvGroupId),
-        sceneList: TlvOptionalField(3, TlvArray(TlvUInt8))
+        sceneList: TlvOptionalField(3, TlvArray(TlvUInt8)),
     });
 
     /**
@@ -282,7 +283,7 @@ export namespace Scenes {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.11.5
          */
-        sceneIdentifierTo: TlvField(4, TlvUInt8)
+        sceneIdentifierTo: TlvField(4, TlvUInt8),
     });
 
     /**
@@ -315,7 +316,7 @@ export namespace Scenes {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.20.3
          */
-        sceneIdentifierFrom: TlvField(2, TlvUInt8)
+        sceneIdentifierFrom: TlvField(2, TlvUInt8),
     });
 
     /**
@@ -329,7 +330,7 @@ export namespace Scenes {
          *
          * The ability to store a name for a scene.
          */
-        SceneNames = "SceneNames"
+        SceneNames = "SceneNames",
     }
 
     /**
@@ -346,7 +347,7 @@ export namespace Scenes {
              *
              * The ability to store a name for a scene.
              */
-            sceneNames: BitFlag(0)
+            sceneNames: BitFlag(0),
         },
 
         attributes: {
@@ -403,7 +404,7 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.7.6
              */
-            lastConfiguredBy: OptionalAttribute(0x5, TlvNullable(TlvNodeId), { default: null })
+            lastConfiguredBy: OptionalAttribute(0x5, TlvNullable(TlvNodeId), { default: null }),
         },
 
         commands: {
@@ -424,35 +425,23 @@ export namespace Scenes {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.4
              */
-            removeScene: Command(
-                0x2,
-                TlvRemoveSceneRequest,
-                0x2,
-                TlvRemoveSceneResponse,
-                { invokeAcl: AccessLevel.Manage }
-            ),
+            removeScene: Command(0x2, TlvRemoveSceneRequest, 0x2, TlvRemoveSceneResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.5
              */
-            removeAllScenes: Command(
-                0x3,
-                TlvRemoveAllScenesRequest,
-                0x3,
-                TlvRemoveAllScenesResponse,
-                { invokeAcl: AccessLevel.Manage }
-            ),
+            removeAllScenes: Command(0x3, TlvRemoveAllScenesRequest, 0x3, TlvRemoveAllScenesResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.6
              */
-            storeScene: Command(
-                0x4,
-                TlvStoreSceneRequest,
-                0x4,
-                TlvStoreSceneResponse,
-                { invokeAcl: AccessLevel.Manage }
-            ),
+            storeScene: Command(0x4, TlvStoreSceneRequest, 0x4, TlvStoreSceneResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.7
@@ -478,13 +467,9 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.9
              */
-            enhancedAddScene: OptionalCommand(
-                0x40,
-                TlvAddSceneRequest,
-                0x40,
-                TlvAddSceneResponse,
-                { invokeAcl: AccessLevel.Manage }
-            ),
+            enhancedAddScene: OptionalCommand(0x40, TlvAddSceneRequest, 0x40, TlvAddSceneResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
 
             /**
              * The EnhancedViewScene command allows a scene to be retrieved using a finer scene transition time than
@@ -502,14 +487,10 @@ export namespace Scenes {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.11
              */
-            copyScene: OptionalCommand(
-                0x42,
-                TlvCopySceneRequest,
-                0x42,
-                TlvCopySceneResponse,
-                { invokeAcl: AccessLevel.Manage }
-            )
-        }
+            copyScene: OptionalCommand(0x42, TlvCopySceneRequest, 0x42, TlvCopySceneResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
+        },
     });
 
     /**
@@ -548,15 +529,16 @@ export namespace Scenes {
             ClusterFactory.validateFeatureSelection(features, Feature);
             const cluster = ClusterFactory.Definition({
                 ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
+                supportedFeatures: BitFlags(Base.features, ...features),
             });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
+        },
     );
 
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> = Omit<
+        typeof Base,
+        "supportedFeatures"
+    > & { supportedFeatures: SF };
 }
 
 export type ScenesCluster = typeof Scenes.Cluster;

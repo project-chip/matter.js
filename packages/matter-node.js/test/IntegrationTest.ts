@@ -726,7 +726,7 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
-                message: "String is too long: 3, max 2.",
+                message: "(Validation/135) String is too long: 3, max 2.",
             });
         });
 

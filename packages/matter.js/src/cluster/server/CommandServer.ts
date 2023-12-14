@@ -6,14 +6,13 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { ValidationError } from "../../common/MatterError.js";
 import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { ValidationError } from "../../common/ValidationError.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
 import { Globals } from "../../model/index.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";

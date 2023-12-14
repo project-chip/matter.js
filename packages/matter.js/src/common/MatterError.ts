@@ -13,9 +13,6 @@ export class MatterError extends Error {}
  */
 export class NoProviderError extends MatterError {}
 
-/** Error thrown when Data validation fails. Please check the provided data. */
-export class ValidationError extends MatterError {}
-
 /**
  * Error thrown when an internal error occurs like unexpected cases or missing data that should be there. Please
  * report such errors.

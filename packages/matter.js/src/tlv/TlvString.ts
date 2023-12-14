@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError, UnexpectedDataError, ValidationError } from "../common/MatterError.js";
+import { InternalError, UnexpectedDataError } from "../common/MatterError.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { maxValue, minValue } from "../util/Number.js";

@@ -14,4 +14,5 @@ export * from "./InteractionEndpointStructure.js";
 export * from "./InteractionMessenger.js";
 export * from "./InteractionProtocol.js";
 export * from "./InteractionServer.js";
+export * from "./StatusCode.js";
 export * from "./SubscriptionHandler.js";

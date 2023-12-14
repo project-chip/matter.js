@@ -15,8 +15,7 @@ import { ByteArray } from "../util/ByteArray.js";
 import { createPromise } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
 import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
-import { StatusResponseError } from "./interaction/InteractionMessenger.js";
-import { StatusCode } from "./interaction/InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "./interaction/StatusCode.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
 
