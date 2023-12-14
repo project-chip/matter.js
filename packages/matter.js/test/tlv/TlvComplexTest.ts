@@ -186,7 +186,7 @@ describe("TlvObject", () => {
                     schema.validate(structure);
                 } catch (error) {
                     expect(error instanceof Error).equal(true);
-                    expect((error as Error).message).equal(expectedError || "");
+                    expect((error as Error).message).equal(`(Validation/135) ${expectedError}` || "");
                 }
             });
 
@@ -195,7 +195,7 @@ describe("TlvObject", () => {
                     schema.encode(structure);
                 } catch (error) {
                     expect(error instanceof Error).equal(true);
-                    expect((error as Error).message).equal(expectedError || "");
+                    expect((error as Error).message).equal(`(Validation/135) ${expectedError}` || "");
                 }
             });
         }

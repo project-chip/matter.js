@@ -6,8 +6,6 @@
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
@@ -81,13 +79,6 @@ export const GeneralCommissioningClusterHandler: (options?: {
         attributes: { breadcrumb, regulatoryConfig, locationCapability },
         endpoint,
     }) => {
-        if (countryCode.length !== 2) {
-            throw new StatusResponseError(
-                "The country code need to have a fixed length of 2 characters.",
-                StatusCode.ConstraintError,
-            );
-        }
-
         const locationCapabilityValue = locationCapability.getLocal();
 
         // Check and handle country code

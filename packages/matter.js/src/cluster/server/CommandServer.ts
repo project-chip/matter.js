@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { Globals } from "../../model/index.js";
+import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema, TlvStream } from "../../tlv/TlvSchema.js";
 
@@ -49,7 +51,22 @@ export class CommandServer<RequestT, ResponseT> {
         /** Response data */
         response: TlvStream;
     }> {
-        const request = this.requestSchema.decodeTlv(args);
+        let request = this.requestSchema.decodeTlv(args);
+
+        // Inject fabric index into structures in general if undefined, if set it will be used
+        if (session.isSecure()) {
+            const fabric = (session as SecureSession<any>).getFabric();
+            if (fabric) {
+                request = this.requestSchema.injectField(
+                    request,
+                    <number>Globals.FabricIndex.id,
+                    session.getAssociatedFabric().fabricIndex,
+                    existingFieldIndex => existingFieldIndex === undefined,
+                );
+            }
+        }
+
+        this.requestSchema.validate(request);
         logger.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
         const response = await this.handler(request, session, message, endpoint);
         logger.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);

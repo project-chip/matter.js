@@ -12,3 +12,4 @@ export * from "./Scanner.js";
 export * from "./ServerAddress.js";
 export * from "./TransportInterface.js";
 export * from "./TryCatchHandler.js";
+export * from "./ValidationError.js";

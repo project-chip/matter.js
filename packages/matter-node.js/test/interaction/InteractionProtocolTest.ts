@@ -14,10 +14,12 @@ import {
     BasicInformationCluster,
     ClusterServer,
     ClusterServerObjForCluster,
+    GeneralCommissioning,
     OnOffCluster,
     WritableAttribute,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
+import { ValidationError } from "@project-chip/matter.js/common";
 import {
     AttributeId,
     ClusterId,
@@ -562,6 +564,33 @@ const INVOKE_COMMAND_REQUEST_INVALID: InvokeRequest = {
     ],
 };
 
+const INVOKE_COMMAND_REQUEST_VALIDATION_ERROR: InvokeRequest = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(6), commandId: CommandId(2) },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_REQUEST_VALIDATION_ERROR_DATA: InvokeRequest = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    timedRequest: false,
+    invokeRequests: [
+        {
+            commandPath: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x30), commandId: CommandId(0x2) },
+            commandFields: GeneralCommissioning.TlvSetRegulatoryConfigRequest.encodeTlv({
+                newRegulatoryConfig: 1,
+                countryCode: "XXX",
+                breadcrumb: 0,
+            }),
+        },
+    ],
+};
+
 const INVOKE_COMMAND_RESPONSE: InvokeResponse = {
     interactionModelRevision: 10,
     suppressResponse: false,
@@ -583,6 +612,32 @@ const INVOKE_COMMAND_RESPONSE_BUSY: InvokeResponse = {
             status: {
                 commandPath: { clusterId: ClusterId(6), commandId: CommandId(1), endpointId: EndpointNumber(0) },
                 status: { clusterStatus: undefined, status: 0x9c },
+            },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR: InvokeResponse = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(6), commandId: CommandId(2), endpointId: EndpointNumber(0) },
+                status: { status: 0x87, clusterStatus: undefined },
+            },
+        },
+    ],
+};
+
+const INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR_DATA: InvokeResponse = {
+    interactionModelRevision: 10,
+    suppressResponse: false,
+    invokeResponses: [
+        {
+            status: {
+                commandPath: { clusterId: ClusterId(0x30), commandId: CommandId(0x2), endpointId: EndpointNumber(0) },
+                status: { status: 0x87, clusterStatus: undefined },
             },
         },
     ],
@@ -1250,6 +1305,70 @@ describe("InteractionProtocol", () => {
             );
 
             assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_INVALID);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with thrown validation error", async () => {
+            const onOffCluster = ClusterServer(
+                OnOffCluster,
+                {
+                    onOff: onOffState,
+                },
+                {
+                    on: async () => {
+                        onOffState = true;
+                    },
+                    off: async () => {
+                        onOffState = false;
+                    },
+                    toggle: async () => {
+                        throw new ValidationError("test");
+                    },
+                },
+            );
+            endpoint.addClusterServer(onOffCluster);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(),
+                INVOKE_COMMAND_REQUEST_VALIDATION_ERROR,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR);
+            assert.equal(onOffState, false);
+        });
+
+        it("invoke command with data validation error", async () => {
+            const generalCommissioningCluster = ClusterServer(
+                GeneralCommissioning.Cluster,
+                {
+                    breadcrumb: 0,
+                    basicCommissioningInfo: { failSafeExpiryLengthSeconds: 1, maxCumulativeFailsafeSeconds: 1 },
+                    regulatoryConfig: 1,
+                    locationCapability: 1,
+                    supportsConcurrentConnection: false,
+                },
+                {
+                    armFailSafe: async () => {
+                        throw new Error("should never be called");
+                    },
+                    setRegulatoryConfig: async () => {
+                        throw new Error("should never be called");
+                    },
+                    commissioningComplete: async () => {
+                        throw new Error("should never be called");
+                    },
+                },
+            );
+            endpoint.addClusterServer(generalCommissioningCluster);
+            interactionProtocol.setRootEndpoint(endpoint);
+            const result = await interactionProtocol.handleInvokeRequest(
+                await getDummyMessageExchange(),
+                INVOKE_COMMAND_REQUEST_VALIDATION_ERROR_DATA,
+                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            );
+
+            assert.deepEqual(result, INVOKE_COMMAND_RESPONSE_VALIDATION_ERROR_DATA);
             assert.equal(onOffState, false);
         });
 

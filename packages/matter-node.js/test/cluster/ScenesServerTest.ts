@@ -15,6 +15,7 @@ import {
     ScenesClusterHandler,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
+import { ValidationError } from "@project-chip/matter.js/common";
 import { AttributeId, ClusterId, EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
@@ -735,26 +736,24 @@ describe("Scenes Server test", () => {
         });
 
         it("error on adding scene with too long name", async () => {
-            const result = await callCommandOnClusterServer(
-                scenesServer!,
-                "addScene",
-                {
-                    groupId: GroupId(1),
-                    sceneId: 1,
-                    sceneName: "12345678901234567",
-                    transitionTime: 2,
-                    extensionFieldSets: [],
-                },
-                endpoint!,
-                testSession,
-                { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+            await assert.rejects(
+                async () =>
+                    callCommandOnClusterServer(
+                        scenesServer!,
+                        "addScene",
+                        {
+                            groupId: GroupId(1),
+                            sceneId: 1,
+                            sceneName: "12345678901234567",
+                            transitionTime: 2,
+                            extensionFieldSets: [],
+                        },
+                        endpoint!,
+                        testSession,
+                        { packetHeader: { sessionType: SessionType.Unicast } } as Message,
+                    ),
+                new ValidationError("String is too long: 17, max 16."),
             );
-
-            assert.ok(result);
-            assert.equal(result.code, StatusCode.Success);
-            assert.equal(result.response.status, StatusCode.ConstraintError);
-            assert.deepEqual(result.response.groupId, GroupId(1));
-            assert.deepEqual(result.response.sceneId, 1);
         });
 
         it("recallScene on not existing group id", async () => {

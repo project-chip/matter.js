@@ -3,7 +3,8 @@
  * Copyright 2022-2023 Project CHIP Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
+import { UnexpectedDataError } from "../common/MatterError.js";
+import { ValidationError } from "../common/ValidationError.js";
 import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import {

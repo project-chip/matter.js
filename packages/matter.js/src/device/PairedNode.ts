@@ -39,8 +39,7 @@ import { BasicInformation } from "../cluster/definitions/BasicInformationCluster
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
-import { StatusResponseError } from "../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import {
     CommissionningFlowType,
     DiscoveryCapabilitiesSchema,

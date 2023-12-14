@@ -4,17 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, InternalError, MatterError, ValidationError } from "../../common/MatterError.js";
+import { MatterDevice } from "../../MatterDevice.js";
+import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
+import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { Globals } from "../../model/index.js";
-import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { assertSecureSession, NoAssociatedFabricError, SecureSession } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";

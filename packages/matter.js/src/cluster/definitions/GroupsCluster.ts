@@ -6,18 +6,18 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
+import { AccessLevel, Command, FixedAttribute, TlvNoResponse } from "../../cluster/Cluster.js";
 import { ClusterFactory } from "../../cluster/ClusterFactory.js";
-import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, Command, AccessLevel, TlvNoResponse } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvBitmap, TlvEnum } from "../../tlv/TlvNumber.js";
-import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TlvGroupId } from "../../datatype/GroupId.js";
-import { TlvString } from "../../tlv/TlvString.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode } from "../../protocol/interaction/StatusCode.js";
+import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvNullable } from "../../tlv/TlvNullable.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
+import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TlvBitmap, TlvEnum, TlvUInt8 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvString } from "../../tlv/TlvString.js";
 
 export namespace Groups {
     /**
@@ -29,7 +29,7 @@ export namespace Groups {
         /**
          * The ability to store a name for a group.
          */
-        nameSupport: BitFlag(7)
+        nameSupport: BitFlag(7),
     };
 
     /**
@@ -39,7 +39,7 @@ export namespace Groups {
      */
     export const TlvAddGroupRequest = TlvObject({
         groupId: TlvField(0, TlvGroupId),
-        groupName: TlvField(1, TlvString.bound({ maxLength: 16 }))
+        groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
     });
 
     /**
@@ -49,7 +49,7 @@ export namespace Groups {
      */
     export const TlvAddGroupResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
-        groupId: TlvField(1, TlvGroupId)
+        groupId: TlvField(1, TlvGroupId),
     });
 
     /**
@@ -67,7 +67,7 @@ export namespace Groups {
     export const TlvViewGroupResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
         groupId: TlvField(1, TlvGroupId),
-        groupName: TlvField(2, TlvString.bound({ maxLength: 16 }))
+        groupName: TlvField(2, TlvString.bound({ maxLength: 16 })),
     });
 
     /**
@@ -108,7 +108,7 @@ export namespace Groups {
      */
     export const TlvGetGroupMembershipResponse = TlvObject({
         capacity: TlvField(0, TlvNullable(TlvUInt8)),
-        groupList: TlvField(1, TlvArray(TlvGroupId))
+        groupList: TlvField(1, TlvArray(TlvGroupId)),
     });
 
     /**
@@ -125,7 +125,7 @@ export namespace Groups {
      */
     export const TlvRemoveGroupResponse = TlvObject({
         status: TlvField(0, TlvEnum<StatusCode>()),
-        groupId: TlvField(1, TlvGroupId)
+        groupId: TlvField(1, TlvGroupId),
     });
 
     /**
@@ -135,7 +135,7 @@ export namespace Groups {
      */
     export const TlvAddGroupIfIdentifyingRequest = TlvObject({
         groupId: TlvField(0, TlvGroupId),
-        groupName: TlvField(1, TlvString.bound({ maxLength: 16 }))
+        groupName: TlvField(1, TlvString.bound({ maxLength: 16 })),
     });
 
     /**
@@ -149,7 +149,7 @@ export namespace Groups {
          *
          * The ability to store a name for a group.
          */
-        GroupNames = "GroupNames"
+        GroupNames = "GroupNames",
     }
 
     /**
@@ -166,7 +166,7 @@ export namespace Groups {
              *
              * The ability to store a name for a group.
              */
-            groupNames: BitFlag(0)
+            groupNames: BitFlag(0),
         },
 
         attributes: {
@@ -177,7 +177,7 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.6.1
              */
-            nameSupport: FixedAttribute(0x0, TlvBitmap(TlvUInt8, NameSupport))
+            nameSupport: FixedAttribute(0x0, TlvBitmap(TlvUInt8, NameSupport)),
         },
 
         commands: {
@@ -211,13 +211,9 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.4
              */
-            removeGroup: Command(
-                0x3,
-                TlvRemoveGroupRequest,
-                0x3,
-                TlvRemoveGroupResponse,
-                { invokeAcl: AccessLevel.Manage }
-            ),
+            removeGroup: Command(0x3, TlvRemoveGroupRequest, 0x3, TlvRemoveGroupResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
 
             /**
              * The RemoveAllGroups command allows a client to direct the server to remove all group associations for
@@ -238,14 +234,10 @@ export namespace Groups {
              *
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.3.7.6
              */
-            addGroupIfIdentifying: Command(
-                0x5,
-                TlvAddGroupIfIdentifyingRequest,
-                0x5,
-                TlvNoResponse,
-                { invokeAcl: AccessLevel.Manage }
-            )
-        }
+            addGroupIfIdentifying: Command(0x5, TlvAddGroupIfIdentifyingRequest, 0x5, TlvNoResponse, {
+                invokeAcl: AccessLevel.Manage,
+            }),
+        },
     });
 
     /**
@@ -287,15 +279,16 @@ export namespace Groups {
             ClusterFactory.validateFeatureSelection(features, Feature);
             const cluster = ClusterFactory.Definition({
                 ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
+                supportedFeatures: BitFlags(Base.features, ...features),
             });
             return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
+        },
     );
 
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF };
+    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> = Omit<
+        typeof Base,
+        "supportedFeatures"
+    > & { supportedFeatures: SF };
 }
 
 export type GroupsCluster = typeof Groups.Cluster;

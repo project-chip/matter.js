@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValidationError } from "../../src/common/MatterError.js";
+import { ValidationError } from "../../src/common/ValidationError.js";
 import { TlvAny } from "../../src/tlv/TlvAny.js";
 import {
     TlvDouble,

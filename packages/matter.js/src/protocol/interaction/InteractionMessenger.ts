@@ -9,7 +9,6 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
 import {
     ImplementationError,
-    MatterError,
     MatterFlowError,
     NotImplementedError,
     UnexpectedDataError,
@@ -34,7 +33,6 @@ import {
     encodeEventPayload,
 } from "./AttributeDataEncoder.js";
 import {
-    StatusCode,
     TlvAttributeReport,
     TlvDataReport,
     TlvDataReportForSend,
@@ -50,6 +48,7 @@ import {
     TlvWriteResponse,
 } from "./InteractionProtocol.js";
 import { INTERACTION_MODEL_REVISION } from "./InteractionServer.js";
+import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 export enum MessageType {
     StatusResponse = 0x01,
@@ -73,19 +72,6 @@ export type InvokeResponse = TypeFromSchema<typeof TlvInvokeResponse>;
 export type TimedRequest = TypeFromSchema<typeof TlvTimedRequest>;
 export type WriteRequest = TypeFromSchema<typeof TlvWriteRequest>;
 export type WriteResponse = TypeFromSchema<typeof TlvWriteResponse>;
-
-/** Error base Class for all errors related to the status response messages. */
-export class StatusResponseError extends MatterError {
-    public constructor(
-        message: string,
-        public readonly code: StatusCode,
-        public readonly clusterCode?: number,
-    ) {
-        super();
-
-        this.message = `(${code}) ${message}`;
-    }
-}
 
 const MAX_SPDU_LENGTH = 1024;
 

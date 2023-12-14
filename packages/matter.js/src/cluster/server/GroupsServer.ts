@@ -6,7 +6,7 @@
 
 import { GroupId } from "../../datatype/GroupId.js";
 import { Fabric } from "../../fabric/Fabric.js";
-import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
+import { StatusCode } from "../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../session/SecureSession.js";
 import { GroupsCluster } from "../definitions/GroupsCluster.js";
 import { IdentifyCluster } from "../definitions/IdentifyCluster.js";

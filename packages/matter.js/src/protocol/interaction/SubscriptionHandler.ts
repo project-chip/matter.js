@@ -18,9 +18,8 @@ import { RetransmissionLimitReachedError } from "../MessageExchange.js";
 import { AttributeReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { EventHandler, EventStorageData } from "./EventHandler.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
-import { InteractionServerMessenger, StatusResponseError } from "./InteractionMessenger.js";
+import { InteractionServerMessenger } from "./InteractionMessenger.js";
 import {
-    StatusCode,
     TlvAttributePath,
     TlvAttributeStatus,
     TlvDataVersionFilter,
@@ -37,6 +36,7 @@ import {
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
 } from "./InteractionServer.js";
+import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("SubscriptionHandler");
 

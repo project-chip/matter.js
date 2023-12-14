@@ -34,15 +34,15 @@ import {
     IncomingInteractionClientMessenger,
     InteractionClientMessenger,
     ReadRequest,
-    StatusResponseError,
 } from "./InteractionMessenger.js";
-import { StatusCode, TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
+import { TlvAttributeReport, TlvEventFilter, TlvEventReport } from "./InteractionProtocol.js";
 import {
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
     attributePathToId,
     clusterPathToId,
 } from "./InteractionServer.js";
+import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
 const logger = Logger.get("InteractionClient");
 

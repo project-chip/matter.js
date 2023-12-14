@@ -473,7 +473,9 @@ describe("AttributeServerTest", () => {
                         () => 1,
                         () => 2,
                     ),
-            ).throw('Validation error for attribute "test": Invalid value: 3 is above the maximum, 2.');
+            ).throw(
+                'Validation error for attribute "test": (Validation/135) Invalid value: 3 is above the maximum, 2.',
+            );
         });
 
         it("should throw an error if set value is invalid according to schema validator", () => {
@@ -491,7 +493,7 @@ describe("AttributeServerTest", () => {
                 () => true,
             );
             expect(() => server.setLocal(11)).throw(
-                'Validation error for attribute "test": Invalid value: 11 is above the maximum, 3.',
+                'Validation error for attribute "test": (Validation/135) Invalid value: 11 is above the maximum, 3.',
             );
         });
 

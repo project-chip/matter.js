@@ -41,14 +41,12 @@ import {
     InvokeResponse,
     MessageType,
     ReadRequest,
-    StatusResponseError,
     SubscribeRequest,
     TimedRequest,
     WriteRequest,
     WriteResponse,
 } from "./InteractionMessenger.js";
 import {
-    StatusCode,
     TlvAttributePath,
     TlvClusterPath,
     TlvCommandPath,
@@ -56,6 +54,7 @@ import {
     TlvInvokeResponseData,
     TlvSubscribeResponse,
 } from "./InteractionProtocol.js";
+import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
