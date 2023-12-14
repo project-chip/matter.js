@@ -12,10 +12,11 @@ import {
     Identify,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
+import { ValidationError } from "@project-chip/matter.js/common";
 import { EndpointNumber, GroupId } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { Fabric, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { StatusCode, StatusResponseError } from "@project-chip/matter.js/interaction";
+import { StatusCode } from "@project-chip/matter.js/interaction";
 import { SecureSession } from "@project-chip/matter.js/session";
 import { createPromise } from "@project-chip/matter.js/util";
 import * as assert from "assert";
@@ -353,7 +354,7 @@ describe("Groups Server test", () => {
                         testSession,
                         { packetHeader: { sessionType: SessionType.Unicast } } as Message,
                     ),
-                new StatusResponseError("(Validation/135) String is too long: 17, max 16.", StatusCode.ConstraintError),
+                new ValidationError("String is too long: 17, max 16."),
             );
         });
     });
