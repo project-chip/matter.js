@@ -12,6 +12,9 @@ import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
 
+/** @see {@link MatterCoreSpecificationV1_2} § 4.4.4 */
+export const MAX_MESSAGE_SIZE = 1280;
+
 export interface PacketHeader {
     sessionId: number;
     sessionType: SessionType;
