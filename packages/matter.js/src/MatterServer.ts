@@ -237,7 +237,12 @@ export class MatterServer {
         node.setMdnsBroadcaster(this.mdnsBroadcaster);
         node.setMdnsScanner(this.mdnsScanner);
         if (this.started) {
-            await node.start();
+            try {
+                await node.start();
+            } catch (error) {
+                // TODO: Find a better way how to report back such issues and which nodes errored
+                logger.error(`Failed to start node: ${error}`);
+            }
         }
     }
 
