@@ -50,6 +50,7 @@ import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
 import { Endpoint } from "./device/Endpoint.js";
+import { Fabric } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
@@ -872,7 +873,9 @@ export class CommissioningServer extends MatterNode {
             );
         }
         const wasStarted = this.interactionServer !== undefined || this.deviceInstance !== undefined;
+        let fabrics = new Array<Fabric>();
         if (wasStarted) {
+            fabrics = this.isCommissioned() ? this.deviceInstance?.getFabrics() ?? [] : [];
             await this.close();
         }
 
@@ -880,6 +883,7 @@ export class CommissioningServer extends MatterNode {
 
         if (wasStarted) {
             await this.advertise();
+            fabrics.forEach(fabric => this.options.commissioningChangedCallback?.(fabric.fabricIndex));
         }
         logger.info(`The device was factory reset${wasStarted ? " and restarted" : ""}.`);
     }
