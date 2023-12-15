@@ -879,7 +879,7 @@ export class CommissioningServer extends MatterNode {
             await this.close();
         }
 
-        this.storage.clear();
+        this.storage.clearAll();
 
         if (wasStarted) {
             await this.advertise();
