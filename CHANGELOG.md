@@ -9,6 +9,17 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Feature: Added CASE Authenticated Tags support (initialization from NOC and validation only)
+  * Enhancement: Added validation handling to Invoke processing
+  * Fix: Fixed message size check to allow processing of two big non matter UDP messages
+* matter.js API:
+  * Fix: Makes sure to initialize all nodes in the MatterServer on startup also if errors occur on single ones
+  * Fix: Only try to connect to a commissioned device in controller if it has at least one
+  * Fix: Makes sure to call commissioningChanged callback when device is factory reset
+  * Fix: Really remove all data in factory reset of a device
+
 ## 0.7.2 (2023-12-04)
 * Matter-Core functionality:
   * Corrected default values for TemperatureMeasurement Cluster
