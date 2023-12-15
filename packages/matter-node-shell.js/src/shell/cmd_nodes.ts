@@ -43,6 +43,9 @@ export function createDiagnosticCallbacks(): Partial<CommissioningControllerNode
                 case NodeStateInformation.StructureChanged:
                     console.log(`stateInformationCallback Node ${peerNodeId} structure changed`);
                     break;
+                case NodeStateInformation.Decommissioned:
+                    console.log(`stateInformationCallback Node ${peerNodeId} decommissioned`);
+                    break;
             }
         },
     };

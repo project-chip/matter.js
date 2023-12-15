@@ -15,6 +15,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Added validation handling to Invoke processing
   * Fix: Fixed message size check to allow processing of two big non matter UDP messages
 * matter.js API:
+  * Feature: Added NodeStateInfo state "Decommissioned" to inform from about a successful decommissioning of a device  
   * Fix: Makes sure to initialize all nodes in the MatterServer on startup also if errors occur on single ones
   * Fix: Only try to connect to a commissioned device in controller if it has at least one
   * Fix: Makes sure to call commissioningChanged callback when device is factory reset
