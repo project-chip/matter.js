@@ -224,7 +224,12 @@ export class MatterServer {
         }
         this.started = true;
         for (const node of this.nodes) {
-            await this.prepareNode(node);
+            try {
+                await this.prepareNode(node);
+            } catch (error) {
+                // TODO: Find a better way how to report back such issues and which nodes errored
+                logger.error(`Failed to start node: ${error}`);
+            }
         }
     }
 
@@ -237,12 +242,7 @@ export class MatterServer {
         node.setMdnsBroadcaster(this.mdnsBroadcaster);
         node.setMdnsScanner(this.mdnsScanner);
         if (this.started) {
-            try {
-                await node.start();
-            } catch (error) {
-                // TODO: Find a better way how to report back such issues and which nodes errored
-                logger.error(`Failed to start node: ${error}`);
-            }
+            await node.start();
         }
     }
 
