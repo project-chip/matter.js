@@ -73,6 +73,16 @@ npm install
 
 This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
 
+In order to succesfully build all the packages on Windows (tested on Windows 11 Pro) you need to have installed node and the windows-build-tools and use the following commands:
+```
+git clone https://github.com/project-chip/matter.js
+cd matter.js
+npm install node-gyp
+npm install @abandonware/noble
+npm install @abandonware/bleno
+npm install
+```
+
 ### Matter.js
 
 Matter.js is the core implementation of the Matter protocol in typescript. It is a JavaScript only implementation and has no native dependencies. It is build and published as CommonJS and ES6 variants in one package.
@@ -98,7 +108,7 @@ The following commands are available:
 - `npm run lint`: runs eslint on all packages and outputs the results and errors
 - `npm run lint-fix`: runs eslint on all packages and tries to fix the errors
 - `npm run format`: runs typescript-formatter on all packages and formats the code. Files will be changed in place.
-- `npm run format-check`: runs typescript-formatter on all packages and checks if the code is formatted correctly. If not it will output the files that need to be formatted.
+- `npm run format-verify`: runs typescript-formatter on all packages and checks if the code is formatted correctly. If not it will output the files that need to be formatted.
 
 ## Building
 
