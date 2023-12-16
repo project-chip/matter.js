@@ -52,7 +52,7 @@ export type MatterServerOptions = {
  */
 export class MatterServer {
     private started = false;
-    private readonly nodes: MatterNode[] = [];
+    private readonly nodes = new Map<string, MatterNode>();
 
     private mdnsScanner?: MdnsScanner;
     private mdnsBroadcaster?: MdnsBroadcaster;
@@ -77,7 +77,7 @@ export class MatterServer {
     private getNextMatterPort(desiredPort?: number) {
         // Build a temporary map with all ports in use
         const portCheckMap = new Map<number, boolean>();
-        for (const node of this.nodes) {
+        for (const node of this.nodes.values()) {
             const nodePort = node.getPort();
             if (nodePort === undefined) continue;
             if (portCheckMap.has(nodePort)) {
@@ -124,12 +124,15 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     async addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
+        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.size.toString();
+        if (this.nodes.has(storageKey)) {
+            throw new Error(`Node with storage key "${storageKey}" already exists.`);
+        }
         commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
-        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
         commissioningServer.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
         await this.prepareNode(commissioningServer);
-        this.nodes.push(commissioningServer);
+        this.nodes.set(storageKey, commissioningServer);
     }
 
     /**
@@ -140,26 +143,29 @@ export class MatterServer {
      * @param destroyStorage If true the storage context will be destroyed
      */
     async removeCommissioningServer(commissioningServer: CommissioningServer, destroyStorage = false) {
-        // Remove instance from list
-        const index = this.nodes.indexOf(commissioningServer);
-        if (index < 0) {
-            throw new Error("CommissioningServer not found");
-        }
-        this.nodes.splice(index, 1);
+        // Find instance from list
+        for (const [key, value] of this.nodes.entries()) {
+            if (value === commissioningServer) {
+                this.nodes.delete(key);
 
-        const port = commissioningServer.getPort();
-        if (port !== undefined) {
-            // Remember port to not reuse for this run if not needed to prevent issues with controllers
-            this.formerlyUsedPorts.push(port);
+                const port = commissioningServer.getPort();
+                if (port !== undefined) {
+                    // Remember port to not reuse for this run if not needed to prevent issues with controllers
+                    this.formerlyUsedPorts.push(port);
+                }
+
+                // Close instance
+                await commissioningServer.close();
+
+                if (destroyStorage) {
+                    // Destroy storage
+                    await commissioningServer.factoryReset();
+                }
+                return;
+            }
         }
 
-        // Close instance
-        await commissioningServer.close();
-
-        if (destroyStorage) {
-            // Destroy storage
-            await commissioningServer.factoryReset();
-        }
+        throw new Error("CommissioningServer to remove not found.");
     }
 
     /**
@@ -169,17 +175,21 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     async addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
+        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.size.toString();
+        if (this.nodes.has(storageKey)) {
+            throw new Error(`Node with storage key "${storageKey}" already exists.`);
+        }
+
         const localPort = commissioningController.getPort();
         if (localPort !== undefined) {
             // If a local port for controller is defined verify that the port is not overlapping with other nodes
             // Method throws if port is already used
             this.getNextMatterPort(localPort);
         }
-        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
         commissioningController.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningController using storage key "${storageKey}".`);
         await this.prepareNode(commissioningController);
-        this.nodes.push(commissioningController);
+        this.nodes.set(storageKey, commissioningController);
     }
 
     /**
@@ -189,20 +199,23 @@ export class MatterServer {
      * @param destroyStorage If true the storage context will be destroyed
      */
     async removeCommissioningController(commissioningController: CommissioningController, destroyStorage = false) {
-        // Remove instance from list
-        const index = this.nodes.indexOf(commissioningController);
-        if (index < 0) {
-            throw new Error("CommissioningController not found");
-        }
-        this.nodes.splice(index, 1);
+        // Find instance from list
+        for (const [key, value] of this.nodes.entries()) {
+            if (value === commissioningController) {
+                this.nodes.delete(key);
 
-        // Close instance
-        await commissioningController.close();
+                // Close instance
+                await commissioningController.close();
 
-        if (destroyStorage) {
-            // Destroy storage
-            commissioningController.resetStorage();
+                if (destroyStorage) {
+                    // Destroy storage
+                    commissioningController.resetStorage();
+                }
+                return;
+            }
         }
+
+        throw new Error("CommissioningController to remove not found.");
     }
 
     /**
@@ -223,8 +236,13 @@ export class MatterServer {
             });
         }
         this.started = true;
-        for (const node of this.nodes) {
-            await this.prepareNode(node);
+        for (const [key, node] of this.nodes.entries()) {
+            try {
+                await this.prepareNode(node);
+            } catch (error) {
+                // TODO: Find a better way how to report back such issues and which nodes errored
+                logger.error(`Failed to start node with storageKey ${key}: ${error}`);
+            }
         }
     }
 
@@ -245,8 +263,12 @@ export class MatterServer {
      * Close the server and all nodes
      */
     async close() {
-        for (const node of this.nodes) {
-            await node.close();
+        for (const [key, node] of this.nodes.entries()) {
+            try {
+                await node.close();
+            } catch (error) {
+                logger.error(`Failed to close node with storageKey ${key}: ${error}`);
+            }
         }
         await this.mdnsBroadcaster?.close();
         this.mdnsBroadcaster = undefined;

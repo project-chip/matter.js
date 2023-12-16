@@ -81,6 +81,11 @@ export enum NodeStateInformation {
      * This State information will only be fired when the subscribeAllAttributesAndEvents option is set to true.
      */
     StructureChanged,
+
+    /**
+     * The node was just Decommissioned.
+     */
+    Decommissioned,
 }
 
 export type CommissioningControllerNodeOptions = {
@@ -643,6 +648,7 @@ export class PairedNode {
             );
         }
         this.setConnectionState(NodeStateInformation.Disconnected);
+        this.options.stateInformationCallback?.(this.nodeId, NodeStateInformation.Decommissioned);
         await this.commissioningController.removeNode(this.nodeId, false);
     }
 
