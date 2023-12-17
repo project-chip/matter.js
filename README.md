@@ -73,15 +73,7 @@ npm install
 
 This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
 
-In order to succesfully build all the packages on Windows (tested on Windows 11 Pro) you need to have installed node and the windows-build-tools and use the following commands:
-```
-git clone https://github.com/project-chip/matter.js
-cd matter.js
-npm install node-gyp
-npm install @abandonware/noble
-npm install @abandonware/bleno
-npm install
-```
+On Windows in order to succesfully build all the packages (tested on Windows 11 Pro) make sure that to have installed node, the windows-build-tools and node-gyp version 10.
 
 ### Matter.js
 
