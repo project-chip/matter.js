@@ -393,7 +393,7 @@ export class CommissioningController extends MatterNode {
         if (this.controllerInstance === undefined) {
             this.controllerInstance = await this.initializeController();
         }
-        if (this.options.autoConnect !== false) {
+        if (this.options.autoConnect !== false && this.controllerInstance.isCommissioned()) {
             await this.connect();
         }
     }

@@ -1614,8 +1614,9 @@ describe("Integration Test", () => {
             assert.equal(commissioningChangedCallsServer[2].fabricIndex, FabricIndex(1));
             assert.equal(commissioningChangedCallsServer2.length, 1);
 
-            assert.equal(nodeStateChangesController1Node1.length, 2);
+            assert.equal(nodeStateChangesController1Node1.length, 3);
             assert.equal(nodeStateChangesController1Node1[1].nodeState, NodeStateInformation.Disconnected);
+            assert.equal(nodeStateChangesController1Node1[2].nodeState, NodeStateInformation.Decommissioned);
         });
 
         it("read and remove second node by removing fabric from device unplanned and doing factory reset", async () => {

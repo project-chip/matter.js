@@ -258,6 +258,9 @@ class ControllerNode {
                         case NodeStateInformation.StructureChanged:
                             console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} structure changed`);
                             break;
+                        case NodeStateInformation.Decommissioned:
+                            console.log(`stateInformationCallback ${peerNodeId}: Node ${nodeId} decommissioned`);
+                            break;
                     }
                 },
             });
