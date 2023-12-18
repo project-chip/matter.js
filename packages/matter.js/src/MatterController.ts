@@ -369,7 +369,8 @@ export class MatterController {
         }
 
         // Do PASE paring
-        const paseUnsecureMessageChannel = new MessageChannel(paseChannel, this.sessionManager.getUnsecureSession());
+        const unsecureSession = this.sessionManager.createUnsecureSession();
+        const paseUnsecureMessageChannel = new MessageChannel(paseChannel, unsecureSession);
         const paseExchange = this.exchangeManager.initiateExchangeWithChannel(
             paseUnsecureMessageChannel,
             SECURE_CHANNEL_PROTOCOL_ID,
@@ -384,6 +385,8 @@ export class MatterController {
             },
         );
 
+        await paseUnsecureMessageChannel.close();
+        await unsecureSession.destroy();
         return new MessageChannel(paseChannel, paseSecureSession);
     }
 
@@ -584,10 +587,8 @@ export class MatterController {
         }
 
         const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
-        const operationalUnsecureMessageExchange = new MessageChannel(
-            operationalChannel,
-            this.sessionManager.getUnsecureSession(),
-        );
+        const unsecureSession = this.sessionManager.createUnsecureSession();
+        const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, unsecureSession);
         const operationalSecureSession = await tryCatchAsync(
             async () => {
                 const exchange = this.exchangeManager.initiateExchangeWithChannel(
@@ -609,6 +610,8 @@ export class MatterController {
                 throw new PairRetransmissionLimitReachedError(error.message);
             }, // Convert error
         );
+        await operationalUnsecureMessageExchange.close(); // We reconnect using CASE, so close unsecure connection
+        await unsecureSession.destroy();
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
         await this.channelManager.setChannel(this.fabric, peerNodeId, channel);
         return channel;

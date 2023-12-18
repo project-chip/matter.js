@@ -59,7 +59,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             this.pairingErrors++;
             logger.error("An error occurred during the PASE commissioning.", error);
 
-            // if we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
+            // If we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
             const sendError = !(error instanceof ChannelStatusResponseError);
             await this.cancelPairing(messenger, sendError);
 
@@ -68,6 +68,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
                     `Pase server: Too many errors during PASE commissioning, aborting commissioning window`,
                 );
             }
+        } finally {
+            // Destroy the unsecure session used to establish the secure Case session
+            await exchange.session.destroy();
         }
     }
 

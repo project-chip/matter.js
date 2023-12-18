@@ -39,6 +39,9 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
         } catch (error) {
             logger.error("An error occurred during the commissioning", error);
             await messenger.sendError(ProtocolStatusCode.InvalidParam);
+        } finally {
+            // Destroy the unsecure session used to establish the secure Case session
+            await exchange.session.destroy();
         }
     }
 
