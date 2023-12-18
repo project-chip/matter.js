@@ -24,7 +24,7 @@ import { ChannelManager } from "./ChannelManager.js";
 import { MessageExchange } from "./MessageExchange.js";
 import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
+import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.js";
 
 const logger = Logger.get("ExchangeManager");
@@ -185,7 +185,16 @@ export class ExchangeManager<ContextT> {
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
             ? message.payloadHeader.exchangeId
             : message.payloadHeader.exchangeId | 0x10000;
-        const exchange = this.exchanges.get(exchangeIndex);
+        let exchange = this.exchanges.get(exchangeIndex);
+
+        if (
+            exchange !== undefined &&
+            (exchange.session.getId() !== session.getId() ||
+                exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
+        ) {
+            exchange = undefined;
+        }
+
         if (exchange !== undefined) {
             await exchange.onMessageReceived(message, isDuplicate);
         } else {
@@ -194,18 +203,38 @@ export class ExchangeManager<ContextT> {
                     `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,
                 );
             }
-            const exchange = MessageExchange.fromInitialMessage(
-                await this.channelManager.getOrCreateChannel(channel, session),
-                this.messageCounter,
-                message,
-                async () => await this.deleteExchange(exchangeIndex),
-            );
-            this.exchanges.set(exchangeIndex, exchange);
-            await exchange.onMessageReceived(message);
+
             const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
-            if (protocolHandler === undefined)
-                throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
-            await protocolHandler.onNewExchange(exchange, message);
+
+            if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
+                const exchange = MessageExchange.fromInitialMessage(
+                    await this.channelManager.getOrCreateChannel(channel, session),
+                    message,
+                    async () => await this.deleteExchange(exchangeIndex),
+                );
+                this.exchanges.set(exchangeIndex, exchange);
+                await exchange.onMessageReceived(message);
+                await protocolHandler.onNewExchange(exchange, message);
+            } else if (message.payloadHeader.requiresAck) {
+                const exchange = MessageExchange.fromInitialMessage(
+                    await this.channelManager.getOrCreateChannel(channel, session),
+                    message,
+                    async () => await this.deleteExchange(exchangeIndex),
+                );
+                this.exchanges.set(exchangeIndex, exchange);
+                await exchange.send(MessageType.StandaloneAck, new ByteArray(0));
+                await exchange.close();
+                logger.debug(
+                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId}.`,
+                );
+            } else {
+                if (protocolHandler === undefined)
+                    throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
+                logger.debug(`Discarding message ${messageId} for protocol ${message.payloadHeader.protocolId}.`);
+            }
+
+            // TODO A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
+            //  to prevent a node from exhausting the message counter window of the peer node.
         }
     }
 
