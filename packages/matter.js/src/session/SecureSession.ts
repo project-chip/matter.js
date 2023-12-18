@@ -317,7 +317,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy(sendClose: boolean, closeAfterExchangeFinished = true) {
+    async destroy(sendClose = false, closeAfterExchangeFinished = true) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
         if (!sendClose) {

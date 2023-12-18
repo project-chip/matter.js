@@ -5,7 +5,7 @@
  */
 
 import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "../codec/MessageCodec.js";
-import { InternalError, MatterFlowError } from "../common/MatterError.js";
+import { MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
@@ -21,7 +21,7 @@ import {
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
 export class UnsecureSession<T> implements Session<T> {
-    private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
+    private readonly initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
     private readonly messageReceptionState: MessageReceptionStateUnencryptedWithRollover;
 
@@ -68,7 +68,7 @@ export class UnsecureSession<T> implements Session<T> {
     }
 
     get name() {
-        return "unsecure";
+        return `unsecure/${this.initiatorNodeId}`;
     }
 
     getMrpParameters() {
@@ -100,11 +100,11 @@ export class UnsecureSession<T> implements Session<T> {
     }
 
     async destroy() {
-        throw new InternalError("The unsecure session should never be destroyed.");
+        await this.end();
     }
 
-    async end(_sendClose: boolean) {
-        throw new InternalError("The unsecure session should never be closed.");
+    async end() {
+        this.closeCallback?.();
     }
 
     getAssociatedFabric(): Fabric {

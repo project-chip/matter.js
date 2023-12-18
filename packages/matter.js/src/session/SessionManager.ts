@@ -36,19 +36,43 @@ type ResumptionStorageRecord = {
 };
 
 export class SessionManager<ContextT> {
-    private readonly unsecureSession: UnsecureSession<ContextT>;
-    private readonly sessions = new Map<number, Session<ContextT>>();
+    private readonly unsecureSessions = new Map<NodeId, UnsecureSession<ContextT>>();
+    private readonly sessions = new Map<number, SecureSession<ContextT>>();
     private nextSessionId = Crypto.getRandomUInt16();
     private resumptionRecords = new Map<NodeId, ResumptionRecord>();
     private readonly sessionStorage: StorageContext;
+    private readonly globalUnencryptedMessageCounter = new MessageCounter();
 
     constructor(
         private readonly context: ContextT,
         storage: StorageContext,
     ) {
         this.sessionStorage = storage.createContext("SessionManager");
-        this.unsecureSession = new UnsecureSession(context);
-        this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
+    }
+
+    createUnsecureSession(initiatorNodeId?: NodeId) {
+        if (initiatorNodeId !== undefined) {
+            if (this.unsecureSessions.has(initiatorNodeId)) {
+                throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
+            }
+        }
+        while (true) {
+            const session = new UnsecureSession(
+                this.context,
+                this.globalUnencryptedMessageCounter,
+                () => {
+                    logger.info(`Remove Session ${session.name} from session manager.`);
+                    this.unsecureSessions.delete(session.getNodeId());
+                },
+                initiatorNodeId,
+            );
+
+            const ephermalNodeId = session.getNodeId();
+            if (this.unsecureSessions.has(ephermalNodeId)) continue;
+
+            this.unsecureSessions.set(ephermalNodeId, session);
+            return session;
+        }
     }
 
     async createSecureSession(args: {
@@ -173,8 +197,20 @@ export class SessionManager<ContextT> {
         }
     }
 
-    getUnsecureSession() {
-        return this.unsecureSession;
+    getUnsecureSession(sourceNodeId?: NodeId) {
+        if (sourceNodeId === undefined) {
+            return this.unsecureSessions.get(NodeId.UNSPECIFIED_NODE_ID);
+        }
+        return this.unsecureSessions.get(sourceNodeId);
+    }
+
+    findGroupSession(groupId: number, groupSessionId: number) {
+        // Use groupsession id to find the key ??!!
+        // The Group Session ID MAY help receiving nodes efficiently locate the Operational Group Key used to encrypt an incoming groupcast message. It SHALL NOT be used as the sole means to locate the asso­ ciated Operational Group Key, since it MAY collide within the fabric. Instead, the Group Session ID provides receiving nodes a means to identify Operational Group Key candidates without the need to first attempt to decrypt groupcast messages using all available keys.
+        // On receipt of a message of Group Session Type, all valid, installed, operational group key candidates referenced by the given Group Session ID SHALL be attempted until authentication is passed or there are no more operational group keys to try. This is done because the same Group Session ID might arise from different keys. The chance of a Group Session ID collision is 2-16 but the chance of both a Group Session ID collision and the message MIC matching two different operational group keys is 2-80.
+
+        // TODO
+        throw new Error(`Not implemented ${groupId} ${groupSessionId}`);
     }
 
     findResumptionRecordById(resumptionId: ByteArray) {
@@ -250,10 +286,13 @@ export class SessionManager<ContextT> {
     async close() {
         this.storeResumptionRecords();
         for (const sessionId of this.sessions.keys()) {
-            if (sessionId === UNICAST_UNSECURE_SESSION_ID) continue;
             const session = this.sessions.get(sessionId);
             await session?.end(false);
             this.sessions.delete(sessionId);
+        }
+        for (const session of this.unsecureSessions.values()) {
+            await session?.end();
+            this.unsecureSessions.delete(session.getNodeId());
         }
     }
 }

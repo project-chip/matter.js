@@ -44,7 +44,7 @@ export interface Session<T> {
     getPeerNodeId(): NodeId | undefined;
     getIncrementedMessageCounter(): number;
     end(sendClose: boolean): Promise<void>;
-    destroy(sendClose: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
+    destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
     getAssociatedFabric(): Fabric;
