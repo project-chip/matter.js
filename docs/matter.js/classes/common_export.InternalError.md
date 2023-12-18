@@ -25,7 +25,7 @@ report such errors.
 
 ### constructor
 
-• **new InternalError**(`message?`)
+• **new InternalError**(`message?`): [`InternalError`](common_export.InternalError.md)
 
 #### Parameters
 
@@ -33,10 +33,14 @@ report such errors.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`InternalError`](common_export.InternalError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

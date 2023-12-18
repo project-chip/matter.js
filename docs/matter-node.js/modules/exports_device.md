@@ -57,16 +57,16 @@
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](exports_datatype.md#nodeid), `data`: [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](exports_datatype.md#nodeid), `data`: [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
 | `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
-| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](exports_datatype.md#nodeid), `data`: [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](exports_datatype.md#nodeid), `data`: [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
 | `stateInformationCallback?` | (`nodeId`: [`NodeId`](exports_datatype.md#nodeid), `state`: [`NodeStateInformation`](../enums/exports_device.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
 | `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
 | `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
 
 #### Defined in
 
-packages/matter.js/dist/esm/device/PairedNode.d.ts:39
+packages/matter.js/dist/esm/device/PairedNode.d.ts:43
 
 ___
 
@@ -81,8 +81,8 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 | Name | Type |
 | :------ | :------ |
-| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterClientObj`](exports_cluster.md#clusterclientobj)<`any`, `any`, `any`, `any`\>) => `boolean` |
-| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterServerObj`](exports_cluster.md#clusterserverobj)<`any`, `any`\>) => `boolean` |
+| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterClientObj`](exports_cluster.md#clusterclientobj)\<`any`, `any`, `any`, `any`\>) => `boolean` |
+| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md), `cluster`: [`ClusterServerObj`](exports_cluster.md#clusterserverobj)\<`any`, `any`\>) => `boolean` |
 | `endpointFilter?` | (`endpoint`: [`Endpoint`](../classes/exports_device.Endpoint.md)) => `boolean` |
 | `logAttributeObjectValues?` | `boolean` |
 | `logAttributePrimitiveValues?` | `boolean` |
@@ -169,7 +169,7 @@ ___
 
 ### WrapCommandHandler
 
-▸ **WrapCommandHandler**<`C`\>(`handler`, `commandHandler?`): [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<`C`\>
+▸ **WrapCommandHandler**\<`C`\>(`handler`, `commandHandler?`): [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<`C`\>
 
 Utility function to wrap externally registered command handlers into the internal command handler and make sure
 the custom ones are used if defined
@@ -178,18 +178,18 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `C` | extends [`Cluster`](exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `handler` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<`C`\> | Internal handlers instance to wrap the external handler into |
-| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> | Command handler instance with the registered handlers |
+| `handler` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<`C`\> | Internal handlers instance to wrap the external handler into |
+| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)\<`any`\> | Command handler instance with the registered handlers |
 
 #### Returns
 
-[`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<`C`\>
+[`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<`C`\>
 
 #### Defined in
 
@@ -199,7 +199,7 @@ ___
 
 ### getClusterInitialAttributeValues
 
-▸ **getClusterInitialAttributeValues**<`F`, `SF`, `A`, `C`, `E`\>(`attributeInitialValues`, `cluster`): [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`A`\> \| `undefined`
+▸ **getClusterInitialAttributeValues**\<`F`, `SF`, `A`, `C`, `E`\>(`attributeInitialValues`, `cluster`): [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)\<`A`\> \| `undefined`
 
 Utility function to get the initial attribute values for a cluster out of an object with initial attribute values
 for multiple clusters
@@ -209,7 +209,7 @@ for multiple clusters
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -218,12 +218,12 @@ for multiple clusters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeInitialValues` | `undefined` \| { `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`any`\>;  } | Object with initial attribute values for automatically added clusters |
-| `cluster` | [`Cluster`](exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
+| `attributeInitialValues` | `undefined` \| \{ `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)\<`any`\>;  } | Object with initial attribute values for automatically added clusters |
+| `cluster` | [`Cluster`](exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
 
 #### Returns
 
-[`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`A`\> \| `undefined`
+[`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)\<`A`\> \| `undefined`
 
 #### Defined in
 

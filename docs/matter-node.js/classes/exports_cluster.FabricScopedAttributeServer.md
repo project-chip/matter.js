@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / FabricScopedAttributeServer
 
-# Class: FabricScopedAttributeServer<T\>
+# Class: FabricScopedAttributeServer\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).FabricScopedAttributeServer
 
@@ -15,7 +15,7 @@ on fabric level if no custom getter or setter is defined.
 
 ## Hierarchy
 
-- [`AttributeServer`](exports_cluster.AttributeServer.md)<`T`\>
+- [`AttributeServer`](exports_cluster.AttributeServer.md)\<`T`\>
 
   ↳ **`FabricScopedAttributeServer`**
 
@@ -76,7 +76,7 @@ on fabric level if no custom getter or setter is defined.
 
 ### constructor
 
-• **new FabricScopedAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `cluster`, `getClusterDataVersion`, `increaseClusterDataVersion`, `getter?`, `setter?`, `validator?`)
+• **new FabricScopedAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `cluster`, `getClusterDataVersion`, `increaseClusterDataVersion`, `getter?`, `setter?`, `validator?`): [`FabricScopedAttributeServer`](exports_cluster.FabricScopedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -90,17 +90,21 @@ on fabric level if no custom getter or setter is defined.
 | :------ | :------ |
 | `id` | [`AttributeId`](../modules/exports_datatype.md#attributeid) |
 | `name` | `string` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
 | `requiresTimedInteraction` | `boolean` |
 | `defaultValue` | `T` |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `getClusterDataVersion` | () => `number` |
 | `increaseClusterDataVersion` | () => `number` |
-| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` |
-| `setter?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean` |
-| `validator?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void` |
+| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` |
+| `setter?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean` |
+| `validator?` | (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void` |
+
+#### Returns
+
+[`FabricScopedAttributeServer`](exports_cluster.FabricScopedAttributeServer.md)\<`T`\>
 
 #### Overrides
 
@@ -114,7 +118,7 @@ packages/matter.js/dist/esm/cluster/server/AttributeServer.d.ts:233
 
 ### cluster
 
-• `Readonly` **cluster**: [`Cluster`](../modules/exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\>
+• `Readonly` **cluster**: [`Cluster`](../modules/exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\>
 
 #### Defined in
 
@@ -174,7 +178,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -184,7 +188,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -330,7 +334,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -344,7 +348,7 @@ ___
 
 ### setter
 
-• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean`
+• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `boolean`
 
 #### Type declaration
 
@@ -355,7 +359,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 
 ##### Returns
@@ -374,7 +378,7 @@ ___
 
 ### validator
 
-• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void`
+• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md)) => `void`
 
 #### Type declaration
 
@@ -385,7 +389,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 
 ##### Returns
@@ -536,7 +540,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -612,7 +616,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -636,7 +640,7 @@ ___
 
 ### handleVersionAndTriggerListeners
 
-▸ `Protected` **handleVersionAndTriggerListeners**(`value`, `oldValue`, `considerVersionChanged`): `void`
+▸ **handleVersionAndTriggerListeners**(`value`, `oldValue`, `considerVersionChanged`): `void`
 
 Helper Method to handle needed version increases and trigger the relevant listeners. This method is used
 internally.
@@ -692,7 +696,7 @@ ___
 
 ### processSet
 
-▸ `Protected` **processSet**(`value`, `session?`): `void`
+▸ **processSet**(`value`, `session?`): `void`
 
 Helper Method to process the set of a value in a generic way. This method is used internally.
 
@@ -701,7 +705,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -783,7 +787,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -854,7 +858,7 @@ ___
 
 ### setRemote
 
-▸ `Protected` **setRemote**(`value`, `session`): `void`
+▸ **setRemote**(`value`, `session`): `void`
 
 Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
 we need to inject the fabric index into the value.
@@ -864,7 +868,7 @@ we need to inject the fabric index into the value.
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -920,7 +924,7 @@ ACL checks needs to be performed before calling this method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](exports_session.SecureSession.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 

@@ -112,7 +112,7 @@
 
 ### AttributeReportPayload
 
-Ƭ **AttributeReportPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvAttributeReport`](exports_interaction.md#tlvattributereport)\>, ``"attributeData"``\> & { `attributeData?`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload)  }
+Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeReport`](exports_interaction.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload)  }
 
 Type for TlvAttributeReport where the real data are represented with the schema and the JS value.
 
@@ -124,7 +124,7 @@ ___
 
 ### DataReport
 
-Ƭ **DataReport**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvDataReport`](exports_interaction.md#tlvdatareport)\>
+Ƭ **DataReport**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvDataReport`](exports_interaction.md#tlvdatareport)\>
 
 #### Defined in
 
@@ -134,7 +134,7 @@ ___
 
 ### DataReportPayload
 
-Ƭ **DataReportPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvDataReport`](exports_interaction.md#tlvdatareport)\>, ``"attributeReports"`` \| ``"eventReports"``\> & { `attributeReportsPayload?`: [`AttributeReportPayload`](exports_interaction.md#attributereportpayload)[] ; `eventReportsPayload?`: [`EventReportPayload`](exports_interaction.md#eventreportpayload)[]  }
+Ƭ **DataReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvDataReport`](exports_interaction.md#tlvdatareport)\>, ``"attributeReports"`` \| ``"eventReports"``\> & \{ `attributeReportsPayload?`: [`AttributeReportPayload`](exports_interaction.md#attributereportpayload)[] ; `eventReportsPayload?`: [`EventReportPayload`](exports_interaction.md#eventreportpayload)[]  }
 
 Type for TlvDataReport where the real data are represented with the schema and the JS value.
 
@@ -146,7 +146,7 @@ ___
 
 ### DecodedAttributeReportValue
 
-Ƭ **DecodedAttributeReportValue**<`T`\>: `Object`
+Ƭ **DecodedAttributeReportValue**\<`T`\>: `Object`
 
 Represents a fully qualified and decoded attribute value from a received DataReport
 
@@ -160,7 +160,7 @@ Represents a fully qualified and decoded attribute value from a received DataRep
 
 | Name | Type |
 | :------ | :------ |
-| `path` | { `attributeId`: [`AttributeId`](exports_datatype.md#attributeid) ; `attributeName`: `string` ; `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber) ; `nodeId?`: [`NodeId`](exports_datatype.md#nodeid)  } |
+| `path` | \{ `attributeId`: [`AttributeId`](exports_datatype.md#attributeid) ; `attributeName`: `string` ; `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber) ; `nodeId?`: [`NodeId`](exports_datatype.md#nodeid)  } |
 | `path.attributeId` | [`AttributeId`](exports_datatype.md#attributeid) |
 | `path.attributeName` | `string` |
 | `path.clusterId` | [`ClusterId`](exports_datatype.md#clusterid) |
@@ -177,7 +177,7 @@ ___
 
 ### DecodedAttributeValue
 
-Ƭ **DecodedAttributeValue**<`T`\>: `Omit`<[`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)<`T`\>, ``"version"``\> & { `version?`: `number`  }
+Ƭ **DecodedAttributeValue**\<`T`\>: `Omit`\<[`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)\<`T`\>, ``"version"``\> & \{ `version?`: `number`  }
 
 Represents a decoded attribute value from a received DataReport where data version could be optional.
 
@@ -195,7 +195,7 @@ ___
 
 ### DecodedEventData
 
-Ƭ **DecodedEventData**<`T`\>: `Object`
+Ƭ **DecodedEventData**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -223,7 +223,7 @@ ___
 
 ### DecodedEventReportValue
 
-Ƭ **DecodedEventReportValue**<`T`\>: `Object`
+Ƭ **DecodedEventReportValue**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -235,8 +235,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `events` | [`DecodedEventData`](exports_interaction.md#decodedeventdata)<`T`\>[] |
-| `path` | { `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber) ; `eventId`: [`EventId`](exports_datatype.md#eventid) ; `eventName`: `string` ; `nodeId?`: [`NodeId`](exports_datatype.md#nodeid)  } |
+| `events` | [`DecodedEventData`](exports_interaction.md#decodedeventdata)\<`T`\>[] |
+| `path` | \{ `clusterId`: [`ClusterId`](exports_datatype.md#clusterid) ; `endpointId`: [`EndpointNumber`](exports_datatype.md#endpointnumber) ; `eventId`: [`EventId`](exports_datatype.md#eventid) ; `eventName`: `string` ; `nodeId?`: [`NodeId`](exports_datatype.md#nodeid)  } |
 | `path.clusterId` | [`ClusterId`](exports_datatype.md#clusterid) |
 | `path.endpointId` | [`EndpointNumber`](exports_datatype.md#endpointnumber) |
 | `path.eventId` | [`EventId`](exports_datatype.md#eventid) |
@@ -251,7 +251,7 @@ ___
 
 ### EventReportPayload
 
-Ƭ **EventReportPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventReport`](exports_interaction.md#tlveventreport)\>, ``"eventData"``\> & { `eventData?`: [`EventDataPayload`](export._internal_.md#eventdatapayload)  }
+Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventReport`](exports_interaction.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](export._internal_.md#eventdatapayload)  }
 
 Type for TlvEventReport where the real data are represented with the schema and the JS value.
 
@@ -281,7 +281,7 @@ ___
 
 ### InvokeRequest
 
-Ƭ **InvokeRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvInvokeRequest`](exports_interaction.md#tlvinvokerequest)\>
+Ƭ **InvokeRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvInvokeRequest`](exports_interaction.md#tlvinvokerequest)\>
 
 #### Defined in
 
@@ -291,7 +291,7 @@ ___
 
 ### InvokeResponse
 
-Ƭ **InvokeResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvInvokeResponse`](exports_interaction.md#tlvinvokeresponse)\>
+Ƭ **InvokeResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvInvokeResponse`](exports_interaction.md#tlvinvokeresponse)\>
 
 #### Defined in
 
@@ -301,7 +301,7 @@ ___
 
 ### ReadRequest
 
-Ƭ **ReadRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvReadRequest`](exports_interaction.md#tlvreadrequest)\>
+Ƭ **ReadRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvReadRequest`](exports_interaction.md#tlvreadrequest)\>
 
 #### Defined in
 
@@ -311,7 +311,7 @@ ___
 
 ### SubscribeRequest
 
-Ƭ **SubscribeRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvSubscribeRequest`](exports_interaction.md#tlvsubscriberequest)\>
+Ƭ **SubscribeRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvSubscribeRequest`](exports_interaction.md#tlvsubscriberequest)\>
 
 #### Defined in
 
@@ -321,7 +321,7 @@ ___
 
 ### SubscribeResponse
 
-Ƭ **SubscribeResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvSubscribeResponse`](exports_interaction.md#tlvsubscriberesponse)\>
+Ƭ **SubscribeResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvSubscribeResponse`](exports_interaction.md#tlvsubscriberesponse)\>
 
 #### Defined in
 
@@ -331,7 +331,7 @@ ___
 
 ### TimedRequest
 
-Ƭ **TimedRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvTimedRequest`](exports_interaction.md#tlvtimedrequest)\>
+Ƭ **TimedRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvTimedRequest`](exports_interaction.md#tlvtimedrequest)\>
 
 #### Defined in
 
@@ -341,7 +341,7 @@ ___
 
 ### WriteRequest
 
-Ƭ **WriteRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvWriteRequest`](exports_interaction.md#tlvwriterequest)\>
+Ƭ **WriteRequest**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvWriteRequest`](exports_interaction.md#tlvwriterequest)\>
 
 #### Defined in
 
@@ -351,7 +351,7 @@ ___
 
 ### WriteResponse
 
-Ƭ **WriteResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvWriteResponse`](exports_interaction.md#tlvwriteresponse)\>
+Ƭ **WriteResponse**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvWriteResponse`](exports_interaction.md#tlvwriteresponse)\>
 
 #### Defined in
 
@@ -389,7 +389,7 @@ MatterCoreSpecificationV1_0, section 10.5.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:112
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:83
 
 ___
 
@@ -403,7 +403,7 @@ MatterCoreSpecificationV1_0, section 10.5.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:38
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:9
 
 ___
 
@@ -417,7 +417,7 @@ MatterCoreSpecificationV1_0, section 10.5.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:137
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:108
 
 ___
 
@@ -427,7 +427,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:124
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:95
 
 ___
 
@@ -441,7 +441,7 @@ MatterCoreSpecificationV1_0, section 10.5.16
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:97
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:68
 
 ___
 
@@ -455,7 +455,7 @@ MatterCoreSpecificationV1_0, section 10.5.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:77
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:48
 
 ___
 
@@ -469,7 +469,7 @@ MatterCoreSpecificationV1_0, section 10.5.12
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:218
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:189
 
 ___
 
@@ -483,7 +483,7 @@ MatterCoreSpecificationV1_0, section 10.5.11
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:212
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:183
 
 ___
 
@@ -497,7 +497,7 @@ MatterCoreSpecificationV1_0, section 10.5.14
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:227
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:198
 
 ___
 
@@ -511,7 +511,7 @@ MatterCoreSpecificationV1_0, section 10.6.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:298
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:269
 
 ___
 
@@ -523,7 +523,7 @@ Special version of the DataReport Message with pre-encoded report entries used b
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:364
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:335
 
 ___
 
@@ -537,7 +537,7 @@ MatterCoreSpecificationV1_0, section 10.5.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:83
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:54
 
 ___
 
@@ -551,7 +551,7 @@ MatterCoreSpecificationV1_0, section 10.5.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:55
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:26
 
 ___
 
@@ -565,7 +565,7 @@ MatterCoreSpecificationV1_0, section 10.5.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:72
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:43
 
 ___
 
@@ -579,7 +579,7 @@ MatterCoreSpecificationV1_0, section 10.5.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:18
 
 ___
 
@@ -593,7 +593,7 @@ MatterCoreSpecificationV1_0, section 10.5.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:180
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:151
 
 ___
 
@@ -607,7 +607,7 @@ MatterCoreSpecificationV1_0, section 10.5.15
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:166
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:137
 
 ___
 
@@ -621,7 +621,7 @@ MatterCoreSpecificationV1_0, section 10.6.9
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:414
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:385
 
 ___
 
@@ -635,7 +635,7 @@ MatterCoreSpecificationV1_0, section 10.6.10
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:428
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:399
 
 ___
 
@@ -649,7 +649,7 @@ MatterCoreSpecificationV1_0, section 10.5.13
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:239
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:210
 
 ___
 
@@ -663,7 +663,7 @@ MatterCoreSpecificationV1_0, section 10.6.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:266
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:237
 
 ___
 
@@ -677,7 +677,7 @@ MatterCoreSpecificationV1_0, section 10.5.17
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:92
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:63
 
 ___
 
@@ -691,7 +691,7 @@ MatterCoreSpecificationV1_0, section 10.6.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:261
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:232
 
 ___
 
@@ -705,7 +705,7 @@ MatterCoreSpecificationV1_0, section 10.6.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:373
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:344
 
 ___
 
@@ -719,7 +719,7 @@ MatterCoreSpecificationV1_0, section 10.6.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:408
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:379
 
 ___
 
@@ -733,7 +733,7 @@ MatterCoreSpecificationV1_0, section 10.6.8
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:454
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:425
 
 ___
 
@@ -747,7 +747,7 @@ MatterCoreSpecificationV1_0, section 10.6.6
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:459
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:430
 
 ___
 
@@ -761,7 +761,7 @@ MatterCoreSpecificationV1_0, section 10.6.7
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:478
+packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:449
 
 ## Functions
 
@@ -773,7 +773,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:478
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -837,7 +837,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -871,7 +871,7 @@ ___
 
 ### compressAttributeDataReportTags
 
-▸ **compressAttributeDataReportTags**(`data`): { `attributeData`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
+▸ **compressAttributeDataReportTags**(`data`): \{ `attributeData`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
 
 Sort and use Tag compression to compress a list of AttributeReportPayloads.
 
@@ -883,7 +883,7 @@ Sort and use Tag compression to compress a list of AttributeReportPayloads.
 
 #### Returns
 
-{ `attributeData`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
+\{ `attributeData`: [`AttributeDataPayload`](export._internal_.md#attributedatapayload) \| `undefined` ; `attributeStatus`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) \| `undefined`  }[]
 
 #### Defined in
 
@@ -893,7 +893,7 @@ ___
 
 ### decodeAttributeValueWithSchema
 
-▸ **decodeAttributeValueWithSchema**<`T`\>(`schema`, `values`, `defaultValue?`): `T` \| `undefined`
+▸ **decodeAttributeValueWithSchema**\<`T`\>(`schema`, `values`, `defaultValue?`): `T` \| `undefined`
 
 Decodes the data for one attribute via a schema including array un-chunking.
 
@@ -907,8 +907,8 @@ Decodes the data for one attribute via a schema including array un-chunking.
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
-| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
+| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 | `defaultValue?` | `T` |
 
 #### Returns
@@ -931,7 +931,7 @@ Decodes the data for one unknown attribute via the AnySchema including array un-
 
 | Name | Type |
 | :------ | :------ |
-| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+| `values` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 
 #### Returns
 
@@ -1015,7 +1015,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -1051,7 +1051,7 @@ ___
 
 ### normalizeAndDecodeAttributeData
 
-▸ **normalizeAndDecodeAttributeData**(`data`): [`DecodedAttributeValue`](exports_interaction.md#decodedattributevalue)<`any`\>[]
+▸ **normalizeAndDecodeAttributeData**(`data`): [`DecodedAttributeValue`](exports_interaction.md#decodedattributevalue)\<`any`\>[]
 
 Normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from a received
 DataReport.
@@ -1060,11 +1060,11 @@ DataReport.
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 
 #### Returns
 
-[`DecodedAttributeValue`](exports_interaction.md#decodedattributevalue)<`any`\>[]
+[`DecodedAttributeValue`](exports_interaction.md#decodedattributevalue)\<`any`\>[]
 
 #### Defined in
 
@@ -1074,17 +1074,17 @@ ___
 
 ### normalizeAndDecodeEventData
 
-▸ **normalizeAndDecodeEventData**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+▸ **normalizeAndDecodeEventData**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
 
 #### Returns
 
-[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)\<`any`\>[]
 
 #### Defined in
 
@@ -1094,7 +1094,7 @@ ___
 
 ### normalizeAndDecodeReadAttributeReport
 
-▸ **normalizeAndDecodeReadAttributeReport**(`data`): [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)<`any`\>[]
+▸ **normalizeAndDecodeReadAttributeReport**(`data`): [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)\<`any`\>[]
 
 Parses, normalizes (e.g. un-chunk arrays and resolve Tag compression if used) and decodes the attribute data from
 a received DataReport.
@@ -1103,11 +1103,11 @@ a received DataReport.
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
 
 #### Returns
 
-[`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)<`any`\>[]
+[`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)\<`any`\>[]
 
 #### Defined in
 
@@ -1117,17 +1117,17 @@ ___
 
 ### normalizeAndDecodeReadEventReport
 
-▸ **normalizeAndDecodeReadEventReport**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+▸ **normalizeAndDecodeReadEventReport**(`data`): [`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `eventData`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`StatusCode`](../enums/exports_interaction.StatusCode.md)\>  }\>\>  }\>\>  }\>[] |
 
 #### Returns
 
-[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)<`any`\>[]
+[`DecodedEventReportValue`](exports_interaction.md#decodedeventreportvalue)\<`any`\>[]
 
 #### Defined in
 
@@ -1137,7 +1137,7 @@ ___
 
 ### normalizeAttributeData
 
-▸ **normalizeAttributeData**(`data`, `acceptWildcardPaths?`): [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvAttributeData`](exports_interaction.md#tlvattributedata)\>[][]
+▸ **normalizeAttributeData**(`data`, `acceptWildcardPaths?`): [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeData`](exports_interaction.md#tlvattributedata)\>[][]
 
 Normalizes (e.g. prepare data for array un-chinking and resolve Tag compression if used) the attribute details from
 a received DataReport.
@@ -1146,12 +1146,12 @@ a received DataReport.
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`AttributeId`](exports_datatype.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\>  }\>[] |
 | `acceptWildcardPaths?` | `boolean` |
 
 #### Returns
 
-[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvAttributeData`](exports_interaction.md#tlvattributedata)\>[][]
+[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeData`](exports_interaction.md#tlvattributedata)\>[][]
 
 #### Defined in
 
@@ -1161,17 +1161,17 @@ ___
 
 ### normalizeEventData
 
-▸ **normalizeEventData**(`data`): [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
+▸ **normalizeEventData**(`data`): [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`TypeFromFields`](exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number` \| `bigint`\>  }\>[] |
+| `data` | [`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TlvStream`](exports_tlv.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`TypeFromFields`](exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](exports_datatype.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<[`EventPriority`](../enums/exports_cluster.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>[] |
 
 #### Returns
 
-[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
+[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>[][]
 
 #### Defined in
 
@@ -1213,7 +1213,7 @@ Structure the data of a received DataReport into an endpointId/clusterId/attribu
 
 | Name | Type |
 | :------ | :------ |
-| `data` | [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)<`any`\>[] |
+| `data` | [`DecodedAttributeReportValue`](exports_interaction.md#decodedattributereportvalue)\<`any`\>[] |
 
 #### Returns
 

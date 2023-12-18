@@ -22,7 +22,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new StorageError**(`message?`)
+• **new StorageError**(`message?`): [`StorageError`](storage_export.StorageError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`StorageError`](storage_export.StorageError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

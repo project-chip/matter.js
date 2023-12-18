@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / InteractionEndpointStructure
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / InteractionEndpointStructure
 
 # Class: InteractionEndpointStructure
 
-[<internal>](../modules/internal_.md).InteractionEndpointStructure
+[\<internal\>](../modules/internal_.md).InteractionEndpointStructure
 
 ## Table of contents
 
@@ -50,7 +50,11 @@
 
 ### constructor
 
-• **new InteractionEndpointStructure**()
+• **new InteractionEndpointStructure**(): [`InteractionEndpointStructure`](internal_.InteractionEndpointStructure.md)
+
+#### Returns
+
+[`InteractionEndpointStructure`](internal_.InteractionEndpointStructure.md)
 
 ## Properties
 
@@ -66,7 +70,7 @@ ___
 
 ### attributes
 
-• **attributes**: `Map`<`string`, [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>\>
+• **attributes**: `Map`\<`string`, [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)\<`any`\>\>
 
 #### Defined in
 
@@ -86,7 +90,7 @@ ___
 
 ### commands
 
-• **commands**: `Map`<`string`, [`CommandServer`](internal_.CommandServer.md)<`any`, `any`\>\>
+• **commands**: `Map`\<`string`, [`CommandServer`](internal_.CommandServer.md)\<`any`, `any`\>\>
 
 #### Defined in
 
@@ -96,7 +100,7 @@ ___
 
 ### endpoints
 
-• **endpoints**: `Map`<[`EndpointNumber`](../modules/internal_.md#endpointnumber), [`Endpoint`](internal_.Endpoint.md)\>
+• **endpoints**: `Map`\<[`EndpointNumber`](../modules/internal_.md#endpointnumber), [`Endpoint`](internal_.Endpoint.md)\>
 
 #### Defined in
 
@@ -116,7 +120,7 @@ ___
 
 ### events
 
-• **events**: `Map`<`string`, [`EventServer`](internal_.EventServer.md)<`any`\>\>
+• **events**: `Map`\<`string`, [`EventServer`](internal_.EventServer.md)\<`any`\>\>
 
 #### Defined in
 
@@ -174,7 +178,7 @@ ___
 
 ### getAttribute
 
-▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>
+▸ **getAttribute**(`endpointId`, `clusterId`, `attributeId`): `undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)\<`any`\>
 
 #### Parameters
 
@@ -186,7 +190,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)<`any`\>
+`undefined` \| [`AnyAttributeServer`](../modules/internal_.md#anyattributeserver)\<`any`\>
 
 #### Defined in
 
@@ -202,7 +206,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `onlyWritable?` | `boolean` |
 
 #### Returns
@@ -217,7 +221,7 @@ ___
 
 ### getClusterServer
 
-▸ **getClusterServer**(`endpointId`, `clusterId`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<`any`, `any`\>
+▸ **getClusterServer**(`endpointId`, `clusterId`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<`any`, `any`\>
 
 #### Parameters
 
@@ -228,7 +232,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<`any`, `any`\>
+`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<`any`, `any`\>
 
 #### Defined in
 
@@ -238,7 +242,7 @@ ___
 
 ### getCommand
 
-▸ **getCommand**(`endpointId`, `clusterId`, `commandId`): `undefined` \| [`CommandServer`](internal_.CommandServer.md)<`any`, `any`\>
+▸ **getCommand**(`endpointId`, `clusterId`, `commandId`): `undefined` \| [`CommandServer`](internal_.CommandServer.md)\<`any`, `any`\>
 
 #### Parameters
 
@@ -250,7 +254,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`CommandServer`](internal_.CommandServer.md)<`any`, `any`\>
+`undefined` \| [`CommandServer`](internal_.CommandServer.md)\<`any`, `any`\>
 
 #### Defined in
 
@@ -266,7 +270,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>[] |
 
 #### Returns
 
@@ -300,7 +304,7 @@ ___
 
 ### getEvent
 
-▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](internal_.EventServer.md)<`any`\>
+▸ **getEvent**(`endpointId`, `clusterId`, `eventId`): `undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`\>
 
 #### Parameters
 
@@ -312,7 +316,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`EventServer`](internal_.EventServer.md)<`any`\>
+`undefined` \| [`EventServer`](internal_.EventServer.md)\<`any`\>
 
 #### Defined in
 
@@ -328,7 +332,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `filters` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 
 #### Returns
 
@@ -475,7 +479,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -495,7 +499,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\> |
 
 #### Returns
 
@@ -515,7 +519,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
 
 #### Returns
 
@@ -539,7 +543,7 @@ ___
 | `endpointId` | `undefined` \| [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
 | `clusterId` | `undefined` \| [`ClusterId`](../modules/internal_.md#clusterid) |
 | `elementId` | `undefined` \| `number` |
-| `elementMap` | `Map`<`string`, `any`\> |
+| `elementMap` | `Map`\<`string`, `any`\> |
 
 #### Returns
 

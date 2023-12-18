@@ -30,47 +30,51 @@
 
 ### constructor
 
-• **new ChannelManager**()
+• **new ChannelManager**(): [`ChannelManager`](protocol_export.ChannelManager.md)
+
+#### Returns
+
+[`ChannelManager`](protocol_export.ChannelManager.md)
 
 ## Properties
 
 ### channels
 
-• `Private` `Readonly` **channels**: `Map`<`string`, [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+• `Private` `Readonly` **channels**: `Map`\<`string`, [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L22)
+[packages/matter.js/src/protocol/ChannelManager.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L22)
 
 ___
 
 ### paseChannels
 
-• `Private` `Readonly` **paseChannels**: `Map`<[`Session`](../interfaces/session_export.Session.md)<`any`\>, [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+• `Private` `Readonly` **paseChannels**: `Map`\<[`Session`](../interfaces/session_export.Session.md)\<`any`\>, [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L23)
+[packages/matter.js/src/protocol/ChannelManager.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L23)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:110](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L110)
+[packages/matter.js/src/protocol/ChannelManager.ts:110](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L110)
 
 ___
 
 ### getChannel
 
-▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
@@ -81,37 +85,37 @@ ___
 
 #### Returns
 
-[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+[`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L45)
+[packages/matter.js/src/protocol/ChannelManager.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L45)
 
 ___
 
 ### getChannelForSession
 
-▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`any`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
 
 #### Returns
 
-`undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+`undefined` \| [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L51)
+[packages/matter.js/src/protocol/ChannelManager.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L51)
 
 ___
 
 ### getChannelKey
 
-▸ `Private` **getChannelKey**(`fabric`, `nodeId`): `string`
+▸ **getChannelKey**(`fabric`, `nodeId`): `string`
 
 #### Parameters
 
@@ -126,55 +130,55 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L25)
+[packages/matter.js/src/protocol/ChannelManager.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L25)
 
 ___
 
 ### getOrCreateAsPaseChannel
 
-▸ `Private` **getOrCreateAsPaseChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+▸ **getOrCreateAsPaseChannel**(`byteArrayChannel`, `session`): [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`any`\> |
+| `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
 
 #### Returns
 
-[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>
+[`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L77)
+[packages/matter.js/src/protocol/ChannelManager.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L77)
 
 ___
 
 ### getOrCreateChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`any`\> |
+| `byteArrayChannel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<[`MessageChannel`](protocol_export.MessageChannel.md)<`any`\>\>
+`Promise`\<[`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:87](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L87)
+[packages/matter.js/src/protocol/ChannelManager.ts:87](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L87)
 
 ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -185,17 +189,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L68)
+[packages/matter.js/src/protocol/ChannelManager.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L68)
 
 ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -203,12 +207,12 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](fabric_export.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
-| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`any`\> |
+| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ChannelManager.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ChannelManager.ts#L29)
+[packages/matter.js/src/protocol/ChannelManager.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ChannelManager.ts#L29)

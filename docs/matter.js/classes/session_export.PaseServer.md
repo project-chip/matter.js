@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -36,7 +36,7 @@
 
 ### constructor
 
-• **new PaseServer**(`w0`, `L`, `pbkdfParameters?`)
+• **new PaseServer**(`w0`, `L`, `pbkdfParameters?`): [`PaseServer`](session_export.PaseServer.md)
 
 #### Parameters
 
@@ -46,9 +46,13 @@
 | `L` | `Uint8Array` |
 | `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/crypto_export.PbkdfParameters.md) |
 
+#### Returns
+
+[`PaseServer`](session_export.PaseServer.md)
+
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L44)
+[packages/matter.js/src/session/pase/PaseServer.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L44)
 
 ## Properties
 
@@ -58,7 +62,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L46)
+[packages/matter.js/src/session/pase/PaseServer.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L46)
 
 ___
 
@@ -68,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L31)
+[packages/matter.js/src/session/pase/PaseServer.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L31)
 
 ___
 
@@ -78,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L30)
+[packages/matter.js/src/session/pase/PaseServer.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L30)
 
 ___
 
@@ -88,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L47)
+[packages/matter.js/src/session/pase/PaseServer.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L47)
 
 ___
 
@@ -98,13 +102,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L45)
+[packages/matter.js/src/session/pase/PaseServer.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L45)
 
 ## Methods
 
 ### cancelPairing
 
-▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`<`void`\>
+▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -115,21 +119,21 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:149](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L149)
+[packages/matter.js/src/session/pase/PaseServer.ts:149](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L149)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -137,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:159](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L159)
+[packages/matter.js/src/session/pase/PaseServer.ts:159](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L159)
 
 ___
 
@@ -155,13 +159,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L50)
+[packages/matter.js/src/session/pase/PaseServer.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L50)
 
 ___
 
 ### handlePairingRequest
 
-▸ `Private` **handlePairingRequest**(`server`, `messenger`): `Promise`<`void`\>
+▸ **handlePairingRequest**(`server`, `messenger`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -172,27 +176,27 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:74](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L74)
+[packages/matter.js/src/session/pase/PaseServer.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L74)
 
 ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -200,13 +204,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L54)
+[packages/matter.js/src/session/pase/PaseServer.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L54)
 
 ___
 
 ### fromPin
 
-▸ `Static` **fromPin**(`setupPinCode`, `pbkdfParameters`): `Promise`<[`PaseServer`](session_export.PaseServer.md)\>
+▸ **fromPin**(`setupPinCode`, `pbkdfParameters`): `Promise`\<[`PaseServer`](session_export.PaseServer.md)\>
 
 #### Parameters
 
@@ -217,17 +221,17 @@ ___
 
 #### Returns
 
-`Promise`<[`PaseServer`](session_export.PaseServer.md)\>
+`Promise`\<[`PaseServer`](session_export.PaseServer.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L33)
+[packages/matter.js/src/session/pase/PaseServer.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L33)
 
 ___
 
 ### fromVerificationValue
 
-▸ `Static` **fromVerificationValue**(`verificationValue`, `pbkdfParameters?`): [`PaseServer`](session_export.PaseServer.md)
+▸ **fromVerificationValue**(`verificationValue`, `pbkdfParameters?`): [`PaseServer`](session_export.PaseServer.md)
 
 #### Parameters
 
@@ -242,4 +246,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseServer.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseServer.ts#L38)
+[packages/matter.js/src/session/pase/PaseServer.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseServer.ts#L38)

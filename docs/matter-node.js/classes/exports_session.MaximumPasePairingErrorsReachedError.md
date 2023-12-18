@@ -22,7 +22,7 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 
 ### constructor
 
-• **new MaximumPasePairingErrorsReachedError**(`message?`)
+• **new MaximumPasePairingErrorsReachedError**(`message?`): [`MaximumPasePairingErrorsReachedError`](exports_session.MaximumPasePairingErrorsReachedError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`MaximumPasePairingErrorsReachedError`](exports_session.MaximumPasePairingErrorsReachedError.md)
+
 #### Inherited from
 
 [MatterFlowError](exports_common.MatterFlowError.md).[constructor](exports_common.MatterFlowError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

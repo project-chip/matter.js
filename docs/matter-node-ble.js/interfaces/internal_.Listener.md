@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Listener
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Listener
 
 # Interface: Listener
 
-[<internal>](../modules/internal_.md).Listener
+[\<internal\>](../modules/internal_.md).Listener
 
 ## Table of contents
 
@@ -14,11 +14,11 @@
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

@@ -46,7 +46,7 @@ Cluster.constructor
 
 ### attributes
 
-• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
+• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ ___
 
 ### commands
 
-• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
+• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
 
 #### Inherited from
 
@@ -74,7 +74,7 @@ ___
 
 ### events
 
-• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
+• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
 
 #### Inherited from
 
@@ -144,7 +144,7 @@ ___
 
 ### supportedFeatures
 
-• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
+• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
 
 #### Inherited from
 

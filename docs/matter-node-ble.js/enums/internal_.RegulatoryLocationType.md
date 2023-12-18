@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / RegulatoryLocationType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / RegulatoryLocationType
 
 # Enumeration: RegulatoryLocationType
 
-[<internal>](../modules/internal_.md).RegulatoryLocationType
+[\<internal\>](../modules/internal_.md).RegulatoryLocationType
 
 This enumeration is used by the RegulatoryConfig and LocationCapability attributes to indicate possible radio
 usage.

@@ -18,13 +18,17 @@
 
 ### constructor
 
-• **new CertificationDeclarationManager**()
+• **new CertificationDeclarationManager**(): [`CertificationDeclarationManager`](exports_certificate.CertificationDeclarationManager.md)
+
+#### Returns
+
+[`CertificationDeclarationManager`](exports_certificate.CertificationDeclarationManager.md)
 
 ## Methods
 
 ### generate
 
-▸ `Static` **generate**(`vendorId`, `productId`): `Uint8Array`
+▸ **generate**(`vendorId`, `productId`): `Uint8Array`
 
 #### Parameters
 

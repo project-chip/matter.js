@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / TlvSchema
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / TlvSchema
 
-# Class: TlvSchema<T\>
+# Class: TlvSchema\<T\>
 
-[<internal>](../modules/internal_.md).TlvSchema
+[\<internal\>](../modules/internal_.md).TlvSchema
 
 ## Type parameters
 
@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- [`Schema`](internal_.Schema.md)<`T`, [`ByteArray`](../modules/internal_.md#bytearray-1)\>
+- [`Schema`](internal_.Schema.md)\<`T`, [`ByteArray`](../modules/internal_.md#bytearray-1)\>
 
   ↳ **`TlvSchema`**
 
@@ -20,7 +20,7 @@
 
 ## Implements
 
-- [`TlvSchema`](internal_.TlvSchema.md)<`T`\>
+- [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 ## Implemented by
 
@@ -51,7 +51,7 @@
 
 ### constructor
 
-• **new TlvSchema**<`T`\>()
+• **new TlvSchema**\<`T`\>(): [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -59,9 +59,13 @@
 | :------ |
 | `T` |
 
+#### Returns
+
+[`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
+
 #### Inherited from
 
-Schema<T, ByteArray\>.constructor
+Schema\<T, ByteArray\>.constructor
 
 ## Methods
 
@@ -179,7 +183,7 @@ ___
 
 ### decodeTlvInternalValue
 
-▸ `Abstract` **decodeTlvInternalValue**(`reader`, `typeLength`): `T`
+▸ **decodeTlvInternalValue**(`reader`, `typeLength`): `T`
 
 #### Parameters
 
@@ -286,7 +290,7 @@ ___
 
 ### encodeTlvInternal
 
-▸ `Abstract` **encodeTlvInternal**(`writer`, `value`, `tag?`): `void`
+▸ **encodeTlvInternal**(`writer`, `value`, `tag?`): `void`
 
 #### Parameters
 

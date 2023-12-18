@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / ChannelManager
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / ChannelManager
 
 # Class: ChannelManager
 
-[<internal>](../modules/internal_.md).ChannelManager
+[\<internal\>](../modules/internal_.md).ChannelManager
 
 ## Table of contents
 
@@ -30,7 +30,11 @@
 
 ### constructor
 
-• **new ChannelManager**()
+• **new ChannelManager**(): [`ChannelManager`](internal_.ChannelManager.md)
+
+#### Returns
+
+[`ChannelManager`](internal_.ChannelManager.md)
 
 ## Properties
 
@@ -76,11 +80,11 @@ matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -90,7 +94,7 @@ ___
 
 ### getChannel
 
-▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
@@ -101,7 +105,7 @@ ___
 
 #### Returns
 
-[`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+[`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
@@ -111,17 +115,17 @@ ___
 
 ### getChannelForSession
 
-▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<`any`\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<`any`\> |
 
 #### Returns
 
-`undefined` \| [`MessageChannel`](internal_.MessageChannel.md)<`any`\>
+`undefined` \| [`MessageChannel`](internal_.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
@@ -131,18 +135,18 @@ ___
 
 ### getOrCreateChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`any`\>\>
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`\<[`MessageChannel`](internal_.MessageChannel.md)\<`any`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `byteArrayChannel` | [`Channel`](../interfaces/internal_.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<`any`\> |
+| `byteArrayChannel` | [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<[`MessageChannel`](internal_.MessageChannel.md)<`any`\>\>
+`Promise`\<[`MessageChannel`](internal_.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
@@ -152,7 +156,7 @@ ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -163,7 +167,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -173,7 +177,7 @@ ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -181,11 +185,11 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](internal_.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`any`\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

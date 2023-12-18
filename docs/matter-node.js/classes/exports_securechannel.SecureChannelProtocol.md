@@ -36,13 +36,17 @@
 
 ### constructor
 
-• **new SecureChannelProtocol**(`commissioningCancelledCallback`)
+• **new SecureChannelProtocol**(`commissioningCancelledCallback`): [`SecureChannelProtocol`](exports_securechannel.SecureChannelProtocol.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `commissioningCancelledCallback` | () => `Promise`<`void`\> |
+| `commissioningCancelledCallback` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`SecureChannelProtocol`](exports_securechannel.SecureChannelProtocol.md)
 
 #### Overrides
 
@@ -86,11 +90,11 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelProtocol.d.ts:18
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -122,18 +126,18 @@ ___
 
 ### handleInitialStatusReport
 
-▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`<`void`\>
+▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -147,18 +151,18 @@ ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`, `message`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Overrides
 
@@ -206,7 +210,7 @@ ___
 
 ### isStandaloneAck
 
-▸ `Static` **isStandaloneAck**(`protocolId`, `messageType`): `boolean`
+▸ **isStandaloneAck**(`protocolId`, `messageType`): `boolean`
 
 #### Parameters
 

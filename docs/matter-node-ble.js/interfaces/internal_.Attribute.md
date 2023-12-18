@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Attribute
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Attribute
 
-# Interface: Attribute<T, F\>
+# Interface: Attribute\<T, F\>
 
-[<internal>](../modules/internal_.md).Attribute
+[\<internal\>](../modules/internal_.md).Attribute
 
 ## Type parameters
 
@@ -87,7 +87,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -117,7 +117,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -157,7 +157,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\>
 
 #### Defined in
 

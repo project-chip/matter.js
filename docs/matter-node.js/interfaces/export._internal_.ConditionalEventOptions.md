@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ConditionalEventOptions
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ConditionalEventOptions
 
-# Interface: ConditionalEventOptions<F\>
+# Interface: ConditionalEventOptions\<F\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ConditionalEventOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ConditionalEventOptions
 
 ## Type parameters
 
@@ -28,7 +28,7 @@
 
 ### mandatoryIf
 
-• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -38,7 +38,7 @@ ___
 
 ### optionalIf
 
-• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 

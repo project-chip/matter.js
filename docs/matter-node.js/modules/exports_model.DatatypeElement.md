@@ -40,7 +40,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`DatatypeElement`](exports_model.md#datatypeelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`DatatypeElement`](exports_model.md#datatypeelement)\>
 
 #### Defined in
 

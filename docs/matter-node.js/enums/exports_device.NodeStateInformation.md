@@ -9,6 +9,7 @@
 ### Enumeration Members
 
 - [Connected](exports_device.NodeStateInformation.md#connected)
+- [Decommissioned](exports_device.NodeStateInformation.md#decommissioned)
 - [Disconnected](exports_device.NodeStateInformation.md#disconnected)
 - [Reconnecting](exports_device.NodeStateInformation.md#reconnecting)
 - [StructureChanged](exports_device.NodeStateInformation.md#structurechanged)
@@ -25,6 +26,18 @@ Node is connected and all data is up-to-date.
 #### Defined in
 
 packages/matter.js/dist/esm/device/PairedNode.d.ts:20
+
+___
+
+### Decommissioned
+
+• **Decommissioned** = ``5``
+
+The node was just Decommissioned.
+
+#### Defined in
+
+packages/matter.js/dist/esm/device/PairedNode.d.ts:41
 
 ___
 

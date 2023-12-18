@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/session](../modules/exports_session.md) / Session
 
-# Interface: Session<T\>
+# Interface: Session\<T\>
 
 [exports/session](../modules/exports_session.md).Session
 
@@ -85,7 +85,7 @@ ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`<`void`\>
+▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -96,7 +96,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -126,7 +126,7 @@ ___
 
 ### end
 
-▸ **end**(`sendClose`): `Promise`<`void`\>
+▸ **end**(`sendClose`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -136,7 +136,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Storage
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Storage
 
 # Class: Storage
 
-[<internal>](../modules/internal_.md).Storage
+[\<internal\>](../modules/internal_.md).Storage
 
 ## Table of contents
 
@@ -24,13 +24,17 @@
 
 ### constructor
 
-• **new Storage**()
+• **new Storage**(): [`Storage`](internal_.Storage.md)
+
+#### Returns
+
+[`Storage`](internal_.Storage.md)
 
 ## Methods
 
 ### clearAll
 
-▸ `Abstract` **clearAll**(`contexts`): `void`
+▸ **clearAll**(`contexts`): `void`
 
 #### Parameters
 
@@ -50,11 +54,11 @@ ___
 
 ### close
 
-▸ `Abstract` **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -64,7 +68,7 @@ ___
 
 ### delete
 
-▸ `Abstract` **delete**(`contexts`, `key`): `void`
+▸ **delete**(`contexts`, `key`): `void`
 
 #### Parameters
 
@@ -85,7 +89,7 @@ ___
 
 ### get
 
-▸ `Abstract` **get**<`T`\>(`contexts`, `key`): `undefined` \| `T`
+▸ **get**\<`T`\>(`contexts`, `key`): `undefined` \| `T`
 
 #### Type parameters
 
@@ -112,11 +116,11 @@ ___
 
 ### initialize
 
-▸ `Abstract` **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -126,7 +130,7 @@ ___
 
 ### keys
 
-▸ `Abstract` **keys**(`contexts`): `string`[]
+▸ **keys**(`contexts`): `string`[]
 
 #### Parameters
 
@@ -146,7 +150,7 @@ ___
 
 ### set
 
-▸ `Abstract` **set**<`T`\>(`contexts`, `key`, `value`): `void`
+▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
 
 #### Type parameters
 

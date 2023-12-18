@@ -30,7 +30,7 @@ Fully Closed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:372](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L372)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:372](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L372)
 
 ___
 
@@ -42,7 +42,7 @@ Half Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:387](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L387)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:387](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L387)
 
 ___
 
@@ -54,7 +54,7 @@ Fully Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:377](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L377)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:377](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L377)
 
 ___
 
@@ -66,7 +66,7 @@ Quarter Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:382](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L382)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:382](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L382)
 
 ___
 
@@ -78,4 +78,4 @@ Three Quarters Open
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:392](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L392)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:392](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L392)

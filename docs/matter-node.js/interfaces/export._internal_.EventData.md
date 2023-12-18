@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / EventData
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / EventData
 
-# Interface: EventData<T\>
+# Interface: EventData\<T\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).EventData
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).EventData
 
 Data of one Event
 

@@ -27,7 +27,7 @@
 
 ### constructor
 
-• **new TlvByteArrayReader**(`byteArray`)
+• **new TlvByteArrayReader**(`byteArray`): [`TlvByteArrayReader`](tlv_export.TlvByteArrayReader.md)
 
 #### Parameters
 
@@ -35,25 +35,29 @@
 | :------ | :------ |
 | `byteArray` | `Uint8Array` |
 
+#### Returns
+
+[`TlvByteArrayReader`](tlv_export.TlvByteArrayReader.md)
+
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:125](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L125)
+[packages/matter.js/src/tlv/TlvSchema.ts:125](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L125)
 
 ## Properties
 
 ### reader
 
-• `Private` `Readonly` **reader**: [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\>
+• `Private` `Readonly` **reader**: [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\>
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:123](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L123)
+[packages/matter.js/src/tlv/TlvSchema.ts:123](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L123)
 
 ## Methods
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`typeLength`): `V`
 
 #### Type parameters
 
@@ -78,7 +82,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:133](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L133)
+[packages/matter.js/src/tlv/TlvSchema.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L133)
 
 ___
 
@@ -101,4 +105,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L129)
+[packages/matter.js/src/tlv/TlvSchema.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L129)

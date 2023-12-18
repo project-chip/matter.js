@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / KeyType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / KeyType
 
 # Enumeration: KeyType
 
-[<internal>](../modules/internal_.md).KeyType
+[\<internal\>](../modules/internal_.md).KeyType
 
 ## Table of contents
 

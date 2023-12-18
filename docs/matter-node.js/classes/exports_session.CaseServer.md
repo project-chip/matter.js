@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -28,7 +28,11 @@
 
 ### constructor
 
-• **new CaseServer**()
+• **new CaseServer**(): [`CaseServer`](exports_session.CaseServer.md)
+
+#### Returns
+
+[`CaseServer`](exports_session.CaseServer.md)
 
 ## Properties
 
@@ -44,11 +48,11 @@ packages/matter.js/dist/esm/session/case/CaseServer.d.ts:12
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -80,17 +84,17 @@ ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

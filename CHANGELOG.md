@@ -9,7 +9,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 0.7.3 (2023-12-18)
 * Matter-Core functionality:
   * Feature: Added CASE Authenticated Tags support (initialization from NOC and validation only)
   * Enhancement: Added validation handling to Invoke processing

@@ -29,7 +29,11 @@
 
 ### constructor
 
-• `Private` **new CrossReference**()
+• **new CrossReference**(): [`CrossReference`](exports_model.Model.CrossReference.md)
+
+#### Returns
+
+[`CrossReference`](exports_model.Model.CrossReference.md)
 
 #### Defined in
 
@@ -91,7 +95,7 @@ ___
 
 ### get
 
-▸ `Static` **get**(`xref`): [`CrossReference`](exports_model.Model.CrossReference.md)
+▸ **get**(`xref`): [`CrossReference`](exports_model.Model.CrossReference.md)
 
 #### Parameters
 

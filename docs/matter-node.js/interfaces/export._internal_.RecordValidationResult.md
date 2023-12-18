@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / RecordValidationResult
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / RecordValidationResult
 
 # Interface: RecordValidationResult
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).RecordValidationResult
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).RecordValidationResult
 
 The result of validation.
 

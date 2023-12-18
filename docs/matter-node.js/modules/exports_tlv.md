@@ -33,12 +33,15 @@
 
 - [FieldType](../interfaces/exports_tlv.FieldType.md)
 - [OptionalFieldType](../interfaces/exports_tlv.OptionalFieldType.md)
+- [OptionalRepeatedFieldType](../interfaces/exports_tlv.OptionalRepeatedFieldType.md)
+- [RepeatedFieldType](../interfaces/exports_tlv.RepeatedFieldType.md)
 - [TlvReader](../interfaces/exports_tlv.TlvReader.md)
 - [TlvWriter](../interfaces/exports_tlv.TlvWriter.md)
 
 ### Type Aliases
 
 - [ArrayAsChunked](exports_tlv.md#arrayaschunked)
+- [LengthConstraints](exports_tlv.md#lengthconstraints)
 - [NumericConstraints](exports_tlv.md#numericconstraints)
 - [TlvElement](exports_tlv.md#tlvelement)
 - [TlvFields](exports_tlv.md#tlvfields)
@@ -87,10 +90,12 @@
 - [TlvBitmap](exports_tlv.md#tlvbitmap)
 - [TlvEnum](exports_tlv.md#tlvenum)
 - [TlvField](exports_tlv.md#tlvfield)
-- [TlvList](exports_tlv.md#tlvlist)
 - [TlvNullable](exports_tlv.md#tlvnullable)
 - [TlvObject](exports_tlv.md#tlvobject)
 - [TlvOptionalField](exports_tlv.md#tlvoptionalfield)
+- [TlvOptionalRepeatedField](exports_tlv.md#tlvoptionalrepeatedfield)
+- [TlvRepeatedField](exports_tlv.md#tlvrepeatedfield)
+- [TlvTaggedList](exports_tlv.md#tlvtaggedlist)
 
 ## Type Aliases
 
@@ -104,9 +109,27 @@ packages/matter.js/dist/esm/tlv/TlvArray.d.ts:17
 
 ___
 
+### LengthConstraints
+
+Ƭ **LengthConstraints**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `length?` | `number` |
+| `maxLength?` | `number` |
+| `minLength?` | `number` |
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvArray.d.ts:8
+
+___
+
 ### NumericConstraints
 
-Ƭ **NumericConstraints**<`T`\>: `Object`
+Ƭ **NumericConstraints**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -129,7 +152,7 @@ ___
 
 ### TlvElement
 
-Ƭ **TlvElement**<`T`\>: `Object`
+Ƭ **TlvElement**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -157,17 +180,17 @@ ___
 
 #### Index signature
 
-▪ [field: `string`]: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`any`\>
+▪ [field: `string`]: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`any`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:18
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:29
 
 ___
 
 ### TlvStream
 
-Ƭ **TlvStream**: [`TlvElement`](exports_tlv.md#tlvelement)<`any`\>[]
+Ƭ **TlvStream**: [`TlvElement`](exports_tlv.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
@@ -224,7 +247,7 @@ ___
 
 ### TlvTypeLength
 
-Ƭ **TlvTypeLength**: { `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`SignedInt`](../enums/exports_tlv.TlvType.md#signedint)  } \| { `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`UnsignedInt`](../enums/exports_tlv.TlvType.md#unsignedint)  } \| { `type`: [`Boolean`](../enums/exports_tlv.TlvType.md#boolean) ; `value`: `boolean`  } \| { `length`: [`FourBytes`](../enums/exports_tlv.TlvLength.md#fourbytes) \| [`EightBytes`](../enums/exports_tlv.TlvLength.md#eightbytes) ; `type`: [`Float`](../enums/exports_tlv.TlvType.md#float)  } \| { `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)  } \| { `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)  } \| { `type`: [`Null`](../enums/exports_tlv.TlvType.md#null)  } \| { `type`: [`Structure`](../enums/exports_tlv.TlvType.md#structure)  } \| { `type`: [`Array`](../enums/exports_tlv.TlvType.md#array)  } \| { `type`: [`List`](../enums/exports_tlv.TlvType.md#list)  } \| { `type`: [`EndOfContainer`](../enums/exports_tlv.TlvType.md#endofcontainer)  }
+Ƭ **TlvTypeLength**: \{ `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`SignedInt`](../enums/exports_tlv.TlvType.md#signedint)  } \| \{ `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`UnsignedInt`](../enums/exports_tlv.TlvType.md#unsignedint)  } \| \{ `type`: [`Boolean`](../enums/exports_tlv.TlvType.md#boolean) ; `value`: `boolean`  } \| \{ `length`: [`FourBytes`](../enums/exports_tlv.TlvLength.md#fourbytes) \| [`EightBytes`](../enums/exports_tlv.TlvLength.md#eightbytes) ; `type`: [`Float`](../enums/exports_tlv.TlvType.md#float)  } \| \{ `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)  } \| \{ `length`: [`TlvLength`](../enums/exports_tlv.TlvLength.md) ; `type`: [`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)  } \| \{ `type`: [`Null`](../enums/exports_tlv.TlvType.md#null)  } \| \{ `type`: [`Structure`](../enums/exports_tlv.TlvType.md#structure)  } \| \{ `type`: [`Array`](../enums/exports_tlv.TlvType.md#array)  } \| \{ `type`: [`List`](../enums/exports_tlv.TlvType.md#list)  } \| \{ `type`: [`EndOfContainer`](../enums/exports_tlv.TlvType.md#endofcontainer)  }
 
 Type and length or value, when applicable.
 
@@ -236,7 +259,7 @@ ___
 
 ### TypeFromFields
 
-Ƭ **TypeFromFields**<`F`\>: [`Merge`](util_export.md#merge)<[`TypeForMandatoryFields`](export._internal_.md#typeformandatoryfields)<`F`, [`MandatoryFieldNames`](export._internal_.md#mandatoryfieldnames)<`F`\>\>, [`TypeForOptionalFields`](export._internal_.md#typeforoptionalfields)<`F`, [`OptionalFieldNames`](export._internal_.md#optionalfieldnames)<`F`\>\>\>
+Ƭ **TypeFromFields**\<`F`\>: [`Merge`](util_export.md#merge)\<[`TypeForMandatoryFields`](export._internal_.md#typeformandatoryfields)\<`F`, [`MandatoryFieldNames`](export._internal_.md#mandatoryfieldnames)\<`F`\>\>, [`TypeForOptionalFields`](export._internal_.md#typeforoptionalfields)\<`F`, [`OptionalFieldNames`](export._internal_.md#optionalfieldnames)\<`F`\>\>\>
 
 #### Type parameters
 
@@ -246,13 +269,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:34
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:45
 
 ___
 
 ### TypeFromSchema
 
-Ƭ **TypeFromSchema**<`S`\>: `S` extends [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<infer T\> ? `T` : `never`
+Ƭ **TypeFromSchema**\<`S`\>: `S` extends [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<infer T\> ? `T` : `never`
 
 Type defined by the TLV schema.
 
@@ -260,7 +283,7 @@ Type defined by the TLV schema.
 
 | Name | Type |
 | :------ | :------ |
-| `S` | extends [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\> |
+| `S` | extends [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`any`\> |
 
 #### Defined in
 
@@ -292,7 +315,7 @@ ___
 
 ### TlvByteString
 
-• `Const` **TlvByteString**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)\>
+• `Const` **TlvByteString**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)\>
 
 ByteString TLV schema.
 
@@ -324,7 +347,7 @@ ___
 
 ### TlvEpochUs
 
-• `Const` **TlvEpochUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvEpochUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -346,7 +369,7 @@ ___
 
 ### TlvHardwareAddress
 
-• `Const` **TlvHardwareAddress**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)\>
+• `Const` **TlvHardwareAddress**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`ByteString`](../enums/exports_tlv.TlvType.md#bytestring)\>
 
 #### Defined in
 
@@ -376,7 +399,7 @@ ___
 
 ### TlvInt64
 
-• `Const` **TlvInt64**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvInt64**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -396,11 +419,11 @@ ___
 
 ### TlvLongNumberSchema
 
-• `Const` **TlvLongNumberSchema**: (`type`: [`SignedInt`](../enums/exports_tlv.TlvType.md#signedint) \| [`UnsignedInt`](../enums/exports_tlv.TlvType.md#unsignedint) \| [`Float`](../enums/exports_tlv.TlvType.md#float), `lengthProvider`: (`value`: `number` \| `bigint`) => [`TlvLength`](../enums/exports_tlv.TlvLength.md), `min?`: `number` \| `bigint`, `max?`: `number` \| `bigint`) => [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvLongNumberSchema**: (`type`: [`SignedInt`](../enums/exports_tlv.TlvType.md#signedint) \| [`UnsignedInt`](../enums/exports_tlv.TlvType.md#unsignedint) \| [`Float`](../enums/exports_tlv.TlvType.md#float), `lengthProvider`: (`value`: `number` \| `bigint`) => [`TlvLength`](../enums/exports_tlv.TlvLength.md), `min?`: `number` \| `bigint`, `max?`: `number` \| `bigint`) => [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Type declaration
 
-• **new TlvLongNumberSchema**(`type`, `lengthProvider`, `min?`, `max?`): [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• **new TlvLongNumberSchema**(`type`, `lengthProvider`, `min?`, `max?`): [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 ##### Parameters
 
@@ -413,7 +436,7 @@ ___
 
 ##### Returns
 
-[`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+[`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -435,7 +458,7 @@ ___
 
 ### TlvPercent
 
-• `Const` **TlvPercent**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number`\>
+• `Const` **TlvPercent**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number`\>
 
 #### Defined in
 
@@ -445,7 +468,7 @@ ___
 
 ### TlvPercent100ths
 
-• `Const` **TlvPercent100ths**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number`\>
+• `Const` **TlvPercent100ths**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number`\>
 
 #### Defined in
 
@@ -455,7 +478,7 @@ ___
 
 ### TlvPosixMs
 
-• `Const` **TlvPosixMs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvPosixMs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -465,7 +488,7 @@ ___
 
 ### TlvString
 
-• `Const` **TlvString**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
+• `Const` **TlvString**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
 
 String TLV schema.
 
@@ -477,7 +500,7 @@ ___
 
 ### TlvString256max
 
-• `Const` **TlvString256max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
+• `Const` **TlvString256max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
 
 String TLV schema.
 
@@ -489,7 +512,7 @@ ___
 
 ### TlvString32max
 
-• `Const` **TlvString32max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
+• `Const` **TlvString32max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
 
 String TLV schema.
 
@@ -501,7 +524,7 @@ ___
 
 ### TlvString64max
 
-• `Const` **TlvString64max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
+• `Const` **TlvString64max**: [`StringSchema`](../classes/exports_tlv.StringSchema.md)\<[`Utf8String`](../enums/exports_tlv.TlvType.md#utf8string)\>
 
 String TLV schema.
 
@@ -513,7 +536,7 @@ ___
 
 ### TlvSysTimeMS
 
-• `Const` **TlvSysTimeMS**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvSysTimeMS**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -523,7 +546,7 @@ ___
 
 ### TlvSysTimeUs
 
-• `Const` **TlvSysTimeUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvSysTimeUs**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -563,7 +586,7 @@ ___
 
 ### TlvUInt64
 
-• `Const` **TlvUInt64**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)<`number` \| `bigint`\>
+• `Const` **TlvUInt64**: [`TlvNumericSchema`](../classes/exports_tlv.TlvNumericSchema.md)\<`number` \| `bigint`\>
 
 #### Defined in
 
@@ -595,7 +618,7 @@ packages/matter.js/dist/esm/tlv/TlvVoid.d.ts:18
 
 ### TlvArray
 
-▸ **TlvArray**<`T`\>(`elementSchema`, `«destructured»?`): [`ArraySchema`](../classes/exports_tlv.ArraySchema.md)<`T`\>
+▸ **TlvArray**\<`T`\>(`elementSchema`, `«destructured»?`): [`ArraySchema`](../classes/exports_tlv.ArraySchema.md)\<`T`\>
 
 Array TLV schema.
 
@@ -609,12 +632,12 @@ Array TLV schema.
 
 | Name | Type |
 | :------ | :------ |
-| `elementSchema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`LengthConstraints`](export._internal_.md#lengthconstraints) |
+| `elementSchema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`LengthConstraints`](exports_tlv.md#lengthconstraints) |
 
 #### Returns
 
-[`ArraySchema`](../classes/exports_tlv.ArraySchema.md)<`T`\>
+[`ArraySchema`](../classes/exports_tlv.ArraySchema.md)\<`T`\>
 
 #### Defined in
 
@@ -624,7 +647,7 @@ ___
 
 ### TlvBitmap
 
-▸ **TlvBitmap**<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
+▸ **TlvBitmap**\<`T`\>(`underlyingSchema`, `bitSchema`): [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)\<`T`\>, `number`\>
 
 #### Type parameters
 
@@ -641,7 +664,7 @@ ___
 
 #### Returns
 
-[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`T`\>, `number`\>
+[`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)\<`T`\>, `number`\>
 
 #### Defined in
 
@@ -651,7 +674,7 @@ ___
 
 ### TlvEnum
 
-▸ **TlvEnum**<`T`\>(): [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+▸ **TlvEnum**\<`T`\>(): [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -661,7 +684,7 @@ ___
 
 #### Returns
 
-[`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+[`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -671,10 +694,10 @@ ___
 
 ### TlvField
 
-▸ **TlvField**<`T`\>(`id`, `schema`, `fallback?`): [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`T`\>
+▸ **TlvField**\<`T`\>(`id`, `schema`, `fallback?`): [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`T`\>
 
 Object TLV mandatory field. Optionally provide a fallback value to initialize the field value when devices omit
-providing a value against the specifications or in special usecases. Make sure to use a value that is an equivalent
+providing a value against the specifications or in special use cases. Make sure to use a value that is an equivalent
 to the value being empty.
 
 #### Type parameters
@@ -688,50 +711,22 @@ to the value being empty.
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
 | `fallback?` | `T` |
 
 #### Returns
 
-[`FieldType`](../interfaces/exports_tlv.FieldType.md)<`T`\>
+[`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`T`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:60
-
-___
-
-### TlvList
-
-▸ **TlvList**<`F`\>(`fields`): [`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)<`F`\>
-
-List TLV schema.
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `F` | extends [`TlvFields`](exports_tlv.md#tlvfields) |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `fields` | `F` |
-
-#### Returns
-
-[`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)<`F`\>
-
-#### Defined in
-
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:54
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:79
 
 ___
 
 ### TlvNullable
 
-▸ **TlvNullable**<`T`\>(`schema`): [`NullableSchema`](../classes/exports_tlv.NullableSchema.md)<`T`\>
+▸ **TlvNullable**\<`T`\>(`schema`): [`NullableSchema`](../classes/exports_tlv.NullableSchema.md)\<`T`\>
 
 Nullable TLV schema.
 
@@ -745,11 +740,11 @@ Nullable TLV schema.
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-[`NullableSchema`](../classes/exports_tlv.NullableSchema.md)<`T`\>
+[`NullableSchema`](../classes/exports_tlv.NullableSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -759,7 +754,7 @@ ___
 
 ### TlvObject
 
-▸ **TlvObject**<`F`\>(`fields`): [`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)<`F`\>
+▸ **TlvObject**\<`F`\>(`fields`): [`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)\<`F`\>
 
 Object TLV schema.
 
@@ -777,17 +772,17 @@ Object TLV schema.
 
 #### Returns
 
-[`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)<`F`\>
+[`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)\<`F`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:52
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:63
 
 ___
 
 ### TlvOptionalField
 
-▸ **TlvOptionalField**<`T`\>(`id`, `schema`): [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`T`\>
+▸ **TlvOptionalField**\<`T`\>(`id`, `schema`): [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`T`\>
 
 Object TLV optional field.
 
@@ -802,12 +797,109 @@ Object TLV optional field.
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-[`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`T`\>
+[`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`T`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:62
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:81
+
+___
+
+### TlvOptionalRepeatedField
+
+▸ **TlvOptionalRepeatedField**\<`T`\>(`id`, `schema`, `lengthOptions?`): [`OptionalRepeatedFieldType`](../interfaces/exports_tlv.OptionalRepeatedFieldType.md)\<`T`[]\>
+
+Object TLV optional field that can exist repeated in a TLV List structure. The order is preserved on encoding and
+decoding.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
+| `lengthOptions?` | `Object` |
+| `lengthOptions.maxLength` | `number` |
+
+#### Returns
+
+[`OptionalRepeatedFieldType`](../interfaces/exports_tlv.OptionalRepeatedFieldType.md)\<`T`[]\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:91
+
+___
+
+### TlvRepeatedField
+
+▸ **TlvRepeatedField**\<`T`\>(`id`, `schema`, `lengthOptions?`): [`RepeatedFieldType`](../interfaces/exports_tlv.RepeatedFieldType.md)\<`T`[]\>
+
+Object TLV mandatory field that can exist repeated in a TLV List structure. The order is preserved on encoding and
+decoding.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+| `schema` | [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\> |
+| `lengthOptions?` | [`LengthConstraints`](exports_tlv.md#lengthconstraints) |
+
+#### Returns
+
+[`RepeatedFieldType`](../interfaces/exports_tlv.RepeatedFieldType.md)\<`T`[]\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:86
+
+___
+
+### TlvTaggedList
+
+▸ **TlvTaggedList**\<`F`\>(`fields`): [`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)\<`F`\>
+
+List TLV schema with all tagged entries.
+List entries that can appear multiple times can be defined using TlvRepeatedField/TlvOptionalRepeatedField and are
+represented as Arrays.
+TODO: We represent Tlv Lists right now as named object properties. This formally does not match the spec, which
+     defines a list as a sequence of TLV elements with optional tag where the order matters. That's ok for now
+     (also with the help of "Repeated Fields") because it not makes any real difference for now for the current
+     existing data structures. We need to change once this changes.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `F` | extends [`TlvFields`](exports_tlv.md#tlvfields) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fields` | `F` |
+
+#### Returns
+
+[`ObjectSchema`](../classes/exports_tlv.ObjectSchema.md)\<`F`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:73

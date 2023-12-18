@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/protocol](../modules/exports_protocol.md) / ExchangeManager
 
-# Class: ExchangeManager<ContextT\>
+# Class: ExchangeManager\<ContextT\>
 
 [exports/protocol](../modules/exports_protocol.md).ExchangeManager
 
@@ -44,7 +44,7 @@
 
 ### constructor
 
-• **new ExchangeManager**<`ContextT`\>(`sessionManager`, `channelManager`)
+• **new ExchangeManager**\<`ContextT`\>(`sessionManager`, `channelManager`): [`ExchangeManager`](exports_protocol.ExchangeManager.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -56,8 +56,12 @@
 
 | Name | Type |
 | :------ | :------ |
-| `sessionManager` | [`SessionManager`](exports_session.SessionManager.md)<`ContextT`\> |
+| `sessionManager` | [`SessionManager`](exports_session.SessionManager.md)\<`ContextT`\> |
 | `channelManager` | [`ChannelManager`](exports_protocol.ChannelManager.md) |
+
+#### Returns
+
+[`ExchangeManager`](exports_protocol.ExchangeManager.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -163,7 +167,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
 
 | Name | Type |
 | :------ | :------ |
-| `protocol` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<`ContextT`\> |
+| `protocol` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<`ContextT`\> |
 
 #### Returns
 
@@ -197,11 +201,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -211,17 +215,17 @@ ___
 
 ### closeSession
 
-▸ **closeSession**(`session`): `Promise`<`void`\>
+▸ **closeSession**(`session`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](exports_session.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](exports_session.SecureSession.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -231,7 +235,7 @@ ___
 
 ### deleteExchange
 
-▸ **deleteExchange**(`exchangeIndex`): `Promise`<`void`\>
+▸ **deleteExchange**(`exchangeIndex`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -241,7 +245,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -251,7 +255,7 @@ ___
 
 ### getProtocolHandler
 
-▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<`ContextT`\>
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -261,7 +265,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<`ContextT`\>
+`undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -291,7 +295,7 @@ ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -303,7 +307,7 @@ ___
 
 #### Returns
 
-[`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -313,18 +317,18 @@ ___
 
 ### initiateExchangeWithChannel
 
-▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)\<`ContextT`\> |
 | `protocolId` | `number` |
 
 #### Returns
 
-[`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / MrpParameters
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / MrpParameters
 
 # Interface: MrpParameters
 
-[<internal>](../modules/internal_.md).MrpParameters
+[\<internal\>](../modules/internal_.md).MrpParameters
 
 ## Table of contents
 

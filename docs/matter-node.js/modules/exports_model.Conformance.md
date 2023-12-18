@@ -56,7 +56,7 @@
 
 ### Ast
 
-Ƭ **Ast**: { `type`: [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Flag`](../enums/exports_model.Conformance.Flag.md)  } \| { `param`: [`Name`](exports_model.Conformance.Ast.md#name) ; `type`: [`Name`](../enums/exports_model.Conformance.Special.md#name)  } \| { `param`: [`Value`](exports_model.Conformance.Ast.md#value) ; `type`: [`Value`](../enums/exports_model.Conformance.Special.md#value)  } \| { `param`: [`Choice`](exports_model.Conformance.Ast.md#choice) ; `type`: [`Choice`](../enums/exports_model.Conformance.Special.md#choice)  } \| { `param`: [`Group`](exports_model.Conformance.Ast.md#group) ; `type`: [`Group`](../enums/exports_model.Conformance.Special.md#group)  } \| { `param`: [`Option`](exports_model.Conformance.Ast.md#option) ; `type`: [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif)  } \| { `param`: [`BinaryOperands`](exports_model.Conformance.Ast.md#binaryoperands) ; `type`: [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte)  } \| { `param`: [`UnaryOperand`](exports_model.Conformance.Ast.md#unaryoperand) ; `type`: [`NOT`](../enums/exports_model.Conformance.Operator.md#not)  }
+Ƭ **Ast**: \{ `type`: [`Empty`](../enums/exports_model.Conformance.Special.md#empty) \| [`Desc`](../enums/exports_model.Conformance.Special.md#desc) \| [`Flag`](../enums/exports_model.Conformance.Flag.md)  } \| \{ `param`: [`Name`](exports_model.Conformance.Ast.md#name) ; `type`: [`Name`](../enums/exports_model.Conformance.Special.md#name)  } \| \{ `param`: [`Value`](exports_model.Conformance.Ast.md#value) ; `type`: [`Value`](../enums/exports_model.Conformance.Special.md#value)  } \| \{ `param`: [`Choice`](exports_model.Conformance.Ast.md#choice) ; `type`: [`Choice`](../enums/exports_model.Conformance.Special.md#choice)  } \| \{ `param`: [`Group`](exports_model.Conformance.Ast.md#group) ; `type`: [`Group`](../enums/exports_model.Conformance.Special.md#group)  } \| \{ `param`: [`Option`](exports_model.Conformance.Ast.md#option) ; `type`: [`OptionalIf`](../enums/exports_model.Conformance.Special.md#optionalif)  } \| \{ `param`: [`BinaryOperands`](exports_model.Conformance.Ast.md#binaryoperands) ; `type`: [`AND`](../enums/exports_model.Conformance.Operator.md#and) \| [`OR`](../enums/exports_model.Conformance.Operator.md#or) \| [`XOR`](../enums/exports_model.Conformance.Operator.md#xor) \| [`EQ`](../enums/exports_model.Conformance.Operator.md#eq) \| [`NE`](../enums/exports_model.Conformance.Operator.md#ne) \| [`LT`](../enums/exports_model.Conformance.Operator.md#lt) \| [`GT`](../enums/exports_model.Conformance.Operator.md#gt) \| [`LTE`](../enums/exports_model.Conformance.Operator.md#lte) \| [`GTE`](../enums/exports_model.Conformance.Operator.md#gte)  } \| \{ `param`: [`UnaryOperand`](exports_model.Conformance.Ast.md#unaryoperand) ; `type`: [`NOT`](../enums/exports_model.Conformance.Operator.md#not)  }
 
 #### Defined in
 
@@ -88,7 +88,7 @@ ___
 
 ### Definition
 
-Ƭ **Definition**: `string` \| `string`[] \| { `ast`: [`Ast`](exports_model.Conformance.md#ast)  } \| `undefined`
+Ƭ **Definition**: `string` \| `string`[] \| \{ `ast`: [`Ast`](exports_model.Conformance.md#ast)  } \| `undefined`
 
 Supported ways of expressing conformance (conceptually union should
 include Flag but that is covered by string).
@@ -121,7 +121,7 @@ ___
 
 ### ReferenceResolver
 
-Ƭ **ReferenceResolver**<`T`\>: (`name`: `string`) => `T`
+Ƭ **ReferenceResolver**\<`T`\>: (`name`: `string`) => `T`
 
 #### Type parameters
 
@@ -390,7 +390,7 @@ ___
 | :------ | :------ |
 | `conformance` | [`Conformance`](../classes/exports_model.Conformance-1.md) |
 | `ast` | [`Ast`](exports_model.Conformance.md#ast) |
-| `resolver` | [`ReferenceResolver`](exports_model.Conformance.md#referenceresolver)<`boolean`\> |
+| `resolver` | [`ReferenceResolver`](exports_model.Conformance.md#referenceresolver)\<`boolean`\> |
 
 #### Returns
 

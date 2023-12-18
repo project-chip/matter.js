@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [protocol/export](../modules/protocol_export.md) / ExchangeManager
 
-# Class: ExchangeManager<ContextT\>
+# Class: ExchangeManager\<ContextT\>
 
 [protocol/export](../modules/protocol_export.md).ExchangeManager
 
@@ -44,7 +44,7 @@
 
 ### constructor
 
-• **new ExchangeManager**<`ContextT`\>(`sessionManager`, `channelManager`)
+• **new ExchangeManager**\<`ContextT`\>(`sessionManager`, `channelManager`): [`ExchangeManager`](protocol_export.ExchangeManager.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -56,12 +56,16 @@
 
 | Name | Type |
 | :------ | :------ |
-| `sessionManager` | [`SessionManager`](session_export.SessionManager.md)<`ContextT`\> |
+| `sessionManager` | [`SessionManager`](session_export.SessionManager.md)\<`ContextT`\> |
 | `channelManager` | [`ChannelManager`](protocol_export.ChannelManager.md) |
+
+#### Returns
+
+[`ExchangeManager`](protocol_export.ExchangeManager.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L66)
+[packages/matter.js/src/protocol/ExchangeManager.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L74)
 
 ## Properties
 
@@ -71,17 +75,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L68)
+[packages/matter.js/src/protocol/ExchangeManager.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L76)
 
 ___
 
 ### closingSessions
 
-• `Private` `Readonly` **closingSessions**: `Set`<`number`\>
+• `Private` `Readonly` **closingSessions**: `Set`\<`number`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L64)
+[packages/matter.js/src/protocol/ExchangeManager.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L72)
 
 ___
 
@@ -91,17 +95,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L59)
+[packages/matter.js/src/protocol/ExchangeManager.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L67)
 
 ___
 
 ### exchanges
 
-• `Private` `Readonly` **exchanges**: `Map`<`number`, [`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>\>
+• `Private` `Readonly` **exchanges**: `Map`\<`number`, [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L61)
+[packages/matter.js/src/protocol/ExchangeManager.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L69)
 
 ___
 
@@ -111,27 +115,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L60)
+[packages/matter.js/src/protocol/ExchangeManager.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L68)
 
 ___
 
 ### protocols
 
-• `Private` `Readonly` **protocols**: `Map`<`number`, [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<`ContextT`\>\>
+• `Private` `Readonly` **protocols**: `Map`\<`number`, [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<`ContextT`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L62)
+[packages/matter.js/src/protocol/ExchangeManager.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L70)
 
 ___
 
 ### sessionManager
 
-• `Private` `Readonly` **sessionManager**: [`SessionManager`](session_export.SessionManager.md)<`ContextT`\>
+• `Private` `Readonly` **sessionManager**: [`SessionManager`](session_export.SessionManager.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L67)
+[packages/matter.js/src/protocol/ExchangeManager.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L75)
 
 ___
 
@@ -141,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L63)
+[packages/matter.js/src/protocol/ExchangeManager.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L71)
 
 ## Methods
 
@@ -153,7 +157,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `protocol` | [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<`ContextT`\> |
+| `protocol` | [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<`ContextT`\> |
 
 #### Returns
 
@@ -161,7 +165,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:87](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L87)
+[packages/matter.js/src/protocol/ExchangeManager.ts:103](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L103)
 
 ___
 
@@ -181,47 +185,47 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L71)
+[packages/matter.js/src/protocol/ExchangeManager.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L79)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L113)
+[packages/matter.js/src/protocol/ExchangeManager.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L129)
 
 ___
 
 ### closeSession
 
-▸ **closeSession**(`session`): `Promise`<`void`\>
+▸ **closeSession**(`session`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](session_export.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](session_export.SecureSession.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:185](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L185)
+[packages/matter.js/src/protocol/ExchangeManager.ts:201](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L201)
 
 ___
 
 ### deleteExchange
 
-▸ **deleteExchange**(`exchangeIndex`): `Promise`<`void`\>
+▸ **deleteExchange**(`exchangeIndex`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -231,17 +235,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:165](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L165)
+[packages/matter.js/src/protocol/ExchangeManager.ts:181](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L181)
 
 ___
 
 ### getProtocolHandler
 
-▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<`ContextT`\>
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -251,11 +255,11 @@ ___
 
 #### Returns
 
-`undefined` \| [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<`ContextT`\>
+`undefined` \| [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:83](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L83)
+[packages/matter.js/src/protocol/ExchangeManager.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L99)
 
 ___
 
@@ -275,13 +279,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L79)
+[packages/matter.js/src/protocol/ExchangeManager.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L95)
 
 ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -293,50 +297,50 @@ ___
 
 #### Returns
 
-[`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L94)
+[packages/matter.js/src/protocol/ExchangeManager.ts:110](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L110)
 
 ___
 
 ### initiateExchangeWithChannel
 
-▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\> |
 | `protocolId` | `number` |
 
 #### Returns
 
-[`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:98](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L98)
+[packages/matter.js/src/protocol/ExchangeManager.ts:114](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L114)
 
 ___
 
 ### onMessage
 
-▸ `Private` **onMessage**(`channel`, `messageBytes`): `Promise`<`void`\>
+▸ **onMessage**(`channel`, `messageBytes`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
+| `channel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
 | `messageBytes` | `Uint8Array` |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L127)
+[packages/matter.js/src/protocol/ExchangeManager.ts:143](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L143)

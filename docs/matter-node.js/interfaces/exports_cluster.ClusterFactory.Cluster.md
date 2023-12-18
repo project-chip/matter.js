@@ -10,7 +10,7 @@ A Cluster represents a fully formed cluster with features selected.
 
 - [`Identity`](exports_cluster.ClusterFactory.Identity.md)
 
-- [`Features`](exports_cluster.ClusterFactory.Features.md)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
+- [`Features`](exports_cluster.ClusterFactory.Features.md)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
 
 - [`ClusterElements`](exports_cluster.ClusterFactory.ClusterElements.md)
 
@@ -36,7 +36,7 @@ A Cluster represents a fully formed cluster with features selected.
 
 ### attributes
 
-• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
+• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
 
 #### Inherited from
 
@@ -50,7 +50,7 @@ ___
 
 ### commands
 
-• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
+• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ ___
 
 ### events
 
-• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
+• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
 
 #### Inherited from
 
@@ -134,7 +134,7 @@ ___
 
 ### supportedFeatures
 
-• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
+• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<[`BitSchema`](../modules/exports_schema.md#bitschema)\>
 
 #### Inherited from
 

@@ -18,7 +18,7 @@
 
 ### Modules
 
-- [&lt;internal\&gt;](export._internal_.md)
+- [\<internal\>](export._internal_.md)
 
 ### Classes
 
@@ -101,13 +101,13 @@ Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/exports_spec.Mat
 
 ### CommissioningControllerOptions
 
-Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & { `adminFabricId?`: [`FabricId`](exports_datatype.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](exports_datatype.md#fabricindex) ; `adminVendorId?`: [`VendorId`](exports_datatype.md#vendorid) ; `autoConnect?`: `boolean` ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
+Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](exports_datatype.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](exports_datatype.md#fabricindex) ; `adminVendorId?`: [`VendorId`](exports_datatype.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)[] ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
 
 Constructor options for the CommissioningController class
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:25
+packages/matter.js/dist/esm/CommissioningController.d.ts:26
 
 ___
 
@@ -131,13 +131,13 @@ ___
 
 ### NodeCommissioningOptions
 
-Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & { `commissioning?`: [`CommissioningOptions`](exports_protocol.md#commissioningoptions) ; `discovery`: { `identifierData`: [`CommissionableDeviceIdentifiers`](exports_common.md#commissionabledeviceidentifiers)  } \| { `commissionableDevice`: [`CommissionableDevice`](exports_common.md#commissionabledevice)  } & { `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<typeof [`DiscoveryCapabilitiesBitmap`](exports_schema.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](exports_common.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
+Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](exports_device.md#commissioningcontrollernodeoptions) & \{ `commissioning?`: [`CommissioningOptions`](exports_protocol.md#commissioningoptions) ; `discovery`: \{ `identifierData`: [`CommissionableDeviceIdentifiers`](exports_common.md#commissionabledeviceidentifiers)  } \| \{ `commissionableDevice`: [`CommissionableDevice`](exports_common.md#commissionabledevice)  } & \{ `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof [`DiscoveryCapabilitiesBitmap`](exports_schema.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](exports_common.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
 
 Options needed to commission a new node
 
 #### Defined in
 
-packages/matter.js/dist/esm/CommissioningController.d.ts:55
+packages/matter.js/dist/esm/CommissioningController.d.ts:61
 
 ___
 

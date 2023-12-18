@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / BitRangeType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / BitRangeType
 
 # Enumeration: BitRangeType
 
-[<internal>](../modules/internal_.md).BitRangeType
+[\<internal\>](../modules/internal_.md).BitRangeType
 
 ## Table of contents
 

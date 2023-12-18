@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / TlvNumericSchema
 
-# Class: TlvNumericSchema<T\>
+# Class: TlvNumericSchema\<T\>
 
 [exports/tlv](../modules/exports_tlv.md).TlvNumericSchema
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.11.1
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
   ↳ **`TlvNumericSchema`**
 
@@ -58,7 +58,7 @@ MatterCoreSpecificationV1_0 § A.11.1
 
 ### constructor
 
-• **new TlvNumericSchema**<`T`\>(`type`, `lengthProvider`, `min?`, `max?`)
+• **new TlvNumericSchema**\<`T`\>(`type`, `lengthProvider`, `min?`, `max?`): [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -75,9 +75,13 @@ MatterCoreSpecificationV1_0 § A.11.1
 | `min?` | `T` |
 | `max?` | `T` |
 
+#### Returns
+
+[`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`T`\>
+
 #### Overrides
 
-TlvSchema&lt;T\&gt;.constructor
+TlvSchema\&lt;T\&gt;.constructor
 
 #### Defined in
 
@@ -141,7 +145,7 @@ packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:11
 
 ### bound
 
-▸ **bound**(`«destructured»`): [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)<`T`\>
+▸ **bound**(`«destructured»`): [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`T`\>
 
 Restrict value range.
 
@@ -149,11 +153,11 @@ Restrict value range.
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`NumericConstraints`](../modules/exports_tlv.md#numericconstraints)<`T`\> |
+| `«destructured»` | [`NumericConstraints`](../modules/exports_tlv.md#numericconstraints)\<`T`\> |
 
 #### Returns
 
-[`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)<`T`\>
+[`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`T`\>
 
 #### Defined in
 

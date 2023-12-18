@@ -27,7 +27,7 @@ The Node has encountered a network fault as a result of a failure to establish a
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:295](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L295)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:295](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L295)
 
 ___
 
@@ -39,7 +39,7 @@ The Node has encountered a network fault as a result of a hardware failure.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:285](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L285)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:285](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L285)
 
 ___
 
@@ -51,7 +51,7 @@ The Node has encountered a network fault as a result of a jammed network.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:290](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L290)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:290](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L290)
 
 ___
 
@@ -63,4 +63,4 @@ The Node has encountered an unspecified fault.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:280](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L280)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:280](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L280)

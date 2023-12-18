@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new UdpChannelNode**(`socket`, `netInterface?`)
+• **new UdpChannelNode**(`socket`, `netInterface?`): [`UdpChannelNode`](net_export.UdpChannelNode.md)
 
 #### Parameters
 
@@ -39,9 +39,13 @@
 | `socket` | `Socket` |
 | `netInterface?` | `string` |
 
+#### Returns
+
+[`UdpChannelNode`](net_export.UdpChannelNode.md)
+
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:101](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L101)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L97)
 
 ## Properties
 
@@ -51,7 +55,7 @@
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:103](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L103)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L99)
 
 ___
 
@@ -61,17 +65,17 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:102](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L102)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:98](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L98)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:147](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L147)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L129)
 
 ___
 
@@ -99,7 +103,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `close` | () => `Promise`<`void`\> |
+| `close` | () => `Promise`\<`void`\> |
 
 #### Implementation of
 
@@ -107,13 +111,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:106](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L106)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L102)
 
 ___
 
 ### send
 
-▸ **send**(`host`, `port`, `data`): `Promise`<`void`\>
+▸ **send**(`host`, `port`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -125,7 +129,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -133,13 +137,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L127)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L117)
 
 ___
 
 ### create
 
-▸ `Static` **create**(`«destructured»`): `Promise`<[`UdpChannelNode`](net_export.UdpChannelNode.md)\>
+▸ **create**(`«destructured»`): `Promise`\<[`UdpChannelNode`](net_export.UdpChannelNode.md)\>
 
 #### Parameters
 
@@ -149,8 +153,8 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpChannelNode`](net_export.UdpChannelNode.md)\>
+`Promise`\<[`UdpChannelNode`](net_export.UdpChannelNode.md)\>
 
 #### Defined in
 
-[packages/matter-node.js/src/net/UdpChannelNode.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/UdpChannelNode.ts#L44)
+[packages/matter-node.js/src/net/UdpChannelNode.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/UdpChannelNode.ts#L40)

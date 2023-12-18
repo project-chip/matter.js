@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [protocol/export](../modules/protocol_export.md) / MessageChannel
 
-# Class: MessageChannel<ContextT\>
+# Class: MessageChannel\<ContextT\>
 
 [protocol/export](../modules/protocol_export.md).MessageChannel
 
@@ -17,7 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Implements
 
-- [`Channel`](../interfaces/common_export.Channel.md)<[`Message`](../interfaces/codec_export.Message.md)\>
+- [`Channel`](../interfaces/common_export.Channel.md)\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 ## Table of contents
 
@@ -45,7 +45,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new MessageChannel**<`ContextT`\>(`channel`, `session`, `closeCallback?`)
+• **new MessageChannel**\<`ContextT`\>(`channel`, `session`, `closeCallback?`): [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -57,41 +57,45 @@ SPDX-License-Identifier: Apache-2.0
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`ContextT`\> |
-| `closeCallback?` | () => `Promise`<`void`\> |
+| `channel` | [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\> |
+| `closeCallback?` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L31)
+[packages/matter.js/src/protocol/ExchangeManager.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L32)
 
 ## Properties
 
 ### channel
 
-• `Readonly` **channel**: [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\>
+• `Readonly` **channel**: [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L32)
+[packages/matter.js/src/protocol/ExchangeManager.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L33)
 
 ___
 
 ### closeCallback
 
-• `Private` `Optional` `Readonly` **closeCallback**: () => `Promise`<`void`\>
+• `Private` `Optional` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\>
+▸ (): `Promise`\<`void`\>
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L34)
+[packages/matter.js/src/protocol/ExchangeManager.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L35)
 
 ___
 
@@ -101,17 +105,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L30)
+[packages/matter.js/src/protocol/ExchangeManager.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L31)
 
 ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/session_export.Session.md)<`ContextT`\>
+• `Readonly` **session**: [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L33)
+[packages/matter.js/src/protocol/ExchangeManager.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L34)
 
 ## Accessors
 
@@ -129,17 +133,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L44)
+[packages/matter.js/src/protocol/ExchangeManager.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L52)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -147,13 +151,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L48)
+[packages/matter.js/src/protocol/ExchangeManager.ts:56](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L56)
 
 ___
 
 ### send
 
-▸ **send**(`message`): `Promise`<`void`\>
+▸ **send**(`message`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -163,7 +167,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -171,4 +175,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L37)
+[packages/matter.js/src/protocol/ExchangeManager.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L38)

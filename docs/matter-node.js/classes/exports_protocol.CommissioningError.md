@@ -22,7 +22,7 @@ Error that throws when Commissioning fails and process can not be continued.
 
 ### constructor
 
-• **new CommissioningError**(`message?`)
+• **new CommissioningError**(`message?`): [`CommissioningError`](exports_protocol.CommissioningError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error that throws when Commissioning fails and process can not be continued.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`CommissioningError`](exports_protocol.CommissioningError.md)
+
 #### Inherited from
 
 [MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

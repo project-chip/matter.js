@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / NullableSchema
 
-# Class: NullableSchema<T\>
+# Class: NullableSchema\<T\>
 
 [exports/tlv](../modules/exports_tlv.md).NullableSchema
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.11.6
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`T` \| ``null``\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T` \| ``null``\>
 
   ↳ **`NullableSchema`**
 
@@ -51,7 +51,7 @@ MatterCoreSpecificationV1_0 § A.11.6
 
 ### constructor
 
-• **new NullableSchema**<`T`\>(`schema`)
+• **new NullableSchema**\<`T`\>(`schema`): [`NullableSchema`](exports_tlv.NullableSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -63,11 +63,15 @@ MatterCoreSpecificationV1_0 § A.11.6
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
+
+#### Returns
+
+[`NullableSchema`](exports_tlv.NullableSchema.md)\<`T`\>
 
 #### Overrides
 
-TlvSchema&lt;T \| null\&gt;.constructor
+TlvSchema\&lt;T \| null\&gt;.constructor
 
 #### Defined in
 

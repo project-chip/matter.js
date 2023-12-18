@@ -6,7 +6,7 @@
 
 **`See`**
 
-[MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md), section 8.10
+MatterCoreSpecificationV1_0, section 8.10
 
 ## Table of contents
 
@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L43)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L30)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L33)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L20)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L40)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L27)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L50)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L37)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L25)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L12)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L29)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L16)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L31)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L18)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L38)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L25)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L26)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L13)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L46)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L33)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L45)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L32)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L36)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L23)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L48)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L35)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L35)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L22)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L24)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L11)
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L49)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L36)
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L41)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L28)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L37)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L24)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L27)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L14)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L32)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L19)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L44)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L31)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L30)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L17)
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L28)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L15)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L47)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L34)
 
 ___
 
@@ -288,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L42)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L29)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L39)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L26)
 
 ___
 
@@ -308,4 +308,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionProtocol.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/interaction/InteractionProtocol.ts#L34)
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L21)

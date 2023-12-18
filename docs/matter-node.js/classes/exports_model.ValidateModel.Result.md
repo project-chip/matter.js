@@ -30,13 +30,17 @@
 
 ### constructor
 
-• **new Result**(`model`)
+• **new Result**(`model`): [`Result`](exports_model.ValidateModel.Result.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `model` | [`Model`](exports_model.Model-1.md) |
+
+#### Returns
+
+[`Result`](exports_model.ValidateModel.Result.md)
 
 #### Defined in
 

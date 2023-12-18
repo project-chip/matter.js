@@ -27,13 +27,17 @@
 
 ### constructor
 
-• **new TlvByteArrayReader**(`byteArray`)
+• **new TlvByteArrayReader**(`byteArray`): [`TlvByteArrayReader`](exports_tlv.TlvByteArrayReader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `byteArray` | `Uint8Array` |
+
+#### Returns
+
+[`TlvByteArrayReader`](exports_tlv.TlvByteArrayReader.md)
 
 #### Defined in
 
@@ -53,7 +57,7 @@ packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:62
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`typeLength`): `V`
 
 #### Type parameters
 

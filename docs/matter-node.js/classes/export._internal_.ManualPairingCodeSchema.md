@@ -1,14 +1,14 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ManualPairingCodeSchema
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ManualPairingCodeSchema
 
 # Class: ManualPairingCodeSchema
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ManualPairingCodeSchema
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ManualPairingCodeSchema
 
 See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecificationV1_0.md) § 5.1.4.1 Table 38/39/40
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`ManualPairingData`](../modules/exports_schema.md#manualpairingdata), `string`\>
+- [`Schema`](exports_schema.Schema.md)\<[`ManualPairingData`](../modules/exports_schema.md#manualpairingdata), `string`\>
 
   ↳ **`ManualPairingCodeSchema`**
 
@@ -30,7 +30,11 @@ See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecifica
 
 ### constructor
 
-• **new ManualPairingCodeSchema**()
+• **new ManualPairingCodeSchema**(): [`ManualPairingCodeSchema`](export._internal_.ManualPairingCodeSchema.md)
+
+#### Returns
+
+[`ManualPairingCodeSchema`](export._internal_.ManualPairingCodeSchema.md)
 
 #### Inherited from
 
@@ -67,7 +71,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`encoded`): [`ManualPairingData`](../modules/exports_schema.md#manualpairingdata)
+▸ **decodeInternal**(`encoded`): [`ManualPairingData`](../modules/exports_schema.md#manualpairingdata)
 
 #### Parameters
 
@@ -117,7 +121,7 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`«destructured»`): `string`
+▸ **encodeInternal**(`«destructured»`): `string`
 
 #### Parameters
 

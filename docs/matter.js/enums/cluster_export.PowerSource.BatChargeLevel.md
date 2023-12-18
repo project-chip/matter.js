@@ -26,7 +26,7 @@ Charge level is critical, immediate intervention is required
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L128)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L128)
 
 ___
 
@@ -38,7 +38,7 @@ Charge level is nominal
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:118](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L118)
 
 ___
 
@@ -50,4 +50,4 @@ Charge level is low, intervention may soon be required.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:123](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L123)
+[packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts:123](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/PowerSourceCluster.ts#L123)

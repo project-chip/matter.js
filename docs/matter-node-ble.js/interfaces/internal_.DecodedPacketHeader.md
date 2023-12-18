@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / DecodedPacketHeader
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / DecodedPacketHeader
 
 # Interface: DecodedPacketHeader
 
-[<internal>](../modules/internal_.md).DecodedPacketHeader
+[\<internal\>](../modules/internal_.md).DecodedPacketHeader
 
 ## Hierarchy
 
@@ -37,7 +37,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:18
+matter.js/dist/esm/codec/MessageCodec.d.ts:20
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:17
+matter.js/dist/esm/codec/MessageCodec.d.ts:19
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:14
+matter.js/dist/esm/codec/MessageCodec.d.ts:16
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:12
+matter.js/dist/esm/codec/MessageCodec.d.ts:14
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:13
+matter.js/dist/esm/codec/MessageCodec.d.ts:15
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:15
+matter.js/dist/esm/codec/MessageCodec.d.ts:17
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:21
+matter.js/dist/esm/codec/MessageCodec.d.ts:23
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:10
+matter.js/dist/esm/codec/MessageCodec.d.ts:12
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:11
+matter.js/dist/esm/codec/MessageCodec.d.ts:13
 
 ___
 
@@ -159,4 +159,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:16
+matter.js/dist/esm/codec/MessageCodec.d.ts:18

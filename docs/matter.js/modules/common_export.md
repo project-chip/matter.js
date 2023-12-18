@@ -76,20 +76,20 @@ The properties are named identical as in the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Scanner.ts#L16)
+[packages/matter.js/src/common/Scanner.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/Scanner.ts#L16)
 
 ___
 
 ### CommissionableDeviceIdentifiers
 
-Ƭ **CommissionableDeviceIdentifiers**: { `instanceId`: `string`  } \| { `longDiscriminator`: `number`  } \| { `shortDiscriminator`: `number`  } \| { `vendorId`: [`VendorId`](datatype_export.md#vendorid)  } \| { `deviceType`: `number`  } \| { `productId`: `number`  } \| { [K in any]: never }
+Ƭ **CommissionableDeviceIdentifiers**: \{ `instanceId`: `string`  } \| \{ `longDiscriminator`: `number`  } \| \{ `shortDiscriminator`: `number`  } \| \{ `vendorId`: [`VendorId`](datatype_export.md#vendorid)  } \| \{ `deviceType`: `number`  } \| \{ `productId`: `number`  } \| \{ [K in any]: never }
 
 Identifier to use to discover a commissionable device.
 Please decide for the best matching identifier that you have.
 
 #### Defined in
 
-[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Scanner.ts#L60)
+[packages/matter.js/src/common/Scanner.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/Scanner.ts#L60)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:162](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/InstanceBroadcaster.ts#L162)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 | `deviceName` | `string` | Device name for commissionable announcements. |
 | `deviceType` | `number` | Device type for commissionable announcements. |
 | `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<typeof [`PairingHintBitmap`](common_export.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
+| `pairingHint?` | [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](common_export.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
 | `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
 | `productId` | `number` | Product ID for commissionable announcements. |
 | `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/InstanceBroadcaster.ts#L133)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:182](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/InstanceBroadcaster.ts#L182)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L18)
+[packages/matter.js/src/common/ServerAddress.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/ServerAddress.ts#L18)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L13)
+[packages/matter.js/src/common/ServerAddress.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/ServerAddress.ts#L13)
 
 ___
 
@@ -201,7 +201,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L7)
+[packages/matter.js/src/common/ServerAddress.ts:7](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/ServerAddress.ts#L7)
 
 ## Variables
 
@@ -236,17 +236,17 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/InstanceBroadcaster.ts#L11)
 
 ___
 
 ### PairingHintBitmapSchema
 
-• `Const` **PairingHintBitmapSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)<{ `administrator`: [`BitFlag`](schema_export.md#bitflag-1) ; `customInstruction`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManual`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](schema_export.md#bitflag-1) ; `powerCycle`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](schema_export.md#bitflag-1)  }\>
+• `Const` **PairingHintBitmapSchema**: [`BitmapSchemaInternal`](../classes/schema_export.BitmapSchemaInternal.md)\<\{ `administrator`: [`BitFlag`](schema_export.md#bitflag-1) ; `customInstruction`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManual`: [`BitFlag`](schema_export.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](schema_export.md#bitflag-1) ; `powerCycle`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](schema_export.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](schema_export.md#bitflag-1)  }\>
 
 #### Defined in
 
-[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
+[packages/matter.js/src/common/InstanceBroadcaster.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/InstanceBroadcaster.ts#L131)
 
 ## Functions
 
@@ -266,13 +266,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/ServerAddress.ts#L20)
+[packages/matter.js/src/common/ServerAddress.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/ServerAddress.ts#L20)
 
 ___
 
 ### tryCatch
 
-▸ **tryCatch**<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `T`
+▸ **tryCatch**\<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `T`
 
 Try to execute the code block and catch the error if it is of the given type.
 If the error is of the given type, the fallback value or the result of the function is returned.
@@ -290,8 +290,8 @@ If the function returns undefined or the error type do not match, the error is n
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `codeBlock` | () => `T` | Code block to execute |
-| `errorType` | [`ClassExtends`](util_export.md#classextends)<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)<`T`, `E`\> | Fallback value or function to compute the fallback value |
+| `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`T`, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
@@ -299,13 +299,13 @@ If the function returns undefined or the error type do not match, the error is n
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TryCatchHandler.ts#L19)
+[packages/matter.js/src/common/TryCatchHandler.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TryCatchHandler.ts#L19)
 
 ___
 
 ### tryCatchAsync
 
-▸ **tryCatchAsync**<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `Promise`<`T`\>
+▸ **tryCatchAsync**\<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `Promise`\<`T`\>
 
 Try to execute the async code block and catch the error if it is of the given type.
 If the error is of the given type, the fallback value or the result of the function is returned.
@@ -322,14 +322,14 @@ If the function returns undefined or the error type do not match, the error is n
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `codeBlock` | () => `Promise`<`T`\> | Async code block to execute |
-| `errorType` | [`ClassExtends`](util_export.md#classextends)<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)<`Promise`<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
+| `codeBlock` | () => `Promise`\<`T`\> | Async code block to execute |
+| `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`Promise`\<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TryCatchHandler.ts#L47)
+[packages/matter.js/src/common/TryCatchHandler.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TryCatchHandler.ts#L47)

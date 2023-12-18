@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / EventClient
 
-# Class: EventClient<T\>
+# Class: EventClient\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).EventClient
 
@@ -48,7 +48,7 @@ General class for EventClients
 
 ### constructor
 
-• **new EventClient**<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new EventClient**\<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`EventClient`](exports_cluster.EventClient.md)\<`T`\>
 
 #### Type parameters
 
@@ -60,11 +60,15 @@ General class for EventClients
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/exports_cluster.md#event)<`T`, `any`\> |
+| `event` | [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
+
+#### Returns
+
+[`EventClient`](exports_cluster.EventClient.md)\<`T`\>
 
 #### Defined in
 
@@ -94,7 +98,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\>
 
 #### Defined in
 
@@ -150,7 +154,7 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -164,7 +168,7 @@ ___
 
 ### get
 
-▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>[]\>
+▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>[]\>
 
 #### Parameters
 
@@ -175,7 +179,7 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>[]\>
 
 #### Defined in
 
@@ -191,7 +195,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -205,7 +209,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -219,7 +223,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -235,7 +239,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\> |
+| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\> |
 
 #### Returns
 

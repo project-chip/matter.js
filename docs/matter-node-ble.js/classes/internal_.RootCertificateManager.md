@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / RootCertificateManager
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / RootCertificateManager
 
 # Class: RootCertificateManager
 
-[<internal>](../modules/internal_.md).RootCertificateManager
+[\<internal\>](../modules/internal_.md).RootCertificateManager
 
 ## Table of contents
 
@@ -28,7 +28,7 @@
 
 ### constructor
 
-• **new RootCertificateManager**(`storageContext`)
+• **new RootCertificateManager**(`storageContext`): [`RootCertificateManager`](internal_.RootCertificateManager.md)
 
 #### Parameters
 
@@ -36,9 +36,13 @@
 | :------ | :------ |
 | `storageContext` | [`StorageContext`](internal_.StorageContext.md) |
 
+#### Returns
+
+[`RootCertificateManager`](internal_.RootCertificateManager.md)
+
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 ## Properties
 
@@ -48,7 +52,7 @@ matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
 
 ___
 
@@ -58,7 +62,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 ___
 
@@ -68,7 +72,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
 
 ___
 
@@ -78,7 +82,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:11
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 
 ___
 
@@ -88,7 +92,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -98,13 +102,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
 
 ## Methods
 
 ### generateNoc
 
-▸ **generateNoc**(`publicKey`, `fabricId`, `nodeId`): `Uint8Array`
+▸ **generateNoc**(`publicKey`, `fabricId`, `nodeId`, `caseAuthenticatedTags?`): `Uint8Array`
 
 #### Parameters
 
@@ -113,6 +117,7 @@ matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 | `publicKey` | `Uint8Array` |
 | `fabricId` | [`FabricId`](../modules/internal_.md#fabricid) |
 | `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[] |
 
 #### Returns
 
@@ -120,7 +125,7 @@ matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20
 
 ___
 
@@ -134,4 +139,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
+matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18

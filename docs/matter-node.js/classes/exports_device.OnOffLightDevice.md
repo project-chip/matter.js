@@ -70,14 +70,18 @@ Device class for an OnOffPluginUnit Device
 
 ### constructor
 
-• **new OnOffLightDevice**(`onOffAttributeInitialValues?`, `options?`)
+• **new OnOffLightDevice**(`onOffAttributeInitialValues?`, `options?`): [`OnOffLightDevice`](exports_device.OnOffLightDevice.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)<[`Merge`](../modules/util_export.md#merge)<[`Merge`](../modules/util_export.md#merge)<{ `onOff`: [`Attribute`](../modules/exports_cluster.md#attribute)<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)<{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>\> |
+| `onOffAttributeInitialValues?` | [`AttributeInitialValues`](../modules/exports_cluster.md#attributeinitialvalues)\<[`Merge`](../modules/util_export.md#merge)\<[`Merge`](../modules/util_export.md#merge)\<\{ `onOff`: [`Attribute`](../modules/exports_cluster.md#attribute)\<`boolean`, `any`\>  }, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>, [`GlobalAttributes`](../modules/exports_cluster.md#globalattributes-1)\<\{ `levelControlForLighting`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\>\>\> |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
+
+#### Returns
+
+[`OnOffLightDevice`](exports_device.OnOffLightDevice.md)
 
 #### Overrides
 
@@ -91,7 +95,7 @@ packages/matter.js/dist/esm/device/OnOffDevices.d.ts:91
 
 ### commandHandler
 
-• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)<`any`\>
+• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)\<`any`\>
 
 #### Inherited from
 
@@ -175,7 +179,7 @@ packages/matter.js/dist/esm/device/Endpoint.d.ts:24
 
 ### \_executeHandler
 
-▸ `Protected` **_executeHandler**(`command`, `...args`): `Promise`<`any`\>
+▸ **_executeHandler**(`command`, `...args`): `Promise`\<`any`\>
 
 Execute a command handler. Should only be used internally, but can not be declared as protected officially
 because needed public for derived classes.
@@ -189,7 +193,7 @@ because needed public for derived classes.
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Inherited from
 
@@ -199,7 +203,7 @@ because needed public for derived classes.
 
 packages/matter.js/dist/esm/device/Device.d.ts:114
 
-▸ `Protected` **_executeHandler**<`K_2`\>(`action`, `...args`): `Promise`<`void`\>
+▸ **_executeHandler**\<`K_2`\>(`action`, `...args`): `Promise`\<`void`\>
 
 #### Type parameters
 
@@ -212,11 +216,11 @@ packages/matter.js/dist/esm/device/Device.d.ts:114
 | Name | Type |
 | :------ | :------ |
 | `action` | `K_2` |
-| `...args` | `Parameters`<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
+| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K_2`]\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -254,7 +258,7 @@ ___
 
 ### addClusterClient
 
-▸ **addClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
+▸ **addClusterClient**\<`F`, `A`, `C`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -269,7 +273,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\> |
+| `cluster` | [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -287,7 +291,7 @@ ___
 
 ### addClusterServer
 
-▸ **addClusterServer**<`A`, `E`\>(`cluster`): `void`
+▸ **addClusterServer**\<`A`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -300,7 +304,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\> |
+| `cluster` | [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\> |
 
 #### Returns
 
@@ -342,7 +346,7 @@ The base class do not expose any commands!
 
 packages/matter.js/dist/esm/device/Device.d.ts:97
 
-▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
+▸ **addCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
 #### Type parameters
 
@@ -373,7 +377,7 @@ ___
 
 ### addDeviceClusters
 
-▸ `Protected` **addDeviceClusters**(`attributeInitialValues?`, `excludeList?`): `void`
+▸ **addDeviceClusters**(`attributeInitialValues?`, `excludeList?`): `void`
 
 Adds mandatory clusters to the device
 
@@ -477,14 +481,14 @@ ___
 
 ### createOptionalClusterClient
 
-▸ `Protected` **createOptionalClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **createOptionalClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -493,11 +497,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
@@ -511,14 +515,14 @@ ___
 
 ### createOptionalClusterServer
 
-▸ `Protected` **createOptionalClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+▸ **createOptionalClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -527,11 +531,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\>
 
 #### Inherited from
 
@@ -581,11 +585,11 @@ ___
 
 ### getAllClusterClients
 
-▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
+▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
+[`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
@@ -599,11 +603,11 @@ ___
 
 ### getAllClusterServers
 
-▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
+▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Returns
 
-[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
+[`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>[]
 
 #### Inherited from
 
@@ -659,14 +663,14 @@ ___
 
 ### getClusterClient
 
-▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -675,11 +679,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
@@ -693,7 +697,7 @@ ___
 
 ### getClusterClientById
 
-▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
+▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
@@ -703,7 +707,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
+`undefined` \| [`ClusterClientObj`](../modules/exports_cluster.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Commands`](../interfaces/exports_cluster.Commands.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
@@ -717,14 +721,14 @@ ___
 
 ### getClusterServer
 
-▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+▸ **getClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -733,11 +737,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<`A`, `E`\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<`A`, `E`\>
 
 #### Inherited from
 
@@ -751,7 +755,7 @@ ___
 
 ### getClusterServerById
 
-▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
+▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Parameters
 
@@ -761,7 +765,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
+`undefined` \| [`ClusterServerObj`](../modules/exports_cluster.md#clusterserverobj)\<[`Attributes`](../interfaces/exports_cluster.Attributes.md), [`Events`](../interfaces/exports_cluster.Events.md)\>
 
 #### Inherited from
 
@@ -829,14 +833,14 @@ ___
 
 ### hasClusterClient
 
-▸ **hasClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -845,7 +849,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -863,14 +867,14 @@ ___
 
 ### hasClusterServer
 
-▸ **hasClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -879,7 +883,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/exports_cluster.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -897,7 +901,7 @@ ___
 
 ### removeChildEndpoint
 
-▸ `Protected` **removeChildEndpoint**(`endpoint`): `void`
+▸ **removeChildEndpoint**(`endpoint`): `void`
 
 #### Parameters
 
@@ -945,7 +949,7 @@ The base class do not expose any commands!
 
 packages/matter.js/dist/esm/device/Device.d.ts:105
 
-▸ **removeCommandHandler**<`K_1`\>(`action`, `handler`): `void`
+▸ **removeCommandHandler**\<`K_1`\>(`action`, `handler`): `void`
 
 #### Type parameters
 

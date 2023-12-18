@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / InteractionClient
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / InteractionClient
 
 # Class: InteractionClient
 
-[<internal>](../modules/internal_.md).InteractionClient
+[\<internal\>](../modules/internal_.md).InteractionClient
 
 ## Table of contents
 
@@ -53,7 +53,7 @@
 
 ### constructor
 
-• **new InteractionClient**(`exchangeProvider`, `nodeId`)
+• **new InteractionClient**(`exchangeProvider`, `nodeId`): [`InteractionClient`](internal_.InteractionClient.md)
 
 #### Parameters
 
@@ -62,9 +62,13 @@
 | `exchangeProvider` | [`ExchangeProvider`](internal_.ExchangeProvider.md) |
 | `nodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
 
+#### Returns
+
+[`InteractionClient`](internal_.InteractionClient.md)
+
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
 
 ## Properties
 
@@ -74,7 +78,7 @@ matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:44
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:45
 
 ___
 
@@ -84,7 +88,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:46
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:49
 
 ___
 
@@ -104,7 +108,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:145
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:146
 
 ___
 
@@ -114,7 +118,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:261
 
 ___
 
@@ -124,7 +128,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:48
 
 ___
 
@@ -134,7 +138,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:47
 
 ___
 
@@ -144,7 +148,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:50
 
 ___
 
@@ -154,21 +158,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:259
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:260
 
 ## Accessors
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/internal_.Session.md)<[`MatterController`](internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](../interfaces/internal_.Session.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/internal_.Session.md)<[`MatterController`](internal_.MatterController.md)\>
+[`Session`](../interfaces/internal_.Session.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:263
 
 ## Methods
 
@@ -182,86 +186,86 @@ matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:261
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:262
 
 ___
 
 ### getAllAttributes
 
-▸ **getAllAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
+▸ **getAllAttributes**(`options?`): `Promise`\<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
+`Promise`\<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:53
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:54
 
 ___
 
 ### getAllAttributesAndEvents
 
-▸ **getAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getAllAttributesAndEvents**(`options?`): `Promise`\<\{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`\<\{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:65
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:66
 
 ___
 
 ### getAllEvents
 
-▸ **getAllEvents**(`options?`): `Promise`<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]\>
+▸ **getAllEvents**(`options?`): `Promise`\<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]\>
+`Promise`\<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:61
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:62
 
 ___
 
 ### getAttribute
 
-▸ **getAttribute**<`A`\>(`options`): `Promise`<`undefined` \| [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\>\>
+▸ **getAttribute**\<`A`\>(`options`): `Promise`\<`undefined` \| [`AttributeJsType`](../modules/internal_.md#attributejstype)\<`A`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -276,23 +280,23 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\>\>
+`Promise`\<`undefined` \| [`AttributeJsType`](../modules/internal_.md#attributejstype)\<`A`\>\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:121
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:122
 
 ___
 
 ### getAttributeWithVersion
 
-▸ **getAttributeWithVersion**<`A`\>(`options`): `Promise`<`undefined` \| { `value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\> ; `version`: `number`  }\>
+▸ **getAttributeWithVersion**\<`A`\>(`options`): `Promise`\<`undefined` \| \{ `value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)\<`A`\> ; `version`: `number`  }\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -307,24 +311,24 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| { `value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\> ; `version`: `number`  }\>
+`Promise`\<`undefined` \| \{ `value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)\<`A`\> ; `version`: `number`  }\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:128
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:129
 
 ___
 
 ### getEvent
 
-▸ **getEvent**<`T`, `E`\>(`options`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>[]\>
+▸ **getEvent**\<`T`, `E`\>(`options`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>[]\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`\> |
+| `E` | extends [`Event`](../modules/internal_.md#event)\<`T`, `any`\> |
 
 #### Parameters
 
@@ -339,94 +343,94 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:138
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:139
 
 ___
 
 ### getMultipleAttributes
 
-▸ **getMultipleAttributes**(`options?`): `Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
+▸ **getMultipleAttributes**(`options?`): `Promise`\<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.attributes?` | { `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.attributes?` | \{ `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[]\>
+`Promise`\<[`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:77
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:78
 
 ___
 
 ### getMultipleAttributesAndEvents
 
-▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **getMultipleAttributesAndEvents**(`options?`): `Promise`\<\{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.attributes?` | { `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `options.events?` | { `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid)  }[] |
+| `options.attributes?` | \{ `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.events?` | \{ `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid)  }[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`\<\{ `attributeReports`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:99
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:100
 
 ___
 
 ### getMultipleEvents
 
-▸ **getMultipleEvents**(`options?`): `Promise`<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]\>
+▸ **getMultipleEvents**(`options?`): `Promise`\<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `options.events?` | { `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid)  }[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.events?` | \{ `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid)  }[] |
 | `options.isFabricFiltered?` | `boolean` |
 
 #### Returns
 
-`Promise`<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]\>
+`Promise`\<[`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:90
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:91
 
 ___
 
 ### invoke
 
-▸ **invoke**<`C`\>(`options`): `Promise`<[`ResponseType`](../modules/internal_.md#responsetype)<`C`\>\>
+▸ **invoke**\<`C`\>(`options`): `Promise`\<[`ResponseType`](../modules/internal_.md#responsetype)\<`C`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/internal_.md#command)<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../modules/internal_.md#command)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -437,29 +441,29 @@ ___
 | `options.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
 | `options.command` | `C` |
 | `options.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
-| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)<`C`\> |
+| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)\<`C`\> |
 | `options.timedRequestTimeoutMs?` | `number` |
 | `options.useExtendedFailSafeMessageResponseTimeout?` | `boolean` |
 
 #### Returns
 
-`Promise`<[`ResponseType`](../modules/internal_.md#responsetype)<`C`\>\>
+`Promise`\<[`ResponseType`](../modules/internal_.md#responsetype)\<`C`\>\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:242
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:243
 
 ___
 
 ### invokeWithSuppressedResponse
 
-▸ **invokeWithSuppressedResponse**<`C`\>(`options`): `Promise`<`void`\>
+▸ **invokeWithSuppressedResponse**\<`C`\>(`options`): `Promise`\<`void`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](../modules/internal_.md#command)<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](../modules/internal_.md#command)\<`any`, `any`, `any`\> |
 
 #### Parameters
 
@@ -470,16 +474,16 @@ ___
 | `options.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
 | `options.command` | `C` |
 | `options.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
-| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)<`C`\> |
+| `options.request` | [`RequestType`](../modules/internal_.md#requesttype)\<`C`\> |
 | `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:251
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:252
 
 ___
 
@@ -492,7 +496,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `subscriptionId` | `number` |
-| `listener` | (`dataReport`: [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `data`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `data`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`EventPriority`](../enums/internal_.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\>  }\>) => `void` |
+| `listener` | (`dataReport`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `data`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `dataVersion`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\>  }\>\> ; `attributeStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `eventReports`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventData`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `data`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TlvStream`](../modules/internal_.md#tlvstream)\> ; `deltaEpochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number` \| `bigint`\> ; `deltaSystemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number` \| `bigint`\> ; `epochTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number` \| `bigint`\> ; `eventNumber`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `priority`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`EventPriority`](../enums/internal_.EventPriority.md)\> ; `systemTimestamp`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number` \| `bigint`\>  }\>\> ; `eventStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `path`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\> ; `status`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterStatus`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`StatusCode`](../enums/internal_.StatusCode.md)\> ; `status`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`StatusCode`](../enums/internal_.StatusCode.md)\>  }\>\>  }\>\>  }\>[]\> ; `interactionModelRevision`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `moreChunkedMessages`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `subscriptionId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `suppressResponse`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\>  }\>) => `void` |
 
 #### Returns
 
@@ -500,7 +504,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:51
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:52
 
 ___
 
@@ -520,13 +524,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:52
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:53
 
 ___
 
 ### setAttribute
 
-▸ **setAttribute**<`T`\>(`options`): `Promise`<`void`\>
+▸ **setAttribute**\<`T`\>(`options`): `Promise`\<`void`\>
 
 #### Type parameters
 
@@ -541,7 +545,7 @@ ___
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
 | `options.attributeData` | `Object` |
-| `options.attributeData.attribute` | [`Attribute`](../modules/internal_.md#attribute)<`T`, `any`\> |
+| `options.attributeData.attribute` | [`Attribute`](../modules/internal_.md#attribute)\<`T`, `any`\> |
 | `options.attributeData.clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
 | `options.attributeData.dataVersion?` | `number` |
 | `options.attributeData.endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
@@ -551,17 +555,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:146
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:147
 
 ___
 
 ### setMultipleAttributes
 
-▸ **setMultipleAttributes**(`options`): `Promise`<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
+▸ **setMultipleAttributes**(`options`): `Promise`\<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
 
 #### Parameters
 
@@ -569,33 +573,33 @@ ___
 | :------ | :------ |
 | `options` | `Object` |
 | `options.asTimedRequest?` | `boolean` |
-| `options.attributes` | { `attribute`: [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `value`: `any`  }[] |
+| `options.attributes` | \{ `attribute`: [`Attribute`](../modules/internal_.md#attribute)\<`any`, `any`\> ; `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion?`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `value`: `any`  }[] |
 | `options.suppressResponse?` | `boolean` |
 | `options.timedRequestTimeoutMs?` | `number` |
 
 #### Returns
 
-`Promise`<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
+`Promise`\<[`AttributeStatus`](../interfaces/internal_.AttributeStatus.md)[]\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:158
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:159
 
 ___
 
 ### subscribeAllAttributesAndEvents
 
-▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeAllAttributesAndEvents**(`options`): `Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>) => `void` |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>) => `void` |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>) => `void` |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>) => `void` |
 | `options.isFabricFiltered?` | `boolean` |
 | `options.isUrgent?` | `boolean` |
 | `options.keepSubscriptions?` | `boolean` |
@@ -605,23 +609,23 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:194
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:195
 
 ___
 
 ### subscribeAttribute
 
-▸ **subscribeAttribute**<`A`\>(`options`): `Promise`<`void`\>
+▸ **subscribeAttribute**\<`A`\>(`options`): `Promise`\<`void`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](../modules/internal_.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](../modules/internal_.md#attribute)\<`any`, `any`\> |
 
 #### Parameters
 
@@ -634,31 +638,31 @@ ___
 | `options.isFabricFiltered?` | `boolean` |
 | `options.keepSubscriptions?` | `boolean` |
 | `options.knownDataVersion?` | `number` |
-| `options.listener?` | (`value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)<`A`\>, `version`: `number`) => `void` |
+| `options.listener?` | (`value`: [`AttributeJsType`](../modules/internal_.md#attributejstype)\<`A`\>, `version`: `number`) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
 | `options.updateTimeoutHandler?` | [`TimerCallback`](../modules/internal_.md#timercallback) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:170
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:171
 
 ___
 
 ### subscribeEvent
 
-▸ **subscribeEvent**<`T`, `E`\>(`options`): `Promise`<`void`\>
+▸ **subscribeEvent**\<`T`, `E`\>(`options`): `Promise`\<`void`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | `T` |
-| `E` | extends [`Event`](../modules/internal_.md#event)<`T`, `any`\> |
+| `E` | extends [`Event`](../modules/internal_.md#event)\<`T`, `any`\> |
 
 #### Parameters
 
@@ -670,7 +674,7 @@ ___
 | `options.event` | `E` |
 | `options.isFabricFiltered?` | `boolean` |
 | `options.isUrgent?` | `boolean` |
-| `options.listener?` | (`value`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>) => `void` |
+| `options.listener?` | (`value`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>) => `void` |
 | `options.maxIntervalCeilingSeconds` | `number` |
 | `options.minIntervalFloorSeconds` | `number` |
 | `options.minimumEventNumber?` | `number` \| `bigint` |
@@ -678,29 +682,29 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:182
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:183
 
 ___
 
 ### subscribeMultipleAttributesAndEvents
 
-▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeMultipleAttributesAndEvents**(`options`): `Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options` | `Object` |
-| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>) => `void` |
-| `options.attributes` | { `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.dataVersionFilters?` | { `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
-| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>) => `void` |
-| `options.events` | { `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid) ; `isUrgent?`: `boolean`  }[] |
+| `options.attributeListener?` | (`data`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>) => `void` |
+| `options.attributes` | \{ `attributeId?`: [`AttributeId`](../modules/internal_.md#attributeid) ; `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.dataVersionFilters?` | \{ `clusterId`: [`ClusterId`](../modules/internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](../modules/internal_.md#endpointnumber)  }[] |
+| `options.eventFilters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `options.eventListener?` | (`data`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>) => `void` |
+| `options.events` | \{ `clusterId?`: [`ClusterId`](../modules/internal_.md#clusterid) ; `endpointId?`: [`EndpointNumber`](../modules/internal_.md#endpointnumber) ; `eventId?`: [`EventId`](../modules/internal_.md#eventid) ; `isUrgent?`: `boolean`  }[] |
 | `options.isFabricFiltered?` | `boolean` |
 | `options.keepSubscriptions?` | `boolean` |
 | `options.maxIntervalCeilingSeconds` | `number` |
@@ -709,8 +713,8 @@ ___
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/internal_.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/internal_.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:213
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:214

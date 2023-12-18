@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventServer
 
-# Class: EventServer<T\>
+# Class: EventServer\<T\>
 
-[<internal>](../modules/internal_.md).EventServer
+[\<internal\>](../modules/internal_.md).EventServer
 
 ## Type parameters
 
@@ -40,7 +40,7 @@
 
 ### constructor
 
-• **new EventServer**<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`)
+• **new EventServer**\<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](internal_.EventServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -55,8 +55,12 @@
 | `id` | [`EventId`](../modules/internal_.md#eventid) |
 | `clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
 | `name` | `string` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
+
+#### Returns
+
+[`EventServer`](internal_.EventServer.md)\<`T`\>
 
 #### Defined in
 
@@ -146,7 +150,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -162,7 +166,7 @@ matter.js/dist/esm/cluster/server/EventServer.d.ts:16
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -222,7 +226,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 

@@ -1,12 +1,13 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / <internal\>
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / \<internal\>
 
-# Module: <internal\>
+# Module: \<internal\>
 
 ## Table of contents
 
 ### Namespaces
 
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject&quot;](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+- [CaseAuthenticatedTag](internal_.CaseAuthenticatedTag.md)
 - [FabricIndex](internal_.FabricIndex.md)
 - [NodeId](internal_.NodeId.md)
 
@@ -169,6 +170,7 @@
 - [Brand](internal_.md#brand)
 - [Branded](internal_.md#branded)
 - [ByteArray](internal_.md#bytearray)
+- [CaseAuthenticatedTag](internal_.md#caseauthenticatedtag)
 - [ClientAttributeGetters](internal_.md#clientattributegetters)
 - [ClientAttributeListeners](internal_.md#clientattributelisteners)
 - [ClientAttributeSetters](internal_.md#clientattributesetters)
@@ -211,6 +213,7 @@
 - [GlobalAttributeNames](internal_.md#globalattributenames)
 - [GlobalAttributes](internal_.md#globalattributes)
 - [GroupId](internal_.md#groupid)
+- [LengthConstraints](internal_.md#lengthconstraints)
 - [MandatoryAttributeNames](internal_.md#mandatoryattributenames)
 - [MandatoryAttributeServers](internal_.md#mandatoryattributeservers)
 - [MandatoryEventNames](internal_.md#mandatoryeventnames)
@@ -273,6 +276,7 @@
 - [BitFieldEnum](internal_.md#bitfieldenum-1)
 - [BitFlag](internal_.md#bitflag-1)
 - [BitRange](internal_.md#bitrange-1)
+- [CaseAuthenticatedTag](internal_.md#caseauthenticatedtag-1)
 - [Cluster](internal_.md#cluster)
 - [ClusterId](internal_.md#clusterid-1)
 - [Command](internal_.md#command)
@@ -465,7 +469,7 @@ matter.js/dist/esm/tlv/TlvCodec.d.ts:19
 
 ### AnyAttributeServer
 
-Ƭ **AnyAttributeServer**<`T`\>: [`AttributeServer`](../classes/internal_.AttributeServer.md)<`T`\> \| [`FabricScopedAttributeServer`](../classes/internal_.FabricScopedAttributeServer.md)<`T`\> \| [`FixedAttributeServer`](../classes/internal_.FixedAttributeServer.md)<`T`\>
+Ƭ **AnyAttributeServer**\<`T`\>: [`AttributeServer`](../classes/internal_.AttributeServer.md)\<`T`\> \| [`FabricScopedAttributeServer`](../classes/internal_.FabricScopedAttributeServer.md)\<`T`\> \| [`FixedAttributeServer`](../classes/internal_.FixedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -481,7 +485,7 @@ ___
 
 ### AttributeClients
 
-Ƭ **AttributeClients**<`F`, `A`\>: [`Merge`](internal_.md#merge)<[`Merge`](internal_.md#merge)<{ [P in MandatoryAttributeNames<A\>]: AttributeClient<AttributeJsType<A[P]\>\> }, { [P in OptionalAttributeNames<A\>]: AttributeClient<AttributeJsType<A[P]\> \| undefined\> }\>, { [P in GlobalAttributeNames<F\>]: AttributeClient<AttributeJsType<GlobalAttributes<F\>[P]\>\> }\>
+Ƭ **AttributeClients**\<`F`, `A`\>: [`Merge`](internal_.md#merge)\<[`Merge`](internal_.md#merge)\<\{ [P in MandatoryAttributeNames\<A\>]: AttributeClient\<AttributeJsType\<A[P]\>\> }, \{ [P in OptionalAttributeNames\<A\>]: AttributeClient\<AttributeJsType\<A[P]\> \| undefined\> }\>, \{ [P in GlobalAttributeNames\<F\>]: AttributeClient\<AttributeJsType\<GlobalAttributes\<F\>[P]\>\> }\>
 
 #### Type parameters
 
@@ -498,7 +502,7 @@ ___
 
 ### AttributeDataPayload
 
-Ƭ **AttributeDataPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvAttributeReportData`](internal_.md#tlvattributereportdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`any`\>  }
+Ƭ **AttributeDataPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvAttributeReportData`](internal_.md#tlvattributereportdata)\>, ``"data"``\> & \{ `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`any`\>  }
 
 Type for TlvAttributeReportData where the real data are represented with the schema and the JS value.
 
@@ -510,7 +514,7 @@ ___
 
 ### AttributeId
 
-Ƭ **AttributeId**: [`Branded`](internal_.md#branded)<`number`, ``"AttributeId"``\>
+Ƭ **AttributeId**: [`Branded`](internal_.md#branded)\<`number`, ``"AttributeId"``\>
 
 An Attribute ID is a 32 bit number and indicates an attribute defined in a cluster specification.
 
@@ -528,13 +532,13 @@ ___
 
 ### AttributeJsType
 
-Ƭ **AttributeJsType**<`T`\>: `T` extends [`Attribute`](internal_.md#attribute)<infer JsType, `any`\> ? `JsType` : `never`
+Ƭ **AttributeJsType**\<`T`\>: `T` extends [`Attribute`](internal_.md#attribute)\<infer JsType, `any`\> ? `JsType` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Attribute`](internal_.md#attribute)<`any`, `any`\> |
+| `T` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -544,7 +548,7 @@ ___
 
 ### AttributeReportPayload
 
-Ƭ **AttributeReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvAttributeReport`](internal_.md#tlvattributereport)\>, ``"attributeData"``\> & { `attributeData?`: [`AttributeDataPayload`](internal_.md#attributedatapayload)  }
+Ƭ **AttributeReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvAttributeReport`](internal_.md#tlvattributereport)\>, ``"attributeData"``\> & \{ `attributeData?`: [`AttributeDataPayload`](internal_.md#attributedatapayload)  }
 
 Type for TlvAttributeReport where the real data are represented with the schema and the JS value.
 
@@ -556,7 +560,7 @@ ___
 
 ### AttributeServers
 
-Ƭ **AttributeServers**<`A`\>: [`Merge`](internal_.md#merge)<[`MandatoryAttributeServers`](internal_.md#mandatoryattributeservers)<`A`\>, [`OptionalAttributeServers`](internal_.md#optionalattributeservers)<`A`\>\>
+Ƭ **AttributeServers**\<`A`\>: [`Merge`](internal_.md#merge)\<[`MandatoryAttributeServers`](internal_.md#mandatoryattributeservers)\<`A`\>, [`OptionalAttributeServers`](internal_.md#optionalattributeservers)\<`A`\>\>
 
 #### Type parameters
 
@@ -589,7 +593,7 @@ ___
 
 ### BitField
 
-Ƭ **BitField**: [`BitRange`](internal_.md#bitrange-1)<`number`, [`Number`](internal_.md#number)\>
+Ƭ **BitField**: [`BitRange`](internal_.md#bitrange-1)\<`number`, [`Number`](internal_.md#number)\>
 
 Defines the bit position and bit length of a numeric value.
 
@@ -603,7 +607,7 @@ ___
 
 ### BitFieldEnum
 
-Ƭ **BitFieldEnum**<`E`\>: [`BitRange`](internal_.md#bitrange-1)<`E`, [`Enum`](internal_.md#enum)\>
+Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](internal_.md#bitrange-1)\<`E`, [`Enum`](internal_.md#enum)\>
 
 Defines the bit position and bit length of an enum flag.
 
@@ -623,7 +627,7 @@ ___
 
 ### BitFlag
 
-Ƭ **BitFlag**: [`BitRange`](internal_.md#bitrange-1)<`boolean`, [`Flag`](internal_.md#flag)\>
+Ƭ **BitFlag**: [`BitRange`](internal_.md#bitrange-1)\<`boolean`, [`Flag`](internal_.md#flag)\>
 
 Defines the bit position of a boolean flag.
 
@@ -637,7 +641,7 @@ ___
 
 ### BitRange
 
-Ƭ **BitRange**<`T`, `TType`\>: `Object`
+Ƭ **BitRange**\<`T`, `TType`\>: `Object`
 
 #### Type parameters
 
@@ -669,7 +673,7 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: [`BitFlag`](internal_.md#bitflag-1) \| [`BitField`](internal_.md#bitfield-1) \| [`BitFieldEnum`](internal_.md#bitfieldenum-1)<`any`\>
+▪ [key: `string`]: [`BitFlag`](internal_.md#bitflag-1) \| [`BitField`](internal_.md#bitfield-1) \| [`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`any`\>
 
 #### Defined in
 
@@ -679,7 +683,7 @@ ___
 
 ### Brand
 
-Ƭ **Brand**<`B`\>: `Object`
+Ƭ **Brand**\<`B`\>: `Object`
 
 #### Type parameters
 
@@ -701,7 +705,7 @@ ___
 
 ### Branded
 
-Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](internal_.md#brand)<`B`\>
+Ƭ **Branded**\<`T`, `B`\>: `T` & [`Brand`](internal_.md#brand)\<`B`\>
 
 #### Type parameters
 
@@ -730,9 +734,29 @@ matter.js/dist/esm/util/ByteArray.d.ts:26
 
 ___
 
+### CaseAuthenticatedTag
+
+Ƭ **CaseAuthenticatedTag**: [`Branded`](internal_.md#branded)\<`number`, ``"CaseAuthenticatedTag"``\>
+
+A CASE Authenticated Tag (CAT) is a special subject distinguished name within the Operational Certificate.
+
+**`See`**
+
+MatterCoreSpecificationV1_2 § 6.6.2.1.2.
+
+#### Defined in
+
+matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:14
+
+matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:13
+
+matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:15
+
+___
+
 ### ClientAttributeGetters
 
-Ƭ **ClientAttributeGetters**<`A`\>: `Omit`<{ [P in keyof A as \`get${Capitalize<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)<`any`\>\>
+Ƭ **ClientAttributeGetters**\<`A`\>: `Omit`\<\{ [P in keyof A as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`any`\>\>
 
 #### Type parameters
 
@@ -748,7 +772,7 @@ ___
 
 ### ClientAttributeListeners
 
-Ƭ **ClientAttributeListeners**<`A`\>: { [P in keyof A as \`add${Capitalize<string & P\>}AttributeListener\`]: Function }
+Ƭ **ClientAttributeListeners**\<`A`\>: \{ [P in keyof A as \`add$\{Capitalize\<string & P\>}AttributeListener\`]: Function }
 
 #### Type parameters
 
@@ -764,7 +788,7 @@ ___
 
 ### ClientAttributeSetters
 
-Ƭ **ClientAttributeSetters**<`A`\>: { [P in WritableAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientAttributeSetters**\<`A`\>: \{ [P in WritableAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -780,7 +804,7 @@ ___
 
 ### ClientAttributeSubscribers
 
-Ƭ **ClientAttributeSubscribers**<`A`\>: { [P in keyof A as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientAttributeSubscribers**\<`A`\>: \{ [P in keyof A as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -796,7 +820,7 @@ ___
 
 ### ClientEventGetters
 
-Ƭ **ClientEventGetters**<`E`\>: { [P in keyof E as \`get${Capitalize<string & P\>}Event\`]: Function }
+Ƭ **ClientEventGetters**\<`E`\>: \{ [P in keyof E as \`get$\{Capitalize\<string & P\>}Event\`]: Function }
 
 #### Type parameters
 
@@ -812,7 +836,7 @@ ___
 
 ### ClientEventListeners
 
-Ƭ **ClientEventListeners**<`E`\>: { [P in keyof E as \`add${Capitalize<string & P\>}EventListener\`]: Function }
+Ƭ **ClientEventListeners**\<`E`\>: \{ [P in keyof E as \`add$\{Capitalize\<string & P\>}EventListener\`]: Function }
 
 #### Type parameters
 
@@ -828,7 +852,7 @@ ___
 
 ### ClientEventSubscribers
 
-Ƭ **ClientEventSubscribers**<`E`\>: { [P in keyof E as \`subscribe${Capitalize<string & P\>}Event\`]: Function }
+Ƭ **ClientEventSubscribers**\<`E`\>: \{ [P in keyof E as \`subscribe$\{Capitalize\<string & P\>}Event\`]: Function }
 
 #### Type parameters
 
@@ -844,7 +868,7 @@ ___
 
 ### ClientGlobalAttributeGetters
 
-Ƭ **ClientGlobalAttributeGetters**<`F`\>: { [P in GlobalAttributeNames<F\> as \`get${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientGlobalAttributeGetters**\<`F`\>: \{ [P in GlobalAttributeNames\<F\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -860,7 +884,7 @@ ___
 
 ### ClusterClientObj
 
-Ƭ **ClusterClientObj**<`F`, `A`, `C`, `E`\>: { `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](internal_.md#attributeclients)<`F`, `A`\> ; `commands`: [`CommandServers`](internal_.md#commandservers)<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](internal_.md#eventclients)<`E`\> ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: { `dataVersionFilters?`: { `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventFilter`](internal_.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\>  } & [`ClientAttributeGetters`](internal_.md#clientattributegetters)<`A`\> & [`ClientGlobalAttributeGetters`](internal_.md#clientglobalattributegetters)<`F`\> & [`ClientAttributeSetters`](internal_.md#clientattributesetters)<`A`\> & [`ClientAttributeSubscribers`](internal_.md#clientattributesubscribers)<`A`\> & [`ClientAttributeListeners`](internal_.md#clientattributelisteners)<`A`\> & [`CommandServers`](internal_.md#commandservers)<`C`\> & [`ClientEventGetters`](internal_.md#clienteventgetters)<`E`\> & [`ClientEventSubscribers`](internal_.md#clienteventsubscribers)<`E`\> & [`ClientEventListeners`](internal_.md#clienteventlisteners)<`E`\>
+Ƭ **ClusterClientObj**\<`F`, `A`, `C`, `E`\>: \{ `_type`: ``"ClusterClient"`` ; `attributes`: [`AttributeClients`](internal_.md#attributeclients)\<`F`, `A`\> ; `commands`: [`CommandServers`](internal_.md#commandservers)\<`C`\> ; `endpointId`: `number` ; `events`: [`EventClients`](internal_.md#eventclients)\<`E`\> ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `isUnknown`: `boolean` ; `name`: `string` ; `revision`: `number` ; `subscribeAllAttributes`: (`options`: \{ `dataVersionFilters?`: \{ `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `dataVersion`: `number` ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber)  }[] ; `eventFilters?`: [`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvEventFilter`](internal_.md#tlveventfilter)\>[] ; `isFabricFiltered?`: `boolean` ; `keepSubscriptions?`: `boolean` ; `maxIntervalCeilingSeconds`: `number` ; `minIntervalFloorSeconds`: `number`  }) => `Promise`\<`void`\> ; `supportedFeatures`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\>  } & [`ClientAttributeGetters`](internal_.md#clientattributegetters)\<`A`\> & [`ClientGlobalAttributeGetters`](internal_.md#clientglobalattributegetters)\<`F`\> & [`ClientAttributeSetters`](internal_.md#clientattributesetters)\<`A`\> & [`ClientAttributeSubscribers`](internal_.md#clientattributesubscribers)\<`A`\> & [`ClientAttributeListeners`](internal_.md#clientattributelisteners)\<`A`\> & [`CommandServers`](internal_.md#commandservers)\<`C`\> & [`ClientEventGetters`](internal_.md#clienteventgetters)\<`E`\> & [`ClientEventSubscribers`](internal_.md#clienteventsubscribers)\<`E`\> & [`ClientEventListeners`](internal_.md#clienteventlisteners)\<`E`\>
 
 Strongly typed interface of a cluster client
 
@@ -881,7 +905,7 @@ ___
 
 ### ClusterId
 
-Ƭ **ClusterId**: [`Branded`](internal_.md#branded)<`number`, ``"ClusterId"``\>
+Ƭ **ClusterId**: [`Branded`](internal_.md#branded)\<`number`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -900,7 +924,7 @@ ___
 
 ### ClusterServerObj
 
-Ƭ **ClusterServerObj**<`A`, `E`\>: { `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)<`E`\>
+Ƭ **ClusterServerObj**\<`A`, `E`\>: \{ `_type`: ``"ClusterServer"`` ; `attributes`: [`AttributeServers`](internal_.md#attributeservers)\<`A`\> ; `clusterDataVersion`: `number` ; `id`: [`ClusterId`](internal_.md#clusterid) ; `isAttributeSupported`: (`attributeId`: [`AttributeId`](internal_.md#attributeid)) => `boolean` ; `isAttributeSupportedByName`: (`attributeName`: `string`) => `boolean` ; `isCommandSupported`: (`commandId`: [`CommandId`](internal_.md#commandid)) => `boolean` ; `isCommandSupportedByName`: (`commandName`: `string`) => `boolean` ; `isEventSupported`: (`eventId`: [`EventId`](internal_.md#eventid)) => `boolean` ; `isEventSupportedByName`: (`eventName`: `string`) => `boolean` ; `name`: `string`  } & [`ServerAttributeGetters`](internal_.md#serverattributegetters)\<`A`\> & [`ServerAttributeSetters`](internal_.md#serverattributesetters)\<`A`\> & [`ServerAttributeSubscribers`](internal_.md#serverattributesubscribers)\<`A`\> & [`ServerEventTriggers`](internal_.md#servereventtriggers)\<`E`\>
 
 #### Type parameters
 
@@ -917,7 +941,7 @@ ___
 
 ### CommandId
 
-Ƭ **CommandId**: [`Branded`](internal_.md#branded)<`number`, ``"CommandId"``\>
+Ƭ **CommandId**: [`Branded`](internal_.md#branded)\<`number`, ``"CommandId"``\>
 
 A Command ID is a 32 bit number and indicates a command defined in a cluster specification.
 
@@ -935,7 +959,7 @@ ___
 
 ### CommandServers
 
-Ƭ **CommandServers**<`C`\>: { [P in keyof C]: SignatureFromCommandSpec<C[P]\> }
+Ƭ **CommandServers**\<`C`\>: \{ [P in keyof C]: SignatureFromCommandSpec\<C[P]\> }
 
 #### Type parameters
 
@@ -982,17 +1006,17 @@ ___
 
 ### CommissionableDeviceData
 
-Ƭ **CommissionableDeviceData**: [`CommissionableDevice`](internal_.md#commissionabledevice) & { `SD`: `number`  }
+Ƭ **CommissionableDeviceData**: [`CommissionableDevice`](internal_.md#commissionabledevice) & \{ `SD`: `number`  }
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
+[matter-node-ble.js/src/ble/BleScanner.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L30)
 
 ___
 
 ### CommissionableDeviceIdentifiers
 
-Ƭ **CommissionableDeviceIdentifiers**: { `instanceId`: `string`  } \| { `longDiscriminator`: `number`  } \| { `shortDiscriminator`: `number`  } \| { `vendorId`: [`VendorId`](internal_.md#vendorid)  } \| { `deviceType`: `number`  } \| { `productId`: `number`  } \| { [K in any]: never }
+Ƭ **CommissionableDeviceIdentifiers**: \{ `instanceId`: `string`  } \| \{ `longDiscriminator`: `number`  } \| \{ `shortDiscriminator`: `number`  } \| \{ `vendorId`: [`VendorId`](internal_.md#vendorid)  } \| \{ `deviceType`: `number`  } \| \{ `productId`: `number`  } \| \{ [K in any]: never }
 
 Identifier to use to discover a commissionable device.
 Please decide for the best matching identifier that you have.
@@ -1032,16 +1056,16 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedAttributeReportValue`](internal_.md#decodedattributereportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedAttributeReportValue`](internal_.md#decodedattributereportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
 | `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
-| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedEventReportValue`](internal_.md#decodedeventreportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `data`: [`DecodedEventReportValue`](internal_.md#decodedeventreportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
 | `stateInformationCallback?` | (`nodeId`: [`NodeId`](internal_.md#nodeid), `state`: [`NodeStateInformation`](../enums/internal_.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
 | `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
 | `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
 
 #### Defined in
 
-matter.js/dist/esm/device/PairedNode.d.ts:39
+matter.js/dist/esm/device/PairedNode.d.ts:43
 
 ___
 
@@ -1056,7 +1080,7 @@ ___
 | `deviceName` | `string` | Device name for commissionable announcements. |
 | `deviceType` | `number` | Device type for commissionable announcements. |
 | `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<typeof [`PairingHintBitmap`](internal_.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
+| `pairingHint?` | [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](internal_.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
 | `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
 | `productId` | `number` | Product ID for commissionable announcements. |
 | `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
@@ -1082,10 +1106,10 @@ User specific options for the Commissioning process
 | `nodeId?` | [`NodeId`](internal_.md#nodeid) | - |
 | `regulatoryCountryCode` | `string` | Country Code where the device is used. |
 | `regulatoryLocation` | [`RegulatoryLocationType`](../enums/internal_.RegulatoryLocationType.md) | Regulatory Location (Indoor/Outdoor) where the device is used. |
-| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
+| `threadNetwork?` | \{ `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
 | `threadNetwork.networkName` | `string` | - |
 | `threadNetwork.operationalDataset` | `string` | - |
-| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
+| `wifiNetwork?` | \{ `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
 | `wifiNetwork.wifiCredentials` | `string` | - |
 | `wifiNetwork.wifiSsid` | `string` | - |
 
@@ -1097,7 +1121,7 @@ ___
 
 ### ConditionalFeatureList
 
-Ƭ **ConditionalFeatureList**<`F`\>: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\>[]
+Ƭ **ConditionalFeatureList**\<`F`\>: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\>[]
 
 #### Type parameters
 
@@ -1113,7 +1137,7 @@ ___
 
 ### DataReportPayload
 
-Ƭ **DataReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvDataReport`](internal_.md#tlvdatareport)\>, ``"attributeReports"`` \| ``"eventReports"``\> & { `attributeReportsPayload?`: [`AttributeReportPayload`](internal_.md#attributereportpayload)[] ; `eventReportsPayload?`: [`EventReportPayload`](internal_.md#eventreportpayload)[]  }
+Ƭ **DataReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvDataReport`](internal_.md#tlvdatareport)\>, ``"attributeReports"`` \| ``"eventReports"``\> & \{ `attributeReportsPayload?`: [`AttributeReportPayload`](internal_.md#attributereportpayload)[] ; `eventReportsPayload?`: [`EventReportPayload`](internal_.md#eventreportpayload)[]  }
 
 Type for TlvDataReport where the real data are represented with the schema and the JS value.
 
@@ -1125,7 +1149,7 @@ ___
 
 ### DecodedAttributeReportValue
 
-Ƭ **DecodedAttributeReportValue**<`T`\>: `Object`
+Ƭ **DecodedAttributeReportValue**\<`T`\>: `Object`
 
 Represents a fully qualified and decoded attribute value from a received DataReport
 
@@ -1139,7 +1163,7 @@ Represents a fully qualified and decoded attribute value from a received DataRep
 
 | Name | Type |
 | :------ | :------ |
-| `path` | { `attributeId`: [`AttributeId`](internal_.md#attributeid) ; `attributeName`: `string` ; `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber) ; `nodeId?`: [`NodeId`](internal_.md#nodeid)  } |
+| `path` | \{ `attributeId`: [`AttributeId`](internal_.md#attributeid) ; `attributeName`: `string` ; `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber) ; `nodeId?`: [`NodeId`](internal_.md#nodeid)  } |
 | `path.attributeId` | [`AttributeId`](internal_.md#attributeid) |
 | `path.attributeName` | `string` |
 | `path.clusterId` | [`ClusterId`](internal_.md#clusterid) |
@@ -1156,7 +1180,7 @@ ___
 
 ### DecodedEventData
 
-Ƭ **DecodedEventData**<`T`\>: `Object`
+Ƭ **DecodedEventData**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -1184,7 +1208,7 @@ ___
 
 ### DecodedEventReportValue
 
-Ƭ **DecodedEventReportValue**<`T`\>: `Object`
+Ƭ **DecodedEventReportValue**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -1196,8 +1220,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `events` | [`DecodedEventData`](internal_.md#decodedeventdata)<`T`\>[] |
-| `path` | { `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber) ; `eventId`: [`EventId`](internal_.md#eventid) ; `eventName`: `string` ; `nodeId?`: [`NodeId`](internal_.md#nodeid)  } |
+| `events` | [`DecodedEventData`](internal_.md#decodedeventdata)\<`T`\>[] |
+| `path` | \{ `clusterId`: [`ClusterId`](internal_.md#clusterid) ; `endpointId`: [`EndpointNumber`](internal_.md#endpointnumber) ; `eventId`: [`EventId`](internal_.md#eventid) ; `eventName`: `string` ; `nodeId?`: [`NodeId`](internal_.md#nodeid)  } |
 | `path.clusterId` | [`ClusterId`](internal_.md#clusterid) |
 | `path.endpointId` | [`EndpointNumber`](internal_.md#endpointnumber) |
 | `path.eventId` | [`EventId`](internal_.md#eventid) |
@@ -1212,7 +1236,7 @@ ___
 
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**: [`Branded`](internal_.md#branded)<`number`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**: [`Branded`](internal_.md#branded)\<`number`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
@@ -1230,7 +1254,7 @@ ___
 
 ### EndpointNumber
 
-Ƭ **EndpointNumber**: [`Branded`](internal_.md#branded)<`number`, ``"EndpointNumber"``\>
+Ƭ **EndpointNumber**: [`Branded`](internal_.md#branded)\<`number`, ``"EndpointNumber"``\>
 
 A Endpoint Number is a 16-bit number that that indicates an instance of a device type.
 
@@ -1248,7 +1272,7 @@ ___
 
 ### EventClients
 
-Ƭ **EventClients**<`E`\>: [`Merge`](internal_.md#merge)<{ [P in MandatoryEventNames<E\>]: EventClient<EventType<E[P]\>\> }, { [P in OptionalEventNames<E\>]: EventClient<EventType<E[P]\> \| undefined\> }\>
+Ƭ **EventClients**\<`E`\>: [`Merge`](internal_.md#merge)\<\{ [P in MandatoryEventNames\<E\>]: EventClient\<EventType\<E[P]\>\> }, \{ [P in OptionalEventNames\<E\>]: EventClient\<EventType\<E[P]\> \| undefined\> }\>
 
 #### Type parameters
 
@@ -1264,7 +1288,7 @@ ___
 
 ### EventDataPayload
 
-Ƭ **EventDataPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventData`](internal_.md#tlveventdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`any`\>  }
+Ƭ **EventDataPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvEventData`](internal_.md#tlveventdata)\>, ``"data"``\> & \{ `payload`: `any` ; `schema`: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`any`\>  }
 
 Type for TlvEventData where the real data are represented with the schema and the JS value.
 
@@ -1276,7 +1300,7 @@ ___
 
 ### EventId
 
-Ƭ **EventId**: [`Branded`](internal_.md#branded)<`number`, ``"EventId"``\>
+Ƭ **EventId**: [`Branded`](internal_.md#branded)\<`number`, ``"EventId"``\>
 
 An EVent ID is a 32 bit number and indicates an event defined in a cluster specification.
 
@@ -1294,7 +1318,7 @@ ___
 
 ### EventReportPayload
 
-Ƭ **EventReportPayload**: `Omit`<[`TypeFromSchema`](internal_.md#typefromschema)<typeof [`TlvEventReport`](internal_.md#tlveventreport)\>, ``"eventData"``\> & { `eventData?`: [`EventDataPayload`](internal_.md#eventdatapayload)  }
+Ƭ **EventReportPayload**: `Omit`\<[`TypeFromSchema`](internal_.md#typefromschema)\<typeof [`TlvEventReport`](internal_.md#tlveventreport)\>, ``"eventData"``\> & \{ `eventData?`: [`EventDataPayload`](internal_.md#eventdatapayload)  }
 
 Type for TlvEventReport where the real data are represented with the schema and the JS value.
 
@@ -1306,13 +1330,13 @@ ___
 
 ### EventType
 
-Ƭ **EventType**<`T`\>: `T` extends [`OptionalEvent`](internal_.md#optionalevent)<infer EventT, `any`\> ? `EventT` : `T` extends [`Event`](internal_.md#event)<infer EventT, `any`\> ? `EventT` : `never`
+Ƭ **EventType**\<`T`\>: `T` extends [`OptionalEvent`](internal_.md#optionalevent)\<infer EventT, `any`\> ? `EventT` : `T` extends [`Event`](internal_.md#event)\<infer EventT, `any`\> ? `EventT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Event`](internal_.md#event)<`any`, `any`\> |
+| `T` | extends [`Event`](internal_.md#event)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1340,7 +1364,7 @@ ___
 
 ### FabricId
 
-Ƭ **FabricId**: [`Branded`](internal_.md#branded)<`bigint`, ``"FabricId"``\>
+Ƭ **FabricId**: [`Branded`](internal_.md#branded)\<`bigint`, ``"FabricId"``\>
 
 A Fabric ID is a 64-bit number that uniquely identifies the Fabric within the scope of
 a particular root CA.
@@ -1359,7 +1383,7 @@ ___
 
 ### FabricIndex
 
-Ƭ **FabricIndex**: [`Branded`](internal_.md#branded)<`number`, ``"FabricIndex"``\>
+Ƭ **FabricIndex**: [`Branded`](internal_.md#branded)\<`number`, ``"FabricIndex"``\>
 
 Each fabric supported on a node is referenced by fabric-index that is unique on the node. This
 fabric-index enables the look-up of the full fabric information from the fabric-index. A fabric-index
@@ -1390,6 +1414,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](internal_.md#caseauthenticatedtag)[] |
 | `fabricId` | [`FabricId`](internal_.md#fabricid) |
 | `fabricIndex` | [`FabricIndex`](internal_.md#fabricindex) |
 | `identityProtectionKey` | [`ByteArray`](internal_.md#bytearray-1) |
@@ -1404,17 +1429,17 @@ ___
 | `rootNodeId` | [`NodeId`](internal_.md#nodeid) |
 | `rootPublicKey` | [`ByteArray`](internal_.md#bytearray-1) |
 | `rootVendorId` | [`VendorId`](internal_.md#vendorid) |
-| `scopedClusterData` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](internal_.md#supportedstoragetypes)\>\> |
+| `scopedClusterData` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](internal_.md#supportedstoragetypes)\>\> |
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:15
+matter.js/dist/esm/fabric/Fabric.d.ts:16
 
 ___
 
 ### FabricScopedAttributeNames
 
-Ƭ **FabricScopedAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends FabricScopedAttribute<any, any\> ? K : A[K] extends WritableFabricScopedAttribute<any, any\> ? K : A[K] extends OptionalWritableFabricScopedAttribute<any, any\> ? K : never }[keyof `A`]
+Ƭ **FabricScopedAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends FabricScopedAttribute\<any, any\> ? K : A[K] extends WritableFabricScopedAttribute\<any, any\> ? K : A[K] extends OptionalWritableFabricScopedAttribute\<any, any\> ? K : never }[keyof `A`]
 
 #### Type parameters
 
@@ -1430,13 +1455,13 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](internal_.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1446,13 +1471,13 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](internal_.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](internal_.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](internal_.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](internal_.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -1462,7 +1487,7 @@ ___
 
 ### GlobalAttributeNames
 
-Ƭ **GlobalAttributeNames**<`F`\>: keyof [`GlobalAttributes`](internal_.md#globalattributes-1)<`F`\>
+Ƭ **GlobalAttributeNames**\<`F`\>: keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
 
 #### Type parameters
 
@@ -1478,7 +1503,7 @@ ___
 
 ### GlobalAttributes
 
-Ƭ **GlobalAttributes**<`F`\>: `Object`
+Ƭ **GlobalAttributes**\<`F`\>: `Object`
 
 **`See`**
 
@@ -1494,12 +1519,12 @@ MatterCoreSpecificationV1_1 § 7.13
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `acceptedCommandList` | [`Attribute`](internal_.md#attribute)<[`CommandId`](internal_.md#commandid)[], `never`\> | List of client generated commands which are supported by this cluster server instance. |
-| `attributeList` | [`Attribute`](internal_.md#attribute)<[`AttributeId`](internal_.md#attributeid)[], `never`\> | List of the attribute IDs of the attributes supported by the cluster instance. |
-| `clusterRevision` | [`Attribute`](internal_.md#attribute)<`number`, `never`\> | Indicates the revision of the server cluster specification supported by the cluster instance. |
-| `eventList` | [`Attribute`](internal_.md#attribute)<[`EventId`](internal_.md#eventid)[], `never`\> | List of the event IDs of the events supported by the cluster instance. |
-| `featureMap` | [`Attribute`](internal_.md#attribute)<[`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\>, `never`\> | Indicates whether the server supports zero or more optional cluster features. |
-| `generatedCommandList` | [`Attribute`](internal_.md#attribute)<[`CommandId`](internal_.md#commandid)[], `never`\> | List of server generated commands (server to client commands). |
+| `acceptedCommandList` | [`Attribute`](internal_.md#attribute)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of client generated commands which are supported by this cluster server instance. |
+| `attributeList` | [`Attribute`](internal_.md#attribute)\<[`AttributeId`](internal_.md#attributeid)[], `never`\> | List of the attribute IDs of the attributes supported by the cluster instance. |
+| `clusterRevision` | [`Attribute`](internal_.md#attribute)\<`number`, `never`\> | Indicates the revision of the server cluster specification supported by the cluster instance. |
+| `eventList` | [`Attribute`](internal_.md#attribute)\<[`EventId`](internal_.md#eventid)[], `never`\> | List of the event IDs of the events supported by the cluster instance. |
+| `featureMap` | [`Attribute`](internal_.md#attribute)\<[`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\>, `never`\> | Indicates whether the server supports zero or more optional cluster features. |
+| `generatedCommandList` | [`Attribute`](internal_.md#attribute)\<[`CommandId`](internal_.md#commandid)[], `never`\> | List of server generated commands (server to client commands). |
 
 #### Defined in
 
@@ -1511,7 +1536,7 @@ ___
 
 ### GroupId
 
-Ƭ **GroupId**: [`Branded`](internal_.md#branded)<`number`, ``"GroupId"``\>
+Ƭ **GroupId**: [`Branded`](internal_.md#branded)\<`number`, ``"GroupId"``\>
 
 A Group Identifier (Group ID or GID) is a 16-bit number that identifies a set of Nodes across a
 Fabric at the message layer (see Section 4.15, “Group Key Management”). A Group ID can further
@@ -1534,9 +1559,27 @@ matter.js/dist/esm/datatype/GroupId.d.ts:20
 
 ___
 
+### LengthConstraints
+
+Ƭ **LengthConstraints**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `length?` | `number` |
+| `maxLength?` | `number` |
+| `minLength?` | `number` |
+
+#### Defined in
+
+matter.js/dist/esm/tlv/TlvArray.d.ts:8
+
+___
+
 ### MandatoryAttributeNames
 
-Ƭ **MandatoryAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends OptionalAttribute<any, any\> ? never : K }[keyof `A`]
+Ƭ **MandatoryAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends OptionalAttribute\<any, any\> ? never : K }[keyof `A`]
 
 #### Type parameters
 
@@ -1552,7 +1595,7 @@ ___
 
 ### MandatoryAttributeServers
 
-Ƭ **MandatoryAttributeServers**<`A`\>: `Omit`<{ [P in MandatoryAttributeNames<A\>]: A[P] extends FabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends WritableFabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends FixedAttribute<any, any\> ? FixedAttributeServer<AttributeJsType<A[P]\>\> : AttributeServer<AttributeJsType<A[P]\>\> }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)<`any`\>\>
+Ƭ **MandatoryAttributeServers**\<`A`\>: `Omit`\<\{ [P in MandatoryAttributeNames\<A\>]: A[P] extends FabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends WritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends FixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }, keyof [`GlobalAttributes`](internal_.md#globalattributes-1)\<`any`\>\>
 
 Cluster attributes accessible on the cluster server
 
@@ -1570,7 +1613,7 @@ ___
 
 ### MandatoryEventNames
 
-Ƭ **MandatoryEventNames**<`E`\>: { [K in keyof E]: E[K] extends OptionalEvent<any, any\> ? never : K }[keyof `E`]
+Ƭ **MandatoryEventNames**\<`E`\>: \{ [K in keyof E]: E[K] extends OptionalEvent\<any, any\> ? never : K }[keyof `E`]
 
 #### Type parameters
 
@@ -1586,7 +1629,7 @@ ___
 
 ### MandatoryFieldNames
 
-Ƭ **MandatoryFieldNames**<`F`\>: { [K in keyof F]: F[K] extends OptionalFieldType<any\> ? never : K }[keyof `F`]
+Ƭ **MandatoryFieldNames**\<`F`\>: \{ [K in keyof F]: F[K] extends OptionalFieldType\<any\> ? never : K }[keyof `F`]
 
 #### Type parameters
 
@@ -1596,13 +1639,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:21
+matter.js/dist/esm/tlv/TlvObject.d.ts:32
 
 ___
 
 ### Merge
 
-Ƭ **Merge**<`A`, `B`\>: { [K in keyof A as K extends keyof B ? never : K]: A[K] } & `B`
+Ƭ **Merge**\<`A`, `B`\>: \{ [K in keyof A as K extends keyof B ? never : K]: A[K] } & `B`
 
 Merges two types into one.
 
@@ -1623,19 +1666,19 @@ ___
 
 ### NodeCommissioningOptions
 
-Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](internal_.md#commissioningcontrollernodeoptions) & { `commissioning?`: [`CommissioningOptions`](internal_.md#commissioningoptions) ; `discovery`: { `identifierData`: [`CommissionableDeviceIdentifiers`](internal_.md#commissionabledeviceidentifiers)  } \| { `commissionableDevice`: [`CommissionableDevice`](internal_.md#commissionabledevice)  } & { `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<typeof [`DiscoveryCapabilitiesBitmap`](internal_.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](internal_.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
+Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](internal_.md#commissioningcontrollernodeoptions) & \{ `commissioning?`: [`CommissioningOptions`](internal_.md#commissioningoptions) ; `discovery`: \{ `identifierData`: [`CommissionableDeviceIdentifiers`](internal_.md#commissionabledeviceidentifiers)  } \| \{ `commissionableDevice`: [`CommissionableDevice`](internal_.md#commissionabledevice)  } & \{ `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<typeof [`DiscoveryCapabilitiesBitmap`](internal_.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](internal_.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
 
 Options needed to commission a new node
 
 #### Defined in
 
-matter.js/dist/esm/CommissioningController.d.ts:55
+matter.js/dist/esm/CommissioningController.d.ts:61
 
 ___
 
 ### NodeId
 
-Ƭ **NodeId**: [`Branded`](internal_.md#branded)<`bigint`, ``"NodeId"``\>
+Ƭ **NodeId**: [`Branded`](internal_.md#branded)\<`bigint`, ``"NodeId"``\>
 
 A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
 group of Nodes on a Fabric.
@@ -1646,17 +1689,17 @@ MatterCoreSpecificationV1_0 § 2.5.5
 
 #### Defined in
 
+matter.js/dist/esm/datatype/NodeId.d.ts:16
+
 matter.js/dist/esm/datatype/NodeId.d.ts:15
 
-matter.js/dist/esm/datatype/NodeId.d.ts:14
-
-matter.js/dist/esm/datatype/NodeId.d.ts:16
+matter.js/dist/esm/datatype/NodeId.d.ts:17
 
 ___
 
 ### NonFixedAttributeNames
 
-Ƭ **NonFixedAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends FixedAttribute<any, any\> ? never : A[K] extends OptionalFixedAttribute<any, any\> ? never : K }[keyof `A`]
+Ƭ **NonFixedAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends FixedAttribute\<any, any\> ? never : A[K] extends OptionalFixedAttribute\<any, any\> ? never : K }[keyof `A`]
 
 #### Type parameters
 
@@ -1672,7 +1715,7 @@ ___
 
 ### OptionalAttributeNames
 
-Ƭ **OptionalAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends OptionalAttribute<any, any\> ? K : never }[keyof `A`]
+Ƭ **OptionalAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends OptionalAttribute\<any, any\> ? K : never }[keyof `A`]
 
 #### Type parameters
 
@@ -1688,7 +1731,7 @@ ___
 
 ### OptionalAttributeServers
 
-Ƭ **OptionalAttributeServers**<`A`\>: { [P in OptionalAttributeNames<A\>]?: A[P] extends OptionalWritableFabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends OptionalFixedAttribute<any, any\> ? FixedAttributeServer<AttributeJsType<A[P]\>\> : AttributeServer<AttributeJsType<A[P]\>\> }
+Ƭ **OptionalAttributeServers**\<`A`\>: \{ [P in OptionalAttributeNames\<A\>]?: A[P] extends OptionalWritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends OptionalFixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }
 
 #### Type parameters
 
@@ -1704,7 +1747,7 @@ ___
 
 ### OptionalEventNames
 
-Ƭ **OptionalEventNames**<`E`\>: { [K in keyof E]: E[K] extends OptionalEvent<any, any\> ? K : never }[keyof `E`]
+Ƭ **OptionalEventNames**\<`E`\>: \{ [K in keyof E]: E[K] extends OptionalEvent\<any, any\> ? K : never }[keyof `E`]
 
 #### Type parameters
 
@@ -1720,7 +1763,7 @@ ___
 
 ### OptionalFieldNames
 
-Ƭ **OptionalFieldNames**<`F`\>: { [K in keyof F]: F[K] extends OptionalFieldType<any\> ? K : never }[keyof `F`]
+Ƭ **OptionalFieldNames**\<`F`\>: \{ [K in keyof F]: F[K] extends OptionalFieldType\<any\> ? K : never }[keyof `F`]
 
 #### Type parameters
 
@@ -1730,7 +1773,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:24
+matter.js/dist/esm/tlv/TlvObject.d.ts:35
 
 ___
 
@@ -1755,13 +1798,13 @@ ___
 
 ### RequestType
 
-Ƭ **RequestType**<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)<infer RequestT, `any`, `any`\> ? `RequestT` : `T` extends [`Command`](internal_.md#command)<infer RequestT, `any`, `any`\> ? `RequestT` : `never`
+Ƭ **RequestType**\<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)\<infer RequestT, `any`, `any`\> ? `RequestT` : `T` extends [`Command`](internal_.md#command)\<infer RequestT, `any`, `any`\> ? `RequestT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Command`](internal_.md#command)<`any`, `any`, `any`\> |
+| `T` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
 
 #### Defined in
 
@@ -1771,13 +1814,13 @@ ___
 
 ### ResponseType
 
-Ƭ **ResponseType**<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)<`any`, infer ResponseT, `any`\> ? `ResponseT` : `T` extends [`Command`](internal_.md#command)<`any`, infer ResponseT, `any`\> ? `ResponseT` : `never`
+Ƭ **ResponseType**\<`T`\>: `T` extends [`OptionalCommand`](internal_.md#optionalcommand)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `T` extends [`Command`](internal_.md#command)\<`any`, infer ResponseT, `any`\> ? `ResponseT` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Command`](internal_.md#command)<`any`, `any`, `any`\> |
+| `T` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
 
 #### Defined in
 
@@ -1837,7 +1880,7 @@ ___
 
 ### ServerAttributeGetters
 
-Ƭ **ServerAttributeGetters**<`A`\>: { [P in MandatoryAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]: Function } & { [P in OptionalAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]?: Function } & { [P in FabricScopedAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeGetters**\<`A`\>: \{ [P in MandatoryAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in OptionalAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]?: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -1853,7 +1896,7 @@ ___
 
 ### ServerAttributeSetters
 
-Ƭ **ServerAttributeSetters**<`A`\>: { [P in NonFixedAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function } & { [P in FabricScopedAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeSetters**\<`A`\>: \{ [P in NonFixedAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -1869,7 +1912,7 @@ ___
 
 ### ServerAttributeSubscribers
 
-Ƭ **ServerAttributeSubscribers**<`A`\>: { [P in NonFixedAttributeNames<A\> as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function } & { [P in FabricScopedAttributeNames<A\> as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeSubscribers**\<`A`\>: \{ [P in NonFixedAttributeNames\<A\> as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -1885,7 +1928,7 @@ ___
 
 ### ServerEventTriggers
 
-Ƭ **ServerEventTriggers**<`E`\>: { [P in MandatoryEventNames<E\> as \`trigger${Capitalize<string & P\>}Event\`]: Function } & { [P in OptionalEventNames<E\> as \`trigger${Capitalize<string & P\>}Event\`]?: Function }
+Ƭ **ServerEventTriggers**\<`E`\>: \{ [P in MandatoryEventNames\<E\> as \`trigger$\{Capitalize\<string & P\>}Event\`]: Function } & \{ [P in OptionalEventNames\<E\> as \`trigger$\{Capitalize\<string & P\>}Event\`]?: Function }
 
 #### Type parameters
 
@@ -1901,23 +1944,23 @@ ___
 
 ### SignatureFromCommandSpec
 
-Ƭ **SignatureFromCommandSpec**<`C`\>: (`request`: [`RequestType`](internal_.md#requesttype)<`C`\>, `options?`: { `asTimedRequest?`: `boolean` ; `timedRequestTimeoutMs?`: `number` ; `useExtendedFailSafeMessageResponseTimeout?`: `boolean`  }) => `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
+Ƭ **SignatureFromCommandSpec**\<`C`\>: (`request`: [`RequestType`](internal_.md#requesttype)\<`C`\>, `options?`: \{ `asTimedRequest?`: `boolean` ; `timedRequestTimeoutMs?`: `number` ; `useExtendedFailSafeMessageResponseTimeout?`: `boolean`  }) => `Promise`\<[`ResponseType`](internal_.md#responsetype)\<`C`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Command`](internal_.md#command)<`any`, `any`, `any`\> |
+| `C` | extends [`Command`](internal_.md#command)\<`any`, `any`, `any`\> |
 
 #### Type declaration
 
-▸ (`request`, `options?`): `Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
+▸ (`request`, `options?`): `Promise`\<[`ResponseType`](internal_.md#responsetype)\<`C`\>\>
 
 ##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `request` | [`RequestType`](internal_.md#requesttype)<`C`\> | - |
+| `request` | [`RequestType`](internal_.md#requesttype)\<`C`\> | - |
 | `options?` | `Object` | - |
 | `options.asTimedRequest?` | `boolean` | Send this command as a timed request also when not required. Default timeout are 10 seconds. |
 | `options.timedRequestTimeoutMs?` | `number` | Override the request timeout when the command is sent as times request. Default are 10s. |
@@ -1925,7 +1968,7 @@ ___
 
 ##### Returns
 
-`Promise`<[`ResponseType`](internal_.md#responsetype)<`C`\>\>
+`Promise`\<[`ResponseType`](internal_.md#responsetype)\<`C`\>\>
 
 #### Defined in
 
@@ -1935,7 +1978,7 @@ ___
 
 ### SupportedComplexStorageTypes
 
-Ƭ **SupportedComplexStorageTypes**: ([`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes))[] \| { `[key: string]`: [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`;  } \| [[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`][] \| `Map`<[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes)\> \| ``null`` \| `undefined`
+Ƭ **SupportedComplexStorageTypes**: ([`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes))[] \| \{ `[key: string]`: [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`;  } \| [[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`][] \| `Map`\<[`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](internal_.md#supportedcomplexstoragetypes)\> \| ``null`` \| `undefined`
 
 Supported combined types to stringify the data for the storage that can be used as values.
 
@@ -1992,7 +2035,7 @@ ___
 
 ### TlvElement
 
-Ƭ **TlvElement**<`T`\>: `Object`
+Ƭ **TlvElement**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -2020,17 +2063,17 @@ ___
 
 #### Index signature
 
-▪ [field: `string`]: [`FieldType`](../interfaces/internal_.FieldType.md)<`any`\>
+▪ [field: `string`]: [`FieldType`](../interfaces/internal_.FieldType.md)\<`any`\>
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:18
+matter.js/dist/esm/tlv/TlvObject.d.ts:29
 
 ___
 
 ### TlvStream
 
-Ƭ **TlvStream**: [`TlvElement`](internal_.md#tlvelement)<`any`\>[]
+Ƭ **TlvStream**: [`TlvElement`](internal_.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
@@ -2087,7 +2130,7 @@ ___
 
 ### TlvTypeLength
 
-Ƭ **TlvTypeLength**: { `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`SignedInt`](internal_.md#signedint)  } \| { `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`UnsignedInt`](internal_.md#unsignedint)  } \| { `type`: [`Boolean`](internal_.md#boolean) ; `value`: `boolean`  } \| { `length`: [`FourBytes`](../enums/internal_.TlvLength.md#fourbytes) \| [`EightBytes`](../enums/internal_.TlvLength.md#eightbytes) ; `type`: [`Float`](internal_.md#float)  } \| { `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`Utf8String`](internal_.md#utf8string)  } \| { `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`ByteString`](internal_.md#bytestring)  } \| { `type`: [`Null`](internal_.md#null)  } \| { `type`: [`Structure`](internal_.md#structure)  } \| { `type`: [`Array`](internal_.md#array)  } \| { `type`: [`List`](internal_.md#list)  } \| { `type`: [`EndOfContainer`](internal_.md#endofcontainer)  }
+Ƭ **TlvTypeLength**: \{ `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`SignedInt`](internal_.md#signedint)  } \| \{ `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`UnsignedInt`](internal_.md#unsignedint)  } \| \{ `type`: [`Boolean`](internal_.md#boolean) ; `value`: `boolean`  } \| \{ `length`: [`FourBytes`](../enums/internal_.TlvLength.md#fourbytes) \| [`EightBytes`](../enums/internal_.TlvLength.md#eightbytes) ; `type`: [`Float`](internal_.md#float)  } \| \{ `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`Utf8String`](internal_.md#utf8string)  } \| \{ `length`: [`TlvLength`](../enums/internal_.TlvLength.md) ; `type`: [`ByteString`](internal_.md#bytestring)  } \| \{ `type`: [`Null`](internal_.md#null)  } \| \{ `type`: [`Structure`](internal_.md#structure)  } \| \{ `type`: [`Array`](internal_.md#array)  } \| \{ `type`: [`List`](internal_.md#list)  } \| \{ `type`: [`EndOfContainer`](internal_.md#endofcontainer)  }
 
 Type and length or value, when applicable.
 
@@ -2099,7 +2142,7 @@ ___
 
 ### TypeForMandatoryFields
 
-Ƭ **TypeForMandatoryFields**<`F`, `MF`\>: { [K in MF]: TypeFromField<F[K]\> }
+Ƭ **TypeForMandatoryFields**\<`F`, `MF`\>: \{ [K in MF]: TypeFromField\<F[K]\> }
 
 #### Type parameters
 
@@ -2110,13 +2153,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:28
+matter.js/dist/esm/tlv/TlvObject.d.ts:39
 
 ___
 
 ### TypeForOptionalFields
 
-Ƭ **TypeForOptionalFields**<`F`, `MF`\>: { [K in MF]?: TypeFromField<F[K]\> }
+Ƭ **TypeForOptionalFields**\<`F`, `MF`\>: \{ [K in MF]?: TypeFromField\<F[K]\> }
 
 #### Type parameters
 
@@ -2127,29 +2170,29 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:31
+matter.js/dist/esm/tlv/TlvObject.d.ts:42
 
 ___
 
 ### TypeFromField
 
-Ƭ **TypeFromField**<`F`\>: `F` extends [`FieldType`](../interfaces/internal_.FieldType.md)<infer T\> ? `T` : `never`
+Ƭ **TypeFromField**\<`F`\>: `F` extends [`FieldType`](../interfaces/internal_.FieldType.md)\<infer T\> ? `T` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `F` | extends [`FieldType`](../interfaces/internal_.FieldType.md)<`any`\> |
+| `F` | extends [`FieldType`](../interfaces/internal_.FieldType.md)\<`any`\> |
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:27
+matter.js/dist/esm/tlv/TlvObject.d.ts:38
 
 ___
 
 ### TypeFromFields
 
-Ƭ **TypeFromFields**<`F`\>: [`Merge`](internal_.md#merge)<[`TypeForMandatoryFields`](internal_.md#typeformandatoryfields)<`F`, [`MandatoryFieldNames`](internal_.md#mandatoryfieldnames)<`F`\>\>, [`TypeForOptionalFields`](internal_.md#typeforoptionalfields)<`F`, [`OptionalFieldNames`](internal_.md#optionalfieldnames)<`F`\>\>\>
+Ƭ **TypeFromFields**\<`F`\>: [`Merge`](internal_.md#merge)\<[`TypeForMandatoryFields`](internal_.md#typeformandatoryfields)\<`F`, [`MandatoryFieldNames`](internal_.md#mandatoryfieldnames)\<`F`\>\>, [`TypeForOptionalFields`](internal_.md#typeforoptionalfields)\<`F`, [`OptionalFieldNames`](internal_.md#optionalfieldnames)\<`F`\>\>\>
 
 #### Type parameters
 
@@ -2159,13 +2202,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:34
+matter.js/dist/esm/tlv/TlvObject.d.ts:45
 
 ___
 
 ### TypeFromPartialBitSchema
 
-Ƭ **TypeFromPartialBitSchema**<`T`\>: { [K in keyof T]?: T[K] extends BitFieldEnum<infer E\> ? E : T[K] extends BitField ? number : boolean }
+Ƭ **TypeFromPartialBitSchema**\<`T`\>: \{ [K in keyof T]?: T[K] extends BitFieldEnum\<infer E\> ? E : T[K] extends BitField ? number : boolean }
 
 #### Type parameters
 
@@ -2181,7 +2224,7 @@ ___
 
 ### TypeFromSchema
 
-Ƭ **TypeFromSchema**<`S`\>: `S` extends [`TlvSchema`](../classes/internal_.TlvSchema.md)<infer T\> ? `T` : `never`
+Ƭ **TypeFromSchema**\<`S`\>: `S` extends [`TlvSchema`](../classes/internal_.TlvSchema.md)\<infer T\> ? `T` : `never`
 
 Type defined by the TLV schema.
 
@@ -2189,7 +2232,7 @@ Type defined by the TLV schema.
 
 | Name | Type |
 | :------ | :------ |
-| `S` | extends [`TlvSchema`](../classes/internal_.TlvSchema.md)<`any`\> |
+| `S` | extends [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`any`\> |
 
 #### Defined in
 
@@ -2199,7 +2242,7 @@ ___
 
 ### VendorId
 
-Ƭ **VendorId**: [`Branded`](internal_.md#branded)<`number`, ``"VendorId"``\>
+Ƭ **VendorId**: [`Branded`](internal_.md#branded)\<`number`, ``"VendorId"``\>
 
 A Vendor Identifier (Vendor ID or VID) is a 16-bit number that uniquely identifies a particular
 product manufacturer, vendor, or group thereof. Each Vendor ID is statically allocated by the
@@ -2219,7 +2262,7 @@ ___
 
 ### WritableAttributeNames
 
-Ƭ **WritableAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends WritableAttribute<any, any\> ? K : never }[keyof `A`] \| { [K in keyof A]: A[K] extends OptionalWritableAttribute<any, any\> ? K : never }[keyof `A`]
+Ƭ **WritableAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends WritableAttribute\<any, any\> ? K : never }[keyof `A`] \| \{ [K in keyof A]: A[K] extends OptionalWritableAttribute\<any, any\> ? K : never }[keyof `A`]
 
 #### Type parameters
 
@@ -2310,7 +2353,7 @@ MatterCoreSpecificationV1_0, section 10.5.5
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:137
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:108
 
 ___
 
@@ -2320,7 +2363,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:124
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:95
 
 ___
 
@@ -2334,7 +2377,7 @@ MatterCoreSpecificationV1_0, section 10.6.3
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:298
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:269
 
 ___
 
@@ -2348,7 +2391,7 @@ MatterCoreSpecificationV1_0, section 10.5.9
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:55
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:26
 
 ___
 
@@ -2362,7 +2405,7 @@ MatterCoreSpecificationV1_0, section 10.5.6
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:72
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:43
 
 ___
 
@@ -2376,13 +2419,13 @@ MatterCoreSpecificationV1_0, section 10.5.10
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:180
+matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:151
 
 ## Functions
 
 ### Attribute
 
-▸ **Attribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`Attribute`](internal_.md#attribute)<`T`, `F`\>
+▸ **Attribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`Attribute`](internal_.md#attribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2397,12 +2440,12 @@ matter.js/dist/esm/protocol/interaction/InteractionProtocol.d.ts:180
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`Attribute`](internal_.md#attribute)<`T`, `F`\>
+[`Attribute`](internal_.md#attribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2453,7 +2496,7 @@ ___
 
 ### BitFieldEnum
 
-▸ **BitFieldEnum**<`E`\>(`offset`, `length`): [`BitFieldEnum`](internal_.md#bitfieldenum-1)<`E`\>
+▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`E`\>
 
 #### Type parameters
 
@@ -2470,7 +2513,7 @@ ___
 
 #### Returns
 
-[`BitFieldEnum`](internal_.md#bitfieldenum-1)<`E`\>
+[`BitFieldEnum`](internal_.md#bitfieldenum-1)\<`E`\>
 
 #### Defined in
 
@@ -2500,7 +2543,7 @@ ___
 
 ### BitRange
 
-▸ **BitRange**<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](internal_.md#bitrange-1)<`T`, `TType`\>
+▸ **BitRange**\<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](internal_.md#bitrange-1)\<`T`, `TType`\>
 
 #### Type parameters
 
@@ -2519,7 +2562,7 @@ ___
 
 #### Returns
 
-[`BitRange`](internal_.md#bitrange-1)<`T`, `TType`\>
+[`BitRange`](internal_.md#bitrange-1)\<`T`, `TType`\>
 
 #### Defined in
 
@@ -2527,16 +2570,36 @@ matter.js/dist/esm/schema/BitmapSchema.d.ts:20
 
 ___
 
+### CaseAuthenticatedTag
+
+▸ **CaseAuthenticatedTag**(`id`): [`CaseAuthenticatedTag`](internal_.md#caseauthenticatedtag)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`CaseAuthenticatedTag`](internal_.md#caseauthenticatedtag)
+
+#### Defined in
+
+matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:14
+
+___
+
 ### Cluster
 
-▸ **Cluster**<`F`, `SF`, `A`, `C`, `E`\>(`«destructured»`): [`Cluster`](internal_.md#cluster)<`F`, `SF`, [`Merge`](internal_.md#merge)<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)<`F`\>\>, `C`, `E`\>
+▸ **Cluster**\<`F`, `SF`, `A`, `C`, `E`\>(`«destructured»`): [`Cluster`](internal_.md#cluster)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>\>, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/internal_.Attributes.md) = {} |
 | `C` | extends [`Commands`](../interfaces/internal_.Commands.md) = {} |
 | `E` | extends [`Events`](../interfaces/internal_.Events.md) = {} |
@@ -2558,7 +2621,7 @@ ___
 
 #### Returns
 
-[`Cluster`](internal_.md#cluster)<`F`, `SF`, [`Merge`](internal_.md#merge)<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)<`F`\>\>, `C`, `E`\>
+[`Cluster`](internal_.md#cluster)\<`F`, `SF`, [`Merge`](internal_.md#merge)\<`A`, [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>\>, `C`, `E`\>
 
 #### Defined in
 
@@ -2588,7 +2651,7 @@ ___
 
 ### Command
 
-▸ **Command**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`Command`](internal_.md#command)<`RequestT`, `ResponseT`, `F`\>
+▸ **Command**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`Command`](internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -2603,14 +2666,14 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `requestId` | `number` |
-| `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\> |
+| `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`RequestT`\> |
 | `responseId` | `number` |
-| `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\> |
+| `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`ResponseT`\> |
 | `«destructured»` | [`CommandOptions`](../interfaces/internal_.CommandOptions.md) |
 
 #### Returns
 
-[`Command`](internal_.md#command)<`RequestT`, `ResponseT`, `F`\>
+[`Command`](internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Defined in
 
@@ -2710,7 +2773,7 @@ ___
 
 ### Event
 
-▸ **Event**<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`Event`](internal_.md#event)<`T`, `F`\>
+▸ **Event**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`Event`](internal_.md#event)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2725,12 +2788,12 @@ ___
 | :------ | :------ |
 | `id` | `number` |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
 | `«destructured»` | [`EventOptions`](../interfaces/internal_.EventOptions.md) |
 
 #### Returns
 
-[`Event`](internal_.md#event)<`T`, `F`\>
+[`Event`](internal_.md#event)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2800,7 +2863,7 @@ ___
 
 ### FabricScopedAttribute
 
-▸ **FabricScopedAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FabricScopedAttribute`](internal_.md#fabricscopedattribute)<`T`, `F`\>
+▸ **FabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FabricScopedAttribute`](internal_.md#fabricscopedattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2815,12 +2878,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`FabricScopedAttribute`](internal_.md#fabricscopedattribute)<`T`, `F`\>
+[`FabricScopedAttribute`](internal_.md#fabricscopedattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2830,7 +2893,7 @@ ___
 
 ### FixedAttribute
 
-▸ **FixedAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FixedAttribute`](internal_.md#fixedattribute)<`T`, `F`\>
+▸ **FixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`FixedAttribute`](internal_.md#fixedattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2845,12 +2908,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`FixedAttribute`](internal_.md#fixedattribute)<`T`, `F`\>
+[`FixedAttribute`](internal_.md#fixedattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -2860,7 +2923,7 @@ ___
 
 ### GlobalAttributes
 
-▸ **GlobalAttributes**<`F`\>(`features`): [`GlobalAttributes`](internal_.md#globalattributes-1)<`F`\>
+▸ **GlobalAttributes**\<`F`\>(`features`): [`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
 
 #### Type parameters
 
@@ -2876,7 +2939,7 @@ ___
 
 #### Returns
 
-[`GlobalAttributes`](internal_.md#globalattributes-1)<`F`\>
+[`GlobalAttributes`](internal_.md#globalattributes-1)\<`F`\>
 
 #### Defined in
 
@@ -2914,7 +2977,7 @@ Generic key factory.
 
 | Name | Type |
 | :------ | :------ |
-| `properties` | `Partial`<[`Key`](internal_.md#key)\> |
+| `properties` | `Partial`\<[`Key`](internal_.md#key)\> |
 
 #### Returns
 
@@ -2928,7 +2991,7 @@ ___
 
 ### Merge
 
-▸ **Merge**<`A`, `B`\>(`a`, `b`): [`Merge`](internal_.md#merge)<`A`, `B`\>
+▸ **Merge**\<`A`, `B`\>(`a`, `b`): [`Merge`](internal_.md#merge)\<`A`, `B`\>
 
 #### Type parameters
 
@@ -2946,7 +3009,7 @@ ___
 
 #### Returns
 
-[`Merge`](internal_.md#merge)<`A`, `B`\>
+[`Merge`](internal_.md#merge)\<`A`, `B`\>
 
 #### Defined in
 
@@ -2970,13 +3033,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/datatype/NodeId.d.ts:15
+matter.js/dist/esm/datatype/NodeId.d.ts:16
 
 ___
 
 ### OptionalAttribute
 
-▸ **OptionalAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalAttribute`](internal_.md#optionalattribute)<`T`, `F`\>
+▸ **OptionalAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalAttribute`](internal_.md#optionalattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -2991,12 +3054,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`OptionalAttribute`](internal_.md#optionalattribute)<`T`, `F`\>
+[`OptionalAttribute`](internal_.md#optionalattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3006,7 +3069,7 @@ ___
 
 ### OptionalCommand
 
-▸ **OptionalCommand**<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`OptionalCommand`](internal_.md#optionalcommand)<`RequestT`, `ResponseT`, `F`\>
+▸ **OptionalCommand**\<`RequestT`, `ResponseT`, `F`\>(`requestId`, `requestSchema`, `responseId`, `responseSchema`, `«destructured»?`): [`OptionalCommand`](internal_.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Type parameters
 
@@ -3021,14 +3084,14 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `requestId` | `number` |
-| `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\> |
+| `requestSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`RequestT`\> |
 | `responseId` | `number` |
-| `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\> |
+| `responseSchema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`ResponseT`\> |
 | `«destructured»` | [`CommandOptions`](../interfaces/internal_.CommandOptions.md) |
 
 #### Returns
 
-[`OptionalCommand`](internal_.md#optionalcommand)<`RequestT`, `ResponseT`, `F`\>
+[`OptionalCommand`](internal_.md#optionalcommand)\<`RequestT`, `ResponseT`, `F`\>
 
 #### Defined in
 
@@ -3038,7 +3101,7 @@ ___
 
 ### OptionalEvent
 
-▸ **OptionalEvent**<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`OptionalEvent`](internal_.md#optionalevent)<`T`, `F`\>
+▸ **OptionalEvent**\<`T`, `F`\>(`id`, `priority`, `schema`, `«destructured»?`): [`OptionalEvent`](internal_.md#optionalevent)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3053,12 +3116,12 @@ ___
 | :------ | :------ |
 | `id` | `number` |
 | `priority` | [`EventPriority`](../enums/internal_.EventPriority.md) |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
 | `«destructured»` | [`EventOptions`](../interfaces/internal_.EventOptions.md) |
 
 #### Returns
 
-[`OptionalEvent`](internal_.md#optionalevent)<`T`, `F`\>
+[`OptionalEvent`](internal_.md#optionalevent)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3068,7 +3131,7 @@ ___
 
 ### OptionalFixedAttribute
 
-▸ **OptionalFixedAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)<`T`, `F`\>
+▸ **OptionalFixedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3083,12 +3146,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)<`T`, `F`\>
+[`OptionalFixedAttribute`](internal_.md#optionalfixedattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3098,7 +3161,7 @@ ___
 
 ### OptionalWritableAttribute
 
-▸ **OptionalWritableAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)<`T`, `F`\>
+▸ **OptionalWritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3113,12 +3176,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)<`T`, `F`\>
+[`OptionalWritableAttribute`](internal_.md#optionalwritableattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3128,7 +3191,7 @@ ___
 
 ### OptionalWritableFabricScopedAttribute
 
-▸ **OptionalWritableFabricScopedAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)<`T`, `F`\>
+▸ **OptionalWritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3143,12 +3206,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)<`T`, `F`\>
+[`OptionalWritableFabricScopedAttribute`](internal_.md#optionalwritablefabricscopedattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3178,7 +3241,7 @@ ___
 
 ### WritableAttribute
 
-▸ **WritableAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableAttribute`](internal_.md#writableattribute)<`T`, `F`\>
+▸ **WritableAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableAttribute`](internal_.md#writableattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3193,12 +3256,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`WritableAttribute`](internal_.md#writableattribute)<`T`, `F`\>
+[`WritableAttribute`](internal_.md#writableattribute)\<`T`, `F`\>
 
 #### Defined in
 
@@ -3208,7 +3271,7 @@ ___
 
 ### WritableFabricScopedAttribute
 
-▸ **WritableFabricScopedAttribute**<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)<`T`, `F`\>
+▸ **WritableFabricScopedAttribute**\<`T`, `V`, `F`\>(`id`, `schema`, `«destructured»?`): [`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)\<`T`, `F`\>
 
 #### Type parameters
 
@@ -3223,12 +3286,12 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `id` | `number` |
-| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\> |
-| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)<`V`\> |
+| `schema` | [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\> |
+| `«destructured»` | [`AttributeOptions`](../interfaces/internal_.AttributeOptions.md)\<`V`\> |
 
 #### Returns
 
-[`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)<`T`, `F`\>
+[`WritableFabricScopedAttribute`](internal_.md#writablefabricscopedattribute)\<`T`, `F`\>
 
 #### Defined in
 

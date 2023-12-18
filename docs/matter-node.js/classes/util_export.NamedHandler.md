@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / NamedHandler
 
-# Class: NamedHandler<H\>
+# Class: NamedHandler\<H\>
 
 [util/export](../modules/util_export.md).NamedHandler
 
@@ -8,7 +8,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
 
 ## Table of contents
 
@@ -31,13 +31,17 @@
 
 ### constructor
 
-• **new NamedHandler**<`H`\>()
+• **new NamedHandler**\<`H`\>(): [`NamedHandler`](util_export.NamedHandler.md)\<`H`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+
+#### Returns
+
+[`NamedHandler`](util_export.NamedHandler.md)\<`H`\>
 
 ## Properties
 
@@ -53,7 +57,7 @@ packages/matter.js/dist/esm/util/NamedHandler.d.ts:8
 
 ### addHandler
 
-▸ **addHandler**<`K`\>(`action`, `handler`): `void`
+▸ **addHandler**\<`K`\>(`action`, `handler`): `void`
 
 #### Type parameters
 
@@ -80,7 +84,7 @@ ___
 
 ### executeHandler
 
-▸ **executeHandler**<`K`\>(`action`, `...args`): `Promise`<`any`\>
+▸ **executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`any`\>
 
 #### Type parameters
 
@@ -93,11 +97,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `action` | `K` |
-| `...args` | `Parameters`<`H`[`K`]\> |
+| `...args` | `Parameters`\<`H`[`K`]\> |
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
@@ -107,7 +111,7 @@ ___
 
 ### hasHandler
 
-▸ **hasHandler**<`K`\>(`action`): `boolean`
+▸ **hasHandler**\<`K`\>(`action`): `boolean`
 
 #### Type parameters
 
@@ -133,7 +137,7 @@ ___
 
 ### removeHandler
 
-▸ **removeHandler**<`K`\>(`action`, `handler`): `void`
+▸ **removeHandler**\<`K`\>(`action`, `handler`): `void`
 
 #### Type parameters
 

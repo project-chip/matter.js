@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / SecureChannelMessenger
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / SecureChannelMessenger
 
-# Class: SecureChannelMessenger<ContextT\>
+# Class: SecureChannelMessenger\<ContextT\>
 
-[<internal>](../modules/internal_.md).SecureChannelMessenger
+[\<internal\>](../modules/internal_.md).SecureChannelMessenger
 
 ## Type parameters
 
@@ -44,7 +44,7 @@
 
 ### constructor
 
-• **new SecureChannelMessenger**<`ContextT`\>(`exchange`)
+• **new SecureChannelMessenger**\<`ContextT`\>(`exchange`): [`SecureChannelMessenger`](internal_.SecureChannelMessenger.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -56,7 +56,11 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\> |
+
+#### Returns
+
+[`SecureChannelMessenger`](internal_.SecureChannelMessenger.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -66,7 +70,7 @@ matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:19
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -86,11 +90,11 @@ matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:29
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -114,7 +118,7 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Parameters
 
@@ -124,7 +128,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+`Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Defined in
 
@@ -134,7 +138,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -147,11 +151,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
@@ -161,7 +165,7 @@ ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -175,11 +179,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -189,11 +193,11 @@ ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -203,7 +207,7 @@ ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -213,7 +217,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -223,11 +227,11 @@ ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -237,7 +241,7 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -257,11 +261,11 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

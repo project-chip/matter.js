@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / EventStorageData
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / EventStorageData
 
-# Interface: EventStorageData<T\>
+# Interface: EventStorageData\<T\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).EventStorageData
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).EventStorageData
 
 Data of an event which was triggered and stored internally
 
@@ -14,7 +14,7 @@ Data of an event which was triggered and stored internally
 
 ## Hierarchy
 
-- [`EventData`](export._internal_.EventData.md)<`T`\>
+- [`EventData`](export._internal_.EventData.md)\<`T`\>
 
   ↳ **`EventStorageData`**
 

@@ -33,7 +33,7 @@ decoded bytes in a ByteArray
 
 #### Defined in
 
-[packages/matter.js/src/codec/Base64Codec.ts:91](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/Base64Codec.ts#L91)
+[packages/matter.js/src/codec/Base64Codec.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/Base64Codec.ts#L91)
 
 ___
 
@@ -47,7 +47,7 @@ Encodes base64.
 
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
-| `input` | `ArrayLike`<`number`\> | `undefined` | an indexable sequence of bytes |
+| `input` | `ArrayLike`\<`number`\> | `undefined` | an indexable sequence of bytes |
 | `url` | `boolean` | `false` | set to true to encode as base46url |
 
 #### Returns
@@ -58,4 +58,4 @@ an encoded string
 
 #### Defined in
 
-[packages/matter.js/src/codec/Base64Codec.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/Base64Codec.ts#L52)
+[packages/matter.js/src/codec/Base64Codec.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/Base64Codec.ts#L52)

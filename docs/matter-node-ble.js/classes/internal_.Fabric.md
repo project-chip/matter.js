@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Fabric
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Fabric
 
 # Class: Fabric
 
-[<internal>](../modules/internal_.md).Fabric
+[\<internal\>](../modules/internal_.md).Fabric
 
 ## Table of contents
 
@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [caseAuthenticatedTags](internal_.Fabric.md#caseauthenticatedtags)
 - [fabricId](internal_.Fabric.md#fabricid)
 - [fabricIndex](internal_.Fabric.md#fabricindex)
 - [identityProtectionKey](internal_.Fabric.md#identityprotectionkey)
@@ -60,7 +61,7 @@
 
 ### constructor
 
-• **new Fabric**(`fabricIndex`, `fabricId`, `nodeId`, `rootNodeId`, `operationalId`, `rootPublicKey`, `keyPair`, `rootVendorId`, `rootCert`, `identityProtectionKey`, `operationalIdentityProtectionKey`, `intermediateCACert`, `operationalCert`, `label`, `scopedClusterData?`)
+• **new Fabric**(`fabricIndex`, `fabricId`, `nodeId`, `rootNodeId`, `operationalId`, `rootPublicKey`, `keyPair`, `rootVendorId`, `rootCert`, `identityProtectionKey`, `operationalIdentityProtectionKey`, `intermediateCACert`, `operationalCert`, `label`, `caseAuthenticatedTags?`, `scopedClusterData?`): [`Fabric`](internal_.Fabric.md)
 
 #### Parameters
 
@@ -80,13 +81,28 @@
 | `intermediateCACert` | `undefined` \| `Uint8Array` |
 | `operationalCert` | `Uint8Array` |
 | `label` | `string` |
-| `scopedClusterData?` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes)\>\> |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[] |
+| `scopedClusterData?` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](../modules/internal_.md#supportedstoragetypes)\>\> |
+
+#### Returns
+
+[`Fabric`](internal_.Fabric.md)
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:51
+matter.js/dist/esm/fabric/Fabric.d.ts:54
 
 ## Properties
+
+### caseAuthenticatedTags
+
+• `Readonly` **caseAuthenticatedTags**: [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[]
+
+#### Defined in
+
+matter.js/dist/esm/fabric/Fabric.d.ts:49
+
+___
 
 ### fabricId
 
@@ -94,7 +110,7 @@ matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:34
+matter.js/dist/esm/fabric/Fabric.d.ts:36
 
 ___
 
@@ -104,7 +120,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:33
+matter.js/dist/esm/fabric/Fabric.d.ts:35
 
 ___
 
@@ -114,7 +130,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:42
+matter.js/dist/esm/fabric/Fabric.d.ts:44
 
 ___
 
@@ -124,7 +140,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:44
+matter.js/dist/esm/fabric/Fabric.d.ts:46
 
 ___
 
@@ -134,7 +150,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:39
+matter.js/dist/esm/fabric/Fabric.d.ts:41
 
 ___
 
@@ -144,7 +160,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:46
+matter.js/dist/esm/fabric/Fabric.d.ts:48
 
 ___
 
@@ -154,7 +170,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:35
+matter.js/dist/esm/fabric/Fabric.d.ts:37
 
 ___
 
@@ -164,7 +180,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:45
+matter.js/dist/esm/fabric/Fabric.d.ts:47
 
 ___
 
@@ -174,7 +190,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:37
+matter.js/dist/esm/fabric/Fabric.d.ts:39
 
 ___
 
@@ -184,7 +200,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:43
+matter.js/dist/esm/fabric/Fabric.d.ts:45
 
 ___
 
@@ -194,7 +210,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:50
+matter.js/dist/esm/fabric/Fabric.d.ts:53
 
 ___
 
@@ -204,7 +220,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:49
+matter.js/dist/esm/fabric/Fabric.d.ts:52
 
 ___
 
@@ -214,7 +230,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:41
+matter.js/dist/esm/fabric/Fabric.d.ts:43
 
 ___
 
@@ -224,7 +240,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:36
+matter.js/dist/esm/fabric/Fabric.d.ts:38
 
 ___
 
@@ -234,7 +250,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:38
+matter.js/dist/esm/fabric/Fabric.d.ts:40
 
 ___
 
@@ -244,7 +260,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:40
+matter.js/dist/esm/fabric/Fabric.d.ts:42
 
 ___
 
@@ -254,7 +270,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:48
+matter.js/dist/esm/fabric/Fabric.d.ts:51
 
 ___
 
@@ -264,7 +280,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:47
+matter.js/dist/esm/fabric/Fabric.d.ts:50
 
 ## Methods
 
@@ -284,7 +300,7 @@ matter.js/dist/esm/fabric/Fabric.d.ts:47
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:62
+matter.js/dist/esm/fabric/Fabric.d.ts:65
 
 ___
 
@@ -296,7 +312,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](internal_.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](internal_.SecureSession.md)\<`any`\> |
 
 #### Returns
 
@@ -304,7 +320,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:60
+matter.js/dist/esm/fabric/Fabric.d.ts:63
 
 ___
 
@@ -324,7 +340,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:63
+matter.js/dist/esm/fabric/Fabric.d.ts:66
 
 ___
 
@@ -336,7 +352,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -344,7 +360,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:71
+matter.js/dist/esm/fabric/Fabric.d.ts:74
 
 ___
 
@@ -356,7 +372,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -365,7 +381,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:69
+matter.js/dist/esm/fabric/Fabric.d.ts:72
 
 ___
 
@@ -386,7 +402,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:59
+matter.js/dist/esm/fabric/Fabric.d.ts:62
 
 ___
 
@@ -409,7 +425,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:73
+matter.js/dist/esm/fabric/Fabric.d.ts:76
 
 ___
 
@@ -423,7 +439,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:55
+matter.js/dist/esm/fabric/Fabric.d.ts:58
 
 ___
 
@@ -435,7 +451,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -443,13 +459,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:72
+matter.js/dist/esm/fabric/Fabric.d.ts:75
 
 ___
 
 ### getScopedClusterDataValue
 
-▸ **getScopedClusterDataValue**<`T`\>(`cluster`, `clusterDataKey`): `undefined` \| `T`
+▸ **getScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`): `undefined` \| `T`
 
 #### Type parameters
 
@@ -461,7 +477,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -470,7 +486,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:67
+matter.js/dist/esm/fabric/Fabric.d.ts:70
 
 ___
 
@@ -482,7 +498,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -491,7 +507,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:70
+matter.js/dist/esm/fabric/Fabric.d.ts:73
 
 ___
 
@@ -512,7 +528,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:58
+matter.js/dist/esm/fabric/Fabric.d.ts:61
 
 ___
 
@@ -526,13 +542,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:66
+matter.js/dist/esm/fabric/Fabric.d.ts:69
 
 ___
 
 ### remove
 
-▸ **remove**(`currentSessionId?`): `Promise`<`void`\>
+▸ **remove**(`currentSessionId?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -542,11 +558,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:65
+matter.js/dist/esm/fabric/Fabric.d.ts:68
 
 ___
 
@@ -558,7 +574,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](internal_.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](internal_.SecureSession.md)\<`any`\> |
 
 #### Returns
 
@@ -566,7 +582,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:61
+matter.js/dist/esm/fabric/Fabric.d.ts:64
 
 ___
 
@@ -586,7 +602,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:54
+matter.js/dist/esm/fabric/Fabric.d.ts:57
 
 ___
 
@@ -606,13 +622,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:64
+matter.js/dist/esm/fabric/Fabric.d.ts:67
 
 ___
 
 ### setScopedClusterDataValue
 
-▸ **setScopedClusterDataValue**<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
+▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
 
 #### Type parameters
 
@@ -624,7 +640,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 | `value` | `T` |
 
@@ -634,7 +650,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:68
+matter.js/dist/esm/fabric/Fabric.d.ts:71
 
 ___
 
@@ -654,7 +670,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:56
+matter.js/dist/esm/fabric/Fabric.d.ts:59
 
 ___
 
@@ -668,7 +684,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:52
+matter.js/dist/esm/fabric/Fabric.d.ts:55
 
 ___
 
@@ -689,13 +705,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:57
+matter.js/dist/esm/fabric/Fabric.d.ts:60
 
 ___
 
 ### createFromStorageObject
 
-▸ `Static` **createFromStorageObject**(`fabricObject`): [`Fabric`](internal_.Fabric.md)
+▸ **createFromStorageObject**(`fabricObject`): [`Fabric`](internal_.Fabric.md)
 
 #### Parameters
 
@@ -709,4 +725,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:53
+matter.js/dist/esm/fabric/Fabric.d.ts:56

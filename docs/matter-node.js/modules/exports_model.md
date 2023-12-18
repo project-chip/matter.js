@@ -171,7 +171,7 @@ ___
 
 ### AttributeElement
 
-Ƭ **AttributeElement**: [`ValueElement`](exports_model.md#valueelement) & { `id`: [`Mei`](exports_model.md#mei) ; `tag`: \`${Tag}\`  }
+Ƭ **AttributeElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `id`: [`Mei`](exports_model.md#mei) ; `tag`: \`$\{Tag}\`  }
 
 A cluster property description.
 
@@ -221,7 +221,7 @@ ___
 
 ### ClusterElement
 
-Ƭ **ClusterElement**: [`BaseElement`](exports_model.md#baseelement) & { `children?`: [`Child`](exports_model.ClusterElement.md#child)[] ; `classification?`: \`${Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `singleton?`: `boolean` ; `tag`: \`${Tag}\`  }
+Ƭ **ClusterElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children?`: [`Child`](exports_model.ClusterElement.md#child)[] ; `classification?`: \`$\{Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `singleton?`: `boolean` ; `tag`: \`$\{Tag}\`  }
 
 A cluster describes a set of related functionality.
 
@@ -260,7 +260,7 @@ ___
 
 ### CommandElement
 
-Ƭ **CommandElement**: [`ValueElement`](exports_model.md#valueelement) & { `direction?`: \`${Direction}\` ; `id`: [`Mei`](exports_model.md#mei) ; `response?`: `string` ; `tag`: \`${Tag}\`  }
+Ƭ **CommandElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `direction?`: \`$\{Direction}\` ; `id`: [`Mei`](exports_model.md#mei) ; `response?`: `string` ; `tag`: \`$\{Tag}\`  }
 
 A command describes a remote procedure call.
 
@@ -276,7 +276,7 @@ ___
 
 ### DatatypeElement
 
-Ƭ **DatatypeElement**: [`ValueElement`](exports_model.md#valueelement) & { `children?`: [`DatatypeElement`](exports_model.md#datatypeelement)[] ; `id?`: [`Mei`](exports_model.md#mei) ; `metatype?`: \`${Metatype}\` ; `tag`: \`${Tag}\`  }
+Ƭ **DatatypeElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `children?`: [`DatatypeElement`](exports_model.md#datatypeelement)[] ; `id?`: [`Mei`](exports_model.md#mei) ; `metatype?`: \`$\{Metatype}\` ; `tag`: \`$\{Tag}\`  }
 
 A datatype element defines a standalone datatype.
 
@@ -313,7 +313,7 @@ ___
 
 ### DeviceTypeElement
 
-Ƭ **DeviceTypeElement**: [`BaseElement`](exports_model.md#baseelement) & { `category?`: `string` ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `classification`: \`${Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `tag`: \`${Tag}\`  }
+Ƭ **DeviceTypeElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `category?`: `string` ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `classification`: \`$\{Classification}\` ; `id?`: [`Mei`](exports_model.md#mei) ; `tag`: \`$\{Tag}\`  }
 
 Details on a specific device as defined in the Matter specification.
 
@@ -331,7 +331,7 @@ ___
 
 ### EndpointElement
 
-Ƭ **EndpointElement**: [`BaseElement`](exports_model.md#baseelement) & { `children`: [`DeviceTypeElement`](exports_model.md#devicetypeelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **EndpointElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`DeviceTypeElement`](exports_model.md#devicetypeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of an endpoint.
 
@@ -347,7 +347,7 @@ ___
 
 ### EventElement
 
-Ƭ **EventElement**: [`ValueElement`](exports_model.md#valueelement) & { `id`: [`Mei`](exports_model.md#mei) ; `priority?`: \`${Priority}\` ; `tag`: \`${Tag}\`  }
+Ƭ **EventElement**: [`ValueElement`](exports_model.md#valueelement) & \{ `id`: [`Mei`](exports_model.md#mei) ; `priority?`: \`$\{Priority}\` ; `tag`: \`$\{Tag}\`  }
 
 An event is triggered by endpoints.
 
@@ -363,7 +363,7 @@ ___
 
 ### FabricElement
 
-Ƭ **FabricElement**: [`BaseElement`](exports_model.md#baseelement) & { `children`: [`NodeElement`](exports_model.md#nodeelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **FabricElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`NodeElement`](exports_model.md#nodeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of a fabric.
 
@@ -503,7 +503,7 @@ ___
 
 ### MatterElement
 
-Ƭ **MatterElement**: [`BaseElement`](exports_model.md#baseelement) & { `children`: [`Child`](exports_model.MatterElement.md#child)[] ; `tag`: \`${Matter}\` ; `version?`: `string`  }
+Ƭ **MatterElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children`: [`Child`](exports_model.MatterElement.md#child)[] ; `tag`: \`$\{Matter}\` ; `version?`: `string`  }
 
 The root model element.
 
@@ -529,7 +529,7 @@ ___
 
 ### NamedComponent
 
-Ƭ **NamedComponent**: [`InferredComponent`](exports_model.md#inferredcomponent) & { `documentation`: `string` ; `name`: `string`  }
+Ƭ **NamedComponent**: [`InferredComponent`](exports_model.md#inferredcomponent) & \{ `documentation`: `string` ; `name`: `string`  }
 
 An inferred with generated name and documentation.
 
@@ -555,7 +555,7 @@ ___
 
 ### NodeElement
 
-Ƭ **NodeElement**: [`BaseElement`](exports_model.md#baseelement) & { `children?`: [`EndpointElement`](exports_model.md#endpointelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **NodeElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `children?`: [`EndpointElement`](exports_model.md#endpointelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of a node.
 
@@ -571,7 +571,7 @@ ___
 
 ### RequirementElement
 
-Ƭ **RequirementElement**: [`BaseElement`](exports_model.md#baseelement) & { `access?`: [`Definition`](exports_model.Access.md#definition) ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `element`: \`${ElementType}\` ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `tag`: \`${Tag}\`  }
+Ƭ **RequirementElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `children?`: ([`RequirementElement`](exports_model.md#requirementelement) \| [`DatatypeElement`](exports_model.md#datatypeelement))[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `element`: \`$\{ElementType}\` ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `tag`: \`$\{Tag}\`  }
 
 Describes a cluster or cluster element requirement for a device.
 
@@ -603,7 +603,7 @@ ___
 
 ### ValueElement
 
-Ƭ **ValueElement**: [`BaseElement`](exports_model.md#baseelement) & { `access?`: [`Definition`](exports_model.Access.md#definition) ; `byteSize?`: [`Size`](exports_model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](exports_model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `default?`: [`FieldValue`](exports_model.md#fieldvalue) ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `type?`: `string`  }
+Ƭ **ValueElement**: [`BaseElement`](exports_model.md#baseelement) & \{ `access?`: [`Definition`](exports_model.Access.md#definition) ; `byteSize?`: [`Size`](exports_model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](exports_model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](exports_model.Conformance.md#definition) ; `constraint?`: [`Definition`](exports_model.Constraint.md#definition) ; `default?`: [`FieldValue`](exports_model.md#fieldvalue) ; `quality?`: [`Definition`](exports_model.Quality.md#definition) ; `type?`: `string`  }
 
 A base element for all elements that represent data values.
 

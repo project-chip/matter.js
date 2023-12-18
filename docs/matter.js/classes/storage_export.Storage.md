@@ -28,13 +28,17 @@
 
 ### constructor
 
-• **new Storage**()
+• **new Storage**(): [`Storage`](storage_export.Storage.md)
+
+#### Returns
+
+[`Storage`](storage_export.Storage.md)
 
 ## Methods
 
 ### clearAll
 
-▸ `Abstract` **clearAll**(`contexts`): `void`
+▸ **clearAll**(`contexts`): `void`
 
 #### Parameters
 
@@ -48,27 +52,27 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L18)
+[packages/matter.js/src/storage/Storage.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L18)
 
 ___
 
 ### close
 
-▸ `Abstract` **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L13)
+[packages/matter.js/src/storage/Storage.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L13)
 
 ___
 
 ### delete
 
-▸ `Abstract` **delete**(`contexts`, `key`): `void`
+▸ **delete**(`contexts`, `key`): `void`
 
 #### Parameters
 
@@ -83,13 +87,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L16)
+[packages/matter.js/src/storage/Storage.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L16)
 
 ___
 
 ### get
 
-▸ `Abstract` **get**<`T`\>(`contexts`, `key`): `undefined` \| `T`
+▸ **get**\<`T`\>(`contexts`, `key`): `undefined` \| `T`
 
 #### Type parameters
 
@@ -110,27 +114,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L14)
+[packages/matter.js/src/storage/Storage.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L14)
 
 ___
 
 ### initialize
 
-▸ `Abstract` **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L12)
+[packages/matter.js/src/storage/Storage.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L12)
 
 ___
 
 ### keys
 
-▸ `Abstract` **keys**(`contexts`): `string`[]
+▸ **keys**(`contexts`): `string`[]
 
 #### Parameters
 
@@ -144,13 +148,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L17)
+[packages/matter.js/src/storage/Storage.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L17)
 
 ___
 
 ### set
 
-▸ `Abstract` **set**<`T`\>(`contexts`, `key`, `value`): `void`
+▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
 
 #### Type parameters
 
@@ -172,4 +176,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/Storage.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/Storage.ts#L15)
+[packages/matter.js/src/storage/Storage.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/Storage.ts#L15)

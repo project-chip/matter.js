@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / OptionalFixedAttribute
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / OptionalFixedAttribute
 
-# Interface: OptionalFixedAttribute<T, F\>
+# Interface: OptionalFixedAttribute\<T, F\>
 
-[<internal>](../modules/internal_.md).OptionalFixedAttribute
+[\<internal\>](../modules/internal_.md).OptionalFixedAttribute
 
 ## Type parameters
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalAttribute`](../modules/internal_.md#optionalattribute)<`T`, `F`\>
+- [`OptionalAttribute`](../modules/internal_.md#optionalattribute)\<`T`, `F`\>
 
   ↳ **`OptionalFixedAttribute`**
 
@@ -113,7 +113,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -155,7 +155,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -211,7 +211,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 

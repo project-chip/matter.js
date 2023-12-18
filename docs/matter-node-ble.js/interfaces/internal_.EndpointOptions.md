@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EndpointOptions
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EndpointOptions
 
 # Interface: EndpointOptions
 
-[<internal>](../modules/internal_.md).EndpointOptions
+[\<internal\>](../modules/internal_.md).EndpointOptions
 
 ## Table of contents
 

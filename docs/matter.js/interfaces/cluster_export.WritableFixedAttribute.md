@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / WritableFixedAttribute
 
-# Interface: WritableFixedAttribute<T, F\>
+# Interface: WritableFixedAttribute\<T, F\>
 
 [cluster/export](../modules/cluster_export.md).WritableFixedAttribute
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`WritableAttribute`](../modules/cluster_export.md#writableattribute)<`T`, `F`\>
+- [`WritableAttribute`](../modules/cluster_export.md#writableattribute)\<`T`, `F`\>
 
   ↳ **`WritableFixedAttribute`**
 
@@ -51,7 +51,7 @@ WritableAttribute.default
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L48)
+[packages/matter.js/src/cluster/Cluster.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L48)
 
 ___
 
@@ -65,7 +65,7 @@ WritableAttribute.fabricScoped
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L45)
+[packages/matter.js/src/cluster/Cluster.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L45)
 
 ___
 
@@ -79,7 +79,7 @@ WritableAttribute.fixed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L97)
+[packages/matter.js/src/cluster/Cluster.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L97)
 
 ___
 
@@ -93,7 +93,7 @@ WritableAttribute.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L36)
+[packages/matter.js/src/cluster/Cluster.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L36)
 
 ___
 
@@ -107,13 +107,13 @@ WritableAttribute.isConditional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L49)
+[packages/matter.js/src/cluster/Cluster.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L49)
 
 ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ WritableAttribute.mandatoryIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L51)
+[packages/matter.js/src/cluster/Cluster.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L51)
 
 ___
 
@@ -135,7 +135,7 @@ WritableAttribute.omitChanges
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L46)
+[packages/matter.js/src/cluster/Cluster.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L46)
 
 ___
 
@@ -149,13 +149,13 @@ WritableAttribute.optional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L38)
+[packages/matter.js/src/cluster/Cluster.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L38)
 
 ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -163,7 +163,7 @@ WritableAttribute.optionalIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L50)
+[packages/matter.js/src/cluster/Cluster.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L50)
 
 ___
 
@@ -177,7 +177,7 @@ WritableAttribute.persistent
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L42)
+[packages/matter.js/src/cluster/Cluster.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L42)
 
 ___
 
@@ -191,7 +191,7 @@ WritableAttribute.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L39)
+[packages/matter.js/src/cluster/Cluster.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L39)
 
 ___
 
@@ -205,13 +205,13 @@ WritableAttribute.scene
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L41)
+[packages/matter.js/src/cluster/Cluster.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L41)
 
 ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -219,7 +219,7 @@ WritableAttribute.schema
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L37)
+[packages/matter.js/src/cluster/Cluster.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L37)
 
 ___
 
@@ -233,7 +233,7 @@ WritableAttribute.timed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L43)
+[packages/matter.js/src/cluster/Cluster.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L43)
 
 ___
 
@@ -247,7 +247,7 @@ WritableAttribute.unknown
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L52)
+[packages/matter.js/src/cluster/Cluster.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L52)
 
 ___
 
@@ -261,7 +261,7 @@ WritableAttribute.writable
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L64)
+[packages/matter.js/src/cluster/Cluster.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L64)
 
 ___
 
@@ -275,4 +275,4 @@ WritableAttribute.writeAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L47)
+[packages/matter.js/src/cluster/Cluster.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L47)

@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/common](../modules/exports_common.md) / Channel
 
-# Interface: Channel<T\>
+# Interface: Channel\<T\>
 
 [exports/common](../modules/exports_common.md).Channel
 
@@ -45,11 +45,11 @@ packages/matter.js/dist/esm/common/Channel.d.ts:7
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -59,7 +59,7 @@ ___
 
 ### send
 
-▸ **send**(`data`): `Promise`<`void`\>
+▸ **send**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -69,7 +69,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

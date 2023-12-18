@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Cache
 
-# Class: Cache<T\>
+# Class: Cache\<T\>
 
 [util/export](../modules/util_export.md).Cache
 
@@ -46,7 +46,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new Cache**<`T`\>(`generator`, `expirationMs`, `expireCallback?`)
+• **new Cache**\<`T`\>(`generator`, `expirationMs`, `expireCallback?`): [`Cache`](util_export.Cache.md)\<`T`\>
 
 #### Type parameters
 
@@ -60,7 +60,11 @@ SPDX-License-Identifier: Apache-2.0
 | :------ | :------ |
 | `generator` | (...`params`: `any`[]) => `T` |
 | `expirationMs` | `number` |
-| `expireCallback?` | (`key`: `string`, `value`: `T`) => `Promise`<`void`\> |
+| `expireCallback?` | (`key`: `string`, `value`: `T`) => `Promise`\<`void`\> |
+
+#### Returns
+
+[`Cache`](util_export.Cache.md)\<`T`\>
 
 #### Defined in
 
@@ -160,11 +164,11 @@ packages/matter.js/dist/esm/util/Cache.d.ts:13
 
 ### clear
 
-▸ **clear**(): `Promise`<`void`\>
+▸ **clear**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -174,11 +178,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

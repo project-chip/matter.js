@@ -40,13 +40,17 @@
 
 ### constructor
 
-• **new StorageBackendMemory**(`store?`)
+• **new StorageBackendMemory**(`store?`): [`StorageBackendMemory`](storage_export.StorageBackendMemory.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `store?` | `any` |
+
+#### Returns
+
+[`StorageBackendMemory`](storage_export.StorageBackendMemory.md)
 
 #### Defined in
 
@@ -114,11 +118,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -157,7 +161,7 @@ ___
 
 ### get
 
-▸ **get**<`T`\>(`contexts`, `key`): `undefined` \| `T`
+▸ **get**\<`T`\>(`contexts`, `key`): `undefined` \| `T`
 
 #### Type parameters
 
@@ -188,11 +192,11 @@ ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -230,7 +234,7 @@ ___
 
 ### set
 
-▸ **set**<`T`\>(`contexts`, `key`, `value`): `void`
+▸ **set**\<`T`\>(`contexts`, `key`, `value`): `void`
 
 #### Type parameters
 

@@ -28,37 +28,41 @@
 
 ### constructor
 
-• **new TlvArrayWriter**()
+• **new TlvArrayWriter**(): [`TlvArrayWriter`](tlv_export.TlvArrayWriter.md)
+
+#### Returns
+
+[`TlvArrayWriter`](tlv_export.TlvArrayWriter.md)
 
 ## Properties
 
 ### tlvArray
 
-• `Private` `Readonly` **tlvArray**: [`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>[]
+• `Private` `Readonly` **tlvArray**: [`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L61)
+[packages/matter.js/src/tlv/TlvSchema.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L61)
 
 ## Methods
 
 ### toTlvArray
 
-▸ **toTlvArray**(): [`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>[]
+▸ **toTlvArray**(): [`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>[]
 
 #### Returns
 
-[`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>[]
+[`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L71)
+[packages/matter.js/src/tlv/TlvSchema.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L71)
 
 ___
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`_typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`_typeLength`, `value`): `void`
 
 #### Type parameters
 
@@ -83,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L67)
+[packages/matter.js/src/tlv/TlvSchema.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L67)
 
 ___
 
@@ -108,4 +112,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L63)
+[packages/matter.js/src/tlv/TlvSchema.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L63)

@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / InteractionMessenger
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / InteractionMessenger
 
-# Class: InteractionMessenger<ContextT\>
+# Class: InteractionMessenger\<ContextT\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).InteractionMessenger
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).InteractionMessenger
 
 ## Type parameters
 
@@ -42,7 +42,7 @@
 
 ### constructor
 
-• **new InteractionMessenger**<`ContextT`\>(`exchange`)
+• **new InteractionMessenger**\<`ContextT`\>(`exchange`): [`InteractionMessenger`](export._internal_.InteractionMessenger.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -54,35 +54,39 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\> |
+
+#### Returns
+
+[`InteractionMessenger`](export._internal_.InteractionMessenger.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:39
 
 ## Properties
 
 ### exchange
 
-• `Protected` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+• `Protected` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:38
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:50
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
 
 ___
 
@@ -96,13 +100,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:52
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
 
 ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Parameters
 
@@ -112,17 +116,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+`Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:43
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -134,17 +138,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:40
 
 ___
 
 ### sendStatus
 
-▸ **sendStatus**(`status`): `Promise`<`void`\>
+▸ **sendStatus**(`status`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -154,17 +158,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:41
 
 ___
 
 ### throwIfErrorStatusMessage
 
-▸ `Protected` **throwIfErrorStatusMessage**(`message`): `void`
+▸ **throwIfErrorStatusMessage**(`message`): `void`
 
 #### Parameters
 
@@ -178,18 +182,18 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:51
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
 
 ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:42

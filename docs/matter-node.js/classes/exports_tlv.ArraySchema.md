@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / ArraySchema
 
-# Class: ArraySchema<T\>
+# Class: ArraySchema\<T\>
 
 [exports/tlv](../modules/exports_tlv.md).ArraySchema
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.11.2 and A.11.4
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`[]\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`[]\>
 
   ↳ **`ArraySchema`**
 
@@ -55,7 +55,7 @@ MatterCoreSpecificationV1_0 § A.11.2 and A.11.4
 
 ### constructor
 
-• **new ArraySchema**<`T`\>(`elementSchema`, `minLength?`, `maxLength?`)
+• **new ArraySchema**\<`T`\>(`elementSchema`, `minLength?`, `maxLength?`): [`ArraySchema`](exports_tlv.ArraySchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -67,13 +67,17 @@ MatterCoreSpecificationV1_0 § A.11.2 and A.11.4
 
 | Name | Type |
 | :------ | :------ |
-| `elementSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `elementSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `minLength?` | `number` |
 | `maxLength?` | `number` |
 
+#### Returns
+
+[`ArraySchema`](exports_tlv.ArraySchema.md)\<`T`\>
+
 #### Overrides
 
-TlvSchema&lt;T[]\&gt;.constructor
+TlvSchema\&lt;T[]\&gt;.constructor
 
 #### Defined in
 
@@ -83,7 +87,7 @@ packages/matter.js/dist/esm/tlv/TlvArray.d.ts:27
 
 ### elementSchema
 
-• `Readonly` **elementSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\>
+• `Readonly` **elementSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Defined in
 

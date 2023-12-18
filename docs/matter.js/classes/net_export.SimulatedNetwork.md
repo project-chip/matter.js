@@ -25,17 +25,21 @@
 
 ### constructor
 
-• **new SimulatedNetwork**()
+• **new SimulatedNetwork**(): [`SimulatedNetwork`](net_export.SimulatedNetwork.md)
+
+#### Returns
+
+[`SimulatedNetwork`](net_export.SimulatedNetwork.md)
 
 ## Properties
 
 ### listenersMap
 
-• `Private` `Readonly` **listenersMap**: `Map`<`string`, [`ListenerFunc`](../modules/net_export.md#listenerfunc)[]\>
+• `Private` `Readonly` **listenersMap**: `Map`\<`string`, [`ListenerFunc`](../modules/net_export.md#listenerfunc)[]\>
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L21)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L21)
 
 ___
 
@@ -53,13 +57,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L19)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L19)
 
 ## Methods
 
 ### offUdpData
 
-▸ `Private` **offUdpData**(`host`, `port`, `listenerToRemove`): `void`
+▸ **offUdpData**(`host`, `port`, `listenerToRemove`): `void`
 
 #### Parameters
 
@@ -75,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L36)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L36)
 
 ___
 
@@ -97,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L23)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L23)
 
 ___
 
@@ -121,4 +125,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L48)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L48)

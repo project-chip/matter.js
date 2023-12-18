@@ -59,7 +59,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 ### constructor
 
-• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `nodeId`, `adminVendorId`, `reconnectWithDeviceCallback`)
+• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `nodeId`, `adminVendorId`, `reconnectWithDeviceCallback`): [`ControllerCommissioner`](exports_protocol.ControllerCommissioner.md)
 
 #### Parameters
 
@@ -71,7 +71,11 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 | `commissioningOptions` | [`CommissioningOptions`](../modules/exports_protocol.md#commissioningoptions) |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 | `adminVendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
-| `reconnectWithDeviceCallback` | () => `Promise`<[`InteractionClient`](exports_interaction.InteractionClient.md)\> |
+| `reconnectWithDeviceCallback` | () => `Promise`\<[`InteractionClient`](exports_interaction.InteractionClient.md)\> |
+
+#### Returns
+
+[`ControllerCommissioner`](exports_protocol.ControllerCommissioner.md)
 
 #### Defined in
 
@@ -508,7 +512,7 @@ packages/matter.js/dist/esm/protocol/ControllerCommissioner.d.ts:165
 
 ### executeCommissioning
 
-▸ **executeCommissioning**(): `Promise`<`void`\>
+▸ **executeCommissioning**(): `Promise`\<`void`\>
 
 Execute the commissioning process in the defined order. The steps are sorted before execution based on the step
 number and sub step number.
@@ -517,7 +521,7 @@ action is allowed to take 30s at minimum based on specs).
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

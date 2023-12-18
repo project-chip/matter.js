@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / CachedAttributeInfo
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / CachedAttributeInfo
 
 # Interface: CachedAttributeInfo
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).CachedAttributeInfo
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).CachedAttributeInfo
 
 ## Table of contents
 
@@ -15,7 +15,7 @@
 
 ### attribute
 
-• **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)<`any`, `any`\>
+• **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\>
 
 #### Defined in
 

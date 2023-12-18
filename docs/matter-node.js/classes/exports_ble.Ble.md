@@ -25,7 +25,11 @@
 
 ### constructor
 
-• **new Ble**()
+• **new Ble**(): [`Ble`](exports_ble.Ble.md)
+
+#### Returns
+
+[`Ble`](exports_ble.Ble.md)
 
 ## Properties
 
@@ -49,7 +53,7 @@ packages/matter.js/dist/esm/ble/Ble.d.ts:15
 
 ### getBleBroadcaster
 
-▸ `Abstract` **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/exports_common.InstanceBroadcaster.md)
+▸ **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/exports_common.InstanceBroadcaster.md)
 
 #### Parameters
 
@@ -69,7 +73,7 @@ ___
 
 ### getBleCentralInterface
 
-▸ `Abstract` **getBleCentralInterface**(): [`NetInterface`](../interfaces/net_export.NetInterface.md)
+▸ **getBleCentralInterface**(): [`NetInterface`](../interfaces/net_export.NetInterface.md)
 
 #### Returns
 
@@ -83,7 +87,7 @@ ___
 
 ### getBlePeripheralInterface
 
-▸ `Abstract` **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/exports_common.TransportInterface.md)
+▸ **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/exports_common.TransportInterface.md)
 
 #### Returns
 
@@ -97,7 +101,7 @@ ___
 
 ### getBleScanner
 
-▸ `Abstract` **getBleScanner**(): [`Scanner`](../interfaces/exports_common.Scanner.md)
+▸ **getBleScanner**(): [`Scanner`](../interfaces/exports_common.Scanner.md)
 
 #### Returns
 

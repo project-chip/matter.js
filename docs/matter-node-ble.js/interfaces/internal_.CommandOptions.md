@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / CommandOptions
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / CommandOptions
 
 # Interface: CommandOptions
 
-[<internal>](../modules/internal_.md).CommandOptions
+[\<internal\>](../modules/internal_.md).CommandOptions
 
 ## Table of contents
 

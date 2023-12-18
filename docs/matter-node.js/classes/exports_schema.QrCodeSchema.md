@@ -8,7 +8,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<`string`, `string`\>
+- [`Schema`](exports_schema.Schema.md)\<`string`, `string`\>
 
   ↳ **`QrCodeSchema`**
 
@@ -35,7 +35,11 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new QrCodeSchema**()
+• **new QrCodeSchema**(): [`QrCodeSchema`](exports_schema.QrCodeSchema.md)
+
+#### Returns
+
+[`QrCodeSchema`](exports_schema.QrCodeSchema.md)
 
 #### Inherited from
 
@@ -82,7 +86,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`_encoded`): `string`
+▸ **decodeInternal**(`_encoded`): `string`
 
 #### Parameters
 
@@ -132,7 +136,7 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`data`): `string`
+▸ **encodeInternal**(`data`): `string`
 
 #### Parameters
 

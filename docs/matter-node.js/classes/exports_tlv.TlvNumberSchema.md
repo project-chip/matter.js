@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)<`number`\>
+- [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`number`\>
 
   ↳ **`TlvNumberSchema`**
 
@@ -44,7 +44,7 @@
 
 ### constructor
 
-• **new TlvNumberSchema**(`type`, `lengthProvider`, `min?`, `max?`)
+• **new TlvNumberSchema**(`type`, `lengthProvider`, `min?`, `max?`): [`TlvNumberSchema`](exports_tlv.TlvNumberSchema.md)
 
 #### Parameters
 
@@ -55,9 +55,13 @@
 | `min?` | `number` |
 | `max?` | `number` |
 
+#### Returns
+
+[`TlvNumberSchema`](exports_tlv.TlvNumberSchema.md)
+
 #### Overrides
 
-TlvNumericSchema&lt;number\&gt;.constructor
+TlvNumericSchema\&lt;number\&gt;.constructor
 
 #### Defined in
 
@@ -137,17 +141,17 @@ packages/matter.js/dist/esm/tlv/TlvNumber.d.ts:11
 
 ### bound
 
-▸ **bound**(`«destructured»`): [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)<`number`\>
+▸ **bound**(`«destructured»`): [`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`number`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`NumericConstraints`](../modules/exports_tlv.md#numericconstraints)<`number`\> |
+| `«destructured»` | [`NumericConstraints`](../modules/exports_tlv.md#numericconstraints)\<`number`\> |
 
 #### Returns
 
-[`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)<`number`\>
+[`TlvNumericSchema`](exports_tlv.TlvNumericSchema.md)\<`number`\>
 
 #### Overrides
 

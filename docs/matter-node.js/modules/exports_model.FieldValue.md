@@ -105,7 +105,7 @@ A set of struct property values keyed by name.
 
 | Name | Type |
 | :------ | :------ |
-| `properties` | { `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } |
+| `properties` | \{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } |
 | `type` | [`properties`](exports_model.FieldValue.md#properties-2) |
 
 #### Defined in
@@ -368,7 +368,7 @@ ___
 
 ### objectValue
 
-▸ **objectValue**(`value`): { `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| `undefined`
+▸ **objectValue**(`value`): \{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| `undefined`
 
 Extract object properties from the value.
 
@@ -380,7 +380,7 @@ Extract object properties from the value.
 
 #### Returns
 
-{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| `undefined`
+\{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| `undefined`
 
 #### Defined in
 
@@ -434,7 +434,7 @@ ___
 
 ### unwrap
 
-▸ **unwrap**(`value`, `typeName?`): `string` \| `number` \| `bigint` \| `boolean` \| `Date` \| [] \| { `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| ``null`` \| `undefined`
+▸ **unwrap**(`value`, `typeName?`): `string` \| `number` \| `bigint` \| `boolean` \| `Date` \| [] \| \{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| ``null`` \| `undefined`
 
 Unwrap wrapped values, leave others as-is.
 
@@ -447,7 +447,7 @@ Unwrap wrapped values, leave others as-is.
 
 #### Returns
 
-`string` \| `number` \| `bigint` \| `boolean` \| `Date` \| [] \| { `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| ``null`` \| `undefined`
+`string` \| `number` \| `bigint` \| `boolean` \| `Date` \| [] \| \{ `[name: string]`: [`FieldValue`](exports_model.md#fieldvalue);  } \| ``null`` \| `undefined`
 
 #### Defined in
 

@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)<[`MatterController`](export._internal_.MatterController.md)\>
+- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
   ↳ **`PaseClientMessenger`**
 
@@ -42,13 +42,17 @@
 
 ### constructor
 
-• **new PaseClientMessenger**(`exchange`)
+• **new PaseClientMessenger**(`exchange`): [`PaseClientMessenger`](exports_session.PaseClientMessenger.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
+
+#### Returns
+
+[`PaseClientMessenger`](exports_session.PaseClientMessenger.md)
 
 #### Inherited from
 
@@ -62,7 +66,7 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Inherited from
 
@@ -76,11 +80,11 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -112,7 +116,7 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Parameters
 
@@ -122,7 +126,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+`Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Inherited from
 
@@ -136,7 +140,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -149,11 +153,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Inherited from
 
@@ -167,11 +171,11 @@ ___
 
 ### readPasePake2
 
-▸ **readPasePake2**(): `Promise`<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\>
+▸ **readPasePake2**(): `Promise`\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Returns
 
-`Promise`<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\>
+`Promise`\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Defined in
 
@@ -181,11 +185,11 @@ ___
 
 ### readPbkdfParamResponse
 
-▸ **readPbkdfParamResponse**(): `Promise`<{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
+▸ **readPbkdfParamResponse**(): `Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
 
 #### Returns
 
-`Promise`<{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
+`Promise`\<\{ `response`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `responsePayload`: `Uint8Array`  }\>
 
 #### Defined in
 
@@ -195,7 +199,7 @@ ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -209,11 +213,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -227,11 +231,11 @@ ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -245,7 +249,7 @@ ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -255,7 +259,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -269,17 +273,17 @@ ___
 
 ### sendPasePake1
 
-▸ **sendPasePake1**(`pasePake1`): `Promise`<`Uint8Array`\>
+▸ **sendPasePake1**(`pasePake1`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `pasePake1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `x`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\> |
+| `pasePake1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `x`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -289,17 +293,17 @@ ___
 
 ### sendPasePake3
 
-▸ **sendPasePake3**(`pasePake3`): `Promise`<`Uint8Array`\>
+▸ **sendPasePake3**(`pasePake3`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `pasePake3` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\> |
+| `pasePake3` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -309,17 +313,17 @@ ___
 
 ### sendPbkdfParamRequest
 
-▸ **sendPbkdfParamRequest**(`request`): `Promise`<`Uint8Array`\>
+▸ **sendPbkdfParamRequest**(`request`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `request` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `hasPbkdfParameters`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> |
+| `request` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -329,11 +333,11 @@ ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -347,7 +351,7 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -371,11 +375,11 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 

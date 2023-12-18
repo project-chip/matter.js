@@ -22,13 +22,13 @@ Interface for classes that allow to announce one Matter instance.
 
 ### announce
 
-▸ **announce**(): `Promise`<`void`\>
+▸ **announce**(): `Promise`\<`void`\>
 
 Send out announcements for this instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -38,13 +38,13 @@ ___
 
 ### expireAllAnnouncements
 
-▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+▸ **expireAllAnnouncements**(): `Promise`\<`void`\>
 
 Expire all announcements.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -54,13 +54,13 @@ ___
 
 ### expireCommissioningAnnouncement
 
-▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+▸ **expireCommissioningAnnouncement**(): `Promise`\<`void`\>
 
 Expire the announcement for this commissioning instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -70,13 +70,13 @@ ___
 
 ### expireFabricAnnouncement
 
-▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+▸ **expireFabricAnnouncement**(): `Promise`\<`void`\>
 
 Expire the announcement for this operative instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -86,7 +86,7 @@ ___
 
 ### setCommissionMode
 
-▸ **setCommissionMode**(`mode`, `deviceData`): `Promise`<`void`\>
+▸ **setCommissionMode**(`mode`, `deviceData`): `Promise`\<`void`\>
 
 Set a commissionable mode and details to announce a commissionable device.
 
@@ -99,7 +99,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -109,7 +109,7 @@ ___
 
 ### setCommissionerInfo
 
-▸ **setCommissionerInfo**(`commissionerData`): `Promise`<`void`\>
+▸ **setCommissionerInfo**(`commissionerData`): `Promise`\<`void`\>
 
 Set commissioner details to announce a commissioner service for User directed commissioning (UDC).
 
@@ -121,7 +121,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -131,7 +131,7 @@ ___
 
 ### setFabrics
 
-▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`<`void`\>
+▸ **setFabrics**(`fabrics`, `expireCommissioningAnnouncements?`): `Promise`\<`void`\>
 
 Set operational details to Announce an operational device which is already commissioned.
 Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
@@ -145,7 +145,7 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

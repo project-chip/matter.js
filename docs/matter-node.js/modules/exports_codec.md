@@ -60,6 +60,7 @@
 - [KeyUsage\_Signature\_ContentCommited\_X509](exports_codec.md#keyusage_signature_contentcommited_x509)
 - [KeyUsage\_Signature\_X509](exports_codec.md#keyusage_signature_x509)
 - [MAX\_MDNS\_MESSAGE\_SIZE](exports_codec.md#max_mdns_message_size)
+- [MAX\_MESSAGE\_SIZE](exports_codec.md#max_message_size)
 - [OBJECT\_ID\_KEY](exports_codec.md#object_id_key)
 - [SHA256\_CMS](exports_codec.md#sha256_cms)
 - [TAG\_ID\_KEY](exports_codec.md#tag_id_key)
@@ -114,9 +115,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `additionalRecords` | [`DnsRecord`](exports_codec.md#dnsrecord)<`any`\>[] |
-| `answers` | [`DnsRecord`](exports_codec.md#dnsrecord)<`any`\>[] |
-| `authorities` | [`DnsRecord`](exports_codec.md#dnsrecord)<`any`\>[] |
+| `additionalRecords` | [`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\>[] |
+| `answers` | [`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\>[] |
+| `authorities` | [`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\>[] |
 | `messageType` | [`DnsMessageType`](../enums/exports_codec.DnsMessageType.md) |
 | `queries` | [`DnsQuery`](exports_codec.md#dnsquery)[] |
 | `transactionId` | `number` |
@@ -129,7 +130,7 @@ ___
 
 ### DnsMessagePartiallyPreEncoded
 
-Ƭ **DnsMessagePartiallyPreEncoded**: `Omit`<[`DnsMessage`](exports_codec.md#dnsmessage), ``"answers"`` \| ``"additionalRecords"``\> & { `additionalRecords`: ([`DnsRecord`](exports_codec.md#dnsrecord)<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[] ; `answers`: ([`DnsRecord`](exports_codec.md#dnsrecord)<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[]  }
+Ƭ **DnsMessagePartiallyPreEncoded**: `Omit`\<[`DnsMessage`](exports_codec.md#dnsmessage), ``"answers"`` \| ``"additionalRecords"``\> & \{ `additionalRecords`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[] ; `answers`: ([`DnsRecord`](exports_codec.md#dnsrecord)\<`any`\> \| [`ByteArray`](util_export.md#bytearray-1))[]  }
 
 #### Defined in
 
@@ -158,7 +159,7 @@ ___
 
 ### DnsRecord
 
-Ƭ **DnsRecord**<`T`\>: `Object`
+Ƭ **DnsRecord**\<`T`\>: `Object`
 
 #### Type parameters
 
@@ -275,6 +276,20 @@ packages/matter.js/dist/esm/codec/DnsCodec.d.ts:11
 
 ___
 
+### MAX\_MESSAGE\_SIZE
+
+• `Const` **MAX\_MESSAGE\_SIZE**: ``1280``
+
+**`See`**
+
+MatterCoreSpecificationV1_2 § 4.4.4
+
+#### Defined in
+
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:10
+
+___
+
 ### OBJECT\_ID\_KEY
 
 • `Const` **OBJECT\_ID\_KEY**: ``"_objectId"``
@@ -307,7 +322,7 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:3
 
 ### AAAARecord
 
-▸ **AAAARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+▸ **AAAARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Parameters
 
@@ -320,7 +335,7 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:3
 
 #### Returns
 
-[`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+[`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Defined in
 
@@ -330,7 +345,7 @@ ___
 
 ### ARecord
 
-▸ **ARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+▸ **ARecord**(`name`, `ip`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Parameters
 
@@ -343,7 +358,7 @@ ___
 
 #### Returns
 
-[`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+[`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Defined in
 
@@ -600,7 +615,7 @@ ___
 
 ### PtrRecord
 
-▸ **PtrRecord**(`name`, `ptr`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+▸ **PtrRecord**(`name`, `ptr`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Parameters
 
@@ -613,7 +628,7 @@ ___
 
 #### Returns
 
-[`DnsRecord`](exports_codec.md#dnsrecord)<`string`\>
+[`DnsRecord`](exports_codec.md#dnsrecord)\<`string`\>
 
 #### Defined in
 
@@ -637,15 +652,15 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `bytes` | { `_bytes`: `Uint8Array` ; `_padding`: `number` ; `_tag`: `number`  } |
+| `bytes` | \{ `_bytes`: `Uint8Array` ; `_padding`: `number` ; `_tag`: `number`  } |
 | `bytes._bytes` | `Uint8Array` |
 | `bytes._padding` | `number` |
 | `bytes._tag` | `number` |
-| `type` | { `algorithm`: { `_bytes`: `Uint8Array` ; `_tag`: `number`  } ; `curve`: { `_bytes`: `Uint8Array` ; `_tag`: `number`  }  } |
-| `type.algorithm` | { `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
+| `type` | \{ `algorithm`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } ; `curve`: \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  }  } |
+| `type.algorithm` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
 | `type.algorithm._bytes` | `Uint8Array` |
 | `type.algorithm._tag` | `number` |
-| `type.curve` | { `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
+| `type.curve` | \{ `_bytes`: `Uint8Array` ; `_tag`: `number`  } |
 | `type.curve._bytes` | `Uint8Array` |
 | `type.curve._tag` | `number` |
 
@@ -657,7 +672,7 @@ ___
 
 ### SrvRecord
 
-▸ **SrvRecord**(`name`, `srv`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)<[`SrvRecordValue`](exports_codec.md#srvrecordvalue)\>
+▸ **SrvRecord**(`name`, `srv`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)\<[`SrvRecordValue`](exports_codec.md#srvrecordvalue)\>
 
 #### Parameters
 
@@ -670,7 +685,7 @@ ___
 
 #### Returns
 
-[`DnsRecord`](exports_codec.md#dnsrecord)<[`SrvRecordValue`](exports_codec.md#srvrecordvalue)\>
+[`DnsRecord`](exports_codec.md#dnsrecord)\<[`SrvRecordValue`](exports_codec.md#srvrecordvalue)\>
 
 #### Defined in
 
@@ -700,7 +715,7 @@ ___
 
 ### TxtRecord
 
-▸ **TxtRecord**(`name`, `entries`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)<`string`[]\>
+▸ **TxtRecord**(`name`, `entries`, `ttl?`, `flushCache?`): [`DnsRecord`](exports_codec.md#dnsrecord)\<`string`[]\>
 
 #### Parameters
 
@@ -713,7 +728,7 @@ ___
 
 #### Returns
 
-[`DnsRecord`](exports_codec.md#dnsrecord)<`string`[]\>
+[`DnsRecord`](exports_codec.md#dnsrecord)\<`string`[]\>
 
 #### Defined in
 

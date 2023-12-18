@@ -20,7 +20,7 @@
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`typeLength`, `value`): `void`
 
 #### Type parameters
 

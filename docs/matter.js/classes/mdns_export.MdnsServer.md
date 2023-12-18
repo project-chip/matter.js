@@ -39,7 +39,7 @@
 
 ### constructor
 
-• **new MdnsServer**(`multicastServer`, `netInterface`)
+• **new MdnsServer**(`multicastServer`, `netInterface`): [`MdnsServer`](mdns_export.MdnsServer.md)
 
 #### Parameters
 
@@ -48,9 +48,13 @@
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `netInterface` | `undefined` \| `string` |
 
+#### Returns
+
+[`MdnsServer`](mdns_export.MdnsServer.md)
+
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L63)
+[packages/matter.js/src/mdns/MdnsServer.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L63)
 
 ## Properties
 
@@ -60,7 +64,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L64)
+[packages/matter.js/src/mdns/MdnsServer.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L64)
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:65](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L65)
+[packages/matter.js/src/mdns/MdnsServer.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L65)
 
 ___
 
@@ -80,43 +84,43 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L49)
+[packages/matter.js/src/mdns/MdnsServer.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L49)
 
 ___
 
 ### recordLastSentAsMulticastAnswer
 
-• `Private` `Readonly` **recordLastSentAsMulticastAnswer**: `Map`<`string`, `number`\>
+• `Private` `Readonly` **recordLastSentAsMulticastAnswer**: `Map`\<`string`, `number`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L61)
+[packages/matter.js/src/mdns/MdnsServer.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L61)
 
 ___
 
 ### records
 
-• `Private` `Readonly` **records**: [`Cache`](util_export.Cache.md)<`Map`<`string`, [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]\>\>
+• `Private` `Readonly` **records**: [`Cache`](util_export.Cache.md)\<`Map`\<`string`, [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]\>\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L51)
+[packages/matter.js/src/mdns/MdnsServer.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L51)
 
 ___
 
 ### recordsGenerator
 
-• `Private` **recordsGenerator**: `Map`<`string`, (`netInterface`: `string`) => [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]\>
+• `Private` **recordsGenerator**: `Map`\<`string`, (`netInterface`: `string`) => [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L50)
+[packages/matter.js/src/mdns/MdnsServer.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L50)
 
 ## Methods
 
 ### announce
 
-▸ **announce**(`announcedNetPort?`): `Promise`<`void`\>
+▸ **announce**(`announcedNetPort?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -126,32 +130,32 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:230](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L230)
+[packages/matter.js/src/mdns/MdnsServer.ts:230](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L230)
 
 ___
 
 ### announceRecordsForInterface
 
-▸ `Private` **announceRecordsForInterface**(`netInterface`, `records`): `Promise`<`void`\>
+▸ **announceRecordsForInterface**(`netInterface`, `records`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `netInterface` | `string` |
-| `records` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
+| `records` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[] |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:166](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L166)
+[packages/matter.js/src/mdns/MdnsServer.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L166)
 
 ___
 
@@ -163,7 +167,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\> |
+| `record` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\> |
 | `netInterface?` | `string` |
 
 #### Returns
@@ -172,7 +176,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L72)
+[packages/matter.js/src/mdns/MdnsServer.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L72)
 
 ___
 
@@ -193,27 +197,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:76](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L76)
+[packages/matter.js/src/mdns/MdnsServer.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L76)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:294](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L294)
+[packages/matter.js/src/mdns/MdnsServer.ts:294](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L294)
 
 ___
 
 ### expireAnnouncements
 
-▸ **expireAnnouncements**(`announcedNetPort?`, `type?`): `Promise`<`void`\>
+▸ **expireAnnouncements**(`announcedNetPort?`, `type?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -224,17 +228,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:245](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L245)
+[packages/matter.js/src/mdns/MdnsServer.ts:245](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L245)
 
 ___
 
 ### getMulticastInterfacesForAnnounce
 
-▸ `Private` **getMulticastInterfacesForAnnounce**(): `string`[]
+▸ **getMulticastInterfacesForAnnounce**(): `string`[]
 
 #### Returns
 
@@ -242,13 +246,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:300](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L300)
+[packages/matter.js/src/mdns/MdnsServer.ts:300](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L300)
 
 ___
 
 ### handleDnsMessage
 
-▸ `Private` **handleDnsMessage**(`messageBytes`, `remoteIp`, `netInterface`): `Promise`<`void`\>
+▸ **handleDnsMessage**(`messageBytes`, `remoteIp`, `netInterface`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -260,11 +264,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L84)
+[packages/matter.js/src/mdns/MdnsServer.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L84)
 
 ___
 
@@ -285,13 +289,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:80](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L80)
+[packages/matter.js/src/mdns/MdnsServer.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L80)
 
 ___
 
 ### queryRecords
 
-▸ `Private` **queryRecords**(`«destructured»`, `records`): [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
+▸ **queryRecords**(`«destructured»`, `records`): [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]
 
 #### Parameters
 
@@ -300,43 +304,43 @@ ___
 | `«destructured»` | `Object` |
 | › `name` | `string` |
 | › `recordType` | [`DnsRecordType`](../enums/codec_export.DnsRecordType.md) |
-| `records` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
+| `records` | [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[] |
 
 #### Returns
 
-[`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
+[`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:304](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L304)
+[packages/matter.js/src/mdns/MdnsServer.ts:304](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L304)
 
 ___
 
 ### sendRecords
 
-▸ `Private` **sendRecords**(`dnsMessageData`, `netInterface`, `unicastTarget?`): `Promise`<`void`\>
+▸ **sendRecords**(`dnsMessageData`, `netInterface`, `unicastTarget?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `dnsMessageData` | `Partial`<[`DnsMessage`](../modules/codec_export.md#dnsmessage)\> |
+| `dnsMessageData` | `Partial`\<[`DnsMessage`](../modules/codec_export.md#dnsmessage)\> |
 | `netInterface` | `string` |
 | `unicastTarget?` | `string` |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:180](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L180)
+[packages/matter.js/src/mdns/MdnsServer.ts:180](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L180)
 
 ___
 
 ### setRecordsGenerator
 
-▸ **setRecordsGenerator**(`hostPort`, `type`, `generator`): `Promise`<`void`\>
+▸ **setRecordsGenerator**(`hostPort`, `type`, `generator`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -344,21 +348,21 @@ ___
 | :------ | :------ |
 | `hostPort` | `number` |
 | `type` | [`AnnouncementType`](../enums/mdns_export.AnnouncementType.md) |
-| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[] |
+| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[] |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:284](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L284)
+[packages/matter.js/src/mdns/MdnsServer.ts:284](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L284)
 
 ___
 
 ### create
 
-▸ `Static` **create**(`options?`): `Promise`<[`MdnsServer`](mdns_export.MdnsServer.md)\>
+▸ **create**(`options?`): `Promise`\<[`MdnsServer`](mdns_export.MdnsServer.md)\>
 
 #### Parameters
 
@@ -370,8 +374,8 @@ ___
 
 #### Returns
 
-`Promise`<[`MdnsServer`](mdns_export.MdnsServer.md)\>
+`Promise`\<[`MdnsServer`](mdns_export.MdnsServer.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsServer.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsServer.ts#L36)
+[packages/matter.js/src/mdns/MdnsServer.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsServer.ts#L36)

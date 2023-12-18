@@ -22,7 +22,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new DiscoveryError**(`message?`)
+• **new DiscoveryError**(`message?`): [`DiscoveryError`](exports_protocol.DiscoveryError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`DiscoveryError`](exports_protocol.DiscoveryError.md)
+
 #### Inherited from
 
 [MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

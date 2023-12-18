@@ -28,11 +28,11 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/common/TransportInterface.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TransportInterface.ts#L20)
+[packages/matter.js/src/common/TransportInterface.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TransportInterface.ts#L20)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`socket`: [`Channel`](common_export.Channel.md)<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
+| `listener` | (`socket`: [`Channel`](common_export.Channel.md)\<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
 
 #### Returns
 
@@ -64,13 +64,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/TransportInterface.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/TransportInterface.ts#L19)
+[packages/matter.js/src/common/TransportInterface.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TransportInterface.ts#L19)
 
 ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`<[`Channel`](common_export.Channel.md)<`Uint8Array`\>\>
+▸ **openChannel**(`address`): `Promise`\<[`Channel`](common_export.Channel.md)\<`Uint8Array`\>\>
 
 #### Parameters
 
@@ -80,8 +80,8 @@ ___
 
 #### Returns
 
-`Promise`<[`Channel`](common_export.Channel.md)<`Uint8Array`\>\>
+`Promise`\<[`Channel`](common_export.Channel.md)\<`Uint8Array`\>\>
 
 #### Defined in
 
-[packages/matter.js/src/net/NetInterface.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/NetInterface.ts#L16)
+[packages/matter.js/src/net/NetInterface.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/NetInterface.ts#L16)

@@ -30,13 +30,13 @@
 
 ### AllProperties
 
-Ƭ **AllProperties**: [`Attribute`](model.Quality.md#attribute) & { `singleton?`: `boolean`  }
+Ƭ **AllProperties**: [`Attribute`](model.Quality.md#attribute) & \{ `singleton?`: `boolean`  }
 
 Quality properties that apply to device types.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:190](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L190)
+[packages/matter.js/src/model/aspects/Quality.ts:190](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L190)
 
 ___
 
@@ -49,31 +49,31 @@ specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:211](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L211)
+[packages/matter.js/src/model/aspects/Quality.ts:211](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L211)
 
 ___
 
 ### Attribute
 
-Ƭ **Attribute**: [`AttributeData`](model.Quality.md#attributedata) & { `reportable?`: `boolean` ; `scene?`: `boolean`  }
+Ƭ **Attribute**: [`AttributeData`](model.Quality.md#attributedata) & \{ `reportable?`: `boolean` ; `scene?`: `boolean`  }
 
 Quality values that apply to attributes.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:175](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L175)
+[packages/matter.js/src/model/aspects/Quality.ts:175](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L175)
 
 ___
 
 ### AttributeData
 
-Ƭ **AttributeData**: [`DataField`](model.Quality.md#datafield) & { `changesOmitted?`: `boolean` ; `fixed?`: `boolean` ; `nonvolatile?`: `boolean`  }
+Ƭ **AttributeData**: [`DataField`](model.Quality.md#datafield) & \{ `changesOmitted?`: `boolean` ; `fixed?`: `boolean` ; `nonvolatile?`: `boolean`  }
 
 Quality values that apply to attribute data.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:154](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L154)
+[packages/matter.js/src/model/aspects/Quality.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L154)
 
 ___
 
@@ -91,43 +91,43 @@ Quality values that apply to data fields.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:142](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L142)
+[packages/matter.js/src/model/aspects/Quality.ts:142](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L142)
 
 ___
 
 ### Definition
 
-Ƭ **Definition**: [`Ast`](model.Quality.md#ast) \| \`${Flag}\`[] \| `string` \| `undefined`
+Ƭ **Definition**: [`Ast`](model.Quality.md#ast) \| \`$\{Flag}\`[] \| `string` \| `undefined`
 
 Various ways to define quality.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:101](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L101)
+[packages/matter.js/src/model/aspects/Quality.ts:101](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L101)
 
 ___
 
 ### DeviceType
 
-Ƭ **DeviceType**: [`AllProperties`](model.Quality.md#allproperties) & { `disallowed?`: [`AllProperties`](model.Quality.md#allproperties)  }
+Ƭ **DeviceType**: [`AllProperties`](model.Quality.md#allproperties) & \{ `disallowed?`: [`AllProperties`](model.Quality.md#allproperties)  }
 
 Quality values that apply to device types.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:200](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L200)
+[packages/matter.js/src/model/aspects/Quality.ts:200](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L200)
 
 ___
 
 ### FlagName
 
-Ƭ **FlagName**: \`${Field}\`
+Ƭ **FlagName**: \`$\{Field}\`
 
 Valid "other quality" flags.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:132](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L132)
+[packages/matter.js/src/model/aspects/Quality.ts:132](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L132)
 
 ## Variables
 
@@ -139,4 +139,4 @@ Runtime version of QualityFlag.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:137](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Quality.ts#L137)
+[packages/matter.js/src/model/aspects/Quality.ts:137](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L137)

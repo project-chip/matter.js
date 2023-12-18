@@ -33,7 +33,7 @@
 
 ### constructor
 
-• **new UdpChannelFake**(`localAddress`, `listeningAddress`, `listeningPort?`)
+• **new UdpChannelFake**(`localAddress`, `listeningAddress`, `listeningPort?`): [`UdpChannelFake`](net_export.UdpChannelFake.md)
 
 #### Parameters
 
@@ -42,6 +42,10 @@
 | `localAddress` | `string` |
 | `listeningAddress` | `undefined` \| `string` |
 | `listeningPort?` | `number` |
+
+#### Returns
+
+[`UdpChannelFake`](net_export.UdpChannelFake.md)
 
 #### Defined in
 
@@ -101,11 +105,11 @@ packages/matter.js/dist/esm/net/fake/UdpChannelFake.d.ts:15
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -143,7 +147,7 @@ ___
 
 ### send
 
-▸ **send**(`host`, `port`, `data`): `Promise`<`void`\>
+▸ **send**(`host`, `port`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -155,7 +159,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -169,7 +173,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`network`, `«destructured»`): `Promise`<[`UdpChannelFake`](net_export.UdpChannelFake.md)\>
+▸ **create**(`network`, `«destructured»`): `Promise`\<[`UdpChannelFake`](net_export.UdpChannelFake.md)\>
 
 #### Parameters
 
@@ -180,7 +184,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpChannelFake`](net_export.UdpChannelFake.md)\>
+`Promise`\<[`UdpChannelFake`](net_export.UdpChannelFake.md)\>
 
 #### Defined in
 

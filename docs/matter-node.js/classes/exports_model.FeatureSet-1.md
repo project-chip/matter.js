@@ -9,7 +9,7 @@ present appear in this set.
 
 ## Hierarchy
 
-- `Set`<[`Flag`](../modules/exports_model.FeatureSet.md#flag)\>
+- `Set`\<[`Flag`](../modules/exports_model.FeatureSet.md#flag)\>
 
   ↳ **`FeatureSet`**
 
@@ -32,7 +32,7 @@ present appear in this set.
 
 ### constructor
 
-• **new FeatureSet**(`definition?`)
+• **new FeatureSet**(`definition?`): [`FeatureSet`](exports_model.FeatureSet-1.md)
 
 Create a new feature set from an iterable that returns active names or
 from an object of the form { [featureName: string]: true }
@@ -43,9 +43,13 @@ from an object of the form { [featureName: string]: true }
 | :------ | :------ |
 | `definition?` | [`Definition`](../modules/exports_model.FeatureSet.md#definition) |
 
+#### Returns
+
+[`FeatureSet`](exports_model.FeatureSet-1.md)
+
 #### Overrides
 
-Set&lt;FeatureSet.Flag\&gt;.constructor
+Set\&lt;FeatureSet.Flag\&gt;.constructor
 
 #### Defined in
 
@@ -87,7 +91,7 @@ packages/matter.js/dist/esm/model/definitions/FeatureSet.d.ts:23
 
 ### map
 
-▸ **map**<`T`\>(`fn`): `T`[]
+▸ **map**\<`T`\>(`fn`): `T`[]
 
 #### Type parameters
 

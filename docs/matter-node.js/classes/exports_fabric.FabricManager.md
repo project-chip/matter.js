@@ -32,7 +32,7 @@
 
 ### constructor
 
-• **new FabricManager**(`storage`, `fabricRemoveCallback?`)
+• **new FabricManager**(`storage`, `fabricRemoveCallback?`): [`FabricManager`](exports_fabric.FabricManager.md)
 
 #### Parameters
 
@@ -40,6 +40,10 @@
 | :------ | :------ |
 | `storage` | [`StorageContext`](storage_export.StorageContext.md) |
 | `fabricRemoveCallback?` | (`fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex), `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid)) => `void` |
+
+#### Returns
+
+[`FabricManager`](exports_fabric.FabricManager.md)
 
 #### Defined in
 
@@ -192,7 +196,7 @@ ___
 
 ### revokeFabric
 
-▸ **revokeFabric**(`fabricIndex`): `Promise`<`void`\>
+▸ **revokeFabric**(`fabricIndex`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -202,7 +206,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

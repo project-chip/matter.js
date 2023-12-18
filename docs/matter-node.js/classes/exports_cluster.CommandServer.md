@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / CommandServer
 
-# Class: CommandServer<RequestT, ResponseT\>
+# Class: CommandServer\<RequestT, ResponseT\>
 
 [exports/cluster](../modules/exports_cluster.md).CommandServer
 
@@ -35,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](exports_cluster.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -51,10 +51,14 @@
 | `invokeId` | [`CommandId`](../modules/exports_datatype.md#commandid) |
 | `responseId` | [`CommandId`](../modules/exports_datatype.md#commandid) |
 | `name` | `string` |
-| `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`RequestT`\> |
-| `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`ResponseT`\> |
+| `requestSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`RequestT`\> |
+| `responseSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+
+#### Returns
+
+[`CommandServer`](exports_cluster.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Defined in
 
@@ -64,24 +68,24 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/exports_codec.Message.md), `endpoint`: [`Endpoint`](exports_device.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
-▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`<`ResponseT`\>
+▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`\<`ResponseT`\>
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `request` | `RequestT` |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
 
 ##### Returns
 
-`ResponseT` \| `Promise`<`ResponseT`\>
+`ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Defined in
 
@@ -111,7 +115,7 @@ ___
 
 ### requestSchema
 
-• `Readonly` **requestSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`RequestT`\>
+• `Readonly` **requestSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`RequestT`\>
 
 #### Defined in
 
@@ -141,7 +145,7 @@ ___
 
 ### responseSchema
 
-• `Readonly` **responseSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`ResponseT`\>
+• `Readonly` **responseSchema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`ResponseT`\>
 
 #### Defined in
 
@@ -151,20 +155,20 @@ packages/matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/exports_tlv.md#tlvstream) |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 | `endpoint` | [`Endpoint`](exports_device.Endpoint.md) |
 
 #### Returns
 
-`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
+`Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/exports_interaction.StatusCode.md) ; `response`: [`TlvStream`](../modules/exports_tlv.md#tlvstream) ; `responseId`: [`CommandId`](../modules/exports_datatype.md#commandid)  }\>
 
 #### Defined in
 

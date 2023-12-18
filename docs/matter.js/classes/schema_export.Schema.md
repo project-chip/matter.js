@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [schema/export](../modules/schema_export.md) / Schema
 
-# Class: Schema<T, E\>
+# Class: Schema\<T, E\>
 
 [schema/export](../modules/schema_export.md).Schema
 
@@ -51,7 +51,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new Schema**<`T`, `E`\>()
+• **new Schema**\<`T`, `E`\>(): [`Schema`](schema_export.Schema.md)\<`T`, `E`\>
 
 #### Type parameters
 
@@ -59,6 +59,10 @@ Define a schema to encode / decode convert type T to type E.
 | :------ |
 | `T` |
 | `E` |
+
+#### Returns
+
+[`Schema`](schema_export.Schema.md)\<`T`, `E`\>
 
 ## Methods
 
@@ -81,13 +85,13 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeInternal
 
-▸ `Protected` `Abstract` **decodeInternal**(`encoded`): `T`
+▸ **decodeInternal**(`encoded`): `T`
 
 #### Parameters
 
@@ -101,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L25)
+[packages/matter.js/src/schema/Schema.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L25)
 
 ___
 
@@ -123,13 +127,13 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
 ### encodeInternal
 
-▸ `Protected` `Abstract` **encodeInternal**(`value`): `E`
+▸ **encodeInternal**(`value`): `E`
 
 #### Parameters
 
@@ -143,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L24)
+[packages/matter.js/src/schema/Schema.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L24)
 
 ___
 
@@ -165,4 +169,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

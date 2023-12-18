@@ -9,6 +9,7 @@
 ### Enumeration Members
 
 - [Connected](device_export.NodeStateInformation.md#connected)
+- [Decommissioned](device_export.NodeStateInformation.md#decommissioned)
 - [Disconnected](device_export.NodeStateInformation.md#disconnected)
 - [Reconnecting](device_export.NodeStateInformation.md#reconnecting)
 - [StructureChanged](device_export.NodeStateInformation.md#structurechanged)
@@ -24,7 +25,19 @@ Node is connected and all data is up-to-date.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L63)
+[packages/matter.js/src/device/PairedNode.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L62)
+
+___
+
+### Decommissioned
+
+• **Decommissioned** = ``5``
+
+The node was just Decommissioned.
+
+#### Defined in
+
+[packages/matter.js/src/device/PairedNode.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L88)
 
 ___
 
@@ -37,7 +50,7 @@ is still active then the device will be reconnected once it is available again.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L69)
+[packages/matter.js/src/device/PairedNode.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L68)
 
 ___
 
@@ -49,7 +62,7 @@ Node is reconnecting. Data are stale. It is yet unknown if the reconnection is s
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L72)
+[packages/matter.js/src/device/PairedNode.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L71)
 
 ___
 
@@ -62,7 +75,7 @@ This State information will only be fired when the subscribeAllAttributesAndEven
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L84)
+[packages/matter.js/src/device/PairedNode.ts:83](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L83)
 
 ___
 
@@ -75,4 +88,4 @@ minutes to reconnect.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L78)
+[packages/matter.js/src/device/PairedNode.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L77)

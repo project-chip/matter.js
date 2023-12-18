@@ -30,7 +30,7 @@ as base types.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L105)
+[packages/matter.js/src/model/elements/ValueElement.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L105)
 
 ___
 
@@ -46,17 +46,17 @@ A pool of datatype definitions indexed by name.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L92)
+[packages/matter.js/src/model/elements/ValueElement.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L92)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)<[`ValueElement`](model.md#valueelement) & { `tag`: \`${ElementTag}\`  }\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`ValueElement`](model.md#valueelement) & \{ `tag`: \`$\{ElementTag}\`  }\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L79)
+[packages/matter.js/src/model/elements/ValueElement.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L79)
 
 ___
 
@@ -68,4 +68,4 @@ Valid sizes for ints.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L97)
+[packages/matter.js/src/model/elements/ValueElement.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L97)

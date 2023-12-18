@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Schema
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Schema
 
-# Class: Schema<T, E\>
+# Class: Schema\<T, E\>
 
-[<internal>](../modules/internal_.md).Schema
+[\<internal\>](../modules/internal_.md).Schema
 
 Define a schema to encode / decode convert type T to type E.
 
@@ -37,7 +37,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new Schema**<`T`, `E`\>()
+• **new Schema**\<`T`, `E`\>(): [`Schema`](internal_.Schema.md)\<`T`, `E`\>
 
 #### Type parameters
 
@@ -45,6 +45,10 @@ Define a schema to encode / decode convert type T to type E.
 | :------ |
 | `T` |
 | `E` |
+
+#### Returns
+
+[`Schema`](internal_.Schema.md)\<`T`, `E`\>
 
 ## Methods
 
@@ -73,7 +77,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` `Abstract` **decodeInternal**(`encoded`): `T`
+▸ **decodeInternal**(`encoded`): `T`
 
 #### Parameters
 
@@ -115,7 +119,7 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` `Abstract` **encodeInternal**(`value`): `E`
+▸ **encodeInternal**(`value`): `E`
 
 #### Parameters
 

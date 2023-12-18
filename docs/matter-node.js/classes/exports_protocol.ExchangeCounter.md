@@ -22,7 +22,11 @@
 
 ### constructor
 
-• **new ExchangeCounter**()
+• **new ExchangeCounter**(): [`ExchangeCounter`](exports_protocol.ExchangeCounter.md)
+
+#### Returns
+
+[`ExchangeCounter`](exports_protocol.ExchangeCounter.md)
 
 ## Properties
 

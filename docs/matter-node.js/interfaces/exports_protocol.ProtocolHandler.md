@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/protocol](../modules/exports_protocol.md) / ProtocolHandler
 
-# Interface: ProtocolHandler<ContextT\>
+# Interface: ProtocolHandler\<ContextT\>
 
 [exports/protocol](../modules/exports_protocol.md).ProtocolHandler
 
@@ -30,11 +30,11 @@
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -58,18 +58,18 @@ ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`, `message`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](../classes/exports_protocol.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](../classes/exports_protocol.MessageExchange.md)\<`ContextT`\> |
 | `message` | [`Message`](exports_codec.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

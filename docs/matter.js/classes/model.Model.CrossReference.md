@@ -29,7 +29,7 @@
 
 ### constructor
 
-• `Private` **new CrossReference**(`«destructured»`)
+• **new CrossReference**(`«destructured»`): [`CrossReference`](model.Model.CrossReference.md)
 
 #### Parameters
 
@@ -37,9 +37,13 @@
 | :------ | :------ |
 | `«destructured»` | [`CrossReference`](../modules/model.Specification.md#crossreference) |
 
+#### Returns
+
+[`CrossReference`](model.Model.CrossReference.md)
+
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:413](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L413)
+[packages/matter.js/src/model/models/Model.ts:413](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L413)
 
 ## Properties
 
@@ -53,7 +57,7 @@ Specification.CrossReference.document
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:409](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L409)
+[packages/matter.js/src/model/models/Model.ts:409](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L409)
 
 ___
 
@@ -67,7 +71,7 @@ Specification.CrossReference.section
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:410](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L410)
+[packages/matter.js/src/model/models/Model.ts:410](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L410)
 
 ___
 
@@ -81,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:411](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L411)
+[packages/matter.js/src/model/models/Model.ts:411](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L411)
 
 ## Methods
 
@@ -95,13 +99,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:418](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L418)
+[packages/matter.js/src/model/models/Model.ts:418](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L418)
 
 ___
 
 ### get
 
-▸ `Static` **get**(`xref`): [`CrossReference`](model.Model.CrossReference.md)
+▸ **get**(`xref`): [`CrossReference`](model.Model.CrossReference.md)
 
 #### Parameters
 
@@ -115,4 +119,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/models/Model.ts:422](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/Model.ts#L422)
+[packages/matter.js/src/model/models/Model.ts:422](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/Model.ts#L422)

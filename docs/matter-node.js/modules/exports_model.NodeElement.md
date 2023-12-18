@@ -19,7 +19,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`NodeElement`](exports_model.md#nodeelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`NodeElement`](exports_model.md#nodeelement)\>
 
 #### Defined in
 

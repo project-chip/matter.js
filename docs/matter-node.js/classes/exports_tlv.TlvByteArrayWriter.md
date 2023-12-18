@@ -28,7 +28,11 @@
 
 ### constructor
 
-• **new TlvByteArrayWriter**()
+• **new TlvByteArrayWriter**(): [`TlvByteArrayWriter`](exports_tlv.TlvByteArrayWriter.md)
+
+#### Returns
+
+[`TlvByteArrayWriter`](exports_tlv.TlvByteArrayWriter.md)
 
 ## Properties
 
@@ -58,7 +62,7 @@ ___
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`typeLength`, `value`): `void`
 
 #### Type parameters
 

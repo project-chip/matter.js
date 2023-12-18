@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / CachedCommandInfo
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / CachedCommandInfo
 
 # Interface: CachedCommandInfo
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).CachedCommandInfo
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).CachedCommandInfo
 
 ## Table of contents
 
@@ -15,11 +15,11 @@
 
 ### command
 
-• **command**: [`Command`](../modules/cluster_export.md#command)<`any`, `any`, `any`\>
+• **command**: [`Command`](../modules/cluster_export.md#command)\<`any`, `any`, `any`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:106](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterHelper.ts#L106)
+[packages/matter.js/src/cluster/ClusterHelper.ts:106](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterHelper.ts#L106)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:107](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterHelper.ts#L107)
+[packages/matter.js/src/cluster/ClusterHelper.ts:107](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterHelper.ts#L107)

@@ -28,13 +28,17 @@
 
 ### constructor
 
-• **new TlvArrayReader**(`tlvElements`)
+• **new TlvArrayReader**(`tlvElements`): [`TlvArrayReader`](exports_tlv.TlvArrayReader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tlvElements` | [`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\>[] |
+| `tlvElements` | [`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\>[] |
+
+#### Returns
+
+[`TlvArrayReader`](exports_tlv.TlvArrayReader.md)
 
 #### Defined in
 
@@ -64,7 +68,7 @@ packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:36
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`_typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`_typeLength`): `V`
 
 #### Type parameters
 
@@ -95,11 +99,11 @@ ___
 
 ### readTagType
 
-▸ **readTagType**(): [`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\>
+▸ **readTagType**(): [`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\>
 
 #### Returns
 
-[`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\>
+[`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\>
 
 #### Implementation of
 

@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/model](../modules/exports_model.md) / ModelVariantTraversal
 
-# Class: ModelVariantTraversal<S\>
+# Class: ModelVariantTraversal\<S\>
 
 [exports/model](../modules/exports_model.md).ModelVariantTraversal
 
@@ -39,7 +39,7 @@ Visits multiple model hierarchies simultaneously and builds state.
 
 ### constructor
 
-• **new ModelVariantTraversal**<`S`\>(`sourceNames`)
+• **new ModelVariantTraversal**\<`S`\>(`sourceNames`): [`ModelVariantTraversal`](exports_model.ModelVariantTraversal.md)\<`S`\>
 
 Create a new visitor.  Must list the valid names of sources.  The order
 of this list implies the priority used for choosing a name when multiple
@@ -56,6 +56,10 @@ model variants have different names.
 | Name | Type |
 | :------ | :------ |
 | `sourceNames` | `string`[] |
+
+#### Returns
+
+[`ModelVariantTraversal`](exports_model.ModelVariantTraversal.md)\<`S`\>
 
 #### Defined in
 
@@ -139,7 +143,7 @@ packages/matter.js/dist/esm/model/logic/ModelVariantTraversal.d.ts:51
 
 ### enterCluster
 
-▸ `Protected` **enterCluster**(`variants`): `boolean`
+▸ **enterCluster**(`variants`): `boolean`
 
 Determine if we are entering a cluster and install cluster state if so.
 
@@ -161,7 +165,7 @@ ___
 
 ### getCanonicalName
 
-▸ `Protected` **getCanonicalName**(`model`): `string`
+▸ **getCanonicalName**(`model`): `string`
 
 Get the canonical name for a model.  Within cluster scope alternate
 names may be selected, otherwise the name of the model is returned.
@@ -207,7 +211,7 @@ ___
 
 ### visit
 
-▸ `Protected` `Abstract` **visit**(`variants`, `recurse`): `S`
+▸ **visit**(`variants`, `recurse`): `S`
 
 This is the primary callback.  It is invoked for every set of variants
 during traversal.  It may optionally return state that is returned

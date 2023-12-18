@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / DeviceTypeDefinition
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / DeviceTypeDefinition
 
 # Interface: DeviceTypeDefinition
 
-[<internal>](../modules/internal_.md).DeviceTypeDefinition
+[\<internal\>](../modules/internal_.md).DeviceTypeDefinition
 
 ## Table of contents
 

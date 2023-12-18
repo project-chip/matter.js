@@ -5,10 +5,11 @@
 [exports/common](../modules/exports_common.md).ValidationError
 
 Error thrown when Data validation fails. Please check the provided data.
+We encode this as StatusResponseError because in most places we want to return a StatusResponseError anyway.
 
 ## Hierarchy
 
-- [`MatterError`](exports_common.MatterError.md)
+- [`StatusResponseError`](exports_interaction.StatusResponseError.md)
 
   ↳ **`ValidationError`**
 
@@ -18,22 +19,59 @@ Error thrown when Data validation fails. Please check the provided data.
 
 - [constructor](exports_common.ValidationError.md#constructor)
 
+### Properties
+
+- [clusterCode](exports_common.ValidationError.md#clustercode)
+- [code](exports_common.ValidationError.md#code)
+
 ## Constructors
 
 ### constructor
 
-• **new ValidationError**(`message?`)
+• **new ValidationError**(`message`): [`ValidationError`](exports_common.ValidationError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `message?` | `string` |
+| `message` | `string` |
 
-#### Inherited from
+#### Returns
 
-[MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
+[`ValidationError`](exports_common.ValidationError.md)
+
+#### Overrides
+
+[StatusResponseError](exports_interaction.StatusResponseError.md).[constructor](exports_interaction.StatusResponseError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+packages/matter.js/dist/esm/common/ValidationError.d.ts:12
+
+## Properties
+
+### clusterCode
+
+• `Optional` `Readonly` **clusterCode**: `number`
+
+#### Inherited from
+
+[StatusResponseError](exports_interaction.StatusResponseError.md).[clusterCode](exports_interaction.StatusResponseError.md#clustercode)
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/StatusCode.d.ts:40
+
+___
+
+### code
+
+• `Readonly` **code**: [`StatusCode`](../enums/exports_interaction.StatusCode.md)
+
+#### Inherited from
+
+[StatusResponseError](exports_interaction.StatusResponseError.md).[code](exports_interaction.StatusResponseError.md#code)
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/StatusCode.d.ts:39

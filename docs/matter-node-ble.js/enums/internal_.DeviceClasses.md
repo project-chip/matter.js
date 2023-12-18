@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / DeviceClasses
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / DeviceClasses
 
 # Enumeration: DeviceClasses
 
-[<internal>](../modules/internal_.md).DeviceClasses
+[\<internal\>](../modules/internal_.md).DeviceClasses
 
 This represents a Root Node for devices.
 

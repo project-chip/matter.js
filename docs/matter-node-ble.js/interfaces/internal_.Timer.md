@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Timer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Timer
 
 # Interface: Timer
 
-[<internal>](../modules/internal_.md).Timer
+[\<internal\>](../modules/internal_.md).Timer
 
 ## Table of contents
 

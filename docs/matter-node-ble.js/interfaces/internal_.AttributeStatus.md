@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / AttributeStatus
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / AttributeStatus
 
 # Interface: AttributeStatus
 
-[<internal>](../modules/internal_.md).AttributeStatus
+[\<internal\>](../modules/internal_.md).AttributeStatus
 
 ## Table of contents
 
@@ -28,7 +28,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:23
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:24
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:29
+matter.js/dist/esm/protocol/interaction/InteractionClient.d.ts:30

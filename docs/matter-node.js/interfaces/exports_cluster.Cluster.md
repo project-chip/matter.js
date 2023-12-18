@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / Cluster
 
-# Interface: Cluster<F, SF, A, C, E\>
+# Interface: Cluster\<F, SF, A, C, E\>
 
 [exports/cluster](../modules/exports_cluster.md).Cluster
 
@@ -9,7 +9,7 @@
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](exports_cluster.Commands.md) |
 | `E` | extends [`Events`](exports_cluster.Events.md) |

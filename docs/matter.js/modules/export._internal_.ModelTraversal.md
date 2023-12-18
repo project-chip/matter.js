@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [<internal\>](export._internal_.md) / ModelTraversal
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [\<internal\>](export._internal_.md) / ModelTraversal
 
 # Namespace: ModelTraversal
 
-[export](export.md).[<internal>](export._internal_.md).ModelTraversal
+[export](export.md).[\<internal\>](export._internal_.md).ModelTraversal
 
 ## Table of contents
 
@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)

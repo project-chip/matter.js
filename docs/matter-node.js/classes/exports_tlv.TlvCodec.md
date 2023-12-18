@@ -32,7 +32,11 @@
 
 ### constructor
 
-• **new TlvCodec**()
+• **new TlvCodec**(): [`TlvCodec`](exports_tlv.TlvCodec.md)
+
+#### Returns
+
+[`TlvCodec`](exports_tlv.TlvCodec.md)
 
 ## Properties
 
@@ -78,7 +82,7 @@ packages/matter.js/dist/esm/tlv/TlvCodec.d.ts:99
 
 ### getIntTlvLength
 
-▸ `Static` **getIntTlvLength**(`value`): [`TlvLength`](../enums/exports_tlv.TlvLength.md)
+▸ **getIntTlvLength**(`value`): [`TlvLength`](../enums/exports_tlv.TlvLength.md)
 
 #### Parameters
 
@@ -98,7 +102,7 @@ ___
 
 ### getPrimitiveByteLength
 
-▸ `Static` **getPrimitiveByteLength**<`T`\>(`typeLength`, `value`): `number`
+▸ **getPrimitiveByteLength**\<`T`\>(`typeLength`, `value`): `number`
 
 #### Type parameters
 
@@ -125,7 +129,7 @@ ___
 
 ### getTagByteLength
 
-▸ `Static` **getTagByteLength**(`tag?`): ``2`` \| ``1`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+▸ **getTagByteLength**(`tag?`): ``2`` \| ``1`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
 
 #### Parameters
 
@@ -145,7 +149,7 @@ ___
 
 ### getUIntTlvLength
 
-▸ `Static` **getUIntTlvLength**(`value`): [`TlvLength`](../enums/exports_tlv.TlvLength.md)
+▸ **getUIntTlvLength**(`value`): [`TlvLength`](../enums/exports_tlv.TlvLength.md)
 
 #### Parameters
 
@@ -165,7 +169,7 @@ ___
 
 ### readPrimitive
 
-▸ `Static` **readPrimitive**<`T`, `V`\>(`reader`, `typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`reader`, `typeLength`): `V`
 
 #### Type parameters
 
@@ -178,7 +182,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 
 #### Returns
@@ -193,13 +197,13 @@ ___
 
 ### readTagType
 
-▸ `Static` **readTagType**(`reader`): `Object`
+▸ **readTagType**(`reader`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -222,7 +226,7 @@ ___
 
 ### writePrimitive
 
-▸ `Static` **writePrimitive**<`T`\>(`writer`, `typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`writer`, `typeLength`, `value`): `void`
 
 #### Type parameters
 
@@ -234,7 +238,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 | `value` | [`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`[``"type"``]] |
 
@@ -250,13 +254,13 @@ ___
 
 ### writeTag
 
-▸ `Static` **writeTag**(`writer`, `typeLengthValue`, `tag?`): `void`
+▸ **writeTag**(`writer`, `typeLengthValue`, `tag?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLengthValue` | [`TlvTypeLength`](../modules/exports_tlv.md#tlvtypelength) |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
 

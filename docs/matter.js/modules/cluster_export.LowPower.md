@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `sleep`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``1288`` = 0x508; `name`: ``"LowPower"`` = "LowPower"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `sleep`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``1288`` = 0x508; `name`: ``"LowPower"`` = "LowPower"; `revision`: ``1`` = 1 }\>
 
 Low Power
 
@@ -26,4 +26,4 @@ This cluster provides an interface for managing low power mode on a device.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L22)
+[packages/matter.js/src/cluster/definitions/LowPowerCluster.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/LowPowerCluster.ts#L22)

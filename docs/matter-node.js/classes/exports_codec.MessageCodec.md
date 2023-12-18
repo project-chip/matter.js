@@ -29,7 +29,11 @@
 
 ### constructor
 
-• **new MessageCodec**()
+• **new MessageCodec**(): [`MessageCodec`](exports_codec.MessageCodec.md)
+
+#### Returns
+
+[`MessageCodec`](exports_codec.MessageCodec.md)
 
 ## Properties
 
@@ -39,7 +43,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:58
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:60
 
 ___
 
@@ -49,7 +53,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:59
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:61
 
 ___
 
@@ -59,13 +63,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:62
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:64
 
 ## Methods
 
 ### decodePacket
 
-▸ `Static` **decodePacket**(`data`): [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md)
+▸ **decodePacket**(`data`): [`DecodedPacket`](../interfaces/exports_codec.DecodedPacket.md)
 
 #### Parameters
 
@@ -79,13 +83,13 @@ packages/matter.js/dist/esm/codec/MessageCodec.d.ts:62
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:54
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:56
 
 ___
 
 ### decodePayload
 
-▸ `Static` **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
+▸ **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/exports_codec.DecodedMessage.md)
 
 #### Parameters
 
@@ -99,13 +103,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:55
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:57
 
 ___
 
 ### encodePacket
 
-▸ `Static` **encodePacket**(`«destructured»`): `Uint8Array`
+▸ **encodePacket**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -119,13 +123,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:57
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:59
 
 ___
 
 ### encodePacketHeader
 
-▸ `Static` **encodePacketHeader**(`«destructured»`): `Uint8Array`
+▸ **encodePacketHeader**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -139,13 +143,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:60
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:62
 
 ___
 
 ### encodePayload
 
-▸ `Static` **encodePayload**(`«destructured»`): [`Packet`](../interfaces/exports_codec.Packet.md)
+▸ **encodePayload**(`«destructured»`): [`Packet`](../interfaces/exports_codec.Packet.md)
 
 #### Parameters
 
@@ -159,13 +163,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:56
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:58
 
 ___
 
 ### messageDiagnostics
 
-▸ `Static` **messageDiagnostics**(`«destructured»`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
+▸ **messageDiagnostics**(`«destructured»`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
 
 #### Parameters
 
@@ -179,4 +183,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:61
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:63

@@ -1,26 +1,26 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / <internal\>
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / \<internal\>
 
-# Module: <internal\>
+# Module: \<internal\>
 
 ## Table of contents
 
 ### Namespaces
 
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EndpointNumber&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EndpointNumber_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/FabricIndex&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_FabricIndex_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
-- [&quot;/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type&quot;](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/cluster/Cluster"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_cluster_Cluster_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/AttributeId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_AttributeId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/ClusterId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_ClusterId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/CommandId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_CommandId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EndpointNumber"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EndpointNumber_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/EventId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_EventId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/FabricIndex"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_FabricIndex_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_NodeId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/VendorId"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_datatype_VendorId_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/schema/BitmapSchema"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_schema_BitmapSchema_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvVoid_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvWrapper"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvWrapper_.md)
+- ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/util/Type"](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_util_Type_.md)
 
 ### Enumerations
 
@@ -43,6 +43,7 @@
 - [MatterController](../classes/export._internal_.MatterController.md)
 - [MatterDevice](../classes/export._internal_.MatterDevice.md)
 - [QrPairingCodeSchema](../classes/export._internal_.QrPairingCodeSchema.md)
+- [TlvCaseAuthenticatedTagSchema](../classes/export._internal_.TlvCaseAuthenticatedTagSchema.md)
 - [UdpConnection](../classes/export._internal_.UdpConnection.md)
 
 ### Interfaces
@@ -95,7 +96,6 @@
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec)
 - [GetterTypeFromSpec](export._internal_.md#gettertypefromspec-1)
 - [LengthConstraints](export._internal_.md#lengthconstraints)
-- [LengthConstraints](export._internal_.md#lengthconstraints-1)
 - [MakeAttributeMandatory](export._internal_.md#makeattributemandatory)
 - [MakeAttributesMandatory](export._internal_.md#makeattributesmandatory)
 - [MandatoryAttributeServers](export._internal_.md#mandatoryattributeservers)
@@ -184,7 +184,7 @@ ___
 
 ### AttributeDataPayload
 
-Ƭ **AttributeDataPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvAttributeReportData`](exports_interaction.md#tlvattributereportdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\>  }
+Ƭ **AttributeDataPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvAttributeReportData`](exports_interaction.md#tlvattributereportdata)\>, ``"data"``\> & \{ `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`any`\>  }
 
 Type for TlvAttributeReportData where the real data are represented with the schema and the JS value.
 
@@ -196,7 +196,7 @@ ___
 
 ### AttributeGetters
 
-Ƭ **AttributeGetters**<`A`\>: { [P in keyof A as \`${string & P}AttributeGetter\`]?: Function }
+Ƭ **AttributeGetters**\<`A`\>: \{ [P in keyof A as \`$\{string & P}AttributeGetter\`]?: Function }
 
 #### Type parameters
 
@@ -212,7 +212,7 @@ ___
 
 ### AttributeHandlers
 
-Ƭ **AttributeHandlers**<`A`\>: [`Merge`](util_export.md#merge)<[`AttributeGetters`](export._internal_.md#attributegetters)<`A`\>, [`Merge`](util_export.md#merge)<[`AttributeSetters`](export._internal_.md#attributesetters)<`A`\>, [`AttributeValidators`](export._internal_.md#attributevalidators)<`A`\>\>\>
+Ƭ **AttributeHandlers**\<`A`\>: [`Merge`](util_export.md#merge)\<[`AttributeGetters`](export._internal_.md#attributegetters)\<`A`\>, [`Merge`](util_export.md#merge)\<[`AttributeSetters`](export._internal_.md#attributesetters)\<`A`\>, [`AttributeValidators`](export._internal_.md#attributevalidators)\<`A`\>\>\>
 
 Handlers to process cluster commands
 
@@ -230,7 +230,7 @@ ___
 
 ### AttributeSetters
 
-Ƭ **AttributeSetters**<`A`\>: { [P in keyof A as \`${string & P}AttributeSetter\`]?: Function }
+Ƭ **AttributeSetters**\<`A`\>: \{ [P in keyof A as \`$\{string & P}AttributeSetter\`]?: Function }
 
 #### Type parameters
 
@@ -246,7 +246,7 @@ ___
 
 ### AttributeValidators
 
-Ƭ **AttributeValidators**<`A`\>: { [P in keyof A as \`${string & P}AttributeValidator\`]?: Function }
+Ƭ **AttributeValidators**\<`A`\>: \{ [P in keyof A as \`$\{string & P}AttributeValidator\`]?: Function }
 
 #### Type parameters
 
@@ -262,7 +262,7 @@ ___
 
 ### BitRange
 
-Ƭ **BitRange**<`T`, `TType`\>: `Object`
+Ƭ **BitRange**\<`T`, `TType`\>: `Object`
 
 #### Type parameters
 
@@ -290,7 +290,7 @@ ___
 
 ### BuildArrayMinLength
 
-Ƭ **BuildArrayMinLength**<`T`, `N`, `Current`\>: `Current`[``"length"``] extends `N` ? [...Current, ...T[]] : [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)<`T`, `N`, [...Current, `T`]\>
+Ƭ **BuildArrayMinLength**\<`T`, `N`, `Current`\>: `Current`[``"length"``] extends `N` ? [...Current, ...T[]] : [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)\<`T`, `N`, [...Current, `T`]\>
 
 #### Type parameters
 
@@ -308,7 +308,7 @@ ___
 
 ### ClientAttributeGetters
 
-Ƭ **ClientAttributeGetters**<`A`\>: `Omit`<{ [P in keyof A as \`get${Capitalize<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<`any`\>\>
+Ƭ **ClientAttributeGetters**\<`A`\>: `Omit`\<\{ [P in keyof A as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }, keyof [`GlobalAttributes`](exports_cluster.md#globalattributes-1)\<`any`\>\>
 
 #### Type parameters
 
@@ -324,7 +324,7 @@ ___
 
 ### ClientAttributeListeners
 
-Ƭ **ClientAttributeListeners**<`A`\>: { [P in keyof A as \`add${Capitalize<string & P\>}AttributeListener\`]: Function }
+Ƭ **ClientAttributeListeners**\<`A`\>: \{ [P in keyof A as \`add$\{Capitalize\<string & P\>}AttributeListener\`]: Function }
 
 #### Type parameters
 
@@ -340,7 +340,7 @@ ___
 
 ### ClientAttributeSetters
 
-Ƭ **ClientAttributeSetters**<`A`\>: { [P in WritableAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientAttributeSetters**\<`A`\>: \{ [P in WritableAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -356,7 +356,7 @@ ___
 
 ### ClientAttributeSubscribers
 
-Ƭ **ClientAttributeSubscribers**<`A`\>: { [P in keyof A as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientAttributeSubscribers**\<`A`\>: \{ [P in keyof A as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -372,7 +372,7 @@ ___
 
 ### ClientEventGetters
 
-Ƭ **ClientEventGetters**<`E`\>: { [P in keyof E as \`get${Capitalize<string & P\>}Event\`]: Function }
+Ƭ **ClientEventGetters**\<`E`\>: \{ [P in keyof E as \`get$\{Capitalize\<string & P\>}Event\`]: Function }
 
 #### Type parameters
 
@@ -388,7 +388,7 @@ ___
 
 ### ClientEventListeners
 
-Ƭ **ClientEventListeners**<`E`\>: { [P in keyof E as \`add${Capitalize<string & P\>}EventListener\`]: Function }
+Ƭ **ClientEventListeners**\<`E`\>: \{ [P in keyof E as \`add$\{Capitalize\<string & P\>}EventListener\`]: Function }
 
 #### Type parameters
 
@@ -404,7 +404,7 @@ ___
 
 ### ClientEventSubscribers
 
-Ƭ **ClientEventSubscribers**<`E`\>: { [P in keyof E as \`subscribe${Capitalize<string & P\>}Event\`]: Function }
+Ƭ **ClientEventSubscribers**\<`E`\>: \{ [P in keyof E as \`subscribe$\{Capitalize\<string & P\>}Event\`]: Function }
 
 #### Type parameters
 
@@ -420,7 +420,7 @@ ___
 
 ### ClientGlobalAttributeGetters
 
-Ƭ **ClientGlobalAttributeGetters**<`F`\>: { [P in GlobalAttributeNames<F\> as \`get${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ClientGlobalAttributeGetters**\<`F`\>: \{ [P in GlobalAttributeNames\<F\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -436,14 +436,14 @@ ___
 
 ### ClusterExtend
 
-Ƭ **ClusterExtend**<`F`, `SF`, `A`, `C`, `E`\>: `Object`
+Ƭ **ClusterExtend**\<`F`, `SF`, `A`, `C`, `E`\>: `Object`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
 | `E` | extends [`Events`](../interfaces/exports_cluster.Events.md) |
@@ -485,15 +485,15 @@ ___
 
 ### CommandHandlers
 
-Ƭ **CommandHandlers**<`T`, `AS`, `ES`\>: [`Merge`](util_export.md#merge)<{ [P in MandatoryCommandNames<T\>]: CommandHandler<T[P], AS, ES\> }, { [P in OptionalCommandNames<T\>]?: CommandHandler<T[P], AS, ES\> }\>
+Ƭ **CommandHandlers**\<`T`, `AS`, `ES`\>: [`Merge`](util_export.md#merge)\<\{ [P in MandatoryCommandNames\<T\>]: CommandHandler\<T[P], AS, ES\> }, \{ [P in OptionalCommandNames\<T\>]?: CommandHandler\<T[P], AS, ES\> }\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) |
-| `AS` | extends [`AttributeServers`](exports_cluster.md#attributeservers)<`any`\> |
-| `ES` | extends [`EventServers`](exports_cluster.md#eventservers)<`any`\> |
+| `AS` | extends [`AttributeServers`](exports_cluster.md#attributeservers)\<`any`\> |
+| `ES` | extends [`EventServers`](exports_cluster.md#eventservers)\<`any`\> |
 
 #### Defined in
 
@@ -503,7 +503,7 @@ ___
 
 ### CommandServers
 
-Ƭ **CommandServers**<`C`\>: { [P in keyof C]: SignatureFromCommandSpec<C[P]\> }
+Ƭ **CommandServers**\<`C`\>: \{ [P in keyof C]: SignatureFromCommandSpec\<C[P]\> }
 
 #### Type parameters
 
@@ -527,7 +527,7 @@ Commands exposed by the CommissioningServer
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `testEventTrigger` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`GeneralDiagnosticsCluster`](exports_cluster.md#generaldiagnosticscluster-1)\>[``"testEventTrigger"``] | Provide a means for certification tests to trigger some test-plan-specific events. |
+| `testEventTrigger` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`GeneralDiagnosticsCluster`](exports_cluster.md#generaldiagnosticscluster-1)\>[``"testEventTrigger"``] | Provide a means for certification tests to trigger some test-plan-specific events. |
 
 #### Defined in
 
@@ -563,14 +563,14 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `move` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"move"``] |
-| `moveToLevel` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveToLevel"``] |
-| `moveToLevelWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveToLevelWithOnOff"``] |
-| `moveWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveWithOnOff"``] |
-| `step` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"step"``] |
-| `stepWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stepWithOnOff"``] |
-| `stop` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stop"``] |
-| `stopWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stopWithOnOff"``] |
+| `move` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"move"``] |
+| `moveToLevel` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveToLevel"``] |
+| `moveToLevelWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveToLevelWithOnOff"``] |
+| `moveWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"moveWithOnOff"``] |
+| `step` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"step"``] |
+| `stepWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stepWithOnOff"``] |
+| `stop` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stop"``] |
+| `stopWithOnOff` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.LevelControl.md#complete)\>[``"stopWithOnOff"``] |
 
 #### Defined in
 
@@ -590,7 +590,7 @@ ___
 
 ### ErrorHandler
 
-Ƭ **ErrorHandler**<`T`, `E`\>: (`error`: `E`) => `T`
+Ƭ **ErrorHandler**\<`T`, `E`\>: (`error`: `E`) => `T`
 
 #### Type parameters
 
@@ -621,7 +621,7 @@ ___
 
 ### EventDataPayload
 
-Ƭ **EventDataPayload**: `Omit`<[`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>, ``"data"``\> & { `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\>  }
+Ƭ **EventDataPayload**: `Omit`\<[`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvEventData`](exports_interaction.md#tlveventdata)\>, ``"data"``\> & \{ `payload`: `any` ; `schema`: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`any`\>  }
 
 Type for TlvEventData where the real data are represented with the schema and the JS value.
 
@@ -633,14 +633,14 @@ ___
 
 ### ExtendPublicHandlerMethods
 
-Ƭ **ExtendPublicHandlerMethods**<`ParentClass`, `H`\>: `ParentClass` extends (...`args`: infer TArgs) => infer T ? (...`args`: `TArgs`) => `T` & { `_executeHandler`: <K\>(`action`: `K`, ...`args`: `Parameters`<`H`[`K`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: `H`[`K`]) => `void` ; `removeCommandHandler`: <K\>(`action`: `K`, `handler`: `H`[`K`]) => `void`  } : `never`
+Ƭ **ExtendPublicHandlerMethods**\<`ParentClass`, `H`\>: `ParentClass` extends (...`args`: infer TArgs) => infer T ? (...`args`: `TArgs`) => `T` & \{ `_executeHandler`: \<K\>(`action`: `K`, ...`args`: `Parameters`\<`H`[`K`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: `H`[`K`]) => `void` ; `removeCommandHandler`: \<K\>(`action`: `K`, `handler`: `H`[`K`]) => `void`  } : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `ParentClass` | extends (...`args`: `any`[]) => `any` |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
 
 #### Defined in
 
@@ -650,13 +650,13 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](exports_cluster.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -666,35 +666,17 @@ ___
 
 ### GetterTypeFromSpec
 
-Ƭ **GetterTypeFromSpec**<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)<`A`\>
+Ƭ **GetterTypeFromSpec**\<`A`\>: `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)\<infer T, `any`\> ? `T` \| `undefined` : [`AttributeJsType`](exports_cluster.md#attributejstype)\<`A`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](exports_cluster.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
 packages/matter.js/dist/esm/cluster/server/ClusterServerTypes.d.ts:118
-
-___
-
-### LengthConstraints
-
-Ƭ **LengthConstraints**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `length?` | `number` |
-| `maxLength?` | `number` |
-| `minLength?` | `number` |
-
-#### Defined in
-
-packages/matter.js/dist/esm/tlv/TlvArray.d.ts:8
 
 ___
 
@@ -718,13 +700,13 @@ ___
 
 ### MakeAttributeMandatory
 
-Ƭ **MakeAttributeMandatory**<`A`\>: `A` extends [`OptionalWritableFabricScopedAttribute`](exports_cluster.md#optionalwritablefabricscopedattribute)<infer T, `any`\> ? [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)<`T`, `any`\> : `A` extends [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)<infer T, `any`\> ? [`WritableAttribute`](exports_cluster.md#writableattribute)<`T`, `any`\> : `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)<infer T, `any`\> ? [`Attribute`](exports_cluster.md#attribute)<`T`, `any`\> : `A`
+Ƭ **MakeAttributeMandatory**\<`A`\>: `A` extends [`OptionalWritableFabricScopedAttribute`](exports_cluster.md#optionalwritablefabricscopedattribute)\<infer T, `any`\> ? [`WritableFabricScopedAttribute`](exports_cluster.md#writablefabricscopedattribute)\<`T`, `any`\> : `A` extends [`OptionalWritableAttribute`](exports_cluster.md#optionalwritableattribute)\<infer T, `any`\> ? [`WritableAttribute`](exports_cluster.md#writableattribute)\<`T`, `any`\> : `A` extends [`OptionalAttribute`](exports_cluster.md#optionalattribute)\<infer T, `any`\> ? [`Attribute`](exports_cluster.md#attribute)\<`T`, `any`\> : `A`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `A` | extends [`Attribute`](exports_cluster.md#attribute)<`any`, `any`\> |
+| `A` | extends [`Attribute`](exports_cluster.md#attribute)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -734,14 +716,14 @@ ___
 
 ### MakeAttributesMandatory
 
-Ƭ **MakeAttributesMandatory**<`T`, `C`\>: { [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]\> : T[K] }
+Ƭ **MakeAttributesMandatory**\<`T`, `C`\>: \{ [K in keyof T]: K extends keyof C ? MakeAttributeMandatory\<T[K]\> : T[K] }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)<`T`\> |
+| `C` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)\<`T`\> |
 
 #### Defined in
 
@@ -753,7 +735,7 @@ ___
 
 ### MandatoryAttributeServers
 
-Ƭ **MandatoryAttributeServers**<`A`\>: `Omit`<{ [P in MandatoryAttributeNames<A\>]: A[P] extends FabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends WritableFabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends FixedAttribute<any, any\> ? FixedAttributeServer<AttributeJsType<A[P]\>\> : AttributeServer<AttributeJsType<A[P]\>\> }, keyof [`GlobalAttributes`](exports_cluster.md#globalattributes-1)<`any`\>\>
+Ƭ **MandatoryAttributeServers**\<`A`\>: `Omit`\<\{ [P in MandatoryAttributeNames\<A\>]: A[P] extends FabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends WritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends FixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }, keyof [`GlobalAttributes`](exports_cluster.md#globalattributes-1)\<`any`\>\>
 
 Cluster attributes accessible on the cluster server
 
@@ -771,7 +753,7 @@ ___
 
 ### MandatoryCommandNames
 
-Ƭ **MandatoryCommandNames**<`C`\>: { [K in keyof C]: C[K] extends OptionalCommand<any, any, any\> ? never : K }[keyof `C`]
+Ƭ **MandatoryCommandNames**\<`C`\>: \{ [K in keyof C]: C[K] extends OptionalCommand\<any, any, any\> ? never : K }[keyof `C`]
 
 #### Type parameters
 
@@ -787,7 +769,7 @@ ___
 
 ### MandatoryFieldNames
 
-Ƭ **MandatoryFieldNames**<`F`\>: { [K in keyof F]: F[K] extends OptionalFieldType<any\> ? never : K }[keyof `F`]
+Ƭ **MandatoryFieldNames**\<`F`\>: \{ [K in keyof F]: F[K] extends OptionalFieldType\<any\> ? never : K }[keyof `F`]
 
 #### Type parameters
 
@@ -797,13 +779,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:21
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:32
 
 ___
 
 ### NameMapping
 
-Ƭ **NameMapping**: `Map`<[`Model`](../classes/exports_model.Model-1.md), `string`\>
+Ƭ **NameMapping**: `Map`\<[`Model`](../classes/exports_model.Model-1.md), `string`\>
 
 Map of Model -> name
 
@@ -821,8 +803,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `identify` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Cluster`](exports_cluster.Identify.md#cluster)\>[``"identify"``] |
-| `offWithEffect` | [`MakeMandatory`](util_export.md#makemandatory)<[`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)<typeof [`Complete`](exports_cluster.OnOff.md#complete)\>[``"offWithEffect"``]\> |
+| `identify` | [`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Cluster`](exports_cluster.Identify.md#cluster)\>[``"identify"``] |
+| `offWithEffect` | [`MakeMandatory`](util_export.md#makemandatory)\<[`ClusterServerHandlers`](exports_cluster.md#clusterserverhandlers)\<typeof [`Complete`](exports_cluster.OnOff.md#complete)\>[``"offWithEffect"``]\> |
 
 #### Defined in
 
@@ -832,7 +814,7 @@ ___
 
 ### OptionalAttributeConf
 
-Ƭ **OptionalAttributeConf**<`T`\>: { [K in OptionalAttributeNames<T\>]?: true }
+Ƭ **OptionalAttributeConf**\<`T`\>: \{ [K in OptionalAttributeNames\<T\>]?: true }
 
 #### Type parameters
 
@@ -848,7 +830,7 @@ ___
 
 ### OptionalAttributeServers
 
-Ƭ **OptionalAttributeServers**<`A`\>: { [P in OptionalAttributeNames<A\>]?: A[P] extends OptionalWritableFabricScopedAttribute<any, any\> ? FabricScopedAttributeServer<AttributeJsType<A[P]\>\> : A[P] extends OptionalFixedAttribute<any, any\> ? FixedAttributeServer<AttributeJsType<A[P]\>\> : AttributeServer<AttributeJsType<A[P]\>\> }
+Ƭ **OptionalAttributeServers**\<`A`\>: \{ [P in OptionalAttributeNames\<A\>]?: A[P] extends OptionalWritableFabricScopedAttribute\<any, any\> ? FabricScopedAttributeServer\<AttributeJsType\<A[P]\>\> : A[P] extends OptionalFixedAttribute\<any, any\> ? FixedAttributeServer\<AttributeJsType\<A[P]\>\> : AttributeServer\<AttributeJsType\<A[P]\>\> }
 
 #### Type parameters
 
@@ -864,7 +846,7 @@ ___
 
 ### OptionalCommandNames
 
-Ƭ **OptionalCommandNames**<`C`\>: { [K in keyof C]: C[K] extends OptionalCommand<any, any, any\> ? K : never }[keyof `C`]
+Ƭ **OptionalCommandNames**\<`C`\>: \{ [K in keyof C]: C[K] extends OptionalCommand\<any, any, any\> ? K : never }[keyof `C`]
 
 #### Type parameters
 
@@ -880,7 +862,7 @@ ___
 
 ### OptionalFieldNames
 
-Ƭ **OptionalFieldNames**<`F`\>: { [K in keyof F]: F[K] extends OptionalFieldType<any\> ? K : never }[keyof `F`]
+Ƭ **OptionalFieldNames**\<`F`\>: \{ [K in keyof F]: F[K] extends OptionalFieldType\<any\> ? K : never }[keyof `F`]
 
 #### Type parameters
 
@@ -890,13 +872,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:24
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:35
 
 ___
 
 ### ServerAttributeGetters
 
-Ƭ **ServerAttributeGetters**<`A`\>: { [P in MandatoryAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]: Function } & { [P in OptionalAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]?: Function } & { [P in FabricScopedAttributeNames<A\> as \`get${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeGetters**\<`A`\>: \{ [P in MandatoryAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in OptionalAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]?: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`get$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -912,7 +894,7 @@ ___
 
 ### ServerAttributeSetters
 
-Ƭ **ServerAttributeSetters**<`A`\>: { [P in NonFixedAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function } & { [P in FabricScopedAttributeNames<A\> as \`set${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeSetters**\<`A`\>: \{ [P in NonFixedAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`set$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -928,7 +910,7 @@ ___
 
 ### ServerAttributeSubscribers
 
-Ƭ **ServerAttributeSubscribers**<`A`\>: { [P in NonFixedAttributeNames<A\> as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function } & { [P in FabricScopedAttributeNames<A\> as \`subscribe${Capitalize<string & P\>}Attribute\`]: Function }
+Ƭ **ServerAttributeSubscribers**\<`A`\>: \{ [P in NonFixedAttributeNames\<A\> as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function } & \{ [P in FabricScopedAttributeNames\<A\> as \`subscribe$\{Capitalize\<string & P\>}Attribute\`]: Function }
 
 #### Type parameters
 
@@ -944,7 +926,7 @@ ___
 
 ### ServerEventTriggers
 
-Ƭ **ServerEventTriggers**<`E`\>: { [P in MandatoryEventNames<E\> as \`trigger${Capitalize<string & P\>}Event\`]: Function } & { [P in OptionalEventNames<E\> as \`trigger${Capitalize<string & P\>}Event\`]?: Function }
+Ƭ **ServerEventTriggers**\<`E`\>: \{ [P in MandatoryEventNames\<E\> as \`trigger$\{Capitalize\<string & P\>}Event\`]: Function } & \{ [P in OptionalEventNames\<E\> as \`trigger$\{Capitalize\<string & P\>}Event\`]?: Function }
 
 #### Type parameters
 
@@ -960,7 +942,7 @@ ___
 
 ### SupportedComplexStorageTypes
 
-Ƭ **SupportedComplexStorageTypes**: ([`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes))[] \| { `[key: string]`: [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`;  } \| [[`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`][] \| `Map`<[`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes)\> \| ``null`` \| `undefined`
+Ƭ **SupportedComplexStorageTypes**: ([`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes))[] \| \{ `[key: string]`: [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`;  } \| [[`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes) \| ``null`` \| `undefined`][] \| `Map`\<[`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes), [`SupportedStorageBaseTypes`](export._internal_.md#supportedstoragebasetypes) \| [`SupportedComplexStorageTypes`](export._internal_.md#supportedcomplexstoragetypes)\> \| ``null`` \| `undefined`
 
 Supported combined types to stringify the data for the storage that can be used as values.
 
@@ -984,7 +966,7 @@ ___
 
 ### TypeForMandatoryFields
 
-Ƭ **TypeForMandatoryFields**<`F`, `MF`\>: { [K in MF]: TypeFromField<F[K]\> }
+Ƭ **TypeForMandatoryFields**\<`F`, `MF`\>: \{ [K in MF]: TypeFromField\<F[K]\> }
 
 #### Type parameters
 
@@ -995,13 +977,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:28
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:39
 
 ___
 
 ### TypeForOptionalFields
 
-Ƭ **TypeForOptionalFields**<`F`, `MF`\>: { [K in MF]?: TypeFromField<F[K]\> }
+Ƭ **TypeForOptionalFields**\<`F`, `MF`\>: \{ [K in MF]?: TypeFromField\<F[K]\> }
 
 #### Type parameters
 
@@ -1012,29 +994,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:31
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:42
 
 ___
 
 ### TypeFromField
 
-Ƭ **TypeFromField**<`F`\>: `F` extends [`FieldType`](../interfaces/exports_tlv.FieldType.md)<infer T\> ? `T` : `never`
+Ƭ **TypeFromField**\<`F`\>: `F` extends [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<infer T\> ? `T` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `F` | extends [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`any`\> |
+| `F` | extends [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`any`\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:27
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:38
 
 ___
 
 ### Unsigned
 
-Ƭ **Unsigned**<`Type`\>: { [Property in keyof Type as Exclude<Property, "signature"\>]: Type[Property] }
+Ƭ **Unsigned**\<`Type`\>: \{ [Property in keyof Type as Exclude\<Property, "signature"\>]: Type[Property] }
 
 #### Type parameters
 
@@ -1044,20 +1026,20 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:218
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:224
 
 ___
 
 ### UseOptionalAttributes
 
-Ƭ **UseOptionalAttributes**<`C`, `A`\>: [`Cluster`](exports_cluster.md#cluster)<`C`[``"features"``], `C`[``"supportedFeatures"``], [`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)<`C`[``"attributes"``], `A`\>, `C`[``"commands"``], `C`[``"events"``]\>
+Ƭ **UseOptionalAttributes**\<`C`, `A`\>: [`Cluster`](exports_cluster.md#cluster)\<`C`[``"features"``], `C`[``"supportedFeatures"``], [`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)\<`C`[``"attributes"``], `A`\>, `C`[``"commands"``], `C`[``"events"``]\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
-| `A` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)<`C`[``"attributes"``]\> |
+| `C` | extends [`Cluster`](exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `A` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)\<`C`[``"attributes"``]\> |
 
 #### Defined in
 
@@ -1069,7 +1051,7 @@ ___
 
 ### WritableAttributeNames
 
-Ƭ **WritableAttributeNames**<`A`\>: { [K in keyof A]: A[K] extends WritableAttribute<any, any\> ? K : never }[keyof `A`] \| { [K in keyof A]: A[K] extends OptionalWritableAttribute<any, any\> ? K : never }[keyof `A`]
+Ƭ **WritableAttributeNames**\<`A`\>: \{ [K in keyof A]: A[K] extends WritableAttribute\<any, any\> ? K : never }[keyof `A`] \| \{ [K in keyof A]: A[K] extends OptionalWritableAttribute\<any, any\> ? K : never }[keyof `A`]
 
 #### Type parameters
 
@@ -1085,11 +1067,11 @@ packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 
 ### DimmableBaseDevice\_base
 
-• `Const` **DimmableBaseDevice\_base**: (`definition`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md), `attributeInitialValues?`: { `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)<`any`\>;  }, `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & { `_executeHandler`: <K_2\>(`action`: `K_2`, ...`args`: `Parameters`<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: <K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
+• `Const` **DimmableBaseDevice\_base**: (`definition`: [`"/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/device/DeviceTypes"`](export._internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_device_DeviceTypes_.md), `attributeInitialValues?`: \{ `[key: ClusterId]`: [`AttributeInitialValues`](exports_cluster.md#attributeinitialvalues)\<`any`\>;  }, `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
 
 #### Type declaration
 
-• (`definition`, `attributeInitialValues?`, `options?`)
+• (`definition`, `attributeInitialValues?`, `options?`): [`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
 
 ##### Parameters
 
@@ -1099,6 +1081,10 @@ packages/matter.js/dist/esm/cluster/client/ClusterClientTypes.d.ts:50
 | `attributeInitialValues?` | `Object` |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
 
+##### Returns
+
+[`OnOffBaseDevice`](../classes/exports_device.OnOffBaseDevice.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`DimmableDeviceCommands`](export._internal_.md#dimmabledevicecommands)[`K_1`]) => `void`  }
+
 #### Defined in
 
 packages/matter.js/dist/esm/device/DimmableDevices.d.ts:17
@@ -1107,11 +1093,11 @@ ___
 
 ### OnOffBaseDevice\_base
 
-• `Const` **OnOffBaseDevice\_base**: (`definition`: [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition), `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`Device`](../classes/exports_device.Device.md) & { `_executeHandler`: <K_2\>(`action`: `K_2`, ...`args`: `Parameters`<[`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_2`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: <K_1\>(`action`: `K_1`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_1`]) => `void`  }
+• `Const` **OnOffBaseDevice\_base**: (`definition`: [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition), `options?`: [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md)) => [`Device`](../classes/exports_device.Device.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_1`]) => `void`  }
 
 #### Type declaration
 
-• (`definition`, `options?`)
+• (`definition`, `options?`): [`Device`](../classes/exports_device.Device.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_1`]) => `void`  }
 
 ##### Parameters
 
@@ -1119,6 +1105,10 @@ ___
 | :------ | :------ |
 | `definition` | [`DeviceTypeDefinition`](exports_device.md#devicetypedefinition) |
 | `options?` | [`EndpointOptions`](../interfaces/exports_device.EndpointOptions.md) |
+
+##### Returns
+
+[`Device`](../classes/exports_device.Device.md) & \{ `_executeHandler`: \<K_2\>(`action`: `K_2`, ...`args`: `Parameters`\<[`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_2`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K_1\>(`action`: `K_1`, `handler`: [`OnOffBaseDeviceCommands`](export._internal_.md#onoffbasedevicecommands)[`K_1`]) => `void`  }
 
 #### Defined in
 
@@ -1140,7 +1130,7 @@ packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:36
 
 ### BitRange
 
-▸ **BitRange**<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](export._internal_.md#bitrange-1)<`T`, `TType`\>
+▸ **BitRange**\<`T`, `TType`\>(`type`, `offset`, `length`): [`BitRange`](export._internal_.md#bitrange-1)\<`T`, `TType`\>
 
 #### Type parameters
 
@@ -1159,7 +1149,7 @@ packages/matter.js/dist/esm/schema/PairingCodeSchema.d.ts:36
 
 #### Returns
 
-[`BitRange`](export._internal_.md#bitrange-1)<`T`, `TType`\>
+[`BitRange`](export._internal_.md#bitrange-1)\<`T`, `TType`\>
 
 #### Defined in
 
@@ -1169,15 +1159,15 @@ ___
 
 ### ClusterExtend
 
-▸ **ClusterExtend**<`F`, `SF_BASE`, `SF_EXTEND`, `A_BASE`, `C_BASE`, `E_BASE`, `A_EXTEND`, `C_EXTEND`, `E_EXTEND`\>(`«destructured»`, `«destructured»`): [`Cluster`](exports_cluster.md#cluster)<`F`, [`Merge`](util_export.md#merge)<`SF_BASE`, `SF_EXTEND`\>, [`Merge`](util_export.md#merge)<`A_BASE`, `A_EXTEND`\>, [`Merge`](util_export.md#merge)<`C_BASE`, `C_EXTEND`\>, [`Merge`](util_export.md#merge)<`E_BASE`, `E_EXTEND`\>\>
+▸ **ClusterExtend**\<`F`, `SF_BASE`, `SF_EXTEND`, `A_BASE`, `C_BASE`, `E_BASE`, `A_EXTEND`, `C_EXTEND`, `E_EXTEND`\>(`«destructured»`, `«destructured»`): [`Cluster`](exports_cluster.md#cluster)\<`F`, [`Merge`](util_export.md#merge)\<`SF_BASE`, `SF_EXTEND`\>, [`Merge`](util_export.md#merge)\<`A_BASE`, `A_EXTEND`\>, [`Merge`](util_export.md#merge)\<`C_BASE`, `C_EXTEND`\>, [`Merge`](util_export.md#merge)\<`E_BASE`, `E_EXTEND`\>\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `SF_BASE` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\> |
-| `SF_EXTEND` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`F`\> |
+| `SF_BASE` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`F`\> |
+| `SF_EXTEND` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`F`\> |
 | `A_BASE` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) = {} |
 | `C_BASE` | extends [`Commands`](../interfaces/exports_cluster.Commands.md) = {} |
 | `E_BASE` | extends [`Events`](../interfaces/exports_cluster.Events.md) = {} |
@@ -1189,12 +1179,12 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`Cluster`](exports_cluster.md#cluster)<`F`, `SF_BASE`, `A_BASE`, `C_BASE`, `E_BASE`\> |
-| `«destructured»` | [`ClusterExtend`](export._internal_.md#clusterextend-1)<`F`, `SF_EXTEND`, `A_EXTEND`, `C_EXTEND`, `E_EXTEND`\> |
+| `«destructured»` | [`Cluster`](exports_cluster.md#cluster)\<`F`, `SF_BASE`, `A_BASE`, `C_BASE`, `E_BASE`\> |
+| `«destructured»` | [`ClusterExtend`](export._internal_.md#clusterextend-1)\<`F`, `SF_EXTEND`, `A_EXTEND`, `C_EXTEND`, `E_EXTEND`\> |
 
 #### Returns
 
-[`Cluster`](exports_cluster.md#cluster)<`F`, [`Merge`](util_export.md#merge)<`SF_BASE`, `SF_EXTEND`\>, [`Merge`](util_export.md#merge)<`A_BASE`, `A_EXTEND`\>, [`Merge`](util_export.md#merge)<`C_BASE`, `C_EXTEND`\>, [`Merge`](util_export.md#merge)<`E_BASE`, `E_EXTEND`\>\>
+[`Cluster`](exports_cluster.md#cluster)\<`F`, [`Merge`](util_export.md#merge)\<`SF_BASE`, `SF_EXTEND`\>, [`Merge`](util_export.md#merge)\<`A_BASE`, `A_EXTEND`\>, [`Merge`](util_export.md#merge)\<`C_BASE`, `C_EXTEND`\>, [`Merge`](util_export.md#merge)\<`E_BASE`, `E_EXTEND`\>\>
 
 #### Defined in
 
@@ -1204,14 +1194,14 @@ ___
 
 ### MakeAttributesMandatory
 
-▸ **MakeAttributesMandatory**<`T`, `C`\>(`attributes`, `conf`): [`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)<`T`, `C`\>
+▸ **MakeAttributesMandatory**\<`T`, `C`\>(`attributes`, `conf`): [`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)\<`T`, `C`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | extends [`Attributes`](../interfaces/exports_cluster.Attributes.md) |
-| `C` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)<`T`\> |
+| `C` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)\<`T`\> |
 
 #### Parameters
 
@@ -1222,7 +1212,7 @@ ___
 
 #### Returns
 
-[`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)<`T`, `C`\>
+[`MakeAttributesMandatory`](export._internal_.md#makeattributesmandatory-1)\<`T`, `C`\>
 
 #### Defined in
 
@@ -1232,7 +1222,7 @@ ___
 
 ### UseOptionalAttributes
 
-▸ **UseOptionalAttributes**<`C`, `A`\>(`cluster`, `conf`): [`UseOptionalAttributes`](export._internal_.md#useoptionalattributes-1)<`C`, `A`\>
+▸ **UseOptionalAttributes**\<`C`, `A`\>(`cluster`, `conf`): [`UseOptionalAttributes`](export._internal_.md#useoptionalattributes-1)\<`C`, `A`\>
 
 Forces the presence of the specified optional attributes, so they can be used in the command handlers
 
@@ -1240,8 +1230,8 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](exports_cluster.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
-| `A` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)<`C`[``"attributes"``]\> |
+| `C` | extends [`Cluster`](exports_cluster.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
+| `A` | extends [`OptionalAttributeConf`](export._internal_.md#optionalattributeconf)\<`C`[``"attributes"``]\> |
 
 #### Parameters
 
@@ -1252,7 +1242,7 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Returns
 
-[`UseOptionalAttributes`](export._internal_.md#useoptionalattributes-1)<`C`, `A`\>
+[`UseOptionalAttributes`](export._internal_.md#useoptionalattributes-1)\<`C`, `A`\>
 
 #### Defined in
 

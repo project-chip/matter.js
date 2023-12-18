@@ -31,13 +31,17 @@
 
 ### constructor
 
-• **new BtpCodec**()
+• **new BtpCodec**(): [`BtpCodec`](codec_export.BtpCodec.md)
+
+#### Returns
+
+[`BtpCodec`](codec_export.BtpCodec.md)
 
 ## Methods
 
 ### decodeBleAdvertisementData
 
-▸ `Static` **decodeBleAdvertisementData**(`data`): `Object`
+▸ **decodeBleAdvertisementData**(`data`): `Object`
 
 #### Parameters
 
@@ -58,13 +62,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:305](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L305)
+[packages/matter.js/src/codec/BtpCodec.ts:305](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L305)
 
 ___
 
 ### decodeBleAdvertisementServiceData
 
-▸ `Static` **decodeBleAdvertisementServiceData**(`data`): `Object`
+▸ **decodeBleAdvertisementServiceData**(`data`): `Object`
 
 #### Parameters
 
@@ -85,13 +89,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:325](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L325)
+[packages/matter.js/src/codec/BtpCodec.ts:325](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L325)
 
 ___
 
 ### decodeBtpHandshakeRequest
 
-▸ `Static` **decodeBtpHandshakeRequest**(`data`): [`BtpHandshakeRequest`](../interfaces/codec_export.BtpHandshakeRequest.md)
+▸ **decodeBtpHandshakeRequest**(`data`): [`BtpHandshakeRequest`](../interfaces/codec_export.BtpHandshakeRequest.md)
 
 #### Parameters
 
@@ -105,13 +109,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L72)
+[packages/matter.js/src/codec/BtpCodec.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L72)
 
 ___
 
 ### decodeBtpHandshakeResponsePayload
 
-▸ `Static` **decodeBtpHandshakeResponsePayload**(`data`): [`BtpHandshakeResponse`](../interfaces/codec_export.BtpHandshakeResponse.md)
+▸ **decodeBtpHandshakeResponsePayload**(`data`): [`BtpHandshakeResponse`](../interfaces/codec_export.BtpHandshakeResponse.md)
 
 #### Parameters
 
@@ -125,13 +129,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:217](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L217)
+[packages/matter.js/src/codec/BtpCodec.ts:217](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L217)
 
 ___
 
 ### decodeBtpPacket
 
-▸ `Static` **decodeBtpPacket**(`data`): [`DecodedBtpPacket`](../interfaces/codec_export.DecodedBtpPacket.md)
+▸ **decodeBtpPacket**(`data`): [`DecodedBtpPacket`](../interfaces/codec_export.DecodedBtpPacket.md)
 
 #### Parameters
 
@@ -145,19 +149,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L77)
+[packages/matter.js/src/codec/BtpCodec.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L77)
 
 ___
 
 ### decodeBtpPacketHeader
 
-▸ `Static` `Private` **decodeBtpPacketHeader**(`reader`): [`BtpHeader`](../interfaces/codec_export.BtpHeader.md)
+▸ **decodeBtpPacketHeader**(`reader`): [`BtpHeader`](../interfaces/codec_export.BtpHeader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -165,19 +169,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:235](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L235)
+[packages/matter.js/src/codec/BtpCodec.ts:235](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L235)
 
 ___
 
 ### decodeBtpPacketPayload
 
-▸ `Static` `Private` **decodeBtpPacketPayload**(`reader`, `header`): [`DecodedBtpPacketPayload`](../interfaces/codec_export.DecodedBtpPacketPayload.md)
+▸ **decodeBtpPacketPayload**(`reader`, `header`): [`DecodedBtpPacketPayload`](../interfaces/codec_export.DecodedBtpPacketPayload.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `header` | [`BtpHeader`](../interfaces/codec_export.BtpHeader.md) |
 
 #### Returns
@@ -186,19 +190,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L115)
+[packages/matter.js/src/codec/BtpCodec.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L115)
 
 ___
 
 ### decodeHandshakeRequestPayload
 
-▸ `Static` `Private` **decodeHandshakeRequestPayload**(`reader`): [`BtpHandshakeRequest`](../interfaces/codec_export.BtpHandshakeRequest.md)
+▸ **decodeHandshakeRequestPayload**(`reader`): [`BtpHandshakeRequest`](../interfaces/codec_export.BtpHandshakeRequest.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -206,13 +210,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:178](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L178)
+[packages/matter.js/src/codec/BtpCodec.ts:178](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L178)
 
 ___
 
 ### encodeBleAdvertisementData
 
-▸ `Static` **encodeBleAdvertisementData**(`discriminator`, `vendorId`, `productId`, `hasAdditionalAdvertisementData?`): `Uint8Array`
+▸ **encodeBleAdvertisementData**(`discriminator`, `vendorId`, `productId`, `hasAdditionalAdvertisementData?`): `Uint8Array`
 
 #### Parameters
 
@@ -229,13 +233,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:284](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L284)
+[packages/matter.js/src/codec/BtpCodec.ts:284](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L284)
 
 ___
 
 ### encodeBtpHandshakeRequest
 
-▸ `Static` **encodeBtpHandshakeRequest**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpHandshakeRequest**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -249,13 +253,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L92)
+[packages/matter.js/src/codec/BtpCodec.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L92)
 
 ___
 
 ### encodeBtpHandshakeResponse
 
-▸ `Static` **encodeBtpHandshakeResponse**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpHandshakeResponse**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -269,13 +273,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L105)
+[packages/matter.js/src/codec/BtpCodec.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L105)
 
 ___
 
 ### encodeBtpPacket
 
-▸ `Static` **encodeBtpPacket**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpPacket**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -289,13 +293,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:88](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L88)
+[packages/matter.js/src/codec/BtpCodec.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L88)
 
 ___
 
 ### encodeBtpPacketHeader
 
-▸ `Static` `Private` **encodeBtpPacketHeader**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpPacketHeader**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -309,13 +313,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:258](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L258)
+[packages/matter.js/src/codec/BtpCodec.ts:258](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L258)
 
 ___
 
 ### encodeBtpPacketPayload
 
-▸ `Static` `Private` **encodeBtpPacketPayload**(`«destructured»`, `«destructured»`): `Uint8Array`
+▸ **encodeBtpPacketPayload**(`«destructured»`, `«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -330,4 +334,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/BtpCodec.ts#L128)
+[packages/matter.js/src/codec/BtpCodec.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L128)

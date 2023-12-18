@@ -23,7 +23,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`RequirementElement`](exports_model.md#requirementelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`RequirementElement`](exports_model.md#requirementelement)\>
 
 #### Defined in
 

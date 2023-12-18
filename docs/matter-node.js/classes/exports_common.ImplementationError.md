@@ -23,7 +23,7 @@ provided data. if you are sure your code is correct please report the issue.
 
 ### constructor
 
-• **new ImplementationError**(`message?`)
+• **new ImplementationError**(`message?`): [`ImplementationError`](exports_common.ImplementationError.md)
 
 #### Parameters
 
@@ -31,10 +31,14 @@ provided data. if you are sure your code is correct please report the issue.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`ImplementationError`](exports_common.ImplementationError.md)
+
 #### Inherited from
 
 [MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

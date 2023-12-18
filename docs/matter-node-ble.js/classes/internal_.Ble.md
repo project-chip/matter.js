@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Ble
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Ble
 
 # Class: Ble
 
-[<internal>](../modules/internal_.md).Ble
+[\<internal\>](../modules/internal_.md).Ble
 
 ## Hierarchy
 
@@ -31,7 +31,11 @@
 
 ### constructor
 
-• **new Ble**()
+• **new Ble**(): [`Ble`](internal_.Ble.md)
+
+#### Returns
+
+[`Ble`](internal_.Ble.md)
 
 ## Properties
 
@@ -55,7 +59,7 @@ matter.js/dist/esm/ble/Ble.d.ts:15
 
 ### getBleBroadcaster
 
-▸ `Abstract` **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/internal_.InstanceBroadcaster.md)
+▸ **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/internal_.InstanceBroadcaster.md)
 
 #### Parameters
 
@@ -75,7 +79,7 @@ ___
 
 ### getBleCentralInterface
 
-▸ `Abstract` **getBleCentralInterface**(): [`NetInterface`](../interfaces/internal_.NetInterface.md)
+▸ **getBleCentralInterface**(): [`NetInterface`](../interfaces/internal_.NetInterface.md)
 
 #### Returns
 
@@ -89,7 +93,7 @@ ___
 
 ### getBlePeripheralInterface
 
-▸ `Abstract` **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/internal_.TransportInterface.md)
+▸ **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/internal_.TransportInterface.md)
 
 #### Returns
 
@@ -103,7 +107,7 @@ ___
 
 ### getBleScanner
 
-▸ `Abstract` **getBleScanner**(): [`Scanner`](../interfaces/internal_.Scanner.md)
+▸ **getBleScanner**(): [`Scanner`](../interfaces/internal_.Scanner.md)
 
 #### Returns
 

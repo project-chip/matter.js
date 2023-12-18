@@ -46,7 +46,7 @@ Cluster.constructor
 
 ### attributes
 
-• `Readonly` **attributes**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Attribute`](../modules/cluster_export.ClusterFactory.md#attribute)\>
+• `Readonly` **attributes**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Attribute`](../modules/cluster_export.ClusterFactory.md#attribute)\>
 
 #### Inherited from
 
@@ -54,13 +54,13 @@ Cluster.constructor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
+[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
 
 ___
 
 ### commands
 
-• `Readonly` **commands**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Command`](../modules/cluster_export.ClusterFactory.md#command)\>
+• `Readonly` **commands**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Command`](../modules/cluster_export.ClusterFactory.md#command)\>
 
 #### Inherited from
 
@@ -68,13 +68,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
+[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
 
 ___
 
 ### events
 
-• `Readonly` **events**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Event`](../modules/cluster_export.ClusterFactory.md#event)\>
+• `Readonly` **events**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Event`](../modules/cluster_export.ClusterFactory.md#event)\>
 
 #### Inherited from
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
+[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
+[packages/matter.js/src/cluster/ClusterFactory.ts:93](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L93)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
+[packages/matter.js/src/cluster/ClusterFactory.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L59)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
+[packages/matter.js/src/cluster/ClusterFactory.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L60)
 
 ___
 
@@ -138,13 +138,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L61)
+[packages/matter.js/src/cluster/ClusterFactory.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L61)
 
 ___
 
 ### supportedFeatures
 
-• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<[`BitSchema`](../modules/schema_export.md#bitschema)\>
+• `Readonly` **supportedFeatures**: [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<[`BitSchema`](../modules/schema_export.md#bitschema)\>
 
 #### Inherited from
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
+[packages/matter.js/src/cluster/ClusterFactory.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L94)
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L95)
+[packages/matter.js/src/cluster/ClusterFactory.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L95)
 
 ___
 
@@ -176,4 +176,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:149](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L149)
+[packages/matter.js/src/cluster/ClusterFactory.ts:149](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L149)

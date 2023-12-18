@@ -55,7 +55,7 @@ ___
 
 ### send
 
-▸ **send**(`host`, `port`, `data`): `Promise`<`void`\>
+▸ **send**(`host`, `port`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -67,7 +67,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

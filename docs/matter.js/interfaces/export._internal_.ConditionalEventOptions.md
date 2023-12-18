@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ConditionalEventOptions
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ConditionalEventOptions
 
-# Interface: ConditionalEventOptions<F\>
+# Interface: ConditionalEventOptions\<F\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ConditionalEventOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ConditionalEventOptions
 
 ## Type parameters
 
@@ -28,21 +28,21 @@
 
 ### mandatoryIf
 
-• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:735](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L735)
+[packages/matter.js/src/cluster/Cluster.ts:735](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L735)
 
 ___
 
 ### optionalIf
 
-• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:734](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L734)
+[packages/matter.js/src/cluster/Cluster.ts:734](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L734)
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:730](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L730)
+[packages/matter.js/src/cluster/Cluster.ts:730](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L730)

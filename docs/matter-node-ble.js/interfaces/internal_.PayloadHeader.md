@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / PayloadHeader
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / PayloadHeader
 
 # Interface: PayloadHeader
 
-[<internal>](../modules/internal_.md).PayloadHeader
+[\<internal\>](../modules/internal_.md).PayloadHeader
 
 ## Table of contents
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:29
+matter.js/dist/esm/codec/MessageCodec.d.ts:31
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:24
+matter.js/dist/esm/codec/MessageCodec.d.ts:26
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:30
+matter.js/dist/esm/codec/MessageCodec.d.ts:32
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:27
+matter.js/dist/esm/codec/MessageCodec.d.ts:29
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:26
+matter.js/dist/esm/codec/MessageCodec.d.ts:28
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:25
+matter.js/dist/esm/codec/MessageCodec.d.ts:27
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:28
+matter.js/dist/esm/codec/MessageCodec.d.ts:30

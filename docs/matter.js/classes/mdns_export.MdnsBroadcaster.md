@@ -38,7 +38,7 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 ### constructor
 
-• **new MdnsBroadcaster**(`mdnsServer`, `enableIpv4?`)
+• **new MdnsBroadcaster**(`mdnsServer`, `enableIpv4?`): [`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)
 
 #### Parameters
 
@@ -47,29 +47,33 @@ This class is handing MDNS Announcements for multiple instances/devices
 | `mdnsServer` | [`MdnsServer`](mdns_export.MdnsServer.md) |
 | `enableIpv4?` | `boolean` |
 
+#### Returns
+
+[`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)
+
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L66)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L66)
 
 ## Properties
 
 ### activeCommissioningAnnouncements
 
-• `Private` `Readonly` **activeCommissioningAnnouncements**: `Set`<`number`\>
+• `Private` `Readonly` **activeCommissioningAnnouncements**: `Set`\<`number`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L63)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L63)
 
 ___
 
 ### activeOperationalAnnouncements
 
-• `Private` `Readonly` **activeOperationalAnnouncements**: `Map`<`number`, [`FabricIndex`](../modules/datatype_export.md#fabricindex)[]\>
+• `Private` `Readonly` **activeOperationalAnnouncements**: `Map`\<`number`, [`FabricIndex`](../modules/datatype_export.md#fabricindex)[]\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L64)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L64)
 
 ___
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L68)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L68)
 
 ___
 
@@ -89,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L67)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L67)
 
 ___
 
@@ -99,13 +103,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L62)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L62)
 
 ## Methods
 
 ### announce
 
-▸ **announce**(`announcementPort`): `Promise`<`void`\>
+▸ **announce**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -115,31 +119,31 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:314](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L314)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:314](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L314)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:343](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L343)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:343](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L343)
 
 ___
 
 ### expireAllAnnouncements
 
-▸ **expireAllAnnouncements**(`announcementPort`): `Promise`<`void`\>
+▸ **expireAllAnnouncements**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -149,17 +153,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:332](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L332)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:332](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L332)
 
 ___
 
 ### expireCommissioningAnnouncement
 
-▸ **expireCommissioningAnnouncement**(`announcementPort`): `Promise`<`void`\>
+▸ **expireCommissioningAnnouncement**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -169,17 +173,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:325](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L325)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:325](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L325)
 
 ___
 
 ### expireFabricAnnouncement
 
-▸ **expireFabricAnnouncement**(`announcementPort`): `Promise`<`void`\>
+▸ **expireFabricAnnouncement**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -189,17 +193,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:318](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L318)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:318](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L318)
 
 ___
 
 ### getIpRecords
 
-▸ `Private` **getIpRecords**(`hostname`, `ips`): [`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
+▸ **getIpRecords**(`hostname`, `ips`): [`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]
 
 #### Parameters
 
@@ -210,17 +214,17 @@ ___
 
 #### Returns
 
-[`DnsRecord`](../modules/codec_export.md#dnsrecord)<`any`\>[]
+[`DnsRecord`](../modules/codec_export.md#dnsrecord)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:95](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L95)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L95)
 
 ___
 
 ### setCommissionMode
 
-▸ **setCommissionMode**(`announcedNetPort`, `mode`, `«destructured»`): `Promise`<`void`\>
+▸ **setCommissionMode**(`announcedNetPort`, `mode`, `«destructured»`): `Promise`\<`void`\>
 
 Set the Broadcaster data to announce a device ready for commissioning in a special mode
 
@@ -234,17 +238,17 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L112)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L112)
 
 ___
 
 ### setCommissionerInfo
 
-▸ **setCommissionerInfo**(`announcedNetPort`, `«destructured»`): `Promise`<`void`\>
+▸ **setCommissionerInfo**(`announcedNetPort`, `«destructured»`): `Promise`\<`void`\>
 
 Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
@@ -257,17 +261,17 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:259](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L259)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:259](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L259)
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(`announcedNetPort`, `fabrics`, `«destructured»?`): `Promise`<`void`\>
+▸ **setFabrics**(`announcedNetPort`, `fabrics`, `«destructured»?`): `Promise`\<`void`\>
 
 Set the Broadcaster Data to announce a device for operative discovery (aka "already paired")
 
@@ -281,11 +285,11 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:195](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L195)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:195](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L195)
 
 ___
 
@@ -297,7 +301,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `pairingHint` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<{ `administrator`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `customInstruction`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `deviceManual`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `powerCycle`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\> |
+| `pairingHint` | [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<\{ `administrator`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `customInstruction`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `deviceManual`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `powerCycle`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](../modules/schema_export.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](../modules/schema_export.md#bitflag-1)  }\> |
 | `pairingInstructions` | `string` |
 
 #### Returns
@@ -306,13 +310,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L71)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L71)
 
 ___
 
 ### create
 
-▸ `Static` **create**(`options?`): `Promise`<[`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)\>
+▸ **create**(`options?`): `Promise`\<[`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)\>
 
 #### Parameters
 
@@ -324,8 +328,8 @@ ___
 
 #### Returns
 
-`Promise`<[`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)\>
+`Promise`\<[`MdnsBroadcaster`](mdns_export.MdnsBroadcaster.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsBroadcaster.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L54)
+[packages/matter.js/src/mdns/MdnsBroadcaster.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsBroadcaster.ts#L54)

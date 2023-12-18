@@ -27,7 +27,7 @@ Error base Class for all errors related to the status response messages.
 
 ### constructor
 
-• **new ChannelStatusResponseError**(`message`, `generalStatusCode`, `protocolStatusCode`)
+• **new ChannelStatusResponseError**(`message`, `generalStatusCode`, `protocolStatusCode`): [`ChannelStatusResponseError`](exports_securechannel.ChannelStatusResponseError.md)
 
 #### Parameters
 
@@ -36,6 +36,10 @@ Error base Class for all errors related to the status response messages.
 | `message` | `string` |
 | `generalStatusCode` | [`GeneralStatusCode`](../enums/exports_securechannel.GeneralStatusCode.md) |
 | `protocolStatusCode` | [`ProtocolStatusCode`](../enums/exports_securechannel.ProtocolStatusCode.md) |
+
+#### Returns
+
+[`ChannelStatusResponseError`](exports_securechannel.ChannelStatusResponseError.md)
 
 #### Overrides
 

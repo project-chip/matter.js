@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [protocol/export](../modules/protocol_export.md) / MessageExchange
 
-# Class: MessageExchange<ContextT\>
+# Class: MessageExchange\<ContextT\>
 
 [protocol/export](../modules/protocol_export.md).MessageExchange
 
@@ -63,7 +63,7 @@
 
 ### constructor
 
-• **new MessageExchange**<`ContextT`\>(`session`, `channel`, `messageCounter`, `isInitiator`, `peerSessionId`, `nodeId`, `peerNodeId`, `exchangeId`, `protocolId`, `closeCallback`)
+• **new MessageExchange**\<`ContextT`\>(`session`, `channel`, `messageCounter`, `isInitiator`, `peerSessionId`, `nodeId`, `peerNodeId`, `exchangeId`, `protocolId`, `closeCallback`): [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -75,8 +75,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`ContextT`\> |
-| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\> |
+| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
 | `isInitiator` | `boolean` |
 | `peerSessionId` | `number` |
@@ -84,11 +84,15 @@
 | `peerNodeId` | `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:125](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L125)
+[packages/matter.js/src/protocol/MessageExchange.ts:124](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L124)
 
 ## Properties
 
@@ -98,35 +102,35 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L113)
+[packages/matter.js/src/protocol/MessageExchange.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L112)
 
 ___
 
 ### channel
 
-• `Readonly` **channel**: [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\>
+• `Readonly` **channel**: [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L127)
+[packages/matter.js/src/protocol/MessageExchange.ts:126](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L126)
 
 ___
 
 ### closeCallback
 
-• `Private` `Readonly` **closeCallback**: () => `Promise`<`void`\>
+• `Private` `Readonly` **closeCallback**: () => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\>
+▸ (): `Promise`\<`void`\>
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:135](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L135)
+[packages/matter.js/src/protocol/MessageExchange.ts:134](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L134)
 
 ___
 
@@ -136,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:122](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L122)
+[packages/matter.js/src/protocol/MessageExchange.ts:121](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L121)
 
 ___
 
@@ -146,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:133](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L133)
+[packages/matter.js/src/protocol/MessageExchange.ts:132](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L132)
 
 ___
 
@@ -156,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:114](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L114)
+[packages/matter.js/src/protocol/MessageExchange.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L113)
 
 ___
 
@@ -166,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L129)
+[packages/matter.js/src/protocol/MessageExchange.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L128)
 
 ___
 
@@ -176,17 +180,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L128)
+[packages/matter.js/src/protocol/MessageExchange.ts:127](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L127)
 
 ___
 
 ### messagesQueue
 
-• `Private` `Readonly` **messagesQueue**: [`Queue`](util_export.Queue.md)<[`Message`](../interfaces/codec_export.Message.md)\>
+• `Private` `Readonly` **messagesQueue**: [`Queue`](util_export.Queue.md)\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L116)
+[packages/matter.js/src/protocol/MessageExchange.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L115)
 
 ___
 
@@ -196,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L131)
+[packages/matter.js/src/protocol/MessageExchange.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L130)
 
 ___
 
@@ -206,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:132](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L132)
+[packages/matter.js/src/protocol/MessageExchange.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L131)
 
 ___
 
@@ -216,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L130)
+[packages/matter.js/src/protocol/MessageExchange.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L129)
 
 ___
 
@@ -226,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:134](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L134)
+[packages/matter.js/src/protocol/MessageExchange.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L133)
 
 ___
 
@@ -236,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:117](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L117)
+[packages/matter.js/src/protocol/MessageExchange.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L116)
 
 ___
 
@@ -246,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L115)
+[packages/matter.js/src/protocol/MessageExchange.ts:114](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L114)
 
 ___
 
@@ -256,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:121](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L121)
+[packages/matter.js/src/protocol/MessageExchange.ts:120](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L120)
 
 ___
 
@@ -266,7 +270,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:120](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L120)
+[packages/matter.js/src/protocol/MessageExchange.ts:119](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L119)
 
 ___
 
@@ -276,7 +280,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:119](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L119)
+[packages/matter.js/src/protocol/MessageExchange.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L118)
 
 ___
 
@@ -286,17 +290,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:118](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L118)
+[packages/matter.js/src/protocol/MessageExchange.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L117)
 
 ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/session_export.Session.md)<`ContextT`\>
+• `Readonly` **session**: [`Session`](../interfaces/session_export.Session.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:126](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L126)
+[packages/matter.js/src/protocol/MessageExchange.ts:125](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L125)
 
 ___
 
@@ -306,7 +310,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:123](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L123)
+[packages/matter.js/src/protocol/MessageExchange.ts:122](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L122)
 
 ## Methods
 
@@ -320,55 +324,55 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:377](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L377)
+[packages/matter.js/src/protocol/MessageExchange.ts:376](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L376)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:397](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L397)
+[packages/matter.js/src/protocol/MessageExchange.ts:396](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L396)
 
 ___
 
 ### closeInternal
 
-▸ `Private` **closeInternal**(): `Promise`<`void`\>
+▸ **closeInternal**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:412](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L412)
+[packages/matter.js/src/protocol/MessageExchange.ts:411](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L411)
 
 ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:348](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L348)
+[packages/matter.js/src/protocol/MessageExchange.ts:347](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L347)
 
 ___
 
 ### getResubmissionBackOffTime
 
-▸ `Private` **getResubmissionBackOffTime**(`retransmissionCount`): `number`
+▸ **getResubmissionBackOffTime**(`retransmissionCount`): `number`
 
 #### Parameters
 
@@ -386,7 +390,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:301](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L301)
+[packages/matter.js/src/protocol/MessageExchange.ts:300](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L300)
 
 ___
 
@@ -400,7 +404,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:389](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L389)
+[packages/matter.js/src/protocol/MessageExchange.ts:388](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L388)
 
 ___
 
@@ -414,7 +418,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:393](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L393)
+[packages/matter.js/src/protocol/MessageExchange.ts:392](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L392)
 
 ___
 
@@ -428,27 +432,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:385](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L385)
+[packages/matter.js/src/protocol/MessageExchange.ts:384](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L384)
 
 ___
 
 ### nextMessage
 
-▸ **nextMessage**(): `Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+▸ **nextMessage**(): `Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+`Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:282](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L282)
+[packages/matter.js/src/protocol/MessageExchange.ts:281](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L281)
 
 ___
 
 ### onMessageReceived
 
-▸ **onMessageReceived**(`message`): `Promise`<`void`\>
+▸ **onMessageReceived**(`message`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -458,17 +462,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:156](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L156)
+[packages/matter.js/src/protocol/MessageExchange.ts:155](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L155)
 
 ___
 
 ### retransmitMessage
 
-▸ `Private` **retransmitMessage**(`message`, `retransmissionCount`, `notTimeoutBeforeTimeMs?`): `void`
+▸ **retransmitMessage**(`message`, `retransmissionCount`, `notTimeoutBeforeTimeMs?`): `void`
 
 #### Parameters
 
@@ -484,13 +488,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:313](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L313)
+[packages/matter.js/src/protocol/MessageExchange.ts:312](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L312)
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -502,11 +506,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:216](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L216)
+[packages/matter.js/src/protocol/MessageExchange.ts:215](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L215)
 
 ___
 
@@ -526,13 +530,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:359](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L359)
+[packages/matter.js/src/protocol/MessageExchange.ts:358](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L358)
 
 ___
 
 ### waitFor
 
-▸ **waitFor**(`messageType`, `timeoutMs?`): `Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+▸ **waitFor**(`messageType`, `timeoutMs?`): `Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Parameters
 
@@ -543,17 +547,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+`Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:286](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L286)
+[packages/matter.js/src/protocol/MessageExchange.ts:285](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L285)
 
 ___
 
 ### fromInitialMessage
 
-▸ `Static` **fromInitialMessage**<`ContextT`\>(`channel`, `messageCounter`, `initialMessage`, `closeCallback`): [`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+▸ **fromInitialMessage**\<`ContextT`\>(`channel`, `messageCounter`, `initialMessage`, `closeCallback`): [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -565,24 +569,24 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
 | `initialMessage` | [`Message`](../interfaces/codec_export.Message.md) |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
 
 #### Returns
 
-[`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:70](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L70)
+[packages/matter.js/src/protocol/MessageExchange.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L69)
 
 ___
 
 ### initiate
 
-▸ `Static` **initiate**<`ContextT`\>(`channel`, `exchangeId`, `protocolId`, `messageCounter`, `closeCallback`): [`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+▸ **initiate**\<`ContextT`\>(`channel`, `exchangeId`, `protocolId`, `messageCounter`, `closeCallback`): [`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -594,16 +598,16 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](protocol_export.MessageChannel.md)\<`ContextT`\> |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
 
 #### Returns
 
-[`MessageExchange`](protocol_export.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](protocol_export.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:91](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L91)
+[packages/matter.js/src/protocol/MessageExchange.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L90)

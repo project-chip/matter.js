@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Message
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Message
 
 # Interface: Message
 
-[<internal>](../modules/internal_.md).Message
+[\<internal\>](../modules/internal_.md).Message
 
 ## Hierarchy
 
@@ -27,7 +27,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:41
+matter.js/dist/esm/codec/MessageCodec.d.ts:43
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:44
+matter.js/dist/esm/codec/MessageCodec.d.ts:46
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:42
+matter.js/dist/esm/codec/MessageCodec.d.ts:44
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:43
+matter.js/dist/esm/codec/MessageCodec.d.ts:45

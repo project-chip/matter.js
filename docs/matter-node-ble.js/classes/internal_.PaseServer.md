@@ -1,12 +1,12 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / PaseServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / PaseServer
 
 # Class: PaseServer
 
-[<internal>](../modules/internal_.md).PaseServer
+[\<internal\>](../modules/internal_.md).PaseServer
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<[`MatterDevice`](internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -36,7 +36,7 @@
 
 ### constructor
 
-• **new PaseServer**(`w0`, `L`, `pbkdfParameters?`)
+• **new PaseServer**(`w0`, `L`, `pbkdfParameters?`): [`PaseServer`](internal_.PaseServer.md)
 
 #### Parameters
 
@@ -45,6 +45,10 @@
 | `w0` | `BN` |
 | `L` | `Uint8Array` |
 | `pbkdfParameters?` | [`PbkdfParameters`](../interfaces/internal_.PbkdfParameters.md) |
+
+#### Returns
+
+[`PaseServer`](internal_.PaseServer.md)
 
 #### Defined in
 
@@ -114,7 +118,7 @@ matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 ### cancelPairing
 
-▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`<`void`\>
+▸ **cancelPairing**(`messenger`, `sendError?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -125,7 +129,7 @@ matter.js/dist/esm/session/pase/PaseServer.d.ts:17
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -135,11 +139,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -171,17 +175,17 @@ ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -195,7 +199,7 @@ ___
 
 ### fromPin
 
-▸ `Static` **fromPin**(`setupPinCode`, `pbkdfParameters`): `Promise`<[`PaseServer`](internal_.PaseServer.md)\>
+▸ **fromPin**(`setupPinCode`, `pbkdfParameters`): `Promise`\<[`PaseServer`](internal_.PaseServer.md)\>
 
 #### Parameters
 
@@ -206,7 +210,7 @@ ___
 
 #### Returns
 
-`Promise`<[`PaseServer`](internal_.PaseServer.md)\>
+`Promise`\<[`PaseServer`](internal_.PaseServer.md)\>
 
 #### Defined in
 
@@ -216,7 +220,7 @@ ___
 
 ### fromVerificationValue
 
-▸ `Static` **fromVerificationValue**(`verificationValue`, `pbkdfParameters?`): [`PaseServer`](internal_.PaseServer.md)
+▸ **fromVerificationValue**(`verificationValue`, `pbkdfParameters?`): [`PaseServer`](internal_.PaseServer.md)
 
 #### Parameters
 

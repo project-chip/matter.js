@@ -420,7 +420,7 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:15
 
 ### assertSecureSession
 
-▸ **assertSecureSession**<`T`\>(`session`, `errorText?`): asserts session is SecureSession<T\>
+▸ **assertSecureSession**\<`T`\>(`session`, `errorText?`): asserts session is SecureSession\<T\>
 
 #### Type parameters
 
@@ -432,13 +432,13 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:15
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<`T`\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`T`\> |
 | `errorText?` | `string` |
 
 #### Returns
 
-asserts session is SecureSession<T\>
+asserts session is SecureSession\<T\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:97
+packages/matter.js/dist/esm/session/SecureSession.d.ts:98

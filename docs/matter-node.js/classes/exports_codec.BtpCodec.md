@@ -34,7 +34,11 @@
 
 ### constructor
 
-• **new BtpCodec**()
+• **new BtpCodec**(): [`BtpCodec`](exports_codec.BtpCodec.md)
+
+#### Returns
+
+[`BtpCodec`](exports_codec.BtpCodec.md)
 
 ## Properties
 
@@ -90,7 +94,7 @@ packages/matter.js/dist/esm/codec/BtpCodec.d.ts:61
 
 ### decodeBleAdvertisementData
 
-▸ `Static` **decodeBleAdvertisementData**(`data`): `Object`
+▸ **decodeBleAdvertisementData**(`data`): `Object`
 
 #### Parameters
 
@@ -117,7 +121,7 @@ ___
 
 ### decodeBleAdvertisementServiceData
 
-▸ `Static` **decodeBleAdvertisementServiceData**(`data`): `Object`
+▸ **decodeBleAdvertisementServiceData**(`data`): `Object`
 
 #### Parameters
 
@@ -144,7 +148,7 @@ ___
 
 ### decodeBtpHandshakeRequest
 
-▸ `Static` **decodeBtpHandshakeRequest**(`data`): [`BtpHandshakeRequest`](../interfaces/exports_codec.BtpHandshakeRequest.md)
+▸ **decodeBtpHandshakeRequest**(`data`): [`BtpHandshakeRequest`](../interfaces/exports_codec.BtpHandshakeRequest.md)
 
 #### Parameters
 
@@ -164,7 +168,7 @@ ___
 
 ### decodeBtpHandshakeResponsePayload
 
-▸ `Static` **decodeBtpHandshakeResponsePayload**(`data`): [`BtpHandshakeResponse`](../interfaces/exports_codec.BtpHandshakeResponse.md)
+▸ **decodeBtpHandshakeResponsePayload**(`data`): [`BtpHandshakeResponse`](../interfaces/exports_codec.BtpHandshakeResponse.md)
 
 #### Parameters
 
@@ -184,7 +188,7 @@ ___
 
 ### decodeBtpPacket
 
-▸ `Static` **decodeBtpPacket**(`data`): [`DecodedBtpPacket`](../interfaces/exports_codec.DecodedBtpPacket.md)
+▸ **decodeBtpPacket**(`data`): [`DecodedBtpPacket`](../interfaces/exports_codec.DecodedBtpPacket.md)
 
 #### Parameters
 
@@ -204,7 +208,7 @@ ___
 
 ### encodeBleAdvertisementData
 
-▸ `Static` **encodeBleAdvertisementData**(`discriminator`, `vendorId`, `productId`, `hasAdditionalAdvertisementData?`): `Uint8Array`
+▸ **encodeBleAdvertisementData**(`discriminator`, `vendorId`, `productId`, `hasAdditionalAdvertisementData?`): `Uint8Array`
 
 #### Parameters
 
@@ -227,7 +231,7 @@ ___
 
 ### encodeBtpHandshakeRequest
 
-▸ `Static` **encodeBtpHandshakeRequest**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpHandshakeRequest**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -247,7 +251,7 @@ ___
 
 ### encodeBtpHandshakeResponse
 
-▸ `Static` **encodeBtpHandshakeResponse**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpHandshakeResponse**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -267,7 +271,7 @@ ___
 
 ### encodeBtpPacket
 
-▸ `Static` **encodeBtpPacket**(`«destructured»`): `Uint8Array`
+▸ **encodeBtpPacket**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 

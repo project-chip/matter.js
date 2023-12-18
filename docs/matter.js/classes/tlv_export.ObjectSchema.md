@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [tlv/export](../modules/tlv_export.md) / ObjectSchema
 
-# Class: ObjectSchema<F\>
+# Class: ObjectSchema\<F\>
 
 [tlv/export](../modules/tlv_export.md).ObjectSchema
 
@@ -18,7 +18,7 @@ Schema to encode an object in TLV.
 
 ## Hierarchy
 
-- [`TlvSchema`](tlv_export.TlvSchema.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>\>
+- [`TlvSchema`](tlv_export.TlvSchema.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>\>
 
   ↳ **`ObjectSchema`**
 
@@ -53,7 +53,7 @@ Schema to encode an object in TLV.
 
 ### constructor
 
-• **new ObjectSchema**<`F`\>(`fieldDefinitions`, `type?`)
+• **new ObjectSchema**\<`F`\>(`fieldDefinitions`, `type?`): [`ObjectSchema`](tlv_export.ObjectSchema.md)\<`F`\>
 
 #### Type parameters
 
@@ -68,23 +68,27 @@ Schema to encode an object in TLV.
 | `fieldDefinitions` | `F` | `undefined` |
 | `type` | [`Structure`](../enums/tlv_export.TlvType.md#structure) \| [`List`](../enums/tlv_export.TlvType.md#list) | `TlvType.Structure` |
 
+#### Returns
+
+[`ObjectSchema`](tlv_export.ObjectSchema.md)\<`F`\>
+
 #### Overrides
 
-TlvSchema&lt;TypeFromFields&lt;F\&gt;\&gt;.constructor
+TlvSchema\&lt;TypeFromFields\&lt;F\&gt;\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L49)
+[packages/matter.js/src/tlv/TlvObject.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L63)
 
 ## Properties
 
 ### fieldById
 
-• `Private` `Readonly` **fieldById**: { `field`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`any`\> ; `name`: `string`  }[]
+• `Private` `Readonly` **fieldById**: \{ `field`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`any`\> ; `name`: `string`  }[]
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L47)
+[packages/matter.js/src/tlv/TlvObject.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L61)
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L50)
+[packages/matter.js/src/tlv/TlvObject.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L64)
 
 ___
 
@@ -104,13 +108,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L51)
+[packages/matter.js/src/tlv/TlvObject.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L65)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 Decodes the encoded data using the schema.
 
@@ -123,7 +127,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -131,13 +135,13 @@ TlvSchema.decode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeInternal
 
-▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -147,7 +151,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -155,13 +159,13 @@ TlvSchema.decodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L14)
+[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L14)
 
 ___
 
 ### decodeTlv
 
-▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -171,7 +175,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -179,7 +183,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L30)
+[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L30)
 
 ___
 
@@ -200,7 +204,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `tag?` | [`TlvTag`](../modules/tlv_export.md#tlvtag) |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 
 #### Inherited from
 
@@ -208,13 +212,13 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L34)
+[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L34)
 
 ___
 
 ### decodeTlvInternalValue
 
-▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -225,7 +229,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -233,7 +237,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L77)
+[packages/matter.js/src/tlv/TlvObject.ts:103](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L103)
 
 ___
 
@@ -247,7 +251,7 @@ Encodes the value using the schema.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -259,7 +263,7 @@ TlvSchema.encode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -271,7 +275,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -283,7 +287,7 @@ TlvSchema.encodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L18)
+[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L18)
 
 ___
 
@@ -295,7 +299,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -307,7 +311,7 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L24)
+[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L24)
 
 ___
 
@@ -320,7 +324,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `writer` | [`TlvWriter`](../interfaces/tlv_export.TlvWriter.md) |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 | `tag?` | [`TlvTag`](../modules/tlv_export.md#tlvtag) |
 
 #### Returns
@@ -333,26 +337,26 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L61)
+[packages/matter.js/src/tlv/TlvObject.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L78)
 
 ___
 
 ### injectField
 
-▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `fieldValue` | `any` |
 | `injectChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -360,25 +364,25 @@ TlvSchema.injectField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:122](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L122)
+[packages/matter.js/src/tlv/TlvObject.ts:180](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L180)
 
 ___
 
 ### removeField
 
-▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `removeChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -386,7 +390,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:143](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L143)
+[packages/matter.js/src/tlv/TlvObject.ts:201](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L201)
 
 ___
 
@@ -398,7 +402,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -410,4 +414,4 @@ TlvSchema.validate
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L109)
+[packages/matter.js/src/tlv/TlvObject.ts:148](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L148)

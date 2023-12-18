@@ -12,7 +12,7 @@ or cluster element.
 
 ## Hierarchy
 
-- [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Access.md#definition)\>
+- [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Access.md#definition)\>
 
   ↳ **`Access`**
 
@@ -57,7 +57,7 @@ or cluster element.
 
 ### constructor
 
-• **new Access**(`definition`)
+• **new Access**(`definition`): [`Access`](exports_model.Access-1.md)
 
 Initialize from an Access.Definition or the access control DSL defined
 by the Matter Specification.
@@ -67,6 +67,10 @@ by the Matter Specification.
 | Name | Type |
 | :------ | :------ |
 | `definition` | [`Definition`](../modules/exports_model.Access.md#definition) |
+
+#### Returns
+
+[`Access`](exports_model.Access-1.md)
 
 #### Overrides
 
@@ -303,7 +307,7 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Access.md#definition)\>
+▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Access.md#definition)\>
 
 #### Parameters
 
@@ -313,7 +317,7 @@ ___
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Access.md#definition)\>
+[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Access.md#definition)\>
 
 #### Inherited from
 
@@ -365,7 +369,7 @@ ___
 
 ### parse
 
-▸ `Static` **parse**(`access`, `definition`): [`Flags`](../modules/exports_model.Access.md#flags)
+▸ **parse**(`access`, `definition`): [`Flags`](../modules/exports_model.Access.md#flags)
 
 Parses standard Matter access syntax into an AccessFlag set.  Extremely
 lenient.

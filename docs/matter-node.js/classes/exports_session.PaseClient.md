@@ -21,25 +21,29 @@
 
 ### constructor
 
-• **new PaseClient**()
+• **new PaseClient**(): [`PaseClient`](exports_session.PaseClient.md)
+
+#### Returns
+
+[`PaseClient`](exports_session.PaseClient.md)
 
 ## Methods
 
 ### pair
 
-▸ **pair**(`client`, `exchange`, `setupPin`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **pair**(`client`, `exchange`, `setupPin`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `client` | [`MatterController`](export._internal_.MatterController.md) |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
 | `setupPin` | `number` |
 
 #### Returns
 
-`Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
+`Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Defined in
 
@@ -49,7 +53,7 @@ ___
 
 ### generatePakePasscodeVerifier
 
-▸ `Static` **generatePakePasscodeVerifier**(`setupPinCode`, `pbkdfParameters`): `Promise`<`Uint8Array`\>
+▸ **generatePakePasscodeVerifier**(`setupPinCode`, `pbkdfParameters`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -60,7 +64,7 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -70,7 +74,7 @@ ___
 
 ### generateRandomDiscriminator
 
-▸ `Static` **generateRandomDiscriminator**(): `number`
+▸ **generateRandomDiscriminator**(): `number`
 
 #### Returns
 
@@ -84,7 +88,7 @@ ___
 
 ### generateRandomPasscode
 
-▸ `Static` **generateRandomPasscode**(): `number`
+▸ **generateRandomPasscode**(): `number`
 
 #### Returns
 

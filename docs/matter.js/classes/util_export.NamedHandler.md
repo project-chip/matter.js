@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / NamedHandler
 
-# Class: NamedHandler<H\>
+# Class: NamedHandler\<H\>
 
 [util/export](../modules/util_export.md).NamedHandler
 
@@ -8,7 +8,7 @@
 
 | Name | Type |
 | :------ | :------ |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
 
 ## Table of contents
 
@@ -31,29 +31,33 @@
 
 ### constructor
 
-• **new NamedHandler**<`H`\>()
+• **new NamedHandler**\<`H`\>(): [`NamedHandler`](util_export.NamedHandler.md)\<`H`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](../modules/util_export.md#handlerfunction)\> |
+
+#### Returns
+
+[`NamedHandler`](util_export.NamedHandler.md)\<`H`\>
 
 ## Properties
 
 ### handler
 
-• `Private` **handler**: { `action`: keyof `H` ; `handler`: `H`[keyof `H`]  }[] = `[]`
+• `Private` **handler**: \{ `action`: keyof `H` ; `handler`: `H`[keyof `H`]  }[] = `[]`
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L10)
+[packages/matter.js/src/util/NamedHandler.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L10)
 
 ## Methods
 
 ### addHandler
 
-▸ **addHandler**<`K`\>(`action`, `handler`): `void`
+▸ **addHandler**\<`K`\>(`action`, `handler`): `void`
 
 #### Type parameters
 
@@ -74,13 +78,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L16)
+[packages/matter.js/src/util/NamedHandler.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L16)
 
 ___
 
 ### executeHandler
 
-▸ **executeHandler**<`K`\>(`action`, `...args`): `Promise`<`any`\>
+▸ **executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`any`\>
 
 #### Type parameters
 
@@ -93,21 +97,21 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `action` | `K` |
-| `...args` | `Parameters`<`H`[`K`]\> |
+| `...args` | `Parameters`\<`H`[`K`]\> |
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L20)
+[packages/matter.js/src/util/NamedHandler.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L20)
 
 ___
 
 ### hasHandler
 
-▸ **hasHandler**<`K`\>(`action`): `boolean`
+▸ **hasHandler**\<`K`\>(`action`): `boolean`
 
 #### Type parameters
 
@@ -127,13 +131,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L12)
+[packages/matter.js/src/util/NamedHandler.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L12)
 
 ___
 
 ### removeHandler
 
-▸ **removeHandler**<`K`\>(`action`, `handler`): `void`
+▸ **removeHandler**\<`K`\>(`action`, `handler`): `void`
 
 #### Type parameters
 
@@ -154,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L28)
+[packages/matter.js/src/util/NamedHandler.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L28)

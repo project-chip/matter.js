@@ -26,7 +26,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new UnexpectedMessageError**(`message`, `receivedMessage`)
+• **new UnexpectedMessageError**(`message`, `receivedMessage`): [`UnexpectedMessageError`](protocol_export.UnexpectedMessageError.md)
 
 #### Parameters
 
@@ -35,13 +35,17 @@ Error base class for all errors thrown by this library.
 | `message` | `string` |
 | `receivedMessage` | [`Message`](../interfaces/codec_export.Message.md) |
 
+#### Returns
+
+[`UnexpectedMessageError`](protocol_export.UnexpectedMessageError.md)
+
 #### Overrides
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L28)
+[packages/matter.js/src/protocol/MessageExchange.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L27)
 
 ## Properties
 
@@ -51,4 +55,4 @@ Error base class for all errors thrown by this library.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/MessageExchange.ts#L30)
+[packages/matter.js/src/protocol/MessageExchange.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L29)

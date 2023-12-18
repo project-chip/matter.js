@@ -22,7 +22,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new CertificateError**(`message?`)
+• **new CertificateError**(`message?`): [`CertificateError`](certificate_export.CertificateError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`CertificateError`](certificate_export.CertificateError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

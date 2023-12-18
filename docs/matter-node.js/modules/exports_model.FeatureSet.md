@@ -16,7 +16,7 @@
 
 ### Definition
 
-Ƭ **Definition**: [`Flags`](exports_model.FeatureSet.md#flags) \| { `[name: string]`: `boolean`;  }
+Ƭ **Definition**: [`Flags`](exports_model.FeatureSet.md#flags) \| \{ `[name: string]`: `boolean`;  }
 
 #### Defined in
 
@@ -36,7 +36,7 @@ ___
 
 ### Flags
 
-Ƭ **Flags**: `Iterable`<[`Flag`](exports_model.FeatureSet.md#flag)\>
+Ƭ **Flags**: `Iterable`\<[`Flag`](exports_model.FeatureSet.md#flag)\>
 
 #### Defined in
 

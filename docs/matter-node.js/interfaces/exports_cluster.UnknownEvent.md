@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / UnknownEvent
 
-# Interface: UnknownEvent<F\>
+# Interface: UnknownEvent\<F\>
 
 [exports/cluster](../modules/exports_cluster.md).UnknownEvent
 
@@ -12,7 +12,7 @@
 
 ## Hierarchy
 
-- [`Event`](../modules/exports_cluster.md#event)<`any`, `F`\>
+- [`Event`](../modules/exports_cluster.md#event)\<`any`, `F`\>
 
   ↳ **`UnknownEvent`**
 
@@ -62,7 +62,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -90,7 +90,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -132,7 +132,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`any`\>
+• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`any`\>
 
 #### Inherited from
 

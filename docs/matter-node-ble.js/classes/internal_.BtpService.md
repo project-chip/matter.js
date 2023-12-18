@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / BtpService
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / BtpService
 
 # Class: BtpService
 
-[<internal>](../modules/internal_.md).BtpService
+[\<internal\>](../modules/internal_.md).BtpService
 
 ## Hierarchy
 
@@ -20,7 +20,11 @@
 
 ### constructor
 
-• **new BtpService**()
+• **new BtpService**(): [`BtpService`](internal_.BtpService.md)
+
+#### Returns
+
+[`BtpService`](internal_.BtpService.md)
 
 #### Overrides
 
@@ -28,4 +32,4 @@ Bleno.PrimaryService.constructor
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:106](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L106)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:106](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L106)

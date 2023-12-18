@@ -20,7 +20,7 @@
 
 ### Constructor
 
-Ƭ **Constructor**<`T`\>: (...`args`: `any`) => `T`
+Ƭ **Constructor**\<`T`\>: (...`args`: `any`) => `T`
 
 #### Type parameters
 
@@ -30,13 +30,17 @@
 
 #### Type declaration
 
-• (`...args`)
+• (`...args`): `T`
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `...args` | `any` |
+
+##### Returns
+
+`T`
 
 #### Defined in
 
@@ -46,7 +50,7 @@ ___
 
 ### LookupPredicate
 
-Ƭ **LookupPredicate**<`T`\>: [`Constructor`](exports_model.Model.md#constructor)<`T`\> \| { `test`: (`model`: [`Model`](../classes/exports_model.Model-1.md)) => `boolean` ; `type`: [`Constructor`](exports_model.Model.md#constructor)<`T`\>  }
+Ƭ **LookupPredicate**\<`T`\>: [`Constructor`](exports_model.Model.md#constructor)\<`T`\> \| \{ `test`: (`model`: [`Model`](../classes/exports_model.Model-1.md)) => `boolean` ; `type`: [`Constructor`](exports_model.Model.md#constructor)\<`T`\>  }
 
 #### Type parameters
 
@@ -71,8 +75,8 @@ ___
 | `name` | `string` |
 | `nullable?` | `boolean` |
 | `required?` | `boolean` |
-| `type` | `string` \| (...`args`: `any`[]) => `any` \| { `[key: string \| number]`: `any`;  } \| `undefined` |
-| `values?` | { `[name: string]`: `any`;  } |
+| `type` | `string` \| (...`args`: `any`[]) => `any` \| \{ `[key: string \| number]`: `any`;  } \| `undefined` |
+| `values?` | \{ `[name: string]`: `any`;  } |
 
 #### Defined in
 

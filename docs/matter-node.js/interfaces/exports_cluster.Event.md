@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / Event
 
-# Interface: Event<T, F\>
+# Interface: Event\<T, F\>
 
 [exports/cluster](../modules/exports_cluster.md).Event
 
@@ -49,7 +49,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -69,7 +69,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -99,7 +99,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Defined in
 

@@ -45,7 +45,7 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 
 ### constructor
 
-• **new FailSafeManager**(`device`, `associatedFabric`, `expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `expiryCallback`, `rootEndpoint`)
+• **new FailSafeManager**(`device`, `associatedFabric`, `expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `expiryCallback`, `rootEndpoint`): [`FailSafeManager`](common_export.FailSafeManager.md)
 
 #### Parameters
 
@@ -55,12 +55,16 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 | `associatedFabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
 | `expiryLengthSeconds` | `number` |
 | `maxCumulativeFailsafeSeconds` | `number` |
-| `expiryCallback` | () => `Promise`<`void`\> |
+| `expiryCallback` | () => `Promise`\<`void`\> |
 | `rootEndpoint` | [`Endpoint`](device_export.Endpoint.md) |
+
+#### Returns
+
+[`FailSafeManager`](common_export.FailSafeManager.md)
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L30)
+[packages/matter.js/src/common/FailSafeManager.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L30)
 
 ## Properties
 
@@ -70,7 +74,7 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L32)
+[packages/matter.js/src/common/FailSafeManager.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L32)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L27)
+[packages/matter.js/src/common/FailSafeManager.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L27)
 
 ___
 
@@ -90,25 +94,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L31)
+[packages/matter.js/src/common/FailSafeManager.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L31)
 
 ___
 
 ### expiryCallback
 
-• `Private` `Readonly` **expiryCallback**: () => `Promise`<`void`\>
+• `Private` `Readonly` **expiryCallback**: () => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\>
+▸ (): `Promise`\<`void`\>
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L35)
+[packages/matter.js/src/common/FailSafeManager.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L35)
 
 ___
 
@@ -118,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L20)
+[packages/matter.js/src/common/FailSafeManager.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L20)
 
 ___
 
@@ -128,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L21)
+[packages/matter.js/src/common/FailSafeManager.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L21)
 
 ___
 
@@ -138,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L28)
+[packages/matter.js/src/common/FailSafeManager.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L28)
 
 ___
 
@@ -148,7 +152,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L22)
+[packages/matter.js/src/common/FailSafeManager.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L22)
 
 ___
 
@@ -158,17 +162,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L36)
+[packages/matter.js/src/common/FailSafeManager.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L36)
 
 ___
 
 ### storedNetworkClusterState
 
-• `Private` **storedNetworkClusterState**: `Map`<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `connected`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>[]\>
+• `Private` **storedNetworkClusterState**: `Map`\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `connected`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `networkId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>[]\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L23)
+[packages/matter.js/src/common/FailSafeManager.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L23)
 
 ## Accessors
 
@@ -182,13 +186,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L79)
+[packages/matter.js/src/common/FailSafeManager.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L79)
 
 ## Methods
 
 ### buildFabric
 
-▸ **buildFabric**(`nocData`): `Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+▸ **buildFabric**(`nocData`): `Promise`\<[`Fabric`](fabric_export.Fabric.md)\>
 
 Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster.
 
@@ -205,17 +209,17 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Returns
 
-`Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+`Promise`\<[`Fabric`](fabric_export.Fabric.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:163](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L163)
+[packages/matter.js/src/common/FailSafeManager.ts:163](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L163)
 
 ___
 
 ### buildUpdatedFabric
 
-▸ **buildUpdatedFabric**(`nocValue`, `icacValue`): `Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+▸ **buildUpdatedFabric**(`nocValue`, `icacValue`): `Promise`\<[`Fabric`](fabric_export.Fabric.md)\>
 
 Build a new Fabric object based on an existing fabric for the "UpdateNoc" case of the Operational Credentials
 cluster.
@@ -229,11 +233,11 @@ cluster.
 
 #### Returns
 
-`Promise`<[`Fabric`](fabric_export.Fabric.md)\>
+`Promise`\<[`Fabric`](fabric_export.Fabric.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:152](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L152)
+[packages/matter.js/src/common/FailSafeManager.ts:152](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L152)
 
 ___
 
@@ -249,7 +253,7 @@ Complete the FailSafe context. This is called when the commissioning is complete
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:118](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L118)
+[packages/matter.js/src/common/FailSafeManager.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L118)
 
 ___
 
@@ -273,29 +277,29 @@ validity checks.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L127)
+[packages/matter.js/src/common/FailSafeManager.ts:127](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L127)
 
 ___
 
 ### expire
 
-▸ **expire**(): `Promise`<`void`\>
+▸ **expire**(): `Promise`\<`void`\>
 
 Expire the FailSafe context. This is called by the timer and can also be called manually if needed.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L111)
+[packages/matter.js/src/common/FailSafeManager.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L111)
 
 ___
 
 ### reArm
 
-▸ **reArm**(`associatedFabric`, `expiryLengthSeconds`): `Promise`<`void`\>
+▸ **reArm**(`associatedFabric`, `expiryLengthSeconds`): `Promise`\<`void`\>
 
 Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or fail if not allowed.
 
@@ -308,11 +312,11 @@ Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or f
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L84)
+[packages/matter.js/src/common/FailSafeManager.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L84)
 
 ___
 
@@ -334,7 +338,7 @@ Restore Cluster data when the FailSafe context expired.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L60)
+[packages/matter.js/src/common/FailSafeManager.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L60)
 
 ___
 
@@ -356,13 +360,13 @@ Handles adding a trusted root certificate from Operational Credentials cluster.
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L141)
+[packages/matter.js/src/common/FailSafeManager.ts:141](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L141)
 
 ___
 
 ### storeEndpointState
 
-▸ `Private` **storeEndpointState**(`endpoint?`): `void`
+▸ **storeEndpointState**(`endpoint?`): `void`
 
 Store required CLuster data when opening the FailSafe context to allow to restore them on expiry.
 
@@ -378,4 +382,4 @@ Store required CLuster data when opening the FailSafe context to allow to restor
 
 #### Defined in
 
-[packages/matter.js/src/common/FailSafeManager.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/FailSafeManager.ts#L46)
+[packages/matter.js/src/common/FailSafeManager.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/FailSafeManager.ts#L46)

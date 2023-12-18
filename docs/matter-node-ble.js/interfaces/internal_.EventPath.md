@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventPath
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventPath
 
 # Interface: EventPath
 
-[<internal>](../modules/internal_.md).EventPath
+[\<internal\>](../modules/internal_.md).EventPath
 
 ## Table of contents
 

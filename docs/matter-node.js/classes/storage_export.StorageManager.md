@@ -25,13 +25,17 @@
 
 ### constructor
 
-• **new StorageManager**(`storage`)
+• **new StorageManager**(`storage`): [`StorageManager`](storage_export.StorageManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `storage` | [`Storage`](storage_export.Storage.md) |
+
+#### Returns
+
+[`StorageManager`](storage_export.StorageManager.md)
 
 #### Defined in
 
@@ -61,11 +65,11 @@ packages/matter.js/dist/esm/storage/StorageManager.d.ts:9
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -95,11 +99,11 @@ ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

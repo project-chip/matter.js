@@ -25,7 +25,7 @@ The action was interrupted by another command or interaction
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:508](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L508)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:508](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L508)
 
 ___
 
@@ -37,4 +37,4 @@ Other reason not listed in the row(s) below
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:503](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L503)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:503](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L503)

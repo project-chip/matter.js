@@ -15,7 +15,7 @@ required.
 
 ## Hierarchy
 
-- [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
+- [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
 
   ↳ **`Conformance`**
 
@@ -50,7 +50,7 @@ required.
 
 ### constructor
 
-• **new Conformance**(`definition`)
+• **new Conformance**(`definition`): [`Conformance`](exports_model.Conformance-1.md)
 
 Initialize from a Conformance.Definition or the conformance DSL defined
 by the Matter Specification.
@@ -60,6 +60,10 @@ by the Matter Specification.
 | Name | Type |
 | :------ | :------ |
 | `definition` | [`Definition`](../modules/exports_model.Conformance.md#definition) |
+
+#### Returns
+
+[`Conformance`](exports_model.Conformance-1.md)
 
 #### Overrides
 
@@ -212,7 +216,7 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
+▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
 
 #### Parameters
 
@@ -222,7 +226,7 @@ ___
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
+[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Conformance.md#definition)\>
 
 #### Inherited from
 
@@ -260,7 +264,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `lookup` | [`ReferenceResolver`](../modules/exports_model.Conformance.md#referenceresolver)<`boolean`\> |
+| `lookup` | [`ReferenceResolver`](../modules/exports_model.Conformance.md#referenceresolver)\<`boolean`\> |
 
 #### Returns
 

@@ -22,7 +22,7 @@ The Matter specification documents.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/Specification.ts#L12)
+[packages/matter.js/src/model/definitions/Specification.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Specification.ts#L12)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/Specification.ts#L11)
+[packages/matter.js/src/model/definitions/Specification.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Specification.ts#L11)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/Specification.ts#L13)
+[packages/matter.js/src/model/definitions/Specification.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Specification.ts#L13)

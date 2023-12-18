@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / FixedAttributeServer
 
-# Class: FixedAttributeServer<T\>
+# Class: FixedAttributeServer\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).FixedAttributeServer
 
@@ -15,7 +15,7 @@ Attribute server types.
 
 ## Hierarchy
 
-- [`BaseAttributeServer`](exports_cluster.BaseAttributeServer.md)<`T`\>
+- [`BaseAttributeServer`](exports_cluster.BaseAttributeServer.md)\<`T`\>
 
   ↳ **`FixedAttributeServer`**
 
@@ -60,7 +60,7 @@ Attribute server types.
 
 ### constructor
 
-• **new FixedAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `getter?`)
+• **new FixedAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `getter?`): [`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -74,13 +74,17 @@ Attribute server types.
 | :------ | :------ | :------ |
 | `id` | [`AttributeId`](../modules/exports_datatype.md#attributeid) | - |
 | `name` | `string` | - |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> | - |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
 | `requiresTimedInteraction` | `boolean` | - |
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
+| `getter?` | (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
+
+#### Returns
+
+[`FixedAttributeServer`](exports_cluster.FixedAttributeServer.md)\<`T`\>
 
 #### Overrides
 
@@ -140,7 +144,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](exports_device.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -150,7 +154,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](exports_device.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -246,7 +250,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -356,7 +360,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -400,7 +404,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns

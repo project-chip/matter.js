@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / BaseAttributeServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / BaseAttributeServer
 
-# Class: BaseAttributeServer<T\>
+# Class: BaseAttributeServer\<T\>
 
-[<internal>](../modules/internal_.md).BaseAttributeServer
+[\<internal\>](../modules/internal_.md).BaseAttributeServer
 
 Base class for all attribute servers.
 
@@ -46,7 +46,7 @@ Base class for all attribute servers.
 
 ### constructor
 
-• **new BaseAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`)
+• **new BaseAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`): [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -60,11 +60,15 @@ Base class for all attribute servers.
 | :------ | :------ |
 | `id` | [`AttributeId`](../modules/internal_.md#attributeid) |
 | `name` | `string` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `isWritable` | `boolean` |
 | `isSubscribable` | `boolean` |
 | `requiresTimedInteraction` | `boolean` |
 | `defaultValue` | `T` |
+
+#### Returns
+
+[`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
 
 #### Defined in
 
@@ -144,7 +148,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -186,7 +190,7 @@ ___
 
 ### init
 
-▸ `Abstract` **init**(`value`): `void`
+▸ **init**(`value`): `void`
 
 Initialize the value of the attribute, used when a persisted value is set initially or when values needs to be
 adjusted before the Device gets announced. Do not use this method to change values when the device is in use!

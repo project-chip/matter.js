@@ -33,35 +33,35 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.Groups.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  }
+Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.Groups.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<typeof `Base.features`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:296](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L296)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:288](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L288)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  } ; `commands`: { `addGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `features`: { `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``4`` = 0x4; `name`: ``"Groups"`` = "Groups"; `revision`: ``4`` = 4 }\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  } ; `commands`: \{ `addGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `features`: \{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``4`` = 0x4; `name`: ``"Groups"`` = "Groups"; `revision`: ``4`` = 4 }\>
 
 These elements and properties are present in all Groups clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:158](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:158](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L158)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `addGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: { `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``4`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: { `groupNames`: ``true`` = true } ; `unknown`: ``false``  } & `Omit`<{ `attributes`: [`Merge`](util_export.md#merge)<{ `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `addGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: { `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``4`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: { `groupNames`: ``true`` = true } ; `unknown`: ``false``  }, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Groups.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
+• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: \{ `addGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: \{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)\<``4`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: \{ `groupNames`: ``true`` = true } ; `unknown`: ``false``  } & `Omit`\<\{ `attributes`: [`Merge`](util_export.md#merge)\<\{ `nameSupport`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `nameSupport`: [`BitFlag`](schema_export.md#bitflag-1)  }\>, `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: \{ `addGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `addGroupIfIdentifying`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> ; `getGroupMembership`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>, `any`\> ; `removeAllGroups`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\> ; `removeGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\> ; `viewGroup`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: \{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``4`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> ; `name`: ``"Groups"`` ; `revision`: ``4`` ; `supportedFeatures`: \{ `groupNames`: ``true`` = true } ; `unknown`: ``false``  }, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.Groups.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `groupNames`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Groups
 
@@ -90,7 +90,7 @@ GroupsCluster supports optional features that you can enable with the GroupsClus
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:275](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L275)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:267](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L267)
 
 ___
 
@@ -112,13 +112,13 @@ The value of the Groups nameSupport attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L28)
 
 ___
 
 ### TlvAddGroupIfIdentifyingRequest
 
-• `Const` **TlvAddGroupIfIdentifyingRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>
+• `Const` **TlvAddGroupIfIdentifyingRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>
 
 Input to the Groups addGroupIfIdentifying command
 
@@ -128,13 +128,13 @@ Input to the Groups addGroupIfIdentifying command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:136](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L136)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:136](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L136)
 
 ___
 
 ### TlvAddGroupRequest
 
-• `Const` **TlvAddGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>
+• `Const` **TlvAddGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>
 
 Input to the Groups addGroup command
 
@@ -144,13 +144,13 @@ Input to the Groups addGroup command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L40)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L40)
 
 ___
 
 ### TlvAddGroupResponse
 
-• `Const` **TlvAddGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
+• `Const` **TlvAddGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
 
 The AddGroupResponse is sent by the Groups cluster server in response to an AddGroup command.
 
@@ -160,13 +160,13 @@ The AddGroupResponse is sent by the Groups cluster server in response to an AddG
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L50)
 
 ___
 
 ### TlvGetGroupMembershipRequest
 
-• `Const` **TlvGetGroupMembershipRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>
+• `Const` **TlvGetGroupMembershipRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>
 
 Input to the Groups getGroupMembership command
 
@@ -176,13 +176,13 @@ Input to the Groups getGroupMembership command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L78)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L78)
 
 ___
 
 ### TlvGetGroupMembershipResponse
 
-• `Const` **TlvGetGroupMembershipResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)[]\>  }\>
+• `Const` **TlvGetGroupMembershipResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `capacity`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `groupList`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)[]\>  }\>
 
 The GetGroupMembershipResponse command is sent by the Groups cluster server in response to a GetGroupMembership
 command.
@@ -216,13 +216,13 @@ GroupList field shall contain only as many groups as will fit.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L109)
 
 ___
 
 ### TlvRemoveGroupRequest
 
-• `Const` **TlvRemoveGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>
+• `Const` **TlvRemoveGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>
 
 Input to the Groups removeGroup command
 
@@ -232,13 +232,13 @@ Input to the Groups removeGroup command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:119](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L119)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:119](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L119)
 
 ___
 
 ### TlvRemoveGroupResponse
 
-• `Const` **TlvRemoveGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
+• `Const` **TlvRemoveGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
 
 The RemoveGroupResponse command is generated by the server in response to the receipt of a RemoveGroup command.
 
@@ -248,13 +248,13 @@ The RemoveGroupResponse command is generated by the server in response to the re
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:126](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L126)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:126](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L126)
 
 ___
 
 ### TlvViewGroupRequest
 
-• `Const` **TlvViewGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\>  }\>
+• `Const` **TlvViewGroupRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\>  }\>
 
 Input to the Groups viewGroup command
 
@@ -264,13 +264,13 @@ Input to the Groups viewGroup command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L60)
 
 ___
 
 ### TlvViewGroupResponse
 
-• `Const` **TlvViewGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
+• `Const` **TlvViewGroupResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `groupId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `groupName`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)\>  }\>
 
 The ViewGroupResponse command is sent by the Groups cluster server in response to a ViewGroup command.
 
@@ -280,4 +280,4 @@ The ViewGroupResponse command is sent by the Groups cluster server in response t
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L67)
+[packages/matter.js/src/cluster/definitions/GroupsCluster.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GroupsCluster.ts#L67)

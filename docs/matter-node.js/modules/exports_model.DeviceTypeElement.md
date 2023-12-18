@@ -23,7 +23,7 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`DeviceTypeElement`](exports_model.md#devicetypeelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`DeviceTypeElement`](exports_model.md#devicetypeelement)\>
 
 #### Defined in
 

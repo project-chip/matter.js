@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [tlv/export](../modules/tlv_export.md) / NullableSchema
 
-# Class: NullableSchema<T\>
+# Class: NullableSchema\<T\>
 
 [tlv/export](../modules/tlv_export.md).NullableSchema
 
@@ -18,7 +18,7 @@ Schema to encode a nullable value in TLV.
 
 ## Hierarchy
 
-- [`TlvSchema`](tlv_export.TlvSchema.md)<`T` \| ``null``\>
+- [`TlvSchema`](tlv_export.TlvSchema.md)\<`T` \| ``null``\>
 
   ↳ **`NullableSchema`**
 
@@ -51,7 +51,7 @@ Schema to encode a nullable value in TLV.
 
 ### constructor
 
-• **new NullableSchema**<`T`\>(`schema`)
+• **new NullableSchema**\<`T`\>(`schema`): [`NullableSchema`](tlv_export.NullableSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -63,25 +63,29 @@ Schema to encode a nullable value in TLV.
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
+
+#### Returns
+
+[`NullableSchema`](tlv_export.NullableSchema.md)\<`T`\>
 
 #### Overrides
 
-TlvSchema&lt;T \| null\&gt;.constructor
+TlvSchema\&lt;T \| null\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L17)
+[packages/matter.js/src/tlv/TlvNullable.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L17)
 
 ## Properties
 
 ### schema
 
-• `Private` `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\>
+• `Private` `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L17)
+[packages/matter.js/src/tlv/TlvNullable.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L17)
 
 ## Methods
 
@@ -108,7 +112,7 @@ TlvSchema.decode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -132,7 +136,7 @@ TlvSchema.decodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L14)
+[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L14)
 
 ___
 
@@ -156,7 +160,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L30)
+[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L30)
 
 ___
 
@@ -185,7 +189,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L34)
+[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L34)
 
 ___
 
@@ -210,7 +214,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L29)
+[packages/matter.js/src/tlv/TlvNullable.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L29)
 
 ___
 
@@ -236,7 +240,7 @@ TlvSchema.encode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -260,7 +264,7 @@ TlvSchema.encodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L18)
+[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L18)
 
 ___
 
@@ -284,7 +288,7 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L24)
+[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L24)
 
 ___
 
@@ -310,7 +314,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L21)
+[packages/matter.js/src/tlv/TlvNullable.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L21)
 
 ___
 
@@ -337,7 +341,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L38)
+[packages/matter.js/src/tlv/TlvNullable.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L38)
 
 ___
 
@@ -363,7 +367,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L45)
+[packages/matter.js/src/tlv/TlvNullable.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L45)
 
 ___
 
@@ -387,4 +391,4 @@ TlvSchema.validate
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvNullable.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvNullable.ts#L34)
+[packages/matter.js/src/tlv/TlvNullable.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvNullable.ts#L34)

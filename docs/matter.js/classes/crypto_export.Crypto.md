@@ -52,7 +52,11 @@
 
 ### constructor
 
-• **new Crypto**()
+• **new Crypto**(): [`Crypto`](crypto_export.Crypto.md)
+
+#### Returns
+
+[`Crypto`](crypto_export.Crypto.md)
 
 ## Properties
 
@@ -70,13 +74,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L25)
+[packages/matter.js/src/crypto/Crypto.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L25)
 
 ## Methods
 
 ### createKeyPair
 
-▸ `Abstract` **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▸ **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
 
 #### Returns
 
@@ -84,13 +88,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L112)
+[packages/matter.js/src/crypto/Crypto.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L112)
 
 ___
 
 ### decrypt
 
-▸ `Abstract` **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -107,13 +111,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L33)
+[packages/matter.js/src/crypto/Crypto.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L33)
 
 ___
 
 ### ecdhGeneratePublicKey
 
-▸ `Abstract` **ecdhGeneratePublicKey**(): `Object`
+▸ **ecdhGeneratePublicKey**(): `Object`
 
 #### Returns
 
@@ -126,13 +130,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L58)
+[packages/matter.js/src/crypto/Crypto.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L58)
 
 ___
 
 ### ecdhGeneratePublicKeyAndSecret
 
-▸ `Abstract` **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
+▸ **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
 
 #### Parameters
 
@@ -151,13 +155,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L62)
+[packages/matter.js/src/crypto/Crypto.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L62)
 
 ___
 
 ### ecdhGenerateSecret
 
-▸ `Abstract` **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
+▸ **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
 
 #### Parameters
 
@@ -172,13 +176,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:70](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L70)
+[packages/matter.js/src/crypto/Crypto.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L70)
 
 ___
 
 ### encrypt
 
-▸ `Abstract` **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -195,13 +199,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L29)
+[packages/matter.js/src/crypto/Crypto.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L29)
 
 ___
 
 ### getRandomData
 
-▸ `Abstract` **getRandomData**(`length`): `Uint8Array`
+▸ **getRandomData**(`length`): `Uint8Array`
 
 #### Parameters
 
@@ -215,13 +219,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L37)
+[packages/matter.js/src/crypto/Crypto.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L37)
 
 ___
 
 ### hash
 
-▸ `Abstract` **hash**(`data`): `Uint8Array`
+▸ **hash**(`data`): `Uint8Array`
 
 #### Parameters
 
@@ -235,13 +239,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:74](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L74)
+[packages/matter.js/src/crypto/Crypto.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L74)
 
 ___
 
 ### hkdf
 
-▸ `Abstract` **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -254,17 +258,17 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:85](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L85)
+[packages/matter.js/src/crypto/Crypto.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L85)
 
 ___
 
 ### hmac
 
-▸ `Abstract` **hmac**(`key`, `data`): `Uint8Array`
+▸ **hmac**(`key`, `data`): `Uint8Array`
 
 #### Parameters
 
@@ -279,13 +283,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:89](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L89)
+[packages/matter.js/src/crypto/Crypto.ts:89](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L89)
 
 ___
 
 ### pbkdf2
 
-▸ `Abstract` **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -298,17 +302,17 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L77)
+[packages/matter.js/src/crypto/Crypto.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L77)
 
 ___
 
 ### sign
 
-▸ `Abstract` **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
+▸ **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
 
 #### Parameters
 
@@ -324,13 +328,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L92)
+[packages/matter.js/src/crypto/Crypto.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L92)
 
 ___
 
 ### verify
 
-▸ `Abstract` **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
+▸ **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
 
 #### Parameters
 
@@ -347,13 +351,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:99](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L99)
+[packages/matter.js/src/crypto/Crypto.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L99)
 
 ___
 
 ### createKeyPair
 
-▸ `Static` `Readonly` **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▸ **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
 
 #### Returns
 
@@ -361,13 +365,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L113)
+[packages/matter.js/src/crypto/Crypto.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L113)
 
 ___
 
 ### decrypt
 
-▸ `Static` `Readonly` **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -384,13 +388,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L34)
+[packages/matter.js/src/crypto/Crypto.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L34)
 
 ___
 
 ### ecdhGeneratePublicKey
 
-▸ `Static` `Readonly` **ecdhGeneratePublicKey**(): `Object`
+▸ **ecdhGeneratePublicKey**(): `Object`
 
 #### Returns
 
@@ -403,13 +407,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L59)
+[packages/matter.js/src/crypto/Crypto.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L59)
 
 ___
 
 ### ecdhGeneratePublicKeyAndSecret
 
-▸ `Static` `Readonly` **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
+▸ **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
 
 #### Parameters
 
@@ -428,13 +432,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L66)
+[packages/matter.js/src/crypto/Crypto.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L66)
 
 ___
 
 ### ecdhGenerateSecret
 
-▸ `Static` `Readonly` **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
+▸ **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
 
 #### Parameters
 
@@ -449,13 +453,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L71)
+[packages/matter.js/src/crypto/Crypto.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L71)
 
 ___
 
 ### encrypt
 
-▸ `Static` `Readonly` **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -472,13 +476,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L30)
+[packages/matter.js/src/crypto/Crypto.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L30)
 
 ___
 
 ### getRandom
 
-▸ `Static` `Readonly` **getRandom**(): `Uint8Array`
+▸ **getRandom**(): `Uint8Array`
 
 #### Returns
 
@@ -486,13 +490,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L40)
+[packages/matter.js/src/crypto/Crypto.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L40)
 
 ___
 
 ### getRandomBN
 
-▸ `Static` `Readonly` **getRandomBN**(`size`, `maxValue`): `BN`
+▸ **getRandomBN**(`size`, `maxValue`): `BN`
 
 #### Parameters
 
@@ -507,13 +511,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L51)
+[packages/matter.js/src/crypto/Crypto.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L51)
 
 ___
 
 ### getRandomBigUInt64
 
-▸ `Static` `Readonly` **getRandomBigUInt64**(): `bigint`
+▸ **getRandomBigUInt64**(): `bigint`
 
 #### Returns
 
@@ -521,13 +525,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L48)
+[packages/matter.js/src/crypto/Crypto.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L48)
 
 ___
 
 ### getRandomData
 
-▸ `Static` `Readonly` **getRandomData**(`length`): `Uint8Array`
+▸ **getRandomData**(`length`): `Uint8Array`
 
 #### Parameters
 
@@ -541,13 +545,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L38)
+[packages/matter.js/src/crypto/Crypto.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L38)
 
 ___
 
 ### getRandomUInt16
 
-▸ `Static` `Readonly` **getRandomUInt16**(): `number`
+▸ **getRandomUInt16**(): `number`
 
 #### Returns
 
@@ -555,13 +559,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L42)
+[packages/matter.js/src/crypto/Crypto.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L42)
 
 ___
 
 ### getRandomUInt32
 
-▸ `Static` `Readonly` **getRandomUInt32**(): `number`
+▸ **getRandomUInt32**(): `number`
 
 #### Returns
 
@@ -569,13 +573,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L45)
+[packages/matter.js/src/crypto/Crypto.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L45)
 
 ___
 
 ### hash
 
-▸ `Static` `Readonly` **hash**(`data`): `Uint8Array`
+▸ **hash**(`data`): `Uint8Array`
 
 #### Parameters
 
@@ -589,13 +593,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L75)
+[packages/matter.js/src/crypto/Crypto.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L75)
 
 ___
 
 ### hkdf
 
-▸ `Static` `Readonly` **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -608,17 +612,17 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:86](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L86)
+[packages/matter.js/src/crypto/Crypto.ts:86](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L86)
 
 ___
 
 ### hmac
 
-▸ `Static` `Readonly` **hmac**(`key`, `data`): `Uint8Array`
+▸ **hmac**(`key`, `data`): `Uint8Array`
 
 #### Parameters
 
@@ -633,13 +637,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:90](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L90)
+[packages/matter.js/src/crypto/Crypto.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L90)
 
 ___
 
 ### pbkdf2
 
-▸ `Static` `Readonly` **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -652,17 +656,17 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L78)
+[packages/matter.js/src/crypto/Crypto.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L78)
 
 ___
 
 ### sign
 
-▸ `Static` `Readonly` **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
+▸ **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
 
 #### Parameters
 
@@ -678,13 +682,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:93](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L93)
+[packages/matter.js/src/crypto/Crypto.ts:93](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L93)
 
 ___
 
 ### verify
 
-▸ `Static` `Readonly` **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
+▸ **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
 
 #### Parameters
 
@@ -701,4 +705,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Crypto.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/crypto/Crypto.ts#L105)
+[packages/matter.js/src/crypto/Crypto.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Crypto.ts#L105)

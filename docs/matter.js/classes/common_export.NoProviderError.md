@@ -23,7 +23,7 @@ is not available.
 
 ### constructor
 
-• **new NoProviderError**(`message?`)
+• **new NoProviderError**(`message?`): [`NoProviderError`](common_export.NoProviderError.md)
 
 #### Parameters
 
@@ -31,10 +31,14 @@ is not available.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`NoProviderError`](common_export.NoProviderError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

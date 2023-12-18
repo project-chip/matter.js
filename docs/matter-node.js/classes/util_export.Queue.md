@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Queue
 
-# Class: Queue<T\>
+# Class: Queue\<T\>
 
 [util/export](../modules/util_export.md).Queue
 
@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`Stream`](../interfaces/util_export.Stream.md)<`T`\>
+- [`Stream`](../interfaces/util_export.Stream.md)\<`T`\>
 
 ## Table of contents
 
@@ -36,13 +36,17 @@
 
 ### constructor
 
-• **new Queue**<`T`\>()
+• **new Queue**\<`T`\>(): [`Queue`](util_export.Queue.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
 | :------ |
 | `T` |
+
+#### Returns
+
+[`Queue`](util_export.Queue.md)\<`T`\>
 
 ## Properties
 
@@ -92,7 +96,7 @@ ___
 
 ### read
 
-▸ **read**(`timeoutMs?`): `Promise`<`T`\>
+▸ **read**(`timeoutMs?`): `Promise`\<`T`\>
 
 #### Parameters
 
@@ -102,7 +106,7 @@ ___
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Implementation of
 
@@ -116,7 +120,7 @@ ___
 
 ### write
 
-▸ **write**(`data`): `Promise`<`void`\>
+▸ **write**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -126,7 +130,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

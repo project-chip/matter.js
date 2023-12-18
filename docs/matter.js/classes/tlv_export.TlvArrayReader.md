@@ -28,17 +28,21 @@
 
 ### constructor
 
-• **new TlvArrayReader**(`tlvElements`)
+• **new TlvArrayReader**(`tlvElements`): [`TlvArrayReader`](tlv_export.TlvArrayReader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `tlvElements` | [`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>[] |
+| `tlvElements` | [`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>[] |
+
+#### Returns
+
+[`TlvArrayReader`](tlv_export.TlvArrayReader.md)
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L79)
+[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L79)
 
 ## Properties
 
@@ -48,23 +52,23 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L77)
+[packages/matter.js/src/tlv/TlvSchema.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L77)
 
 ___
 
 ### tlvElements
 
-• `Private` `Readonly` **tlvElements**: [`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>[]
+• `Private` `Readonly` **tlvElements**: [`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L79)
+[packages/matter.js/src/tlv/TlvSchema.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L79)
 
 ## Methods
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`_typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`_typeLength`): `V`
 
 #### Type parameters
 
@@ -89,17 +93,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:86](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L86)
+[packages/matter.js/src/tlv/TlvSchema.ts:86](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L86)
 
 ___
 
 ### readTagType
 
-▸ **readTagType**(): [`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>
+▸ **readTagType**(): [`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>
 
 #### Returns
 
-[`TlvElement`](../modules/tlv_export.md#tlvelement)<`any`\>
+[`TlvElement`](../modules/tlv_export.md#tlvelement)\<`any`\>
 
 #### Implementation of
 
@@ -107,4 +111,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:81](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L81)
+[packages/matter.js/src/tlv/TlvSchema.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L81)
