@@ -85,11 +85,6 @@ export class MessageReceptionStateEncryptedWithoutRollover {
         }
 
         this.messageCounterBitmap = this.calculateMessageCounterBitmap(this.messageCounterBitmap, diff);
-        console.log(
-            `Updated message counter ${
-                this.maximumMessageCounter
-            } to ${messageCounter} with diff ${diff} --> bitmap ${this.messageCounterBitmap.toString(2)}`,
-        );
 
         if (diff > 0 || diff < -MSG_COUNTER_WINDOW_SIZE) {
             this.maximumMessageCounter = messageCounter;
