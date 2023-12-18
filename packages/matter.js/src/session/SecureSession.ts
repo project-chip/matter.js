@@ -56,6 +56,7 @@ export class SecureSession<T> implements Session<T> {
         // Expire/End the session before the counter rolls over
         this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
     }); // Can be changed to a PersistedMessageCounter if we implement session storage
+    private readonly messageReceptionState = new MessageReceptionStateEncryptedWithoutRollover();
 
     static async create<T>(args: {
         context: T;
@@ -340,6 +341,10 @@ export class SecureSession<T> implements Session<T> {
 
     getIncrementedMessageCounter() {
         return this.messageCounter.getIncrementedCounter();
+    }
+
+    updateMessageCounter(messageCounter: number) {
+        this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 }
 

@@ -23,6 +23,7 @@ import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
     readonly closingAfterExchangeFinished = false;
+    private readonly messageReceptionState: MessageReceptionStateUnencryptedWithRollover;
 
     constructor(
         private readonly context: T,

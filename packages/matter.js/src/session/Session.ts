@@ -48,4 +48,5 @@ export interface Session<T> {
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
     getAssociatedFabric(): Fabric;
+    updateMessageCounter(messageCounter: number, sourceNodeId?: NodeId): void;
 }
