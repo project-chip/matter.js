@@ -80,8 +80,8 @@ jobs:
           MERGE_DELETE_BRANCH: "false"
           UPDATE_LABELS: "automated pr"
           MERGE_METHOD: "squash"
-          MERGE_RETRIES: "30"
-          MERGE_RETRY_SLEEP: "15000"
+          MERGE_RETRIES: "50"
+          MERGE_RETRY_SLEEP: "60000"
 
       - name: Checkout repository
         if: steps.automerge.outputs.mergeResult == 'merged'
