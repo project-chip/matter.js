@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/session](../modules/exports_session.md) / UnsecureSession
 
-# Class: UnsecureSession<T\>
+# Class: UnsecureSession\<T\>
 
 [exports/session](../modules/exports_session.md).UnsecureSession
 
@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`Session`](../interfaces/exports_session.Session.md)<`T`\>
+- [`Session`](../interfaces/exports_session.Session.md)\<`T`\>
 
 ## Table of contents
 
@@ -54,7 +54,7 @@
 
 ### constructor
 
-• **new UnsecureSession**<`T`\>(`context`)
+• **new UnsecureSession**\<`T`\>(`context`): [`UnsecureSession`](exports_session.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -67,6 +67,10 @@
 | Name | Type |
 | :------ | :------ |
 | `context` | `T` |
+
+#### Returns
+
+[`UnsecureSession`](exports_session.UnsecureSession.md)\<`T`\>
 
 #### Defined in
 
@@ -152,11 +156,11 @@ ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -194,7 +198,7 @@ ___
 
 ### end
 
-▸ **end**(`_sendClose`): `Promise`<`void`\>
+▸ **end**(`_sendClose`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -204,7 +208,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

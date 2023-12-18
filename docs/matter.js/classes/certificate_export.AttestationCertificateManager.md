@@ -34,7 +34,7 @@
 
 ### constructor
 
-• **new AttestationCertificateManager**(`vendorId`)
+• **new AttestationCertificateManager**(`vendorId`): [`AttestationCertificateManager`](certificate_export.AttestationCertificateManager.md)
 
 #### Parameters
 
@@ -42,9 +42,13 @@
 | :------ | :------ |
 | `vendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
 
+#### Returns
+
+[`AttestationCertificateManager`](certificate_export.AttestationCertificateManager.md)
+
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
 
 ## Properties
 
@@ -54,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L47)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L47)
 
 ___
 
@@ -64,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L35)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L35)
 
 ___
 
@@ -74,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L42)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L42)
 
 ___
 
@@ -84,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L39)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L39)
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L46)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L46)
 
 ___
 
@@ -104,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L43)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L43)
 
 ___
 
@@ -114,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L45)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L45)
 
 ___
 
@@ -124,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L44)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L44)
 
 ___
 
@@ -134,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L49)
 
 ## Methods
 
@@ -156,13 +160,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L130)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L130)
 
 ___
 
 ### generatePAACert
 
-▸ `Private` **generatePAACert**(`vendorId?`): `Uint8Array`
+▸ **generatePAACert**(`vendorId?`): `Uint8Array`
 
 #### Parameters
 
@@ -176,13 +180,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L68)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L68)
 
 ___
 
 ### generatePAICert
 
-▸ `Private` **generatePAICert**(`vendorId`, `productId?`): `Uint8Array`
+▸ **generatePAICert**(`vendorId`, `productId?`): `Uint8Array`
 
 #### Parameters
 
@@ -197,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:99](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L99)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L99)
 
 ___
 
@@ -222,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L57)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L57)
 
 ___
 
@@ -236,4 +240,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/AttestationCertificateManager.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L53)
+[packages/matter.js/src/certificate/AttestationCertificateManager.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/AttestationCertificateManager.ts#L53)

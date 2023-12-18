@@ -26,6 +26,7 @@
 
 | Name | Type |
 | :------ | :------ |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)[] |
 | `fabricId` | [`FabricId`](exports_datatype.md#fabricid) |
 | `fabricIndex` | [`FabricIndex`](exports_datatype.md#fabricindex) |
 | `identityProtectionKey` | [`ByteArray`](util_export.md#bytearray-1) |
@@ -40,8 +41,8 @@
 | `rootNodeId` | [`NodeId`](exports_datatype.md#nodeid) |
 | `rootPublicKey` | [`ByteArray`](util_export.md#bytearray-1) |
 | `rootVendorId` | [`VendorId`](exports_datatype.md#vendorid) |
-| `scopedClusterData` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](storage_export.md#supportedstoragetypes)\>\> |
+| `scopedClusterData` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](storage_export.md#supportedstoragetypes)\>\> |
 
 #### Defined in
 
-packages/matter.js/dist/esm/fabric/Fabric.d.ts:15
+packages/matter.js/dist/esm/fabric/Fabric.d.ts:16

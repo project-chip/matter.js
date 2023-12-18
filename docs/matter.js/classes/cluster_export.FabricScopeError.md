@@ -23,7 +23,7 @@ unavailable.
 
 ### constructor
 
-• **new FabricScopeError**(`message?`)
+• **new FabricScopeError**(`message?`): [`FabricScopeError`](cluster_export.FabricScopeError.md)
 
 #### Parameters
 
@@ -31,10 +31,14 @@ unavailable.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`FabricScopeError`](cluster_export.FabricScopeError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

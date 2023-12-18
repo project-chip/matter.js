@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `maxMeasuredValue`: [`Attribute`](cluster_export.md#attribute)<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](cluster_export.md#attribute)<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](cluster_export.md#attribute)<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`number`, `any`\>  } ; `id`: ``1029`` = 0x405; `name`: ``"RelativeHumidityMeasurement"`` = "RelativeHumidityMeasurement"; `revision`: ``3`` = 3 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `maxMeasuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `measuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `minMeasuredValue`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\> ; `tolerance`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`number`, `any`\>  } ; `id`: ``1029`` = 0x405; `name`: ``"RelativeHumidityMeasurement"`` = "RelativeHumidityMeasurement"; `revision`: ``3`` = 3 }\>
 
 Relative Humidity Measurement
 
@@ -28,4 +28,4 @@ limited to, leaf wetness, relative humidity, and soil moisture.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L25)
+[packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/RelativeHumidityMeasurementCluster.ts#L25)

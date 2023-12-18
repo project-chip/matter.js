@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [<internal\>](export._internal_.md) / "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [\<internal\>](export._internal_.md) / "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"
 
 # Namespace: "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"
 
-[export](export.md).[<internal>](export._internal_.md)."/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"
+[export](export.md).[\<internal\>](export._internal_.md)."/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/datatype/NodeId"
 
 ## Table of contents
 

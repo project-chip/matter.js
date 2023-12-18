@@ -22,7 +22,7 @@ Error thrown when an unexpected data is encountered. Please report such errors.
 
 ### constructor
 
-• **new UnexpectedDataError**(`message?`)
+• **new UnexpectedDataError**(`message?`): [`UnexpectedDataError`](exports_common.UnexpectedDataError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error thrown when an unexpected data is encountered. Please report such errors.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`UnexpectedDataError`](exports_common.UnexpectedDataError.md)
+
 #### Inherited from
 
 [MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

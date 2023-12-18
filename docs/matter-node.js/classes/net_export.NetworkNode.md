@@ -38,7 +38,11 @@
 
 ### constructor
 
-• **new NetworkNode**()
+• **new NetworkNode**(): [`NetworkNode`](net_export.NetworkNode.md)
+
+#### Returns
+
+[`NetworkNode`](net_export.NetworkNode.md)
 
 #### Inherited from
 
@@ -70,21 +74,21 @@ ___
 
 ### netInterfaces
 
-▪ `Static` `Private` `Readonly` **netInterfaces**: [`Cache`](util_export.Cache.md)<`undefined` \| `string`\>
+▪ `Static` `Private` `Readonly` **netInterfaces**: [`Cache`](util_export.Cache.md)\<`undefined` \| `string`\>
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L64)
+[packages/matter-node.js/src/net/NetworkNode.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L64)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Overrides
 
@@ -92,13 +96,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L69)
+[packages/matter-node.js/src/net/NetworkNode.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L69)
 
 ___
 
 ### createUdpChannel
 
-▸ **createUdpChannel**(`options`): `Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+▸ **createUdpChannel**(`options`): `Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Parameters
 
@@ -108,7 +112,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+`Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Overrides
 
@@ -116,13 +120,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L128)
+[packages/matter-node.js/src/net/NetworkNode.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L128)
 
 ___
 
 ### getIpMac
 
-▸ **getIpMac**(`netInterface`): `undefined` \| { `ips`: `string`[] ; `mac`: `string`  }
+▸ **getIpMac**(`netInterface`): `undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
 
 #### Parameters
 
@@ -132,7 +136,7 @@ ___
 
 #### Returns
 
-`undefined` \| { `ips`: `string`[] ; `mac`: `string`  }
+`undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
 
 #### Overrides
 
@@ -140,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:122](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L122)
+[packages/matter-node.js/src/net/NetworkNode.ts:122](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L122)
 
 ___
 
@@ -158,13 +162,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:110](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L110)
+[packages/matter-node.js/src/net/NetworkNode.ts:110](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L110)
 
 ___
 
 ### getMembershipMulticastInterfaces
 
-▸ `Static` **getMembershipMulticastInterfaces**(`netInterface`, `ipv4`): (`undefined` \| `string`)[]
+▸ **getMembershipMulticastInterfaces**(`netInterface`, `ipv4`): (`undefined` \| `string`)[]
 
 #### Parameters
 
@@ -179,13 +183,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L28)
+[packages/matter-node.js/src/net/NetworkNode.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L28)
 
 ___
 
 ### getMulticastInterfaceIpv4
 
-▸ `Static` **getMulticastInterfaceIpv4**(`netInterface`): `undefined` \| `string`
+▸ **getMulticastInterfaceIpv4**(`netInterface`): `undefined` \| `string`
 
 #### Parameters
 
@@ -199,13 +203,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L17)
+[packages/matter-node.js/src/net/NetworkNode.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L17)
 
 ___
 
 ### getNetInterfaceForIp
 
-▸ `Static` **getNetInterfaceForIp**(`ip`): `undefined` \| `string`
+▸ **getNetInterfaceForIp**(`ip`): `undefined` \| `string`
 
 #### Parameters
 
@@ -219,13 +223,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L58)
+[packages/matter-node.js/src/net/NetworkNode.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L58)
 
 ___
 
 ### getNetInterfaceForRemoveAddress
 
-▸ `Static` `Private` **getNetInterfaceForRemoveAddress**(`ip`): `undefined` \| `string`
+▸ **getNetInterfaceForRemoveAddress**(`ip`): `undefined` \| `string`
 
 #### Parameters
 
@@ -239,13 +243,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L73)
+[packages/matter-node.js/src/net/NetworkNode.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L73)
 
 ___
 
 ### getNetInterfaceZoneIpv6
 
-▸ `Static` **getNetInterfaceZoneIpv6**(`netInterface`): `undefined` \| `string`
+▸ **getNetInterfaceZoneIpv6**(`netInterface`): `undefined` \| `string`
 
 #### Parameters
 
@@ -259,13 +263,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L52)
+[packages/matter-node.js/src/net/NetworkNode.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L52)
 
 ___
 
 ### getNetInterfaceZoneIpv6Internal
 
-▸ `Static` `Private` **getNetInterfaceZoneIpv6Internal**(`netInterface`, `netInterfaceInfos`): `undefined` \| `string`
+▸ **getNetInterfaceZoneIpv6Internal**(`netInterface`, `netInterfaceInfos`): `undefined` \| `string`
 
 #### Parameters
 
@@ -280,4 +284,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/net/NetworkNode.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/net/NetworkNode.ts#L97)
+[packages/matter-node.js/src/net/NetworkNode.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/net/NetworkNode.ts#L97)

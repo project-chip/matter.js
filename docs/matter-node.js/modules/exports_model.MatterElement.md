@@ -30,7 +30,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`MatterElement`](exports_model.md#matterelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`MatterElement`](exports_model.md#matterelement)\>
 
 #### Defined in
 

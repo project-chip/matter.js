@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Queue
 
-# Class: Queue<T\>
+# Class: Queue\<T\>
 
 [util/export](../modules/util_export.md).Queue
 
@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`Stream`](../interfaces/util_export.Stream.md)<`T`\>
+- [`Stream`](../interfaces/util_export.Stream.md)\<`T`\>
 
 ## Table of contents
 
@@ -36,13 +36,17 @@
 
 ### constructor
 
-• **new Queue**<`T`\>()
+• **new Queue**\<`T`\>(): [`Queue`](util_export.Queue.md)\<`T`\>
 
 #### Type parameters
 
 | Name |
 | :------ |
 | `T` |
+
+#### Returns
+
+[`Queue`](util_export.Queue.md)\<`T`\>
 
 ## Properties
 
@@ -52,7 +56,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L17)
+[packages/matter.js/src/util/Queue.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L17)
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L16)
+[packages/matter.js/src/util/Queue.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L16)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L15)
+[packages/matter.js/src/util/Queue.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L15)
 
 ## Methods
 
@@ -94,13 +98,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L46)
+[packages/matter.js/src/util/Queue.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L46)
 
 ___
 
 ### read
 
-▸ **read**(`timeoutMs?`): `Promise`<`T`\>
+▸ **read**(`timeoutMs?`): `Promise`\<`T`\>
 
 #### Parameters
 
@@ -110,7 +114,7 @@ ___
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Implementation of
 
@@ -118,13 +122,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L19)
+[packages/matter.js/src/util/Queue.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L19)
 
 ___
 
 ### write
 
-▸ **write**(`data`): `Promise`<`void`\>
+▸ **write**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -134,7 +138,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -142,4 +146,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Queue.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Queue.ts#L35)
+[packages/matter.js/src/util/Queue.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Queue.ts#L35)

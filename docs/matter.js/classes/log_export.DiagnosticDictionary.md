@@ -26,7 +26,7 @@ log output.  See Logger.dict() for maximal convenience.
 
 ### constructor
 
-• **new DiagnosticDictionary**(`entries?`)
+• **new DiagnosticDictionary**(`entries?`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
 
 Create a new dictionary with optional entry values.
 
@@ -36,9 +36,13 @@ Create a new dictionary with optional entry values.
 | :------ | :------ | :------ |
 | `entries` | `Object` | the entries as [ "KEY", value ] tuples |
 
+#### Returns
+
+[`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/log/Logger.ts#L214)
+[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L214)
 
 ## Properties
 
@@ -54,7 +58,7 @@ the entries as [ "KEY", value ] tuples
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/log/Logger.ts#L214)
+[packages/matter.js/src/log/Logger.ts:214](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L214)
 
 ## Methods
 
@@ -79,7 +83,7 @@ the formatted value
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:223](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/log/Logger.ts#L223)
+[packages/matter.js/src/log/Logger.ts:223](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L223)
 
 ___
 
@@ -93,4 +97,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:234](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/log/Logger.ts#L234)
+[packages/matter.js/src/log/Logger.ts:234](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L234)

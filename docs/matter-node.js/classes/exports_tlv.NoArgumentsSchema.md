@@ -37,7 +37,11 @@ Schema to encode void.
 
 ### constructor
 
-• **new NoArgumentsSchema**()
+• **new NoArgumentsSchema**(): [`NoArgumentsSchema`](exports_tlv.NoArgumentsSchema.md)
+
+#### Returns
+
+[`NoArgumentsSchema`](exports_tlv.NoArgumentsSchema.md)
 
 #### Inherited from
 

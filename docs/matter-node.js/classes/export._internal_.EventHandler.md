@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / EventHandler
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / EventHandler
 
 # Class: EventHandler
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).EventHandler
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).EventHandler
 
 Class that collects all triggered events up to a certain limit of events and handle logic
 to handle subscriptions (TBD)
@@ -30,13 +30,17 @@ to handle subscriptions (TBD)
 
 ### constructor
 
-• **new EventHandler**(`storage`)
+• **new EventHandler**(`storage`): [`EventHandler`](export._internal_.EventHandler.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `storage` | [`StorageContext`](storage_export.StorageContext.md) |
+
+#### Returns
+
+[`EventHandler`](export._internal_.EventHandler.md)
 
 #### Defined in
 
@@ -100,18 +104,18 @@ ___
 
 ### getEvents
 
-▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`any`\>[]
+▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventPath` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
-| `filters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
+| `eventPath` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`ClusterId`](../modules/exports_datatype.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EndpointNumber`](../modules/exports_datatype.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`EventId`](../modules/exports_datatype.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\> |
+| `filters?` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`NodeId`](../modules/exports_datatype.md#nodeid)\>  }\>[] |
 
 #### Returns
 
-[`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`any`\>[]
+[`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`any`\>[]
 
 #### Defined in
 
@@ -127,7 +131,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`EventData`](../interfaces/export._internal_.EventData.md)<`any`\> |
+| `event` | [`EventData`](../interfaces/export._internal_.EventData.md)\<`any`\> |
 
 #### Returns
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / SessionManager
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / SessionManager
 
-# Class: SessionManager<ContextT\>
+# Class: SessionManager\<ContextT\>
 
-[<internal>](../modules/internal_.md).SessionManager
+[\<internal\>](../modules/internal_.md).SessionManager
 
 ## Type parameters
 
@@ -49,7 +49,7 @@
 
 ### constructor
 
-• **new SessionManager**<`ContextT`\>(`context`, `storage`)
+• **new SessionManager**\<`ContextT`\>(`context`, `storage`): [`SessionManager`](internal_.SessionManager.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -63,6 +63,10 @@
 | :------ | :------ |
 | `context` | `ContextT` |
 | `storage` | [`StorageContext`](internal_.StorageContext.md) |
+
+#### Returns
+
+[`SessionManager`](internal_.SessionManager.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -132,11 +136,11 @@ matter.js/dist/esm/session/SessionManager.d.ts:24
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -146,7 +150,7 @@ ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`args`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<`ContextT`\>\>
+▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<`ContextT`\>\>
 
 #### Parameters
 
@@ -154,7 +158,7 @@ ___
 | :------ | :------ |
 | `args` | `Object` |
 | `args.activeRetransmissionTimeoutMs?` | `number` |
-| `args.closeCallback?` | () => `Promise`<`void`\> |
+| `args.closeCallback?` | () => `Promise`\<`void`\> |
 | `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
 | `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
@@ -168,7 +172,7 @@ ___
 
 #### Returns
 
-`Promise`<[`SecureSession`](internal_.SecureSession.md)<`ContextT`\>\>
+`Promise`\<[`SecureSession`](internal_.SecureSession.md)\<`ContextT`\>\>
 
 #### Defined in
 
@@ -218,11 +222,11 @@ ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
@@ -246,11 +250,11 @@ ___
 
 ### getPaseSession
 
-▸ **getPaseSession**(): [`SecureSession`](internal_.SecureSession.md)<`ContextT`\>
+▸ **getPaseSession**(): [`SecureSession`](internal_.SecureSession.md)\<`ContextT`\>
 
 #### Returns
 
-[`SecureSession`](internal_.SecureSession.md)<`ContextT`\>
+[`SecureSession`](internal_.SecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -260,7 +264,7 @@ ___
 
 ### getSession
 
-▸ **getSession**(`sessionId`): `undefined` \| [`Session`](../interfaces/internal_.Session.md)<`ContextT`\>
+▸ **getSession**(`sessionId`): `undefined` \| [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -270,7 +274,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/internal_.Session.md)<`ContextT`\>
+`undefined` \| [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -280,7 +284,7 @@ ___
 
 ### getSessionForNode
 
-▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`Session`](../interfaces/internal_.Session.md)<`ContextT`\>
+▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -291,7 +295,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/internal_.Session.md)<`ContextT`\>
+`undefined` \| [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -301,11 +305,11 @@ ___
 
 ### getUnsecureSession
 
-▸ **getUnsecureSession**(): [`UnsecureSession`](internal_.UnsecureSession.md)<`ContextT`\>
+▸ **getUnsecureSession**(): [`UnsecureSession`](internal_.UnsecureSession.md)\<`ContextT`\>
 
 #### Returns
 
-[`UnsecureSession`](internal_.UnsecureSession.md)<`ContextT`\>
+[`UnsecureSession`](internal_.UnsecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -335,7 +339,7 @@ ___
 
 ### removeAllSessionsForNode
 
-▸ **removeAllSessionsForNode**(`nodeId`, `sendClose?`): `Promise`<`void`\>
+▸ **removeAllSessionsForNode**(`nodeId`, `sendClose?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -346,7 +350,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

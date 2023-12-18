@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new StorageContext**(`storage`, `contexts`)
+• **new StorageContext**(`storage`, `contexts`): [`StorageContext`](storage_export.StorageContext.md)
 
 #### Parameters
 
@@ -39,9 +39,13 @@
 | `storage` | [`Storage`](storage_export.Storage.md) |
 | `contexts` | `string`[] |
 
+#### Returns
+
+[`StorageContext`](storage_export.StorageContext.md)
+
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L11)
+[packages/matter.js/src/storage/StorageContext.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L11)
 
 ## Properties
 
@@ -51,7 +55,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L13)
+[packages/matter.js/src/storage/StorageContext.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L13)
 
 ___
 
@@ -61,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L12)
+[packages/matter.js/src/storage/StorageContext.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L12)
 
 ## Methods
 
@@ -77,7 +81,7 @@ Clears all keys in this context
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L50)
+[packages/matter.js/src/storage/StorageContext.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L50)
 
 ___
 
@@ -93,7 +97,7 @@ Clears all keys in this context and all created sub-contexts.
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L57)
+[packages/matter.js/src/storage/StorageContext.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L57)
 
 ___
 
@@ -113,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L39)
+[packages/matter.js/src/storage/StorageContext.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L39)
 
 ___
 
@@ -133,13 +137,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L35)
+[packages/matter.js/src/storage/StorageContext.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L35)
 
 ___
 
 ### get
 
-▸ **get**<`T`\>(`key`, `defaultValue?`): `T`
+▸ **get**\<`T`\>(`key`, `defaultValue?`): `T`
 
 #### Type parameters
 
@@ -160,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L16)
+[packages/matter.js/src/storage/StorageContext.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L16)
 
 ___
 
@@ -180,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L27)
+[packages/matter.js/src/storage/StorageContext.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L27)
 
 ___
 
@@ -194,13 +198,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L45)
+[packages/matter.js/src/storage/StorageContext.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L45)
 
 ___
 
 ### set
 
-▸ **set**<`T`\>(`key`, `value`): `void`
+▸ **set**\<`T`\>(`key`, `value`): `void`
 
 #### Type parameters
 
@@ -221,4 +225,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageContext.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageContext.ts#L31)
+[packages/matter.js/src/storage/StorageContext.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageContext.ts#L31)

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / CommandServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / CommandServer
 
-# Class: CommandServer<RequestT, ResponseT\>
+# Class: CommandServer\<RequestT, ResponseT\>
 
-[<internal>](../modules/internal_.md).CommandServer
+[\<internal\>](../modules/internal_.md).CommandServer
 
 ## Type parameters
 
@@ -35,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](internal_.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -51,10 +51,14 @@
 | `invokeId` | [`CommandId`](../modules/internal_.md#commandid) |
 | `responseId` | [`CommandId`](../modules/internal_.md#commandid) |
 | `name` | `string` |
-| `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)<`RequestT`\> |
-| `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)<`ResponseT`\> |
+| `requestSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`RequestT`\> |
+| `responseSchema` | [`TlvSchema`](internal_.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+
+#### Returns
+
+[`CommandServer`](internal_.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Defined in
 
@@ -64,24 +68,24 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:21
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/internal_.Message.md), `endpoint`: [`Endpoint`](internal_.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
-▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`<`ResponseT`\>
+▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`\<`ResponseT`\>
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `request` | `RequestT` |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
 | `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
 
 ##### Returns
 
-`ResponseT` \| `Promise`<`ResponseT`\>
+`ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Defined in
 
@@ -111,7 +115,7 @@ ___
 
 ### requestSchema
 
-• `Readonly` **requestSchema**: [`TlvSchema`](internal_.TlvSchema.md)<`RequestT`\>
+• `Readonly` **requestSchema**: [`TlvSchema`](internal_.TlvSchema.md)\<`RequestT`\>
 
 #### Defined in
 
@@ -141,7 +145,7 @@ ___
 
 ### responseSchema
 
-• `Readonly` **responseSchema**: [`TlvSchema`](internal_.TlvSchema.md)<`ResponseT`\>
+• `Readonly` **responseSchema**: [`TlvSchema`](internal_.TlvSchema.md)\<`ResponseT`\>
 
 #### Defined in
 
@@ -151,20 +155,20 @@ matter.js/dist/esm/cluster/server/CommandServer.d.ts:18
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/internal_.md#tlvstream) |
 | `message` | [`Message`](../interfaces/internal_.Message.md) |
 | `endpoint` | [`Endpoint`](internal_.Endpoint.md) |
 
 #### Returns
 
-`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
+`Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/internal_.StatusCode.md) ; `response`: [`TlvStream`](../modules/internal_.md#tlvstream) ; `responseId`: [`CommandId`](../modules/internal_.md#commandid)  }\>
 
 #### Defined in
 

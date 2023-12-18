@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventClient
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventClient
 
-# Class: EventClient<T\>
+# Class: EventClient\<T\>
 
-[<internal>](../modules/internal_.md).EventClient
+[\<internal\>](../modules/internal_.md).EventClient
 
 General class for EventClients
 
@@ -40,7 +40,7 @@ General class for EventClients
 
 ### constructor
 
-• **new EventClient**<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new EventClient**\<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`EventClient`](internal_.EventClient.md)\<`T`\>
 
 #### Type parameters
 
@@ -52,11 +52,15 @@ General class for EventClients
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/internal_.md#event)<`T`, `any`\> |
+| `event` | [`Event`](../modules/internal_.md#event)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/internal_.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/internal_.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](internal_.InteractionClient.md) |
+
+#### Returns
+
+[`EventClient`](internal_.EventClient.md)\<`T`\>
 
 #### Defined in
 
@@ -86,7 +90,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/internal_.md#event)<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../modules/internal_.md#event)\<`T`, `any`\>
 
 #### Defined in
 
@@ -142,7 +146,7 @@ matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -156,7 +160,7 @@ ___
 
 ### get
 
-▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>[]\>
+▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>[]\>
 
 #### Parameters
 
@@ -167,7 +171,7 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>[]\>
 
 #### Defined in
 
@@ -183,7 +187,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -197,7 +201,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -211,7 +215,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -227,7 +231,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `newEvent` | [`DecodedEventData`](../modules/internal_.md#decodedeventdata)<`T`\> |
+| `newEvent` | [`DecodedEventData`](../modules/internal_.md#decodedeventdata)\<`T`\> |
 
 #### Returns
 

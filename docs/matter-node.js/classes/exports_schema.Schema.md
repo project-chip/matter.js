@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/schema](../modules/exports_schema.md) / Schema
 
-# Class: Schema<T, E\>
+# Class: Schema\<T, E\>
 
 [exports/schema](../modules/exports_schema.md).Schema
 
@@ -51,7 +51,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new Schema**<`T`, `E`\>()
+• **new Schema**\<`T`, `E`\>(): [`Schema`](exports_schema.Schema.md)\<`T`, `E`\>
 
 #### Type parameters
 
@@ -59,6 +59,10 @@ Define a schema to encode / decode convert type T to type E.
 | :------ |
 | `T` |
 | `E` |
+
+#### Returns
+
+[`Schema`](exports_schema.Schema.md)\<`T`, `E`\>
 
 ## Methods
 
@@ -87,7 +91,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` `Abstract` **decodeInternal**(`encoded`): `T`
+▸ **decodeInternal**(`encoded`): `T`
 
 #### Parameters
 
@@ -129,7 +133,7 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` `Abstract` **encodeInternal**(`value`): `E`
+▸ **encodeInternal**(`value`): `E`
 
 #### Parameters
 

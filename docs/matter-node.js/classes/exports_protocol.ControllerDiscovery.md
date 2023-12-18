@@ -23,13 +23,17 @@
 
 ### constructor
 
-• **new ControllerDiscovery**()
+• **new ControllerDiscovery**(): [`ControllerDiscovery`](exports_protocol.ControllerDiscovery.md)
+
+#### Returns
+
+[`ControllerDiscovery`](exports_protocol.ControllerDiscovery.md)
 
 ## Methods
 
 ### cancelCommissionableDeviceDiscovery
 
-▸ `Static` **cancelCommissionableDeviceDiscovery**(`scanner`, `identifier?`): `void`
+▸ **cancelCommissionableDeviceDiscovery**(`scanner`, `identifier?`): `void`
 
 #### Parameters
 
@@ -50,7 +54,7 @@ ___
 
 ### cancelOperationalDeviceDiscovery
 
-▸ `Static` **cancelOperationalDeviceDiscovery**(`fabric`, `peerNodeId`, `scanner`): `void`
+▸ **cancelOperationalDeviceDiscovery**(`fabric`, `peerNodeId`, `scanner`): `void`
 
 #### Parameters
 
@@ -72,7 +76,7 @@ ___
 
 ### discoverCommissionableDevices
 
-▸ `Static` **discoverCommissionableDevices**(`scanners`, `timeoutSeconds`, `identifier?`, `discoveredCallback?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+▸ **discoverCommissionableDevices**(`scanners`, `timeoutSeconds`, `identifier?`, `discoveredCallback?`): `Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 #### Parameters
 
@@ -85,7 +89,7 @@ ___
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 #### Defined in
 
@@ -95,7 +99,7 @@ ___
 
 ### discoverDeviceAddressesByIdentifier
 
-▸ `Static` **discoverDeviceAddressesByIdentifier**(`scanners`, `identifier`, `timeoutSeconds?`): `Promise`<[`ServerAddress`](../modules/exports_common.md#serveraddress)[]\>
+▸ **discoverDeviceAddressesByIdentifier**(`scanners`, `identifier`, `timeoutSeconds?`): `Promise`\<[`ServerAddress`](../modules/exports_common.md#serveraddress)[]\>
 
 Discovers devices by a provided identifier and a list of scanners (e.g. IP and BLE in parallel).
 It returns after the timeout or if at least one device was found.
@@ -111,7 +115,7 @@ The method returns a list of addresses of the discovered devices.
 
 #### Returns
 
-`Promise`<[`ServerAddress`](../modules/exports_common.md#serveraddress)[]\>
+`Promise`\<[`ServerAddress`](../modules/exports_common.md#serveraddress)[]\>
 
 #### Defined in
 
@@ -121,7 +125,7 @@ ___
 
 ### discoverOperationalDevice
 
-▸ `Static` **discoverOperationalDevice**(`fabric`, `peerNodeId`, `scanner`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
+▸ **discoverOperationalDevice**(`fabric`, `peerNodeId`, `scanner`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
 
 #### Parameters
 
@@ -135,7 +139,7 @@ ___
 
 #### Returns
 
-`Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
+`Promise`\<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
 
 #### Defined in
 
@@ -145,7 +149,7 @@ ___
 
 ### iterateServerAddresses
 
-▸ `Static` **iterateServerAddresses**<`SA`, `T`, `E`\>(`servers`, `errorType`, `updateNetworkInterfaceFunc`, `func`, `lastKnownServer?`): `Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
+▸ **iterateServerAddresses**\<`SA`, `T`, `E`\>(`servers`, `errorType`, `updateNetworkInterfaceFunc`, `func`, `lastKnownServer?`): `Promise`\<\{ `result`: `T` ; `resultAddress`: `SA`  }\>
 
 Helper method to iterate through a list of server addresses and try to execute a method on each of them. If the
 method throws a configurable error (or EHOSTUNREACH), the server address list is updated (to also add later
@@ -165,14 +169,14 @@ call is returned. The logic makes sure to only try each unique address (IP/port)
 | Name | Type |
 | :------ | :------ |
 | `servers` | `SA`[] |
-| `errorType` | [`ClassExtends`](../modules/util_export.md#classextends)<`E`\> |
-| `updateNetworkInterfaceFunc` | () => `Promise`<`SA`[]\> |
-| `func` | (`server`: `SA`) => `Promise`<`T`\> |
+| `errorType` | [`ClassExtends`](../modules/util_export.md#classextends)\<`E`\> |
+| `updateNetworkInterfaceFunc` | () => `Promise`\<`SA`[]\> |
+| `func` | (`server`: `SA`) => `Promise`\<`T`\> |
 | `lastKnownServer?` | `SA` |
 
 #### Returns
 
-`Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
+`Promise`\<\{ `result`: `T` ; `resultAddress`: `SA`  }\>
 
 #### Defined in
 

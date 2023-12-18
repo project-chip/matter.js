@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<`any`\>
+- [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<`any`\>
 
 ## Table of contents
 
@@ -31,17 +31,21 @@
 
 ### constructor
 
-• **new StatusReportOnlySecureChannelProtocol**()
+• **new StatusReportOnlySecureChannelProtocol**(): [`StatusReportOnlySecureChannelProtocol`](exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
+
+#### Returns
+
+[`StatusReportOnlySecureChannelProtocol`](exports_securechannel.StatusReportOnlySecureChannelProtocol.md)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -73,18 +77,18 @@ ___
 
 ### handleInitialStatusReport
 
-▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`<`void`\>
+▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -94,18 +98,18 @@ ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`, `message`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/exports_codec.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

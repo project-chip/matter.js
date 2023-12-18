@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventPriority
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventPriority
 
 # Enumeration: EventPriority
 
-[<internal>](../modules/internal_.md).EventPriority
+[\<internal\>](../modules/internal_.md).EventPriority
 
 Interfaces and helper methods to define a cluster event
 

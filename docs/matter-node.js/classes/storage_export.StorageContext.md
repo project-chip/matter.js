@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new StorageContext**(`storage`, `contexts`)
+• **new StorageContext**(`storage`, `contexts`): [`StorageContext`](storage_export.StorageContext.md)
 
 #### Parameters
 
@@ -38,6 +38,10 @@
 | :------ | :------ |
 | `storage` | [`Storage`](storage_export.Storage.md) |
 | `contexts` | `string`[] |
+
+#### Returns
+
+[`StorageContext`](storage_export.StorageContext.md)
 
 #### Defined in
 
@@ -139,7 +143,7 @@ ___
 
 ### get
 
-▸ **get**<`T`\>(`key`, `defaultValue?`): `T`
+▸ **get**\<`T`\>(`key`, `defaultValue?`): `T`
 
 #### Type parameters
 
@@ -200,7 +204,7 @@ ___
 
 ### set
 
-▸ **set**<`T`\>(`key`, `value`): `void`
+▸ **set**\<`T`\>(`key`, `value`): `void`
 
 #### Type parameters
 

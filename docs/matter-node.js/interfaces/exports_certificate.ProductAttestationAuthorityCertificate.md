@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:186
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:192
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:187
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:193
 
 ___
 
@@ -51,7 +51,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `authorityKeyIdentifier?` | `Uint8Array` |
-| `basicConstraints` | { `isCa`: `boolean` ; `pathLen?`: `number`  } |
+| `basicConstraints` | \{ `isCa`: `boolean` ; `pathLen?`: `number`  } |
 | `basicConstraints.isCa` | `boolean` |
 | `basicConstraints.pathLen?` | `number` |
 | `extendedKeyUsage?` | `number`[] |
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:188
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:194
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:175
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:181
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:180
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:186
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:179
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:185
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:185
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:191
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:173
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:179
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:199
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:205
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:174
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:180
 
 ___
 
@@ -155,4 +155,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:181
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:187

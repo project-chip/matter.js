@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `activeLocale`: [`WritableAttribute`](cluster_export.md#writableattribute)<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`string`[], `any`\>  } ; `id`: ``43`` = 0x2b; `name`: ``"LocalizationConfiguration"`` = "LocalizationConfiguration"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeLocale`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`string`[], `any`\>  } ; `id`: ``43`` = 0x2b; `name`: ``"LocalizationConfiguration"`` = "LocalizationConfiguration"; `revision`: ``1`` = 1 }\>
 
 Localization Configuration
 
@@ -32,4 +32,4 @@ localization information that a Node shall utilize when conveying values to a us
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/LocalizationConfigurationCluster.ts#L29)

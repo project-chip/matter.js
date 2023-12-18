@@ -52,7 +52,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`ValueElement`](exports_model.md#valueelement) & { `tag`: \`${ElementTag}\`  }\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`ValueElement`](exports_model.md#valueelement) & \{ `tag`: \`$\{ElementTag}\`  }\>
 
 #### Defined in
 

@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / EventClient
 
-# Class: EventClient<T\>
+# Class: EventClient\<T\>
 
 [cluster/export](../modules/cluster_export.md).EventClient
 
@@ -48,7 +48,7 @@ General class for EventClients
 
 ### constructor
 
-• **new EventClient**<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new EventClient**\<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`EventClient`](cluster_export.EventClient.md)\<`T`\>
 
 #### Type parameters
 
@@ -60,15 +60,19 @@ General class for EventClients
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/cluster_export.md#event)<`T`, `any`\> |
+| `event` | [`Event`](../modules/cluster_export.md#event)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](protocol_interaction_export.InteractionClient.md) |
 
+#### Returns
+
+[`EventClient`](cluster_export.EventClient.md)\<`T`\>
+
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L41)
+[packages/matter.js/src/cluster/client/EventClient.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L41)
 
 ## Properties
 
@@ -78,7 +82,7 @@ General class for EventClients
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L45)
+[packages/matter.js/src/cluster/client/EventClient.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L45)
 
 ___
 
@@ -88,17 +92,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L44)
+[packages/matter.js/src/cluster/client/EventClient.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L44)
 
 ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/cluster_export.md#event)<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../modules/cluster_export.md#event)\<`T`, `any`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L42)
+[packages/matter.js/src/cluster/client/EventClient.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L42)
 
 ___
 
@@ -108,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L39)
+[packages/matter.js/src/cluster/client/EventClient.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L39)
 
 ___
 
@@ -118,17 +122,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L46)
+[packages/matter.js/src/cluster/client/EventClient.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L46)
 
 ___
 
 ### listeners
 
-• `Private` `Readonly` **listeners**: (`event`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\>) => `void`[]
+• `Private` `Readonly` **listeners**: (`event`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>) => `void`[]
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L38)
+[packages/matter.js/src/cluster/client/EventClient.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L38)
 
 ___
 
@@ -138,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L43)
+[packages/matter.js/src/cluster/client/EventClient.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L43)
 
 ## Methods
 
@@ -150,7 +154,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -158,13 +162,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:90](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L90)
+[packages/matter.js/src/cluster/client/EventClient.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L90)
 
 ___
 
 ### get
 
-▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\>[]\>
+▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>[]\>
 
 #### Parameters
 
@@ -175,11 +179,11 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>[]\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L51)
+[packages/matter.js/src/cluster/client/EventClient.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L51)
 
 ___
 
@@ -191,7 +195,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -199,13 +203,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L94)
+[packages/matter.js/src/cluster/client/EventClient.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L94)
 
 ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -219,11 +223,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L64)
+[packages/matter.js/src/cluster/client/EventClient.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L64)
 
 ___
 
@@ -235,7 +239,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `newEvent` | [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)<`T`\> |
+| `newEvent` | [`DecodedEventData`](../modules/protocol_interaction_export.md#decodedeventdata)\<`T`\> |
 
 #### Returns
 
@@ -243,4 +247,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/EventClient.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/EventClient.ts#L84)
+[packages/matter.js/src/cluster/client/EventClient.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/EventClient.ts#L84)

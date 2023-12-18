@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/protocol](../modules/exports_protocol.md) / MessageChannel
 
-# Class: MessageChannel<ContextT\>
+# Class: MessageChannel\<ContextT\>
 
 [exports/protocol](../modules/exports_protocol.md).MessageChannel
 
@@ -17,7 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Implements
 
-- [`Channel`](../interfaces/exports_common.Channel.md)<[`Message`](../interfaces/exports_codec.Message.md)\>
+- [`Channel`](../interfaces/exports_common.Channel.md)\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 ## Table of contents
 
@@ -45,7 +45,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new MessageChannel**<`ContextT`\>(`channel`, `session`, `closeCallback?`)
+• **new MessageChannel**\<`ContextT`\>(`channel`, `session`, `closeCallback?`): [`MessageChannel`](exports_protocol.MessageChannel.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -57,9 +57,13 @@ SPDX-License-Identifier: Apache-2.0
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\> |
-| `closeCallback?` | () => `Promise`<`void`\> |
+| `channel` | [`Channel`](../interfaces/exports_common.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\> |
+| `closeCallback?` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`MessageChannel`](exports_protocol.MessageChannel.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -69,7 +73,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:24
 
 ### channel
 
-• `Readonly` **channel**: [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\>
+• `Readonly` **channel**: [`Channel`](../interfaces/exports_common.Channel.md)\<`Uint8Array`\>
 
 #### Defined in
 
@@ -99,7 +103,7 @@ ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\>
+• `Readonly` **session**: [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -127,11 +131,11 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:26
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -145,7 +149,7 @@ ___
 
 ### send
 
-▸ **send**(`message`): `Promise`<`void`\>
+▸ **send**(`message`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -155,7 +159,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

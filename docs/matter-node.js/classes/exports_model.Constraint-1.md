@@ -14,7 +14,7 @@ section.
 
 ## Hierarchy
 
-- [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
+- [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
 
   ↳ **`Constraint`**
 
@@ -57,7 +57,7 @@ section.
 
 ### constructor
 
-• **new Constraint**(`definition`)
+• **new Constraint**(`definition`): [`Constraint`](exports_model.Constraint-1.md)
 
 Initialize from a Constraint.Definition or the constraint DSL defined
 by the Matter Specification.
@@ -67,6 +67,10 @@ by the Matter Specification.
 | Name | Type |
 | :------ | :------ |
 | `definition` | [`Definition`](../modules/exports_model.Constraint.md#definition) |
+
+#### Returns
+
+[`Constraint`](exports_model.Constraint-1.md)
 
 #### Overrides
 
@@ -279,7 +283,7 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
+▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
 
 #### Parameters
 
@@ -289,7 +293,7 @@ ___
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
+[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Constraint.md#definition)\>
 
 #### Inherited from
 

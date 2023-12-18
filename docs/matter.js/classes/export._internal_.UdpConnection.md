@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / UdpConnection
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / UdpConnection
 
 # Class: UdpConnection
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).UdpConnection
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).UdpConnection
 
 **`License`**
 
@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Implements
 
-- [`Channel`](../interfaces/common_export.Channel.md)<[`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Channel`](../interfaces/common_export.Channel.md)\<[`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
 ## Table of contents
 
@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new UdpConnection**(`server`, `peerAddress`, `peerPort`)
+• **new UdpConnection**(`server`, `peerAddress`, `peerPort`): [`UdpConnection`](export._internal_.UdpConnection.md)
 
 #### Parameters
 
@@ -48,9 +48,13 @@ SPDX-License-Identifier: Apache-2.0
 | `peerAddress` | `string` |
 | `peerPort` | `number` |
 
+#### Returns
+
+[`UdpConnection`](export._internal_.UdpConnection.md)
+
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L43)
+[packages/matter.js/src/net/UdpInterface.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L43)
 
 ## Properties
 
@@ -60,7 +64,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L45)
+[packages/matter.js/src/net/UdpInterface.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L45)
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L46)
+[packages/matter.js/src/net/UdpInterface.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L46)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L44)
+[packages/matter.js/src/net/UdpInterface.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L44)
 
 ## Accessors
 
@@ -98,17 +102,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L53)
+[packages/matter.js/src/net/UdpInterface.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L53)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -116,13 +120,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L57)
+[packages/matter.js/src/net/UdpInterface.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L57)
 
 ___
 
 ### send
 
-▸ **send**(`data`): `Promise`<`void`\>
+▸ **send**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -132,7 +136,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -140,4 +144,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L49)
+[packages/matter.js/src/net/UdpInterface.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L49)

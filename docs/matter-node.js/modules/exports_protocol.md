@@ -45,10 +45,10 @@ User specific options for the Commissioning process
 | `nodeId?` | [`NodeId`](exports_datatype.md#nodeid) | - |
 | `regulatoryCountryCode` | `string` | Country Code where the device is used. |
 | `regulatoryLocation` | [`RegulatoryLocationType`](../enums/exports_cluster.GeneralCommissioning.RegulatoryLocationType.md) | Regulatory Location (Indoor/Outdoor) where the device is used. |
-| `threadNetwork?` | { `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
+| `threadNetwork?` | \{ `networkName`: `string` ; `operationalDataset`: `string`  } | Thread network credentials to commission the device to. |
 | `threadNetwork.networkName` | `string` | - |
 | `threadNetwork.operationalDataset` | `string` | - |
-| `wifiNetwork?` | { `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
+| `wifiNetwork?` | \{ `wifiCredentials`: `string` ; `wifiSsid`: `string`  } | Wifi network credentials to commission the device to. |
 | `wifiNetwork.wifiCredentials` | `string` | - |
 | `wifiNetwork.wifiSsid` | `string` | - |
 

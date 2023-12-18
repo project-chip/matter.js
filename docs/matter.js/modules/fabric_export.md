@@ -26,6 +26,7 @@
 
 | Name | Type |
 | :------ | :------ |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](datatype_export.md#caseauthenticatedtag)[] |
 | `fabricId` | [`FabricId`](datatype_export.md#fabricid) |
 | `fabricIndex` | [`FabricIndex`](datatype_export.md#fabricindex) |
 | `identityProtectionKey` | [`ByteArray`](util_export.md#bytearray-1) |
@@ -40,8 +41,8 @@
 | `rootNodeId` | [`NodeId`](datatype_export.md#nodeid) |
 | `rootPublicKey` | [`ByteArray`](util_export.md#bytearray-1) |
 | `rootVendorId` | [`VendorId`](datatype_export.md#vendorid) |
-| `scopedClusterData` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](storage_export.md#supportedstoragetypes)\>\> |
+| `scopedClusterData` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](storage_export.md#supportedstoragetypes)\>\> |
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L31)
+[packages/matter.js/src/fabric/Fabric.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L32)

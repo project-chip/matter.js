@@ -25,7 +25,11 @@
 
 ### constructor
 
-• **new Ble**()
+• **new Ble**(): [`Ble`](ble_export.Ble.md)
+
+#### Returns
+
+[`Ble`](ble_export.Ble.md)
 
 ## Properties
 
@@ -43,13 +47,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/ble/Ble.ts#L17)
+[packages/matter.js/src/ble/Ble.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L17)
 
 ## Methods
 
 ### getBleBroadcaster
 
-▸ `Abstract` **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/common_export.InstanceBroadcaster.md)
+▸ **getBleBroadcaster**(`additionalAdvertisementData?`): [`InstanceBroadcaster`](../interfaces/common_export.InstanceBroadcaster.md)
 
 #### Parameters
 
@@ -63,13 +67,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/ble/Ble.ts#L23)
+[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L23)
 
 ___
 
 ### getBleCentralInterface
 
-▸ `Abstract` **getBleCentralInterface**(): [`NetInterface`](../interfaces/net_export.NetInterface.md)
+▸ **getBleCentralInterface**(): [`NetInterface`](../interfaces/net_export.NetInterface.md)
 
 #### Returns
 
@@ -77,13 +81,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/ble/Ble.ts#L22)
+[packages/matter.js/src/ble/Ble.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L22)
 
 ___
 
 ### getBlePeripheralInterface
 
-▸ `Abstract` **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/common_export.TransportInterface.md)
+▸ **getBlePeripheralInterface**(): [`TransportInterface`](../interfaces/common_export.TransportInterface.md)
 
 #### Returns
 
@@ -91,13 +95,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/ble/Ble.ts#L21)
+[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L21)
 
 ___
 
 ### getBleScanner
 
-▸ `Abstract` **getBleScanner**(): [`Scanner`](../interfaces/common_export.Scanner.md)
+▸ **getBleScanner**(): [`Scanner`](../interfaces/common_export.Scanner.md)
 
 #### Returns
 
@@ -105,4 +109,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/ble/Ble.ts#L24)
+[packages/matter.js/src/ble/Ble.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L24)

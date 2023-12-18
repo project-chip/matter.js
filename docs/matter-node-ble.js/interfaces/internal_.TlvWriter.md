@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / TlvWriter
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / TlvWriter
 
 # Interface: TlvWriter
 
-[<internal>](../modules/internal_.md).TlvWriter
+[\<internal\>](../modules/internal_.md).TlvWriter
 
 ## Table of contents
 
@@ -15,7 +15,7 @@
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`typeLength`, `value`): `void`
 
 #### Type parameters
 

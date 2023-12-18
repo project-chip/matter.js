@@ -59,7 +59,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 ### constructor
 
-• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `nodeId`, `adminVendorId`, `reconnectWithDeviceCallback`)
+• **new ControllerCommissioner**(`interactionClient`, `certificateManager`, `fabric`, `commissioningOptions`, `nodeId`, `adminVendorId`, `reconnectWithDeviceCallback`): [`ControllerCommissioner`](protocol_export.ControllerCommissioner.md)
 
 #### Parameters
 
@@ -71,11 +71,15 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 | `commissioningOptions` | [`CommissioningOptions`](../modules/protocol_export.md#commissioningoptions) |
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `adminVendorId` | [`VendorId`](../modules/datatype_export.md#vendorid) |
-| `reconnectWithDeviceCallback` | () => `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
+| `reconnectWithDeviceCallback` | () => `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
+
+#### Returns
+
+[`ControllerCommissioner`](protocol_export.ControllerCommissioner.md)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:138](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L138)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:138](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L138)
 
 ## Properties
 
@@ -85,7 +89,7 @@ Class to abstract the Device commission flow in a step wise way as defined in Sp
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:144](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L144)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:144](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L144)
 
 ___
 
@@ -95,17 +99,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:140](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L140)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L140)
 
 ___
 
 ### clusterClients
 
-• `Private` `Readonly` **clusterClients**: `Map`<[`ClusterId`](../modules/datatype_export.md#clusterid), [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>\>
+• `Private` `Readonly` **clusterClients**: `Map`\<[`ClusterId`](../modules/datatype_export.md#clusterid), [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L130)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L130)
 
 ___
 
@@ -115,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:135](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L135)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:135](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L135)
 
 ___
 
@@ -125,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:132](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L132)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:132](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L132)
 
 ___
 
@@ -135,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:142](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L142)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:142](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L142)
 
 ___
 
@@ -145,17 +149,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L131)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L131)
 
 ___
 
 ### commissioningStepResults
 
-• `Private` `Readonly` **commissioningStepResults**: `Map`<`string`, [`CommissioningStepResult`](../modules/export._internal_.md#commissioningstepresult)\>
+• `Private` `Readonly` **commissioningStepResults**: `Map`\<`string`, [`CommissioningStepResult`](../modules/export._internal_.md#commissioningstepresult)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L129)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L129)
 
 ___
 
@@ -165,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L128)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L128)
 
 ___
 
@@ -175,7 +179,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L141)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:141](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L141)
 
 ___
 
@@ -185,7 +189,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:136](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L136)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:136](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L136)
 
 ___
 
@@ -195,7 +199,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L139)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:139](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L139)
 
 ___
 
@@ -205,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:134](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L134)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:134](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L134)
 
 ___
 
@@ -215,7 +219,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:133](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L133)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L133)
 
 ___
 
@@ -225,31 +229,31 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:143](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L143)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:143](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L143)
 
 ___
 
 ### reconnectWithDeviceCallback
 
-• `Private` `Readonly` **reconnectWithDeviceCallback**: () => `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+• `Private` `Readonly` **reconnectWithDeviceCallback**: () => `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Type declaration
 
-▸ (): `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+▸ (): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 ##### Returns
 
-`Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+`Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:145](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L145)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:145](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L145)
 
 ## Methods
 
 ### armFailsafe
 
-▸ `Private` **armFailsafe**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **armFailsafe**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 3
 Upon completion of PASE session establishment, the Commissionee SHALL autonomously arm the Fail-safe timer for a
@@ -261,17 +265,17 @@ invoking the ArmFailSafe command.
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:464](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L464)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:464](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L464)
 
 ___
 
 ### certificates
 
-▸ `Private` **certificates**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **certificates**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 7-9
 7: Following the Device Attestation Procedure yielding a decision to proceed with commissioning, the Commissioner
@@ -286,17 +290,17 @@ the Commissionee using the AddTrustedRootCertificate and AddNOC commands.
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:652](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L652)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:652](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L652)
 
 ___
 
 ### completeCommissioning
 
-▸ `Private` **completeCommissioning**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **completeCommissioning**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 15
 The Administrator having established a CASE session with the Commissionee over the operational network in the
@@ -306,17 +310,17 @@ the commissioning process.
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:1065](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L1065)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:1065](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L1065)
 
 ___
 
 ### configureAccessControlLists
 
-▸ `Private` **configureAccessControlLists**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+▸ **configureAccessControlLists**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 Step 10
 Commissioner MAY configure the Access Control List (see Access Control Cluster) on the Commissionee in any way
@@ -326,45 +330,45 @@ its desired access control policies.
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:705](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L705)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:705](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L705)
 
 ___
 
 ### configureNetworkThread
 
-▸ `Private` **configureNetworkThread**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+▸ **configureNetworkThread**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:889](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L889)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:889](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L889)
 
 ___
 
 ### configureNetworkWifi
 
-▸ `Private` **configureNetworkWifi**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+▸ **configureNetworkWifi**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:756](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L756)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:756](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L756)
 
 ___
 
 ### configureRegulatoryInformation
 
-▸ `Private` **configureRegulatoryInformation**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **configureRegulatoryInformation**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 5 - 1
 Commissioner SHALL configure regulatory information in the Commissionee if it has at least one instance of
@@ -375,17 +379,17 @@ The regulatory information is configured using SetRegulatoryConfig (see Section 
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:508](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L508)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:508](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L508)
 
 ___
 
 ### deviceAttestation
 
-▸ `Private` **deviceAttestation**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **deviceAttestation**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 6
 Commissioner SHALL establish the authenticity of the Commissionee as a certified Matter device (see Section
@@ -393,17 +397,17 @@ Commissioner SHALL establish the authenticity of the Commissionee as a certified
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:599](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L599)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:599](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L599)
 
 ___
 
 ### ensureGeneralCommissioningSuccess
 
-▸ `Private` **ensureGeneralCommissioningSuccess**(`context`, `«destructured»`): `void`
+▸ **ensureGeneralCommissioningSuccess**(`context`, `«destructured»`): `void`
 
 Helper method to check for errorCode/debugTest responses and throw error on failure
 
@@ -420,13 +424,13 @@ Helper method to check for errorCode/debugTest responses and throw error on fail
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:379](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L379)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:379](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L379)
 
 ___
 
 ### ensureOperationalCredentialsSuccess
 
-▸ `Private` **ensureOperationalCredentialsSuccess**(`context`, `«destructured»`): `void`
+▸ **ensureOperationalCredentialsSuccess**(`context`, `«destructured»`): `void`
 
 Helper method to check for errorCode/debugTest responses and throw error on failure
 
@@ -435,7 +439,7 @@ Helper method to check for errorCode/debugTest responses and throw error on fail
 | Name | Type |
 | :------ | :------ |
 | `context` | `string` |
-| `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\> |
+| `«destructured»` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `debugText`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`string`\> ; `fabricIndex`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`FabricIndex`](../modules/datatype_export.md#fabricindex)\> ; `statusCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeOperationalCertStatus`](../enums/cluster_export.OperationalCredentials.NodeOperationalCertStatus.md)\>  }\> |
 
 #### Returns
 
@@ -443,13 +447,13 @@ Helper method to check for errorCode/debugTest responses and throw error on fail
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:360](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L360)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:360](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L360)
 
 ___
 
 ### executeCommissioning
 
-▸ **executeCommissioning**(): `Promise`<`void`\>
+▸ **executeCommissioning**(): `Promise`\<`void`\>
 
 Execute the commissioning process in the defined order. The steps are sorted before execution based on the step
 number and sub step number.
@@ -458,17 +462,17 @@ action is allowed to take 30s at minimum based on specs).
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:279](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L279)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:279](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L279)
 
 ___
 
 ### getClusterClient
 
-▸ `Private` **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`, `endpointId?`, `isFeatureSpecific?`): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`, `endpointId?`, `isFeatureSpecific?`): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 Helper method to create ClusterClients. If not feature specific and for the Root Endpoint they are also reused.
 
@@ -477,7 +481,7 @@ Helper method to create ClusterClients. If not feature specific and for the Root
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -486,17 +490,17 @@ Helper method to create ClusterClients. If not feature specific and for the Root
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | `undefined` |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | `undefined` |
 | `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) | `undefined` |
 | `isFeatureSpecific` | `boolean` | `false` |
 
 #### Returns
 
-[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:154](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L154)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L154)
 
 ___
 
@@ -517,29 +521,29 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:355](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L355)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:355](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L355)
 
 ___
 
 ### getInitialData
 
-▸ `Private` **getInitialData**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **getInitialData**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Initial Step to receive some common data used by other steps
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:392](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L392)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:392](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L392)
 
 ___
 
 ### initializeCommissioningSteps
 
-▸ `Private` **initializeCommissioningSteps**(): `void`
+▸ **initializeCommissioningSteps**(): `void`
 
 Initialize commissioning steps and add them in the default order
 
@@ -549,13 +553,13 @@ Initialize commissioning steps and add them in the default order
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:185](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L185)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:185](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L185)
 
 ___
 
 ### reconnectWithDevice
 
-▸ `Private` **reconnectWithDevice**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **reconnectWithDevice**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 13-14
 13: Finalization of the Commissioning process begins. An Administrator configured in the ACL of the Commissionee
@@ -566,31 +570,31 @@ the Commissioner itself, or another Node to which the Commissioner has delegated
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:1046](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L1046)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:1046](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L1046)
 
 ___
 
 ### resetFailsafeTimer
 
-▸ `Private` **resetFailsafeTimer**(): `Promise`<`void`\>
+▸ **resetFailsafeTimer**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:488](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L488)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:488](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L488)
 
 ___
 
 ### setCommissioningStepResult
 
-▸ `Private` **setCommissioningStepResult**(`step`, `result`): `void`
+▸ **setCommissioningStepResult**(`step`, `result`): `void`
 
 #### Parameters
 
@@ -605,13 +609,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:351](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L351)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:351](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L351)
 
 ___
 
 ### sortSteps
 
-▸ `Private` **sortSteps**(): `void`
+▸ **sortSteps**(): `void`
 
 #### Returns
 
@@ -619,13 +623,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:344](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L344)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:344](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L344)
 
 ___
 
 ### synchronizeTime
 
-▸ `Private` **synchronizeTime**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+▸ **synchronizeTime**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 Step 5 - 2
 Commissioner SHOULD configure UTC time, timezone, and DST offset, if the Commissionee supports the time cluster.
@@ -636,17 +640,17 @@ command (see Section 11.16.9.1, “SetUtcTime Command”) while timezone and DST
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Skipped }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:580](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L580)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:580](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L580)
 
 ___
 
 ### validateNetwork
 
-▸ `Private` **validateNetwork**(): `Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+▸ **validateNetwork**(): `Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 Step 11-12
 11: If the Commissionee both supports it and requires it, the Commissioner SHALL configure the operational network
@@ -661,8 +665,8 @@ command (see Section 11.8.7.9, “ConnectNetwork Command”) unless the Commissi
 
 #### Returns
 
-`Promise`<{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
+`Promise`\<\{ `breadcrumb`: `number` ; `code`: [`CommissioningStepResultCode`](../enums/export._internal_.CommissioningStepResultCode.md) = CommissioningStepResultCode.Success }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:726](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerCommissioner.ts#L726)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:726](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L726)

@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<[`TlvStream`](../modules/exports_tlv.md#tlvstream)\>
 
   ↳ **`AnySchema`**
 
@@ -41,11 +41,15 @@
 
 ### constructor
 
-• **new AnySchema**()
+• **new AnySchema**(): [`AnySchema`](exports_tlv.AnySchema.md)
+
+#### Returns
+
+[`AnySchema`](exports_tlv.AnySchema.md)
 
 #### Inherited from
 
-TlvSchema<TlvStream\>.constructor
+TlvSchema\<TlvStream\>.constructor
 
 ## Methods
 
@@ -125,7 +129,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `reader` | [`TlvArrayReader`](exports_tlv.TlvArrayReader.md) |
-| `preReadElement?` | [`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\> |
+| `preReadElement?` | [`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\> |
 | `allowTag?` | `boolean` |
 
 #### Returns

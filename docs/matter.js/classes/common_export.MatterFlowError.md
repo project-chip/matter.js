@@ -26,7 +26,7 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 
 ### constructor
 
-• **new MatterFlowError**(`message?`)
+• **new MatterFlowError**(`message?`): [`MatterFlowError`](common_export.MatterFlowError.md)
 
 #### Parameters
 
@@ -34,10 +34,14 @@ Error thrown when an unexpected case in the matter flow is encountered. Please r
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`MatterFlowError`](common_export.MatterFlowError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

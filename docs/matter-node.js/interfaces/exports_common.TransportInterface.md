@@ -24,11 +24,11 @@ It can not open new connections.
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -44,7 +44,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`socket`: [`Channel`](exports_common.Channel.md)<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
+| `listener` | (`socket`: [`Channel`](exports_common.Channel.md)\<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
 
 #### Returns
 

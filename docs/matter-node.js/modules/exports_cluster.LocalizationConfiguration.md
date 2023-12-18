@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `activeLocale`: [`WritableAttribute`](exports_cluster.md#writableattribute)<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](exports_cluster.md#fixedattribute)<`string`[], `any`\>  } ; `id`: ``43`` ; `name`: ``"LocalizationConfiguration"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `activeLocale`: [`WritableAttribute`](exports_cluster.md#writableattribute)\<`string`, `any`\> ; `supportedLocales`: [`FixedAttribute`](exports_cluster.md#fixedattribute)\<`string`[], `any`\>  } ; `id`: ``43`` ; `name`: ``"LocalizationConfiguration"`` ; `revision`: ``1``  }\>
 
 Localization Configuration
 

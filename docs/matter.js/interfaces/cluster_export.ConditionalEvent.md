@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / ConditionalEvent
 
-# Interface: ConditionalEvent<T, F\>
+# Interface: ConditionalEvent\<T, F\>
 
 [cluster/export](../modules/cluster_export.md).ConditionalEvent
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalEvent`](../modules/cluster_export.md#optionalevent)<`T`, `F`\>
+- [`OptionalEvent`](../modules/cluster_export.md#optionalevent)\<`T`, `F`\>
 
   ↳ **`ConditionalEvent`**
 
@@ -43,7 +43,7 @@ OptionalEvent.id
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:714](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L714)
+[packages/matter.js/src/cluster/Cluster.ts:714](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L714)
 
 ___
 
@@ -57,13 +57,13 @@ OptionalEvent.isConditional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:743](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L743)
+[packages/matter.js/src/cluster/Cluster.ts:743](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L743)
 
 ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ OptionalEvent.mandatoryIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:721](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L721)
+[packages/matter.js/src/cluster/Cluster.ts:721](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L721)
 
 ___
 
@@ -85,13 +85,13 @@ OptionalEvent.optional
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:739](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L739)
+[packages/matter.js/src/cluster/Cluster.ts:739](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L739)
 
 ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -99,7 +99,7 @@ OptionalEvent.optionalIf
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:720](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L720)
+[packages/matter.js/src/cluster/Cluster.ts:720](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L720)
 
 ___
 
@@ -113,7 +113,7 @@ OptionalEvent.priority
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:716](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L716)
+[packages/matter.js/src/cluster/Cluster.ts:716](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L716)
 
 ___
 
@@ -127,13 +127,13 @@ OptionalEvent.readAcl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:718](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L718)
+[packages/matter.js/src/cluster/Cluster.ts:718](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L718)
 
 ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -141,7 +141,7 @@ OptionalEvent.schema
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:715](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L715)
+[packages/matter.js/src/cluster/Cluster.ts:715](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L715)
 
 ___
 
@@ -155,4 +155,4 @@ OptionalEvent.unknown
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:722](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L722)
+[packages/matter.js/src/cluster/Cluster.ts:722](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L722)

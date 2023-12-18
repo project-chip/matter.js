@@ -26,7 +26,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new UnexpectedMessageError**(`message`, `receivedMessage`)
+• **new UnexpectedMessageError**(`message`, `receivedMessage`): [`UnexpectedMessageError`](exports_protocol.UnexpectedMessageError.md)
 
 #### Parameters
 
@@ -34,6 +34,10 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message` | `string` |
 | `receivedMessage` | [`Message`](../interfaces/exports_codec.Message.md) |
+
+#### Returns
+
+[`UnexpectedMessageError`](exports_protocol.UnexpectedMessageError.md)
 
 #### Overrides
 

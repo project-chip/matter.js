@@ -25,7 +25,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `basicCommissioningInfo`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `failSafeExpiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `breadcrumb`: [`WritableAttribute`](cluster_export.md#writableattribute)<`number` \| `bigint`, `any`\> ; `locationCapability`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `regulatoryConfig`: [`Attribute`](cluster_export.md#attribute)<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `supportsConcurrentConnection`: [`FixedAttribute`](cluster_export.md#fixedattribute)<`boolean`, `any`\>  } ; `commands`: { `armFailSafe`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `expiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\> ; `commissioningComplete`: [`Command`](cluster_export.md#command)<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\> ; `setRegulatoryConfig`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `countryCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `newRegulatoryConfig`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\>  } ; `id`: ``48`` = 0x30; `name`: ``"GeneralCommissioning"`` = "GeneralCommissioning"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `basicCommissioningInfo`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `failSafeExpiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `breadcrumb`: [`WritableAttribute`](cluster_export.md#writableattribute)\<`number` \| `bigint`, `any`\> ; `locationCapability`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `regulatoryConfig`: [`Attribute`](cluster_export.md#attribute)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md), `any`\> ; `supportsConcurrentConnection`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<`boolean`, `any`\>  } ; `commands`: \{ `armFailSafe`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `expiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\> ; `commissioningComplete`: [`Command`](cluster_export.md#command)\<`void`, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\> ; `setRegulatoryConfig`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `countryCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `newRegulatoryConfig`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>, `any`\>  } ; `id`: ``48`` = 0x30; `name`: ``"GeneralCommissioning"`` = "GeneralCommissioning"; `revision`: ``1`` = 1 }\>
 
 General Commissioning
 
@@ -42,13 +42,13 @@ those other clusters may depend on.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)
 
 ___
 
 ### TlvArmFailSafeRequest
 
-• `Const` **TlvArmFailSafeRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `expiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvArmFailSafeRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `expiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 Input to the GeneralCommissioning armFailSafe command
 
@@ -58,13 +58,13 @@ Input to the GeneralCommissioning armFailSafe command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:76](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L76)
 
 ___
 
 ### TlvArmFailSafeResponse
 
-• `Const` **TlvArmFailSafeResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
+• `Const` **TlvArmFailSafeResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
 
 **`See`**
 
@@ -72,13 +72,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
 
 ___
 
 ### TlvBasicCommissioningInfo
 
-• `Const` **TlvBasicCommissioningInfo**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `failSafeExpiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvBasicCommissioningInfo**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `failSafeExpiryLengthSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `maxCumulativeFailsafeSeconds`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 This structure provides some constant values that may be of use to all commissioners.
 
@@ -88,13 +88,13 @@ This structure provides some constant values that may be of use to all commissio
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L24)
 
 ___
 
 ### TlvCommissioningCompleteResponse
 
-• `Const` **TlvCommissioningCompleteResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
+• `Const` **TlvCommissioningCompleteResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
 
 This field shall contain the result of the operation, based on the behavior specified in the functional
 description of the CommissioningComplete command.
@@ -107,13 +107,13 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:167](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L167)
 
 ___
 
 ### TlvSetRegulatoryConfigRequest
 
-• `Const` **TlvSetRegulatoryConfigRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `countryCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `newRegulatoryConfig`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md)\>  }\>
+• `Const` **TlvSetRegulatoryConfigRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `breadcrumb`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `countryCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `newRegulatoryConfig`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`RegulatoryLocationType`](../enums/cluster_export.GeneralCommissioning.RegulatoryLocationType.md)\>  }\>
 
 Input to the GeneralCommissioning setRegulatoryConfig command
 
@@ -123,13 +123,13 @@ Input to the GeneralCommissioning setRegulatoryConfig command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L140)
 
 ___
 
 ### TlvSetRegulatoryConfigResponse
 
-• `Const` **TlvSetRegulatoryConfigResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
+• `Const` **TlvSetRegulatoryConfigResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `debugText`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `errorCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CommissioningError`](../enums/cluster_export.GeneralCommissioning.CommissioningError.md)\>  }\>
 
 This field shall contain the result of the operation, based on the behavior specified in the functional
 description of the SetRegulatoryConfig command.
@@ -142,4 +142,4 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:154](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L154)

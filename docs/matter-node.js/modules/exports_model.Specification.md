@@ -26,7 +26,7 @@ Information on the source of an element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `document` | \`${Specification}\` | The defining document for the element. |
+| `document` | \`$\{Specification}\` | The defining document for the element. |
 | `section` | `string` | The section of the defining document that most specifically addresses the element. |
 
 #### Defined in

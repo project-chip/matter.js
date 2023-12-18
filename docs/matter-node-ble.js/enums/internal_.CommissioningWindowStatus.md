@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / CommissioningWindowStatus
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / CommissioningWindowStatus
 
 # Enumeration: CommissioningWindowStatus
 
-[<internal>](../modules/internal_.md).CommissioningWindowStatus
+[\<internal\>](../modules/internal_.md).CommissioningWindowStatus
 
 **`See`**
 

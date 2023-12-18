@@ -25,7 +25,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `defaultOtaProviders`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\> ; `updatePossible`: [`Attribute`](cluster_export.md#attribute)<`boolean`, `any`\> ; `updateState`: [`Attribute`](cluster_export.md#attribute)<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md), `any`\> ; `updateStateProgress`: [`Attribute`](cluster_export.md#attribute)<``null`` \| `number`, `any`\>  } ; `commands`: { `announceOtaProvider`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `announcementReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`AnnouncementReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.AnnouncementReason.md)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `metadataForNode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\>  }\>, `void`, `any`\>  } ; `events`: { `downloadError`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `bytesDownloaded`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `platformCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number` \| `bigint`\> ; `progressPercent`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\> ; `stateTransition`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `previousState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `reason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ChangeReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.ChangeReason.md)\> ; `targetSoftwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>, `any`\> ; `versionApplied`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `productId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `any`\>  } ; `id`: ``42`` = 0x2a; `name`: ``"OtaSoftwareUpdateRequestor"`` = "OtaSoftwareUpdateRequestor"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `defaultOtaProviders`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\> ; `updatePossible`: [`Attribute`](cluster_export.md#attribute)\<`boolean`, `any`\> ; `updateState`: [`Attribute`](cluster_export.md#attribute)\<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md), `any`\> ; `updateStateProgress`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| `number`, `any`\>  } ; `commands`: \{ `announceOtaProvider`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `announcementReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AnnouncementReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.AnnouncementReason.md)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `metadataForNode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`VendorId`](datatype_export.md#vendorid)\>  }\>, `void`, `any`\>  } ; `events`: \{ `downloadError`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `bytesDownloaded`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `platformCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `progressPercent`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\> ; `stateTransition`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `previousState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `reason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ChangeReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.ChangeReason.md)\> ; `targetSoftwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\>  }\>, `any`\> ; `versionApplied`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `productId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `any`\>  } ; `id`: ``42`` = 0x2a; `name`: ``"OtaSoftwareUpdateRequestor"`` = "OtaSoftwareUpdateRequestor"; `revision`: ``1`` = 1 }\>
 
 OTA Software Update Requestor
 
@@ -37,13 +37,13 @@ Provides an interface for downloading and applying OTA software updates
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:202](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L202)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:202](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L202)
 
 ___
 
 ### TlvAnnounceOtaProviderRequest
 
-• `Const` **TlvAnnounceOtaProviderRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `announcementReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`AnnouncementReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.AnnouncementReason.md)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `metadataForNode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`VendorId`](datatype_export.md#vendorid)\>  }\>
+• `Const` **TlvAnnounceOtaProviderRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `announcementReason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`AnnouncementReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.AnnouncementReason.md)\> ; `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `metadataForNode`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\> ; `vendorId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`VendorId`](datatype_export.md#vendorid)\>  }\>
 
 Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
@@ -53,13 +53,13 @@ Input to the OtaSoftwareUpdateRequestor announceOtaProvider command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:120](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L120)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:120](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L120)
 
 ___
 
 ### TlvDownloadErrorEvent
 
-• `Const` **TlvDownloadErrorEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `bytesDownloaded`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number` \| `bigint`\> ; `platformCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number` \| `bigint`\> ; `progressPercent`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvDownloadErrorEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `bytesDownloaded`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number` \| `bigint`\> ; `platformCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number` \| `bigint`\> ; `progressPercent`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 Body of the OtaSoftwareUpdateRequestor downloadError event
 
@@ -69,13 +69,13 @@ Body of the OtaSoftwareUpdateRequestor downloadError event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:188](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:188](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L188)
 
 ___
 
 ### TlvProviderLocationStruct
 
-• `Const` **TlvProviderLocationStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>
+• `Const` **TlvProviderLocationStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `endpoint`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `providerNodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>
 
 This structure encodes a fabric-scoped location of an OTA provider on a given fabric.
 
@@ -85,13 +85,13 @@ This structure encodes a fabric-scoped location of an OTA provider on a given fa
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L37)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L37)
 
 ___
 
 ### TlvStateTransitionEvent
 
-• `Const` **TlvStateTransitionEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `previousState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `reason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ChangeReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.ChangeReason.md)\> ; `targetSoftwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `number`\>  }\>
+• `Const` **TlvStateTransitionEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `previousState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`UpdateState`](../enums/cluster_export.OtaSoftwareUpdateRequestor.UpdateState.md)\> ; `reason`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ChangeReason`](../enums/cluster_export.OtaSoftwareUpdateRequestor.ChangeReason.md)\> ; `targetSoftwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `number`\>  }\>
 
 Body of the OtaSoftwareUpdateRequestor stateTransition event
 
@@ -101,13 +101,13 @@ Body of the OtaSoftwareUpdateRequestor stateTransition event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:166](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L166)
 
 ___
 
 ### TlvVersionAppliedEvent
 
-• `Const` **TlvVersionAppliedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `productId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvVersionAppliedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `productId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `softwareVersion`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 Body of the OtaSoftwareUpdateRequestor versionApplied event
 
@@ -117,4 +117,4 @@ Body of the OtaSoftwareUpdateRequestor versionApplied event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:178](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L178)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts:178](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateRequestorCluster.ts#L178)

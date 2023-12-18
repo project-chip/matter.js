@@ -20,7 +20,7 @@
 
 ### constructor
 
-• **new NoAssociatedFabricError**(`message?`)
+• **new NoAssociatedFabricError**(`message?`): [`NoAssociatedFabricError`](session_export.NoAssociatedFabricError.md)
 
 #### Parameters
 
@@ -28,10 +28,14 @@
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`NoAssociatedFabricError`](session_export.NoAssociatedFabricError.md)
+
 #### Inherited from
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

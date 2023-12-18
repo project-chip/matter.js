@@ -30,7 +30,7 @@
 
 ### AllProperties
 
-Ƭ **AllProperties**: [`Attribute`](exports_model.Quality.md#attribute) & { `singleton?`: `boolean`  }
+Ƭ **AllProperties**: [`Attribute`](exports_model.Quality.md#attribute) & \{ `singleton?`: `boolean`  }
 
 Quality properties that apply to device types.
 
@@ -55,7 +55,7 @@ ___
 
 ### Attribute
 
-Ƭ **Attribute**: [`AttributeData`](exports_model.Quality.md#attributedata) & { `reportable?`: `boolean` ; `scene?`: `boolean`  }
+Ƭ **Attribute**: [`AttributeData`](exports_model.Quality.md#attributedata) & \{ `reportable?`: `boolean` ; `scene?`: `boolean`  }
 
 Quality values that apply to attributes.
 
@@ -67,7 +67,7 @@ ___
 
 ### AttributeData
 
-Ƭ **AttributeData**: [`DataField`](exports_model.Quality.md#datafield) & { `changesOmitted?`: `boolean` ; `fixed?`: `boolean` ; `nonvolatile?`: `boolean`  }
+Ƭ **AttributeData**: [`DataField`](exports_model.Quality.md#datafield) & \{ `changesOmitted?`: `boolean` ; `fixed?`: `boolean` ; `nonvolatile?`: `boolean`  }
 
 Quality values that apply to attribute data.
 
@@ -97,7 +97,7 @@ ___
 
 ### Definition
 
-Ƭ **Definition**: [`Ast`](exports_model.Quality.md#ast) \| \`${Flag}\`[] \| `string` \| `undefined`
+Ƭ **Definition**: [`Ast`](exports_model.Quality.md#ast) \| \`$\{Flag}\`[] \| `string` \| `undefined`
 
 Various ways to define quality.
 
@@ -109,7 +109,7 @@ ___
 
 ### DeviceType
 
-Ƭ **DeviceType**: [`AllProperties`](exports_model.Quality.md#allproperties) & { `disallowed?`: [`AllProperties`](exports_model.Quality.md#allproperties)  }
+Ƭ **DeviceType**: [`AllProperties`](exports_model.Quality.md#allproperties) & \{ `disallowed?`: [`AllProperties`](exports_model.Quality.md#allproperties)  }
 
 Quality values that apply to device types.
 
@@ -121,7 +121,7 @@ ___
 
 ### FlagName
 
-Ƭ **FlagName**: \`${Field}\`
+Ƭ **FlagName**: \`$\{Field}\`
 
 Valid "other quality" flags.
 

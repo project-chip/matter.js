@@ -1,15 +1,15 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Cluster
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Cluster
 
-# Interface: Cluster<F, SF, A, C, E\>
+# Interface: Cluster\<F, SF, A, C, E\>
 
-[<internal>](../modules/internal_.md).Cluster
+[\<internal\>](../modules/internal_.md).Cluster
 
 ## Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](internal_.Attributes.md) |
 | `C` | extends [`Commands`](internal_.Commands.md) |
 | `E` | extends [`Events`](internal_.Events.md) |

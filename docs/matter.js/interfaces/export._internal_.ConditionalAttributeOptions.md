@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ConditionalAttributeOptions
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ConditionalAttributeOptions
 
-# Interface: ConditionalAttributeOptions<T, F\>
+# Interface: ConditionalAttributeOptions\<T, F\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ConditionalAttributeOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ConditionalAttributeOptions
 
 ## Type parameters
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`AttributeOptions`](export._internal_.AttributeOptions.md)<`T`\>
+- [`AttributeOptions`](export._internal_.AttributeOptions.md)\<`T`\>
 
   ↳ **`ConditionalAttributeOptions`**
 
@@ -43,17 +43,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L115)
+[packages/matter.js/src/cluster/Cluster.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L115)
 
 ___
 
 ### mandatoryIf
 
-• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:122](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L122)
+[packages/matter.js/src/cluster/Cluster.ts:122](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L122)
 
 ___
 
@@ -67,17 +67,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L113)
+[packages/matter.js/src/cluster/Cluster.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L113)
 
 ___
 
 ### optionalIf
 
-• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)<`F`\>
+• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/cluster_export.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:121](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L121)
+[packages/matter.js/src/cluster/Cluster.ts:121](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L121)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L112)
+[packages/matter.js/src/cluster/Cluster.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L112)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L116)
+[packages/matter.js/src/cluster/Cluster.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L116)
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L111)
+[packages/matter.js/src/cluster/Cluster.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L111)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:114](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L114)
+[packages/matter.js/src/cluster/Cluster.ts:114](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L114)
 
 ___
 
@@ -147,4 +147,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:117](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/Cluster.ts#L117)
+[packages/matter.js/src/cluster/Cluster.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L117)

@@ -36,13 +36,17 @@
 
 ### constructor
 
-• **new SecureChannelProtocol**(`commissioningCancelledCallback`)
+• **new SecureChannelProtocol**(`commissioningCancelledCallback`): [`SecureChannelProtocol`](protocol_securechannel_export.SecureChannelProtocol.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `commissioningCancelledCallback` | () => `Promise`<`void`\> |
+| `commissioningCancelledCallback` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`SecureChannelProtocol`](protocol_securechannel_export.SecureChannelProtocol.md)
 
 #### Overrides
 
@@ -50,7 +54,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
 
 ## Properties
 
@@ -60,25 +64,25 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:88](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L88)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L88)
 
 ___
 
 ### commissioningCancelledCallback
 
-• `Private` **commissioningCancelledCallback**: () => `Promise`<`void`\>
+• `Private` **commissioningCancelledCallback**: () => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (): `Promise`<`void`\>
+▸ (): `Promise`\<`void`\>
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L90)
 
 ___
 
@@ -88,17 +92,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:87](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L87)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:87](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L87)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -106,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:81](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L81)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L81)
 
 ___
 
@@ -124,24 +128,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L27)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L27)
 
 ___
 
 ### handleInitialStatusReport
 
-▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`<`void`\>
+▸ **handleInitialStatusReport**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -149,24 +153,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L45)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L45)
 
 ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`, `message`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<`any`\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<`any`\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Overrides
 
@@ -174,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:102](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L102)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L102)
 
 ___
 
@@ -188,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:98](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L98)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:98](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L98)
 
 ___
 
@@ -208,13 +212,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L94)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L94)
 
 ___
 
 ### isStandaloneAck
 
-▸ `Static` **isStandaloneAck**(`protocolId`, `messageType`): `boolean`
+▸ **isStandaloneAck**(`protocolId`, `messageType`): `boolean`
 
 #### Parameters
 
@@ -229,4 +233,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:134](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L134)
+[packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts:134](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelProtocol.ts#L134)

@@ -39,7 +39,7 @@ ClusterElements.constructor
 
 ### attributes
 
-• `Readonly` **attributes**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Attribute`](../modules/cluster_export.ClusterFactory.md#attribute)\>
+• `Readonly` **attributes**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Attribute`](../modules/cluster_export.ClusterFactory.md#attribute)\>
 
 #### Inherited from
 
@@ -47,13 +47,13 @@ ClusterElements.constructor
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
+[packages/matter.js/src/cluster/ClusterFactory.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L69)
 
 ___
 
 ### commands
 
-• `Readonly` **commands**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Command`](../modules/cluster_export.ClusterFactory.md#command)\>
+• `Readonly` **commands**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Command`](../modules/cluster_export.ClusterFactory.md#command)\>
 
 #### Inherited from
 
@@ -61,13 +61,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
+[packages/matter.js/src/cluster/ClusterFactory.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L70)
 
 ___
 
 ### events
 
-• `Readonly` **events**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)<[`Event`](../modules/cluster_export.ClusterFactory.md#event)\>
+• `Readonly` **events**: [`ElementSet`](../modules/cluster_export.ClusterFactory.md#elementset)\<[`Event`](../modules/cluster_export.ClusterFactory.md#event)\>
 
 #### Inherited from
 
@@ -75,4 +75,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterFactory.ts#L71)
+[packages/matter.js/src/cluster/ClusterFactory.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterFactory.ts#L71)

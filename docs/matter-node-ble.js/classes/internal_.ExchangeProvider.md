@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / ExchangeProvider
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / ExchangeProvider
 
 # Class: ExchangeProvider
 
-[<internal>](../modules/internal_.md).ExchangeProvider
+[\<internal\>](../modules/internal_.md).ExchangeProvider
 
 ## Table of contents
 
@@ -32,15 +32,19 @@
 
 ### constructor
 
-• **new ExchangeProvider**(`exchangeManager`, `channel`, `reconnectChannelFunc?`)
+• **new ExchangeProvider**(`exchangeManager`, `channel`, `reconnectChannelFunc?`): [`ExchangeProvider`](internal_.ExchangeProvider.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchangeManager` | [`ExchangeManager`](internal_.ExchangeManager.md)<[`MatterController`](internal_.MatterController.md)\> |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\> |
-| `reconnectChannelFunc?` | () => `Promise`<[`MessageChannel`](internal_.MessageChannel.md)<[`MatterController`](internal_.MatterController.md)\>\> |
+| `exchangeManager` | [`ExchangeManager`](internal_.ExchangeManager.md)\<[`MatterController`](internal_.MatterController.md)\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<[`MatterController`](internal_.MatterController.md)\> |
+| `reconnectChannelFunc?` | () => `Promise`\<[`MessageChannel`](internal_.MessageChannel.md)\<[`MatterController`](internal_.MatterController.md)\>\> |
+
+#### Returns
+
+[`ExchangeProvider`](internal_.ExchangeProvider.md)
 
 #### Defined in
 
@@ -80,11 +84,11 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:61
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/internal_.Session.md)<[`MatterController`](internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](../interfaces/internal_.Session.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/internal_.Session.md)<[`MatterController`](internal_.MatterController.md)\>
+[`Session`](../interfaces/internal_.Session.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -100,7 +104,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:68
 
 | Name | Type |
 | :------ | :------ |
-| `handler` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<[`MatterController`](internal_.MatterController.md)\> |
+| `handler` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<[`MatterController`](internal_.MatterController.md)\> |
 
 #### Returns
 
@@ -114,7 +118,7 @@ ___
 
 ### getProtocolHandler
 
-▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<[`MatterController`](internal_.MatterController.md)\>
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Parameters
 
@@ -124,7 +128,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<[`MatterController`](internal_.MatterController.md)\>
+`undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -154,11 +158,11 @@ ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(): [`MessageExchange`](internal_.MessageExchange.md)<[`MatterController`](internal_.MatterController.md)\>
+▸ **initiateExchange**(): [`MessageExchange`](internal_.MessageExchange.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<[`MatterController`](internal_.MatterController.md)\>
+[`MessageExchange`](internal_.MessageExchange.md)\<[`MatterController`](internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -168,11 +172,11 @@ ___
 
 ### reconnectChannel
 
-▸ **reconnectChannel**(): `Promise`<`boolean`\>
+▸ **reconnectChannel**(): `Promise`\<`boolean`\>
 
 #### Returns
 
-`Promise`<`boolean`\>
+`Promise`\<`boolean`\>
 
 #### Defined in
 

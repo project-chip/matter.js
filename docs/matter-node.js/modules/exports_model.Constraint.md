@@ -44,7 +44,7 @@ ___
 
 ### Definition
 
-Ƭ **Definition**: [`Ast`](exports_model.Constraint.md#ast) & { `definition?`: [`Definition`](exports_model.Constraint.md#definition)  } \| `string` \| `number` \| `undefined`
+Ƭ **Definition**: [`Ast`](exports_model.Constraint.md#ast) & \{ `definition?`: [`Definition`](exports_model.Constraint.md#definition)  } \| `string` \| `number` \| `undefined`
 
 These are all ways to describe a constraint.
 

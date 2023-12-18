@@ -27,35 +27,35 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.KeypadInput.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  }
+Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.KeypadInput.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<typeof `Base.features`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:259](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L259)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:259](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L259)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `sendKey`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `features`: { `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1289`` = 0x509; `name`: ``"KeypadInput"`` = "KeypadInput"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `sendKey`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `features`: \{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1289`` = 0x509; `name`: ``"KeypadInput"`` = "KeypadInput"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all KeypadInput clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:185](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L185)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:185](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L185)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<{}, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `sendKey`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: { `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``1289`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"KeypadInput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `sendKey`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `features`: { `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1289`` = 0x509; `name`: ``"KeypadInput"`` = "KeypadInput"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.KeypadInput.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
+• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<{}, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: \{ `sendKey`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `events`: {} ; `features`: \{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)\<``1289`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"KeypadInput"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `sendKey`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>, `any`\>  } ; `features`: \{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``1289`` = 0x509; `name`: ``"KeypadInput"`` = "KeypadInput"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.KeypadInput.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `locationKeys`: [`BitFlag`](schema_export.md#bitflag-1) ; `navigationKeyCodes`: [`BitFlag`](schema_export.md#bitflag-1) ; `numberKeys`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Keypad Input
 
@@ -71,13 +71,13 @@ method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:238](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L238)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:238](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L238)
 
 ___
 
 ### TlvSendKeyRequest
 
-• `Const` **TlvSendKeyRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>
+• `Const` **TlvSendKeyRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `keyCode`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`CecKeyCode`](../enums/cluster_export.KeypadInput.CecKeyCode.md)\>  }\>
 
 Input to the KeypadInput sendKey command
 
@@ -87,13 +87,13 @@ Input to the KeypadInput sendKey command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L111)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L111)
 
 ___
 
 ### TlvSendKeyResponse
 
-• `Const` **TlvSendKeyResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>
+• `Const` **TlvSendKeyResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `status`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`Status`](../enums/cluster_export.KeypadInput.Status.md)\>  }\>
 
 This command shall be generated in response to a SendKey command.
 
@@ -103,4 +103,4 @@ This command shall be generated in response to a SendKey command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:145](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L145)
+[packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts:145](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/KeypadInputCluster.ts#L145)

@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpChannel.ts#L21)
+[packages/matter.js/src/net/UdpChannel.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpChannel.ts#L21)
 
 ___
 
@@ -48,13 +48,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpChannel.ts#L19)
+[packages/matter.js/src/net/UdpChannel.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpChannel.ts#L19)
 
 ___
 
 ### send
 
-▸ **send**(`host`, `port`, `data`): `Promise`<`void`\>
+▸ **send**(`host`, `port`, `data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -66,8 +66,8 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpChannel.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpChannel.ts#L20)
+[packages/matter.js/src/net/UdpChannel.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpChannel.ts#L20)

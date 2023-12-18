@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [caseAuthenticatedTags](fabric_export.Fabric.md#caseauthenticatedtags)
 - [fabricId](fabric_export.Fabric.md#fabricid)
 - [fabricIndex](fabric_export.Fabric.md#fabricindex)
 - [identityProtectionKey](fabric_export.Fabric.md#identityprotectionkey)
@@ -60,7 +61,7 @@
 
 ### constructor
 
-• **new Fabric**(`fabricIndex`, `fabricId`, `nodeId`, `rootNodeId`, `operationalId`, `rootPublicKey`, `keyPair`, `rootVendorId`, `rootCert`, `identityProtectionKey`, `operationalIdentityProtectionKey`, `intermediateCACert`, `operationalCert`, `label`, `scopedClusterData?`)
+• **new Fabric**(`fabricIndex`, `fabricId`, `nodeId`, `rootNodeId`, `operationalId`, `rootPublicKey`, `keyPair`, `rootVendorId`, `rootCert`, `identityProtectionKey`, `operationalIdentityProtectionKey`, `intermediateCACert`, `operationalCert`, `label`, `caseAuthenticatedTags?`, `scopedClusterData?`): [`Fabric`](fabric_export.Fabric.md)
 
 #### Parameters
 
@@ -80,13 +81,28 @@
 | `intermediateCACert` | `undefined` \| `Uint8Array` |
 | `operationalCert` | `Uint8Array` |
 | `label` | `string` |
-| `scopedClusterData?` | `Map`<`number`, `Map`<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>\> |
+| `caseAuthenticatedTags` | [`CaseAuthenticatedTag`](../modules/datatype_export.md#caseauthenticatedtag)[] |
+| `scopedClusterData?` | `Map`\<`number`, `Map`\<`string`, [`SupportedStorageTypes`](../modules/storage_export.md#supportedstoragetypes)\>\> |
+
+#### Returns
+
+[`Fabric`](fabric_export.Fabric.md)
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L57)
+[packages/matter.js/src/fabric/Fabric.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L59)
 
 ## Properties
+
+### caseAuthenticatedTags
+
+• `Readonly` **caseAuthenticatedTags**: [`CaseAuthenticatedTag`](../modules/datatype_export.md#caseauthenticatedtag)[]
+
+#### Defined in
+
+[packages/matter.js/src/fabric/Fabric.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L74)
+
+___
 
 ### fabricId
 
@@ -94,7 +110,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L59)
+[packages/matter.js/src/fabric/Fabric.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L61)
 
 ___
 
@@ -104,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L58)
+[packages/matter.js/src/fabric/Fabric.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L60)
 
 ___
 
@@ -114,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L67)
+[packages/matter.js/src/fabric/Fabric.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L69)
 
 ___
 
@@ -124,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L69)
+[packages/matter.js/src/fabric/Fabric.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L71)
 
 ___
 
@@ -134,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L64)
+[packages/matter.js/src/fabric/Fabric.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L66)
 
 ___
 
@@ -144,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L71)
+[packages/matter.js/src/fabric/Fabric.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L73)
 
 ___
 
@@ -154,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L60)
+[packages/matter.js/src/fabric/Fabric.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L62)
 
 ___
 
@@ -164,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:70](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L70)
+[packages/matter.js/src/fabric/Fabric.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L72)
 
 ___
 
@@ -174,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L62)
+[packages/matter.js/src/fabric/Fabric.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L64)
 
 ___
 
@@ -184,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L68)
+[packages/matter.js/src/fabric/Fabric.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L70)
 
 ___
 
@@ -194,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:55](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L55)
+[packages/matter.js/src/fabric/Fabric.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L57)
 
 ___
 
@@ -204,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L54)
+[packages/matter.js/src/fabric/Fabric.ts:56](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L56)
 
 ___
 
@@ -214,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L66)
+[packages/matter.js/src/fabric/Fabric.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L68)
 
 ___
 
@@ -224,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L61)
+[packages/matter.js/src/fabric/Fabric.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L63)
 
 ___
 
@@ -234,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L63)
+[packages/matter.js/src/fabric/Fabric.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L65)
 
 ___
 
@@ -244,27 +260,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:65](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L65)
+[packages/matter.js/src/fabric/Fabric.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L67)
 
 ___
 
 ### scopedClusterData
 
-• `Private` `Readonly` **scopedClusterData**: `Map`<`number`, `any`\>
+• `Private` `Readonly` **scopedClusterData**: `Map`\<`number`, `any`\>
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L52)
+[packages/matter.js/src/fabric/Fabric.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L54)
 
 ___
 
 ### sessions
 
-• `Private` `Readonly` **sessions**: [`SecureSession`](session_export.SecureSession.md)<`any`\>[]
+• `Private` `Readonly` **sessions**: [`SecureSession`](session_export.SecureSession.md)\<`any`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L50)
+[packages/matter.js/src/fabric/Fabric.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L52)
 
 ## Methods
 
@@ -284,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:158](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L158)
+[packages/matter.js/src/fabric/Fabric.ts:164](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L164)
 
 ___
 
@@ -296,7 +312,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](session_export.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](session_export.SecureSession.md)\<`any`\> |
 
 #### Returns
 
@@ -304,7 +320,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:147](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L147)
+[packages/matter.js/src/fabric/Fabric.ts:153](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L153)
 
 ___
 
@@ -324,7 +340,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L162)
+[packages/matter.js/src/fabric/Fabric.ts:168](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L168)
 
 ___
 
@@ -336,7 +352,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -344,7 +360,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:212](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L212)
+[packages/matter.js/src/fabric/Fabric.ts:218](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L218)
 
 ___
 
@@ -356,7 +372,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -365,7 +381,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:200](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L200)
+[packages/matter.js/src/fabric/Fabric.ts:206](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L206)
 
 ___
 
@@ -386,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:138](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L138)
+[packages/matter.js/src/fabric/Fabric.ts:144](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L144)
 
 ___
 
@@ -409,7 +425,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:224](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L224)
+[packages/matter.js/src/fabric/Fabric.ts:230](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L230)
 
 ___
 
@@ -423,7 +439,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:121](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L121)
+[packages/matter.js/src/fabric/Fabric.ts:127](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L127)
 
 ___
 
@@ -435,7 +451,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Returns
 
@@ -443,13 +459,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:217](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L217)
+[packages/matter.js/src/fabric/Fabric.ts:223](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L223)
 
 ___
 
 ### getScopedClusterDataValue
 
-▸ **getScopedClusterDataValue**<`T`\>(`cluster`, `clusterDataKey`): `undefined` \| `T`
+▸ **getScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`): `undefined` \| `T`
 
 #### Type parameters
 
@@ -461,7 +477,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -470,7 +486,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:184](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L184)
+[packages/matter.js/src/fabric/Fabric.ts:190](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L190)
 
 ___
 
@@ -482,7 +498,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 
 #### Returns
@@ -491,7 +507,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:208](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L208)
+[packages/matter.js/src/fabric/Fabric.ts:214](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L214)
 
 ___
 
@@ -512,7 +528,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:134](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L134)
+[packages/matter.js/src/fabric/Fabric.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L140)
 
 ___
 
@@ -526,13 +542,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:180](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L180)
+[packages/matter.js/src/fabric/Fabric.ts:186](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L186)
 
 ___
 
 ### remove
 
-▸ **remove**(`currentSessionId?`): `Promise`<`void`\>
+▸ **remove**(`currentSessionId?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -542,11 +558,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:173](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L173)
+[packages/matter.js/src/fabric/Fabric.ts:179](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L179)
 
 ___
 
@@ -558,7 +574,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](session_export.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](session_export.SecureSession.md)\<`any`\> |
 
 #### Returns
 
@@ -566,7 +582,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:151](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L151)
+[packages/matter.js/src/fabric/Fabric.ts:157](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L157)
 
 ___
 
@@ -586,7 +602,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L116)
+[packages/matter.js/src/fabric/Fabric.ts:122](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L122)
 
 ___
 
@@ -606,13 +622,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:169](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L169)
+[packages/matter.js/src/fabric/Fabric.ts:175](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L175)
 
 ___
 
 ### setScopedClusterDataValue
 
-▸ **setScopedClusterDataValue**<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
+▸ **setScopedClusterDataValue**\<`T`\>(`cluster`, `clusterDataKey`, `value`): `void`
 
 #### Type parameters
 
@@ -624,7 +640,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 | `clusterDataKey` | `string` |
 | `value` | `T` |
 
@@ -634,7 +650,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:192](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L192)
+[packages/matter.js/src/fabric/Fabric.ts:198](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L198)
 
 ___
 
@@ -654,7 +670,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:125](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L125)
+[packages/matter.js/src/fabric/Fabric.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L131)
 
 ___
 
@@ -668,7 +684,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:77](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L77)
+[packages/matter.js/src/fabric/Fabric.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L80)
 
 ___
 
@@ -689,13 +705,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L129)
+[packages/matter.js/src/fabric/Fabric.ts:135](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L135)
 
 ___
 
 ### createFromStorageObject
 
-▸ `Static` **createFromStorageObject**(`fabricObject`): [`Fabric`](fabric_export.Fabric.md)
+▸ **createFromStorageObject**(`fabricObject`): [`Fabric`](fabric_export.Fabric.md)
 
 #### Parameters
 
@@ -709,4 +725,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/fabric/Fabric.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/fabric/Fabric.ts#L97)
+[packages/matter.js/src/fabric/Fabric.ts:101](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/fabric/Fabric.ts#L101)

@@ -33,17 +33,21 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ### constructor
 
-• **new MatterNode**()
+• **new MatterNode**(): [`MatterNode`](export.MatterNode.md)
+
+#### Returns
+
+[`MatterNode`](export.MatterNode.md)
 
 ## Methods
 
 ### close
 
-▸ `Abstract` **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -53,7 +57,7 @@ ___
 
 ### getPort
 
-▸ `Abstract` **getPort**(): `undefined` \| `number`
+▸ **getPort**(): `undefined` \| `number`
 
 #### Returns
 
@@ -67,7 +71,7 @@ ___
 
 ### initialize
 
-▸ `Abstract` **initialize**(`ipv4Disabled`): `void`
+▸ **initialize**(`ipv4Disabled`): `void`
 
 #### Parameters
 
@@ -87,7 +91,7 @@ ___
 
 ### setMdnsBroadcaster
 
-▸ `Abstract` **setMdnsBroadcaster**(`mdnsBroadcaster`): `void`
+▸ **setMdnsBroadcaster**(`mdnsBroadcaster`): `void`
 
 #### Parameters
 
@@ -107,7 +111,7 @@ ___
 
 ### setMdnsScanner
 
-▸ `Abstract` **setMdnsScanner**(`mdnsScanner`): `void`
+▸ **setMdnsScanner**(`mdnsScanner`): `void`
 
 #### Parameters
 
@@ -127,11 +131,11 @@ ___
 
 ### start
 
-▸ `Abstract` **start**(): `Promise`<`void`\>
+▸ **start**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

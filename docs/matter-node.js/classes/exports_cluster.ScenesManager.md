@@ -25,13 +25,17 @@
 
 ### constructor
 
-• **new ScenesManager**()
+• **new ScenesManager**(): [`ScenesManager`](exports_cluster.ScenesManager.md)
+
+#### Returns
+
+[`ScenesManager`](exports_cluster.ScenesManager.md)
 
 ## Methods
 
 ### getAllScenes
 
-▸ `Static` **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
+▸ **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
 
 #### Parameters
 
@@ -53,7 +57,7 @@ ___
 
 ### getEndpointScenes
 
-▸ `Static` **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+▸ **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Parameters
 
@@ -64,7 +68,7 @@ ___
 
 #### Returns
 
-`undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+`undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Defined in
 
@@ -74,7 +78,7 @@ ___
 
 ### getSceneEntry
 
-▸ `Static` **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
+▸ **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
 
 #### Parameters
 
@@ -97,7 +101,7 @@ ___
 
 ### removeAllNonGlobalScenesForEndpoint
 
-▸ `Static` **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
+▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
 
 #### Parameters
 
@@ -118,7 +122,7 @@ ___
 
 ### removeAllScenesForGroup
 
-▸ `Static` **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
+▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
 
 #### Parameters
 
@@ -140,7 +144,7 @@ ___
 
 ### removeScene
 
-▸ `Static` **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
+▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
 
 #### Parameters
 
@@ -163,7 +167,7 @@ ___
 
 ### setEndpointScenes
 
-▸ `Static` **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
+▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
 
 #### Parameters
 
@@ -171,7 +175,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `endpointId` | `number` |
-| `endpointScenes` | `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
+| `endpointScenes` | `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
 
 #### Returns
 
@@ -185,7 +189,7 @@ ___
 
 ### setScenes
 
-▸ `Static` **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
+▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
 
 #### Parameters
 

@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / OptionalFieldType
 
-# Interface: OptionalFieldType<T\>
+# Interface: OptionalFieldType\<T\>
 
 [exports/tlv](../modules/exports_tlv.md).OptionalFieldType
 
@@ -12,9 +12,11 @@
 
 ## Hierarchy
 
-- [`FieldType`](exports_tlv.FieldType.md)<`T`\>
+- [`FieldType`](exports_tlv.FieldType.md)\<`T`\>
 
   ↳ **`OptionalFieldType`**
+
+  ↳↳ [`OptionalRepeatedFieldType`](exports_tlv.OptionalRepeatedFieldType.md)
 
 ## Table of contents
 
@@ -23,6 +25,7 @@
 - [fallback](exports_tlv.OptionalFieldType.md#fallback)
 - [id](exports_tlv.OptionalFieldType.md#id)
 - [optional](exports_tlv.OptionalFieldType.md#optional)
+- [repeated](exports_tlv.OptionalFieldType.md#repeated)
 - [schema](exports_tlv.OptionalFieldType.md#schema)
 
 ## Properties
@@ -37,7 +40,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:13
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:15
 
 ___
 
@@ -51,7 +54,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:10
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:11
 
 ___
 
@@ -65,13 +68,27 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:16
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:23
+
+___
+
+### repeated
+
+• `Optional` **repeated**: `boolean`
+
+#### Inherited from
+
+[FieldType](exports_tlv.FieldType.md).[repeated](exports_tlv.FieldType.md#repeated)
+
+#### Defined in
+
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:14
 
 ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -79,4 +96,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:11
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:12

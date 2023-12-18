@@ -20,7 +20,7 @@
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`typeLength`, `value`): `void`
 
 #### Type parameters
 
@@ -41,7 +41,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:103](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L103)
+[packages/matter.js/src/tlv/TlvSchema.ts:103](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L103)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:101](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L101)
+[packages/matter.js/src/tlv/TlvSchema.ts:101](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L101)

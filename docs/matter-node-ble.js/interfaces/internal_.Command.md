@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Command
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Command
 
-# Interface: Command<RequestT, ResponseT, F\>
+# Interface: Command\<RequestT, ResponseT, F\>
 
-[<internal>](../modules/internal_.md).Command
+[\<internal\>](../modules/internal_.md).Command
 
 ## Type parameters
 
@@ -51,7 +51,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -71,7 +71,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -91,7 +91,7 @@ ___
 
 ### requestSchema
 
-• **requestSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\>
+• **requestSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`RequestT`\>
 
 #### Defined in
 
@@ -111,7 +111,7 @@ ___
 
 ### responseSchema
 
-• **responseSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\>
+• **responseSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`ResponseT`\>
 
 #### Defined in
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / MessageCounter
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / MessageCounter
 
 # Class: MessageCounter
 
-[<internal>](../modules/internal_.md).MessageCounter
+[\<internal\>](../modules/internal_.md).MessageCounter
 
 ## Table of contents
 
@@ -22,7 +22,11 @@
 
 ### constructor
 
-• **new MessageCounter**()
+• **new MessageCounter**(): [`MessageCounter`](internal_.MessageCounter.md)
+
+#### Returns
+
+[`MessageCounter`](internal_.MessageCounter.md)
 
 ## Properties
 

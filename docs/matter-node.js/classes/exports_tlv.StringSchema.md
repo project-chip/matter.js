@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / StringSchema
 
-# Class: StringSchema<T\>
+# Class: StringSchema\<T\>
 
 [exports/tlv](../modules/exports_tlv.md).StringSchema
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.11.2
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<[`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<[`TlvToPrimitive`](../modules/exports_tlv.md#tlvtoprimitive)[`T`]\>
 
   ↳ **`StringSchema`**
 
@@ -54,7 +54,7 @@ MatterCoreSpecificationV1_0 § A.11.2
 
 ### constructor
 
-• **new StringSchema**<`T`\>(`type`, `minLength?`, `maxLength?`)
+• **new StringSchema**\<`T`\>(`type`, `minLength?`, `maxLength?`): [`StringSchema`](exports_tlv.StringSchema.md)\<`T`\>
 
 #### Type parameters
 
@@ -70,9 +70,13 @@ MatterCoreSpecificationV1_0 § A.11.2
 | `minLength?` | `number` |
 | `maxLength?` | `number` |
 
+#### Returns
+
+[`StringSchema`](exports_tlv.StringSchema.md)\<`T`\>
+
 #### Overrides
 
-TlvSchema&lt;TlvToPrimitive[T]\&gt;.constructor
+TlvSchema\&lt;TlvToPrimitive[T]\&gt;.constructor
 
 #### Defined in
 
@@ -112,17 +116,17 @@ packages/matter.js/dist/esm/tlv/TlvString.d.ts:19
 
 ### bound
 
-▸ **bound**(`«destructured»`): [`StringSchema`](exports_tlv.StringSchema.md)<`T`\>
+▸ **bound**(`«destructured»`): [`StringSchema`](exports_tlv.StringSchema.md)\<`T`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | [`LengthConstraints`](../modules/export._internal_.md#lengthconstraints-1) |
+| `«destructured»` | [`LengthConstraints`](../modules/export._internal_.md#lengthconstraints) |
 
 #### Returns
 
-[`StringSchema`](exports_tlv.StringSchema.md)<`T`\>
+[`StringSchema`](exports_tlv.StringSchema.md)\<`T`\>
 
 #### Defined in
 

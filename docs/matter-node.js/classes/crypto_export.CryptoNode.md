@@ -58,7 +58,11 @@
 
 ### constructor
 
-• **new CryptoNode**()
+• **new CryptoNode**(): [`CryptoNode`](crypto_export.CryptoNode.md)
+
+#### Returns
+
+[`CryptoNode`](crypto_export.CryptoNode.md)
 
 #### Inherited from
 
@@ -121,7 +125,7 @@ ___
 
 ### ecdhGeneratePublicKey
 
-▪ `Static` `Readonly` **ecdhGeneratePublicKey**: () => { `ecdh`: `any` ; `publicKey`: `Uint8Array`  }
+▪ `Static` `Readonly` **ecdhGeneratePublicKey**: () => \{ `ecdh`: `any` ; `publicKey`: `Uint8Array`  }
 
 #### Type declaration
 
@@ -148,7 +152,7 @@ ___
 
 ### ecdhGeneratePublicKeyAndSecret
 
-▪ `Static` `Readonly` **ecdhGeneratePublicKeyAndSecret**: (`peerPublicKey`: `Uint8Array`) => { `publicKey`: `Uint8Array` ; `sharedSecret`: `Uint8Array`  }
+▪ `Static` `Readonly` **ecdhGeneratePublicKeyAndSecret**: (`peerPublicKey`: `Uint8Array`) => \{ `publicKey`: `Uint8Array` ; `sharedSecret`: `Uint8Array`  }
 
 #### Type declaration
 
@@ -436,11 +440,11 @@ ___
 
 ### hkdf
 
-▪ `Static` `Readonly` **hkdf**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `info`: `Uint8Array`, `length?`: `number`) => `Promise`<`Uint8Array`\>
+▪ `Static` `Readonly` **hkdf**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `info`: `Uint8Array`, `length?`: `number`) => `Promise`\<`Uint8Array`\>
 
 #### Type declaration
 
-▸ (`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ (`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 ##### Parameters
 
@@ -453,7 +457,7 @@ ___
 
 ##### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -496,11 +500,11 @@ ___
 
 ### pbkdf2
 
-▪ `Static` `Readonly` **pbkdf2**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `iteration`: `number`, `keyLength`: `number`) => `Promise`<`Uint8Array`\>
+▪ `Static` `Readonly` **pbkdf2**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `iteration`: `number`, `keyLength`: `number`) => `Promise`\<`Uint8Array`\>
 
 #### Type declaration
 
-▸ (`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ (`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 ##### Parameters
 
@@ -513,7 +517,7 @@ ___
 
 ##### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -600,7 +604,7 @@ packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:152](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L152)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:152](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L152)
 
 ___
 
@@ -627,7 +631,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L35)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L35)
 
 ___
 
@@ -650,7 +654,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L53)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L53)
 
 ___
 
@@ -679,7 +683,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L59)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L59)
 
 ___
 
@@ -704,7 +708,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L68)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L68)
 
 ___
 
@@ -731,7 +735,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L23)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L23)
 
 ___
 
@@ -755,7 +759,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L49)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L49)
 
 ___
 
@@ -779,13 +783,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L72)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L72)
 
 ___
 
 ### hkdf
 
-▸ **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -798,7 +802,7 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Overrides
 
@@ -806,7 +810,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:91](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L91)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L91)
 
 ___
 
@@ -831,13 +835,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L105)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L105)
 
 ___
 
 ### pbkdf2
 
-▸ **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -850,7 +854,7 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Overrides
 
@@ -858,7 +862,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:82](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L82)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:82](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L82)
 
 ___
 
@@ -884,7 +888,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L111)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L111)
 
 ___
 
@@ -911,4 +915,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/crypto/CryptoNode.ts:132](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/crypto/CryptoNode.ts#L132)
+[packages/matter-node.js/src/crypto/CryptoNode.ts:132](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/crypto/CryptoNode.ts#L132)

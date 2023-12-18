@@ -1,14 +1,14 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / Base38Schema
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / Base38Schema
 
 # Class: Base38Schema
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).Base38Schema
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).Base38Schema
 
 See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md) § 5.1.3.1
 
 ## Hierarchy
 
-- [`Schema`](schema_export.Schema.md)<[`ByteArray`](../modules/util_export.md#bytearray-1), `string`\>
+- [`Schema`](schema_export.Schema.md)\<[`ByteArray`](../modules/util_export.md#bytearray-1), `string`\>
 
   ↳ **`Base38Schema`**
 
@@ -32,7 +32,11 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 ### constructor
 
-• **new Base38Schema**()
+• **new Base38Schema**(): [`Base38Schema`](export._internal_.Base38Schema.md)
+
+#### Returns
+
+[`Base38Schema`](export._internal_.Base38Schema.md)
 
 #### Inherited from
 
@@ -63,13 +67,13 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeBase38
 
-▸ `Private` **decodeBase38**(`encoded`, `offset`, `charCount`): `number`
+▸ **decodeBase38**(`encoded`, `offset`, `charCount`): `number`
 
 #### Parameters
 
@@ -85,13 +89,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Base38Schema.ts#L84)
+[packages/matter.js/src/schema/Base38Schema.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Base38Schema.ts#L84)
 
 ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`encoded`): `Uint8Array`
+▸ **decodeInternal**(`encoded`): `Uint8Array`
 
 #### Parameters
 
@@ -109,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Base38Schema.ts#L45)
+[packages/matter.js/src/schema/Base38Schema.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Base38Schema.ts#L45)
 
 ___
 
@@ -135,13 +139,13 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
 ### encodeBase38
 
-▸ `Private` **encodeBase38**(`value`, `charCount`): `string`
+▸ **encodeBase38**(`value`, `charCount`): `string`
 
 #### Parameters
 
@@ -156,13 +160,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Base38Schema.ts#L35)
+[packages/matter.js/src/schema/Base38Schema.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Base38Schema.ts#L35)
 
 ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`bytes`): `string`
+▸ **encodeInternal**(`bytes`): `string`
 
 #### Parameters
 
@@ -180,7 +184,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/Base38Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Base38Schema.ts#L16)
+[packages/matter.js/src/schema/Base38Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Base38Schema.ts#L16)
 
 ___
 
@@ -206,4 +210,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

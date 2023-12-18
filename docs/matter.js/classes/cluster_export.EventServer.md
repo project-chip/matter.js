@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / EventServer
 
-# Class: EventServer<T\>
+# Class: EventServer\<T\>
 
 [cluster/export](../modules/cluster_export.md).EventServer
 
@@ -40,7 +40,7 @@
 
 ### constructor
 
-• **new EventServer**<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`)
+• **new EventServer**\<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](cluster_export.EventServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -55,12 +55,16 @@
 | `id` | [`EventId`](../modules/datatype_export.md#eventid) |
 | `clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
 | `name` | `string` |
-| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
 | `priority` | [`EventPriority`](../enums/cluster_export.EventPriority.md) |
+
+#### Returns
+
+[`EventServer`](cluster_export.EventServer.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L24)
+[packages/matter.js/src/cluster/server/EventServer.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L24)
 
 ## Properties
 
@@ -70,7 +74,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L26)
+[packages/matter.js/src/cluster/server/EventServer.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L26)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L21)
+[packages/matter.js/src/cluster/server/EventServer.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L21)
 
 ___
 
@@ -90,17 +94,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L22)
+[packages/matter.js/src/cluster/server/EventServer.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L22)
 
 ___
 
 ### eventList
 
-• `Private` **eventList**: [`EventData`](../interfaces/export._internal_.EventData.md)<`T`\>[]
+• `Private` **eventList**: [`EventData`](../interfaces/export._internal_.EventData.md)\<`T`\>[]
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L19)
+[packages/matter.js/src/cluster/server/EventServer.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L19)
 
 ___
 
@@ -110,17 +114,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L25)
+[packages/matter.js/src/cluster/server/EventServer.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L25)
 
 ___
 
 ### listeners
 
-• `Private` `Readonly` **listeners**: (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`T`\>) => `void`[]
+• `Private` `Readonly` **listeners**: (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void`[]
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L20)
+[packages/matter.js/src/cluster/server/EventServer.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L20)
 
 ___
 
@@ -130,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L27)
+[packages/matter.js/src/cluster/server/EventServer.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L27)
 
 ___
 
@@ -140,17 +144,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L29)
+[packages/matter.js/src/cluster/server/EventServer.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L29)
 
 ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L28)
+[packages/matter.js/src/cluster/server/EventServer.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L28)
 
 ## Methods
 
@@ -162,7 +166,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -170,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L69)
+[packages/matter.js/src/cluster/server/EventServer.ts:69](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L69)
 
 ___
 
@@ -190,7 +194,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L32)
+[packages/matter.js/src/cluster/server/EventServer.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L32)
 
 ___
 
@@ -210,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L38)
+[packages/matter.js/src/cluster/server/EventServer.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L38)
 
 ___
 
@@ -222,7 +226,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -230,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L73)
+[packages/matter.js/src/cluster/server/EventServer.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L73)
 
 ___
 
@@ -250,4 +254,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/EventServer.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/EventServer.ts#L48)
+[packages/matter.js/src/cluster/server/EventServer.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/EventServer.ts#L48)

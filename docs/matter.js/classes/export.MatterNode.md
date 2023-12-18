@@ -33,27 +33,31 @@ Abstract base class that represents a node in the matter ecosystem.
 
 ### constructor
 
-• **new MatterNode**()
+• **new MatterNode**(): [`MatterNode`](export.MatterNode.md)
+
+#### Returns
+
+[`MatterNode`](export.MatterNode.md)
 
 ## Methods
 
 ### close
 
-▸ `Abstract` **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L14)
+[packages/matter.js/src/MatterNode.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L14)
 
 ___
 
 ### getPort
 
-▸ `Abstract` **getPort**(): `undefined` \| `number`
+▸ **getPort**(): `undefined` \| `number`
 
 #### Returns
 
@@ -61,13 +65,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L16)
+[packages/matter.js/src/MatterNode.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L16)
 
 ___
 
 ### initialize
 
-▸ `Abstract` **initialize**(`ipv4Disabled`): `void`
+▸ **initialize**(`ipv4Disabled`): `void`
 
 #### Parameters
 
@@ -81,13 +85,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L18)
+[packages/matter.js/src/MatterNode.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L18)
 
 ___
 
 ### setMdnsBroadcaster
 
-▸ `Abstract` **setMdnsBroadcaster**(`mdnsBroadcaster`): `void`
+▸ **setMdnsBroadcaster**(`mdnsBroadcaster`): `void`
 
 #### Parameters
 
@@ -101,13 +105,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L22)
+[packages/matter.js/src/MatterNode.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L22)
 
 ___
 
 ### setMdnsScanner
 
-▸ `Abstract` **setMdnsScanner**(`mdnsScanner`): `void`
+▸ **setMdnsScanner**(`mdnsScanner`): `void`
 
 #### Parameters
 
@@ -121,18 +125,18 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L24)
+[packages/matter.js/src/MatterNode.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L24)
 
 ___
 
 ### start
 
-▸ `Abstract` **start**(): `Promise`<`void`\>
+▸ **start**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterNode.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterNode.ts#L20)
+[packages/matter.js/src/MatterNode.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterNode.ts#L20)

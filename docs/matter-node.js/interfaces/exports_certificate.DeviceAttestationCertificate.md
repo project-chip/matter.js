@@ -28,7 +28,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:127
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:133
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:128
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:134
 
 ___
 
@@ -51,7 +51,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `authorityKeyIdentifier` | `Uint8Array` |
-| `basicConstraints` | { `isCa`: `boolean` ; `pathLen?`: `number`  } |
+| `basicConstraints` | \{ `isCa`: `boolean` ; `pathLen?`: `number`  } |
 | `basicConstraints.isCa` | `boolean` |
 | `basicConstraints.pathLen?` | `number` |
 | `extendedKeyUsage?` | `number`[] |
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:129
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:135
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:114
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:120
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:120
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:126
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:119
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:125
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:126
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:132
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:112
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:118
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:140
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:146
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:113
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:119
 
 ___
 
@@ -157,4 +157,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:121
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:127

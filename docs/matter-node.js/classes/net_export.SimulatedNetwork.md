@@ -25,7 +25,11 @@
 
 ### constructor
 
-• **new SimulatedNetwork**()
+• **new SimulatedNetwork**(): [`SimulatedNetwork`](net_export.SimulatedNetwork.md)
+
+#### Returns
+
+[`SimulatedNetwork`](net_export.SimulatedNetwork.md)
 
 ## Properties
 

@@ -31,13 +31,17 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 ### constructor
 
-• **new UdpInterface**(`server`)
+• **new UdpInterface**(`server`): [`UdpInterface`](net_export.UdpInterface.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `server` | [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
+
+#### Returns
+
+[`UdpInterface`](net_export.UdpInterface.md)
 
 #### Defined in
 
@@ -57,11 +61,11 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:13
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -81,7 +85,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`channel`: [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\>, `messageBytes`: `Uint8Array`) => `void` |
+| `listener` | (`channel`: [`Channel`](../interfaces/exports_common.Channel.md)\<`Uint8Array`\>, `messageBytes`: `Uint8Array`) => `void` |
 
 #### Returns
 
@@ -99,7 +103,7 @@ ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+▸ **openChannel**(`address`): `Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
 
 #### Parameters
 
@@ -109,7 +113,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+`Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
 
 #### Implementation of
 
@@ -123,7 +127,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`<[`UdpInterface`](net_export.UdpInterface.md)\>
+▸ **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Parameters
 
@@ -136,7 +140,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpInterface`](net_export.UdpInterface.md)\>
+`Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Defined in
 

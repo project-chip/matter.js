@@ -27,7 +27,7 @@ Error base Class for all errors related to the status response messages.
 
 ### constructor
 
-• **new ChannelStatusResponseError**(`message`, `generalStatusCode`, `protocolStatusCode`)
+• **new ChannelStatusResponseError**(`message`, `generalStatusCode`, `protocolStatusCode`): [`ChannelStatusResponseError`](protocol_securechannel_export.ChannelStatusResponseError.md)
 
 #### Parameters
 
@@ -37,13 +37,17 @@ Error base Class for all errors related to the status response messages.
 | `generalStatusCode` | [`GeneralStatusCode`](../enums/protocol_securechannel_export.GeneralStatusCode.md) |
 | `protocolStatusCode` | [`ProtocolStatusCode`](../enums/protocol_securechannel_export.ProtocolStatusCode.md) |
 
+#### Returns
+
+[`ChannelStatusResponseError`](protocol_securechannel_export.ChannelStatusResponseError.md)
+
 #### Overrides
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L21)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L21)
 
 ## Properties
 
@@ -53,7 +57,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L23)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L23)
 
 ___
 
@@ -63,4 +67,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L24)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L24)

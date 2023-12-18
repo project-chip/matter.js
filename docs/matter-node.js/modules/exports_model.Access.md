@@ -55,11 +55,11 @@
 
 | Name | Type |
 | :------ | :------ |
-| `fabric?` | \`${Fabric}\` |
-| `readPriv?` | \`${Privilege}\` |
-| `rw?` | \`${Rw}\` |
+| `fabric?` | \`$\{Fabric}\` |
+| `readPriv?` | \`$\{Privilege}\` |
+| `rw?` | \`$\{Rw}\` |
 | `timed?` | `boolean` |
-| `writePriv?` | \`${Privilege}\` |
+| `writePriv?` | \`$\{Privilege}\` |
 
 #### Defined in
 

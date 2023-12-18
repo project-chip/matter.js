@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / AttributeServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / AttributeServer
 
-# Class: AttributeServer<T\>
+# Class: AttributeServer\<T\>
 
-[<internal>](../modules/internal_.md).AttributeServer
+[\<internal\>](../modules/internal_.md).AttributeServer
 
 Attribute server for normal attributes that can be read and written.
 
@@ -14,7 +14,7 @@ Attribute server for normal attributes that can be read and written.
 
 ## Hierarchy
 
-- [`FixedAttributeServer`](internal_.FixedAttributeServer.md)<`T`\>
+- [`FixedAttributeServer`](internal_.FixedAttributeServer.md)\<`T`\>
 
   ↳ **`AttributeServer`**
 
@@ -71,7 +71,7 @@ Attribute server for normal attributes that can be read and written.
 
 ### constructor
 
-• **new AttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `increaseClusterDataVersion`, `getter?`, `setter?`, `validator?`)
+• **new AttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `increaseClusterDataVersion`, `getter?`, `setter?`, `validator?`): [`AttributeServer`](internal_.AttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -85,16 +85,20 @@ Attribute server for normal attributes that can be read and written.
 | :------ | :------ | :------ |
 | `id` | [`AttributeId`](../modules/internal_.md#attributeid) | - |
 | `name` | `string` | - |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> | - |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
 | `requiresTimedInteraction` | `boolean` | - |
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
 | `increaseClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | - |
-| `setter?` | (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. |
-| `validator?` | (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `void` | Optional Validator function to handle special requirements for verification of stored data. The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the client. If a setter is used then no validator should be used as the setter should handle the validation itself! |
+| `getter?` | (`session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | - |
+| `setter?` | (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `boolean` | Optional setter function to handle special requirements or the data are stored in different places. If a setter method is used for a writable attribute, the getter method must be implemented as well. The method needs to return if the stored value has changed or not. |
+| `validator?` | (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `void` | Optional Validator function to handle special requirements for verification of stored data. The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the client. If a setter is used then no validator should be used as the setter should handle the validation itself! |
+
+#### Returns
+
+[`AttributeServer`](internal_.AttributeServer.md)\<`T`\>
 
 #### Overrides
 
@@ -158,7 +162,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -168,7 +172,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](internal_.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -290,7 +294,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -304,7 +308,7 @@ ___
 
 ### setter
 
-• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `boolean`
+• `Protected` `Readonly` **setter**: (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `boolean`
 
 #### Type declaration
 
@@ -315,7 +319,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](internal_.Endpoint.md) |
 
 ##### Returns
@@ -330,7 +334,7 @@ ___
 
 ### validator
 
-• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `void`
+• `Protected` `Readonly` **validator**: (`value`: `T`, `session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md)) => `void`
 
 #### Type declaration
 
@@ -341,7 +345,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](internal_.Endpoint.md) |
 
 ##### Returns
@@ -480,7 +484,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -532,7 +536,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -556,7 +560,7 @@ ___
 
 ### handleVersionAndTriggerListeners
 
-▸ `Protected` **handleVersionAndTriggerListeners**(`value`, `oldValue`, `considerVersionChanged`): `void`
+▸ **handleVersionAndTriggerListeners**(`value`, `oldValue`, `considerVersionChanged`): `void`
 
 Helper Method to handle needed version increases and trigger the relevant listeners. This method is used
 internally.
@@ -608,7 +612,7 @@ ___
 
 ### processSet
 
-▸ `Protected` **processSet**(`value`, `session?`): `void`
+▸ **processSet**(`value`, `session?`): `void`
 
 Helper Method to process the set of a value in a generic way. This method is used internally.
 
@@ -617,7 +621,7 @@ Helper Method to process the set of a value in a generic way. This method is use
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session?` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -695,7 +699,7 @@ Listeners are called when the value changes (internal listeners) or in any case 
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -735,7 +739,7 @@ ___
 
 ### setRemote
 
-▸ `Protected` **setRemote**(`value`, `session`): `void`
+▸ **setRemote**(`value`, `session`): `void`
 
 Method that contains the logic to set a value "from remote" (e.g. from a client).
 
@@ -744,7 +748,7 @@ Method that contains the logic to set a value "from remote" (e.g. from a client)
 | Name | Type |
 | :------ | :------ |
 | `value` | `T` |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -796,7 +800,7 @@ ACL checks needs to be performed before calling this method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](internal_.SecureSession.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`SecureSession`](internal_.SecureSession.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 

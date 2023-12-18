@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / ProtocolStatusCode
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / ProtocolStatusCode
 
 # Enumeration: ProtocolStatusCode
 
-[<internal>](../modules/internal_.md).ProtocolStatusCode
+[\<internal\>](../modules/internal_.md).ProtocolStatusCode
 
 ## Table of contents
 

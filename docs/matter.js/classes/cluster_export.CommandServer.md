@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [cluster/export](../modules/cluster_export.md) / CommandServer
 
-# Class: CommandServer<RequestT, ResponseT\>
+# Class: CommandServer\<RequestT, ResponseT\>
 
 [cluster/export](../modules/cluster_export.md).CommandServer
 
@@ -35,7 +35,7 @@
 
 ### constructor
 
-• **new CommandServer**<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`)
+• **new CommandServer**\<`RequestT`, `ResponseT`\>(`invokeId`, `responseId`, `name`, `requestSchema`, `responseSchema`, `requiresTimedInteraction`, `handler`): [`CommandServer`](cluster_export.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Type parameters
 
@@ -51,41 +51,45 @@
 | `invokeId` | [`CommandId`](../modules/datatype_export.md#commandid) |
 | `responseId` | [`CommandId`](../modules/datatype_export.md#commandid) |
 | `name` | `string` |
-| `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`RequestT`\> |
-| `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`ResponseT`\> |
+| `requestSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`RequestT`\> |
+| `responseSchema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`ResponseT`\> |
 | `requiresTimedInteraction` | `boolean` |
-| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\> |
+| `handler` | (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\> |
+
+#### Returns
+
+[`CommandServer`](cluster_export.CommandServer.md)\<`RequestT`, `ResponseT`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L19)
+[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
 
 ## Properties
 
 ### handler
 
-• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`<`ResponseT`\>
+• `Protected` `Readonly` **handler**: (`request`: `RequestT`, `session`: [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>, `message`: [`Message`](../interfaces/codec_export.Message.md), `endpoint`: [`Endpoint`](device_export.Endpoint.md)) => `ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Type declaration
 
-▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`<`ResponseT`\>
+▸ (`request`, `session`, `message`, `endpoint`): `ResponseT` \| `Promise`\<`ResponseT`\>
 
 ##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `request` | `RequestT` |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 | `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
 
 ##### Returns
 
-`ResponseT` \| `Promise`<`ResponseT`\>
+`ResponseT` \| `Promise`\<`ResponseT`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
+[packages/matter.js/src/cluster/server/CommandServer.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L28)
 
 ___
 
@@ -95,7 +99,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L20)
+[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
 
 ___
 
@@ -105,17 +109,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L22)
+[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
 
 ___
 
 ### requestSchema
 
-• `Readonly` **requestSchema**: [`TlvSchema`](tlv_export.TlvSchema.md)<`RequestT`\>
+• `Readonly` **requestSchema**: [`TlvSchema`](tlv_export.TlvSchema.md)\<`RequestT`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
+[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
 
 ___
 
@@ -125,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L25)
+[packages/matter.js/src/cluster/server/CommandServer.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L27)
 
 ___
 
@@ -135,37 +139,37 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L21)
+[packages/matter.js/src/cluster/server/CommandServer.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L23)
 
 ___
 
 ### responseSchema
 
-• `Readonly` **responseSchema**: [`TlvSchema`](tlv_export.TlvSchema.md)<`ResponseT`\>
+• `Readonly` **responseSchema**: [`TlvSchema`](tlv_export.TlvSchema.md)\<`ResponseT`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L24)
+[packages/matter.js/src/cluster/server/CommandServer.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L26)
 
 ## Methods
 
 ### invoke
 
-▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
+▸ **invoke**(`session`, `args`, `message`, `endpoint`): `Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 | `args` | [`TlvStream`](../modules/tlv_export.md#tlvstream) |
 | `message` | [`Message`](../interfaces/codec_export.Message.md) |
 | `endpoint` | [`Endpoint`](device_export.Endpoint.md) |
 
 #### Returns
 
-`Promise`<{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
+`Promise`\<\{ `clusterCode?`: `number` ; `code`: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md) ; `response`: [`TlvStream`](../modules/tlv_export.md#tlvstream) ; `responseId`: [`CommandId`](../modules/datatype_export.md#commandid)  }\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/CommandServer.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/CommandServer.ts#L34)
+[packages/matter.js/src/cluster/server/CommandServer.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/CommandServer.ts#L36)

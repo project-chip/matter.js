@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / SupportedAttributeClient
 
-# Class: SupportedAttributeClient<T\>
+# Class: SupportedAttributeClient\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).SupportedAttributeClient
 
@@ -14,7 +14,7 @@ Special AttributeClient class to allow identifying attributes that are supported
 
 ## Hierarchy
 
-- [`AttributeClient`](exports_cluster.AttributeClient.md)<`T`\>
+- [`AttributeClient`](exports_cluster.AttributeClient.md)\<`T`\>
 
   ↳ **`SupportedAttributeClient`**
 
@@ -49,7 +49,7 @@ Special AttributeClient class to allow identifying attributes that are supported
 
 ### constructor
 
-• **new SupportedAttributeClient**<`T`\>(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new SupportedAttributeClient**\<`T`\>(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`SupportedAttributeClient`](exports_cluster.SupportedAttributeClient.md)\<`T`\>
 
 #### Type parameters
 
@@ -61,11 +61,15 @@ Special AttributeClient class to allow identifying attributes that are supported
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)<`T`, `any`\> |
+| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
+
+#### Returns
+
+[`SupportedAttributeClient`](exports_cluster.SupportedAttributeClient.md)\<`T`\>
 
 #### Inherited from
 
@@ -79,7 +83,7 @@ packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)<`T`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `any`\>
 
 #### Inherited from
 
@@ -149,7 +153,7 @@ ___
 
 ### schema
 
-• `Protected` `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`any`\>
+• `Protected` `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`any`\>
 
 #### Inherited from
 
@@ -189,7 +193,7 @@ ___
 
 ### get
 
-▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`undefined` \| `T`\>
+▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`undefined` \| `T`\>
 
 Get the value of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -202,7 +206,7 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Returns
 
-`Promise`<`undefined` \| `T`\>
+`Promise`\<`undefined` \| `T`\>
 
 #### Inherited from
 
@@ -216,7 +220,7 @@ ___
 
 ### getWithVersion
 
-▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`undefined` \| { `value`: `T` ; `version`: `number`  }\>
+▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`undefined` \| \{ `value`: `T` ; `version`: `number`  }\>
 
 Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -229,7 +233,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Returns
 
-`Promise`<`undefined` \| { `value`: `T` ; `version`: `number`  }\>
+`Promise`\<`undefined` \| \{ `value`: `T` ; `version`: `number`  }\>
 
 #### Inherited from
 
@@ -269,7 +273,7 @@ ___
 
 ### set
 
-▸ **set**(`value`, `dataVersion?`): `Promise`<`void`\>
+▸ **set**(`value`, `dataVersion?`): `Promise`\<`void`\>
 
 Set the value of the attribute. When dataVersion parameter is provided the value is only set when the
 cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
@@ -283,7 +287,7 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -297,7 +301,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 Subscribe to the attribute.
 
@@ -312,7 +316,7 @@ Subscribe to the attribute.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -326,7 +330,7 @@ ___
 
 ### update
 
-▸ `Private` **update**(`value`): `void`
+▸ **update**(`value`): `void`
 
 Update the value of the attribute. Just internally used!
 

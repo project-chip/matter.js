@@ -8,7 +8,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](schema_export.Schema.md)<`string`, `string`\>
+- [`Schema`](schema_export.Schema.md)\<`string`, `string`\>
 
   ↳ **`QrCodeSchema`**
 
@@ -32,7 +32,11 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new QrCodeSchema**()
+• **new QrCodeSchema**(): [`QrCodeSchema`](schema_export.QrCodeSchema.md)
+
+#### Returns
+
+[`QrCodeSchema`](schema_export.QrCodeSchema.md)
 
 #### Inherited from
 
@@ -63,13 +67,13 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`_encoded`): `string`
+▸ **decodeInternal**(`_encoded`): `string`
 
 #### Parameters
 
@@ -87,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:208](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/QrCodeSchema.ts#L208)
+[packages/matter.js/src/schema/QrCodeSchema.ts:208](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/QrCodeSchema.ts#L208)
 
 ___
 
@@ -113,13 +117,13 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`data`): `string`
+▸ **encodeInternal**(`data`): `string`
 
 #### Parameters
 
@@ -137,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:99](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/QrCodeSchema.ts#L99)
+[packages/matter.js/src/schema/QrCodeSchema.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/QrCodeSchema.ts#L99)
 
 ___
 
@@ -157,13 +161,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:212](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/QrCodeSchema.ts#L212)
+[packages/matter.js/src/schema/QrCodeSchema.ts:212](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/QrCodeSchema.ts#L212)
 
 ___
 
 ### getCode
 
-▸ `Private` **getCode**(`char`): `number`
+▸ **getCode**(`char`): `number`
 
 #### Parameters
 
@@ -177,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/QrCodeSchema.ts:202](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/QrCodeSchema.ts#L202)
+[packages/matter.js/src/schema/QrCodeSchema.ts:202](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/QrCodeSchema.ts#L202)
 
 ___
 
@@ -203,4 +207,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

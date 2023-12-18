@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / Command
 
-# Interface: Command<RequestT, ResponseT, F\>
+# Interface: Command\<RequestT, ResponseT, F\>
 
 [exports/cluster](../modules/exports_cluster.md).Command
 
@@ -51,7 +51,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -71,7 +71,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -91,7 +91,7 @@ ___
 
 ### requestSchema
 
-• **requestSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`RequestT`\>
+• **requestSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`RequestT`\>
 
 #### Defined in
 
@@ -111,7 +111,7 @@ ___
 
 ### responseSchema
 
-• **responseSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`ResponseT`\>
+• **responseSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`ResponseT`\>
 
 #### Defined in
 

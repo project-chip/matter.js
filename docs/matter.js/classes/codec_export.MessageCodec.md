@@ -26,13 +26,17 @@
 
 ### constructor
 
-• **new MessageCodec**()
+• **new MessageCodec**(): [`MessageCodec`](codec_export.MessageCodec.md)
+
+#### Returns
+
+[`MessageCodec`](codec_export.MessageCodec.md)
 
 ## Methods
 
 ### decodePacket
 
-▸ `Static` **decodePacket**(`data`): [`DecodedPacket`](../interfaces/codec_export.DecodedPacket.md)
+▸ **decodePacket**(`data`): [`DecodedPacket`](../interfaces/codec_export.DecodedPacket.md)
 
 #### Parameters
 
@@ -46,19 +50,19 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L94)
+[packages/matter.js/src/codec/MessageCodec.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L97)
 
 ___
 
 ### decodePacketHeader
 
-▸ `Static` `Private` **decodePacketHeader**(`reader`): [`DecodedPacketHeader`](../interfaces/codec_export.DecodedPacketHeader.md)
+▸ **decodePacketHeader**(`reader`): [`DecodedPacketHeader`](../interfaces/codec_export.DecodedPacketHeader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -66,13 +70,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:146](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L146)
+[packages/matter.js/src/codec/MessageCodec.ts:149](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L149)
 
 ___
 
 ### decodePayload
 
-▸ `Static` **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/codec_export.DecodedMessage.md)
+▸ **decodePayload**(`«destructured»`): [`DecodedMessage`](../interfaces/codec_export.DecodedMessage.md)
 
 #### Parameters
 
@@ -86,19 +90,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L112)
+[packages/matter.js/src/codec/MessageCodec.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L115)
 
 ___
 
 ### decodePayloadHeader
 
-▸ `Static` `Private` **decodePayloadHeader**(`reader`): [`PayloadHeader`](../interfaces/codec_export.PayloadHeader.md)
+▸ **decodePayloadHeader**(`reader`): [`PayloadHeader`](../interfaces/codec_export.PayloadHeader.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -106,13 +110,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:190](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L190)
+[packages/matter.js/src/codec/MessageCodec.ts:193](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L193)
 
 ___
 
 ### encodePacket
 
-▸ `Static` **encodePacket**(`«destructured»`): `Uint8Array`
+▸ **encodePacket**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -126,13 +130,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L139)
+[packages/matter.js/src/codec/MessageCodec.ts:142](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L142)
 
 ___
 
 ### encodePacketHeader
 
-▸ `Static` **encodePacketHeader**(`«destructured»`): `Uint8Array`
+▸ **encodePacketHeader**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -146,13 +150,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:215](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L215)
+[packages/matter.js/src/codec/MessageCodec.ts:218](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L218)
 
 ___
 
 ### encodePayload
 
-▸ `Static` **encodePayload**(`«destructured»`): [`Packet`](../interfaces/codec_export.Packet.md)
+▸ **encodePayload**(`«destructured»`): [`Packet`](../interfaces/codec_export.Packet.md)
 
 #### Parameters
 
@@ -166,13 +170,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L128)
+[packages/matter.js/src/codec/MessageCodec.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L131)
 
 ___
 
 ### encodePayloadHeader
 
-▸ `Static` `Private` **encodePayloadHeader**(`«destructured»`): `Uint8Array`
+▸ **encodePayloadHeader**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
@@ -186,13 +190,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:255](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L255)
+[packages/matter.js/src/codec/MessageCodec.ts:258](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L258)
 
 ___
 
 ### messageDiagnostics
 
-▸ `Static` **messageDiagnostics**(`«destructured»`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
+▸ **messageDiagnostics**(`«destructured»`): [`DiagnosticDictionary`](log_export.DiagnosticDictionary.md)
 
 #### Parameters
 
@@ -206,4 +210,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:241](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L241)
+[packages/matter.js/src/codec/MessageCodec.ts:244](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L244)

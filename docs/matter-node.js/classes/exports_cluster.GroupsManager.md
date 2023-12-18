@@ -23,13 +23,17 @@
 
 ### constructor
 
-• **new GroupsManager**()
+• **new GroupsManager**(): [`GroupsManager`](exports_cluster.GroupsManager.md)
+
+#### Returns
+
+[`GroupsManager`](exports_cluster.GroupsManager.md)
 
 ## Methods
 
 ### getGroupName
 
-▸ `Static` **getGroupName**(`fabric`, `endpointId`, `groupId`): `undefined` \| `string`
+▸ **getGroupName**(`fabric`, `endpointId`, `groupId`): `undefined` \| `string`
 
 #### Parameters
 
@@ -51,7 +55,7 @@ ___
 
 ### getGroups
 
-▸ `Static` **getGroups**(`fabric`, `endpointId`): `Map`<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
+▸ **getGroups**(`fabric`, `endpointId`): `Map`\<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
 
 #### Parameters
 
@@ -62,7 +66,7 @@ ___
 
 #### Returns
 
-`Map`<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
+`Map`\<[`GroupId`](../modules/exports_datatype.md#groupid), `string`\>
 
 #### Defined in
 
@@ -72,7 +76,7 @@ ___
 
 ### hasGroup
 
-▸ `Static` **hasGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **hasGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
 
 #### Parameters
 
@@ -94,7 +98,7 @@ ___
 
 ### removeAllGroups
 
-▸ `Static` **removeAllGroups**(`fabric`, `endpointId`): `void`
+▸ **removeAllGroups**(`fabric`, `endpointId`): `void`
 
 #### Parameters
 
@@ -115,7 +119,7 @@ ___
 
 ### removeGroup
 
-▸ `Static` **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
 
 #### Parameters
 
@@ -137,7 +141,7 @@ ___
 
 ### setGroup
 
-▸ `Static` **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
+▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
 
 #### Parameters
 

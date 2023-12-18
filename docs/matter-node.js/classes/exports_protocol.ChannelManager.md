@@ -30,7 +30,11 @@
 
 ### constructor
 
-• **new ChannelManager**()
+• **new ChannelManager**(): [`ChannelManager`](exports_protocol.ChannelManager.md)
+
+#### Returns
+
+[`ChannelManager`](exports_protocol.ChannelManager.md)
 
 ## Properties
 
@@ -76,11 +80,11 @@ packages/matter.js/dist/esm/protocol/ChannelManager.d.ts:17
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -90,7 +94,7 @@ ___
 
 ### getChannel
 
-▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+▸ **getChannel**(`fabric`, `nodeId`): [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
@@ -101,7 +105,7 @@ ___
 
 #### Returns
 
-[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+[`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
@@ -111,17 +115,17 @@ ___
 
 ### getChannelForSession
 
-▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+▸ **getChannelForSession**(`session`): `undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<`any`\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`any`\> |
 
 #### Returns
 
-`undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>
+`undefined` \| [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>
 
 #### Defined in
 
@@ -131,18 +135,18 @@ ___
 
 ### getOrCreateChannel
 
-▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>\>
+▸ **getOrCreateChannel**(`byteArrayChannel`, `session`): `Promise`\<[`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `byteArrayChannel` | [`Channel`](../interfaces/exports_common.Channel.md)<`Uint8Array`\> |
-| `session` | [`Session`](../interfaces/exports_session.Session.md)<`any`\> |
+| `byteArrayChannel` | [`Channel`](../interfaces/exports_common.Channel.md)\<`Uint8Array`\> |
+| `session` | [`Session`](../interfaces/exports_session.Session.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\>\>
+`Promise`\<[`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\>\>
 
 #### Defined in
 
@@ -152,7 +156,7 @@ ___
 
 ### removeChannel
 
-▸ **removeChannel**(`fabric`, `nodeId`): `Promise`<`void`\>
+▸ **removeChannel**(`fabric`, `nodeId`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -163,7 +167,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -173,7 +177,7 @@ ___
 
 ### setChannel
 
-▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`<`void`\>
+▸ **setChannel**(`fabric`, `nodeId`, `channel`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -181,11 +185,11 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
-| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<`any`\> |
+| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

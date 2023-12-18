@@ -31,7 +31,7 @@ Indicates support for asynchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L36)
 
 ___
 
@@ -43,7 +43,7 @@ Indicates support for synchronous BDX.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L31)
 
 ___
 
@@ -55,7 +55,7 @@ Indicates support for HTTPS.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L41)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L41)
 
 ___
 
@@ -67,4 +67,4 @@ Indicates support for vendor specific protocol.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L46)
+[packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/OtaSoftwareUpdateProviderCluster.ts#L46)

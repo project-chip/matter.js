@@ -29,13 +29,17 @@
 
 ### constructor
 
-• **new TlvCodec**()
+• **new TlvCodec**(): [`TlvCodec`](tlv_export.TlvCodec.md)
+
+#### Returns
+
+[`TlvCodec`](tlv_export.TlvCodec.md)
 
 ## Methods
 
 ### getIntTlvLength
 
-▸ `Static` **getIntTlvLength**(`value`): `TlvLength`
+▸ **getIntTlvLength**(`value`): `TlvLength`
 
 #### Parameters
 
@@ -49,13 +53,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L129)
+[packages/matter.js/src/tlv/TlvCodec.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L129)
 
 ___
 
 ### getPrimitiveByteLength
 
-▸ `Static` **getPrimitiveByteLength**<`T`\>(`typeLength`, `value`): `number`
+▸ **getPrimitiveByteLength**\<`T`\>(`typeLength`, `value`): `number`
 
 #### Type parameters
 
@@ -76,13 +80,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:422](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L422)
+[packages/matter.js/src/tlv/TlvCodec.ts:422](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L422)
 
 ___
 
 ### getTagByteLength
 
-▸ `Static` **getTagByteLength**(`tag?`): ``1`` \| ``2`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
+▸ **getTagByteLength**(`tag?`): ``1`` \| ``2`` \| ``3`` \| ``5`` \| ``7`` \| ``9``
 
 #### Parameters
 
@@ -96,13 +100,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:342](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L342)
+[packages/matter.js/src/tlv/TlvCodec.ts:342](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L342)
 
 ___
 
 ### getUIntByteLength
 
-▸ `Static` `Private` **getUIntByteLength**(`length`): ``1`` \| ``2`` \| ``4`` \| ``8``
+▸ **getUIntByteLength**(`length`): ``1`` \| ``2`` \| ``4`` \| ``8``
 
 #### Parameters
 
@@ -116,13 +120,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:457](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L457)
+[packages/matter.js/src/tlv/TlvCodec.ts:457](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L457)
 
 ___
 
 ### getUIntTlvLength
 
-▸ `Static` **getUIntTlvLength**(`value`): `TlvLength`
+▸ **getUIntTlvLength**(`value`): `TlvLength`
 
 #### Parameters
 
@@ -136,13 +140,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:117](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L117)
+[packages/matter.js/src/tlv/TlvCodec.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L117)
 
 ___
 
 ### parseTypeLength
 
-▸ `Static` `Private` **parseTypeLength**(`typeLength`): [`TlvTypeLength`](../modules/tlv_export.md#tlvtypelength)
+▸ **parseTypeLength**(`typeLength`): [`TlvTypeLength`](../modules/tlv_export.md#tlvtypelength)
 
 #### Parameters
 
@@ -156,13 +160,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:179](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L179)
+[packages/matter.js/src/tlv/TlvCodec.ts:179](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L179)
 
 ___
 
 ### readPrimitive
 
-▸ `Static` **readPrimitive**<`T`, `V`\>(`reader`, `typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`reader`, `typeLength`): `V`
 
 #### Type parameters
 
@@ -175,7 +179,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 
 #### Returns
@@ -184,19 +188,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:206](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L206)
+[packages/matter.js/src/tlv/TlvCodec.ts:206](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L206)
 
 ___
 
 ### readTag
 
-▸ `Static` `Private` **readTag**(`reader`, `tagControl`): `undefined` \| [`TlvTag`](../modules/tlv_export.md#tlvtag)
+▸ **readTag**(`reader`, `tagControl`): `undefined` \| [`TlvTag`](../modules/tlv_export.md#tlvtag)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `tagControl` | [`TagControl`](../enums/export._internal_.TagControl.md) |
 
 #### Returns
@@ -205,19 +209,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:159](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L159)
+[packages/matter.js/src/tlv/TlvCodec.ts:159](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L159)
 
 ___
 
 ### readTagType
 
-▸ `Static` **readTagType**(`reader`): `Object`
+▸ **readTagType**(`reader`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 
 #### Returns
 
@@ -234,13 +238,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:154](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L154)
+[packages/matter.js/src/tlv/TlvCodec.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L154)
 
 ___
 
 ### writePrimitive
 
-▸ `Static` **writePrimitive**<`T`\>(`writer`, `typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`writer`, `typeLength`, `value`): `void`
 
 #### Type parameters
 
@@ -252,7 +256,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLength` | `T` |
 | `value` | [`TlvToPrimitive`](../modules/tlv_export.md#tlvtoprimitive)[`T`[``"type"``]] |
 
@@ -262,19 +266,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:370](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L370)
+[packages/matter.js/src/tlv/TlvCodec.ts:370](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L370)
 
 ___
 
 ### writeTag
 
-▸ `Static` **writeTag**(`writer`, `typeLengthValue`, `tag?`): `void`
+▸ **writeTag**(`writer`, `typeLengthValue`, `tag?`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `typeLengthValue` | [`TlvTypeLength`](../modules/tlv_export.md#tlvtypelength) |
 | `tag?` | [`TlvTag`](../modules/tlv_export.md#tlvtag) |
 
@@ -288,19 +292,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:292](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L292)
+[packages/matter.js/src/tlv/TlvCodec.ts:292](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L292)
 
 ___
 
 ### writeUInt
 
-▸ `Static` `Private` **writeUInt**(`writer`, `length`, `value`): `void`
+▸ **writeUInt**(`writer`, `length`, `value`): `void`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `writer` | [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\> |
+| `writer` | [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\> |
 | `length` | [`TlvLength`](../enums/tlv_export.TlvLength.md) |
 | `value` | `number` \| `bigint` |
 
@@ -310,4 +314,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvCodec.ts:444](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvCodec.ts#L444)
+[packages/matter.js/src/tlv/TlvCodec.ts:444](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvCodec.ts#L444)

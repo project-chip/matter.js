@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [model](../modules/model.md) / ModelVariantTraversal
 
-# Class: ModelVariantTraversal<S\>
+# Class: ModelVariantTraversal\<S\>
 
 [model](../modules/model.md).ModelVariantTraversal
 
@@ -39,7 +39,7 @@ Visits multiple model hierarchies simultaneously and builds state.
 
 ### constructor
 
-• **new ModelVariantTraversal**<`S`\>(`sourceNames`)
+• **new ModelVariantTraversal**\<`S`\>(`sourceNames`): [`ModelVariantTraversal`](model.ModelVariantTraversal.md)\<`S`\>
 
 Create a new visitor.  Must list the valid names of sources.  The order
 of this list implies the priority used for choosing a name when multiple
@@ -57,9 +57,13 @@ model variants have different names.
 | :------ | :------ |
 | `sourceNames` | `string`[] |
 
+#### Returns
+
+[`ModelVariantTraversal`](model.ModelVariantTraversal.md)\<`S`\>
+
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
 
 ## Properties
 
@@ -69,7 +73,7 @@ model variants have different names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L58)
 
 ___
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L60)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L60)
 
 ___
 
@@ -89,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L67)
 
 ___
 
@@ -99,13 +103,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L59)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L59)
 
 ## Methods
 
 ### createVariantDetail
 
-▸ `Private` **createVariantDetail**(`map`): [`VariantDetail`](../interfaces/model.VariantDetail.md)
+▸ **createVariantDetail**(`map`): [`VariantDetail`](../interfaces/model.VariantDetail.md)
 
 Create a VariantDetail from a VariantMap.
 
@@ -121,13 +125,13 @@ Create a VariantDetail from a VariantMap.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:268](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L268)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:268](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L268)
 
 ___
 
 ### enterCluster
 
-▸ `Protected` **enterCluster**(`variants`): `boolean`
+▸ **enterCluster**(`variants`): `boolean`
 
 Determine if we are entering a cluster and install cluster state if so.
 
@@ -143,13 +147,13 @@ Determine if we are entering a cluster and install cluster state if so.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:128](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L128)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L128)
 
 ___
 
 ### getCanonicalName
 
-▸ `Protected` **getCanonicalName**(`model`): `string`
+▸ **getCanonicalName**(`model`): `string`
 
 Get the canonical name for a model.  Within cluster scope alternate
 names may be selected, otherwise the name of the model is returned.
@@ -166,13 +170,13 @@ names may be selected, otherwise the name of the model is returned.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L115)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L115)
 
 ___
 
 ### mapChildren
 
-▸ `Private` **mapChildren**(`variants`): `Object`
+▸ **mapChildren**(`variants`): `Object`
 
 #### Parameters
 
@@ -186,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:197](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L197)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:197](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L197)
 
 ___
 
@@ -209,13 +213,13 @@ invoked while traversal is ongoing.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L73)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L73)
 
 ___
 
 ### visit
 
-▸ `Protected` `Abstract` **visit**(`variants`, `recurse`): `S`
+▸ **visit**(`variants`, `recurse`): `S`
 
 This is the primary callback.  It is invoked for every set of variants
 during traversal.  It may optionally return state that is returned
@@ -234,13 +238,13 @@ from traverse().
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L109)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L109)
 
 ___
 
 ### visitVariants
 
-▸ `Private` **visitVariants**(`variants`): `S`
+▸ **visitVariants**(`variants`): `S`
 
 This is the function that actually recurses during the visit.
 
@@ -256,4 +260,4 @@ This is the function that actually recurses during the visit.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L141)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:141](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L141)

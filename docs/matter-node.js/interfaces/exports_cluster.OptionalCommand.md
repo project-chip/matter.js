@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / OptionalCommand
 
-# Interface: OptionalCommand<RequestT, ResponseT, F\>
+# Interface: OptionalCommand\<RequestT, ResponseT, F\>
 
 [exports/cluster](../modules/exports_cluster.md).OptionalCommand
 
@@ -14,7 +14,7 @@
 
 ## Hierarchy
 
-- [`Command`](../modules/exports_cluster.md#command)<`RequestT`, `ResponseT`, `F`\>
+- [`Command`](../modules/exports_cluster.md#command)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`OptionalCommand`**
 
@@ -65,7 +65,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ ___
 
 ### requestSchema
 
-• **requestSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`RequestT`\>
+• **requestSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`RequestT`\>
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ ___
 
 ### responseSchema
 
-• **responseSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`ResponseT`\>
+• **responseSchema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`ResponseT`\>
 
 #### Inherited from
 

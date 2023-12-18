@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `attributes`: { `linkLocalAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`Uint8Array`, `any`\> ; `macAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)<`Uint8Array`, `any`\>  } ; `id`: ``1283`` ; `name`: ``"WakeOnLan"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `attributes`: \{ `linkLocalAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)\<`Uint8Array`, `any`\> ; `macAddress`: [`OptionalFixedAttribute`](exports_cluster.md#optionalfixedattribute)\<`Uint8Array`, `any`\>  } ; `id`: ``1283`` ; `name`: ``"WakeOnLan"`` ; `revision`: ``1``  }\>
 
 Wake on LAN
 

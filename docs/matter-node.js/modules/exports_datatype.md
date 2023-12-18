@@ -6,12 +6,14 @@
 
 ### Namespaces
 
+- [CaseAuthenticatedTag](exports_datatype.CaseAuthenticatedTag.md)
 - [FabricIndex](exports_datatype.FabricIndex.md)
 - [NodeId](exports_datatype.NodeId.md)
 
 ### Type Aliases
 
 - [AttributeId](exports_datatype.md#attributeid)
+- [CaseAuthenticatedTag](exports_datatype.md#caseauthenticatedtag)
 - [ClusterId](exports_datatype.md#clusterid)
 - [CommandId](exports_datatype.md#commandid)
 - [DeviceTypeId](exports_datatype.md#devicetypeid)
@@ -27,6 +29,7 @@
 ### Variables
 
 - [TlvAttributeId](exports_datatype.md#tlvattributeid)
+- [TlvCaseAuthenticatedTag](exports_datatype.md#tlvcaseauthenticatedtag)
 - [TlvClusterId](exports_datatype.md#tlvclusterid)
 - [TlvCommandId](exports_datatype.md#tlvcommandid)
 - [TlvDeviceTypeId](exports_datatype.md#tlvdevicetypeid)
@@ -42,6 +45,7 @@
 ### Functions
 
 - [AttributeId](exports_datatype.md#attributeid-1)
+- [CaseAuthenticatedTag](exports_datatype.md#caseauthenticatedtag-1)
 - [ClusterId](exports_datatype.md#clusterid-1)
 - [CommandId](exports_datatype.md#commandid-1)
 - [DeviceTypeId](exports_datatype.md#devicetypeid-1)
@@ -57,7 +61,7 @@
 
 ### AttributeId
 
-Ƭ **AttributeId**: [`Branded`](util_export.md#branded)<`number`, ``"AttributeId"``\>
+Ƭ **AttributeId**: [`Branded`](util_export.md#branded)\<`number`, ``"AttributeId"``\>
 
 An Attribute ID is a 32 bit number and indicates an attribute defined in a cluster specification.
 
@@ -73,9 +77,29 @@ packages/matter.js/dist/esm/datatype/AttributeId.d.ts:13
 
 ___
 
+### CaseAuthenticatedTag
+
+Ƭ **CaseAuthenticatedTag**: [`Branded`](util_export.md#branded)\<`number`, ``"CaseAuthenticatedTag"``\>
+
+A CASE Authenticated Tag (CAT) is a special subject distinguished name within the Operational Certificate.
+
+**`See`**
+
+MatterCoreSpecificationV1_2 § 6.6.2.1.2.
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:14
+
+packages/matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:13
+
+packages/matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:15
+
+___
+
 ### ClusterId
 
-Ƭ **ClusterId**: [`Branded`](util_export.md#branded)<`number`, ``"ClusterId"``\>
+Ƭ **ClusterId**: [`Branded`](util_export.md#branded)\<`number`, ``"ClusterId"``\>
 
 A Cluster Identifier is a 32 bit number and SHALL reference a single cluster specification and
 SHALL define conformance to that specification.
@@ -94,7 +118,7 @@ ___
 
 ### CommandId
 
-Ƭ **CommandId**: [`Branded`](util_export.md#branded)<`number`, ``"CommandId"``\>
+Ƭ **CommandId**: [`Branded`](util_export.md#branded)\<`number`, ``"CommandId"``\>
 
 A Command ID is a 32 bit number and indicates a command defined in a cluster specification.
 
@@ -112,7 +136,7 @@ ___
 
 ### DeviceTypeId
 
-Ƭ **DeviceTypeId**: [`Branded`](util_export.md#branded)<`number`, ``"DeviceTypeId"``\>
+Ƭ **DeviceTypeId**: [`Branded`](util_export.md#branded)\<`number`, ``"DeviceTypeId"``\>
 
 A Device type ID is a 32-bit number that defines the type of the device.
 
@@ -130,7 +154,7 @@ ___
 
 ### EndpointNumber
 
-Ƭ **EndpointNumber**: [`Branded`](util_export.md#branded)<`number`, ``"EndpointNumber"``\>
+Ƭ **EndpointNumber**: [`Branded`](util_export.md#branded)\<`number`, ``"EndpointNumber"``\>
 
 A Endpoint Number is a 16-bit number that that indicates an instance of a device type.
 
@@ -148,7 +172,7 @@ ___
 
 ### EventId
 
-Ƭ **EventId**: [`Branded`](util_export.md#branded)<`number`, ``"EventId"``\>
+Ƭ **EventId**: [`Branded`](util_export.md#branded)\<`number`, ``"EventId"``\>
 
 An EVent ID is a 32 bit number and indicates an event defined in a cluster specification.
 
@@ -166,7 +190,7 @@ ___
 
 ### FabricId
 
-Ƭ **FabricId**: [`Branded`](util_export.md#branded)<`bigint`, ``"FabricId"``\>
+Ƭ **FabricId**: [`Branded`](util_export.md#branded)\<`bigint`, ``"FabricId"``\>
 
 A Fabric ID is a 64-bit number that uniquely identifies the Fabric within the scope of
 a particular root CA.
@@ -185,7 +209,7 @@ ___
 
 ### FabricIndex
 
-Ƭ **FabricIndex**: [`Branded`](util_export.md#branded)<`number`, ``"FabricIndex"``\>
+Ƭ **FabricIndex**: [`Branded`](util_export.md#branded)\<`number`, ``"FabricIndex"``\>
 
 Each fabric supported on a node is referenced by fabric-index that is unique on the node. This
 fabric-index enables the look-up of the full fabric information from the fabric-index. A fabric-index
@@ -210,7 +234,7 @@ ___
 
 ### GroupId
 
-Ƭ **GroupId**: [`Branded`](util_export.md#branded)<`number`, ``"GroupId"``\>
+Ƭ **GroupId**: [`Branded`](util_export.md#branded)\<`number`, ``"GroupId"``\>
 
 A Group Identifier (Group ID or GID) is a 16-bit number that identifies a set of Nodes across a
 Fabric at the message layer (see Section 4.15, “Group Key Management”). A Group ID can further
@@ -235,7 +259,7 @@ ___
 
 ### NodeId
 
-Ƭ **NodeId**: [`Branded`](util_export.md#branded)<`bigint`, ``"NodeId"``\>
+Ƭ **NodeId**: [`Branded`](util_export.md#branded)\<`bigint`, ``"NodeId"``\>
 
 A Node Identifier (Node ID) is a 64-bit number that uniquely identifies an individual Node or a
 group of Nodes on a Fabric.
@@ -246,11 +270,11 @@ MatterCoreSpecificationV1_0 § 2.5.5
 
 #### Defined in
 
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:16
+
 packages/matter.js/dist/esm/datatype/NodeId.d.ts:15
 
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:14
-
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:16
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:17
 
 ___
 
@@ -273,7 +297,7 @@ ___
 
 ### VendorId
 
-Ƭ **VendorId**: [`Branded`](util_export.md#branded)<`number`, ``"VendorId"``\>
+Ƭ **VendorId**: [`Branded`](util_export.md#branded)\<`number`, ``"VendorId"``\>
 
 A Vendor Identifier (Vendor ID or VID) is a 16-bit number that uniquely identifies a particular
 product manufacturer, vendor, or group thereof. Each Vendor ID is statically allocated by the
@@ -293,7 +317,7 @@ packages/matter.js/dist/esm/datatype/VendorId.d.ts:15
 
 ### TlvAttributeId
 
-• `Const` **TlvAttributeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`AttributeId`](exports_datatype.md#attributeid), `number`\>
+• `Const` **TlvAttributeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`AttributeId`](exports_datatype.md#attributeid), `number`\>
 
 Tlv schema for an Attribute Id.
 
@@ -303,9 +327,19 @@ packages/matter.js/dist/esm/datatype/AttributeId.d.ts:16
 
 ___
 
+### TlvCaseAuthenticatedTag
+
+• `Const` **TlvCaseAuthenticatedTag**: [`TlvCaseAuthenticatedTagSchema`](../classes/export._internal_.TlvCaseAuthenticatedTagSchema.md)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:26
+
+___
+
 ### TlvClusterId
 
-• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`ClusterId`](exports_datatype.md#clusterid), `number`\>
+• `Const` **TlvClusterId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`ClusterId`](exports_datatype.md#clusterid), `number`\>
 
 Tlv schema for a cluster Id.
 
@@ -317,7 +351,7 @@ ___
 
 ### TlvCommandId
 
-• `Const` **TlvCommandId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`CommandId`](exports_datatype.md#commandid), `number`\>
+• `Const` **TlvCommandId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`CommandId`](exports_datatype.md#commandid), `number`\>
 
 Tlv schema for an Command Id.
 
@@ -329,7 +363,7 @@ ___
 
 ### TlvDeviceTypeId
 
-• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`DeviceTypeId`](exports_datatype.md#devicetypeid), `number`\>
+• `Const` **TlvDeviceTypeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`DeviceTypeId`](exports_datatype.md#devicetypeid), `number`\>
 
 Tlv schema for a Device type ID.
 
@@ -341,7 +375,7 @@ ___
 
 ### TlvEndpointNumber
 
-• `Const` **TlvEndpointNumber**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`EndpointNumber`](exports_datatype.md#endpointnumber), `number`\>
+• `Const` **TlvEndpointNumber**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`EndpointNumber`](exports_datatype.md#endpointnumber), `number`\>
 
 Tlv schema for an Endpoint number.
 
@@ -353,7 +387,7 @@ ___
 
 ### TlvEventId
 
-• `Const` **TlvEventId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`EventId`](exports_datatype.md#eventid), `number`\>
+• `Const` **TlvEventId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`EventId`](exports_datatype.md#eventid), `number`\>
 
 Tlv schema for an Event Id.
 
@@ -365,7 +399,7 @@ ___
 
 ### TlvFabricId
 
-• `Const` **TlvFabricId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`FabricId`](exports_datatype.md#fabricid), `number` \| `bigint`\>
+• `Const` **TlvFabricId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`FabricId`](exports_datatype.md#fabricid), `number` \| `bigint`\>
 
 Tlv schema for a Node Identifier.
 
@@ -377,7 +411,7 @@ ___
 
 ### TlvFabricIndex
 
-• `Const` **TlvFabricIndex**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`FabricIndex`](exports_datatype.md#fabricindex), `number` \| `undefined`\>
+• `Const` **TlvFabricIndex**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`FabricIndex`](exports_datatype.md#fabricindex), `number` \| `undefined`\>
 
 Tlv Schema for a Fabric Index.
 
@@ -389,7 +423,7 @@ ___
 
 ### TlvGroupId
 
-• `Const` **TlvGroupId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`GroupId`](exports_datatype.md#groupid), `number`\>
+• `Const` **TlvGroupId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`GroupId`](exports_datatype.md#groupid), `number`\>
 
 Tlv Schema for a Group Id.
 
@@ -401,13 +435,13 @@ ___
 
 ### TlvNodeId
 
-• `Const` **TlvNodeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`NodeId`](exports_datatype.md#nodeid), `number` \| `bigint`\>
+• `Const` **TlvNodeId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`NodeId`](exports_datatype.md#nodeid), `number` \| `bigint`\>
 
 Tlv schema for a Node Identifier.
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:22
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:52
 
 ___
 
@@ -425,7 +459,7 @@ ___
 
 ### TlvVendorId
 
-• `Const` **TlvVendorId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)<[`VendorId`](exports_datatype.md#vendorid), `number`\>
+• `Const` **TlvVendorId**: [`TlvWrapper`](../classes/exports_tlv.TlvWrapper.md)\<[`VendorId`](exports_datatype.md#vendorid), `number`\>
 
 Data model for a Vendor Identifier.
 
@@ -452,6 +486,26 @@ packages/matter.js/dist/esm/datatype/VendorId.d.ts:18
 #### Defined in
 
 packages/matter.js/dist/esm/datatype/AttributeId.d.ts:14
+
+___
+
+### CaseAuthenticatedTag
+
+▸ **CaseAuthenticatedTag**(`id`): [`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `number` |
+
+#### Returns
+
+[`CaseAuthenticatedTag`](exports_datatype.md#caseauthenticatedtag)
+
+#### Defined in
+
+packages/matter.js/dist/esm/datatype/CaseAuthenticatedTag.d.ts:14
 
 ___
 
@@ -631,7 +685,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/datatype/NodeId.d.ts:15
+packages/matter.js/dist/esm/datatype/NodeId.d.ts:16
 
 ___
 

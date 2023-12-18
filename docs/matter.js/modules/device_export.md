@@ -57,16 +57,16 @@
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedAttributeReportValue`](protocol_interaction_export.md#decodedattributereportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
+| `attributeChangedCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedAttributeReportValue`](protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Attribute change reported by the device. Use this if subscribing to all relevant attributes is too much effort. |
 | `autoSubscribe?` | `boolean` | Unless set to false all events and attributes are subscribed and value changes are reflected in the ClusterClient instances. With this reading attributes values is mostly looked up in the locally cached data. Additionally more features like reaction on shutdown event or endpoint structure changes (for bridges) are done internally automatically. |
-| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedEventReportValue`](protocol_interaction_export.md#decodedeventreportvalue)<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
+| `eventTriggeredCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `data`: [`DecodedEventReportValue`](protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>) => `void` | Optional additional callback method which is called for each Event reported by the device. Use this if subscribing to all relevant events is too much effort. |
 | `stateInformationCallback?` | (`nodeId`: [`NodeId`](datatype_export.md#nodeid), `state`: [`NodeStateInformation`](../enums/device_export.NodeStateInformation.md)) => `void` | Optional callback method which is called when the state of the node changes. This can be used to detect when the node goes offline or comes back online. |
 | `subscribeMaxIntervalCeilingSeconds?` | `number` | Maximum subscription interval when values are changed. This is also used as a keepalive mechanism to validate that the device is still available. Default it is set to 30s. |
 | `subscribeMinIntervalFloorSeconds?` | `number` | Minimum subscription interval when values are changed. Default it is set to 0s. |
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:87](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L87)
+[packages/matter.js/src/device/PairedNode.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L91)
 
 ___
 
@@ -81,8 +81,8 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 | Name | Type |
 | :------ | :------ |
-| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterClientObj`](cluster_export.md#clusterclientobj)<`any`, `any`, `any`, `any`\>) => `boolean` |
-| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterServerObj`](cluster_export.md#clusterserverobj)<`any`, `any`\>) => `boolean` |
+| `clusterClientFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterClientObj`](cluster_export.md#clusterclientobj)\<`any`, `any`, `any`, `any`\>) => `boolean` |
+| `clusterServerFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md), `cluster`: [`ClusterServerObj`](cluster_export.md#clusterserverobj)\<`any`, `any`\>) => `boolean` |
 | `endpointFilter?` | (`endpoint`: [`Endpoint`](../classes/device_export.Endpoint.md)) => `boolean` |
 | `logAttributeObjectValues?` | `boolean` |
 | `logAttributePrimitiveValues?` | `boolean` |
@@ -99,7 +99,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/EndpointStructureLogger.ts#L23)
 
 ## Variables
 
@@ -113,7 +113,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/DeviceTypes.ts#L113)
+[packages/matter.js/src/device/DeviceTypes.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/DeviceTypes.ts#L113)
 
 ## Functions
 
@@ -143,7 +143,7 @@ events on ClusterClients. The Filter methods can be used to filter out specific 
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/DeviceTypes.ts#L78)
+[packages/matter.js/src/device/DeviceTypes.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/DeviceTypes.ts#L78)
 
 ___
 
@@ -163,13 +163,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/DeviceTypes.ts#L974)
+[packages/matter.js/src/device/DeviceTypes.ts:974](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/DeviceTypes.ts#L974)
 
 ___
 
 ### WrapCommandHandler
 
-▸ **WrapCommandHandler**<`C`\>(`handler`, `commandHandler?`): [`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)<`C`\>
+▸ **WrapCommandHandler**\<`C`\>(`handler`, `commandHandler?`): [`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)\<`C`\>
 
 Utility function to wrap externally registered command handlers into the internal command handler and make sure
 the custom ones are used if defined
@@ -178,28 +178,28 @@ the custom ones are used if defined
 
 | Name | Type |
 | :------ | :------ |
-| `C` | extends [`Cluster`](cluster_export.md#cluster)<`any`, `any`, `any`, `any`, `any`\> |
+| `C` | extends [`Cluster`](cluster_export.md#cluster)\<`any`, `any`, `any`, `any`, `any`\> |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `handler` | [`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)<`C`\> | Internal handlers instance to wrap the external handler into |
-| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)<`any`\> | Command handler instance with the registered handlers |
+| `handler` | [`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)\<`C`\> | Internal handlers instance to wrap the external handler into |
+| `commandHandler?` | [`NamedHandler`](../classes/util_export.NamedHandler.md)\<`any`\> | Command handler instance with the registered handlers |
 
 #### Returns
 
-[`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)<`C`\>
+[`ClusterServerHandlers`](cluster_export.md#clusterserverhandlers)\<`C`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L29)
+[packages/matter.js/src/device/Device.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L29)
 
 ___
 
 ### getClusterInitialAttributeValues
 
-▸ **getClusterInitialAttributeValues**<`F`, `SF`, `A`, `C`, `E`\>(`attributeInitialValues`, `cluster`): [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)<`A`\> \| `undefined`
+▸ **getClusterInitialAttributeValues**\<`F`, `SF`, `A`, `C`, `E`\>(`attributeInitialValues`, `cluster`): [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)\<`A`\> \| `undefined`
 
 Utility function to get the initial attribute values for a cluster out of an object with initial attribute values
 for multiple clusters
@@ -209,7 +209,7 @@ for multiple clusters
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -218,16 +218,16 @@ for multiple clusters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `attributeInitialValues` | `undefined` \| { `[key: ClusterId]`: [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)<`any`\>;  } | Object with initial attribute values for automatically added clusters |
-| `cluster` | [`Cluster`](cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
+| `attributeInitialValues` | `undefined` \| \{ `[key: ClusterId]`: [`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)\<`any`\>;  } | Object with initial attribute values for automatically added clusters |
+| `cluster` | [`Cluster`](cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | Cluster to get the initial attribute values for |
 
 #### Returns
 
-[`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)<`A`\> \| `undefined`
+[`AttributeInitialValues`](cluster_export.md#attributeinitialvalues)\<`A`\> \| `undefined`
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L36)
+[packages/matter.js/src/device/OnOffDevices.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L36)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/DeviceTypes.ts#L983)
+[packages/matter.js/src/device/DeviceTypes.ts:983](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/DeviceTypes.ts#L983)
 
 ___
 
@@ -268,4 +268,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)
+[packages/matter.js/src/device/EndpointStructureLogger.ts:235](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/EndpointStructureLogger.ts#L235)

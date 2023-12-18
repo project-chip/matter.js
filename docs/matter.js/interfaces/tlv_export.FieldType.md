@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [tlv/export](../modules/tlv_export.md) / FieldType
 
-# Interface: FieldType<T\>
+# Interface: FieldType\<T\>
 
 [tlv/export](../modules/tlv_export.md).FieldType
 
@@ -14,6 +14,8 @@
 
 - **`FieldType`**
 
+  ↳ [`RepeatedFieldType`](tlv_export.RepeatedFieldType.md)
+
   ↳ [`OptionalFieldType`](tlv_export.OptionalFieldType.md)
 
 ## Table of contents
@@ -23,6 +25,7 @@
 - [fallback](tlv_export.FieldType.md#fallback)
 - [id](tlv_export.FieldType.md#id)
 - [optional](tlv_export.FieldType.md#optional)
+- [repeated](tlv_export.FieldType.md#repeated)
 - [schema](tlv_export.FieldType.md#schema)
 
 ## Properties
@@ -33,7 +36,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L18)
+[packages/matter.js/src/tlv/TlvObject.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L21)
 
 ___
 
@@ -43,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L15)
+[packages/matter.js/src/tlv/TlvObject.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L17)
 
 ___
 
@@ -53,14 +56,24 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L17)
+[packages/matter.js/src/tlv/TlvObject.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L19)
+
+___
+
+### repeated
+
+• `Optional` **repeated**: `boolean`
+
+#### Defined in
+
+[packages/matter.js/src/tlv/TlvObject.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L20)
 
 ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/tlv_export.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvObject.ts#L16)
+[packages/matter.js/src/tlv/TlvObject.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L18)

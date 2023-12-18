@@ -53,13 +53,17 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 ### constructor
 
-• **new Logger**(`name`)
+• **new Logger**(`name`): [`Logger`](exports_log.Logger.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `name` | `string` |
+
+#### Returns
+
+[`Logger`](exports_log.Logger.md)
 
 #### Defined in
 
@@ -295,7 +299,7 @@ packages/matter.js/dist/esm/log/Logger.d.ts:78
 
 ### format
 
-• `Static` `set` **format**(`format`): `void`
+• `set` **format**(`format`): `void`
 
 Set logFormatter using configuration-style format name.
 
@@ -317,7 +321,7 @@ packages/matter.js/dist/esm/log/Logger.d.ts:84
 
 ### dict
 
-▸ `Static` **dict**(`entries`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
+▸ **dict**(`entries`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
 
 Shortcut for new DiagnosticDictionary().
 
@@ -339,7 +343,7 @@ ___
 
 ### get
 
-▸ `Static` **get**(`name`): [`Logger`](exports_log.Logger.md)
+▸ **get**(`name`): [`Logger`](exports_log.Logger.md)
 
 Create a new facility.
 
@@ -363,7 +367,7 @@ ___
 
 ### maskString
 
-▸ `Static` **maskString**(`str`, `maskChar?`, `unmaskedLength?`): `string`
+▸ **maskString**(`str`, `maskChar?`, `unmaskedLength?`): `string`
 
 Mask a string with a given character. If unmaskedLength is provided then these number of characters will be
 shown unmasked.
@@ -388,7 +392,7 @@ ___
 
 ### nest
 
-▸ `Static` **nest**<`T`\>(`context`): `T`
+▸ **nest**\<`T`\>(`context`): `T`
 
 Perform operations in a nested logging context.  Messages will be
 indented while the context executes.
@@ -417,7 +421,7 @@ ___
 
 ### nestAsync
 
-▸ `Static` **nestAsync**(`context`): `Promise`<`any`\>
+▸ **nestAsync**(`context`): `Promise`\<`any`\>
 
 Async version of nest().
 
@@ -425,11 +429,11 @@ Async version of nest().
 
 | Name | Type |
 | :------ | :------ |
-| `context` | () => `Promise`<`any`\> |
+| `context` | () => `Promise`\<`any`\> |
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Defined in
 
@@ -439,7 +443,7 @@ ___
 
 ### toJSON
 
-▸ `Static` **toJSON**(`data`): `string`
+▸ **toJSON**(`data`): `string`
 
 Stringify a value (BigInt aware) as JSON.
 

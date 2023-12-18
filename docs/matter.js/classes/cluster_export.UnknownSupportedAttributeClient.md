@@ -9,7 +9,7 @@ but the contained attribute is unknown.
 
 ## Hierarchy
 
-- [`SupportedAttributeClient`](cluster_export.SupportedAttributeClient.md)<`any`\>
+- [`SupportedAttributeClient`](cluster_export.SupportedAttributeClient.md)\<`any`\>
 
   ↳ **`UnknownSupportedAttributeClient`**
 
@@ -42,17 +42,21 @@ but the contained attribute is unknown.
 
 ### constructor
 
-• **new UnknownSupportedAttributeClient**(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new UnknownSupportedAttributeClient**(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`UnknownSupportedAttributeClient`](cluster_export.UnknownSupportedAttributeClient.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\> |
+| `attribute` | [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/datatype_export.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](protocol_interaction_export.InteractionClient.md) |
+
+#### Returns
+
+[`UnknownSupportedAttributeClient`](cluster_export.UnknownSupportedAttributeClient.md)
 
 #### Inherited from
 
@@ -60,13 +64,13 @@ but the contained attribute is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L48)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L48)
 
 ## Properties
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/cluster_export.md#attribute)<`any`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../modules/cluster_export.md#attribute)\<`any`, `any`\>
 
 #### Inherited from
 
@@ -74,7 +78,7 @@ but the contained attribute is unknown.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L49)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L49)
 
 ___
 
@@ -88,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L52)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L52)
 
 ___
 
@@ -102,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L51)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L51)
 
 ___
 
@@ -116,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:46](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L46)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L46)
 
 ___
 
@@ -130,13 +134,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L50)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L50)
 
 ___
 
 ### schema
 
-• `Protected` `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)<`any`\>
+• `Protected` `Readonly` **schema**: [`TlvSchema`](tlv_export.TlvSchema.md)\<`any`\>
 
 #### Inherited from
 
@@ -144,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L44)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L44)
 
 ## Methods
 
@@ -170,13 +174,13 @@ Add a listener to the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:166](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L166)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L166)
 
 ___
 
 ### get
 
-▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`any`\>
+▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`any`\>
 
 Get the value of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -189,7 +193,7 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Inherited from
 
@@ -197,13 +201,13 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L105)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L105)
 
 ___
 
 ### getWithVersion
 
-▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`undefined` \| { `value`: `any` ; `version`: `number`  }\>
+▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`undefined` \| \{ `value`: `any` ; `version`: `number`  }\>
 
 Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -216,7 +220,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Returns
 
-`Promise`<`undefined` \| { `value`: `any` ; `version`: `number`  }\>
+`Promise`\<`undefined` \| \{ `value`: `any` ; `version`: `number`  }\>
 
 #### Inherited from
 
@@ -224,7 +228,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:123](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L123)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:123](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L123)
 
 ___
 
@@ -250,13 +254,13 @@ Remove a listener from the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:171](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L171)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:171](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L171)
 
 ___
 
 ### set
 
-▸ **set**(`value`, `dataVersion?`): `Promise`<`void`\>
+▸ **set**(`value`, `dataVersion?`): `Promise`\<`void`\>
 
 Set the value of the attribute. When dataVersion parameter is provided the value is only set when the
 cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
@@ -270,7 +274,7 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -278,13 +282,13 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:66](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L66)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L66)
 
 ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 Subscribe to the attribute.
 
@@ -299,7 +303,7 @@ Subscribe to the attribute.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -307,13 +311,13 @@ Subscribe to the attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L139)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:139](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L139)
 
 ___
 
 ### update
 
-▸ `Private` **update**(`value`): `void`
+▸ **update**(`value`): `void`
 
 Update the value of the attribute. Just internally used!
 
@@ -333,4 +337,4 @@ Update the value of the attribute. Just internally used!
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/AttributeClient.ts:161](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/client/AttributeClient.ts#L161)
+[packages/matter.js/src/cluster/client/AttributeClient.ts:161](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/AttributeClient.ts#L161)

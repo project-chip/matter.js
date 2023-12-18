@@ -37,7 +37,11 @@
 
 ### constructor
 
-• **new DnsCodec**()
+• **new DnsCodec**(): [`DnsCodec`](exports_codec.DnsCodec.md)
+
+#### Returns
+
+[`DnsCodec`](exports_codec.DnsCodec.md)
 
 ## Properties
 
@@ -183,7 +187,7 @@ packages/matter.js/dist/esm/codec/DnsCodec.d.ts:83
 
 ### decode
 
-▸ `Static` **decode**(`message`): `undefined` \| [`DnsMessage`](../modules/exports_codec.md#dnsmessage)
+▸ **decode**(`message`): `undefined` \| [`DnsMessage`](../modules/exports_codec.md#dnsmessage)
 
 #### Parameters
 
@@ -203,13 +207,13 @@ ___
 
 ### encode
 
-▸ `Static` **encode**(`«destructured»`): `Uint8Array`
+▸ **encode**(`«destructured»`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | `Partial`<[`DnsMessagePartiallyPreEncoded`](../modules/exports_codec.md#dnsmessagepartiallypreencoded)\> |
+| `«destructured»` | `Partial`\<[`DnsMessagePartiallyPreEncoded`](../modules/exports_codec.md#dnsmessagepartiallypreencoded)\> |
 
 #### Returns
 
@@ -223,13 +227,13 @@ ___
 
 ### encodeRecord
 
-▸ `Static` **encodeRecord**(`record`): `Uint8Array`
+▸ **encodeRecord**(`record`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\> |
+| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)\<`any`\> |
 
 #### Returns
 

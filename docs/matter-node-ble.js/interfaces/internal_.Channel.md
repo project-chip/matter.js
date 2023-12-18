@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Channel
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Channel
 
-# Interface: Channel<T\>
+# Interface: Channel\<T\>
 
-[<internal>](../modules/internal_.md).Channel
+[\<internal\>](../modules/internal_.md).Channel
 
 **`License`**
 
@@ -45,11 +45,11 @@ matter.js/dist/esm/common/Channel.d.ts:7
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -59,7 +59,7 @@ ___
 
 ### send
 
-▸ **send**(`data`): `Promise`<`void`\>
+▸ **send**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -69,7 +69,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

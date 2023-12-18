@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / TlvLength
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / TlvLength
 
 # Enumeration: TlvLength
 
-[<internal>](../modules/internal_.md).TlvLength
+[\<internal\>](../modules/internal_.md).TlvLength
 
 Byte length of the encoded value or length.
 

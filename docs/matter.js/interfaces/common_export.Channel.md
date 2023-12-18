@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [common/export](../modules/common_export.md) / Channel
 
-# Interface: Channel<T\>
+# Interface: Channel\<T\>
 
 [common/export](../modules/common_export.md).Channel
 
@@ -39,27 +39,27 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Channel.ts#L8)
+[packages/matter.js/src/common/Channel.ts:8](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/Channel.ts#L8)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Channel.ts#L10)
+[packages/matter.js/src/common/Channel.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/Channel.ts#L10)
 
 ___
 
 ### send
 
-▸ **send**(`data`): `Promise`<`void`\>
+▸ **send**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -69,8 +69,8 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/common/Channel.ts#L9)
+[packages/matter.js/src/common/Channel.ts:9](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/Channel.ts#L9)

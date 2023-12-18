@@ -18,13 +18,17 @@
 
 ### constructor
 
-• **new CertificationDeclarationManager**()
+• **new CertificationDeclarationManager**(): [`CertificationDeclarationManager`](certificate_export.CertificationDeclarationManager.md)
+
+#### Returns
+
+[`CertificationDeclarationManager`](certificate_export.CertificationDeclarationManager.md)
 
 ## Methods
 
 ### generate
 
-▸ `Static` **generate**(`vendorId`, `productId`): `Uint8Array`
+▸ **generate**(`vendorId`, `productId`): `Uint8Array`
 
 #### Parameters
 
@@ -39,4 +43,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/certificate/CertificationDeclarationManager.ts#L34)
+[packages/matter.js/src/certificate/CertificationDeclarationManager.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificationDeclarationManager.ts#L34)

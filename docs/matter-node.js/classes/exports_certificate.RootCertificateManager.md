@@ -28,7 +28,7 @@
 
 ### constructor
 
-• **new RootCertificateManager**(`storageContext`)
+• **new RootCertificateManager**(`storageContext`): [`RootCertificateManager`](exports_certificate.RootCertificateManager.md)
 
 #### Parameters
 
@@ -36,9 +36,13 @@
 | :------ | :------ |
 | `storageContext` | [`StorageContext`](storage_export.StorageContext.md) |
 
+#### Returns
+
+[`RootCertificateManager`](exports_certificate.RootCertificateManager.md)
+
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
 
 ## Properties
 
@@ -48,7 +52,7 @@ packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
 
 ___
 
@@ -58,7 +62,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:16
 
 ___
 
@@ -68,7 +72,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:15
 
 ___
 
@@ -78,7 +82,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:11
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 
 ___
 
@@ -88,7 +92,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:14
 
 ___
 
@@ -98,13 +102,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:13
 
 ## Methods
 
 ### generateNoc
 
-▸ **generateNoc**(`publicKey`, `fabricId`, `nodeId`): `Uint8Array`
+▸ **generateNoc**(`publicKey`, `fabricId`, `nodeId`, `caseAuthenticatedTags?`): `Uint8Array`
 
 #### Parameters
 
@@ -113,6 +117,7 @@ packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 | `publicKey` | `Uint8Array` |
 | `fabricId` | [`FabricId`](../modules/exports_datatype.md#fabricid) |
 | `nodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `caseAuthenticatedTags?` | [`CaseAuthenticatedTag`](../modules/exports_datatype.md#caseauthenticatedtag)[] |
 
 #### Returns
 
@@ -120,7 +125,7 @@ packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:12
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:19
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:20
 
 ___
 
@@ -134,4 +139,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:17
+packages/matter.js/dist/esm/certificate/RootCertificateManager.d.ts:18

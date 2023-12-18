@@ -61,7 +61,7 @@ the CommissioningController on commissioning or when connecting.
 
 ### constructor
 
-• **new PairedNode**(`nodeId`, `commissioningController`, `options?`, `reconnectInteractionClient`, `assignDisconnectedHandler`)
+• **new PairedNode**(`nodeId`, `commissioningController`, `options?`, `reconnectInteractionClient`, `assignDisconnectedHandler`): [`PairedNode`](device_export.PairedNode.md)
 
 #### Parameters
 
@@ -70,12 +70,16 @@ the CommissioningController on commissioning or when connecting.
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `commissioningController` | [`CommissioningController`](export.CommissioningController.md) |
 | `options` | [`CommissioningControllerNodeOptions`](../modules/device_export.md#commissioningcontrollernodeoptions) |
-| `reconnectInteractionClient` | () => `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
-| `assignDisconnectedHandler` | (`handler`: () => `Promise`<`void`\>) => `void` |
+| `reconnectInteractionClient` | () => `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
+| `assignDisconnectedHandler` | (`handler`: () => `Promise`\<`void`\>) => `void` |
+
+#### Returns
+
+[`PairedNode`](device_export.PairedNode.md)
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:159](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L159)
+[packages/matter.js/src/device/PairedNode.ts:163](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L163)
 
 ## Properties
 
@@ -85,7 +89,7 @@ the CommissioningController on commissioning or when connecting.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:161](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L161)
+[packages/matter.js/src/device/PairedNode.ts:165](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L165)
 
 ___
 
@@ -95,17 +99,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L139)
+[packages/matter.js/src/device/PairedNode.ts:143](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L143)
 
 ___
 
 ### endpoints
 
-• `Private` `Readonly` **endpoints**: `Map`<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`Endpoint`](device_export.Endpoint.md)\>
+• `Private` `Readonly` **endpoints**: `Map`\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`Endpoint`](device_export.Endpoint.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:129](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L129)
+[packages/matter.js/src/device/PairedNode.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L133)
 
 ___
 
@@ -115,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L130)
+[packages/matter.js/src/device/PairedNode.ts:134](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L134)
 
 ___
 
@@ -125,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:160](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L160)
+[packages/matter.js/src/device/PairedNode.ts:164](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L164)
 
 ___
 
@@ -135,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:162](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L162)
+[packages/matter.js/src/device/PairedNode.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L166)
 
 ___
 
@@ -145,25 +149,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L131)
+[packages/matter.js/src/device/PairedNode.ts:135](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L135)
 
 ___
 
 ### reconnectInteractionClient
 
-• `Private` `Readonly` **reconnectInteractionClient**: () => `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+• `Private` `Readonly` **reconnectInteractionClient**: () => `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Type declaration
 
-▸ (): `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+▸ (): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 ##### Returns
 
-`Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+`Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:163](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L163)
+[packages/matter.js/src/device/PairedNode.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L167)
 
 ___
 
@@ -173,7 +177,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:135](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L135)
+[packages/matter.js/src/device/PairedNode.ts:139](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L139)
 
 ## Accessors
 
@@ -187,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:178](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L178)
+[packages/matter.js/src/device/PairedNode.ts:182](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L182)
 
 ## Methods
 
@@ -201,13 +205,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:749](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L749)
+[packages/matter.js/src/device/PairedNode.ts:754](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L754)
 
 ___
 
 ### createDevice
 
-▸ `Private` **createDevice**(`endpointId`, `data`, `interactionClient`): [`PairedDevice`](device_export.PairedDevice.md) \| [`RootEndpoint`](device_export.RootEndpoint.md) \| [`ComposedDevice`](device_export.ComposedDevice.md) \| [`Aggregator`](device_export.Aggregator.md)
+▸ **createDevice**(`endpointId`, `data`, `interactionClient`): [`PairedDevice`](device_export.PairedDevice.md) \| [`RootEndpoint`](device_export.RootEndpoint.md) \| [`ComposedDevice`](device_export.ComposedDevice.md) \| [`Aggregator`](device_export.Aggregator.md)
 
 Create a device object from the data read from the device.
 
@@ -225,59 +229,59 @@ Create a device object from the data read from the device.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:513](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L513)
+[packages/matter.js/src/device/PairedNode.ts:517](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L517)
 
 ___
 
 ### decommission
 
-▸ **decommission**(): `Promise`<`void`\>
+▸ **decommission**(): `Promise`\<`void`\>
 
 De-Commission (unpair) the device from this controller by removing the fabric from the device.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:626](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L626)
+[packages/matter.js/src/device/PairedNode.ts:630](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L630)
 
 ___
 
 ### disconnect
 
-▸ **disconnect**(): `Promise`<`void`\>
+▸ **disconnect**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:744](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L744)
+[packages/matter.js/src/device/PairedNode.ts:749](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L749)
 
 ___
 
 ### ensureConnection
 
-▸ `Private` **ensureConnection**(): `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+▸ **ensureConnection**(): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 Ensure that the node is connected by creating a new InteractionClient if needed.
 
 #### Returns
 
-`Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+`Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:223](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L223)
+[packages/matter.js/src/device/PairedNode.ts:227](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L227)
 
 ___
 
 ### getClusterClientForDevice
 
-▸ **getClusterClientForDevice**<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getClusterClientForDevice**\<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
 
@@ -286,7 +290,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -296,21 +300,21 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) | EndpointNumber to get the cluster from |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:806](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L806)
+[packages/matter.js/src/device/PairedNode.ts:811](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L811)
 
 ___
 
 ### getClusterServerForDevice
 
-▸ **getClusterServerForDevice**<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+▸ **getClusterServerForDevice**\<`F`, `SF`, `A`, `C`, `E`\>(`endpointId`, `cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
 
@@ -319,7 +323,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -329,15 +333,15 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `endpointId` | [`EndpointNumber`](../modules/datatype_export.md#endpointnumber) | EndpointNumber to get the cluster from |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:790](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L790)
+[packages/matter.js/src/device/PairedNode.ts:795](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L795)
 
 ___
 
@@ -359,7 +363,7 @@ Returns the device/endpoint with the given endpoint ID.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:617](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L617)
+[packages/matter.js/src/device/PairedNode.ts:621](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L621)
 
 ___
 
@@ -375,30 +379,30 @@ Returns the functional devices/endpoints (those below the Root Endpoint) known f
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:612](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L612)
+[packages/matter.js/src/device/PairedNode.ts:616](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L616)
 
 ___
 
 ### getInteractionClient
 
-▸ **getInteractionClient**(): `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+▸ **getInteractionClient**(): `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 Request the current InteractionClient for custom special case interactions with the device. Usually the
 ClusterClients of the Devices of the node should be used instead.
 
 #### Returns
 
-`Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
+`Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:263](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L263)
+[packages/matter.js/src/device/PairedNode.ts:267](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L267)
 
 ___
 
 ### getRootClusterClient
 
-▸ **getRootClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getRootClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
 
@@ -407,7 +411,7 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -416,21 +420,21 @@ Get a cluster client from the root endpoint. This is mainly used internally and 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterClient to get or undefined if not existing |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:774](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L774)
+[packages/matter.js/src/device/PairedNode.ts:779](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L779)
 
 ___
 
 ### getRootClusterServer
 
-▸ **getRootClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+▸ **getRootClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
 
@@ -439,7 +443,7 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -448,15 +452,15 @@ Get a cluster server from the root endpoint. This is mainly used internally and 
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> | ClusterServer to get or undefined if not existing |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:759](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L759)
+[packages/matter.js/src/device/PairedNode.ts:764](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L764)
 
 ___
 
@@ -470,45 +474,45 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:621](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L621)
+[packages/matter.js/src/device/PairedNode.ts:625](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L625)
 
 ___
 
 ### handleNodeShutdown
 
-▸ `Private` **handleNodeShutdown**(): `Promise`<`void`\>
+▸ **handleNodeShutdown**(): `Promise`\<`void`\>
 
 Handles a node shutDown event (if supported by the node and received).
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:381](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L381)
+[packages/matter.js/src/device/PairedNode.ts:385](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L385)
 
 ___
 
 ### initialize
 
-▸ `Private` **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 Initialize the node after the InteractionClient was created and to subscribe attributes and events if requested.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:232](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L232)
+[packages/matter.js/src/device/PairedNode.ts:236](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L236)
 
 ___
 
 ### initializeEndpointStructure
 
-▸ `Private` **initializeEndpointStructure**(`allClusterAttributes`, `updateStructure?`): `Promise`<`void`\>
+▸ **initializeEndpointStructure**(`allClusterAttributes`, `updateStructure?`): `Promise`\<`void`\>
 
 Reads all data from the device and create a device object structure out of it.
 
@@ -516,16 +520,16 @@ Reads all data from the device and create a device object structure out of it.
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `allClusterAttributes` | [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] | `undefined` |
+| `allClusterAttributes` | [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>[] | `undefined` |
 | `updateStructure` | `boolean` | `false` |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:397](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L397)
+[packages/matter.js/src/device/PairedNode.ts:401](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L401)
 
 ___
 
@@ -547,13 +551,13 @@ Method to log the structure of this node with all endpoint and clusters.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:268](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L268)
+[packages/matter.js/src/device/PairedNode.ts:272](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L272)
 
 ___
 
 ### openBasicCommissioningWindow
 
-▸ **openBasicCommissioningWindow**(`commissioningTimeout?`): `Promise`<`void`\>
+▸ **openBasicCommissioningWindow**(`commissioningTimeout?`): `Promise`\<`void`\>
 
 Opens a Basic Commissioning Window (uses the original Passcode printed on the device) with the device.
 
@@ -565,17 +569,17 @@ Opens a Basic Commissioning Window (uses the original Passcode printed on the de
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:651](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L651)
+[packages/matter.js/src/device/PairedNode.ts:656](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L656)
 
 ___
 
 ### openEnhancedCommissioningWindow
 
-▸ **openEnhancedCommissioningWindow**(`commissioningTimeout?`): `Promise`<{ `manualPairingCode`: `string` ; `qrPairingCode`: `string`  }\>
+▸ **openEnhancedCommissioningWindow**(`commissioningTimeout?`): `Promise`\<\{ `manualPairingCode`: `string` ; `qrPairingCode`: `string`  }\>
 
 Opens an Enhanced Commissioning Window (uses a generated random Passcode) with the device.
 
@@ -587,34 +591,34 @@ Opens an Enhanced Commissioning Window (uses a generated random Passcode) with t
 
 #### Returns
 
-`Promise`<{ `manualPairingCode`: `string` ; `qrPairingCode`: `string`  }\>
+`Promise`\<\{ `manualPairingCode`: `string` ; `qrPairingCode`: `string`  }\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:679](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L679)
+[packages/matter.js/src/device/PairedNode.ts:684](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L684)
 
 ___
 
 ### reconnect
 
-▸ **reconnect**(): `Promise`<`void`\>
+▸ **reconnect**(): `Promise`\<`void`\>
 
 Force a reconnection to the device. This method is mainly used internally to reconnect after the active session
 was closed or the device wen offline and was detected as being online again.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:199](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L199)
+[packages/matter.js/src/device/PairedNode.ts:203](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L203)
 
 ___
 
 ### setConnectionState
 
-▸ `Private` **setConnectionState**(`state`): `void`
+▸ **setConnectionState**(`state`): `void`
 
 #### Parameters
 
@@ -628,13 +632,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:182](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L182)
+[packages/matter.js/src/device/PairedNode.ts:186](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L186)
 
 ___
 
 ### structureEndpoints
 
-▸ `Private` **structureEndpoints**(`partLists`): `void`
+▸ **structureEndpoints**(`partLists`): `void`
 
 Bring the endpoints in a structure based on their partsList attribute.
 
@@ -642,7 +646,7 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 | Name | Type |
 | :------ | :------ |
-| `partLists` | `Map`<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[]\> |
+| `partLists` | `Map`\<[`EndpointNumber`](../modules/datatype_export.md#endpointnumber), [`EndpointNumber`](../modules/datatype_export.md#endpointnumber)[]\> |
 
 #### Returns
 
@@ -650,13 +654,13 @@ Bring the endpoints in a structure based on their partsList attribute.
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:446](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L446)
+[packages/matter.js/src/device/PairedNode.ts:450](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L450)
 
 ___
 
 ### subscribeAllAttributesAndEvents
 
-▸ **subscribeAllAttributesAndEvents**(`options?`): `Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+▸ **subscribeAllAttributesAndEvents**(`options?`): `Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 Subscribe to all attributes and events of the device. Unless setting the Controller property autoSubscribe to
 false this is executed automatically. Alternatively you can manually subscribe by calling this method.
@@ -666,37 +670,37 @@ false this is executed automatically. Alternatively you can manually subscribe b
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.attributeChangedCallback?` | (`data`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>) => `void` |
-| `options.eventTriggeredCallback?` | (`data`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>) => `void` |
+| `options.attributeChangedCallback?` | (`data`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>) => `void` |
+| `options.eventTriggeredCallback?` | (`data`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>) => `void` |
 | `options.ignoreInitialTriggers?` | `boolean` |
 
 #### Returns
 
-`Promise`<{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)<`any`\>[]  }\>
+`Promise`\<\{ `attributeReports?`: [`DecodedAttributeReportValue`](../modules/protocol_interaction_export.md#decodedattributereportvalue)\<`any`\>[] ; `eventReports?`: [`DecodedEventReportValue`](../modules/protocol_interaction_export.md#decodedeventreportvalue)\<`any`\>[]  }\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:281](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L281)
+[packages/matter.js/src/device/PairedNode.ts:285](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L285)
 
 ___
 
 ### updateEndpointStructure
 
-▸ **updateEndpointStructure**(): `Promise`<`void`\>
+▸ **updateEndpointStructure**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:389](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L389)
+[packages/matter.js/src/device/PairedNode.ts:393](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L393)
 
 ___
 
 ### create
 
-▸ `Static` **create**(`nodeId`, `commissioningController`, `options?`, `reconnectInteractionClient`, `assignDisconnectedHandler`): `Promise`<[`PairedNode`](device_export.PairedNode.md)\>
+▸ **create**(`nodeId`, `commissioningController`, `options?`, `reconnectInteractionClient`, `assignDisconnectedHandler`): `Promise`\<[`PairedNode`](device_export.PairedNode.md)\>
 
 #### Parameters
 
@@ -705,13 +709,13 @@ ___
 | `nodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 | `commissioningController` | [`CommissioningController`](export.CommissioningController.md) |
 | `options` | [`CommissioningControllerNodeOptions`](../modules/device_export.md#commissioningcontrollernodeoptions) |
-| `reconnectInteractionClient` | () => `Promise`<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
-| `assignDisconnectedHandler` | (`handler`: () => `Promise`<`void`\>) => `void` |
+| `reconnectInteractionClient` | () => `Promise`\<[`InteractionClient`](protocol_interaction_export.InteractionClient.md)\> |
+| `assignDisconnectedHandler` | (`handler`: () => `Promise`\<`void`\>) => `void` |
 
 #### Returns
 
-`Promise`<[`PairedNode`](device_export.PairedNode.md)\>
+`Promise`\<[`PairedNode`](device_export.PairedNode.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/device/PairedNode.ts:141](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/PairedNode.ts#L141)
+[packages/matter.js/src/device/PairedNode.ts:145](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/PairedNode.ts#L145)

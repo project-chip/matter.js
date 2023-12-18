@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / EventServer
 
-# Class: EventServer<T\>
+# Class: EventServer\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).EventServer
 
@@ -40,7 +40,7 @@
 
 ### constructor
 
-• **new EventServer**<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`)
+• **new EventServer**\<`T`\>(`id`, `clusterId`, `name`, `schema`, `priority`): [`EventServer`](exports_cluster.EventServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -55,8 +55,12 @@
 | `id` | [`EventId`](../modules/exports_datatype.md#eventid) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `name` | `string` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `priority` | [`EventPriority`](../enums/exports_cluster.EventPriority.md) |
+
+#### Returns
+
+[`EventServer`](exports_cluster.EventServer.md)\<`T`\>
 
 #### Defined in
 
@@ -146,7 +150,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Defined in
 
@@ -162,7 +166,7 @@ packages/matter.js/dist/esm/cluster/server/EventServer.d.ts:16
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -222,7 +226,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)<`T`\>) => `void` |
+| `listener` | (`event`: [`EventStorageData`](../interfaces/export._internal_.EventStorageData.md)\<`T`\>) => `void` |
 
 #### Returns
 

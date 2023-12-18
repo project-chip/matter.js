@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / SecureSession
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / SecureSession
 
-# Class: SecureSession<T\>
+# Class: SecureSession\<T\>
 
-[<internal>](../modules/internal_.md).SecureSession
+[\<internal\>](../modules/internal_.md).SecureSession
 
 ## Type parameters
 
@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`Session`](../interfaces/internal_.Session.md)<`T`\>
+- [`Session`](../interfaces/internal_.Session.md)\<`T`\>
 
 ## Table of contents
 
@@ -44,6 +44,7 @@
 
 ### Accessors
 
+- [caseAuthenticatedTags](internal_.SecureSession.md#caseauthenticatedtags)
 - [closingAfterExchangeFinished](internal_.SecureSession.md#closingafterexchangefinished)
 - [name](internal_.SecureSession.md#name)
 - [numberOfActiveSubscriptions](internal_.SecureSession.md#numberofactivesubscriptions)
@@ -79,7 +80,7 @@
 
 ### constructor
 
-• **new SecureSession**<`T`\>(`args`)
+• **new SecureSession**\<`T`\>(`args`): [`SecureSession`](internal_.SecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -94,7 +95,7 @@
 | `args` | `Object` |
 | `args.activeRetransmissionTimeoutMs?` | `number` |
 | `args.attestationKey` | `Uint8Array` |
-| `args.closeCallback` | () => `Promise`<`void`\> |
+| `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
 | `args.decryptKey` | `Uint8Array` |
 | `args.encryptKey` | `Uint8Array` |
@@ -105,6 +106,10 @@
 | `args.peerSessionId` | `number` |
 | `args.retransmissionRetries?` | `number` |
 | `args.subscriptionChangedCallback?` | () => `void` |
+
+#### Returns
+
+[`SecureSession`](internal_.SecureSession.md)\<`T`\>
 
 #### Defined in
 
@@ -218,7 +223,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:95
+matter.js/dist/esm/session/SecureSession.d.ts:96
 
 ___
 
@@ -302,6 +307,20 @@ matter.js/dist/esm/session/SecureSession.d.ts:16
 
 ## Accessors
 
+### caseAuthenticatedTags
+
+• `get` **caseAuthenticatedTags**(): [`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[]
+
+#### Returns
+
+[`CaseAuthenticatedTag`](../modules/internal_.md#caseauthenticatedtag)[]
+
+#### Defined in
+
+matter.js/dist/esm/session/SecureSession.d.ts:63
+
+___
+
 ### closingAfterExchangeFinished
 
 • `get` **closingAfterExchangeFinished**(): `boolean`
@@ -316,7 +335,7 @@ matter.js/dist/esm/session/SecureSession.d.ts:16
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:63
+matter.js/dist/esm/session/SecureSession.d.ts:64
 
 ___
 
@@ -334,7 +353,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:76
+matter.js/dist/esm/session/SecureSession.d.ts:77
 
 ___
 
@@ -348,7 +367,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:88
+matter.js/dist/esm/session/SecureSession.d.ts:89
 
 ___
 
@@ -362,7 +381,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:64
+matter.js/dist/esm/session/SecureSession.d.ts:65
 
 ## Methods
 
@@ -382,7 +401,7 @@ matter.js/dist/esm/session/SecureSession.d.ts:64
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:74
+matter.js/dist/esm/session/SecureSession.d.ts:75
 
 ___
 
@@ -402,13 +421,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:87
+matter.js/dist/esm/session/SecureSession.d.ts:88
 
 ___
 
 ### clearSubscriptions
 
-▸ **clearSubscriptions**(`flushSubscriptions?`): `Promise`<`void`\>
+▸ **clearSubscriptions**(`flushSubscriptions?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -418,17 +437,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:90
+matter.js/dist/esm/session/SecureSession.d.ts:91
 
 ___
 
 ### close
 
-▸ **close**(`closeAfterExchangeFinished?`): `Promise`<`void`\>
+▸ **close**(`closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -438,11 +457,11 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:67
+matter.js/dist/esm/session/SecureSession.d.ts:68
 
 ___
 
@@ -467,13 +486,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:70
+matter.js/dist/esm/session/SecureSession.d.ts:71
 
 ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`<`void`\>
+▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 Destroys a session. Outstanding subscription data will be discarded.
 
@@ -486,7 +505,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -494,7 +513,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:94
+matter.js/dist/esm/session/SecureSession.d.ts:95
 
 ___
 
@@ -518,13 +537,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:71
+matter.js/dist/esm/session/SecureSession.d.ts:72
 
 ___
 
 ### end
 
-▸ **end**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`<`void`\>
+▸ **end**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 Ends a session. Outstanding subscription data will be flushed before the session is destroyed.
 
@@ -537,7 +556,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -545,7 +564,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:92
+matter.js/dist/esm/session/SecureSession.d.ts:93
 
 ___
 
@@ -563,7 +582,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:75
+matter.js/dist/esm/session/SecureSession.d.ts:76
 
 ___
 
@@ -577,7 +596,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:72
+matter.js/dist/esm/session/SecureSession.d.ts:73
 
 ___
 
@@ -595,7 +614,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:82
+matter.js/dist/esm/session/SecureSession.d.ts:83
 
 ___
 
@@ -609,7 +628,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:73
+matter.js/dist/esm/session/SecureSession.d.ts:74
 
 ___
 
@@ -627,7 +646,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:83
+matter.js/dist/esm/session/SecureSession.d.ts:84
 
 ___
 
@@ -651,7 +670,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:77
+matter.js/dist/esm/session/SecureSession.d.ts:78
 
 ___
 
@@ -669,7 +688,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:85
+matter.js/dist/esm/session/SecureSession.d.ts:86
 
 ___
 
@@ -687,7 +706,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:86
+matter.js/dist/esm/session/SecureSession.d.ts:87
 
 ___
 
@@ -705,7 +724,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:84
+matter.js/dist/esm/session/SecureSession.d.ts:85
 
 ___
 
@@ -723,7 +742,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:66
+matter.js/dist/esm/session/SecureSession.d.ts:67
 
 ___
 
@@ -741,7 +760,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:69
+matter.js/dist/esm/session/SecureSession.d.ts:70
 
 ___
 
@@ -759,7 +778,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:65
+matter.js/dist/esm/session/SecureSession.d.ts:66
 
 ___
 
@@ -783,7 +802,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:68
+matter.js/dist/esm/session/SecureSession.d.ts:69
 
 ___
 
@@ -803,13 +822,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SecureSession.d.ts:89
+matter.js/dist/esm/session/SecureSession.d.ts:90
 
 ___
 
 ### create
 
-▸ `Static` **create**<`T`\>(`args`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<`T`\>\>
+▸ **create**\<`T`\>(`args`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<`T`\>\>
 
 #### Type parameters
 
@@ -823,7 +842,7 @@ ___
 | :------ | :------ |
 | `args` | `Object` |
 | `args.activeRetransmissionTimeoutMs?` | `number` |
-| `args.closeCallback` | () => `Promise`<`void`\> |
+| `args.closeCallback` | () => `Promise`\<`void`\> |
 | `args.context` | `T` |
 | `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
 | `args.id` | `number` |
@@ -838,7 +857,7 @@ ___
 
 #### Returns
 
-`Promise`<[`SecureSession`](internal_.SecureSession.md)<`T`\>\>
+`Promise`\<[`SecureSession`](internal_.SecureSession.md)\<`T`\>\>
 
 #### Defined in
 

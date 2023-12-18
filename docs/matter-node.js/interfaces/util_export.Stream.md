@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Stream
 
-# Interface: Stream<T\>
+# Interface: Stream\<T\>
 
 [util/export](../modules/util_export.md).Stream
 
@@ -25,11 +25,11 @@
 
 ### read
 
-▸ **read**(): `Promise`<`T`\>
+▸ **read**(): `Promise`\<`T`\>
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
@@ -39,7 +39,7 @@ ___
 
 ### write
 
-▸ **write**(`data`): `Promise`<`void`\>
+▸ **write**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -49,7 +49,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

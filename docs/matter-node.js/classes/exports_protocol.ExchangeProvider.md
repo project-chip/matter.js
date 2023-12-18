@@ -32,15 +32,19 @@
 
 ### constructor
 
-• **new ExchangeProvider**(`exchangeManager`, `channel`, `reconnectChannelFunc?`)
+• **new ExchangeProvider**(`exchangeManager`, `channel`, `reconnectChannelFunc?`): [`ExchangeProvider`](exports_protocol.ExchangeProvider.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchangeManager` | [`ExchangeManager`](exports_protocol.ExchangeManager.md)<[`MatterController`](export._internal_.MatterController.md)\> |
-| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](export._internal_.MatterController.md)\> |
-| `reconnectChannelFunc?` | () => `Promise`<[`MessageChannel`](exports_protocol.MessageChannel.md)<[`MatterController`](export._internal_.MatterController.md)\>\> |
+| `exchangeManager` | [`ExchangeManager`](exports_protocol.ExchangeManager.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
+| `channel` | [`MessageChannel`](exports_protocol.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
+| `reconnectChannelFunc?` | () => `Promise`\<[`MessageChannel`](exports_protocol.MessageChannel.md)\<[`MatterController`](export._internal_.MatterController.md)\>\> |
+
+#### Returns
+
+[`ExchangeProvider`](exports_protocol.ExchangeProvider.md)
 
 #### Defined in
 
@@ -80,11 +84,11 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:61
 
 ### session
 
-• `get` **session**(): [`Session`](../interfaces/exports_session.Session.md)<[`MatterController`](export._internal_.MatterController.md)\>
+• `get` **session**(): [`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`Session`](../interfaces/exports_session.Session.md)<[`MatterController`](export._internal_.MatterController.md)\>
+[`Session`](../interfaces/exports_session.Session.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -100,7 +104,7 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:68
 
 | Name | Type |
 | :------ | :------ |
-| `handler` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `handler` | [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
 
 #### Returns
 
@@ -114,7 +118,7 @@ ___
 
 ### getProtocolHandler
 
-▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\>
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Parameters
 
@@ -124,7 +128,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)<[`MatterController`](export._internal_.MatterController.md)\>
+`undefined` \| [`ProtocolHandler`](../interfaces/exports_protocol.ProtocolHandler.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -154,11 +158,11 @@ ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(): [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
+▸ **initiateExchange**(): [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Returns
 
-[`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
+[`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Defined in
 
@@ -168,11 +172,11 @@ ___
 
 ### reconnectChannel
 
-▸ **reconnectChannel**(): `Promise`<`boolean`\>
+▸ **reconnectChannel**(): `Promise`\<`boolean`\>
 
 #### Returns
 
-`Promise`<`boolean`\>
+`Promise`\<`boolean`\>
 
 #### Defined in
 

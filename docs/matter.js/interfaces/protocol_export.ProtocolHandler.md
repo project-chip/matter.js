@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [protocol/export](../modules/protocol_export.md) / ProtocolHandler
 
-# Interface: ProtocolHandler<ContextT\>
+# Interface: ProtocolHandler\<ContextT\>
 
 [protocol/export](../modules/protocol_export.md).ProtocolHandler
 
@@ -30,15 +30,15 @@
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ProtocolHandler.ts#L13)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ProtocolHandler.ts#L13)
 
 ___
 
@@ -52,25 +52,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ProtocolHandler.ts#L11)
 
 ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`, `message`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`, `message`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](../classes/protocol_export.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](../classes/protocol_export.MessageExchange.md)\<`ContextT`\> |
 | `message` | [`Message`](codec_export.Message.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)
+[packages/matter.js/src/protocol/ProtocolHandler.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ProtocolHandler.ts#L12)

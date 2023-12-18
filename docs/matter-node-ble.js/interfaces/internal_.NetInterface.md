@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / NetInterface
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / NetInterface
 
 # Interface: NetInterface
 
-[<internal>](../modules/internal_.md).NetInterface
+[\<internal\>](../modules/internal_.md).NetInterface
 
 A Network interface enhances a TransportInterface with the ability to open a channel to a remote server.
 
@@ -24,11 +24,11 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`socket`: [`Channel`](internal_.Channel.md)<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
+| `listener` | (`socket`: [`Channel`](internal_.Channel.md)\<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
 
 #### Returns
 
@@ -66,7 +66,7 @@ ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`<[`Channel`](internal_.Channel.md)<`Uint8Array`\>\>
+▸ **openChannel**(`address`): `Promise`\<[`Channel`](internal_.Channel.md)\<`Uint8Array`\>\>
 
 #### Parameters
 
@@ -76,7 +76,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Channel`](internal_.Channel.md)<`Uint8Array`\>\>
+`Promise`\<[`Channel`](internal_.Channel.md)\<`Uint8Array`\>\>
 
 #### Defined in
 

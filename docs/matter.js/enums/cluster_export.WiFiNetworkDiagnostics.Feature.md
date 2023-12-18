@@ -30,7 +30,7 @@ transmission of packets on the Wi-Fi interface.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:209](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L209)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:209](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L209)
 
 ___
 
@@ -44,4 +44,4 @@ Node makes available the counts for the number of received and transmitted packe
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:201](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L201)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:201](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L201)

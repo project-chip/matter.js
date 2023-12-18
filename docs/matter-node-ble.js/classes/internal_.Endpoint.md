@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Endpoint
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Endpoint
 
 # Class: Endpoint
 
-[<internal>](../modules/internal_.md).Endpoint
+[\<internal\>](../modules/internal_.md).Endpoint
 
 ## Table of contents
 
@@ -54,7 +54,7 @@
 
 ### constructor
 
-• **new Endpoint**(`deviceTypes`, `options?`)
+• **new Endpoint**(`deviceTypes`, `options?`): [`Endpoint`](internal_.Endpoint.md)
 
 Create a new Endpoint instance.
 
@@ -64,6 +64,10 @@ Create a new Endpoint instance.
 | :------ | :------ | :------ |
 | `deviceTypes` | [[`DeviceTypeDefinition`](../modules/internal_.md#devicetypedefinition), ...DeviceTypeDefinition[]] | One or multiple DeviceTypeDefinitions of the endpoint |
 | `options?` | [`EndpointOptions`](../interfaces/internal_.EndpointOptions.md) | Options for the endpoint |
+
+#### Returns
+
+[`Endpoint`](internal_.Endpoint.md)
 
 #### Defined in
 
@@ -183,7 +187,7 @@ ___
 
 ### addClusterClient
 
-▸ **addClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
+▸ **addClusterClient**\<`F`, `A`, `C`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -198,7 +202,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`F`, `A`, `C`, `E`\> |
+| `cluster` | [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`F`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -212,7 +216,7 @@ ___
 
 ### addClusterServer
 
-▸ **addClusterServer**<`A`, `E`\>(`cluster`): `void`
+▸ **addClusterServer**\<`A`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -225,7 +229,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<`A`, `E`\> |
+| `cluster` | [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<`A`, `E`\> |
 
 #### Returns
 
@@ -309,11 +313,11 @@ ___
 
 ### getAllClusterClients
 
-▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>[]
+▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>[]
 
 #### Returns
 
-[`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>[]
+[`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>[]
 
 #### Defined in
 
@@ -323,11 +327,11 @@ ___
 
 ### getAllClusterServers
 
-▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>[]
+▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>[]
 
 #### Returns
 
-[`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>[]
+[`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>[]
 
 #### Defined in
 
@@ -371,14 +375,14 @@ ___
 
 ### getClusterClient
 
-▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/internal_.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/internal_.Commands.md) |
 | `E` | extends [`Events`](../interfaces/internal_.Events.md) |
@@ -387,11 +391,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+`undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Defined in
 
@@ -401,7 +405,7 @@ ___
 
 ### getClusterClientById
 
-▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>
+▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>
 
 #### Parameters
 
@@ -411,7 +415,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>
+`undefined` \| [`ClusterClientObj`](../modules/internal_.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/internal_.Attributes.md), [`Commands`](../interfaces/internal_.Commands.md), [`Events`](../interfaces/internal_.Events.md)\>
 
 #### Defined in
 
@@ -421,14 +425,14 @@ ___
 
 ### getClusterServer
 
-▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<`A`, `E`\>
+▸ **getClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/internal_.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/internal_.Commands.md) |
 | `E` | extends [`Events`](../interfaces/internal_.Events.md) |
@@ -437,11 +441,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<`A`, `E`\>
+`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<`A`, `E`\>
 
 #### Defined in
 
@@ -451,7 +455,7 @@ ___
 
 ### getClusterServerById
 
-▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>
+▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>
 
 #### Parameters
 
@@ -461,7 +465,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>
+`undefined` \| [`ClusterServerObj`](../modules/internal_.md#clusterserverobj)\<[`Attributes`](../interfaces/internal_.Attributes.md), [`Events`](../interfaces/internal_.Events.md)\>
 
 #### Defined in
 
@@ -499,14 +503,14 @@ ___
 
 ### hasClusterClient
 
-▸ **hasClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/internal_.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/internal_.Commands.md) |
 | `E` | extends [`Events`](../interfaces/internal_.Events.md) |
@@ -515,7 +519,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -529,14 +533,14 @@ ___
 
 ### hasClusterServer
 
-▸ **hasClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/internal_.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/internal_.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/internal_.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/internal_.Commands.md) |
 | `E` | extends [`Events`](../interfaces/internal_.Events.md) |
@@ -545,7 +549,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/internal_.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/internal_.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -559,7 +563,7 @@ ___
 
 ### removeChildEndpoint
 
-▸ `Protected` **removeChildEndpoint**(`endpoint`): `void`
+▸ **removeChildEndpoint**(`endpoint`): `void`
 
 #### Parameters
 

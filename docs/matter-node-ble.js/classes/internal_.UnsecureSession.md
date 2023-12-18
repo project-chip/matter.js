@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / UnsecureSession
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / UnsecureSession
 
-# Class: UnsecureSession<T\>
+# Class: UnsecureSession\<T\>
 
-[<internal>](../modules/internal_.md).UnsecureSession
+[\<internal\>](../modules/internal_.md).UnsecureSession
 
 ## Type parameters
 
@@ -12,7 +12,7 @@
 
 ## Implements
 
-- [`Session`](../interfaces/internal_.Session.md)<`T`\>
+- [`Session`](../interfaces/internal_.Session.md)\<`T`\>
 
 ## Table of contents
 
@@ -54,7 +54,7 @@
 
 ### constructor
 
-• **new UnsecureSession**<`T`\>(`context`)
+• **new UnsecureSession**\<`T`\>(`context`): [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -67,6 +67,10 @@
 | Name | Type |
 | :------ | :------ |
 | `context` | `T` |
+
+#### Returns
+
+[`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
 
 #### Defined in
 
@@ -152,11 +156,11 @@ ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -194,7 +198,7 @@ ___
 
 ### end
 
-▸ **end**(`_sendClose`): `Promise`<`void`\>
+▸ **end**(`_sendClose`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -204,7 +208,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 

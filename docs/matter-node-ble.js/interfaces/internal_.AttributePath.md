@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / AttributePath
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / AttributePath
 
 # Interface: AttributePath
 
-[<internal>](../modules/internal_.md).AttributePath
+[\<internal\>](../modules/internal_.md).AttributePath
 
 ## Table of contents
 

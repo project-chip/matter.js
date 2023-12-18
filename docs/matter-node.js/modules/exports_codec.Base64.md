@@ -52,7 +52,7 @@ Encodes base64.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `input` | `ArrayLike`<`number`\> | an indexable sequence of bytes |
+| `input` | `ArrayLike`\<`number`\> | an indexable sequence of bytes |
 | `url?` | `boolean` | set to true to encode as base46url |
 
 #### Returns

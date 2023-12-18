@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / RecordValidator
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / RecordValidator
 
 # Interface: RecordValidator
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).RecordValidator
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).RecordValidator
 
 Record validation API.
 

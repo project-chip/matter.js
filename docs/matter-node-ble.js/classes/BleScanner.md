@@ -39,7 +39,7 @@
 
 ### constructor
 
-• **new BleScanner**(`nobleClient`)
+• **new BleScanner**(`nobleClient`): [`BleScanner`](BleScanner.md)
 
 #### Parameters
 
@@ -47,19 +47,23 @@
 | :------ | :------ |
 | `nobleClient` | [`NobleBleClient`](internal_.NobleBleClient.md) |
 
+#### Returns
+
+[`BleScanner`](BleScanner.md)
+
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L45)
+[matter-node-ble.js/src/ble/BleScanner.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L45)
 
 ## Properties
 
 ### discoveredMatterDevices
 
-• `Private` `Readonly` **discoveredMatterDevices**: `Map`<`string`, [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)\>
+• `Private` `Readonly` **discoveredMatterDevices**: `Map`\<`string`, [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)\>
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:43](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L43)
+[matter-node-ble.js/src/ble/BleScanner.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L43)
 
 ___
 
@@ -69,23 +73,23 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L45)
+[matter-node-ble.js/src/ble/BleScanner.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L45)
 
 ___
 
 ### recordWaiters
 
-• `Private` `Readonly` **recordWaiters**: `Map`<`string`, { `resolveOnUpdatedRecords`: `boolean` ; `resolver`: () => `void` ; `timer`: [`Timer`](../interfaces/internal_.Timer.md)  }\>
+• `Private` `Readonly` **recordWaiters**: `Map`\<`string`, \{ `resolveOnUpdatedRecords`: `boolean` ; `resolver`: () => `void` ; `timer`: [`Timer`](../interfaces/internal_.Timer.md)  }\>
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L35)
+[matter-node-ble.js/src/ble/BleScanner.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L35)
 
 ## Methods
 
 ### buildCommissionableQueryIdentifier
 
-▸ `Private` **buildCommissionableQueryIdentifier**(`identifier`): `string`
+▸ **buildCommissionableQueryIdentifier**(`identifier`): `string`
 
 Builds an identifier string for commissionable queries based on the given identifier object.
 Some identifiers are identical to the official DNS-SD identifiers, others are custom.
@@ -102,7 +106,7 @@ Some identifiers are identical to the official DNS-SD identifiers, others are cu
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:170](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L170)
+[matter-node-ble.js/src/ble/BleScanner.ts:170](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L170)
 
 ___
 
@@ -129,7 +133,7 @@ be over.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L92)
+[matter-node-ble.js/src/ble/BleScanner.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L92)
 
 ___
 
@@ -149,13 +153,13 @@ Close the scanner server and free resources.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:272](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L272)
+[matter-node-ble.js/src/ble/BleScanner.ts:272](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L272)
 
 ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns as soon as minimum one was found or the timeout is over.
@@ -169,7 +173,7 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 #### Implementation of
 
@@ -177,13 +181,13 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:221](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L221)
+[matter-node-ble.js/src/ble/BleScanner.ts:221](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L221)
 
 ___
 
 ### findCommissionableDevicesContinuously
 
-▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns after the timeout is over. For each new discovered device the provided callback is
@@ -199,7 +203,7 @@ called when it is discovered.
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 #### Implementation of
 
@@ -207,13 +211,13 @@ called when it is discovered.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:238](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L238)
+[matter-node-ble.js/src/ble/BleScanner.ts:238](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L238)
 
 ___
 
 ### findCommissionableQueryIdentifier
 
-▸ `Private` **findCommissionableQueryIdentifier**(`record`): `undefined` \| `string`
+▸ **findCommissionableQueryIdentifier**(`record`): `undefined` \| `string`
 
 #### Parameters
 
@@ -227,20 +231,20 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L131)
+[matter-node-ble.js/src/ble/BleScanner.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L131)
 
 ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(): `Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(): `Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
 
 #### Returns
 
-`Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+`Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
 
 #### Implementation of
 
@@ -248,13 +252,13 @@ and return them.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:211](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L211)
+[matter-node-ble.js/src/ble/BleScanner.ts:211](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L211)
 
 ___
 
 ### finishWaiter
 
-▸ `Private` **finishWaiter**(`queryId`, `resolvePromise`, `isUpdatedRecord?`): `void`
+▸ **finishWaiter**(`queryId`, `resolvePromise`, `isUpdatedRecord?`): `void`
 
 Remove a waiter promise for a specific queryId and stop the connected timer. If required also resolve the
 promise.
@@ -273,13 +277,13 @@ promise.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:79](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L79)
+[matter-node-ble.js/src/ble/BleScanner.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L79)
 
 ___
 
 ### getCommissionableDevices
 
-▸ `Private` **getCommissionableDevices**(`identifier`): [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)[]
+▸ **getCommissionableDevices**(`identifier`): [`DiscoveredBleDevice`](../modules.md#discoveredbledevice)[]
 
 #### Parameters
 
@@ -293,7 +297,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:183](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L183)
+[matter-node-ble.js/src/ble/BleScanner.ts:183](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L183)
 
 ___
 
@@ -319,7 +323,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:268](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L268)
+[matter-node-ble.js/src/ble/BleScanner.ts:268](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L268)
 
 ___
 
@@ -339,7 +343,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L51)
+[matter-node-ble.js/src/ble/BleScanner.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L51)
 
 ___
 
@@ -360,13 +364,13 @@ DNS-SD queries.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:216](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L216)
+[matter-node-ble.js/src/ble/BleScanner.ts:216](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L216)
 
 ___
 
 ### handleDiscoveredDevice
 
-▸ `Private` **handleDiscoveredDevice**(`peripheral`, `manufacturerServiceData`): `void`
+▸ **handleDiscoveredDevice**(`peripheral`, `manufacturerServiceData`): `void`
 
 #### Parameters
 
@@ -381,13 +385,13 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L97)
+[matter-node-ble.js/src/ble/BleScanner.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L97)
 
 ___
 
 ### registerWaiterPromise
 
-▸ `Private` **registerWaiterPromise**(`queryId`, `timeoutSeconds`, `resolveOnUpdatedRecords?`): `Promise`<`void`\>
+▸ **registerWaiterPromise**(`queryId`, `timeoutSeconds`, `resolveOnUpdatedRecords?`): `Promise`\<`void`\>
 
 Registers a deferred promise for a specific queryId together with a timeout and return the promise.
 The promise will be resolved when the timer runs out latest.
@@ -402,8 +406,8 @@ The promise will be resolved when the timer runs out latest.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleScanner.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleScanner.ts#L63)
+[matter-node-ble.js/src/ble/BleScanner.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleScanner.ts#L63)

@@ -25,13 +25,17 @@
 
 ### constructor
 
-• **new ScenesManager**()
+• **new ScenesManager**(): [`ScenesManager`](cluster_export.ScenesManager.md)
+
+#### Returns
+
+[`ScenesManager`](cluster_export.ScenesManager.md)
 
 ## Methods
 
 ### getAllScenes
 
-▸ `Static` **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
+▸ **getAllScenes**(`fabric`, `endpointId`, `groupId`): [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)[]
 
 #### Parameters
 
@@ -47,13 +51,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:91](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L91)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L90)
 
 ___
 
 ### getEndpointScenes
 
-▸ `Static` **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+▸ **getEndpointScenes**(`fabric`, `endpointId`): `undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Parameters
 
@@ -64,17 +68,17 @@ ___
 
 #### Returns
 
-`undefined` \| `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
+`undefined` \| `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L44)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L43)
 
 ___
 
 ### getSceneEntry
 
-▸ `Static` **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
+▸ **getSceneEntry**(`fabric`, `endpointId`, `groupId`, `sceneId`): `undefined` \| [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)
 
 #### Parameters
 
@@ -91,13 +95,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:82](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L82)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L81)
 
 ___
 
 ### removeAllNonGlobalScenesForEndpoint
 
-▸ `Static` **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
+▸ **removeAllNonGlobalScenesForEndpoint**(`fabric`, `endpointId`): `void`
 
 #### Parameters
 
@@ -112,13 +116,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:120](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L120)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:119](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L119)
 
 ___
 
 ### removeAllScenesForGroup
 
-▸ `Static` **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
+▸ **removeAllScenesForGroup**(`fabric`, `endpointId`, `groupId`): `void`
 
 #### Parameters
 
@@ -134,13 +138,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:111](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L111)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:110](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L110)
 
 ___
 
 ### removeScene
 
-▸ `Static` **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
+▸ **removeScene**(`fabric`, `endpointId`, `groupId`, `sceneId`): `boolean`
 
 #### Parameters
 
@@ -157,13 +161,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:97](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L97)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:96](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L96)
 
 ___
 
 ### setEndpointScenes
 
-▸ `Static` **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
+▸ **setEndpointScenes**(`fabric`, `endpointId`, `endpointScenes`): `void`
 
 #### Parameters
 
@@ -171,7 +175,7 @@ ___
 | :------ | :------ |
 | `fabric` | [`Fabric`](fabric_export.Fabric.md) |
 | `endpointId` | `number` |
-| `endpointScenes` | `Map`<`number`, `Map`<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
+| `endpointScenes` | `Map`\<`number`, `Map`\<`number`, [`scenesTableEntry`](../interfaces/export._internal_.scenesTableEntry.md)\>\> |
 
 #### Returns
 
@@ -179,13 +183,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L54)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L53)
 
 ___
 
 ### setScenes
 
-▸ `Static` **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
+▸ **setScenes**(`fabric`, `endpointId`, `sceneEntries`): `void`
 
 #### Parameters
 
@@ -201,4 +205,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/ScenesServer.ts#L62)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L61)

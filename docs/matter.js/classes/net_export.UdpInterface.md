@@ -31,7 +31,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 ### constructor
 
-• **new UdpInterface**(`server`)
+• **new UdpInterface**(`server`): [`UdpInterface`](net_export.UdpInterface.md)
 
 #### Parameters
 
@@ -39,9 +39,13 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 | :------ | :------ |
 | `server` | [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
 
+#### Returns
+
+[`UdpInterface`](net_export.UdpInterface.md)
+
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Properties
 
@@ -51,17 +55,17 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -69,7 +73,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L37)
+[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L37)
 
 ___
 
@@ -81,7 +85,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`channel`: [`Channel`](../interfaces/common_export.Channel.md)<`Uint8Array`\>, `messageBytes`: `Uint8Array`) => `void` |
+| `listener` | (`channel`: [`Channel`](../interfaces/common_export.Channel.md)\<`Uint8Array`\>, `messageBytes`: `Uint8Array`) => `void` |
 
 #### Returns
 
@@ -93,13 +97,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L32)
+[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L32)
 
 ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+▸ **openChannel**(`address`): `Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
 
 #### Parameters
 
@@ -109,7 +113,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpConnection`](export._internal_.UdpConnection.md)\>
+`Promise`\<[`UdpConnection`](export._internal_.UdpConnection.md)\>
 
 #### Implementation of
 
@@ -117,13 +121,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L24)
+[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L24)
 
 ___
 
 ### create
 
-▸ `Static` **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`<[`UdpInterface`](net_export.UdpInterface.md)\>
+▸ **create**(`type`, `port?`, `host?`, `netInterface?`): `Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Parameters
 
@@ -136,8 +140,8 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpInterface`](net_export.UdpInterface.md)\>
+`Promise`\<[`UdpInterface`](net_export.UdpInterface.md)\>
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/net/UdpInterface.ts#L16)
+[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L16)

@@ -29,47 +29,47 @@
 
 ### Extension
 
-Ƭ **Extension**<`SF`\>: `Omit`<typeof [`Base`](cluster_export.AdministratorCommissioning.md#base), ``"supportedFeatures"``\> & { `supportedFeatures`: `SF`  } & `SF` extends { `basic`: ``true``  } ? typeof [`BasicComponent`](cluster_export.AdministratorCommissioning.md#basiccomponent) : {}
+Ƭ **Extension**\<`SF`\>: `Omit`\<typeof [`Base`](cluster_export.AdministratorCommissioning.md#base), ``"supportedFeatures"``\> & \{ `supportedFeatures`: `SF`  } & `SF` extends \{ `basic`: ``true``  } ? typeof [`BasicComponent`](cluster_export.AdministratorCommissioning.md#basiccomponent) : {}
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<typeof `Base.features`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof `Base.features`\> |
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:359](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L359)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:359](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L359)
 
 ## Variables
 
 ### Base
 
-• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: { `openCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>
+• `Const` **Base**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: \{ `openCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>
 
 These elements and properties are present in all AdministratorCommissioning clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:157](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:157](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L157)
 
 ___
 
 ### BasicComponent
 
-• `Const` **BasicComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)<{ `commands`: { `openBasicCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\>  }  }\>
+• `Const` **BasicComponent**: [`TypedComponent`](../interfaces/cluster_export.ClusterFactory.TypedComponent.md)\<\{ `commands`: \{ `openBasicCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\>  }  }\>
 
 A AdministratorCommissioningCluster supports these elements if it supports feature Basic.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:279](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L279)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:279](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L279)
 
 ___
 
 ### Cluster
 
-• `Const` **Cluster**: { `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: { `openCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: { `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)<``60`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`<[`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: { `openCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & { `with`: <T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.AdministratorCommissioning.md#extension)<[`BitFlags`](schema_export.md#bitflags)<{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
+• `Const` **Cluster**: \{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `commands`: \{ `openCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `events`: {} ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: [`Branded`](util_export.md#branded)\<``60`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\>, ``"ClusterId"``\> ; `name`: ``"AdministratorCommissioning"`` ; `revision`: ``1`` ; `supportedFeatures`: {} ; `unknown`: ``false``  } & `Omit`\<[`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  } ; `commands`: \{ `openCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } ; `id`: ``60`` = 0x3c; `name`: ``"AdministratorCommissioning"`` = "AdministratorCommissioning"; `revision`: ``1`` = 1 }\>, ``"attributes"``\> & \{ `with`: \<T\>(...`features`: [...T[]]) => [`Extension`](cluster_export.AdministratorCommissioning.md#extension)\<[`BitFlags`](schema_export.md#bitflags)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }, `T`\>\> = extender }
 
 Administrator Commissioning
 
@@ -88,13 +88,13 @@ AdministratorCommissioningCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:337](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L337)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:337](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L337)
 
 ___
 
 ### Complete
 
-• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: [`Merge`](util_export.md#merge)<[`Merge`](util_export.md#merge)<{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)<{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> = Cluster.attributes; `commands`: { `openBasicCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> & { `isConditional`: ``true`` = true; `mandatoryIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\> ; `optional`: ``true`` = true; `optionalIf`: readonly [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)<[`BitSchema`](schema_export.md#bitschema)\>  } ; `openCommissioningWindow`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `features`: { `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``60`` & [`Brand`](util_export.md#brand)<``"ClusterId"``\> = Cluster.id; `name`: ``"AdministratorCommissioning"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
+• `Const` **Complete**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: [`Merge`](util_export.md#merge)\<[`Merge`](util_export.md#merge)\<\{ `adminFabricIndex`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`FabricIndex`](datatype_export.md#fabricindex), `any`\> ; `adminVendorId`: [`Attribute`](cluster_export.md#attribute)\<``null`` \| [`VendorId`](datatype_export.md#vendorid), `any`\> ; `windowStatus`: [`Attribute`](cluster_export.md#attribute)\<[`CommissioningWindowStatus`](../enums/cluster_export.AdministratorCommissioning.CommissioningWindowStatus.md), `any`\>  }, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\>, [`GlobalAttributes`](cluster_export.md#globalattributes-1)\<\{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> = Cluster.attributes; `commands`: \{ `openBasicCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> & \{ `isConditional`: ``true`` = true; `mandatoryIf`: [] \| [\{ `basic`: `boolean` = true }] ; `optional`: ``true`` = true; `optionalIf`: [] \| [`ConditionalFeatureList`](cluster_export.md#conditionalfeaturelist)\<[`BitSchema`](schema_export.md#bitschema)\>  } ; `openCommissioningWindow`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>, `void`, `any`\> ; `revokeCommissioning`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `features`: \{ `basic`: [`BitFlag`](schema_export.md#bitflag-1)  } = Cluster.features; `id`: ``60`` & [`Brand`](util_export.md#brand)\<``"ClusterId"``\> = Cluster.id; `name`: ``"AdministratorCommissioning"`` = Cluster.name; `revision`: ``1`` = Cluster.revision }\>
 
 This cluster supports all AdministratorCommissioning features. It may support illegal feature combinations.
 
@@ -103,13 +103,13 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:371](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L371)
 
 ___
 
 ### TlvOpenBasicCommissioningWindowRequest
 
-• `Const` **TlvOpenBasicCommissioningWindowRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvOpenBasicCommissioningWindowRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
@@ -119,13 +119,13 @@ Input to the AdministratorCommissioning openBasicCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:138](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L138)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:138](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L138)
 
 ___
 
 ### TlvOpenCommissioningWindowRequest
 
-• `Const` **TlvOpenCommissioningWindowRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvOpenCommissioningWindowRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `commissioningTimeout`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `discriminator`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `pakePasscodeVerifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 Input to the AdministratorCommissioning openCommissioningWindow command
 
@@ -135,4 +135,4 @@ Input to the AdministratorCommissioning openCommissioningWindow command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L47)
+[packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AdministratorCommissioningCluster.ts#L47)

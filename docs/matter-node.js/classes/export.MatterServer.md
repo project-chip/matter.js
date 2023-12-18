@@ -42,7 +42,7 @@ by reusing MDNS scanner and broadcaster
 
 ### constructor
 
-• **new MatterServer**(`storageManager`, `options?`)
+• **new MatterServer**(`storageManager`, `options?`): [`MatterServer`](export.MatterServer.md)
 
 Create a new Matter server instance
 
@@ -52,6 +52,10 @@ Create a new Matter server instance
 | :------ | :------ | :------ |
 | `storageManager` | [`StorageManager`](storage_export.StorageManager.md) | Storage manager instance to use for all nodes |
 | `options?` | [`MatterServerOptions`](../modules/export.md#matterserveroptions) | Optional MatterServer options |
+
+#### Returns
+
+[`MatterServer`](export.MatterServer.md)
 
 #### Defined in
 
@@ -165,7 +169,7 @@ packages/matter.js/dist/esm/MatterServer.d.ts:53
 
 ### addCommissioningController
 
-▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `Promise`<`void`\>
+▸ **addCommissioningController**(`commissioningController`, `nodeOptions?`): `Promise`\<`void`\>
 
 Add a Controller node to the server
 
@@ -178,7 +182,7 @@ Add a Controller node to the server
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -188,7 +192,7 @@ ___
 
 ### addCommissioningServer
 
-▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `Promise`<`void`\>
+▸ **addCommissioningServer**(`commissioningServer`, `nodeOptions?`): `Promise`\<`void`\>
 
 Add a CommissioningServer node to the server
 
@@ -201,7 +205,7 @@ Add a CommissioningServer node to the server
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -211,13 +215,13 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 Close the server and all nodes
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -227,7 +231,7 @@ ___
 
 ### removeCommissioningController
 
-▸ **removeCommissioningController**(`commissioningController`, `destroyStorage?`): `Promise`<`void`\>
+▸ **removeCommissioningController**(`commissioningController`, `destroyStorage?`): `Promise`\<`void`\>
 
 Remove a Controller node from the server, close the Controller and optionally destroy the storage context.
 
@@ -240,7 +244,7 @@ Remove a Controller node from the server, close the Controller and optionally de
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -250,7 +254,7 @@ ___
 
 ### removeCommissioningServer
 
-▸ **removeCommissioningServer**(`commissioningServer`, `destroyStorage?`): `Promise`<`void`\>
+▸ **removeCommissioningServer**(`commissioningServer`, `destroyStorage?`): `Promise`\<`void`\>
 
 Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
 storage context.
@@ -264,7 +268,7 @@ storage context.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -274,14 +278,14 @@ ___
 
 ### start
 
-▸ **start**(): `Promise`<`void`\>
+▸ **start**(): `Promise`\<`void`\>
 
 Start the server and all nodes. If the nodes do not have specified a delayed announcement or pairing they will
 be announced/paired immediately.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

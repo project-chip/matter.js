@@ -26,9 +26,9 @@ Information on the source of an element.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `document` | \`${Specification}\` | The defining document for the element. |
+| `document` | \`$\{Specification}\` | The defining document for the element. |
 | `section` | `string` | The section of the defining document that most specifically addresses the element. |
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Specification.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/Specification.ts#L29)
+[packages/matter.js/src/model/definitions/Specification.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Specification.ts#L29)

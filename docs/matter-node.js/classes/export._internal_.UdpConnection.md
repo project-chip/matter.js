@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / UdpConnection
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / UdpConnection
 
 # Class: UdpConnection
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).UdpConnection
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).UdpConnection
 
 **`License`**
 
@@ -11,7 +11,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ## Implements
 
-- [`Channel`](../interfaces/exports_common.Channel.md)<[`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Channel`](../interfaces/exports_common.Channel.md)\<[`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
 ## Table of contents
 
@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
 
 ### constructor
 
-• **new UdpConnection**(`server`, `peerAddress`, `peerPort`)
+• **new UdpConnection**(`server`, `peerAddress`, `peerPort`): [`UdpConnection`](export._internal_.UdpConnection.md)
 
 #### Parameters
 
@@ -47,6 +47,10 @@ SPDX-License-Identifier: Apache-2.0
 | `server` | [`UdpChannel`](../interfaces/net_export.UdpChannel.md) |
 | `peerAddress` | `string` |
 | `peerPort` | `number` |
+
+#### Returns
+
+[`UdpConnection`](export._internal_.UdpConnection.md)
 
 #### Defined in
 
@@ -104,11 +108,11 @@ packages/matter.js/dist/esm/net/UdpInterface.d.ts:26
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -122,7 +126,7 @@ ___
 
 ### send
 
-▸ **send**(`data`): `Promise`<`void`\>
+▸ **send**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -132,7 +136,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
