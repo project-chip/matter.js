@@ -15,7 +15,7 @@
 
 ### ElementForProperties
 
-Ƭ **ElementForProperties**<`P`\>: `P` extends [`Properties`](exports_model.BaseElement.md#properties)<infer T\> ? `T` : `never`
+Ƭ **ElementForProperties**\<`P`\>: `P` extends [`Properties`](exports_model.BaseElement.md#properties)\<infer T\> ? `T` : `never`
 
 #### Type parameters
 
@@ -31,7 +31,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**<`T`\>: `Omit`<`T`, ``"tag"``\> & `Partial`<`Pick`<`T`, ``"tag"``\>\>
+Ƭ **Properties**\<`T`\>: `Omit`\<`T`, ``"tag"``\> & `Partial`\<`Pick`\<`T`, ``"tag"``\>\>
 
 Element with optional type; used for factory functions and constructors.
 

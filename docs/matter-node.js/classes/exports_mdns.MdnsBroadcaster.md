@@ -38,7 +38,7 @@ This class is handing MDNS Announcements for multiple instances/devices
 
 ### constructor
 
-• **new MdnsBroadcaster**(`mdnsServer`, `enableIpv4?`)
+• **new MdnsBroadcaster**(`mdnsServer`, `enableIpv4?`): [`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)
 
 #### Parameters
 
@@ -46,6 +46,10 @@ This class is handing MDNS Announcements for multiple instances/devices
 | :------ | :------ |
 | `mdnsServer` | [`MdnsServer`](exports_mdns.MdnsServer.md) |
 | `enableIpv4?` | `boolean` |
+
+#### Returns
+
+[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)
 
 #### Defined in
 
@@ -115,7 +119,7 @@ packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:20
 
 ### announce
 
-▸ **announce**(`announcementPort`): `Promise`<`void`\>
+▸ **announce**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -125,7 +129,7 @@ packages/matter.js/dist/esm/mdns/MdnsBroadcaster.d.ts:20
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -135,11 +139,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -149,7 +153,7 @@ ___
 
 ### expireAllAnnouncements
 
-▸ **expireAllAnnouncements**(`announcementPort`): `Promise`<`void`\>
+▸ **expireAllAnnouncements**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -159,7 +163,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -169,7 +173,7 @@ ___
 
 ### expireCommissioningAnnouncement
 
-▸ **expireCommissioningAnnouncement**(`announcementPort`): `Promise`<`void`\>
+▸ **expireCommissioningAnnouncement**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -179,7 +183,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -189,7 +193,7 @@ ___
 
 ### expireFabricAnnouncement
 
-▸ **expireFabricAnnouncement**(`announcementPort`): `Promise`<`void`\>
+▸ **expireFabricAnnouncement**(`announcementPort`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -199,7 +203,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -209,7 +213,7 @@ ___
 
 ### setCommissionMode
 
-▸ **setCommissionMode**(`announcedNetPort`, `mode`, `«destructured»`): `Promise`<`void`\>
+▸ **setCommissionMode**(`announcedNetPort`, `mode`, `«destructured»`): `Promise`\<`void`\>
 
 Set the Broadcaster data to announce a device ready for commissioning in a special mode
 
@@ -223,7 +227,7 @@ Set the Broadcaster data to announce a device ready for commissioning in a speci
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -233,7 +237,7 @@ ___
 
 ### setCommissionerInfo
 
-▸ **setCommissionerInfo**(`announcedNetPort`, `«destructured»`): `Promise`<`void`\>
+▸ **setCommissionerInfo**(`announcedNetPort`, `«destructured»`): `Promise`\<`void`\>
 
 Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
@@ -246,7 +250,7 @@ Set the Broadcaster data to announce a Commissioner (aka Commissioner discovery)
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -256,7 +260,7 @@ ___
 
 ### setFabrics
 
-▸ **setFabrics**(`announcedNetPort`, `fabrics`, `«destructured»?`): `Promise`<`void`\>
+▸ **setFabrics**(`announcedNetPort`, `fabrics`, `«destructured»?`): `Promise`\<`void`\>
 
 Set the Broadcaster Data to announce a device for operative discovery (aka "already paired")
 
@@ -270,7 +274,7 @@ Set the Broadcaster Data to announce a device for operative discovery (aka "alre
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -286,7 +290,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `pairingHint` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<{ `administrator`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `customInstruction`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `deviceManual`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `powerCycle`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
+| `pairingHint` | [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<\{ `administrator`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `customInstruction`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `deviceManual`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `deviceManufacturerUrl`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `powerCycle`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButton`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonNumberOfTimes`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonUntilLightBlinks`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressResetButtonWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressRestButtonForNumberOfSeconds`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButton`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonForNumberOfSeconds`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonForNumberOfSecondsWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonNumberOfTimes`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonUntilLightBlinks`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonUntilLightBlinksWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `pressSetupButtonWithApplicationOfPower`: [`BitFlag`](../modules/exports_schema.md#bitflag-1) ; `settingsMenuOnNode`: [`BitFlag`](../modules/exports_schema.md#bitflag-1)  }\> |
 | `pairingInstructions` | `string` |
 
 #### Returns
@@ -301,7 +305,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`options?`): `Promise`<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
+▸ **create**(`options?`): `Promise`\<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
 
 #### Parameters
 
@@ -313,7 +317,7 @@ ___
 
 #### Returns
 
-`Promise`<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
+`Promise`\<[`MdnsBroadcaster`](exports_mdns.MdnsBroadcaster.md)\>
 
 #### Defined in
 

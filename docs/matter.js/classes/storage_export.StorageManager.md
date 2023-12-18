@@ -25,7 +25,7 @@
 
 ### constructor
 
-• **new StorageManager**(`storage`)
+• **new StorageManager**(`storage`): [`StorageManager`](storage_export.StorageManager.md)
 
 #### Parameters
 
@@ -33,9 +33,13 @@
 | :------ | :------ |
 | `storage` | [`Storage`](storage_export.Storage.md) |
 
+#### Returns
+
+[`StorageManager`](storage_export.StorageManager.md)
+
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L13)
+[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L13)
 
 ## Properties
 
@@ -45,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L11)
+[packages/matter.js/src/storage/StorageManager.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L11)
 
 ___
 
@@ -55,21 +59,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L13)
+[packages/matter.js/src/storage/StorageManager.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L13)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L20)
+[packages/matter.js/src/storage/StorageManager.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L20)
 
 ___
 
@@ -89,18 +93,18 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L24)
+[packages/matter.js/src/storage/StorageManager.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L24)
 
 ___
 
 ### initialize
 
-▸ **initialize**(): `Promise`<`void`\>
+▸ **initialize**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/storage/StorageManager.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/storage/StorageManager.ts#L15)
+[packages/matter.js/src/storage/StorageManager.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StorageManager.ts#L15)

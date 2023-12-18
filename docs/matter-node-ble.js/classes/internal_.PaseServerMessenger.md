@@ -1,12 +1,12 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / PaseServerMessenger
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / PaseServerMessenger
 
 # Class: PaseServerMessenger
 
-[<internal>](../modules/internal_.md).PaseServerMessenger
+[\<internal\>](../modules/internal_.md).PaseServerMessenger
 
 ## Hierarchy
 
-- [`SecureChannelMessenger`](internal_.SecureChannelMessenger.md)<[`MatterDevice`](internal_.MatterDevice.md)\>
+- [`SecureChannelMessenger`](internal_.SecureChannelMessenger.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
   ↳ **`PaseServerMessenger`**
 
@@ -42,13 +42,17 @@
 
 ### constructor
 
-• **new PaseServerMessenger**(`exchange`)
+• **new PaseServerMessenger**(`exchange`): [`PaseServerMessenger`](internal_.PaseServerMessenger.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
+
+#### Returns
+
+[`PaseServerMessenger`](internal_.PaseServerMessenger.md)
 
 #### Inherited from
 
@@ -62,7 +66,7 @@ matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:19
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)<[`MatterDevice`](internal_.MatterDevice.md)\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Inherited from
 
@@ -76,11 +80,11 @@ matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:18
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -112,7 +116,7 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Parameters
 
@@ -122,7 +126,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+`Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Inherited from
 
@@ -136,7 +140,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -149,11 +153,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Inherited from
 
@@ -167,11 +171,11 @@ ___
 
 ### readPasePake1
 
-▸ **readPasePake1**(): `Promise`<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `x`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\>\>
+▸ **readPasePake1**(): `Promise`\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `x`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Returns
 
-`Promise`<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `x`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\>\>
+`Promise`\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `x`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Defined in
 
@@ -181,11 +185,11 @@ ___
 
 ### readPasePake3
 
-▸ **readPasePake3**(): `Promise`<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\>\>
+▸ **readPasePake3**(): `Promise`\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Returns
 
-`Promise`<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\>\>
+`Promise`\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\>
 
 #### Defined in
 
@@ -195,11 +199,11 @@ ___
 
 ### readPbkdfParamRequest
 
-▸ **readPbkdfParamRequest**(): `Promise`<{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
+▸ **readPbkdfParamRequest**(): `Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
 
 #### Returns
 
-`Promise`<{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
+`Promise`\<\{ `request`: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> ; `requestPayload`: `Uint8Array`  }\>
 
 #### Defined in
 
@@ -209,7 +213,7 @@ ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -223,11 +227,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -241,11 +245,11 @@ ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -259,7 +263,7 @@ ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -269,7 +273,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -283,17 +287,17 @@ ___
 
 ### sendPasePake2
 
-▸ **sendPasePake2**(`pasePake2`): `Promise`<`Uint8Array`\>
+▸ **sendPasePake2**(`pasePake2`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `pasePake2` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\> |
+| `pasePake2` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `verifier`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -303,17 +307,17 @@ ___
 
 ### sendPbkdfParamResponse
 
-▸ **sendPbkdfParamResponse**(`response`): `Promise`<`Uint8Array`\>
+▸ **sendPbkdfParamResponse**(`response`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `response` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `iterations`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `salt`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\>  }\> |
+| `response` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -323,11 +327,11 @@ ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -341,7 +345,7 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -365,11 +369,11 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 

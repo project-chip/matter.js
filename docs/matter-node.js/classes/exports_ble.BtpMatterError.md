@@ -26,7 +26,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new BtpMatterError**(`message?`)
+• **new BtpMatterError**(`message?`): [`BtpMatterError`](exports_ble.BtpMatterError.md)
 
 #### Parameters
 
@@ -34,10 +34,14 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`BtpMatterError`](exports_ble.BtpMatterError.md)
+
 #### Inherited from
 
 [MatterError](exports_common.MatterError.md).[constructor](exports_common.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / OptionalWritableFabricScopedAttribute
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / OptionalWritableFabricScopedAttribute
 
-# Interface: OptionalWritableFabricScopedAttribute<T, F\>
+# Interface: OptionalWritableFabricScopedAttribute\<T, F\>
 
-[<internal>](../modules/internal_.md).OptionalWritableFabricScopedAttribute
+[\<internal\>](../modules/internal_.md).OptionalWritableFabricScopedAttribute
 
 ## Type parameters
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalWritableAttribute`](../modules/internal_.md#optionalwritableattribute)<`T`, `F`\>
+- [`OptionalWritableAttribute`](../modules/internal_.md#optionalwritableattribute)\<`T`, `F`\>
 
   ↳ **`OptionalWritableFabricScopedAttribute`**
 
@@ -113,7 +113,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -155,7 +155,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -211,7 +211,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 

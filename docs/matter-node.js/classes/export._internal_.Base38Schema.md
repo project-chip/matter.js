@@ -1,14 +1,14 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / Base38Schema
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / Base38Schema
 
 # Class: Base38Schema
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).Base38Schema
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).Base38Schema
 
 See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecificationV1_0.md) § 5.1.3.1
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`ByteArray`](../modules/util_export.md#bytearray-1), `string`\>
+- [`Schema`](exports_schema.Schema.md)\<[`ByteArray`](../modules/util_export.md#bytearray-1), `string`\>
 
   ↳ **`Base38Schema`**
 
@@ -35,7 +35,11 @@ See [MatterCoreSpecificationV1_0](../interfaces/exports_spec.MatterCoreSpecifica
 
 ### constructor
 
-• **new Base38Schema**()
+• **new Base38Schema**(): [`Base38Schema`](export._internal_.Base38Schema.md)
+
+#### Returns
+
+[`Base38Schema`](export._internal_.Base38Schema.md)
 
 #### Inherited from
 
@@ -92,7 +96,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`encoded`): `Uint8Array`
+▸ **decodeInternal**(`encoded`): `Uint8Array`
 
 #### Parameters
 
@@ -142,7 +146,7 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`bytes`): `string`
+▸ **encodeInternal**(`bytes`): `string`
 
 #### Parameters
 

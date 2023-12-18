@@ -22,7 +22,7 @@ Error thrown when a feature is not implemented yet. Please report such errors.
 
 ### constructor
 
-• **new NotImplementedError**(`message?`)
+• **new NotImplementedError**(`message?`): [`NotImplementedError`](common_export.NotImplementedError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Error thrown when a feature is not implemented yet. Please report such errors.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`NotImplementedError`](common_export.NotImplementedError.md)
+
 #### Inherited from
 
 [InternalError](common_export.InternalError.md).[constructor](common_export.InternalError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

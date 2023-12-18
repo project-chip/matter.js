@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / MessageExchange
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / MessageExchange
 
-# Class: MessageExchange<ContextT\>
+# Class: MessageExchange\<ContextT\>
 
-[<internal>](../modules/internal_.md).MessageExchange
+[\<internal\>](../modules/internal_.md).MessageExchange
 
 ## Type parameters
 
@@ -63,7 +63,7 @@
 
 ### constructor
 
-• **new MessageExchange**<`ContextT`\>(`session`, `channel`, `messageCounter`, `isInitiator`, `peerSessionId`, `nodeId`, `peerNodeId`, `exchangeId`, `protocolId`, `closeCallback`)
+• **new MessageExchange**\<`ContextT`\>(`session`, `channel`, `messageCounter`, `isInitiator`, `peerSessionId`, `nodeId`, `peerNodeId`, `exchangeId`, `protocolId`, `closeCallback`): [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -75,8 +75,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<`ContextT`\> |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
 | `isInitiator` | `boolean` |
 | `peerSessionId` | `number` |
@@ -84,7 +84,11 @@
 | `peerNodeId` | `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
+
+#### Returns
+
+[`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -104,7 +108,7 @@ ___
 
 ### channel
 
-• `Readonly` **channel**: [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\>
+• `Readonly` **channel**: [`MessageChannel`](internal_.MessageChannel.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -318,7 +322,7 @@ ___
 
 ### session
 
-• `Readonly` **session**: [`Session`](../interfaces/internal_.Session.md)<`ContextT`\>
+• `Readonly` **session**: [`Session`](../interfaces/internal_.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -352,11 +356,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -366,11 +370,11 @@ ___
 
 ### destroy
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **destroy**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -422,11 +426,11 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(): `Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **nextMessage**(): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+`Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Defined in
 
@@ -436,7 +440,7 @@ ___
 
 ### onMessageReceived
 
-▸ **onMessageReceived**(`message`): `Promise`<`void`\>
+▸ **onMessageReceived**(`message`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -446,7 +450,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -456,7 +460,7 @@ ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -468,7 +472,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -498,7 +502,7 @@ ___
 
 ### waitFor
 
-▸ **waitFor**(`messageType`, `timeoutMs?`): `Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **waitFor**(`messageType`, `timeoutMs?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Parameters
 
@@ -509,7 +513,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+`Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Defined in
 
@@ -519,7 +523,7 @@ ___
 
 ### fromInitialMessage
 
-▸ `Static` **fromInitialMessage**<`ContextT`\>(`channel`, `messageCounter`, `initialMessage`, `closeCallback`): [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+▸ **fromInitialMessage**\<`ContextT`\>(`channel`, `messageCounter`, `initialMessage`, `closeCallback`): [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -531,14 +535,14 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<`ContextT`\> |
 | `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
 | `initialMessage` | [`Message`](../interfaces/internal_.Message.md) |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -548,7 +552,7 @@ ___
 
 ### initiate
 
-▸ `Static` **initiate**<`ContextT`\>(`channel`, `exchangeId`, `protocolId`, `messageCounter`, `closeCallback`): [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+▸ **initiate**\<`ContextT`\>(`channel`, `exchangeId`, `protocolId`, `messageCounter`, `closeCallback`): [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -560,15 +564,15 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<`ContextT`\> |
 | `exchangeId` | `number` |
 | `protocolId` | `number` |
 | `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
-| `closeCallback` | () => `Promise`<`void`\> |
+| `closeCallback` | () => `Promise`\<`void`\> |
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 

@@ -58,7 +58,11 @@
 
 ### constructor
 
-• **new Crypto**()
+• **new Crypto**(): [`Crypto`](crypto_export.Crypto.md)
+
+#### Returns
+
+[`Crypto`](crypto_export.Crypto.md)
 
 ## Properties
 
@@ -109,7 +113,7 @@ ___
 
 ### ecdhGeneratePublicKey
 
-▪ `Static` `Readonly` **ecdhGeneratePublicKey**: () => { `ecdh`: `any` ; `publicKey`: `Uint8Array`  }
+▪ `Static` `Readonly` **ecdhGeneratePublicKey**: () => \{ `ecdh`: `any` ; `publicKey`: `Uint8Array`  }
 
 #### Type declaration
 
@@ -132,7 +136,7 @@ ___
 
 ### ecdhGeneratePublicKeyAndSecret
 
-▪ `Static` `Readonly` **ecdhGeneratePublicKeyAndSecret**: (`peerPublicKey`: `Uint8Array`) => { `publicKey`: `Uint8Array` ; `sharedSecret`: `Uint8Array`  }
+▪ `Static` `Readonly` **ecdhGeneratePublicKeyAndSecret**: (`peerPublicKey`: `Uint8Array`) => \{ `publicKey`: `Uint8Array` ; `sharedSecret`: `Uint8Array`  }
 
 #### Type declaration
 
@@ -376,11 +380,11 @@ ___
 
 ### hkdf
 
-▪ `Static` `Readonly` **hkdf**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `info`: `Uint8Array`, `length?`: `number`) => `Promise`<`Uint8Array`\>
+▪ `Static` `Readonly` **hkdf**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `info`: `Uint8Array`, `length?`: `number`) => `Promise`\<`Uint8Array`\>
 
 #### Type declaration
 
-▸ (`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ (`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 ##### Parameters
 
@@ -393,7 +397,7 @@ ___
 
 ##### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -428,11 +432,11 @@ ___
 
 ### pbkdf2
 
-▪ `Static` `Readonly` **pbkdf2**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `iteration`: `number`, `keyLength`: `number`) => `Promise`<`Uint8Array`\>
+▪ `Static` `Readonly` **pbkdf2**: (`secret`: `Uint8Array`, `salt`: `Uint8Array`, `iteration`: `number`, `keyLength`: `number`) => `Promise`\<`Uint8Array`\>
 
 #### Type declaration
 
-▸ (`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ (`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 ##### Parameters
 
@@ -445,7 +449,7 @@ ___
 
 ##### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -508,7 +512,7 @@ packages/matter.js/dist/esm/crypto/Crypto.d.ts:62
 
 ### createKeyPair
 
-▸ `Abstract` **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
+▸ **createKeyPair**(): [`PrivateKey`](../modules/crypto_export.md#privatekey)
 
 #### Returns
 
@@ -522,7 +526,7 @@ ___
 
 ### decrypt
 
-▸ `Abstract` **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **decrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -545,7 +549,7 @@ ___
 
 ### ecdhGeneratePublicKey
 
-▸ `Abstract` **ecdhGeneratePublicKey**(): `Object`
+▸ **ecdhGeneratePublicKey**(): `Object`
 
 #### Returns
 
@@ -564,7 +568,7 @@ ___
 
 ### ecdhGeneratePublicKeyAndSecret
 
-▸ `Abstract` **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
+▸ **ecdhGeneratePublicKeyAndSecret**(`peerPublicKey`): `Object`
 
 #### Parameters
 
@@ -589,7 +593,7 @@ ___
 
 ### ecdhGenerateSecret
 
-▸ `Abstract` **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
+▸ **ecdhGenerateSecret**(`peerPublicKey`, `ecdh`): `Uint8Array`
 
 #### Parameters
 
@@ -610,7 +614,7 @@ ___
 
 ### encrypt
 
-▸ `Abstract` **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
+▸ **encrypt**(`key`, `data`, `nonce`, `aad?`): `Uint8Array`
 
 #### Parameters
 
@@ -633,7 +637,7 @@ ___
 
 ### getRandomData
 
-▸ `Abstract` **getRandomData**(`length`): `Uint8Array`
+▸ **getRandomData**(`length`): `Uint8Array`
 
 #### Parameters
 
@@ -653,7 +657,7 @@ ___
 
 ### hash
 
-▸ `Abstract` **hash**(`data`): `Uint8Array`
+▸ **hash**(`data`): `Uint8Array`
 
 #### Parameters
 
@@ -673,7 +677,7 @@ ___
 
 ### hkdf
 
-▸ `Abstract` **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`<`Uint8Array`\>
+▸ **hkdf**(`secret`, `salt`, `info`, `length?`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -686,7 +690,7 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -696,7 +700,7 @@ ___
 
 ### hmac
 
-▸ `Abstract` **hmac**(`key`, `data`): `Uint8Array`
+▸ **hmac**(`key`, `data`): `Uint8Array`
 
 #### Parameters
 
@@ -717,7 +721,7 @@ ___
 
 ### pbkdf2
 
-▸ `Abstract` **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`<`Uint8Array`\>
+▸ **pbkdf2**(`secret`, `salt`, `iteration`, `keyLength`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
@@ -730,7 +734,7 @@ ___
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -740,7 +744,7 @@ ___
 
 ### sign
 
-▸ `Abstract` **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
+▸ **sign**(`privateKey`, `data`, `dsaEncoding?`): `Uint8Array`
 
 #### Parameters
 
@@ -762,7 +766,7 @@ ___
 
 ### verify
 
-▸ `Abstract` **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
+▸ **verify**(`publicKey`, `data`, `signature`, `dsaEncoding?`): `void`
 
 #### Parameters
 

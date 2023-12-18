@@ -28,7 +28,11 @@
 
 ### constructor
 
-• **new TlvArrayWriter**()
+• **new TlvArrayWriter**(): [`TlvArrayWriter`](exports_tlv.TlvArrayWriter.md)
+
+#### Returns
+
+[`TlvArrayWriter`](exports_tlv.TlvArrayWriter.md)
 
 ## Properties
 
@@ -44,11 +48,11 @@ packages/matter.js/dist/esm/tlv/TlvSchema.d.ts:30
 
 ### toTlvArray
 
-▸ **toTlvArray**(): [`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\>[]
+▸ **toTlvArray**(): [`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\>[]
 
 #### Returns
 
-[`TlvElement`](../modules/exports_tlv.md#tlvelement)<`any`\>[]
+[`TlvElement`](../modules/exports_tlv.md#tlvelement)\<`any`\>[]
 
 #### Defined in
 
@@ -58,7 +62,7 @@ ___
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`_typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`_typeLength`, `value`): `void`
 
 #### Type parameters
 

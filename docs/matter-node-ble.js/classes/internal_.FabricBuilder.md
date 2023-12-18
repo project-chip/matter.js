@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / FabricBuilder
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / FabricBuilder
 
 # Class: FabricBuilder
 
-[<internal>](../modules/internal_.md).FabricBuilder
+[\<internal\>](../modules/internal_.md).FabricBuilder
 
 ## Table of contents
 
@@ -12,6 +12,7 @@
 
 ### Properties
 
+- [caseAuthenticatedTags](internal_.FabricBuilder.md#caseauthenticatedtags)
 - [fabricId](internal_.FabricBuilder.md#fabricid)
 - [fabricIndex](internal_.FabricBuilder.md#fabricindex)
 - [identityProtectionKey](internal_.FabricBuilder.md#identityprotectionkey)
@@ -47,9 +48,23 @@
 
 ### constructor
 
-• **new FabricBuilder**()
+• **new FabricBuilder**(): [`FabricBuilder`](internal_.FabricBuilder.md)
+
+#### Returns
+
+[`FabricBuilder`](internal_.FabricBuilder.md)
 
 ## Properties
+
+### caseAuthenticatedTags
+
+• `Private` **caseAuthenticatedTags**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/fabric/Fabric.d.ts:98
+
+___
 
 ### fabricId
 
@@ -57,7 +72,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:88
+matter.js/dist/esm/fabric/Fabric.d.ts:91
 
 ___
 
@@ -67,7 +82,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:93
+matter.js/dist/esm/fabric/Fabric.d.ts:96
 
 ___
 
@@ -77,7 +92,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:92
+matter.js/dist/esm/fabric/Fabric.d.ts:95
 
 ___
 
@@ -87,7 +102,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:86
+matter.js/dist/esm/fabric/Fabric.d.ts:89
 
 ___
 
@@ -97,7 +112,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:83
+matter.js/dist/esm/fabric/Fabric.d.ts:86
 
 ___
 
@@ -107,7 +122,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:94
+matter.js/dist/esm/fabric/Fabric.d.ts:97
 
 ___
 
@@ -117,7 +132,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:89
+matter.js/dist/esm/fabric/Fabric.d.ts:92
 
 ___
 
@@ -127,7 +142,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:87
+matter.js/dist/esm/fabric/Fabric.d.ts:90
 
 ___
 
@@ -137,7 +152,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:85
+matter.js/dist/esm/fabric/Fabric.d.ts:88
 
 ___
 
@@ -147,7 +162,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:90
+matter.js/dist/esm/fabric/Fabric.d.ts:93
 
 ___
 
@@ -157,7 +172,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:91
+matter.js/dist/esm/fabric/Fabric.d.ts:94
 
 ___
 
@@ -167,13 +182,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:84
+matter.js/dist/esm/fabric/Fabric.d.ts:87
 
 ## Methods
 
 ### build
 
-▸ **build**(`fabricIndex`): `Promise`<[`Fabric`](internal_.Fabric.md)\>
+▸ **build**(`fabricIndex`): `Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 #### Parameters
 
@@ -183,11 +198,11 @@ matter.js/dist/esm/fabric/Fabric.d.ts:84
 
 #### Returns
 
-`Promise`<[`Fabric`](internal_.Fabric.md)\>
+`Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:109
+matter.js/dist/esm/fabric/Fabric.d.ts:113
 
 ___
 
@@ -201,7 +216,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:97
+matter.js/dist/esm/fabric/Fabric.d.ts:101
 
 ___
 
@@ -215,7 +230,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:108
+matter.js/dist/esm/fabric/Fabric.d.ts:112
 
 ___
 
@@ -229,7 +244,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:96
+matter.js/dist/esm/fabric/Fabric.d.ts:100
 
 ___
 
@@ -243,7 +258,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:107
+matter.js/dist/esm/fabric/Fabric.d.ts:111
 
 ___
 
@@ -257,7 +272,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:95
+matter.js/dist/esm/fabric/Fabric.d.ts:99
 
 ___
 
@@ -271,7 +286,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:99
+matter.js/dist/esm/fabric/Fabric.d.ts:103
 
 ___
 
@@ -291,7 +306,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:105
+matter.js/dist/esm/fabric/Fabric.d.ts:109
 
 ___
 
@@ -311,7 +326,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:106
+matter.js/dist/esm/fabric/Fabric.d.ts:110
 
 ___
 
@@ -331,7 +346,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:104
+matter.js/dist/esm/fabric/Fabric.d.ts:108
 
 ___
 
@@ -351,7 +366,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:101
+matter.js/dist/esm/fabric/Fabric.d.ts:105
 
 ___
 
@@ -371,7 +386,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:100
+matter.js/dist/esm/fabric/Fabric.d.ts:104
 
 ___
 
@@ -391,7 +406,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:98
+matter.js/dist/esm/fabric/Fabric.d.ts:102
 
 ___
 
@@ -411,7 +426,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:103
+matter.js/dist/esm/fabric/Fabric.d.ts:107
 
 ___
 
@@ -431,4 +446,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/fabric/Fabric.d.ts:102
+matter.js/dist/esm/fabric/Fabric.d.ts:106

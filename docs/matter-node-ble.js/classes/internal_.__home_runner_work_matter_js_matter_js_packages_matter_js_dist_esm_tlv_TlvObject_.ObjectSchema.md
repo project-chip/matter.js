@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](../modules/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) / ObjectSchema
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / ["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](../modules/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md) / ObjectSchema
 
-# Class: ObjectSchema<F\>
+# Class: ObjectSchema\<F\>
 
-[<internal>](../modules/internal_.md).["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](../modules/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md).ObjectSchema
+[\<internal\>](../modules/internal_.md).["/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvObject"](../modules/internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.md).ObjectSchema
 
 Schema to encode an object in TLV.
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 
 ## Hierarchy
 
-- [`TlvSchema`](internal_.TlvSchema.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>\>
+- [`TlvSchema`](internal_.TlvSchema.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>\>
 
   ↳ **`ObjectSchema`**
 
@@ -53,7 +53,7 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 
 ### constructor
 
-• **new ObjectSchema**<`F`\>(`fieldDefinitions`, `type?`)
+• **new ObjectSchema**\<`F`\>(`fieldDefinitions`, `type?`): [`ObjectSchema`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.ObjectSchema.md)\<`F`\>
 
 #### Type parameters
 
@@ -68,13 +68,17 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 | `fieldDefinitions` | `F` |
 | `type?` | [`Structure`](../modules/internal_.md#structure) \| [`List`](../modules/internal_.md#list) |
 
+#### Returns
+
+[`ObjectSchema`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.ObjectSchema.md)\<`F`\>
+
 #### Overrides
 
-TlvSchema&lt;TypeFromFields&lt;F\&gt;\&gt;.constructor
+TlvSchema\&lt;TypeFromFields\&lt;F\&gt;\&gt;.constructor
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:44
+matter.js/dist/esm/tlv/TlvObject.d.ts:55
 
 ## Properties
 
@@ -84,7 +88,7 @@ matter.js/dist/esm/tlv/TlvObject.d.ts:44
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:43
+matter.js/dist/esm/tlv/TlvObject.d.ts:54
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:41
+matter.js/dist/esm/tlv/TlvObject.d.ts:52
 
 ___
 
@@ -104,13 +108,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:42
+matter.js/dist/esm/tlv/TlvObject.d.ts:53
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 Decodes the encoded data using the schema.
 
@@ -123,7 +127,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -137,7 +141,7 @@ ___
 
 ### decodeInternal
 
-▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -147,7 +151,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -161,7 +165,7 @@ ___
 
 ### decodeTlv
 
-▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -171,7 +175,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -200,7 +204,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `tag?` | [`TlvTag`](../modules/internal_.md#tlvtag) |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 
 #### Inherited from
 
@@ -214,7 +218,7 @@ ___
 
 ### decodeTlvInternalValue
 
-▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -225,7 +229,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -233,7 +237,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:46
+matter.js/dist/esm/tlv/TlvObject.d.ts:57
 
 ___
 
@@ -247,7 +251,7 @@ Encodes the value using the schema.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -271,7 +275,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -295,7 +299,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -320,7 +324,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `writer` | [`TlvWriter`](../interfaces/internal_.TlvWriter.md) |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 | `tag?` | [`TlvTag`](../modules/internal_.md#tlvtag) |
 
 #### Returns
@@ -333,26 +337,26 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:45
+matter.js/dist/esm/tlv/TlvObject.d.ts:56
 
 ___
 
 ### injectField
 
-▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `fieldValue` | `any` |
 | `injectChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -360,25 +364,25 @@ TlvSchema.injectField
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:48
+matter.js/dist/esm/tlv/TlvObject.d.ts:59
 
 ___
 
 ### removeField
 
-▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `removeChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -386,7 +390,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:49
+matter.js/dist/esm/tlv/TlvObject.d.ts:60
 
 ___
 
@@ -398,7 +402,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -410,4 +414,4 @@ TlvSchema.validate
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:47
+matter.js/dist/esm/tlv/TlvObject.d.ts:58

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Key
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Key
 
 # Interface: Key
 
-[<internal>](../modules/internal_.md).Key
+[\<internal\>](../modules/internal_.md).Key
 
 Represents a cryptographic key.
 

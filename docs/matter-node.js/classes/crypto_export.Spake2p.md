@@ -33,7 +33,7 @@
 
 ### constructor
 
-• **new Spake2p**(`context`, `random`, `w0`)
+• **new Spake2p**(`context`, `random`, `w0`): [`Spake2p`](crypto_export.Spake2p.md)
 
 #### Parameters
 
@@ -42,6 +42,10 @@
 | `context` | `Uint8Array` |
 | `random` | `BN` |
 | `w0` | `BN` |
+
+#### Returns
+
+[`Spake2p`](crypto_export.Spake2p.md)
 
 #### Defined in
 
@@ -111,7 +115,7 @@ packages/matter.js/dist/esm/crypto/Spake2p.d.ts:15
 
 ### computeSecretAndVerifiersFromX
 
-▸ **computeSecretAndVerifiersFromX**(`L`, `X`, `Y`): `Promise`<{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
+▸ **computeSecretAndVerifiersFromX**(`L`, `X`, `Y`): `Promise`\<\{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
 
 #### Parameters
 
@@ -123,7 +127,7 @@ packages/matter.js/dist/esm/crypto/Spake2p.d.ts:15
 
 #### Returns
 
-`Promise`<{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
+`Promise`\<\{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
 
 #### Defined in
 
@@ -133,7 +137,7 @@ ___
 
 ### computeSecretAndVerifiersFromY
 
-▸ **computeSecretAndVerifiersFromY**(`w1`, `X`, `Y`): `Promise`<{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
+▸ **computeSecretAndVerifiersFromY**(`w1`, `X`, `Y`): `Promise`\<\{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
 
 #### Parameters
 
@@ -145,7 +149,7 @@ ___
 
 #### Returns
 
-`Promise`<{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
+`Promise`\<\{ `Ke`: `Uint8Array` ; `hAY`: `Uint8Array` ; `hBX`: `Uint8Array`  }\>
 
 #### Defined in
 
@@ -183,7 +187,7 @@ ___
 
 ### computeW0L
 
-▸ `Static` **computeW0L**(`pbkdfParameters`, `pin`): `Promise`<{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
+▸ **computeW0L**(`pbkdfParameters`, `pin`): `Promise`\<\{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
 
 #### Parameters
 
@@ -194,7 +198,7 @@ ___
 
 #### Returns
 
-`Promise`<{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
+`Promise`\<\{ `L`: `Uint8Array` ; `w0`: `BN`  }\>
 
 #### Defined in
 
@@ -204,7 +208,7 @@ ___
 
 ### computeW0W1
 
-▸ `Static` **computeW0W1**(`«destructured»`, `pin`): `Promise`<{ `w0`: `BN` ; `w1`: `BN`  }\>
+▸ **computeW0W1**(`«destructured»`, `pin`): `Promise`\<\{ `w0`: `BN` ; `w1`: `BN`  }\>
 
 #### Parameters
 
@@ -215,7 +219,7 @@ ___
 
 #### Returns
 
-`Promise`<{ `w0`: `BN` ; `w1`: `BN`  }\>
+`Promise`\<\{ `w0`: `BN` ; `w1`: `BN`  }\>
 
 #### Defined in
 
@@ -225,7 +229,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`context`, `w0`): [`Spake2p`](crypto_export.Spake2p.md)
+▸ **create**(`context`, `w0`): [`Spake2p`](crypto_export.Spake2p.md)
 
 #### Parameters
 

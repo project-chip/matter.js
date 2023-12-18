@@ -8,7 +8,7 @@ Schema to encode void.
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`void`\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`void`\>
 
   ↳ **`VoidSchema`**
 
@@ -39,11 +39,15 @@ Schema to encode void.
 
 ### constructor
 
-• **new VoidSchema**()
+• **new VoidSchema**(): [`VoidSchema`](exports_tlv.VoidSchema.md)
+
+#### Returns
+
+[`VoidSchema`](exports_tlv.VoidSchema.md)
 
 #### Inherited from
 
-TlvSchema<void\>.constructor
+TlvSchema\<void\>.constructor
 
 ## Methods
 

@@ -33,7 +33,7 @@
 
 ### constructor
 
-• **new NetworkFake**(`mac`, `ips`)
+• **new NetworkFake**(`mac`, `ips`): [`NetworkFake`](net_export.NetworkFake.md)
 
 #### Parameters
 
@@ -41,6 +41,10 @@
 | :------ | :------ |
 | `mac` | `string` |
 | `ips` | `string`[] |
+
+#### Returns
+
+[`NetworkFake`](net_export.NetworkFake.md)
 
 #### Overrides
 
@@ -96,11 +100,11 @@ packages/matter.js/dist/esm/net/Network.d.ts:11
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -114,7 +118,7 @@ ___
 
 ### createUdpChannel
 
-▸ **createUdpChannel**(`options`): `Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+▸ **createUdpChannel**(`options`): `Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Parameters
 
@@ -124,7 +128,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+`Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Overrides
 

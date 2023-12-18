@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / DataWriter
 
-# Class: DataWriter<E\>
+# Class: DataWriter\<E\>
 
 [util/export](../modules/util_export.md).DataWriter
 
@@ -43,7 +43,7 @@ Writer that auto-increments its offset after each write.
 
 ### constructor
 
-• **new DataWriter**<`E`\>(`endian`)
+• **new DataWriter**\<`E`\>(`endian`): [`DataWriter`](util_export.DataWriter.md)\<`E`\>
 
 #### Type parameters
 
@@ -56,6 +56,10 @@ Writer that auto-increments its offset after each write.
 | Name | Type |
 | :------ | :------ |
 | `endian` | `E` |
+
+#### Returns
+
+[`DataWriter`](util_export.DataWriter.md)\<`E`\>
 
 #### Defined in
 

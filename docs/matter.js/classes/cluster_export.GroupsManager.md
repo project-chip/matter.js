@@ -23,13 +23,17 @@
 
 ### constructor
 
-• **new GroupsManager**()
+• **new GroupsManager**(): [`GroupsManager`](cluster_export.GroupsManager.md)
+
+#### Returns
+
+[`GroupsManager`](cluster_export.GroupsManager.md)
 
 ## Methods
 
 ### getGroupName
 
-▸ `Static` **getGroupName**(`fabric`, `endpointId`, `groupId`): `undefined` \| `string`
+▸ **getGroupName**(`fabric`, `endpointId`, `groupId`): `undefined` \| `string`
 
 #### Parameters
 
@@ -45,13 +49,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
 
 ___
 
 ### getGroups
 
-▸ `Static` **getGroups**(`fabric`, `endpointId`): `Map`<[`GroupId`](../modules/datatype_export.md#groupid), `string`\>
+▸ **getGroups**(`fabric`, `endpointId`): `Map`\<[`GroupId`](../modules/datatype_export.md#groupid), `string`\>
 
 #### Parameters
 
@@ -62,17 +66,17 @@ ___
 
 #### Returns
 
-`Map`<[`GroupId`](../modules/datatype_export.md#groupid), `string`\>
+`Map`\<[`GroupId`](../modules/datatype_export.md#groupid), `string`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
 
 ___
 
 ### hasGroup
 
-▸ `Static` **hasGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **hasGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
 
 #### Parameters
 
@@ -88,13 +92,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
 
 ___
 
 ### removeAllGroups
 
-▸ `Static` **removeAllGroups**(`fabric`, `endpointId`): `void`
+▸ **removeAllGroups**(`fabric`, `endpointId`): `void`
 
 #### Parameters
 
@@ -109,13 +113,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
 
 ___
 
 ### removeGroup
 
-▸ `Static` **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
+▸ **removeGroup**(`fabric`, `endpointId`, `groupId`): `boolean`
 
 #### Parameters
 
@@ -131,13 +135,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
 
 ___
 
 ### setGroup
 
-▸ `Static` **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
+▸ **setGroup**(`fabric`, `endpointId`, `groupId`, `groupName`): `void`
 
 #### Parameters
 
@@ -154,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)

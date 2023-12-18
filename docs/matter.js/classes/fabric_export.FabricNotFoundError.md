@@ -22,7 +22,7 @@ Specific Error for when a fabric is not found.
 
 ### constructor
 
-• **new FabricNotFoundError**(`message?`)
+• **new FabricNotFoundError**(`message?`): [`FabricNotFoundError`](fabric_export.FabricNotFoundError.md)
 
 #### Parameters
 
@@ -30,10 +30,14 @@ Specific Error for when a fabric is not found.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`FabricNotFoundError`](fabric_export.FabricNotFoundError.md)
+
 #### Inherited from
 
 [MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

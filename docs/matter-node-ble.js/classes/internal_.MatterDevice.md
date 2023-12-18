@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / MatterDevice
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / MatterDevice
 
 # Class: MatterDevice
 
-[<internal>](../modules/internal_.md).MatterDevice
+[\<internal\>](../modules/internal_.md).MatterDevice
 
 ## Table of contents
 
@@ -81,7 +81,7 @@
 
 ### constructor
 
-• **new MatterDevice**(`deviceName`, `deviceType`, `vendorId`, `productId`, `discriminator`, `initialPasscode`, `storage`, `commissioningChangedCallback`, `sessionChangedCallback`)
+• **new MatterDevice**(`deviceName`, `deviceType`, `vendorId`, `productId`, `discriminator`, `initialPasscode`, `storage`, `commissioningChangedCallback`, `sessionChangedCallback`): [`MatterDevice`](internal_.MatterDevice.md)
 
 #### Parameters
 
@@ -96,6 +96,10 @@
 | `storage` | [`StorageContext`](internal_.StorageContext.md) |
 | `commissioningChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
 | `sessionChangedCallback` | (`fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex)) => `void` |
+
+#### Returns
+
+[`MatterDevice`](internal_.MatterDevice.md)
 
 #### Defined in
 
@@ -375,7 +379,7 @@ ___
 
 ### addFabric
 
-▸ **addFabric**(`fabric`): `Promise`<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
+▸ **addFabric**(`fabric`): `Promise`\<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
 
 #### Parameters
 
@@ -385,7 +389,7 @@ ___
 
 #### Returns
 
-`Promise`<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
+`Promise`\<[`FabricIndex`](../modules/internal_.md#fabricindex)\>
 
 #### Defined in
 
@@ -401,7 +405,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `protocol` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `protocol` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 
 #### Returns
 
@@ -455,7 +459,7 @@ ___
 
 ### allowBasicCommissioning
 
-▸ **allowBasicCommissioning**(`commissioningEndCallback?`): `Promise`<`void`\>
+▸ **allowBasicCommissioning**(`commissioningEndCallback?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -465,7 +469,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -475,7 +479,7 @@ ___
 
 ### allowEnhancedCommissioning
 
-▸ **allowEnhancedCommissioning**(`discriminator`, `paseServer`, `commissioningEndCallback`): `Promise`<`void`\>
+▸ **allowEnhancedCommissioning**(`discriminator`, `paseServer`, `commissioningEndCallback`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -487,7 +491,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -497,7 +501,7 @@ ___
 
 ### announce
 
-▸ **announce**(`announceOnce?`): `Promise`<`void`\>
+▸ **announce**(`announceOnce?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -507,7 +511,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -517,7 +521,7 @@ ___
 
 ### armFailSafe
 
-▸ **armFailSafe**(`expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `associatedFabric`, `endpoint`): `Promise`<`void`\>
+▸ **armFailSafe**(`expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `associatedFabric`, `endpoint`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -530,7 +534,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -560,11 +564,11 @@ ___
 
 ### completeCommission
 
-▸ **completeCommission**(): `Promise`<`void`\>
+▸ **completeCommission**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -574,7 +578,7 @@ ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterDevice`](internal_.MatterDevice.md)\>\>
+▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>\>
 
 #### Parameters
 
@@ -593,7 +597,7 @@ ___
 
 #### Returns
 
-`Promise`<[`SecureSession`](internal_.SecureSession.md)<[`MatterDevice`](internal_.MatterDevice.md)\>\>
+`Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>\>
 
 #### Defined in
 
@@ -603,11 +607,11 @@ ___
 
 ### endCommissioning
 
-▸ **endCommissioning**(): `Promise`<`void`\>
+▸ **endCommissioning**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -631,7 +635,7 @@ ___
 
 ### findDevice
 
-▸ **findDevice**(`fabric`, `nodeId`, `timeOutSeconds?`): `Promise`<`undefined` \| { `channel`: [`Channel`](../interfaces/internal_.Channel.md)<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
+▸ **findDevice**(`fabric`, `nodeId`, `timeOutSeconds?`): `Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
 
 #### Parameters
 
@@ -643,7 +647,7 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| { `channel`: [`Channel`](../interfaces/internal_.Channel.md)<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
+`Promise`\<`undefined` \| \{ `channel`: [`Channel`](../interfaces/internal_.Channel.md)\<`Uint8Array`\> ; `session`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>  }\>
 
 #### Defined in
 
@@ -694,11 +698,11 @@ ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
@@ -824,7 +828,7 @@ ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)<[`MatterDevice`](internal_.MatterDevice.md)\>
+▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Parameters
 
@@ -836,7 +840,7 @@ ___
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<[`MatterDevice`](internal_.MatterDevice.md)\>
+[`MessageExchange`](internal_.MessageExchange.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>
 
 #### Defined in
 
@@ -874,11 +878,11 @@ ___
 
 ### removePaseSession
 
-▸ **removePaseSession**(): `Promise`<`void`\>
+▸ **removePaseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -908,7 +912,7 @@ ___
 
 ### sendCommissionableAnnouncement
 
-▸ **sendCommissionableAnnouncement**(`mode`, `discriminator?`): `Promise`<`void`\>
+▸ **sendCommissionableAnnouncement**(`mode`, `discriminator?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -919,7 +923,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -929,7 +933,7 @@ ___
 
 ### sendFabricAnnouncements
 
-▸ **sendFabricAnnouncements**(`fabrics`, `expireCommissioningAnnouncement?`): `Promise`<`void`\>
+▸ **sendFabricAnnouncements**(`fabrics`, `expireCommissioningAnnouncement?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -940,7 +944,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -950,11 +954,11 @@ ___
 
 ### start
 
-▸ **start**(): `Promise`<`void`\>
+▸ **start**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -964,11 +968,11 @@ ___
 
 ### startAnnouncement
 
-▸ **startAnnouncement**(): `Promise`<`void`\>
+▸ **startAnnouncement**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -978,11 +982,11 @@ ___
 
 ### stop
 
-▸ **stop**(): `Promise`<`void`\>
+▸ **stop**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventData
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventData
 
-# Interface: EventData<T\>
+# Interface: EventData\<T\>
 
-[<internal>](../modules/internal_.md).EventData
+[\<internal\>](../modules/internal_.md).EventData
 
 Data of one Event
 

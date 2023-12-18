@@ -24,7 +24,9 @@ Priorities define rules that control how values are merged.
 
 #### Index signature
 
-▪ [typeName: `string`]: { `[fieldName: string]`: `string`[];  }
+▪ [typeName: `string`]: \{ `[fieldName: string]`: `string`[];  }
+
+An element type or "*" to match all elements.
 
 #### Defined in
 

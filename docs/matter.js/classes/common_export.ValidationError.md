@@ -5,10 +5,11 @@
 [common/export](../modules/common_export.md).ValidationError
 
 Error thrown when Data validation fails. Please check the provided data.
+We encode this as StatusResponseError because in most places we want to return a StatusResponseError anyway.
 
 ## Hierarchy
 
-- [`MatterError`](common_export.MatterError.md)
+- [`StatusResponseError`](protocol_interaction_export.StatusResponseError.md)
 
   ↳ **`ValidationError`**
 
@@ -18,22 +19,59 @@ Error thrown when Data validation fails. Please check the provided data.
 
 - [constructor](common_export.ValidationError.md#constructor)
 
+### Properties
+
+- [clusterCode](common_export.ValidationError.md#clustercode)
+- [code](common_export.ValidationError.md#code)
+
 ## Constructors
 
 ### constructor
 
-• **new ValidationError**(`message?`)
+• **new ValidationError**(`message`): [`ValidationError`](common_export.ValidationError.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `message?` | `string` |
+| `message` | `string` |
 
-#### Inherited from
+#### Returns
 
-[MatterError](common_export.MatterError.md).[constructor](common_export.MatterError.md#constructor)
+[`ValidationError`](common_export.ValidationError.md)
+
+#### Overrides
+
+[StatusResponseError](protocol_interaction_export.StatusResponseError.md).[constructor](protocol_interaction_export.StatusResponseError.md#constructor)
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+[packages/matter.js/src/common/ValidationError.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/ValidationError.ts#L14)
+
+## Properties
+
+### clusterCode
+
+• `Optional` `Readonly` **clusterCode**: `number`
+
+#### Inherited from
+
+[StatusResponseError](protocol_interaction_export.StatusResponseError.md).[clusterCode](protocol_interaction_export.StatusResponseError.md#clustercode)
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L45)
+
+___
+
+### code
+
+• `Readonly` **code**: [`StatusCode`](../enums/protocol_interaction_export.StatusCode.md)
+
+#### Inherited from
+
+[StatusResponseError](protocol_interaction_export.StatusResponseError.md).[code](protocol_interaction_export.StatusResponseError.md#code)
+
+#### Defined in
+
+[packages/matter.js/src/protocol/interaction/StatusCode.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/StatusCode.ts#L44)

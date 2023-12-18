@@ -28,17 +28,21 @@
 
 ### constructor
 
-• **new TlvByteArrayWriter**()
+• **new TlvByteArrayWriter**(): [`TlvByteArrayWriter`](tlv_export.TlvByteArrayWriter.md)
+
+#### Returns
+
+[`TlvByteArrayWriter`](tlv_export.TlvByteArrayWriter.md)
 
 ## Properties
 
 ### writer
 
-• `Private` `Readonly` **writer**: [`DataWriter`](util_export.DataWriter.md)<[`Little`](../enums/util_export.Endian.md#little)\>
+• `Private` `Readonly` **writer**: [`DataWriter`](util_export.DataWriter.md)\<[`Little`](../enums/util_export.Endian.md#little)\>
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:107](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L107)
+[packages/matter.js/src/tlv/TlvSchema.ts:107](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L107)
 
 ## Methods
 
@@ -52,13 +56,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:117](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L117)
+[packages/matter.js/src/tlv/TlvSchema.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L117)
 
 ___
 
 ### writePrimitive
 
-▸ **writePrimitive**<`T`\>(`typeLength`, `value`): `void`
+▸ **writePrimitive**\<`T`\>(`typeLength`, `value`): `void`
 
 #### Type parameters
 
@@ -83,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L113)
+[packages/matter.js/src/tlv/TlvSchema.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L113)
 
 ___
 
@@ -108,4 +112,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/tlv/TlvSchema.ts#L109)
+[packages/matter.js/src/tlv/TlvSchema.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L109)

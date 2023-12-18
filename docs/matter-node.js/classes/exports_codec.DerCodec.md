@@ -33,7 +33,11 @@
 
 ### constructor
 
-• **new DerCodec**()
+• **new DerCodec**(): [`DerCodec`](exports_codec.DerCodec.md)
+
+#### Returns
+
+[`DerCodec`](exports_codec.DerCodec.md)
 
 ## Properties
 
@@ -149,7 +153,7 @@ packages/matter.js/dist/esm/codec/DerCodec.d.ts:50
 
 ### decode
 
-▸ `Static` **decode**(`data`): [`DerNode`](../modules/exports_codec.md#dernode)
+▸ **decode**(`data`): [`DerNode`](../modules/exports_codec.md#dernode)
 
 #### Parameters
 
@@ -169,7 +173,7 @@ ___
 
 ### encode
 
-▸ `Static` **encode**(`value`): `Uint8Array`
+▸ **encode**(`value`): `Uint8Array`
 
 #### Parameters
 

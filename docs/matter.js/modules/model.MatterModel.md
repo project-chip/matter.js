@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/models/MatterModel.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/models/MatterModel.ts#L78)
+[packages/matter.js/src/model/models/MatterModel.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/models/MatterModel.ts#L78)

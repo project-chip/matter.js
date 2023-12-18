@@ -1,14 +1,14 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ManualPairingCodeSchema
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ManualPairingCodeSchema
 
 # Class: ManualPairingCodeSchema
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ManualPairingCodeSchema
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ManualPairingCodeSchema
 
 See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificationV1_0.md) § 5.1.4.1 Table 38/39/40
 
 ## Hierarchy
 
-- [`Schema`](schema_export.Schema.md)<[`ManualPairingData`](../modules/schema_export.md#manualpairingdata), `string`\>
+- [`Schema`](schema_export.Schema.md)\<[`ManualPairingData`](../modules/schema_export.md#manualpairingdata), `string`\>
 
   ↳ **`ManualPairingCodeSchema`**
 
@@ -30,7 +30,11 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 ### constructor
 
-• **new ManualPairingCodeSchema**()
+• **new ManualPairingCodeSchema**(): [`ManualPairingCodeSchema`](export._internal_.ManualPairingCodeSchema.md)
+
+#### Returns
+
+[`ManualPairingCodeSchema`](export._internal_.ManualPairingCodeSchema.md)
 
 #### Inherited from
 
@@ -61,13 +65,13 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`encoded`): [`ManualPairingData`](../modules/schema_export.md#manualpairingdata)
+▸ **decodeInternal**(`encoded`): [`ManualPairingData`](../modules/schema_export.md#manualpairingdata)
 
 #### Parameters
 
@@ -85,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:100](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/PairingCodeSchema.ts#L100)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:100](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/PairingCodeSchema.ts#L100)
 
 ___
 
@@ -111,13 +115,13 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`«destructured»`): `string`
+▸ **encodeInternal**(`«destructured»`): `string`
 
 #### Parameters
 
@@ -135,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/PairingCodeSchema.ts#L84)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/PairingCodeSchema.ts#L84)
 
 ___
 
@@ -161,4 +165,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

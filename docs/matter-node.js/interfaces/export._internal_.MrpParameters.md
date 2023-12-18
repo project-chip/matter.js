@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / MrpParameters
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / MrpParameters
 
 # Interface: MrpParameters
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).MrpParameters
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).MrpParameters
 
 ## Table of contents
 

@@ -43,7 +43,9 @@
 
 - [CommonName\_X520](exports_certificate.md#commonname_x520)
 - [FabricId\_Matter](exports_certificate.md#fabricid_matter)
+- [FirmwareSigningId\_Matter](exports_certificate.md#firmwaresigningid_matter)
 - [IcacId\_Matter](exports_certificate.md#icacid_matter)
+- [NocCat\_Matter](exports_certificate.md#noccat_matter)
 - [NodeId\_Matter](exports_certificate.md#nodeid_matter)
 - [ProductId\_Matter](exports_certificate.md#productid_matter)
 - [RcacId\_Matter](exports_certificate.md#rcacid_matter)
@@ -55,31 +57,31 @@
 
 ### IntermediateCertificate
 
-Ƭ **IntermediateCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvIntermediateCertificate`](exports_certificate.md#tlvintermediatecertificate)\>
+Ƭ **IntermediateCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvIntermediateCertificate`](exports_certificate.md#tlvintermediatecertificate)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:216
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:222
 
 ___
 
 ### OperationalCertificate
 
-Ƭ **OperationalCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvOperationalCertificate`](exports_certificate.md#tlvoperationalcertificate)\>
+Ƭ **OperationalCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvOperationalCertificate`](exports_certificate.md#tlvoperationalcertificate)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:217
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:223
 
 ___
 
 ### RootCertificate
 
-Ƭ **RootCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)<typeof [`TlvRootCertificate`](exports_certificate.md#tlvrootcertificate)\>
+Ƭ **RootCertificate**: [`TypeFromSchema`](exports_tlv.md#typefromschema)\<typeof [`TlvRootCertificate`](exports_certificate.md#tlvrootcertificate)\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:215
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:221
 
 ## Variables
 
@@ -169,7 +171,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:201
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:207
 
 ___
 
@@ -179,7 +181,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:86
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:92
 
 ___
 
@@ -189,7 +191,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:58
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:63
 
 ___
 
@@ -199,7 +201,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:31
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:36
 
 ## Functions
 
@@ -221,7 +223,7 @@ commonName = ASN.1 OID 2.5.4.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:18
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:19
 
 ___
 
@@ -243,7 +245,29 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:26
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:29
+
+___
+
+### FirmwareSigningId\_Matter
+
+▸ **FirmwareSigningId_Matter**(`signingId`): `any`[]
+
+matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `signingId` | `number` |
+
+#### Returns
+
+`any`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:23
 
 ___
 
@@ -265,7 +289,29 @@ matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:22
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:25
+
+___
+
+### NocCat\_Matter
+
+▸ **NocCat_Matter**(`cat`): `any`[]
+
+matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `cat` | `number` |
+
+#### Returns
+
+`any`[]
+
+#### Defined in
+
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:31
 
 ___
 
@@ -287,7 +333,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:20
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:21
 
 ___
 
@@ -295,7 +341,7 @@ ___
 
 ▸ **ProductId_Matter**(`id`): `any`[]
 
-matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2
+matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2
 
 #### Parameters
 
@@ -309,7 +355,7 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.3724 4.2.2
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:30
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:35
 
 ___
 
@@ -331,7 +377,7 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:24
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:27
 
 ___
 
@@ -353,7 +399,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:28
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:33
 
 ___
 
@@ -374,7 +420,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:16
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:17
 
 ___
 
@@ -394,4 +440,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:15
+packages/matter.js/dist/esm/certificate/CertificateManager.d.ts:16

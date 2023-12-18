@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/securechannel](../modules/exports_securechannel.md) / SecureChannelMessenger
 
-# Class: SecureChannelMessenger<ContextT\>
+# Class: SecureChannelMessenger\<ContextT\>
 
 [exports/securechannel](../modules/exports_securechannel.md).SecureChannelMessenger
 
@@ -50,7 +50,7 @@
 
 ### constructor
 
-• **new SecureChannelMessenger**<`ContextT`\>(`exchange`)
+• **new SecureChannelMessenger**\<`ContextT`\>(`exchange`): [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -62,7 +62,11 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\> |
+
+#### Returns
+
+[`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -72,7 +76,7 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<`ContextT`\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -92,11 +96,11 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:2
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -120,7 +124,7 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Parameters
 
@@ -130,7 +134,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+`Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Defined in
 
@@ -140,7 +144,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -153,11 +157,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
@@ -167,7 +171,7 @@ ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -181,11 +185,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -195,11 +199,11 @@ ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -209,7 +213,7 @@ ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -219,7 +223,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -229,11 +233,11 @@ ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -243,7 +247,7 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -263,11 +267,11 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

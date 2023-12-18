@@ -12,7 +12,7 @@ that do not involve access or conformance.
 
 ## Hierarchy
 
-- [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Quality.md#definition)\>
+- [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Quality.md#definition)\>
 
   ↳ **`Quality`**
 
@@ -57,7 +57,7 @@ that do not involve access or conformance.
 
 ### constructor
 
-• **new Quality**(`definition`)
+• **new Quality**(`definition`): [`Quality`](exports_model.Quality-1.md)
 
 Initialize from a Quality.All definition or a string conforming to the
 "other quality" DSL defined in the Matter specification.
@@ -67,6 +67,10 @@ Initialize from a Quality.All definition or a string conforming to the
 | Name | Type |
 | :------ | :------ |
 | `definition` | [`Definition`](../modules/exports_model.Quality.md#definition) |
+
+#### Returns
+
+[`Quality`](exports_model.Quality-1.md)
 
 #### Overrides
 
@@ -317,7 +321,7 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Quality.md#definition)\>
+▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Quality.md#definition)\>
 
 #### Parameters
 
@@ -327,7 +331,7 @@ ___
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<[`Definition`](../modules/exports_model.Quality.md#definition)\>
+[`Aspect`](exports_model.Aspect.md)\<[`Definition`](../modules/exports_model.Quality.md#definition)\>
 
 #### Inherited from
 

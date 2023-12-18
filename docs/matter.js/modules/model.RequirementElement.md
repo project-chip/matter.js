@@ -23,11 +23,11 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)<[`RequirementElement`](model.md#requirementelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`RequirementElement`](model.md#requirementelement)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L40)
+[packages/matter.js/src/model/elements/RequirementElement.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L40)
 
 ___
 
@@ -37,9 +37,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L38)
+[packages/matter.js/src/model/elements/RequirementElement.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L38)
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L39)
+[packages/matter.js/src/model/elements/RequirementElement.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L39)
 
 ## Variables
 
@@ -49,6 +49,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L38)
+[packages/matter.js/src/model/elements/RequirementElement.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L38)
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L39)
+[packages/matter.js/src/model/elements/RequirementElement.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L39)

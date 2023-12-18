@@ -46,7 +46,7 @@
 
 ### constructor
 
-• **new BtpSessionHandler**(`role`, `btpVersion`, `fragmentSize`, `clientWindowSize`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`)
+• **new BtpSessionHandler**(`role`, `btpVersion`, `fragmentSize`, `clientWindowSize`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`): [`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)
 
 Creates a new BTP session handler
 
@@ -58,9 +58,13 @@ Creates a new BTP session handler
 | `btpVersion` | `number` | The BTP protocol version to use |
 | `fragmentSize` | `number` | The fragment size to use for the messages |
 | `clientWindowSize` | `number` | The client window size to use |
-| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`<`void`\> | Callback to write data to the BLE transport |
-| `disconnectBleCallback` | () => `Promise`<`void`\> | Callback to disconnect the BLE transport |
-| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`<`void`\> | Callback to handle a Matter message payload |
+| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`\<`void`\> | Callback to write data to the BLE transport |
+| `disconnectBleCallback` | () => `Promise`\<`void`\> | Callback to disconnect the BLE transport |
+| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`\<`void`\> | Callback to handle a Matter message payload |
+
+#### Returns
+
+[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)
 
 #### Defined in
 
@@ -278,13 +282,13 @@ packages/matter.js/dist/esm/ble/BtpSessionHandler.d.ts:18
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 Close the BTP session. This method is called when the BLE transport is disconnected and so the BTP session gets closed.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -310,7 +314,7 @@ ___
 
 ### handleIncomingBleData
 
-▸ **handleIncomingBleData**(`data`): `Promise`<`void`\>
+▸ **handleIncomingBleData**(`data`): `Promise`\<`void`\>
 
 Handle incoming data from the transport layer and hand over completely received matter messages to the
 ExchangeManager layer
@@ -323,7 +327,7 @@ ExchangeManager layer
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -333,7 +337,7 @@ ___
 
 ### sendMatterMessage
 
-▸ **sendMatterMessage**(`data`): `Promise`<`void`\>
+▸ **sendMatterMessage**(`data`): `Promise`\<`void`\>
 
 Send a Matter message to the transport layer, but before that encode it into a BTP packet and potentially split
 it into multiple segments. This Method is indirectly called by the ExchangeManager layer when a Matter message
@@ -347,7 +351,7 @@ should be sent.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -357,20 +361,20 @@ ___
 
 ### createAsCentral
 
-▸ `Static` **createAsCentral**(`handshakeResponsePayload`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`): `Promise`<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
+▸ **createAsCentral**(`handshakeResponsePayload`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`): `Promise`\<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `handshakeResponsePayload` | `Uint8Array` |
-| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`<`void`\> |
-| `disconnectBleCallback` | () => `Promise`<`void`\> |
-| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`<`void`\> |
+| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`\<`void`\> |
+| `disconnectBleCallback` | () => `Promise`\<`void`\> |
+| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`\<`void`\> |
 
 #### Returns
 
-`Promise`<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
+`Promise`\<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
 
 #### Defined in
 
@@ -380,7 +384,7 @@ ___
 
 ### createFromHandshakeRequest
 
-▸ `Static` **createFromHandshakeRequest**(`maxDataSize`, `handshakeRequestPayload`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`): `Promise`<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
+▸ **createFromHandshakeRequest**(`maxDataSize`, `handshakeRequestPayload`, `writeBleCallback`, `disconnectBleCallback`, `handleMatterMessagePayload`): `Promise`\<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
 
 Factory method to create a new BTPSessionHandler from a received handshake request
 
@@ -390,13 +394,13 @@ Factory method to create a new BTPSessionHandler from a received handshake reque
 | :------ | :------ |
 | `maxDataSize` | `undefined` \| `number` |
 | `handshakeRequestPayload` | `Uint8Array` |
-| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`<`void`\> |
-| `disconnectBleCallback` | () => `Promise`<`void`\> |
-| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`<`void`\> |
+| `writeBleCallback` | (`data`: `Uint8Array`) => `Promise`\<`void`\> |
+| `disconnectBleCallback` | () => `Promise`\<`void`\> |
+| `handleMatterMessagePayload` | (`data`: `Uint8Array`) => `Promise`\<`void`\> |
 
 #### Returns
 
-`Promise`<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
+`Promise`\<[`BtpSessionHandler`](exports_ble.BtpSessionHandler.md)\>
 
 #### Defined in
 

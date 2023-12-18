@@ -22,7 +22,11 @@
 
 ### constructor
 
-• **new MessageCounter**()
+• **new MessageCounter**(): [`MessageCounter`](protocol_export.MessageCounter.md)
+
+#### Returns
+
+[`MessageCounter`](protocol_export.MessageCounter.md)
 
 ## Properties
 
@@ -32,7 +36,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:240](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L240)
+[packages/matter.js/src/protocol/ExchangeManager.ts:256](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L256)
 
 ## Methods
 
@@ -46,4 +50,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ExchangeManager.ts:242](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ExchangeManager.ts#L242)
+[packages/matter.js/src/protocol/ExchangeManager.ts:258](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ExchangeManager.ts#L258)

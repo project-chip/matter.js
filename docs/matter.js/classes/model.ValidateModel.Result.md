@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new Result**(`model`)
+• **new Result**(`model`): [`Result`](model.ValidateModel.Result.md)
 
 #### Parameters
 
@@ -38,9 +38,13 @@
 | :------ | :------ |
 | `model` | [`Model`](model.Model-1.md) |
 
+#### Returns
+
+[`Result`](model.ValidateModel.Result.md)
+
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L92)
+[packages/matter.js/src/model/logic/ValidateModel.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L92)
 
 ## Properties
 
@@ -50,7 +54,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:83](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L83)
+[packages/matter.js/src/model/logic/ValidateModel.ts:83](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L83)
 
 ___
 
@@ -64,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:85](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L85)
+[packages/matter.js/src/model/logic/ValidateModel.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L85)
 
 ___
 
@@ -74,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:86](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L86)
+[packages/matter.js/src/model/logic/ValidateModel.ts:86](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L86)
 
 ___
 
@@ -84,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:84](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L84)
+[packages/matter.js/src/model/logic/ValidateModel.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L84)
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L92)
+[packages/matter.js/src/model/logic/ValidateModel.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L92)
 
 ## Accessors
 
@@ -108,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:88](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L88)
+[packages/matter.js/src/model/logic/ValidateModel.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L88)
 
 ## Methods
 
@@ -122,4 +126,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L94)
+[packages/matter.js/src/model/logic/ValidateModel.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L94)

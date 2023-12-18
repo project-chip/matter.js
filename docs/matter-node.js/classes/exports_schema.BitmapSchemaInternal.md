@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/schema](../modules/exports_schema.md) / BitmapSchemaInternal
 
-# Class: BitmapSchemaInternal<T\>
+# Class: BitmapSchemaInternal\<T\>
 
 [exports/schema](../modules/exports_schema.md).BitmapSchemaInternal
 
@@ -14,7 +14,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>, `number`\>
+- [`Schema`](exports_schema.Schema.md)\<[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>, `number`\>
 
   ↳ **`BitmapSchemaInternal`**
 
@@ -41,7 +41,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new BitmapSchemaInternal**<`T`\>(`bitSchemas`)
+• **new BitmapSchemaInternal**\<`T`\>(`bitSchemas`): [`BitmapSchemaInternal`](exports_schema.BitmapSchemaInternal.md)\<`T`\>
 
 #### Type parameters
 
@@ -54,6 +54,10 @@ Define a schema to encode / decode convert type T to type E.
 | Name | Type |
 | :------ | :------ |
 | `bitSchemas` | `T` |
+
+#### Returns
+
+[`BitmapSchemaInternal`](exports_schema.BitmapSchemaInternal.md)\<`T`\>
 
 #### Overrides
 
@@ -87,7 +91,7 @@ packages/matter.js/dist/esm/schema/BitmapSchema.d.ts:42
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>
 
 Decodes the encoded data using the schema.
 
@@ -100,7 +104,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>
+[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>
 
 #### Inherited from
 
@@ -114,7 +118,7 @@ ___
 
 ### decodeInternal
 
-▸ **decodeInternal**(`bitmap`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>
+▸ **decodeInternal**(`bitmap`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>
 
 #### Parameters
 
@@ -124,7 +128,7 @@ ___
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\>
+[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\>
 
 #### Overrides
 
@@ -147,7 +151,7 @@ provided, rest is unset.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\> \| [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)<`T`\> |
+| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\> \| [`TypeFromPartialBitSchema`](../modules/exports_schema.md#typefrompartialbitschema)\<`T`\> |
 
 #### Returns
 
@@ -171,7 +175,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\> |
+| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\> |
 
 #### Returns
 
@@ -197,7 +201,7 @@ Optional validator that can be used to enforce constraints on the data before en
 
 | Name | Type |
 | :------ | :------ |
-| `_value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<`T`\> |
+| `_value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<`T`\> |
 
 #### Returns
 

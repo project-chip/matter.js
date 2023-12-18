@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventOptions
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventOptions
 
 # Interface: EventOptions
 
-[<internal>](../modules/internal_.md).EventOptions
+[\<internal\>](../modules/internal_.md).EventOptions
 
 ## Table of contents
 

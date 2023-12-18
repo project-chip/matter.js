@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / SupportedEventClient
 
-# Class: SupportedEventClient<T\>
+# Class: SupportedEventClient\<T\>
 
 [exports/cluster](../modules/exports_cluster.md).SupportedEventClient
 
@@ -14,7 +14,7 @@ Special EventClient class to allow identifying events that are supported because
 
 ## Hierarchy
 
-- [`EventClient`](exports_cluster.EventClient.md)<`T`\>
+- [`EventClient`](exports_cluster.EventClient.md)\<`T`\>
 
   ↳ **`SupportedEventClient`**
 
@@ -44,7 +44,7 @@ Special EventClient class to allow identifying events that are supported because
 
 ### constructor
 
-• **new SupportedEventClient**<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new SupportedEventClient**\<`T`\>(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`SupportedEventClient`](exports_cluster.SupportedEventClient.md)\<`T`\>
 
 #### Type parameters
 
@@ -56,11 +56,15 @@ Special EventClient class to allow identifying events that are supported because
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/exports_cluster.md#event)<`T`, `any`\> |
+| `event` | [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
+
+#### Returns
+
+[`SupportedEventClient`](exports_cluster.SupportedEventClient.md)\<`T`\>
 
 #### Inherited from
 
@@ -102,7 +106,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)<`T`, `any`\>
+• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)\<`T`, `any`\>
 
 #### Inherited from
 
@@ -150,7 +154,7 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -168,7 +172,7 @@ ___
 
 ### get
 
-▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>[]\>
+▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>[]\>
 
 #### Parameters
 
@@ -179,7 +183,7 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>[]\>
 
 #### Inherited from
 
@@ -199,7 +203,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\>) => `void` |
 
 #### Returns
 
@@ -217,7 +221,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -231,7 +235,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -251,7 +255,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`T`\> |
+| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`T`\> |
 
 #### Returns
 

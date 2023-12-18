@@ -1,14 +1,14 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / QrPairingCodeSchema
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / QrPairingCodeSchema
 
 # Class: QrPairingCodeSchema
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).QrPairingCodeSchema
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).QrPairingCodeSchema
 
 Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`QrCodeData`](../modules/exports_schema.md#qrcodedata), `string`\>
+- [`Schema`](exports_schema.Schema.md)\<[`QrCodeData`](../modules/exports_schema.md#qrcodedata), `string`\>
 
   ↳ **`QrPairingCodeSchema`**
 
@@ -30,7 +30,11 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new QrPairingCodeSchema**()
+• **new QrPairingCodeSchema**(): [`QrPairingCodeSchema`](export._internal_.QrPairingCodeSchema.md)
+
+#### Returns
+
+[`QrPairingCodeSchema`](export._internal_.QrPairingCodeSchema.md)
 
 #### Inherited from
 
@@ -40,7 +44,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
 
 Decodes the encoded data using the schema.
 
@@ -53,7 +57,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
+[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
 
 #### Inherited from
 
@@ -67,7 +71,7 @@ ___
 
 ### decodeInternal
 
-▸ `Protected` **decodeInternal**(`encoded`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
+▸ **decodeInternal**(`encoded`): [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
 
 #### Parameters
 
@@ -77,7 +81,7 @@ ___
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
+[`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\>
 
 #### Overrides
 
@@ -99,7 +103,7 @@ Encodes the value using the schema.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
+| `value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
 
 #### Returns
 
@@ -117,13 +121,13 @@ ___
 
 ### encodeInternal
 
-▸ `Protected` **encodeInternal**(`payloadData`): `string`
+▸ **encodeInternal**(`payloadData`): `string`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `payloadData` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
+| `payloadData` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
 
 #### Returns
 
@@ -149,7 +153,7 @@ Optional validator that can be used to enforce constraints on the data before en
 
 | Name | Type |
 | :------ | :------ |
-| `_value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)<{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
+| `_value` | [`TypeFromBitSchema`](../modules/exports_schema.md#typefrombitschema)\<\{ `discoveryCapabilities`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `discriminator`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `flowType`: [`BitFieldEnum`](../modules/exports_schema.md#bitfieldenum-1)\<[`CommissionningFlowType`](../enums/exports_schema.CommissionningFlowType.md)\> ; `passcode`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `productId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `vendorId`: [`BitField`](../modules/exports_schema.md#bitfield-1) ; `version`: [`BitField`](../modules/exports_schema.md#bitfield-1)  }\> |
 
 #### Returns
 

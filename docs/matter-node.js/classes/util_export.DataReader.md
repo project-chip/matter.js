@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / DataReader
 
-# Class: DataReader<E\>
+# Class: DataReader\<E\>
 
 [util/export](../modules/util_export.md).DataReader
 
@@ -49,7 +49,7 @@ Reader that auto-increments its offset after each read.
 
 ### constructor
 
-• **new DataReader**<`E`\>(`buffer`, `endian`)
+• **new DataReader**\<`E`\>(`buffer`, `endian`): [`DataReader`](util_export.DataReader.md)\<`E`\>
 
 #### Type parameters
 
@@ -63,6 +63,10 @@ Reader that auto-increments its offset after each read.
 | :------ | :------ |
 | `buffer` | `Uint8Array` |
 | `endian` | `E` |
+
+#### Returns
+
+[`DataReader`](util_export.DataReader.md)\<`E`\>
 
 #### Defined in
 

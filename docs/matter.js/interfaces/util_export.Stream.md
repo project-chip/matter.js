@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Stream
 
-# Interface: Stream<T\>
+# Interface: Stream\<T\>
 
 [util/export](../modules/util_export.md).Stream
 
@@ -25,21 +25,21 @@
 
 ### read
 
-▸ **read**(): `Promise`<`T`\>
+▸ **read**(): `Promise`\<`T`\>
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Stream.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Stream.ts#L12)
+[packages/matter.js/src/util/Stream.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Stream.ts#L12)
 
 ___
 
 ### write
 
-▸ **write**(`data`): `Promise`<`void`\>
+▸ **write**(`data`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -49,8 +49,8 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Stream.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Stream.ts#L13)
+[packages/matter.js/src/util/Stream.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Stream.ts#L13)

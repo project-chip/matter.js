@@ -34,7 +34,7 @@ ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)<[`ClusterElement`](exports_model.md#clusterelement)\>
+Ƭ **Properties**: [`Properties`](exports_model.BaseElement.md#properties)\<[`ClusterElement`](exports_model.md#clusterelement)\>
 
 #### Defined in
 

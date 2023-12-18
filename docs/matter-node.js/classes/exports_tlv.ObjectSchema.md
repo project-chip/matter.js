@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / ObjectSchema
 
-# Class: ObjectSchema<F\>
+# Class: ObjectSchema\<F\>
 
 [exports/tlv](../modules/exports_tlv.md).ObjectSchema
 
@@ -18,7 +18,7 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>\>
 
   ↳ **`ObjectSchema`**
 
@@ -53,7 +53,7 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 
 ### constructor
 
-• **new ObjectSchema**<`F`\>(`fieldDefinitions`, `type?`)
+• **new ObjectSchema**\<`F`\>(`fieldDefinitions`, `type?`): [`ObjectSchema`](exports_tlv.ObjectSchema.md)\<`F`\>
 
 #### Type parameters
 
@@ -68,13 +68,17 @@ MatterCoreSpecificationV1_0 § A.5.1 and § A.11.4
 | `fieldDefinitions` | `F` |
 | `type?` | [`Structure`](../enums/exports_tlv.TlvType.md#structure) \| [`List`](../enums/exports_tlv.TlvType.md#list) |
 
+#### Returns
+
+[`ObjectSchema`](exports_tlv.ObjectSchema.md)\<`F`\>
+
 #### Overrides
 
-TlvSchema&lt;TypeFromFields&lt;F\&gt;\&gt;.constructor
+TlvSchema\&lt;TypeFromFields\&lt;F\&gt;\&gt;.constructor
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:44
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:55
 
 ## Properties
 
@@ -84,7 +88,7 @@ packages/matter.js/dist/esm/tlv/TlvObject.d.ts:44
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:43
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:54
 
 ___
 
@@ -94,7 +98,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:41
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:52
 
 ___
 
@@ -104,13 +108,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:42
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:53
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 Decodes the encoded data using the schema.
 
@@ -123,7 +127,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -137,7 +141,7 @@ ___
 
 ### decodeInternal
 
-▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **decodeInternal**(`encoded`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -147,7 +151,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -161,7 +165,7 @@ ___
 
 ### decodeTlv
 
-▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **decodeTlv**(`encoded`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -171,7 +175,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Inherited from
 
@@ -200,7 +204,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 
 #### Inherited from
 
@@ -214,7 +218,7 @@ ___
 
 ### decodeTlvInternalValue
 
-▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **decodeTlvInternalValue**(`reader`, `typeLength`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Parameters
 
@@ -225,7 +229,7 @@ ___
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -233,7 +237,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:46
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:57
 
 ___
 
@@ -247,7 +251,7 @@ Encodes the value using the schema.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -271,7 +275,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -295,7 +299,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -320,7 +324,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `writer` | [`TlvWriter`](../interfaces/exports_tlv.TlvWriter.md) |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 | `tag?` | [`TlvTag`](../modules/exports_tlv.md#tlvtag) |
 
 #### Returns
@@ -333,26 +337,26 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:45
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:56
 
 ___
 
 ### injectField
 
-▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **injectField**(`value`, `fieldId`, `fieldValue`, `injectChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `fieldValue` | `any` |
 | `injectChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -360,25 +364,25 @@ TlvSchema.injectField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:48
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:59
 
 ___
 
 ### removeField
 
-▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+▸ **removeField**(`value`, `fieldId`, `removeChecker`): [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 | `fieldId` | `number` |
 | `removeChecker` | (`fieldValue`: `any`) => `boolean` |
 
 #### Returns
 
-[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\>
+[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\>
 
 #### Overrides
 
@@ -386,7 +390,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:49
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:60
 
 ___
 
@@ -398,7 +402,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<`F`\> |
+| `value` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<`F`\> |
 
 #### Returns
 
@@ -410,4 +414,4 @@ TlvSchema.validate
 
 #### Defined in
 
-packages/matter.js/dist/esm/tlv/TlvObject.d.ts:47
+packages/matter.js/dist/esm/tlv/TlvObject.d.ts:58

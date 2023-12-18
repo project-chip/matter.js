@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / ConditionalFixedAttribute
 
-# Interface: ConditionalFixedAttribute<T, F\>
+# Interface: ConditionalFixedAttribute\<T, F\>
 
 [exports/cluster](../modules/exports_cluster.md).ConditionalFixedAttribute
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)<`T`, `F`\>
+- [`OptionalFixedAttribute`](../modules/exports_cluster.md#optionalfixedattribute)\<`T`, `F`\>
 
   ↳ **`ConditionalFixedAttribute`**
 
@@ -113,7 +113,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -155,7 +155,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -211,7 +211,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 

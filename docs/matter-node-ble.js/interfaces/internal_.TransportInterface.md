@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / TransportInterface
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / TransportInterface
 
 # Interface: TransportInterface
 
-[<internal>](../modules/internal_.md).TransportInterface
+[\<internal\>](../modules/internal_.md).TransportInterface
 
 A TransportInterface is a generic interface for sending and receiving data on an established incoming connection.
 It can not open new connections.
@@ -24,11 +24,11 @@ It can not open new connections.
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -44,7 +44,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`socket`: [`Channel`](internal_.Channel.md)<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
+| `listener` | (`socket`: [`Channel`](internal_.Channel.md)\<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
 
 #### Returns
 

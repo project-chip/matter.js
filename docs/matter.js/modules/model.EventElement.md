@@ -24,11 +24,11 @@
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)<[`EventElement`](model.md#eventelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`EventElement`](model.md#eventelement)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L29)
+[packages/matter.js/src/model/elements/EventElement.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L29)
 
 ___
 
@@ -38,9 +38,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L27)
+[packages/matter.js/src/model/elements/EventElement.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L27)
 
-[packages/matter.js/src/model/elements/EventElement.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L28)
+[packages/matter.js/src/model/elements/EventElement.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L28)
 
 ## Variables
 
@@ -50,6 +50,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L27)
+[packages/matter.js/src/model/elements/EventElement.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L27)
 
-[packages/matter.js/src/model/elements/EventElement.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L28)
+[packages/matter.js/src/model/elements/EventElement.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L28)

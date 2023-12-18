@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/cluster](../modules/exports_cluster.md) / FabricScopedAttribute
 
-# Interface: FabricScopedAttribute<T, F\>
+# Interface: FabricScopedAttribute\<T, F\>
 
 [exports/cluster](../modules/exports_cluster.md).FabricScopedAttribute
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`Attribute`](../modules/exports_cluster.md#attribute)<`T`, `F`\>
+- [`Attribute`](../modules/exports_cluster.md#attribute)\<`T`, `F`\>
 
   ↳ **`FabricScopedAttribute`**
 
@@ -113,7 +113,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -155,7 +155,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -211,7 +211,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/exports_tlv.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 

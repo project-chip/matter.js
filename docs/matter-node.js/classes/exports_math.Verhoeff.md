@@ -30,7 +30,11 @@ Verhoeff algorithm to compute a checksum.
 
 ### constructor
 
-• **new Verhoeff**()
+• **new Verhoeff**(): [`Verhoeff`](exports_math.Verhoeff.md)
+
+#### Returns
+
+[`Verhoeff`](exports_math.Verhoeff.md)
 
 ## Properties
 

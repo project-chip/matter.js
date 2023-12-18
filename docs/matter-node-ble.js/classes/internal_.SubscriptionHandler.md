@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / SubscriptionHandler
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / SubscriptionHandler
 
 # Class: SubscriptionHandler
 
-[<internal>](../modules/internal_.md).SubscriptionHandler
+[\<internal\>](../modules/internal_.md).SubscriptionHandler
 
 ## Table of contents
 
@@ -65,19 +65,19 @@
 
 ### constructor
 
-• **new SubscriptionHandler**(`subscriptionId`, `session`, `endpointStructure`, `attributeRequests`, `dataVersionFilters`, `eventRequests`, `eventFilters`, `eventHandler`, `isFabricFiltered`, `minIntervalFloor`, `maxIntervalCeiling`, `subscriptionMaxIntervalSeconds`, `subscriptionMinIntervalSeconds`, `subscriptionRandomizationWindowSeconds`, `cancelCallback`)
+• **new SubscriptionHandler**(`subscriptionId`, `session`, `endpointStructure`, `attributeRequests`, `dataVersionFilters`, `eventRequests`, `eventFilters`, `eventHandler`, `isFabricFiltered`, `minIntervalFloor`, `maxIntervalCeiling`, `subscriptionMaxIntervalSeconds`, `subscriptionMinIntervalSeconds`, `subscriptionRandomizationWindowSeconds`, `cancelCallback`): [`SubscriptionHandler`](internal_.SubscriptionHandler.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `subscriptionId` | `number` |
-| `session` | [`SecureSession`](internal_.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](internal_.SecureSession.md)\<`any`\> |
 | `endpointStructure` | [`InteractionEndpointStructure`](internal_.InteractionEndpointStructure.md) |
-| `attributeRequests` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `dataVersionFilters` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `dataVersion`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/internal_.FieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\>  }\>[] |
-| `eventRequests` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
-| `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `attributeRequests` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `dataVersionFilters` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `dataVersion`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number`\> ; `path`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`FieldType`](../interfaces/internal_.FieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>\>  }\>[] |
+| `eventRequests` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `eventFilters` | `undefined` \| [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 | `eventHandler` | [`EventHandler`](internal_.EventHandler.md) |
 | `isFabricFiltered` | `boolean` |
 | `minIntervalFloor` | `number` |
@@ -86,6 +86,10 @@
 | `subscriptionMinIntervalSeconds` | `undefined` \| `number` |
 | `subscriptionRandomizationWindowSeconds` | `undefined` \| `number` |
 | `cancelCallback` | () => `void` |
+
+#### Returns
+
+[`SubscriptionHandler`](internal_.SubscriptionHandler.md)
 
 #### Defined in
 
@@ -429,7 +433,7 @@ ___
 
 ### attributeChangeListener
 
-▸ **attributeChangeListener**<`T`\>(`path`, `schema`, `version`, `value`): `void`
+▸ **attributeChangeListener**\<`T`\>(`path`, `schema`, `version`, `value`): `void`
 
 #### Type parameters
 
@@ -441,8 +445,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
+| `path` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `attributeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`AttributeId`](../modules/internal_.md#attributeid)\> ; `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `enableTagCompression`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `listIndex`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<``null`` \| `number`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
 | `version` | `number` |
 | `value` | `T` |
 
@@ -458,7 +462,7 @@ ___
 
 ### cancel
 
-▸ **cancel**(`flush?`, `cancelledByPeer?`): `Promise`<`void`\>
+▸ **cancel**(`flush?`, `cancelledByPeer?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -469,7 +473,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -479,7 +483,7 @@ ___
 
 ### eventChangeListener
 
-▸ **eventChangeListener**<`T`\>(`path`, `schema`, `newEvent`): `void`
+▸ **eventChangeListener**\<`T`\>(`path`, `schema`, `newEvent`): `void`
 
 #### Type parameters
 
@@ -491,9 +495,9 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `path` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> |
-| `newEvent` | [`EventStorageData`](../interfaces/internal_.EventStorageData.md)<`T`\> |
+| `path` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> |
+| `newEvent` | [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`T`\> |
 
 #### Returns
 
@@ -507,11 +511,11 @@ ___
 
 ### flush
 
-▸ **flush**(): `Promise`<`void`\>
+▸ **flush**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -566,7 +570,7 @@ ___
 
 ### sendInitialReport
 
-▸ **sendInitialReport**(`messenger`): `Promise`<`void`\>
+▸ **sendInitialReport**(`messenger`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -576,7 +580,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -586,13 +590,13 @@ ___
 
 ### sendUpdate
 
-▸ **sendUpdate**(): `Promise`<`void`\>
+▸ **sendUpdate**(): `Promise`\<`void`\>
 
 Determine all attributes that have changed since the last update and send them tout to the subscriber.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

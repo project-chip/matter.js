@@ -14,7 +14,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)<{ `commands`: { `sleep`: [`Command`](exports_cluster.md#command)<`void`, `void`, `any`\>  } ; `id`: ``1288`` ; `name`: ``"LowPower"`` ; `revision`: ``1``  }\>
+• `Const` **Cluster**: [`Definition`](exports_cluster.ClusterFactory.md#definition)\<\{ `commands`: \{ `sleep`: [`Command`](exports_cluster.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``1288`` ; `name`: ``"LowPower"`` ; `revision`: ``1``  }\>
 
 Low Power
 

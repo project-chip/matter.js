@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [model](../modules/model.md) / Aspect
 
-# Class: Aspect<D\>
+# Class: Aspect\<D\>
 
 [model](../modules/model.md).Aspect
 
@@ -54,7 +54,7 @@ for "constraint" which is not formally described as a quality.
 
 ### constructor
 
-• **new Aspect**<`D`\>(`definition`)
+• **new Aspect**\<`D`\>(`definition`): [`Aspect`](model.Aspect.md)\<`D`\>
 
 #### Type parameters
 
@@ -68,9 +68,13 @@ for "constraint" which is not formally described as a quality.
 | :------ | :------ |
 | `definition` | `D` |
 
+#### Returns
+
+[`Aspect`](model.Aspect.md)\<`D`\>
+
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L24)
+[packages/matter.js/src/model/aspects/Aspect.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L24)
 
 ## Properties
 
@@ -80,7 +84,7 @@ for "constraint" which is not formally described as a quality.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -90,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ## Accessors
 
@@ -104,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L28)
+[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L28)
 
 ___
 
@@ -118,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -140,7 +144,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -161,33 +165,33 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](model.Aspect.md)<`D`\>
+▸ **extend**(`other`): [`Aspect`](model.Aspect.md)\<`D`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `other` | `Exclude`<`D`, ``"string"``\> |
+| `other` | `Exclude`\<`D`, ``"string"``\> |
 
 #### Returns
 
-[`Aspect`](model.Aspect.md)<`D`\>
+[`Aspect`](model.Aspect.md)\<`D`\>
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
 ### toString
 
-▸ `Abstract` **toString**(): `string`
+▸ **toString**(): `string`
 
 #### Returns
 
@@ -195,7 +199,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L52)
+[packages/matter.js/src/model/aspects/Aspect.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L52)
 
 ___
 
@@ -209,4 +213,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L47)

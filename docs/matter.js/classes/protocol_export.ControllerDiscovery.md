@@ -23,13 +23,17 @@
 
 ### constructor
 
-• **new ControllerDiscovery**()
+• **new ControllerDiscovery**(): [`ControllerDiscovery`](protocol_export.ControllerDiscovery.md)
+
+#### Returns
+
+[`ControllerDiscovery`](protocol_export.ControllerDiscovery.md)
 
 ## Methods
 
 ### cancelCommissionableDeviceDiscovery
 
-▸ `Static` **cancelCommissionableDeviceDiscovery**(`scanner`, `identifier?`): `void`
+▸ **cancelCommissionableDeviceDiscovery**(`scanner`, `identifier?`): `void`
 
 #### Parameters
 
@@ -44,13 +48,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:130](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L130)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L130)
 
 ___
 
 ### cancelOperationalDeviceDiscovery
 
-▸ `Static` **cancelOperationalDeviceDiscovery**(`fabric`, `peerNodeId`, `scanner`): `void`
+▸ **cancelOperationalDeviceDiscovery**(`fabric`, `peerNodeId`, `scanner`): `void`
 
 #### Parameters
 
@@ -66,13 +70,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:126](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L126)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:126](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L126)
 
 ___
 
 ### discoverCommissionableDevices
 
-▸ `Static` **discoverCommissionableDevices**(`scanners`, `timeoutSeconds`, `identifier?`, `discoveredCallback?`): `Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
+▸ **discoverCommissionableDevices**(`scanners`, `timeoutSeconds`, `identifier?`, `discoveredCallback?`): `Promise`\<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
 
 #### Parameters
 
@@ -85,17 +89,17 @@ ___
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/common_export.md#commissionabledevice)[]\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L62)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L62)
 
 ___
 
 ### discoverDeviceAddressesByIdentifier
 
-▸ `Static` **discoverDeviceAddressesByIdentifier**(`scanners`, `identifier`, `timeoutSeconds?`): `Promise`<[`ServerAddress`](../modules/common_export.md#serveraddress)[]\>
+▸ **discoverDeviceAddressesByIdentifier**(`scanners`, `identifier`, `timeoutSeconds?`): `Promise`\<[`ServerAddress`](../modules/common_export.md#serveraddress)[]\>
 
 Discovers devices by a provided identifier and a list of scanners (e.g. IP and BLE in parallel).
 It returns after the timeout or if at least one device was found.
@@ -111,17 +115,17 @@ The method returns a list of addresses of the discovered devices.
 
 #### Returns
 
-`Promise`<[`ServerAddress`](../modules/common_export.md#serveraddress)[]\>
+`Promise`\<[`ServerAddress`](../modules/common_export.md#serveraddress)[]\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L30)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L30)
 
 ___
 
 ### discoverOperationalDevice
 
-▸ `Static` **discoverOperationalDevice**(`fabric`, `peerNodeId`, `scanner`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
+▸ **discoverOperationalDevice**(`fabric`, `peerNodeId`, `scanner`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
 
 #### Parameters
 
@@ -135,17 +139,17 @@ ___
 
 #### Returns
 
-`Promise`<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
+`Promise`\<[`ServerAddressIp`](../modules/common_export.md#serveraddressip)[]\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:105](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L105)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L105)
 
 ___
 
 ### iterateServerAddresses
 
-▸ `Static` **iterateServerAddresses**<`SA`, `T`, `E`\>(`servers`, `errorType`, `updateNetworkInterfaceFunc`, `func`, `lastKnownServer?`): `Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
+▸ **iterateServerAddresses**\<`SA`, `T`, `E`\>(`servers`, `errorType`, `updateNetworkInterfaceFunc`, `func`, `lastKnownServer?`): `Promise`\<\{ `result`: `T` ; `resultAddress`: `SA`  }\>
 
 Helper method to iterate through a list of server addresses and try to execute a method on each of them. If the
 method throws a configurable error (or EHOSTUNREACH), the server address list is updated (to also add later
@@ -165,15 +169,15 @@ call is returned. The logic makes sure to only try each unique address (IP/port)
 | Name | Type |
 | :------ | :------ |
 | `servers` | `SA`[] |
-| `errorType` | [`ClassExtends`](../modules/util_export.md#classextends)<`E`\> |
-| `updateNetworkInterfaceFunc` | () => `Promise`<`SA`[]\> |
-| `func` | (`server`: `SA`) => `Promise`<`T`\> |
+| `errorType` | [`ClassExtends`](../modules/util_export.md#classextends)\<`E`\> |
+| `updateNetworkInterfaceFunc` | () => `Promise`\<`SA`[]\> |
+| `func` | (`server`: `SA`) => `Promise`\<`T`\> |
 | `lastKnownServer?` | `SA` |
 
 #### Returns
 
-`Promise`<{ `result`: `T` ; `resultAddress`: `SA`  }\>
+`Promise`\<\{ `result`: `T` ; `resultAddress`: `SA`  }\>
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerDiscovery.ts:140](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/ControllerDiscovery.ts#L140)
+[packages/matter.js/src/protocol/ControllerDiscovery.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerDiscovery.ts#L140)

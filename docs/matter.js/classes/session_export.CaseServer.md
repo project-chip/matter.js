@@ -6,7 +6,7 @@
 
 ## Implements
 
-- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\>
+- [`ProtocolHandler`](../interfaces/protocol_export.ProtocolHandler.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>
 
 ## Table of contents
 
@@ -25,17 +25,21 @@
 
 ### constructor
 
-• **new CaseServer**()
+• **new CaseServer**(): [`CaseServer`](session_export.CaseServer.md)
+
+#### Returns
+
+[`CaseServer`](session_export.CaseServer.md)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -43,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:212](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseServer.ts#L212)
+[packages/matter.js/src/session/case/CaseServer.ts:212](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseServer.ts#L212)
 
 ___
 
@@ -61,13 +65,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:45](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseServer.ts#L45)
+[packages/matter.js/src/session/case/CaseServer.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseServer.ts#L45)
 
 ___
 
 ### handleSigma1
 
-▸ `Private` **handleSigma1**(`server`, `messenger`): `Promise`<`void`\>
+▸ **handleSigma1**(`server`, `messenger`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -78,27 +82,27 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:49](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseServer.ts#L49)
+[packages/matter.js/src/session/case/CaseServer.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseServer.ts#L49)
 
 ___
 
 ### onNewExchange
 
-▸ **onNewExchange**(`exchange`): `Promise`<`void`\>
+▸ **onNewExchange**(`exchange`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -106,4 +110,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseServer.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseServer.ts#L35)
+[packages/matter.js/src/session/case/CaseServer.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseServer.ts#L35)

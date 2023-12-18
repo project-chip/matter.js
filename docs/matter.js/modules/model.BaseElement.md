@@ -15,7 +15,7 @@
 
 ### ElementForProperties
 
-Ƭ **ElementForProperties**<`P`\>: `P` extends [`Properties`](model.BaseElement.md#properties)<infer T\> ? `T` : `never`
+Ƭ **ElementForProperties**\<`P`\>: `P` extends [`Properties`](model.BaseElement.md#properties)\<infer T\> ? `T` : `never`
 
 #### Type parameters
 
@@ -25,13 +25,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L75)
+[packages/matter.js/src/model/elements/BaseElement.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L75)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**<`T`\>: `Omit`<`T`, ``"tag"``\> & `Partial`<`Pick`<`T`, ``"tag"``\>\>
+Ƭ **Properties**\<`T`\>: `Omit`\<`T`, ``"tag"``\> & `Partial`\<`Pick`\<`T`, ``"tag"``\>\>
 
 Element with optional type; used for factory functions and constructors.
 
@@ -43,4 +43,4 @@ Element with optional type; used for factory functions and constructors.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:80](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L80)
+[packages/matter.js/src/model/elements/BaseElement.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L80)

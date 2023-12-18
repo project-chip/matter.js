@@ -26,7 +26,7 @@ log output.  See Logger.dict() for maximal convenience.
 
 ### constructor
 
-• **new DiagnosticDictionary**(`entries?`)
+• **new DiagnosticDictionary**(`entries?`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
 
 Create a new dictionary with optional entry values.
 
@@ -35,6 +35,10 @@ Create a new dictionary with optional entry values.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `entries?` | `Object` | the entries as [ "KEY", value ] tuples |
+
+#### Returns
+
+[`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
 
 #### Defined in
 

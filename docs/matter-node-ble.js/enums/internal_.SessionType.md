@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / SessionType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / SessionType
 
 # Enumeration: SessionType
 
-[<internal>](../modules/internal_.md).SessionType
+[\<internal\>](../modules/internal_.md).SessionType
 
 ## Table of contents
 
@@ -19,7 +19,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:50
+matter.js/dist/esm/codec/MessageCodec.d.ts:52
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/codec/MessageCodec.d.ts:51
+matter.js/dist/esm/codec/MessageCodec.d.ts:53

@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [<internal\>](export._internal_.md) / "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](export.md) / [\<internal\>](export._internal_.md) / "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"
 
 # Namespace: "/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"
 
-[export](export.md).[<internal>](export._internal_.md)."/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"
+[export](export.md).[\<internal\>](export._internal_.md)."/home/runner/work/matter.js/matter.js/packages/matter.js/dist/esm/tlv/TlvVoid"
 
 ## Table of contents
 

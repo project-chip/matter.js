@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / GaloisField
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / GaloisField
 
 # Class: GaloisField
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).GaloisField
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).GaloisField
 
 ## Table of contents
 
@@ -28,7 +28,7 @@
 
 ### constructor
 
-• **new GaloisField**(`prime?`, `generator?`, `c_exp?`)
+• **new GaloisField**(`prime?`, `generator?`, `c_exp?`): [`GaloisField`](export._internal_.GaloisField.md)
 
 #### Parameters
 
@@ -38,9 +38,13 @@
 | `generator` | `number` | `2` |
 | `c_exp` | `number` | `8` |
 
+#### Returns
+
+[`GaloisField`](export._internal_.GaloisField.md)
+
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L14)
+[packages/matter.js/src/math/ReedSolomon.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L14)
 
 ## Properties
 
@@ -50,7 +54,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L10)
+[packages/matter.js/src/math/ReedSolomon.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L10)
 
 ___
 
@@ -60,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L11)
+[packages/matter.js/src/math/ReedSolomon.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L11)
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L15)
+[packages/matter.js/src/math/ReedSolomon.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L15)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L12)
+[packages/matter.js/src/math/ReedSolomon.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L12)
 
 ## Methods
 
@@ -101,13 +105,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:32](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L32)
+[packages/matter.js/src/math/ReedSolomon.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L32)
 
 ___
 
 ### multiplyNoLut
 
-▸ `Private` **multiplyNoLut**(`x`, `y`): `number`
+▸ **multiplyNoLut**(`x`, `y`): `number`
 
 #### Parameters
 
@@ -122,7 +126,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L58)
+[packages/matter.js/src/math/ReedSolomon.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L58)
 
 ___
 
@@ -143,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L37)
+[packages/matter.js/src/math/ReedSolomon.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L37)
 
 ___
 
@@ -164,4 +168,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L54)
+[packages/matter.js/src/math/ReedSolomon.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L54)

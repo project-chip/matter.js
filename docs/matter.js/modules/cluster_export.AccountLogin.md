@@ -17,7 +17,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `commands`: { `getSetupPin`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `string`\>  }\>, `any`\> ; `login`: [`Command`](cluster_export.md#command)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>, `void`, `any`\> ; `logout`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``1294`` = 0x50e; `name`: ``"AccountLogin"`` = "AccountLogin"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `commands`: \{ `getSetupPin`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, [`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `string`\>  }\>, `any`\> ; `login`: [`Command`](cluster_export.md#command)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>, `void`, `any`\> ; `logout`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``1294`` = 0x50e; `name`: ``"AccountLogin"`` = "AccountLogin"; `revision`: ``1`` = 1 }\>
 
 Account Login
 
@@ -32,13 +32,13 @@ Client.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:80](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L80)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L80)
 
 ___
 
 ### TlvGetSetupPinRequest
 
-• `Const` **TlvGetSetupPinRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>
+• `Const` **TlvGetSetupPinRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>
 
 Input to the AccountLogin getSetupPin command
 
@@ -48,13 +48,13 @@ Input to the AccountLogin getSetupPin command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L23)
 
 ___
 
 ### TlvGetSetupPinResponse
 
-• `Const` **TlvGetSetupPinResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<``null`` \| `string`\>  }\>
+• `Const` **TlvGetSetupPinResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<``null`` \| `string`\>  }\>
 
 This message is sent in response to the GetSetupPIN command, and contains the Setup PIN code, or null when the
 account identified in the request does not match the active account of the running Content App.
@@ -65,13 +65,13 @@ account identified in the request does not match the active account of the runni
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L39)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L39)
 
 ___
 
 ### TlvLoginRequest
 
-• `Const` **TlvLoginRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\>  }\>
+• `Const` **TlvLoginRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `setupPin`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `tempAccountIdentifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\>  }\>
 
 Input to the AccountLogin login command
 
@@ -81,4 +81,4 @@ Input to the AccountLogin login command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L54)
+[packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/AccountLoginCluster.ts#L54)

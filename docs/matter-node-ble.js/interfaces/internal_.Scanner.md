@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / Scanner
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / Scanner
 
 # Interface: Scanner
 
-[<internal>](../modules/internal_.md).Scanner
+[\<internal\>](../modules/internal_.md).Scanner
 
 ## Implemented by
 
@@ -64,7 +64,7 @@ ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns as soon as minimum one was found or the timeout is over.
@@ -79,7 +79,7 @@ vendorId, etc.) and returns as soon as minimum one was found or the timeout is o
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 #### Defined in
 
@@ -89,7 +89,7 @@ ___
 
 ### findCommissionableDevicesContinuously
 
-▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,
 vendorId, etc.) and returns after the timeout is over. For each new discovered device the provided callback is
@@ -105,7 +105,7 @@ called when it is discovered.
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/internal_.md#commissionabledevice)[]\>
 
 #### Defined in
 
@@ -115,7 +115,7 @@ ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`fabric`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
 
 Send DNS-SD queries to discover the current addresses of an operational paired device by its operational ID
 and return them.
@@ -131,7 +131,7 @@ and return them.
 
 #### Returns
 
-`Promise`<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
+`Promise`\<[`ServerAddressIp`](../modules/internal_.md#serveraddressip)[]\>
 
 #### Defined in
 

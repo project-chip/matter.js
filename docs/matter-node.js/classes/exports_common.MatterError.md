@@ -28,8 +28,6 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`NoProviderError`](exports_common.NoProviderError.md)
 
-  ↳↳ [`ValidationError`](exports_common.ValidationError.md)
-
   ↳↳ [`InternalError`](exports_common.InternalError.md)
 
   ↳↳ [`MatterFlowError`](exports_common.MatterFlowError.md)
@@ -76,7 +74,7 @@ Error base class for all errors thrown by this library.
 
 ### constructor
 
-• **new MatterError**(`message?`)
+• **new MatterError**(`message?`): [`MatterError`](exports_common.MatterError.md)
 
 #### Parameters
 
@@ -84,10 +82,14 @@ Error base class for all errors thrown by this library.
 | :------ | :------ |
 | `message?` | `string` |
 
+#### Returns
+
+[`MatterError`](exports_common.MatterError.md)
+
 #### Inherited from
 
 Error.constructor
 
 #### Defined in
 
-node_modules/typescript/lib/lib.es5.d.ts:1073
+node_modules/typescript/lib/lib.es5.d.ts:1081

@@ -30,7 +30,11 @@ Verhoeff algorithm to compute a checksum.
 
 ### constructor
 
-• **new Verhoeff**()
+• **new Verhoeff**(): [`Verhoeff`](math_export.Verhoeff.md)
+
+#### Returns
+
+[`Verhoeff`](math_export.Verhoeff.md)
 
 ## Properties
 
@@ -40,7 +44,7 @@ Verhoeff algorithm to compute a checksum.
 
 #### Defined in
 
-[packages/matter.js/src/math/Verhoeff.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/Verhoeff.ts#L26)
+[packages/matter.js/src/math/Verhoeff.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/Verhoeff.ts#L26)
 
 ___
 
@@ -50,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/Verhoeff.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/Verhoeff.ts#L14)
+[packages/matter.js/src/math/Verhoeff.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/Verhoeff.ts#L14)
 
 ___
 
@@ -60,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/Verhoeff.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/Verhoeff.ts#L27)
+[packages/matter.js/src/math/Verhoeff.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/Verhoeff.ts#L27)
 
 ## Methods
 
@@ -80,4 +84,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/Verhoeff.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/Verhoeff.ts#L38)
+[packages/matter.js/src/math/Verhoeff.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/Verhoeff.ts#L38)

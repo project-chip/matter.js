@@ -32,19 +32,19 @@ and other metadata.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L73)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L73)
 
 ___
 
 ### Properties
 
-Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)<[`DatatypeElement`](model.md#datatypeelement)\>
+Ƭ **Properties**: [`Properties`](model.BaseElement.md#properties)\<[`DatatypeElement`](model.md#datatypeelement)\>
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L41)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L41)
 
 ___
 
@@ -54,9 +54,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
 
 ___
 
@@ -75,7 +75,7 @@ generating the Matter enum we ignore the string keys.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:81](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L81)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L81)
 
 ## Variables
 
@@ -85,9 +85,9 @@ generating the Matter enum we ignore the string keys.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L39)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L40)
 
 ## Functions
 
@@ -113,4 +113,4 @@ we can't use a TypeScript enum directly.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L50)

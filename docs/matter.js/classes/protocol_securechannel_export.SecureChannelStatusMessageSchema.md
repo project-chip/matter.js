@@ -8,7 +8,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](schema_export.Schema.md)<[`StatusMessage`](../modules/protocol_securechannel_export.md#statusmessage), [`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Schema`](schema_export.Schema.md)\<[`StatusMessage`](../modules/protocol_securechannel_export.md#statusmessage), [`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
   ↳ **`SecureChannelStatusMessageSchema`**
 
@@ -30,7 +30,11 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new SecureChannelStatusMessageSchema**()
+• **new SecureChannelStatusMessageSchema**(): [`SecureChannelStatusMessageSchema`](protocol_securechannel_export.SecureChannelStatusMessageSchema.md)
+
+#### Returns
+
+[`SecureChannelStatusMessageSchema`](protocol_securechannel_export.SecureChannelStatusMessageSchema.md)
 
 #### Inherited from
 
@@ -61,7 +65,7 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -91,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L28)
+[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L28)
 
 ___
 
@@ -117,7 +121,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -141,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L20)
+[packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelStatusMessageSchema.ts#L20)
 
 ___
 
@@ -167,4 +171,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

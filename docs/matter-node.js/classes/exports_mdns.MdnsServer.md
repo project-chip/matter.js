@@ -39,7 +39,7 @@
 
 ### constructor
 
-• **new MdnsServer**(`multicastServer`, `netInterface`)
+• **new MdnsServer**(`multicastServer`, `netInterface`): [`MdnsServer`](exports_mdns.MdnsServer.md)
 
 #### Parameters
 
@@ -47,6 +47,10 @@
 | :------ | :------ |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `netInterface` | `undefined` \| `string` |
+
+#### Returns
+
+[`MdnsServer`](exports_mdns.MdnsServer.md)
 
 #### Defined in
 
@@ -166,7 +170,7 @@ packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
 
 ### announce
 
-▸ **announce**(`announcedNetPort?`): `Promise`<`void`\>
+▸ **announce**(`announcedNetPort?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -176,7 +180,7 @@ packages/matter.js/dist/esm/mdns/MdnsServer.d.ts:32
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -192,7 +196,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\> |
+| `record` | [`DnsRecord`](../modules/exports_codec.md#dnsrecord)\<`any`\> |
 | `netInterface?` | `string` |
 
 #### Returns
@@ -228,11 +232,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -242,7 +246,7 @@ ___
 
 ### expireAnnouncements
 
-▸ **expireAnnouncements**(`announcedNetPort?`, `type?`): `Promise`<`void`\>
+▸ **expireAnnouncements**(`announcedNetPort?`, `type?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -253,7 +257,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -284,7 +288,7 @@ ___
 
 ### setRecordsGenerator
 
-▸ **setRecordsGenerator**(`hostPort`, `type`, `generator`): `Promise`<`void`\>
+▸ **setRecordsGenerator**(`hostPort`, `type`, `generator`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -292,11 +296,11 @@ ___
 | :------ | :------ |
 | `hostPort` | `number` |
 | `type` | [`AnnouncementType`](../enums/exports_mdns.AnnouncementType.md) |
-| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../modules/exports_codec.md#dnsrecord)<`any`\>[] |
+| `generator` | (`netInterface`: `string`) => [`DnsRecord`](../modules/exports_codec.md#dnsrecord)\<`any`\>[] |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -306,7 +310,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`options?`): `Promise`<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
+▸ **create**(`options?`): `Promise`\<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
 
 #### Parameters
 
@@ -318,7 +322,7 @@ ___
 
 #### Returns
 
-`Promise`<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
+`Promise`\<[`MdnsServer`](exports_mdns.MdnsServer.md)\>
 
 #### Defined in
 

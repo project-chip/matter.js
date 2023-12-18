@@ -18,7 +18,7 @@
 
 ### Modules
 
-- [&lt;internal\&gt;](export._internal_.md)
+- [\<internal\>](export._internal_.md)
 
 ### Classes
 
@@ -101,13 +101,13 @@ Re-exports [MatterDeviceLibrarySpecificationV1_2](../interfaces/spec_export.Matt
 
 ### CommissioningControllerOptions
 
-Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & { `adminFabricId?`: [`FabricId`](datatype_export.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](datatype_export.md#fabricindex) ; `adminVendorId?`: [`VendorId`](datatype_export.md#vendorid) ; `autoConnect?`: `boolean` ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
+Ƭ **CommissioningControllerOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & \{ `adminFabricId?`: [`FabricId`](datatype_export.md#fabricid) ; `adminFabricIndex?`: [`FabricIndex`](datatype_export.md#fabricindex) ; `adminVendorId?`: [`VendorId`](datatype_export.md#vendorid) ; `autoConnect?`: `boolean` ; `caseAuthenticatedTags?`: [`CaseAuthenticatedTag`](datatype_export.md#caseauthenticatedtag)[] ; `listeningAddressIpv4?`: `string` ; `listeningAddressIpv6?`: `string` ; `localPort?`: `number`  }
 
 Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningController.ts#L36)
+[packages/matter.js/src/CommissioningController.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningController.ts#L37)
 
 ___
 
@@ -125,19 +125,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterServer.ts#L31)
+[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterServer.ts#L31)
 
 ___
 
 ### NodeCommissioningOptions
 
-Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & { `commissioning?`: [`CommissioningOptions`](protocol_export.md#commissioningoptions) ; `discovery`: { `identifierData`: [`CommissionableDeviceIdentifiers`](common_export.md#commissionabledeviceidentifiers)  } \| { `commissionableDevice`: [`CommissionableDevice`](common_export.md#commissionabledevice)  } & { `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)<typeof [`DiscoveryCapabilitiesBitmap`](schema_export.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](common_export.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
+Ƭ **NodeCommissioningOptions**: [`CommissioningControllerNodeOptions`](device_export.md#commissioningcontrollernodeoptions) & \{ `commissioning?`: [`CommissioningOptions`](protocol_export.md#commissioningoptions) ; `discovery`: \{ `identifierData`: [`CommissionableDeviceIdentifiers`](common_export.md#commissionabledeviceidentifiers)  } \| \{ `commissionableDevice`: [`CommissionableDevice`](common_export.md#commissionabledevice)  } & \{ `discoveryCapabilities?`: [`TypeFromPartialBitSchema`](schema_export.md#typefrompartialbitschema)\<typeof [`DiscoveryCapabilitiesBitmap`](schema_export.md#discoverycapabilitiesbitmap)\> ; `knownAddress?`: [`ServerAddress`](common_export.md#serveraddress) ; `timeoutSeconds?`: `number`  } ; `passcode`: `number`  }
 
 Options needed to commission a new node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningController.ts#L73)
+[packages/matter.js/src/CommissioningController.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningController.ts#L80)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/MatterServer.ts#L19)
+[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterServer.ts#L19)
 
 ## Variables
 
@@ -164,4 +164,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/CommissioningServer.ts#L75)
+[packages/matter.js/src/CommissioningServer.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningServer.ts#L76)

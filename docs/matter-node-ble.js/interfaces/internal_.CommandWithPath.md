@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / CommandWithPath
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / CommandWithPath
 
 # Interface: CommandWithPath
 
-[<internal>](../modules/internal_.md).CommandWithPath
+[\<internal\>](../modules/internal_.md).CommandWithPath
 
 ## Table of contents
 
@@ -15,7 +15,7 @@
 
 ### command
 
-• **command**: [`CommandServer`](../classes/internal_.CommandServer.md)<`any`, `any`\>
+• **command**: [`CommandServer`](../classes/internal_.CommandServer.md)\<`any`, `any`\>
 
 #### Defined in
 
@@ -25,7 +25,7 @@ ___
 
 ### path
 
-• **path**: [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`FieldType`](internal_.FieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](internal_.FieldType.md)<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>
+• **path**: [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`FieldType`](internal_.FieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `commandId`: [`FieldType`](internal_.FieldType.md)\<[`CommandId`](../modules/internal_.md#commandid)\> ; `endpointId`: [`OptionalFieldType`](internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\>  }\>
 
 #### Defined in
 

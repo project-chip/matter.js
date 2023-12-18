@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / CurveType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / CurveType
 
 # Enumeration: CurveType
 
-[<internal>](../modules/internal_.md).CurveType
+[\<internal\>](../modules/internal_.md).CurveType
 
 ## Table of contents
 

@@ -24,4 +24,4 @@ Provided EnableKey does not match the previously configured value.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:415](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L415)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:415](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L415)

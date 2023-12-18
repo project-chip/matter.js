@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / AttributeOptions
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / AttributeOptions
 
-# Interface: AttributeOptions<T\>
+# Interface: AttributeOptions\<T\>
 
-[<internal>](../modules/internal_.md).AttributeOptions
+[\<internal\>](../modules/internal_.md).AttributeOptions
 
 ## Type parameters
 

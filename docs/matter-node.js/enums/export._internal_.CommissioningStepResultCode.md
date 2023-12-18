@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / CommissioningStepResultCode
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / CommissioningStepResultCode
 
 # Enumeration: CommissioningStepResultCode
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).CommissioningStepResultCode
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).CommissioningStepResultCode
 
 Result code of a single commissioning step.
 

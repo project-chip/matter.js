@@ -12,7 +12,7 @@ MatterCoreSpecificationV1_0 § A.11.3
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`boolean`\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`boolean`\>
 
   ↳ **`BooleanSchema`**
 
@@ -41,11 +41,15 @@ MatterCoreSpecificationV1_0 § A.11.3
 
 ### constructor
 
-• **new BooleanSchema**()
+• **new BooleanSchema**(): [`BooleanSchema`](exports_tlv.BooleanSchema.md)
+
+#### Returns
+
+[`BooleanSchema`](exports_tlv.BooleanSchema.md)
 
 #### Inherited from
 
-TlvSchema<boolean\>.constructor
+TlvSchema\<boolean\>.constructor
 
 ## Methods
 

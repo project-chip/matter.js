@@ -8,7 +8,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](exports_schema.Schema.md)<[`StatusMessage`](../modules/exports_securechannel.md#statusmessage), [`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Schema`](exports_schema.Schema.md)\<[`StatusMessage`](../modules/exports_securechannel.md#statusmessage), [`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
   ↳ **`SecureChannelStatusMessageSchema`**
 
@@ -30,7 +30,11 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new SecureChannelStatusMessageSchema**()
+• **new SecureChannelStatusMessageSchema**(): [`SecureChannelStatusMessageSchema`](exports_securechannel.SecureChannelStatusMessageSchema.md)
+
+#### Returns
+
+[`SecureChannelStatusMessageSchema`](exports_securechannel.SecureChannelStatusMessageSchema.md)
 
 #### Inherited from
 

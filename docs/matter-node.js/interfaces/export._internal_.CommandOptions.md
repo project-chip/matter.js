@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / CommandOptions
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / CommandOptions
 
 # Interface: CommandOptions
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).CommandOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).CommandOptions
 
 ## Hierarchy
 

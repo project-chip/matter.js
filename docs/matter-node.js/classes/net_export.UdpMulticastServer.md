@@ -33,7 +33,11 @@
 
 ### constructor
 
-• `Private` **new UdpMulticastServer**()
+• **new UdpMulticastServer**(): [`UdpMulticastServer`](net_export.UdpMulticastServer.md)
+
+#### Returns
+
+[`UdpMulticastServer`](net_export.UdpMulticastServer.md)
 
 #### Defined in
 
@@ -133,11 +137,11 @@ packages/matter.js/dist/esm/net/UdpMulticastServer.d.ts:19
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -167,7 +171,7 @@ ___
 
 ### send
 
-▸ **send**(`message`, `netInterface?`, `uniCastTarget?`): `Promise`<`void`\>
+▸ **send**(`message`, `netInterface?`, `uniCastTarget?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -179,7 +183,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -189,7 +193,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`«destructured»`): `Promise`<[`UdpMulticastServer`](net_export.UdpMulticastServer.md)\>
+▸ **create**(`«destructured»`): `Promise`\<[`UdpMulticastServer`](net_export.UdpMulticastServer.md)\>
 
 #### Parameters
 
@@ -199,7 +203,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpMulticastServer`](net_export.UdpMulticastServer.md)\>
+`Promise`\<[`UdpMulticastServer`](net_export.UdpMulticastServer.md)\>
 
 #### Defined in
 

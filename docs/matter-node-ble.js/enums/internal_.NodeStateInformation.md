@@ -1,14 +1,15 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / NodeStateInformation
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / NodeStateInformation
 
 # Enumeration: NodeStateInformation
 
-[<internal>](../modules/internal_.md).NodeStateInformation
+[\<internal\>](../modules/internal_.md).NodeStateInformation
 
 ## Table of contents
 
 ### Enumeration Members
 
 - [Connected](internal_.NodeStateInformation.md#connected)
+- [Decommissioned](internal_.NodeStateInformation.md#decommissioned)
 - [Disconnected](internal_.NodeStateInformation.md#disconnected)
 - [Reconnecting](internal_.NodeStateInformation.md#reconnecting)
 - [StructureChanged](internal_.NodeStateInformation.md#structurechanged)
@@ -25,6 +26,18 @@ Node is connected and all data is up-to-date.
 #### Defined in
 
 matter.js/dist/esm/device/PairedNode.d.ts:20
+
+___
+
+### Decommissioned
+
+• **Decommissioned** = ``5``
+
+The node was just Decommissioned.
+
+#### Defined in
+
+matter.js/dist/esm/device/PairedNode.d.ts:41
 
 ___
 

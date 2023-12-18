@@ -36,7 +36,11 @@
 
 ### constructor
 
-• **new Time**()
+• **new Time**(): [`Time`](time_export.Time.md)
+
+#### Returns
+
+[`Time`](time_export.Time.md)
 
 ## Properties
 
@@ -146,11 +150,11 @@ ___
 
 ### sleep
 
-▪ `Static` `Readonly` **sleep**: (`durationMs`: `number`) => `Promise`<`void`\>
+▪ `Static` `Readonly` **sleep**: (`durationMs`: `number`) => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (`durationMs`): `Promise`<`void`\>
+▸ (`durationMs`): `Promise`\<`void`\>
 
 ##### Parameters
 
@@ -160,7 +164,7 @@ ___
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -170,7 +174,7 @@ packages/matter.js/dist/esm/time/Time.d.ts:19
 
 ### getPeriodicTimer
 
-▸ `Abstract` **getPeriodicTimer**(`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getPeriodicTimer**(`intervalMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will periodically call callback at intervalMs intervals.
 
@@ -193,7 +197,7 @@ ___
 
 ### getTimer
 
-▸ `Abstract` **getTimer**(`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
+▸ **getTimer**(`durationMs`, `callback`): [`Timer`](../interfaces/time_export.Timer.md)
 
 Returns a timer that will call callback after durationMs has passed.
 
@@ -216,7 +220,7 @@ ___
 
 ### now
 
-▸ `Abstract` **now**(): `Date`
+▸ **now**(): `Date`
 
 #### Returns
 
@@ -230,7 +234,7 @@ ___
 
 ### nowMs
 
-▸ `Abstract` **nowMs**(): `number`
+▸ **nowMs**(): `number`
 
 #### Returns
 

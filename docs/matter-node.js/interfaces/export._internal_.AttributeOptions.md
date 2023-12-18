@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / AttributeOptions
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / AttributeOptions
 
-# Interface: AttributeOptions<T\>
+# Interface: AttributeOptions\<T\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).AttributeOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).AttributeOptions
 
 ## Type parameters
 

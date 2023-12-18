@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/model](../modules/exports_model.md) / Aspect
 
-# Class: Aspect<D\>
+# Class: Aspect\<D\>
 
 [exports/model](../modules/exports_model.md).Aspect
 
@@ -54,7 +54,7 @@ for "constraint" which is not formally described as a quality.
 
 ### constructor
 
-• **new Aspect**<`D`\>(`definition`)
+• **new Aspect**\<`D`\>(`definition`): [`Aspect`](exports_model.Aspect.md)\<`D`\>
 
 #### Type parameters
 
@@ -67,6 +67,10 @@ for "constraint" which is not formally described as a quality.
 | Name | Type |
 | :------ | :------ |
 | `definition` | `D` |
+
+#### Returns
+
+[`Aspect`](exports_model.Aspect.md)\<`D`\>
 
 #### Defined in
 
@@ -167,17 +171,17 @@ ___
 
 ### extend
 
-▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)<`D`\>
+▸ **extend**(`other`): [`Aspect`](exports_model.Aspect.md)\<`D`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `other` | `Exclude`<`D`, ``"string"``\> |
+| `other` | `Exclude`\<`D`, ``"string"``\> |
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<`D`\>
+[`Aspect`](exports_model.Aspect.md)\<`D`\>
 
 #### Defined in
 
@@ -187,7 +191,7 @@ ___
 
 ### toString
 
-▸ `Abstract` **toString**(): `string`
+▸ **toString**(): `string`
 
 #### Returns
 

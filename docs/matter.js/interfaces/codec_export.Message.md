@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L52)
+[packages/matter.js/src/codec/MessageCodec.ts:55](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L55)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:55](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L55)
+[packages/matter.js/src/codec/MessageCodec.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L58)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L53)
+[packages/matter.js/src/codec/MessageCodec.ts:56](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L56)
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/MessageCodec.ts:54](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/MessageCodec.ts#L54)
+[packages/matter.js/src/codec/MessageCodec.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/MessageCodec.ts#L57)

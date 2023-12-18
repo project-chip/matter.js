@@ -23,7 +23,11 @@
 
 ### constructor
 
-• **new ReedSolomon**()
+• **new ReedSolomon**(): [`ReedSolomon`](exports_math.ReedSolomon.md)
+
+#### Returns
+
+[`ReedSolomon`](exports_math.ReedSolomon.md)
 
 ## Properties
 

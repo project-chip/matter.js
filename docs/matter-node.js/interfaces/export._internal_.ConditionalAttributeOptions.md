@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / ConditionalAttributeOptions
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / ConditionalAttributeOptions
 
-# Interface: ConditionalAttributeOptions<T, F\>
+# Interface: ConditionalAttributeOptions\<T, F\>
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).ConditionalAttributeOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).ConditionalAttributeOptions
 
 ## Type parameters
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`AttributeOptions`](export._internal_.AttributeOptions.md)<`T`\>
+- [`AttributeOptions`](export._internal_.AttributeOptions.md)\<`T`\>
 
   ↳ **`ConditionalAttributeOptions`**
 
@@ -49,7 +49,7 @@ ___
 
 ### mandatoryIf
 
-• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• `Optional` **mandatoryIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 
@@ -73,7 +73,7 @@ ___
 
 ### optionalIf
 
-• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)<`F`\>
+• `Optional` **optionalIf**: [`ConditionalFeatureList`](../modules/exports_cluster.md#conditionalfeaturelist)\<`F`\>
 
 #### Defined in
 

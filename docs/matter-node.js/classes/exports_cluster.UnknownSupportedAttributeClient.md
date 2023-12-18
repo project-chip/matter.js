@@ -9,7 +9,7 @@ but the contained attribute is unknown.
 
 ## Hierarchy
 
-- [`SupportedAttributeClient`](exports_cluster.SupportedAttributeClient.md)<`any`\>
+- [`SupportedAttributeClient`](exports_cluster.SupportedAttributeClient.md)\<`any`\>
 
   ↳ **`UnknownSupportedAttributeClient`**
 
@@ -42,17 +42,21 @@ but the contained attribute is unknown.
 
 ### constructor
 
-• **new UnknownSupportedAttributeClient**(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new UnknownSupportedAttributeClient**(`attribute`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`UnknownSupportedAttributeClient`](exports_cluster.UnknownSupportedAttributeClient.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)<`any`, `any`\> |
+| `attribute` | [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
+
+#### Returns
+
+[`UnknownSupportedAttributeClient`](exports_cluster.UnknownSupportedAttributeClient.md)
 
 #### Inherited from
 
@@ -66,7 +70,7 @@ packages/matter.js/dist/esm/cluster/client/AttributeClient.d.ts:30
 
 ### attribute
 
-• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)<`any`, `any`\>
+• `Readonly` **attribute**: [`Attribute`](../modules/exports_cluster.md#attribute)\<`any`, `any`\>
 
 #### Inherited from
 
@@ -136,7 +140,7 @@ ___
 
 ### schema
 
-• `Protected` `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)<`any`\>
+• `Protected` `Readonly` **schema**: [`TlvSchema`](exports_tlv.TlvSchema.md)\<`any`\>
 
 #### Inherited from
 
@@ -176,7 +180,7 @@ ___
 
 ### get
 
-▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`any`\>
+▸ **get**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`any`\>
 
 Get the value of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -189,7 +193,7 @@ Get the value of the attribute. Fabric scoped reads are always done with the rem
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Inherited from
 
@@ -203,7 +207,7 @@ ___
 
 ### getWithVersion
 
-▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`<`undefined` \| { `value`: `any` ; `version`: `number`  }\>
+▸ **getWithVersion**(`alwaysRequestFromRemote?`, `isFabricFiltered?`): `Promise`\<`undefined` \| \{ `value`: `any` ; `version`: `number`  }\>
 
 Get the value with version of the attribute. Fabric scoped reads are always done with the remote.
 
@@ -216,7 +220,7 @@ Get the value with version of the attribute. Fabric scoped reads are always done
 
 #### Returns
 
-`Promise`<`undefined` \| { `value`: `any` ; `version`: `number`  }\>
+`Promise`\<`undefined` \| \{ `value`: `any` ; `version`: `number`  }\>
 
 #### Inherited from
 
@@ -256,7 +260,7 @@ ___
 
 ### set
 
-▸ **set**(`value`, `dataVersion?`): `Promise`<`void`\>
+▸ **set**(`value`, `dataVersion?`): `Promise`\<`void`\>
 
 Set the value of the attribute. When dataVersion parameter is provided the value is only set when the
 cluster dataVersion of the server matches. If it does not match it is rejected with an Error.
@@ -270,7 +274,7 @@ cluster dataVersion of the server matches. If it does not match it is rejected w
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -284,7 +288,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `knownDataVersion?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 Subscribe to the attribute.
 
@@ -299,7 +303,7 @@ Subscribe to the attribute.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -313,7 +317,7 @@ ___
 
 ### update
 
-▸ `Private` **update**(`value`): `void`
+▸ **update**(`value`): `void`
 
 Update the value of the attribute. Just internally used!
 

@@ -38,7 +38,7 @@ Interface for classes that allow to announce one Matter instance.
 
 ### constructor
 
-• **new BleBroadcaster**(`blenoServer`, `additionalAdvertisementData?`)
+• **new BleBroadcaster**(`blenoServer`, `additionalAdvertisementData?`): [`BleBroadcaster`](BleBroadcaster.md)
 
 #### Parameters
 
@@ -47,9 +47,13 @@ Interface for classes that allow to announce one Matter instance.
 | `blenoServer` | [`BlenoBleServer`](internal_.BlenoBleServer.md) |
 | `additionalAdvertisementData?` | `Uint8Array` |
 
+#### Returns
+
+[`BleBroadcaster`](BleBroadcaster.md)
+
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L26)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L26)
 
 ## Properties
 
@@ -59,7 +63,7 @@ Interface for classes that allow to announce one Matter instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L28)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L28)
 
 ___
 
@@ -69,7 +73,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L24)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L24)
 
 ___
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L27)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L27)
 
 ___
 
@@ -89,7 +93,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L23)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L23)
 
 ___
 
@@ -99,7 +103,7 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L22)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L22)
 
 ___
 
@@ -109,19 +113,19 @@ ___
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L21)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L21)
 
 ## Methods
 
 ### announce
 
-▸ **announce**(): `Promise`<`void`\>
+▸ **announce**(): `Promise`\<`void`\>
 
 Send out announcements for this instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -129,33 +133,33 @@ Send out announcements for this instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:65](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L65)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L65)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:102](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L102)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L102)
 
 ___
 
 ### expireAllAnnouncements
 
-▸ **expireAllAnnouncements**(): `Promise`<`void`\>
+▸ **expireAllAnnouncements**(): `Promise`\<`void`\>
 
 Expire all announcements.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -163,19 +167,19 @@ Expire all announcements.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:98](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L98)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:98](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L98)
 
 ___
 
 ### expireCommissioningAnnouncement
 
-▸ **expireCommissioningAnnouncement**(): `Promise`<`void`\>
+▸ **expireCommissioningAnnouncement**(): `Promise`\<`void`\>
 
 Expire the announcement for this commissioning instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -183,19 +187,19 @@ Expire the announcement for this commissioning instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:90](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L90)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L90)
 
 ___
 
 ### expireFabricAnnouncement
 
-▸ **expireFabricAnnouncement**(): `Promise`<`void`\>
+▸ **expireFabricAnnouncement**(): `Promise`\<`void`\>
 
 Expire the announcement for this operative instance.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -203,13 +207,13 @@ Expire the announcement for this operative instance.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L94)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L94)
 
 ___
 
 ### setCommissionMode
 
-▸ **setCommissionMode**(`mode`, `«destructured»`): `Promise`<`void`\>
+▸ **setCommissionMode**(`mode`, `«destructured»`): `Promise`\<`void`\>
 
 Set a commissionable mode and details to announce a commissionable device.
 
@@ -222,7 +226,7 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -230,13 +234,13 @@ Set a commissionable mode and details to announce a commissionable device.
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L31)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L31)
 
 ___
 
 ### setCommissionerInfo
 
-▸ **setCommissionerInfo**(`_commissionerData`): `Promise`<`void`\>
+▸ **setCommissionerInfo**(`_commissionerData`): `Promise`\<`void`\>
 
 Set commissioner details to announce a commissioner service for User directed commissioning (UDC).
 
@@ -248,7 +252,7 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -256,20 +260,20 @@ Set commissioner details to announce a commissioner service for User directed co
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:60](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L60)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L60)
 
 ___
 
 ### setFabrics
 
-▸ **setFabrics**(): `Promise`<`void`\>
+▸ **setFabrics**(): `Promise`\<`void`\>
 
 Set operational details to Announce an operational device which is already commissioned.
 Use expireCommissioningAnnouncements = true when Fabrics are changed after a n commissioning process.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -277,4 +281,4 @@ Use expireCommissioningAnnouncements = true when Fabrics are changed after a n c
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BleBroadcaster.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L53)
+[matter-node-ble.js/src/ble/BleBroadcaster.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BleBroadcaster.ts#L53)

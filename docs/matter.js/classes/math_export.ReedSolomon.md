@@ -23,7 +23,11 @@
 
 ### constructor
 
-• **new ReedSolomon**()
+• **new ReedSolomon**(): [`ReedSolomon`](math_export.ReedSolomon.md)
+
+#### Returns
+
+[`ReedSolomon`](math_export.ReedSolomon.md)
 
 ## Properties
 
@@ -33,7 +37,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L73)
+[packages/matter.js/src/math/ReedSolomon.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L73)
 
 ## Methods
 
@@ -54,13 +58,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L75)
+[packages/matter.js/src/math/ReedSolomon.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L75)
 
 ___
 
 ### generatePolynom
 
-▸ `Private` **generatePolynom**(`ecLength`): `number`[]
+▸ **generatePolynom**(`ecLength`): `number`[]
 
 #### Parameters
 
@@ -74,4 +78,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/math/ReedSolomon.ts:93](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/math/ReedSolomon.ts#L93)
+[packages/matter.js/src/math/ReedSolomon.ts:93](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/math/ReedSolomon.ts#L93)

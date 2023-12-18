@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / FixedAttributeServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / FixedAttributeServer
 
-# Class: FixedAttributeServer<T\>
+# Class: FixedAttributeServer\<T\>
 
-[<internal>](../modules/internal_.md).FixedAttributeServer
+[\<internal\>](../modules/internal_.md).FixedAttributeServer
 
 Attribute server class that handled fixed attribute values that never change and is the base class for other
 Attribute server types.
@@ -15,7 +15,7 @@ Attribute server types.
 
 ## Hierarchy
 
-- [`BaseAttributeServer`](internal_.BaseAttributeServer.md)<`T`\>
+- [`BaseAttributeServer`](internal_.BaseAttributeServer.md)\<`T`\>
 
   ↳ **`FixedAttributeServer`**
 
@@ -60,7 +60,7 @@ Attribute server types.
 
 ### constructor
 
-• **new FixedAttributeServer**<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `getter?`)
+• **new FixedAttributeServer**\<`T`\>(`id`, `name`, `schema`, `isWritable`, `isSubscribable`, `requiresTimedInteraction`, `defaultValue`, `getClusterDataVersion`, `getter?`): [`FixedAttributeServer`](internal_.FixedAttributeServer.md)\<`T`\>
 
 #### Type parameters
 
@@ -74,13 +74,17 @@ Attribute server types.
 | :------ | :------ | :------ |
 | `id` | [`AttributeId`](../modules/internal_.md#attributeid) | - |
 | `name` | `string` | - |
-| `schema` | [`TlvSchema`](internal_.TlvSchema.md)<`T`\> | - |
+| `schema` | [`TlvSchema`](internal_.TlvSchema.md)\<`T`\> | - |
 | `isWritable` | `boolean` | - |
 | `isSubscribable` | `boolean` | - |
 | `requiresTimedInteraction` | `boolean` | - |
 | `defaultValue` | `T` | - |
 | `getClusterDataVersion` | () => `number` | - |
-| `getter?` | (`session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
+| `getter?` | (`session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T` | Optional getter function to handle special requirements or the data are stored in different places. |
+
+#### Returns
+
+[`FixedAttributeServer`](internal_.FixedAttributeServer.md)\<`T`\>
 
 #### Overrides
 
@@ -140,7 +144,7 @@ ___
 
 ### getter
 
-• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
+• `Protected` `Readonly` **getter**: (`session?`: [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\>, `endpoint?`: [`Endpoint`](internal_.Endpoint.md), `isFabricFiltered?`: `boolean`) => `T`
 
 #### Type declaration
 
@@ -150,7 +154,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session?` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session?` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `endpoint?` | [`Endpoint`](internal_.Endpoint.md) |
 | `isFabricFiltered?` | `boolean` |
 
@@ -246,7 +250,7 @@ ___
 
 ### schema
 
-• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)<`T`\>
+• `Readonly` **schema**: [`TlvSchema`](internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -356,7 +360,7 @@ If a getter is defined the value is determined by that getter method.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns
@@ -400,7 +404,7 @@ attributes.
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/internal_.Session.md)<[`MatterDevice`](internal_.MatterDevice.md)\> |
+| `session` | [`Session`](../interfaces/internal_.Session.md)\<[`MatterDevice`](internal_.MatterDevice.md)\> |
 | `isFabricFiltered` | `boolean` |
 
 #### Returns

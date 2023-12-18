@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/tlv](../modules/exports_tlv.md) / TlvWrapper
 
-# Class: TlvWrapper<O, T\>
+# Class: TlvWrapper\<O, T\>
 
 [exports/tlv](../modules/exports_tlv.md).TlvWrapper
 
@@ -13,9 +13,11 @@
 
 ## Hierarchy
 
-- [`TlvSchema`](exports_tlv.TlvSchema.md)<`O`\>
+- [`TlvSchema`](exports_tlv.TlvSchema.md)\<`O`\>
 
   ↳ **`TlvWrapper`**
+
+  ↳↳ [`TlvCaseAuthenticatedTagSchema`](export._internal_.TlvCaseAuthenticatedTagSchema.md)
 
 ## Table of contents
 
@@ -48,7 +50,7 @@
 
 ### constructor
 
-• **new TlvWrapper**<`O`, `T`\>(`underlyingSchema`, `wrap`, `unwrap`)
+• **new TlvWrapper**\<`O`, `T`\>(`underlyingSchema`, `wrap`, `unwrap`): [`TlvWrapper`](exports_tlv.TlvWrapper.md)\<`O`, `T`\>
 
 #### Type parameters
 
@@ -61,13 +63,17 @@
 
 | Name | Type |
 | :------ | :------ |
-| `underlyingSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `underlyingSchema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 | `wrap` | (`object`: `O`) => `T` |
 | `unwrap` | (`value`: `T`) => `O` |
 
+#### Returns
+
+[`TlvWrapper`](exports_tlv.TlvWrapper.md)\<`O`, `T`\>
+
 #### Overrides
 
-TlvSchema&lt;O\&gt;.constructor
+TlvSchema\&lt;O\&gt;.constructor
 
 #### Defined in
 

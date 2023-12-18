@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)<[`MatterController`](export._internal_.MatterController.md)\>
+- [`SecureChannelMessenger`](exports_securechannel.SecureChannelMessenger.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
   ↳ **`CaseClientMessenger`**
 
@@ -40,13 +40,17 @@
 
 ### constructor
 
-• **new CaseClientMessenger**(`exchange`)
+• **new CaseClientMessenger**(`exchange`): [`CaseClientMessenger`](exports_session.CaseClientMessenger.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
+
+#### Returns
+
+[`CaseClientMessenger`](exports_session.CaseClientMessenger.md)
 
 #### Inherited from
 
@@ -60,7 +64,7 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Inherited from
 
@@ -74,11 +78,11 @@ packages/matter.js/dist/esm/protocol/securechannel/SecureChannelMessenger.d.ts:1
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -110,7 +114,7 @@ ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Parameters
 
@@ -120,7 +124,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/exports_codec.Message.md)\>
+`Promise`\<[`Message`](../interfaces/exports_codec.Message.md)\>
 
 #### Inherited from
 
@@ -134,7 +138,7 @@ ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -147,11 +151,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Inherited from
 
@@ -165,11 +169,11 @@ ___
 
 ### readSigma2
 
-▸ **readSigma2**(): `Promise`<{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| { `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>  }\>
+▸ **readSigma2**(): `Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Returns
 
-`Promise`<{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| { `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\>  }\>
+`Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` ; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` ; `sigma2Resume`: [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Defined in
 
@@ -179,7 +183,7 @@ ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -193,11 +197,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](exports_tlv.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -211,11 +215,11 @@ ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -229,7 +233,7 @@ ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -239,7 +243,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -253,17 +257,17 @@ ___
 
 ### sendSigma1
 
-▸ **sendSigma1**(`sigma1`): `Promise`<`Uint8Array`\>
+▸ **sendSigma1**(`sigma1`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sigma1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `destinationId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`number`\>  }\> |
+| `sigma1` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `destinationId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<[`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/exports_tlv.OptionalFieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -273,17 +277,17 @@ ___
 
 ### sendSigma3
 
-▸ **sendSigma3**(`sigma3`): `Promise`<`Uint8Array`\>
+▸ **sendSigma3**(`sigma3`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sigma3` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)<{ `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)<`Uint8Array`\>  }\> |
+| `sigma3` | [`TypeFromFields`](../modules/exports_tlv.md#typefromfields)\<\{ `encrypted`: [`FieldType`](../interfaces/exports_tlv.FieldType.md)\<`Uint8Array`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
@@ -293,11 +297,11 @@ ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -311,7 +315,7 @@ ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -335,11 +339,11 @@ ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 

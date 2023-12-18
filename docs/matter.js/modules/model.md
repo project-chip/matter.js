@@ -153,7 +153,7 @@ Any Matter element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AnyElement.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AnyElement.ts#L19)
+[packages/matter.js/src/model/elements/AnyElement.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AnyElement.ts#L19)
 
 ___
 
@@ -165,23 +165,23 @@ All Matter data elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AnyValueElement.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AnyValueElement.ts#L15)
+[packages/matter.js/src/model/elements/AnyValueElement.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AnyValueElement.ts#L15)
 
 ___
 
 ### AttributeElement
 
-Ƭ **AttributeElement**: [`ValueElement`](model.md#valueelement) & { `id`: [`Mei`](model.md#mei) ; `tag`: \`${Tag}\`  }
+Ƭ **AttributeElement**: [`ValueElement`](model.md#valueelement) & \{ `id`: [`Mei`](model.md#mei) ; `tag`: \`$\{Tag}\`  }
 
 A cluster property description.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AttributeElement.ts#L19)
+[packages/matter.js/src/model/elements/AttributeElement.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L19)
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AttributeElement.ts#L14)
+[packages/matter.js/src/model/elements/AttributeElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L14)
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AttributeElement.ts#L23)
+[packages/matter.js/src/model/elements/AttributeElement.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L23)
 
 ___
 
@@ -211,27 +211,27 @@ functionality related to the element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L64)
+[packages/matter.js/src/model/elements/BaseElement.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L64)
 
-[packages/matter.js/src/model/elements/BaseElement.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L18)
+[packages/matter.js/src/model/elements/BaseElement.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L18)
 
-[packages/matter.js/src/model/elements/BaseElement.ts:74](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L74)
+[packages/matter.js/src/model/elements/BaseElement.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L74)
 
 ___
 
 ### ClusterElement
 
-Ƭ **ClusterElement**: [`BaseElement`](model.md#baseelement) & { `children?`: [`Child`](model.ClusterElement.md#child)[] ; `classification?`: \`${Classification}\` ; `id?`: [`Mei`](model.md#mei) ; `singleton?`: `boolean` ; `tag`: \`${Tag}\`  }
+Ƭ **ClusterElement**: [`BaseElement`](model.md#baseelement) & \{ `children?`: [`Child`](model.ClusterElement.md#child)[] ; `classification?`: \`$\{Classification}\` ; `id?`: [`Mei`](model.md#mei) ; `singleton?`: `boolean` ; `tag`: \`$\{Tag}\`  }
 
 A cluster describes a set of related functionality.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ClusterElement.ts#L35)
+[packages/matter.js/src/model/elements/ClusterElement.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ClusterElement.ts#L35)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ClusterElement.ts#L17)
+[packages/matter.js/src/model/elements/ClusterElement.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ClusterElement.ts#L17)
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ClusterElement.ts#L39)
+[packages/matter.js/src/model/elements/ClusterElement.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ClusterElement.ts#L39)
 
 ___
 
@@ -252,41 +252,41 @@ Defines different variants of clusters.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ClusterVariance.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ClusterVariance.ts#L41)
+[packages/matter.js/src/model/logic/ClusterVariance.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ClusterVariance.ts#L41)
 
-[packages/matter.js/src/model/logic/ClusterVariance.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ClusterVariance.ts#L15)
+[packages/matter.js/src/model/logic/ClusterVariance.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ClusterVariance.ts#L15)
 
 ___
 
 ### CommandElement
 
-Ƭ **CommandElement**: [`ValueElement`](model.md#valueelement) & { `direction?`: \`${Direction}\` ; `id`: [`Mei`](model.md#mei) ; `response?`: `string` ; `tag`: \`${Tag}\`  }
+Ƭ **CommandElement**: [`ValueElement`](model.md#valueelement) & \{ `direction?`: \`$\{Direction}\` ; `id`: [`Mei`](model.md#mei) ; `response?`: `string` ; `tag`: \`$\{Tag}\`  }
 
 A command describes a remote procedure call.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L24)
+[packages/matter.js/src/model/elements/CommandElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/CommandElement.ts#L24)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L14)
+[packages/matter.js/src/model/elements/CommandElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/CommandElement.ts#L14)
 
-[packages/matter.js/src/model/elements/CommandElement.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L28)
+[packages/matter.js/src/model/elements/CommandElement.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/CommandElement.ts#L28)
 
 ___
 
 ### DatatypeElement
 
-Ƭ **DatatypeElement**: [`ValueElement`](model.md#valueelement) & { `children?`: [`DatatypeElement`](model.md#datatypeelement)[] ; `id?`: [`Mei`](model.md#mei) ; `metatype?`: \`${Metatype}\` ; `tag`: \`${Tag}\`  }
+Ƭ **DatatypeElement**: [`ValueElement`](model.md#valueelement) & \{ `children?`: [`DatatypeElement`](model.md#datatypeelement)[] ; `id?`: [`Mei`](model.md#mei) ; `metatype?`: \`$\{Metatype}\` ; `tag`: \`$\{Tag}\`  }
 
 A datatype element defines a standalone datatype.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L34)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L34)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L14)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L14)
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L38)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L38)
 
 ___
 
@@ -307,13 +307,13 @@ Describes an error in model construction.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/DefinitionError.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/DefinitionError.ts#L10)
+[packages/matter.js/src/model/definitions/DefinitionError.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/DefinitionError.ts#L10)
 
 ___
 
 ### DeviceTypeElement
 
-Ƭ **DeviceTypeElement**: [`BaseElement`](model.md#baseelement) & { `category?`: `string` ; `children?`: ([`RequirementElement`](model.md#requirementelement) \| [`DatatypeElement`](model.md#datatypeelement))[] ; `classification`: \`${Classification}\` ; `id?`: [`Mei`](model.md#mei) ; `tag`: \`${Tag}\`  }
+Ƭ **DeviceTypeElement**: [`BaseElement`](model.md#baseelement) & \{ `category?`: `string` ; `children?`: ([`RequirementElement`](model.md#requirementelement) \| [`DatatypeElement`](model.md#datatypeelement))[] ; `classification`: \`$\{Classification}\` ; `id?`: [`Mei`](model.md#mei) ; `tag`: \`$\{Tag}\`  }
 
 Details on a specific device as defined in the Matter specification.
 
@@ -321,59 +321,59 @@ TODO - extract/merge DeviceTypes.ts?
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L25)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L25)
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L17)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L17)
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L29)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L29)
 
 ___
 
 ### EndpointElement
 
-Ƭ **EndpointElement**: [`BaseElement`](model.md#baseelement) & { `children`: [`DeviceTypeElement`](model.md#devicetypeelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **EndpointElement**: [`BaseElement`](model.md#baseelement) & \{ `children`: [`DeviceTypeElement`](model.md#devicetypeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of an endpoint.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EndpointElement.ts#L20)
+[packages/matter.js/src/model/elements/EndpointElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EndpointElement.ts#L20)
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EndpointElement.ts#L14)
+[packages/matter.js/src/model/elements/EndpointElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EndpointElement.ts#L14)
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EndpointElement.ts#L24)
+[packages/matter.js/src/model/elements/EndpointElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EndpointElement.ts#L24)
 
 ___
 
 ### EventElement
 
-Ƭ **EventElement**: [`ValueElement`](model.md#valueelement) & { `id`: [`Mei`](model.md#mei) ; `priority?`: \`${Priority}\` ; `tag`: \`${Tag}\`  }
+Ƭ **EventElement**: [`ValueElement`](model.md#valueelement) & \{ `id`: [`Mei`](model.md#mei) ; `priority?`: \`$\{Priority}\` ; `tag`: \`$\{Tag}\`  }
 
 An event is triggered by endpoints.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L22)
+[packages/matter.js/src/model/elements/EventElement.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L22)
 
-[packages/matter.js/src/model/elements/EventElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L14)
+[packages/matter.js/src/model/elements/EventElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L14)
 
-[packages/matter.js/src/model/elements/EventElement.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L26)
+[packages/matter.js/src/model/elements/EventElement.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L26)
 
 ___
 
 ### FabricElement
 
-Ƭ **FabricElement**: [`BaseElement`](model.md#baseelement) & { `children`: [`NodeElement`](model.md#nodeelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **FabricElement**: [`BaseElement`](model.md#baseelement) & \{ `children`: [`NodeElement`](model.md#nodeelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of a fabric.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/FabricElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/FabricElement.ts#L20)
+[packages/matter.js/src/model/elements/FabricElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/FabricElement.ts#L20)
 
-[packages/matter.js/src/model/elements/FabricElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/FabricElement.ts#L14)
+[packages/matter.js/src/model/elements/FabricElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/FabricElement.ts#L14)
 
-[packages/matter.js/src/model/elements/FabricElement.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/FabricElement.ts#L24)
+[packages/matter.js/src/model/elements/FabricElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/FabricElement.ts#L24)
 
 ___
 
@@ -387,9 +387,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L14)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L14)
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L11)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L11)
 
 ___
 
@@ -399,7 +399,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L10)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L10)
 
 ___
 
@@ -413,7 +413,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L12)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L12)
 
 ___
 
@@ -427,9 +427,9 @@ can capture the original semantic meaning.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/FieldValue.ts#L15)
+[packages/matter.js/src/model/definitions/FieldValue.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/FieldValue.ts#L15)
 
-[packages/matter.js/src/model/definitions/FieldValue.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/FieldValue.ts#L28)
+[packages/matter.js/src/model/definitions/FieldValue.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/FieldValue.ts#L28)
 
 ___
 
@@ -439,9 +439,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L33)
+[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L33)
 
-[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L13)
+[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L13)
 
 ___
 
@@ -461,7 +461,7 @@ Lists mandatory and optional elements for a specific context.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L15)
+[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L15)
 
 ___
 
@@ -473,9 +473,9 @@ A list of component definitions.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L29)
+[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L29)
 
-[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L24)
+[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L24)
 
 ___
 
@@ -497,23 +497,23 @@ we do not express statically with TypeScript.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/identifiers.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/identifiers.ts#L20)
+[packages/matter.js/src/model/definitions/identifiers.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/identifiers.ts#L20)
 
 ___
 
 ### MatterElement
 
-Ƭ **MatterElement**: [`BaseElement`](model.md#baseelement) & { `children`: [`Child`](model.MatterElement.md#child)[] ; `tag`: \`${Matter}\` ; `version?`: `string`  }
+Ƭ **MatterElement**: [`BaseElement`](model.md#baseelement) & \{ `children`: [`Child`](model.MatterElement.md#child)[] ; `tag`: \`$\{Matter}\` ; `version?`: `string`  }
 
 The root model element.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/MatterElement.ts#L25)
+[packages/matter.js/src/model/elements/MatterElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/MatterElement.ts#L25)
 
-[packages/matter.js/src/model/elements/MatterElement.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/MatterElement.ts#L19)
+[packages/matter.js/src/model/elements/MatterElement.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/MatterElement.ts#L19)
 
-[packages/matter.js/src/model/elements/MatterElement.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/MatterElement.ts#L29)
+[packages/matter.js/src/model/elements/MatterElement.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/MatterElement.ts#L29)
 
 ___
 
@@ -523,19 +523,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/identifiers.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/definitions/identifiers.ts#L21)
+[packages/matter.js/src/model/definitions/identifiers.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/identifiers.ts#L21)
 
 ___
 
 ### NamedComponent
 
-Ƭ **NamedComponent**: [`InferredComponent`](model.md#inferredcomponent) & { `documentation`: `string` ; `name`: `string`  }
+Ƭ **NamedComponent**: [`InferredComponent`](model.md#inferredcomponent) & \{ `documentation`: `string` ; `name`: `string`  }
 
 An inferred with generated name and documentation.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L14)
+[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L14)
 
 ___
 
@@ -547,41 +547,41 @@ A set of components keyed by generated names.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L27)
+[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L27)
 
-[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L22)
+[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L22)
 
 ___
 
 ### NodeElement
 
-Ƭ **NodeElement**: [`BaseElement`](model.md#baseelement) & { `children?`: [`EndpointElement`](model.md#endpointelement)[] ; `id`: `number` ; `tag`: \`${Tag}\`  }
+Ƭ **NodeElement**: [`BaseElement`](model.md#baseelement) & \{ `children?`: [`EndpointElement`](model.md#endpointelement)[] ; `id`: `number` ; `tag`: \`$\{Tag}\`  }
 
 Runtime representation of a node.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/NodeElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/NodeElement.ts#L20)
+[packages/matter.js/src/model/elements/NodeElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/NodeElement.ts#L20)
 
-[packages/matter.js/src/model/elements/NodeElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/NodeElement.ts#L14)
+[packages/matter.js/src/model/elements/NodeElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/NodeElement.ts#L14)
 
-[packages/matter.js/src/model/elements/NodeElement.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/NodeElement.ts#L24)
+[packages/matter.js/src/model/elements/NodeElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/NodeElement.ts#L24)
 
 ___
 
 ### RequirementElement
 
-Ƭ **RequirementElement**: [`BaseElement`](model.md#baseelement) & { `access?`: [`Definition`](model.Access.md#definition) ; `children?`: ([`RequirementElement`](model.md#requirementelement) \| [`DatatypeElement`](model.md#datatypeelement))[] ; `conformance?`: [`Definition`](model.Conformance.md#definition) ; `constraint?`: [`Definition`](model.Constraint.md#definition) ; `element`: \`${ElementType}\` ; `quality?`: [`Definition`](model.Quality.md#definition) ; `tag`: \`${Tag}\`  }
+Ƭ **RequirementElement**: [`BaseElement`](model.md#baseelement) & \{ `access?`: [`Definition`](model.Access.md#definition) ; `children?`: ([`RequirementElement`](model.md#requirementelement) \| [`DatatypeElement`](model.md#datatypeelement))[] ; `conformance?`: [`Definition`](model.Conformance.md#definition) ; `constraint?`: [`Definition`](model.Constraint.md#definition) ; `element`: \`$\{ElementType}\` ; `quality?`: [`Definition`](model.Quality.md#definition) ; `tag`: \`$\{Tag}\`  }
 
 Describes a cluster or cluster element requirement for a device.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L30)
+[packages/matter.js/src/model/elements/RequirementElement.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L30)
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L14)
+[packages/matter.js/src/model/elements/RequirementElement.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L14)
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L37)
+[packages/matter.js/src/model/elements/RequirementElement.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L37)
 
 ___
 
@@ -597,23 +597,23 @@ Input to traverse().
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L26)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L26)
 
 ___
 
 ### ValueElement
 
-Ƭ **ValueElement**: [`BaseElement`](model.md#baseelement) & { `access?`: [`Definition`](model.Access.md#definition) ; `byteSize?`: [`Size`](model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](model.Conformance.md#definition) ; `constraint?`: [`Definition`](model.Constraint.md#definition) ; `default?`: [`FieldValue`](model.md#fieldvalue) ; `quality?`: [`Definition`](model.Quality.md#definition) ; `type?`: `string`  }
+Ƭ **ValueElement**: [`BaseElement`](model.md#baseelement) & \{ `access?`: [`Definition`](model.Access.md#definition) ; `byteSize?`: [`Size`](model.ValueElement.md#size) ; `children?`: [`AnyValueElement`](model.md#anyvalueelement)[] ; `conformance?`: [`Definition`](model.Conformance.md#definition) ; `constraint?`: [`Definition`](model.Constraint.md#definition) ; `default?`: [`FieldValue`](model.md#fieldvalue) ; `quality?`: [`Definition`](model.Quality.md#definition) ; `type?`: `string`  }
 
 A base element for all elements that represent data values.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L62)
+[packages/matter.js/src/model/elements/ValueElement.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L62)
 
-[packages/matter.js/src/model/elements/ValueElement.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L15)
+[packages/matter.js/src/model/elements/ValueElement.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L15)
 
-[packages/matter.js/src/model/elements/ValueElement.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L78)
+[packages/matter.js/src/model/elements/ValueElement.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L78)
 
 ___
 
@@ -634,7 +634,7 @@ Attributes, Commands and Events.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts#L14)
+[packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts#L14)
 
 ___
 
@@ -652,7 +652,7 @@ name is a string that identifies the source of the variant, such as "chip",
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L21)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L21)
 
 ## Variables
 
@@ -662,7 +662,7 @@ name is a string that identifies the source of the variant, such as "chip",
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L52)
+[packages/matter.js/src/model/elements/EventElement.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L52)
 
 ___
 
@@ -672,7 +672,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L50)
+[packages/matter.js/src/model/elements/EventElement.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L50)
 
 ___
 
@@ -682,7 +682,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L17)
+[packages/matter.js/src/model/elements/Globals.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L17)
 
 ___
 
@@ -778,7 +778,7 @@ these types or derive new types.
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:72](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L72)
+[packages/matter.js/src/model/elements/Globals.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L72)
 
 ___
 
@@ -788,7 +788,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:51](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L51)
+[packages/matter.js/src/model/elements/EventElement.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L51)
 
 ___
 
@@ -800,7 +800,7 @@ Canonical instance of the Matter Object Model.
 
 #### Defined in
 
-[packages/matter.js/src/model/standard/Matter.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/standard/Matter.ts#L12)
+[packages/matter.js/src/model/standard/Matter.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/standard/Matter.ts#L12)
 
 ___
 
@@ -810,7 +810,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L15)
+[packages/matter.js/src/model/elements/Globals.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L15)
 
 ___
 
@@ -820,7 +820,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L16)
+[packages/matter.js/src/model/elements/Globals.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L16)
 
 ___
 
@@ -830,7 +830,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L19)
+[packages/matter.js/src/model/elements/Globals.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L19)
 
 ___
 
@@ -840,7 +840,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L20)
+[packages/matter.js/src/model/elements/Globals.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L20)
 
 ___
 
@@ -850,7 +850,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L21)
+[packages/matter.js/src/model/elements/Globals.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L21)
 
 ___
 
@@ -860,7 +860,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/Globals.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/Globals.ts#L18)
+[packages/matter.js/src/model/elements/Globals.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/Globals.ts#L18)
 
 ## Functions
 
@@ -880,7 +880,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/AttributeElement.ts#L19)
+[packages/matter.js/src/model/elements/AttributeElement.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L19)
 
 ___
 
@@ -901,7 +901,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/BaseElement.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/BaseElement.ts#L64)
+[packages/matter.js/src/model/elements/BaseElement.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/BaseElement.ts#L64)
 
 ___
 
@@ -921,7 +921,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ClusterElement.ts:35](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ClusterElement.ts#L35)
+[packages/matter.js/src/model/elements/ClusterElement.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ClusterElement.ts#L35)
 
 ___
 
@@ -944,7 +944,7 @@ flag -> component mapping.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ClusterVariance.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ClusterVariance.ts#L41)
+[packages/matter.js/src/model/logic/ClusterVariance.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ClusterVariance.ts#L41)
 
 ___
 
@@ -964,7 +964,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/CommandElement.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/CommandElement.ts#L24)
+[packages/matter.js/src/model/elements/CommandElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/CommandElement.ts#L24)
 
 ___
 
@@ -984,7 +984,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DatatypeElement.ts:34](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DatatypeElement.ts#L34)
+[packages/matter.js/src/model/elements/DatatypeElement.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DatatypeElement.ts#L34)
 
 ___
 
@@ -1011,7 +1011,7 @@ correct type.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/DefaultValue.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/DefaultValue.ts#L21)
+[packages/matter.js/src/model/logic/DefaultValue.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/DefaultValue.ts#L21)
 
 ___
 
@@ -1031,7 +1031,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/DeviceTypeElement.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L25)
+[packages/matter.js/src/model/elements/DeviceTypeElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/DeviceTypeElement.ts#L25)
 
 ___
 
@@ -1051,7 +1051,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EndpointElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EndpointElement.ts#L20)
+[packages/matter.js/src/model/elements/EndpointElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EndpointElement.ts#L20)
 
 ___
 
@@ -1071,7 +1071,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/EventElement.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/EventElement.ts#L22)
+[packages/matter.js/src/model/elements/EventElement.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/EventElement.ts#L22)
 
 ___
 
@@ -1091,7 +1091,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/FabricElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/FabricElement.ts#L20)
+[packages/matter.js/src/model/elements/FabricElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/FabricElement.ts#L20)
 
 ___
 
@@ -1111,7 +1111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L14)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L14)
 
 ___
 
@@ -1146,7 +1146,7 @@ indicates the ruleset needs augmentation.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L33)
+[packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/IllegalFeatureCombinations.ts#L33)
 
 ___
 
@@ -1168,7 +1168,7 @@ Details components generated by analyzing variance of cluster elements.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L29)
+[packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/InferredComponents.ts#L29)
 
 ___
 
@@ -1188,7 +1188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/MatterElement.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/MatterElement.ts#L25)
+[packages/matter.js/src/model/elements/MatterElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/MatterElement.ts#L25)
 
 ___
 
@@ -1211,7 +1211,7 @@ Merge multiple variants of an element into a single element.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/MergeModels.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/MergeModels.ts#L17)
+[packages/matter.js/src/model/logic/MergeModels.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/MergeModels.ts#L17)
 
 ___
 
@@ -1239,7 +1239,7 @@ Compute name and documentation a set of inferred components.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L27)
+[packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/NamedComponents.ts#L27)
 
 ___
 
@@ -1259,7 +1259,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/NodeElement.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/NodeElement.ts#L20)
+[packages/matter.js/src/model/elements/NodeElement.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/NodeElement.ts#L20)
 
 ___
 
@@ -1287,7 +1287,7 @@ a Validator
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/RecordValidator.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/RecordValidator.ts#L23)
+[packages/matter.js/src/model/logic/RecordValidator.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/RecordValidator.ts#L23)
 
 ___
 
@@ -1307,7 +1307,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/RequirementElement.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/RequirementElement.ts#L30)
+[packages/matter.js/src/model/elements/RequirementElement.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/RequirementElement.ts#L30)
 
 ___
 
@@ -1339,7 +1339,7 @@ logic we rely on for validation.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ValidateModel.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/ValidateModel.ts#L27)
+[packages/matter.js/src/model/logic/ValidateModel.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ValidateModel.ts#L27)
 
 ___
 
@@ -1360,7 +1360,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/ValueElement.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/elements/ValueElement.ts#L62)
+[packages/matter.js/src/model/elements/ValueElement.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/ValueElement.ts#L62)
 
 ___
 
@@ -1383,7 +1383,7 @@ Convert a VarianceCondition to an array of FeatureBitmaps.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts#L23)
+[packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/VarianceCondition.ts#L23)
 
 ___
 
@@ -1411,4 +1411,4 @@ If a name isn't present leaves the feature code intact.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L29)
+[packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/cluster-variance/FeatureBitmap.ts#L29)

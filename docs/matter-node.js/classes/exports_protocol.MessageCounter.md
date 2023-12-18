@@ -22,7 +22,11 @@
 
 ### constructor
 
-• **new MessageCounter**()
+• **new MessageCounter**(): [`MessageCounter`](exports_protocol.MessageCounter.md)
+
+#### Returns
+
+[`MessageCounter`](exports_protocol.MessageCounter.md)
 
 ## Properties
 

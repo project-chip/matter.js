@@ -34,13 +34,17 @@
 
 ### constructor
 
-• **new AttestationCertificateManager**(`vendorId`)
+• **new AttestationCertificateManager**(`vendorId`): [`AttestationCertificateManager`](exports_certificate.AttestationCertificateManager.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `vendorId` | [`VendorId`](../modules/exports_datatype.md#vendorid) |
+
+#### Returns
+
+[`AttestationCertificateManager`](exports_certificate.AttestationCertificateManager.md)
 
 #### Defined in
 

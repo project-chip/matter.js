@@ -1,6 +1,6 @@
 [@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [exports/session](../modules/exports_session.md) / SessionManager
 
-# Class: SessionManager<ContextT\>
+# Class: SessionManager\<ContextT\>
 
 [exports/session](../modules/exports_session.md).SessionManager
 
@@ -49,7 +49,7 @@
 
 ### constructor
 
-• **new SessionManager**<`ContextT`\>(`context`, `storage`)
+• **new SessionManager**\<`ContextT`\>(`context`, `storage`): [`SessionManager`](exports_session.SessionManager.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -63,6 +63,10 @@
 | :------ | :------ |
 | `context` | `ContextT` |
 | `storage` | [`StorageContext`](storage_export.StorageContext.md) |
+
+#### Returns
+
+[`SessionManager`](exports_session.SessionManager.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -132,11 +136,11 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:24
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -146,7 +150,7 @@ ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`args`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>\>
+▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>\>
 
 #### Parameters
 
@@ -154,7 +158,7 @@ ___
 | :------ | :------ |
 | `args` | `Object` |
 | `args.activeRetransmissionTimeoutMs?` | `number` |
-| `args.closeCallback?` | () => `Promise`<`void`\> |
+| `args.closeCallback?` | () => `Promise`\<`void`\> |
 | `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
 | `args.idleRetransmissionTimeoutMs?` | `number` |
 | `args.isInitiator` | `boolean` |
@@ -168,7 +172,7 @@ ___
 
 #### Returns
 
-`Promise`<[`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>\>
+`Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>\>
 
 #### Defined in
 
@@ -218,11 +222,11 @@ ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): { `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-{ `fabric`: `undefined` \| { `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
@@ -246,11 +250,11 @@ ___
 
 ### getPaseSession
 
-▸ **getPaseSession**(): [`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>
+▸ **getPaseSession**(): [`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Returns
 
-[`SecureSession`](exports_session.SecureSession.md)<`ContextT`\>
+[`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -260,7 +264,7 @@ ___
 
 ### getSession
 
-▸ **getSession**(`sessionId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\>
+▸ **getSession**(`sessionId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -270,7 +274,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\>
+`undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -280,7 +284,7 @@ ___
 
 ### getSessionForNode
 
-▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\>
+▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -291,7 +295,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/exports_session.Session.md)<`ContextT`\>
+`undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -301,11 +305,11 @@ ___
 
 ### getUnsecureSession
 
-▸ **getUnsecureSession**(): [`UnsecureSession`](exports_session.UnsecureSession.md)<`ContextT`\>
+▸ **getUnsecureSession**(): [`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
 
 #### Returns
 
-[`UnsecureSession`](exports_session.UnsecureSession.md)<`ContextT`\>
+[`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -335,7 +339,7 @@ ___
 
 ### removeAllSessionsForNode
 
-▸ **removeAllSessionsForNode**(`nodeId`, `sendClose?`): `Promise`<`void`\>
+▸ **removeAllSessionsForNode**(`nodeId`, `sendClose?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -346,7 +350,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 

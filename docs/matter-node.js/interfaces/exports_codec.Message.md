@@ -27,7 +27,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:41
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:43
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:44
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:46
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:42
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:44
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/codec/MessageCodec.d.ts:43
+packages/matter.js/dist/esm/codec/MessageCodec.d.ts:45

@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `binding`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `id`: ``30`` = 0x1e; `name`: ``"Binding"`` = "Binding"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `binding`: [`WritableFabricScopedAttribute`](cluster_export.md#writablefabricscopedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `id`: ``30`` = 0x1e; `name`: ``"Binding"`` = "Binding"; `revision`: ``1`` = 1 }\>
 
 Binding
 
@@ -54,13 +54,13 @@ binding target.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:94](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L94)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L94)
 
 ___
 
 ### TlvTargetStruct
 
-• `Const` **TlvTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>
+• `Const` **TlvTargetStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `cluster`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`ClusterId`](datatype_export.md#clusterid)\> ; `endpoint`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)\> ; `fabricIndex`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`FabricIndex`](datatype_export.md#fabricindex)\> ; `group`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`GroupId`](datatype_export.md#groupid)\> ; `node`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>
 
 **`See`**
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BindingCluster.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/BindingCluster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BindingCluster.ts#L24)

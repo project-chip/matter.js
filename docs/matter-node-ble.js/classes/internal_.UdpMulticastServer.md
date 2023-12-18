@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / UdpMulticastServer
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / UdpMulticastServer
 
 # Class: UdpMulticastServer
 
-[<internal>](../modules/internal_.md).UdpMulticastServer
+[\<internal\>](../modules/internal_.md).UdpMulticastServer
 
 ## Table of contents
 
@@ -33,7 +33,11 @@
 
 ### constructor
 
-• `Private` **new UdpMulticastServer**()
+• **new UdpMulticastServer**(): [`UdpMulticastServer`](internal_.UdpMulticastServer.md)
+
+#### Returns
+
+[`UdpMulticastServer`](internal_.UdpMulticastServer.md)
 
 #### Defined in
 
@@ -133,11 +137,11 @@ matter.js/dist/esm/net/UdpMulticastServer.d.ts:19
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -167,7 +171,7 @@ ___
 
 ### send
 
-▸ **send**(`message`, `netInterface?`, `uniCastTarget?`): `Promise`<`void`\>
+▸ **send**(`message`, `netInterface?`, `uniCastTarget?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -179,7 +183,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -189,7 +193,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`«destructured»`): `Promise`<[`UdpMulticastServer`](internal_.UdpMulticastServer.md)\>
+▸ **create**(`«destructured»`): `Promise`\<[`UdpMulticastServer`](internal_.UdpMulticastServer.md)\>
 
 #### Parameters
 
@@ -199,7 +203,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpMulticastServer`](internal_.UdpMulticastServer.md)\>
+`Promise`\<[`UdpMulticastServer`](internal_.UdpMulticastServer.md)\>
 
 #### Defined in
 

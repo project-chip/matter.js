@@ -30,13 +30,17 @@
 
 ### constructor
 
-• **new DerCodec**()
+• **new DerCodec**(): [`DerCodec`](codec_export.DerCodec.md)
+
+#### Returns
+
+[`DerCodec`](codec_export.DerCodec.md)
 
 ## Methods
 
 ### decode
 
-▸ `Static` **decode**(`data`): [`DerNode`](../modules/codec_export.md#dernode)
+▸ **decode**(`data`): [`DerNode`](../modules/codec_export.md#dernode)
 
 #### Parameters
 
@@ -50,19 +54,19 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:167](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L167)
+[packages/matter.js/src/codec/DerCodec.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L167)
 
 ___
 
 ### decodeAnsi1
 
-▸ `Static` `Private` **decodeAnsi1**(`reader`): `Object`
+▸ **decodeAnsi1**(`reader`): `Object`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Big`](../enums/util_export.Endian.md#big)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Big`](../enums/util_export.Endian.md#big)\> |
 
 #### Returns
 
@@ -75,19 +79,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:184](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L184)
+[packages/matter.js/src/codec/DerCodec.ts:184](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L184)
 
 ___
 
 ### decodeRec
 
-▸ `Static` `Private` **decodeRec**(`reader`): [`DerNode`](../modules/codec_export.md#dernode)
+▸ **decodeRec**(`reader`): [`DerNode`](../modules/codec_export.md#dernode)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `reader` | [`DataReader`](util_export.DataReader.md)<[`Big`](../enums/util_export.Endian.md#big)\> |
+| `reader` | [`DataReader`](util_export.DataReader.md)\<[`Big`](../enums/util_export.Endian.md#big)\> |
 
 #### Returns
 
@@ -95,13 +99,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:171](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L171)
+[packages/matter.js/src/codec/DerCodec.ts:171](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L171)
 
 ___
 
 ### encode
 
-▸ `Static` **encode**(`value`): `Uint8Array`
+▸ **encode**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -115,13 +119,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L63)
+[packages/matter.js/src/codec/DerCodec.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L63)
 
 ___
 
 ### encodeAnsi1
 
-▸ `Static` `Private` **encodeAnsi1**(`tag`, `data`): `Uint8Array`
+▸ **encodeAnsi1**(`tag`, `data`): `Uint8Array`
 
 #### Parameters
 
@@ -136,13 +140,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:163](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L163)
+[packages/matter.js/src/codec/DerCodec.ts:163](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L163)
 
 ___
 
 ### encodeArray
 
-▸ `Static` `Private` **encodeArray**(`array`): `Uint8Array`
+▸ **encodeArray**(`array`): `Uint8Array`
 
 #### Parameters
 
@@ -156,13 +160,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:108](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L108)
+[packages/matter.js/src/codec/DerCodec.ts:108](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L108)
 
 ___
 
 ### encodeBoolean
 
-▸ `Static` `Private` **encodeBoolean**(`bool`): `Uint8Array`
+▸ **encodeBoolean**(`bool`): `Uint8Array`
 
 #### Parameters
 
@@ -176,13 +180,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:104](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L104)
+[packages/matter.js/src/codec/DerCodec.ts:104](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L104)
 
 ___
 
 ### encodeDate
 
-▸ `Static` `Private` **encodeDate**(`date`): `Uint8Array`
+▸ **encodeDate**(`date`): `Uint8Array`
 
 #### Parameters
 
@@ -196,13 +200,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:92](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L92)
+[packages/matter.js/src/codec/DerCodec.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L92)
 
 ___
 
 ### encodeLengthBytes
 
-▸ `Static` `Private` **encodeLengthBytes**(`value`): `Uint8Array`
+▸ **encodeLengthBytes**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -216,13 +220,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:145](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L145)
+[packages/matter.js/src/codec/DerCodec.ts:145](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L145)
 
 ___
 
 ### encodeObject
 
-▸ `Static` `Private` **encodeObject**(`object`): `Uint8Array`
+▸ **encodeObject**(`object`): `Uint8Array`
 
 #### Parameters
 
@@ -236,13 +240,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:119](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L119)
+[packages/matter.js/src/codec/DerCodec.ts:119](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L119)
 
 ___
 
 ### encodeOctetString
 
-▸ `Static` `Private` **encodeOctetString**(`value`): `Uint8Array`
+▸ **encodeOctetString**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -256,13 +260,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:115](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L115)
+[packages/matter.js/src/codec/DerCodec.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L115)
 
 ___
 
 ### encodeString
 
-▸ `Static` `Private` **encodeString**(`value`): `Uint8Array`
+▸ **encodeString**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -276,13 +280,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:127](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L127)
+[packages/matter.js/src/codec/DerCodec.ts:127](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L127)
 
 ___
 
 ### encodeUnsignedInt
 
-▸ `Static` `Private` **encodeUnsignedInt**(`value`): `Uint8Array`
+▸ **encodeUnsignedInt**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -296,4 +300,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/DerCodec.ts:131](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/codec/DerCodec.ts#L131)
+[packages/matter.js/src/codec/DerCodec.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/DerCodec.ts#L131)

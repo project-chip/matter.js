@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / TlvReader
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / TlvReader
 
 # Interface: TlvReader
 
-[<internal>](../modules/internal_.md).TlvReader
+[\<internal\>](../modules/internal_.md).TlvReader
 
 ## Table of contents
 
@@ -15,7 +15,7 @@
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`typeLength`): `V`
 
 #### Type parameters
 

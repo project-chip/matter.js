@@ -95,7 +95,7 @@
 
 ### ArrayMinLength
 
-Ƭ **ArrayMinLength**<`T`, `N`\>: [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)<`T`, `N`, []\>
+Ƭ **ArrayMinLength**\<`T`, `N`\>: [`BuildArrayMinLength`](export._internal_.md#buildarrayminlength)\<`T`, `N`, []\>
 
 #### Type parameters
 
@@ -112,7 +112,7 @@ ___
 
 ### AtLeastOne
 
-Ƭ **AtLeastOne**<`T`\>: [`ArrayMinLength`](util_export.md#arrayminlength)<`T`, ``1``\>
+Ƭ **AtLeastOne**\<`T`\>: [`ArrayMinLength`](util_export.md#arrayminlength)\<`T`, ``1``\>
 
 Array types
 
@@ -135,7 +135,7 @@ ___
 
 ### Brand
 
-Ƭ **Brand**<`B`\>: `Object`
+Ƭ **Brand**\<`B`\>: `Object`
 
 #### Type parameters
 
@@ -157,7 +157,7 @@ ___
 
 ### Branded
 
-Ƭ **Branded**<`T`, `B`\>: `T` & [`Brand`](util_export.md#brand)<`B`\>
+Ƭ **Branded**\<`T`, `B`\>: `T` & [`Brand`](util_export.md#brand)\<`B`\>
 
 #### Type parameters
 
@@ -188,7 +188,7 @@ ___
 
 ### ClassExtends
 
-Ƭ **ClassExtends**<`C`\>: (...`args`: `any`[]) => `C`
+Ƭ **ClassExtends**\<`C`\>: (...`args`: `any`[]) => `C`
 
 #### Type parameters
 
@@ -249,7 +249,7 @@ ___
 
 ### MakeMandatory
 
-Ƭ **MakeMandatory**<`T`\>: `Exclude`<`T`, `undefined`\>
+Ƭ **MakeMandatory**\<`T`\>: `Exclude`\<`T`, `undefined`\>
 
 #### Type parameters
 
@@ -265,7 +265,7 @@ ___
 
 ### Merge
 
-Ƭ **Merge**<`A`, `B`\>: { [K in keyof A as K extends keyof B ? never : K]: A[K] } & `B`
+Ƭ **Merge**\<`A`, `B`\>: \{ [K in keyof A as K extends keyof B ? never : K]: A[K] } & `B`
 
 Merges two types into one.
 
@@ -286,7 +286,7 @@ ___
 
 ### MergeAll
 
-Ƭ **MergeAll**<`T`\>: `T` extends [infer O, ...(infer R)] ? `O` extends `undefined` ? [`MergeAll`](util_export.md#mergeall)<`R`\> : `O` & [`MergeAll`](util_export.md#mergeall)<`R`\> : `T` extends [] ? {} : `never`
+Ƭ **MergeAll**\<`T`\>: `T` extends [infer O, ...(infer R)] ? `O` extends `undefined` ? [`MergeAll`](util_export.md#mergeall)\<`R`\> : `O` & [`MergeAll`](util_export.md#mergeall)\<`R`\> : `T` extends [] ? {} : `never`
 
 Merge an array of objects into one.  Currently assumes unique elements
 
@@ -306,7 +306,7 @@ ___
 
 ### Pluck
 
-Ƭ **Pluck**<`K`, `T`\>: `T` extends [infer O, ...(infer R)] ? `K` extends keyof `O` ? [`O`[`K`], ...Pluck<K, R\>] : [`Pluck`](util_export.md#pluck)<`K`, `R`\> : `T` extends [] ? `T` : `never`
+Ƭ **Pluck**\<`K`, `T`\>: `T` extends [infer O, ...(infer R)] ? `K` extends keyof `O` ? [`O`[`K`], ...Pluck\<K, R\>] : [`Pluck`](util_export.md#pluck)\<`K`, `R`\> : `T` extends [] ? `T` : `never`
 
 Pluck an item from an array of objects if present
 
@@ -513,7 +513,7 @@ packages/matter.js/dist/esm/util/Number.d.ts:6
 
 ### Merge
 
-▸ **Merge**<`A`, `B`\>(`a`, `b`): [`Merge`](util_export.md#merge)<`A`, `B`\>
+▸ **Merge**\<`A`, `B`\>(`a`, `b`): [`Merge`](util_export.md#merge)\<`A`, `B`\>
 
 #### Type parameters
 
@@ -531,7 +531,7 @@ packages/matter.js/dist/esm/util/Number.d.ts:6
 
 #### Returns
 
-[`Merge`](util_export.md#merge)<`A`, `B`\>
+[`Merge`](util_export.md#merge)\<`A`, `B`\>
 
 #### Defined in
 
@@ -541,7 +541,7 @@ ___
 
 ### MergeAll
 
-▸ **MergeAll**<`T`\>(`...objects`): [`MergeAll`](util_export.md#mergeall)<`T`\>
+▸ **MergeAll**\<`T`\>(`...objects`): [`MergeAll`](util_export.md#mergeall)\<`T`\>
 
 #### Type parameters
 
@@ -557,7 +557,7 @@ ___
 
 #### Returns
 
-[`MergeAll`](util_export.md#mergeall)<`T`\>
+[`MergeAll`](util_export.md#mergeall)\<`T`\>
 
 #### Defined in
 
@@ -567,7 +567,7 @@ ___
 
 ### Pluck
 
-▸ **Pluck**<`T`, `K`\>(`key`, `...objects`): [`Pluck`](util_export.md#pluck)<`K`, `T`\>
+▸ **Pluck**\<`T`, `K`\>(`key`, `...objects`): [`Pluck`](util_export.md#pluck)\<`K`, `T`\>
 
 #### Type parameters
 
@@ -585,7 +585,7 @@ ___
 
 #### Returns
 
-[`Pluck`](util_export.md#pluck)<`K`, `T`\>
+[`Pluck`](util_export.md#pluck)\<`K`, `T`\>
 
 #### Defined in
 
@@ -595,7 +595,7 @@ ___
 
 ### anyPromise
 
-▸ **anyPromise**<`T`\>(`promises`): `Promise`<`T`\>
+▸ **anyPromise**\<`T`\>(`promises`): `Promise`\<`T`\>
 
 Use all promises or promise returning methods and return the first resolved promise or reject when all promises
 rejected
@@ -610,11 +610,11 @@ rejected
 
 | Name | Type |
 | :------ | :------ |
-| `promises` | (`Promise`<`T`\> \| () => `Promise`<`T`\>)[] |
+| `promises` | (`Promise`\<`T`\> \| () => `Promise`\<`T`\>)[] |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 
@@ -648,7 +648,7 @@ ___
 
 ### capitalize
 
-▸ **capitalize**<`T`\>(`text`): `Capitalize`<`T`\>
+▸ **capitalize**\<`T`\>(`text`): `Capitalize`\<`T`\>
 
 #### Type parameters
 
@@ -664,7 +664,7 @@ ___
 
 #### Returns
 
-`Capitalize`<`T`\>
+`Capitalize`\<`T`\>
 
 **`License`**
 
@@ -693,13 +693,13 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:30](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/util/CommandLine.ts#L30)
+[packages/matter-node.js/src/util/CommandLine.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/util/CommandLine.ts#L30)
 
 ___
 
 ### createPromise
 
-▸ **createPromise**<`T`\>(): `Object`
+▸ **createPromise**\<`T`\>(): `Object`
 
 Obtain a promise with functions to resolve and reject.
 
@@ -715,7 +715,7 @@ Obtain a promise with functions to resolve and reject.
 
 | Name | Type |
 | :------ | :------ |
-| `promise` | `Promise`<`T`\> |
+| `promise` | `Promise`\<`T`\> |
 | `rejecter` | (`reason?`: `any`) => `void` |
 | `resolver` | (`value`: `T`) => `void` |
 
@@ -750,14 +750,14 @@ ___
 
 ### extendPublicHandlerMethods
 
-▸ **extendPublicHandlerMethods**<`ParentClass`, `H`\>(`parentClass`): [`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)<`ParentClass`, `H`\>
+▸ **extendPublicHandlerMethods**\<`ParentClass`, `H`\>(`parentClass`): [`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `ParentClass` | extends (...`args`: `any`[]) => `any` |
-| `H` | extends `Record`<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
+| `H` | extends `Record`\<keyof `H`, [`HandlerFunction`](util_export.md#handlerfunction)\> |
 
 #### Parameters
 
@@ -767,7 +767,7 @@ ___
 
 #### Returns
 
-[`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)<`ParentClass`, `H`\>
+[`ExtendPublicHandlerMethods`](export._internal_.md#extendpublichandlermethods)\<`ParentClass`, `H`\>
 
 #### Defined in
 
@@ -791,7 +791,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/util/CommandLine.ts#L22)
+[packages/matter-node.js/src/util/CommandLine.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/util/CommandLine.ts#L22)
 
 ___
 
@@ -811,7 +811,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/util/CommandLine.ts#L12)
+[packages/matter-node.js/src/util/CommandLine.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/util/CommandLine.ts#L12)
 
 ___
 
@@ -831,7 +831,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/CommandLine.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/util/CommandLine.ts#L18)
+[packages/matter-node.js/src/util/CommandLine.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/util/CommandLine.ts#L18)
 
 ___
 
@@ -970,7 +970,7 @@ ___
 
 ### maxValue
 
-▸ **maxValue**<`T`\>(`a`, `b`): `T` \| `undefined`
+▸ **maxValue**\<`T`\>(`a`, `b`): `T` \| `undefined`
 
 #### Type parameters
 
@@ -997,7 +997,7 @@ ___
 
 ### minValue
 
-▸ **minValue**<`T`\>(`a`, `b`): `T` \| `undefined`
+▸ **minValue**\<`T`\>(`a`, `b`): `T` \| `undefined`
 
 #### Type parameters
 
@@ -1060,7 +1060,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter-node.js/src/util/Node.ts#L11)
+[packages/matter-node.js/src/util/Node.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/util/Node.ts#L11)
 
 ___
 
@@ -1088,7 +1088,7 @@ ___
 
 ### singleton
 
-▸ **singleton**<`T`\>(`create`): () => `T`
+▸ **singleton**\<`T`\>(`create`): () => `T`
 
 #### Type parameters
 

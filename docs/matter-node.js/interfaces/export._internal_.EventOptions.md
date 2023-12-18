@@ -1,8 +1,8 @@
-[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / EventOptions
+[@project-chip/matter-node.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / EventOptions
 
 # Interface: EventOptions
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).EventOptions
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).EventOptions
 
 ## Hierarchy
 

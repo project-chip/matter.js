@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / CachedEventInfo
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / CachedEventInfo
 
 # Interface: CachedEventInfo
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).CachedEventInfo
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).CachedEventInfo
 
 ## Table of contents
 
@@ -15,11 +15,11 @@
 
 ### event
 
-• **event**: [`Event`](../modules/cluster_export.md#event)<`any`, `any`\>
+• **event**: [`Event`](../modules/cluster_export.md#event)\<`any`, `any`\>
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:102](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterHelper.ts#L102)
+[packages/matter.js/src/cluster/ClusterHelper.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterHelper.ts#L102)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/ClusterHelper.ts:103](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/ClusterHelper.ts#L103)
+[packages/matter.js/src/cluster/ClusterHelper.ts:103](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/ClusterHelper.ts#L103)

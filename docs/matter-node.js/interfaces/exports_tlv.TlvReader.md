@@ -20,7 +20,7 @@
 
 ### readPrimitive
 
-▸ **readPrimitive**<`T`, `V`\>(`typeLength`): `V`
+▸ **readPrimitive**\<`T`, `V`\>(`typeLength`): `V`
 
 #### Type parameters
 

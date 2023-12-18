@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / OptionalCommand
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / OptionalCommand
 
-# Interface: OptionalCommand<RequestT, ResponseT, F\>
+# Interface: OptionalCommand\<RequestT, ResponseT, F\>
 
-[<internal>](../modules/internal_.md).OptionalCommand
+[\<internal\>](../modules/internal_.md).OptionalCommand
 
 ## Type parameters
 
@@ -14,7 +14,7 @@
 
 ## Hierarchy
 
-- [`Command`](../modules/internal_.md#command)<`RequestT`, `ResponseT`, `F`\>
+- [`Command`](../modules/internal_.md#command)\<`RequestT`, `ResponseT`, `F`\>
 
   ↳ **`OptionalCommand`**
 
@@ -65,7 +65,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -93,7 +93,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -121,7 +121,7 @@ ___
 
 ### requestSchema
 
-• **requestSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`RequestT`\>
+• **requestSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`RequestT`\>
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ ___
 
 ### responseSchema
 
-• **responseSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`ResponseT`\>
+• **responseSchema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`ResponseT`\>
 
 #### Inherited from
 

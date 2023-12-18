@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / OptionalFieldType
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / OptionalFieldType
 
-# Interface: OptionalFieldType<T\>
+# Interface: OptionalFieldType\<T\>
 
-[<internal>](../modules/internal_.md).OptionalFieldType
+[\<internal\>](../modules/internal_.md).OptionalFieldType
 
 ## Type parameters
 
@@ -12,9 +12,11 @@
 
 ## Hierarchy
 
-- [`FieldType`](internal_.FieldType.md)<`T`\>
+- [`FieldType`](internal_.FieldType.md)\<`T`\>
 
   ↳ **`OptionalFieldType`**
+
+  ↳↳ [`OptionalRepeatedFieldType`](internal_.__home_runner_work_matter_js_matter_js_packages_matter_js_dist_esm_tlv_TlvObject_.OptionalRepeatedFieldType.md)
 
 ## Table of contents
 
@@ -23,6 +25,7 @@
 - [fallback](internal_.OptionalFieldType.md#fallback)
 - [id](internal_.OptionalFieldType.md#id)
 - [optional](internal_.OptionalFieldType.md#optional)
+- [repeated](internal_.OptionalFieldType.md#repeated)
 - [schema](internal_.OptionalFieldType.md#schema)
 
 ## Properties
@@ -37,7 +40,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:13
+matter.js/dist/esm/tlv/TlvObject.d.ts:15
 
 ___
 
@@ -51,7 +54,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:10
+matter.js/dist/esm/tlv/TlvObject.d.ts:11
 
 ___
 
@@ -65,13 +68,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:16
+matter.js/dist/esm/tlv/TlvObject.d.ts:23
+
+___
+
+### repeated
+
+• `Optional` **repeated**: `boolean`
+
+#### Inherited from
+
+[FieldType](internal_.FieldType.md).[repeated](internal_.FieldType.md#repeated)
+
+#### Defined in
+
+matter.js/dist/esm/tlv/TlvObject.d.ts:14
 
 ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 
@@ -79,4 +96,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/tlv/TlvObject.d.ts:11
+matter.js/dist/esm/tlv/TlvObject.d.ts:12

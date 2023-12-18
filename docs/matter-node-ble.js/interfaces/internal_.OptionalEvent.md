@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / OptionalEvent
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / OptionalEvent
 
-# Interface: OptionalEvent<T, F\>
+# Interface: OptionalEvent\<T, F\>
 
-[<internal>](../modules/internal_.md).OptionalEvent
+[\<internal\>](../modules/internal_.md).OptionalEvent
 
 ## Type parameters
 
@@ -13,7 +13,7 @@
 
 ## Hierarchy
 
-- [`Event`](../modules/internal_.md#event)<`T`, `F`\>
+- [`Event`](../modules/internal_.md#event)\<`T`, `F`\>
 
   ↳ **`OptionalEvent`**
 
@@ -63,7 +63,7 @@ ___
 
 ### mandatoryIf
 
-• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **mandatoryIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -91,7 +91,7 @@ ___
 
 ### optionalIf
 
-• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)<`F`\>
+• **optionalIf**: [`ConditionalFeatureList`](../modules/internal_.md#conditionalfeaturelist)\<`F`\>
 
 #### Inherited from
 
@@ -133,7 +133,7 @@ ___
 
 ### schema
 
-• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)<`T`\>
+• **schema**: [`TlvSchema`](../classes/internal_.TlvSchema.md)\<`T`\>
 
 #### Inherited from
 

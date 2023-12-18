@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [schema/export](../modules/schema_export.md) / ByteArrayBitmapSchemaInternal
 
-# Class: ByteArrayBitmapSchemaInternal<T\>
+# Class: ByteArrayBitmapSchemaInternal\<T\>
 
 [schema/export](../modules/schema_export.md).ByteArrayBitmapSchemaInternal
 
@@ -14,7 +14,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ## Hierarchy
 
-- [`Schema`](schema_export.Schema.md)<[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\>, [`ByteArray`](../modules/util_export.md#bytearray-1)\>
+- [`Schema`](schema_export.Schema.md)\<[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\>, [`ByteArray`](../modules/util_export.md#bytearray-1)\>
 
   ↳ **`ByteArrayBitmapSchemaInternal`**
 
@@ -42,7 +42,7 @@ Define a schema to encode / decode convert type T to type E.
 
 ### constructor
 
-• **new ByteArrayBitmapSchemaInternal**<`T`\>(`bitSchemas`)
+• **new ByteArrayBitmapSchemaInternal**\<`T`\>(`bitSchemas`): [`ByteArrayBitmapSchemaInternal`](schema_export.ByteArrayBitmapSchemaInternal.md)\<`T`\>
 
 #### Type parameters
 
@@ -56,13 +56,17 @@ Define a schema to encode / decode convert type T to type E.
 | :------ | :------ |
 | `bitSchemas` | `T` |
 
+#### Returns
+
+[`ByteArrayBitmapSchemaInternal`](schema_export.ByteArrayBitmapSchemaInternal.md)\<`T`\>
+
 #### Overrides
 
 [Schema](schema_export.Schema.md).[constructor](schema_export.Schema.md#constructor)
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L116)
+[packages/matter.js/src/schema/BitmapSchema.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L116)
 
 ## Properties
 
@@ -72,7 +76,7 @@ Define a schema to encode / decode convert type T to type E.
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L116)
+[packages/matter.js/src/schema/BitmapSchema.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L116)
 
 ___
 
@@ -82,23 +86,23 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:113](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L113)
+[packages/matter.js/src/schema/BitmapSchema.ts:113](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L113)
 
 ___
 
 ### maskOffset
 
-• `Private` `Readonly` **maskOffset**: [`MaskOffsetFromBitSchema`](../modules/export._internal_.md#maskoffsetfrombitschema)<`T`\>
+• `Private` `Readonly` **maskOffset**: [`MaskOffsetFromBitSchema`](../modules/export._internal_.md#maskoffsetfrombitschema)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:114](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L114)
+[packages/matter.js/src/schema/BitmapSchema.ts:114](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L114)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\>
+▸ **decode**(`encoded`, `validate?`): [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\>
 
 Decodes the encoded data using the schema.
 
@@ -111,7 +115,7 @@ Decodes the encoded data using the schema.
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\>
+[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\>
 
 #### Inherited from
 
@@ -119,13 +123,13 @@ Decodes the encoded data using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
 ### decodeInternal
 
-▸ **decodeInternal**(`bitmap`): [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\>
+▸ **decodeInternal**(`bitmap`): [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\>
 
 #### Parameters
 
@@ -135,7 +139,7 @@ ___
 
 #### Returns
 
-[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\>
+[`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\>
 
 #### Overrides
 
@@ -143,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:164](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L164)
+[packages/matter.js/src/schema/BitmapSchema.ts:164](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L164)
 
 ___
 
@@ -157,7 +161,7 @@ Encodes the value using the schema.
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\> |
+| `value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\> |
 
 #### Returns
 
@@ -169,7 +173,7 @@ Encodes the value using the schema.
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -181,7 +185,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\> |
+| `value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\> |
 
 #### Returns
 
@@ -193,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:139](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/BitmapSchema.ts#L139)
+[packages/matter.js/src/schema/BitmapSchema.ts:139](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L139)
 
 ___
 
@@ -207,7 +211,7 @@ Optional validator that can be used to enforce constraints on the data before en
 
 | Name | Type |
 | :------ | :------ |
-| `_value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)<`T`\> |
+| `_value` | [`TypeFromBitSchema`](../modules/schema_export.md#typefrombitschema)\<`T`\> |
 
 #### Returns
 
@@ -219,4 +223,4 @@ Optional validator that can be used to enforce constraints on the data before en
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/schema/Schema.ts#L28)
+[packages/matter.js/src/schema/Schema.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L28)

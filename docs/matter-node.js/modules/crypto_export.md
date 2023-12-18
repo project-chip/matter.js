@@ -288,7 +288,7 @@ Generic key factory.
 
 | Name | Type |
 | :------ | :------ |
-| `properties` | `Partial`<[`Key`](crypto_export.md#key)\> |
+| `properties` | `Partial`\<[`Key`](crypto_export.md#key)\> |
 
 #### Returns
 
@@ -311,7 +311,7 @@ Private key factory.
 | Name | Type |
 | :------ | :------ |
 | `privateKey` | `Uint8Array` \| [`BinaryKeyPair`](crypto_export.md#binarykeypair) |
-| `options?` | `Partial`<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
 
 #### Returns
 
@@ -334,7 +334,7 @@ Public key factory.
 | Name | Type |
 | :------ | :------ |
 | `publicKey` | `Uint8Array` |
-| `options?` | `Partial`<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
 
 #### Returns
 
@@ -357,7 +357,7 @@ Symmetric key factory.
 | Name | Type |
 | :------ | :------ |
 | `privateKey` | `Uint8Array` |
-| `options?` | `Partial`<[`Key`](crypto_export.md#key)\> |
+| `options?` | `Partial`\<[`Key`](crypto_export.md#key)\> |
 
 #### Returns
 

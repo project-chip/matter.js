@@ -38,7 +38,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `actionList`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `state`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\> ; `supportedCommands`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `disableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `disableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantActionWithTransition`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `resumeAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `stopAction`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionType`](../enums/cluster_export.Actions.ActionType.md)\>  }\>[], `any`\> ; `endpointLists`: [`Attribute`](cluster_export.md#attribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `endpoints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)[]\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointListType`](../enums/cluster_export.Actions.EndpointListType.md)\>  }\>[], `any`\> ; `setupUrl`: [`OptionalAttribute`](cluster_export.md#optionalattribute)<`string`, `any`\>  } ; `commands`: { `disableAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `disableActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `enableAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `enableActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `instantAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `instantActionWithTransition`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>, `void`, `any`\> ; `pauseAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `pauseActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `resumeAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `startAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `startActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\> ; `stopAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>, `void`, `any`\>  } ; `events`: { `actionFailed`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `error`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> ; `stateChanged`: [`Event`](cluster_export.md#event)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\>  } ; `id`: ``37`` = 0x25; `name`: ``"Actions"`` = "Actions"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `actionList`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `state`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\> ; `supportedCommands`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `disableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `disableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantActionWithTransition`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `resumeAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `stopAction`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionType`](../enums/cluster_export.Actions.ActionType.md)\>  }\>[], `any`\> ; `endpointLists`: [`Attribute`](cluster_export.md#attribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `endpoints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[]\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointListType`](../enums/cluster_export.Actions.EndpointListType.md)\>  }\>[], `any`\> ; `setupUrl`: [`OptionalAttribute`](cluster_export.md#optionalattribute)\<`string`, `any`\>  } ; `commands`: \{ `disableAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `disableActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `enableAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `enableActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `instantAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `instantActionWithTransition`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `pauseAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `pauseActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `resumeAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `startAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `startActionWithDuration`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\> ; `stopAction`: [`OptionalCommand`](cluster_export.md#optionalcommand)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>, `void`, `any`\>  } ; `events`: \{ `actionFailed`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `error`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\> ; `stateChanged`: [`Event`](cluster_export.md#event)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>, `any`\>  } ; `id`: ``37`` = 0x25; `name`: ``"Actions"`` = "Actions"; `revision`: ``1`` = 1 }\>
 
 Actions
 
@@ -80,7 +80,7 @@ the Interaction Model.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:566](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L566)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:566](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L566)
 
 ___
 
@@ -113,13 +113,13 @@ Note - The bit allocation of this bitmap shall follow the ID’s of the Commands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L116)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L116)
 
 ___
 
 ### TlvActionFailedEvent
 
-• `Const` **TlvActionFailedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `error`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>
+• `Const` **TlvActionFailedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `error`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionError`](../enums/cluster_export.Actions.ActionError.md)\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>
 
 Body of the Actions actionFailed event
 
@@ -129,13 +129,13 @@ Body of the Actions actionFailed event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:516](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L516)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:516](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L516)
 
 ___
 
 ### TlvActionStruct
 
-• `Const` **TlvActionStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `state`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\> ; `supportedCommands`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)<{ `disableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `disableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantActionWithTransition`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `resumeAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `stopAction`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionType`](../enums/cluster_export.Actions.ActionType.md)\>  }\>
+• `Const` **TlvActionStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `state`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\> ; `supportedCommands`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`TypeFromBitSchema`](schema_export.md#typefrombitschema)\<\{ `disableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `disableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `enableActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `instantActionWithTransition`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `pauseActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `resumeAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startAction`: [`BitFlag`](schema_export.md#bitflag-1) ; `startActionWithDuration`: [`BitFlag`](schema_export.md#bitflag-1) ; `stopAction`: [`BitFlag`](schema_export.md#bitflag-1)  }\>\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionType`](../enums/cluster_export.Actions.ActionType.md)\>  }\>
 
 This data type holds the details of a single action, and contains the data fields below.
 
@@ -145,13 +145,13 @@ This data type holds the details of a single action, and contains the data field
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:210](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L210)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:210](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L210)
 
 ___
 
 ### TlvDisableActionRequest
 
-• `Const` **TlvDisableActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvDisableActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions disableAction command
 
@@ -161,13 +161,13 @@ Input to the Actions disableAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:456](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L456)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:456](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L456)
 
 ___
 
 ### TlvDisableActionWithDurationRequest
 
-• `Const` **TlvDisableActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvDisableActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions disableActionWithDuration command
 
@@ -177,13 +177,13 @@ Input to the Actions disableActionWithDuration command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:466](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L466)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:466](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L466)
 
 ___
 
 ### TlvEnableActionRequest
 
-• `Const` **TlvEnableActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvEnableActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions enableAction command
 
@@ -193,13 +193,13 @@ Input to the Actions enableAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:435](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L435)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:435](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L435)
 
 ___
 
 ### TlvEnableActionWithDurationRequest
 
-• `Const` **TlvEnableActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvEnableActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions enableActionWithDuration command
 
@@ -209,13 +209,13 @@ Input to the Actions enableActionWithDuration command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:445](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L445)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:445](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L445)
 
 ___
 
 ### TlvEndpointListStruct
 
-• `Const` **TlvEndpointListStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `endpoints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointNumber`](datatype_export.md#endpointnumber)[]\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`string`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`EndpointListType`](../enums/cluster_export.Actions.EndpointListType.md)\>  }\>
+• `Const` **TlvEndpointListStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `endpointListId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `endpoints`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointNumber`](datatype_export.md#endpointnumber)[]\> ; `name`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`string`\> ; `type`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`EndpointListType`](../enums/cluster_export.Actions.EndpointListType.md)\>  }\>
 
 This data type holds the details of a single endpoint list, which relates to a set of endpoints that have some
 logical relation, and contains the data fields below.
@@ -234,13 +234,13 @@ This field shall indicate the type of endpoint list, see EndpointListTypeEnum.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:322](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L322)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:322](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L322)
 
 ___
 
 ### TlvInstantActionRequest
 
-• `Const` **TlvInstantActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvInstantActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions instantAction command
 
@@ -250,13 +250,13 @@ Input to the Actions instantAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:340](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L340)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:340](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L340)
 
 ___
 
 ### TlvInstantActionWithTransitionRequest
 
-• `Const` **TlvInstantActionWithTransitionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvInstantActionWithTransitionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `transitionTime`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 Input to the Actions instantActionWithTransition command
 
@@ -266,13 +266,13 @@ Input to the Actions instantActionWithTransition command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:350](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L350)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:350](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L350)
 
 ___
 
 ### TlvPauseActionRequest
 
-• `Const` **TlvPauseActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvPauseActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions pauseAction command
 
@@ -282,13 +282,13 @@ Input to the Actions pauseAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:404](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L404)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:404](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L404)
 
 ___
 
 ### TlvPauseActionWithDurationRequest
 
-• `Const` **TlvPauseActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvPauseActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions pauseActionWithDuration command
 
@@ -298,13 +298,13 @@ Input to the Actions pauseActionWithDuration command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:414](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L414)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:414](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L414)
 
 ___
 
 ### TlvResumeActionRequest
 
-• `Const` **TlvResumeActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvResumeActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions resumeAction command
 
@@ -314,13 +314,13 @@ Input to the Actions resumeAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:425](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L425)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:425](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L425)
 
 ___
 
 ### TlvStartActionRequest
 
-• `Const` **TlvStartActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvStartActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions startAction command
 
@@ -330,13 +330,13 @@ Input to the Actions startAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:367](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L367)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:367](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L367)
 
 ___
 
 ### TlvStartActionWithDurationRequest
 
-• `Const` **TlvStartActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvStartActionWithDurationRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `duration`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions startActionWithDuration command
 
@@ -346,13 +346,13 @@ Input to the Actions startActionWithDuration command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:377](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L377)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:377](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L377)
 
 ___
 
 ### TlvStateChangedEvent
 
-• `Const` **TlvStateChangedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>
+• `Const` **TlvStateChangedEvent**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `newState`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`ActionState`](../enums/cluster_export.Actions.ActionState.md)\>  }\>
 
 Body of the Actions stateChanged event
 
@@ -362,13 +362,13 @@ Body of the Actions stateChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:477](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L477)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:477](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L477)
 
 ___
 
 ### TlvStopActionRequest
 
-• `Const` **TlvStopActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>
+• `Const` **TlvStopActionRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `actionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `invokeId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>
 
 Input to the Actions stopAction command
 
@@ -378,4 +378,4 @@ Input to the Actions stopAction command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:394](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L394)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:394](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L394)

@@ -8,7 +8,7 @@ Abstract Base class for OnOff devices
 
 ## Hierarchy
 
-- [`Device`](device_export.Device.md)<`this`\> & { `_executeHandler`: <K\>(`action`: `K`, ...`args`: `Parameters`<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]\>) => `Promise`<`void`\> ; `addCommandHandler`: <K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: <K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]) => `void`  }
+- [`Device`](device_export.Device.md)\<`this`\> & \{ `_executeHandler`: \<K\>(`action`: `K`, ...`args`: `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]\>) => `Promise`\<`void`\> ; `addCommandHandler`: \<K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]) => `void` ; `removeCommandHandler`: \<K\>(`action`: `K`, `handler`: [`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]) => `void`  }
 
   ↳ **`OnOffBaseDevice`**
 
@@ -74,7 +74,7 @@ Abstract Base class for OnOff devices
 
 ### constructor
 
-• `Protected` **new OnOffBaseDevice**(`definition`, `attributeInitialValues?`, `options?`)
+• **new OnOffBaseDevice**(`definition`, `attributeInitialValues?`, `options?`): [`OnOffBaseDevice`](device_export.OnOffBaseDevice.md)
 
 Creates a new OnOffBaseDevice
 
@@ -86,27 +86,31 @@ Creates a new OnOffBaseDevice
 | `attributeInitialValues?` | `Object` | Optional object with initial attribute values for automatically added clusters |
 | `options` | [`EndpointOptions`](../interfaces/device_export.EndpointOptions.md) | Optional endpoint options |
 
+#### Returns
+
+[`OnOffBaseDevice`](device_export.OnOffBaseDevice.md)
+
 #### Overrides
 
-extendPublicHandlerMethods&lt;typeof Device, OnOffBaseDeviceCommands\&gt;(Device).constructor
+extendPublicHandlerMethods\&lt;typeof Device, OnOffBaseDeviceCommands\&gt;(Device).constructor
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:62](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L62)
+[packages/matter.js/src/device/OnOffDevices.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L62)
 
 ## Properties
 
 ### commandHandler
 
-• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)<`any`\>
+• `Protected` **commandHandler**: [`NamedHandler`](util_export.NamedHandler.md)\<`any`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).commandHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).commandHandler
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L168)
+[packages/matter.js/src/device/Device.ts:168](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L168)
 
 ___
 
@@ -116,11 +120,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).deviceType
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).deviceType
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L167)
+[packages/matter.js/src/device/Device.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L167)
 
 ___
 
@@ -132,11 +136,11 @@ One or multiple DeviceTypeDefinitions of the endpoint
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).deviceTypes
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).deviceTypes
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L53)
+[packages/matter.js/src/device/Endpoint.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L53)
 
 ___
 
@@ -146,11 +150,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).id
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).id
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L37)
+[packages/matter.js/src/device/Endpoint.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L37)
 
 ___
 
@@ -160,11 +164,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).name
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).name
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L39)
+[packages/matter.js/src/device/Endpoint.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L39)
 
 ___
 
@@ -174,17 +178,17 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).uniqueStorageKey
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).uniqueStorageKey
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L38)
+[packages/matter.js/src/device/Endpoint.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L38)
 
 ## Methods
 
 ### \_executeHandler
 
-▸ `Protected` **_executeHandler**(`command`, `...args`): `Promise`<`any`\>
+▸ **_executeHandler**(`command`, `...args`): `Promise`\<`any`\>
 
 Execute a command handler. Should only be used internally, but can not be declared as protected officially
 because needed public for derived classes.
@@ -198,17 +202,17 @@ because needed public for derived classes.
 
 #### Returns
 
-`Promise`<`any`\>
+`Promise`\<`any`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).\_executeHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).\_executeHandler
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L225)
+[packages/matter.js/src/device/Device.ts:225](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L225)
 
-▸ `Protected` **_executeHandler**<`K`\>(`action`, `...args`): `Promise`<`void`\>
+▸ **_executeHandler**\<`K`\>(`action`, `...args`): `Promise`\<`void`\>
 
 Execute a command handler. Should only be used internally, but can not be declared as protected officially
 because needed public for derived classes.
@@ -224,19 +228,19 @@ because needed public for derived classes.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `action` | `K` | - |
-| `...args` | `Parameters`<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]\> | Arguments to be passed to the handler |
+| `...args` | `Parameters`\<[`OnOffBaseDeviceCommands`](../modules/export._internal_.md#onoffbasedevicecommands)[`K`]\> | Arguments to be passed to the handler |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).\_executeHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).\_executeHandler
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L42)
+[packages/matter.js/src/util/NamedHandler.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L42)
 
 ___
 
@@ -256,17 +260,17 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addChildEndpoint
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addChildEndpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L256)
+[packages/matter.js/src/device/Endpoint.ts:256](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L256)
 
 ___
 
 ### addClusterClient
 
-▸ **addClusterClient**<`F`, `A`, `C`, `E`\>(`cluster`): `void`
+▸ **addClusterClient**\<`F`, `A`, `C`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -281,7 +285,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\> |
+| `cluster` | [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -289,17 +293,17 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addClusterClient
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addClusterClient
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L173)
+[packages/matter.js/src/device/Endpoint.ts:173](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L173)
 
 ___
 
 ### addClusterServer
 
-▸ **addClusterServer**<`A`, `E`\>(`cluster`): `void`
+▸ **addClusterServer**\<`A`, `E`\>(`cluster`): `void`
 
 #### Type parameters
 
@@ -312,7 +316,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\> |
+| `cluster` | [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\> |
 
 #### Returns
 
@@ -320,11 +324,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addClusterServer
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addClusterServer
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L146)
+[packages/matter.js/src/device/Endpoint.ts:146](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L146)
 
 ___
 
@@ -348,13 +352,13 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addCommandHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addCommandHandler
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L202)
+[packages/matter.js/src/device/Device.ts:202](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L202)
 
-▸ **addCommandHandler**<`K`\>(`action`, `handler`): `void`
+▸ **addCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
 Method to add command handlers to the device.
 The base class do not expose any commands!
@@ -378,17 +382,17 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addCommandHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addCommandHandler
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L40)
+[packages/matter.js/src/util/NamedHandler.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L40)
 
 ___
 
 ### addDeviceClusters
 
-▸ `Protected` **addDeviceClusters**(`attributeInitialValues?`, `excludeList?`): `void`
+▸ **addDeviceClusters**(`attributeInitialValues?`, `excludeList?`): `void`
 
 Adds mandatory clusters to the device
 
@@ -405,7 +409,7 @@ Adds mandatory clusters to the device
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:78](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L78)
+[packages/matter.js/src/device/OnOffDevices.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L78)
 
 ___
 
@@ -426,11 +430,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addFixedLabel
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addFixedLabel
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L106)
+[packages/matter.js/src/device/Endpoint.ts:106](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L106)
 
 ___
 
@@ -453,7 +457,7 @@ This is an example of a convenient device class API to control the device withou
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:136](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L136)
+[packages/matter.js/src/device/OnOffDevices.ts:136](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L136)
 
 ___
 
@@ -474,24 +478,24 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).addUserLabel
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).addUserLabel
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L126)
+[packages/matter.js/src/device/Endpoint.ts:126](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L126)
 
 ___
 
 ### createOptionalClusterClient
 
-▸ `Protected` **createOptionalClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **createOptionalClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -500,32 +504,32 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).createOptionalClusterClient
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).createOptionalClusterClient
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L240)
+[packages/matter.js/src/device/Device.ts:240](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L240)
 
 ___
 
 ### createOptionalClusterServer
 
-▸ `Protected` **createOptionalClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+▸ **createOptionalClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`_cluster`): [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -534,19 +538,19 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `_cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-[`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+[`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).createOptionalClusterServer
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).createOptionalClusterServer
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L229)
+[packages/matter.js/src/device/Device.ts:229](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L229)
 
 ___
 
@@ -560,11 +564,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).destroy
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).destroy
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L93)
+[packages/matter.js/src/device/Endpoint.ts:93](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L93)
 
 ___
 
@@ -578,47 +582,47 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).determineUniqueID
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).determineUniqueID
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L283)
+[packages/matter.js/src/device/Endpoint.ts:283](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L283)
 
 ___
 
 ### getAllClusterClients
 
-▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
+▸ **getAllClusterClients**(): [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
 #### Returns
 
-[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
+[`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getAllClusterClients
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getAllClusterClients
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L343)
+[packages/matter.js/src/device/Endpoint.ts:343](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L343)
 
 ___
 
 ### getAllClusterServers
 
-▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
+▸ **getAllClusterServers**(): [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
 #### Returns
 
-[`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
+[`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>[]
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getAllClusterServers
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getAllClusterServers
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L339)
+[packages/matter.js/src/device/Endpoint.ts:339](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L339)
 
 ___
 
@@ -638,11 +642,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getChildEndpoint
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getChildEndpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L265)
+[packages/matter.js/src/device/Endpoint.ts:265](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L265)
 
 ___
 
@@ -656,24 +660,24 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getChildEndpoints
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getChildEndpoints
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L269)
+[packages/matter.js/src/device/Endpoint.ts:269](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L269)
 
 ___
 
 ### getClusterClient
 
-▸ **getClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+▸ **getClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -682,25 +686,25 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`F`, `A`, `C`, `E`\>
+`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`F`, `A`, `C`, `E`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterClient
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterClient
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L271)
+[packages/matter.js/src/device/Device.ts:271](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L271)
 
 ___
 
 ### getClusterClientById
 
-▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+▸ **getClusterClientById**(`clusterId`): `undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
 
 #### Parameters
 
@@ -710,28 +714,28 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+`undefined` \| [`ClusterClientObj`](../modules/cluster_export.md#clusterclientobj)\<`any`, [`Attributes`](../interfaces/cluster_export.Attributes.md), [`Commands`](../interfaces/cluster_export.Commands.md), [`Events`](../interfaces/cluster_export.Events.md)\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterClientById
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterClientById
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L212)
+[packages/matter.js/src/device/Endpoint.ts:212](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L212)
 
 ___
 
 ### getClusterServer
 
-▸ **getClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+▸ **getClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -740,25 +744,25 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<`A`, `E`\>
+`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<`A`, `E`\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterServer
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterServer
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L251)
+[packages/matter.js/src/device/Device.ts:251](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L251)
 
 ___
 
 ### getClusterServerById
 
-▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+▸ **getClusterServerById**(`clusterId`): `undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>
 
 #### Parameters
 
@@ -768,15 +772,15 @@ ___
 
 #### Returns
 
-`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>
+`undefined` \| [`ClusterServerObj`](../modules/cluster_export.md#clusterserverobj)\<[`Attributes`](../interfaces/cluster_export.Attributes.md), [`Events`](../interfaces/cluster_export.Events.md)\>
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterServerById
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getClusterServerById
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L208)
+[packages/matter.js/src/device/Endpoint.ts:208](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L208)
 
 ___
 
@@ -790,11 +794,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getDeviceTypes
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getDeviceTypes
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L236)
+[packages/matter.js/src/device/Endpoint.ts:236](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L236)
 
 ___
 
@@ -808,11 +812,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).getId
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).getId
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L99)
+[packages/matter.js/src/device/Endpoint.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L99)
 
 ___
 
@@ -826,20 +830,20 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:116](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L116)
+[packages/matter.js/src/device/OnOffDevices.ts:116](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L116)
 
 ___
 
 ### hasClusterClient
 
-▸ **hasClusterClient**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterClient**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -848,7 +852,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -856,24 +860,24 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).hasClusterClient
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).hasClusterClient
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L226)
+[packages/matter.js/src/device/Endpoint.ts:226](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L226)
 
 ___
 
 ### hasClusterServer
 
-▸ **hasClusterServer**<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
+▸ **hasClusterServer**\<`F`, `SF`, `A`, `C`, `E`\>(`cluster`): `boolean`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `F` | extends [`BitSchema`](../modules/schema_export.md#bitschema) |
-| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)<`F`\> |
+| `SF` | extends [`TypeFromPartialBitSchema`](../modules/schema_export.md#typefrompartialbitschema)\<`F`\> |
 | `A` | extends [`Attributes`](../interfaces/cluster_export.Attributes.md) |
 | `C` | extends [`Commands`](../interfaces/cluster_export.Commands.md) |
 | `E` | extends [`Events`](../interfaces/cluster_export.Events.md) |
@@ -882,7 +886,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)<`F`, `SF`, `A`, `C`, `E`\> |
+| `cluster` | [`Cluster`](../modules/cluster_export.md#cluster)\<`F`, `SF`, `A`, `C`, `E`\> |
 
 #### Returns
 
@@ -890,17 +894,17 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).hasClusterServer
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).hasClusterServer
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L216)
+[packages/matter.js/src/device/Endpoint.ts:216](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L216)
 
 ___
 
 ### removeChildEndpoint
 
-▸ `Protected` **removeChildEndpoint**(`endpoint`): `void`
+▸ **removeChildEndpoint**(`endpoint`): `void`
 
 #### Parameters
 
@@ -914,11 +918,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).removeChildEndpoint
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).removeChildEndpoint
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L273)
+[packages/matter.js/src/device/Endpoint.ts:273](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L273)
 
 ___
 
@@ -942,13 +946,13 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).removeCommandHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).removeCommandHandler
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L213)
+[packages/matter.js/src/device/Device.ts:213](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L213)
 
-▸ **removeCommandHandler**<`K`\>(`action`, `handler`): `void`
+▸ **removeCommandHandler**\<`K`\>(`action`, `handler`): `void`
 
 Method to remove command handlers from the device.
 The base class do not expose any commands!
@@ -972,11 +976,11 @@ The base class do not expose any commands!
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).removeCommandHandler
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).removeCommandHandler
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/NamedHandler.ts#L41)
+[packages/matter.js/src/util/NamedHandler.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L41)
 
 ___
 
@@ -990,11 +994,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).removeFromStructure
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).removeFromStructure
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L85)
+[packages/matter.js/src/device/Endpoint.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L85)
 
 ___
 
@@ -1017,11 +1021,11 @@ reachability needs to be set there.
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).setBridgedDeviceReachability
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).setBridgedDeviceReachability
 
 #### Defined in
 
-[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Device.ts#L296)
+[packages/matter.js/src/device/Device.ts:296](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Device.ts#L296)
 
 ___
 
@@ -1041,11 +1045,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).setDeviceTypes
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).setDeviceTypes
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L240)
+[packages/matter.js/src/device/Endpoint.ts:240](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L240)
 
 ___
 
@@ -1068,7 +1072,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:112](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L112)
+[packages/matter.js/src/device/OnOffDevices.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L112)
 
 ___
 
@@ -1088,11 +1092,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).setStructureChangedCallback
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).setStructureChangedCallback
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L80)
+[packages/matter.js/src/device/Endpoint.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L80)
 
 ___
 
@@ -1109,7 +1113,7 @@ This is an example f a convenient device class API to control the device without
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:124](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/OnOffDevices.ts#L124)
+[packages/matter.js/src/device/OnOffDevices.ts:124](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L124)
 
 ___
 
@@ -1123,11 +1127,11 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).updatePartsList
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).updatePartsList
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L347)
+[packages/matter.js/src/device/Endpoint.ts:347](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L347)
 
 ___
 
@@ -1141,8 +1145,8 @@ ___
 
 #### Inherited from
 
-extendPublicHandlerMethods<typeof Device, OnOffBaseDeviceCommands\>(Device).verifyRequiredClusters
+extendPublicHandlerMethods\<typeof Device, OnOffBaseDeviceCommands\>(Device).verifyRequiredClusters
 
 #### Defined in
 
-[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/device/Endpoint.ts#L305)
+[packages/matter.js/src/device/Endpoint.ts:305](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/Endpoint.ts#L305)

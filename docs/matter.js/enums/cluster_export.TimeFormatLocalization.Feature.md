@@ -28,4 +28,4 @@ The Node can be configured to use different calendar formats when conveying valu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:109](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/TimeFormatLocalizationCluster.ts#L109)

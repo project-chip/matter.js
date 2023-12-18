@@ -100,13 +100,17 @@ this class.
 
 ### constructor
 
-• **new DatatypeModel**(`definition`)
+• **new DatatypeModel**(`definition`): [`DatatypeModel`](exports_model.DatatypeModel.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `definition` | [`Properties`](../modules/exports_model.DatatypeElement.md#properties) |
+
+#### Returns
+
+[`DatatypeModel`](exports_model.DatatypeModel.md)
 
 #### Overrides
 
@@ -1228,13 +1232,13 @@ ___
 
 ### validationAspects
 
-• `get` **validationAspects**(): [`Aspect`](exports_model.Aspect.md)<`any`\>[]
+• `get` **validationAspects**(): [`Aspect`](exports_model.Aspect.md)\<`any`\>[]
 
 Collect constraints and conformance for this type and all base types.
 
 #### Returns
 
-[`Aspect`](exports_model.Aspect.md)<`any`\>[]
+[`Aspect`](exports_model.Aspect.md)\<`any`\>[]
 
 #### Inherited from
 
@@ -1274,7 +1278,7 @@ ___
 
 ### all
 
-▸ **all**<`T`\>(`constructor`): `T`[]
+▸ **all**\<`T`\>(`constructor`): `T`[]
 
 Retrieve all models of a specific element type from local scope.
 
@@ -1288,7 +1292,7 @@ Retrieve all models of a specific element type from local scope.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)<`T`\> | model class or a predicate object |
+| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> | model class or a predicate object |
 
 #### Returns
 
@@ -1359,7 +1363,7 @@ ___
 
 ### get
 
-▸ **get**<`T`\>(`constructor`, `key`): `T`
+▸ **get**\<`T`\>(`constructor`, `key`): `T`
 
 Retrieve a specific model by ID or name.
 
@@ -1373,7 +1377,7 @@ Retrieve a specific model by ID or name.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)<`T`\> |
+| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
 | `key` | `string` \| `number` |
 
 #### Returns
@@ -1471,7 +1475,7 @@ ___
 
 ### owner
 
-▸ **owner**<`T`\>(`constructor`): `undefined` \| `T`
+▸ **owner**\<`T`\>(`constructor`): `undefined` \| `T`
 
 Retrieve a model of a specific type from the ownership hierarchy.
 
@@ -1485,7 +1489,7 @@ Retrieve a model of a specific type from the ownership hierarchy.
 
 | Name | Type |
 | :------ | :------ |
-| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)<`T`\> |
+| `constructor` | [`Constructor`](../modules/exports_model.Model.md#constructor)\<`T`\> |
 
 #### Returns
 
@@ -1595,7 +1599,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`definition`): [`Model`](exports_model.Model-1.md)
+▸ **create**(`definition`): [`Model`](exports_model.Model-1.md)
 
 Create a model for an element.
 

@@ -52,7 +52,7 @@
 
 ### BitField
 
-Ƭ **BitField**: [`BitRange`](export._internal_.md#bitrange-1)<`number`, [`Number`](export._internal_.md#number)\>
+Ƭ **BitField**: [`BitRange`](export._internal_.md#bitrange-1)\<`number`, [`Number`](export._internal_.md#number)\>
 
 Defines the bit position and bit length of a numeric value.
 
@@ -66,7 +66,7 @@ ___
 
 ### BitFieldEnum
 
-Ƭ **BitFieldEnum**<`E`\>: [`BitRange`](export._internal_.md#bitrange-1)<`E`, [`Enum`](export._internal_.md#enum)\>
+Ƭ **BitFieldEnum**\<`E`\>: [`BitRange`](export._internal_.md#bitrange-1)\<`E`, [`Enum`](export._internal_.md#enum)\>
 
 Defines the bit position and bit length of an enum flag.
 
@@ -86,7 +86,7 @@ ___
 
 ### BitFlag
 
-Ƭ **BitFlag**: [`BitRange`](export._internal_.md#bitrange-1)<`boolean`, [`Flag`](export._internal_.md#flag)\>
+Ƭ **BitFlag**: [`BitRange`](export._internal_.md#bitrange-1)\<`boolean`, [`Flag`](export._internal_.md#flag)\>
 
 Defines the bit position of a boolean flag.
 
@@ -100,7 +100,7 @@ ___
 
 ### BitFlags
 
-Ƭ **BitFlags**<`T`, `F`\>: [`Merge`](util_export.md#merge)<{ [key in keyof T]: false }, [`FlagsToBitmap`](exports_schema.md#flagstobitmap)<`F`\>\>
+Ƭ **BitFlags**\<`T`, `F`\>: [`Merge`](util_export.md#merge)\<\{ [key in keyof T]: false }, [`FlagsToBitmap`](exports_schema.md#flagstobitmap)\<`F`\>\>
 
 Create a type with specified bit flags set
 
@@ -109,7 +109,7 @@ Create a type with specified bit flags set
 | Name | Type |
 | :------ | :------ |
 | `T` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `F` | extends `Capitalize`<`Extract`<keyof `T`, `string`\>\>[] |
+| `F` | extends `Capitalize`\<`Extract`\<keyof `T`, `string`\>\>[] |
 
 #### Defined in
 
@@ -125,7 +125,7 @@ ___
 
 #### Index signature
 
-▪ [key: `string`]: [`BitFlag`](exports_schema.md#bitflag-1) \| [`BitField`](exports_schema.md#bitfield-1) \| [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)<`any`\>
+▪ [key: `string`]: [`BitFlag`](exports_schema.md#bitflag-1) \| [`BitField`](exports_schema.md#bitfield-1) \| [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`any`\>
 
 #### Defined in
 
@@ -135,7 +135,7 @@ ___
 
 ### FlagsToBitmap
 
-Ƭ **FlagsToBitmap**<`T`\>: { [name in Uncapitalize<T[number]\>]: true }
+Ƭ **FlagsToBitmap**\<`T`\>: \{ [name in Uncapitalize\<T[number]\>]: true }
 
 Create a partial bitmap from a flag sequence
 
@@ -173,7 +173,7 @@ ___
 
 ### QrCodeData
 
-Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](exports_schema.md#typefrombitmapschema)<typeof [`QrCodeDataSchema`](export._internal_.md#qrcodedataschema)\>
+Ƭ **QrCodeData**: [`TypeFromBitmapSchema`](exports_schema.md#typefrombitmapschema)\<typeof [`QrCodeDataSchema`](export._internal_.md#qrcodedataschema)\>
 
 #### Defined in
 
@@ -183,7 +183,7 @@ ___
 
 ### TypeFromBitSchema
 
-Ƭ **TypeFromBitSchema**<`T`\>: { [K in keyof T]: T[K] extends BitFieldEnum<infer E\> ? E : T[K] extends BitField ? number : boolean }
+Ƭ **TypeFromBitSchema**\<`T`\>: \{ [K in keyof T]: T[K] extends BitFieldEnum\<infer E\> ? E : T[K] extends BitField ? number : boolean }
 
 #### Type parameters
 
@@ -199,13 +199,13 @@ ___
 
 ### TypeFromBitmapSchema
 
-Ƭ **TypeFromBitmapSchema**<`S`\>: `S` extends [`Schema`](../classes/exports_schema.Schema.md)<infer T, `any`\> ? `T` : `never`
+Ƭ **TypeFromBitmapSchema**\<`S`\>: `S` extends [`Schema`](../classes/exports_schema.Schema.md)\<infer T, `any`\> ? `T` : `never`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `S` | extends [`Schema`](../classes/exports_schema.Schema.md)<`any`, `any`\> |
+| `S` | extends [`Schema`](../classes/exports_schema.Schema.md)\<`any`, `any`\> |
 
 #### Defined in
 
@@ -215,7 +215,7 @@ ___
 
 ### TypeFromPartialBitSchema
 
-Ƭ **TypeFromPartialBitSchema**<`T`\>: { [K in keyof T]?: T[K] extends BitFieldEnum<infer E\> ? E : T[K] extends BitField ? number : boolean }
+Ƭ **TypeFromPartialBitSchema**\<`T`\>: \{ [K in keyof T]?: T[K] extends BitFieldEnum\<infer E\> ? E : T[K] extends BitField ? number : boolean }
 
 #### Type parameters
 
@@ -322,7 +322,7 @@ ___
 
 ### BitFieldEnum
 
-▸ **BitFieldEnum**<`E`\>(`offset`, `length`): [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)<`E`\>
+▸ **BitFieldEnum**\<`E`\>(`offset`, `length`): [`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`E`\>
 
 #### Type parameters
 
@@ -339,7 +339,7 @@ ___
 
 #### Returns
 
-[`BitFieldEnum`](exports_schema.md#bitfieldenum-1)<`E`\>
+[`BitFieldEnum`](exports_schema.md#bitfieldenum-1)\<`E`\>
 
 #### Defined in
 
@@ -369,7 +369,7 @@ ___
 
 ### BitFlags
 
-▸ **BitFlags**<`T`, `F`\>(`bitSchemas`, `...flags`): [`BitFlags`](exports_schema.md#bitflags)<`T`, `F`\>
+▸ **BitFlags**\<`T`, `F`\>(`bitSchemas`, `...flags`): [`BitFlags`](exports_schema.md#bitflags)\<`T`, `F`\>
 
 Create a bitmap schema with a named subset of flags set
 
@@ -378,7 +378,7 @@ Create a bitmap schema with a named subset of flags set
 | Name | Type |
 | :------ | :------ |
 | `T` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `F` | extends `Capitalize`<`Extract`<keyof `T`, `string`\>\>[] |
+| `F` | extends `Capitalize`\<`Extract`\<keyof `T`, `string`\>\>[] |
 
 #### Parameters
 
@@ -389,7 +389,7 @@ Create a bitmap schema with a named subset of flags set
 
 #### Returns
 
-[`BitFlags`](exports_schema.md#bitflags)<`T`, `F`\>
+[`BitFlags`](exports_schema.md#bitflags)\<`T`, `F`\>
 
 #### Defined in
 
@@ -399,7 +399,7 @@ ___
 
 ### BitmapSchema
 
-▸ **BitmapSchema**<`T`\>(`bitSchemas`): [`BitmapSchemaInternal`](../classes/exports_schema.BitmapSchemaInternal.md)<`T`\>
+▸ **BitmapSchema**\<`T`\>(`bitSchemas`): [`BitmapSchemaInternal`](../classes/exports_schema.BitmapSchemaInternal.md)\<`T`\>
 
 Declares a bitmap schema by indicating the bit position and their names.
 
@@ -417,7 +417,7 @@ Declares a bitmap schema by indicating the bit position and their names.
 
 #### Returns
 
-[`BitmapSchemaInternal`](../classes/exports_schema.BitmapSchemaInternal.md)<`T`\>
+[`BitmapSchemaInternal`](../classes/exports_schema.BitmapSchemaInternal.md)\<`T`\>
 
 #### Defined in
 
@@ -427,7 +427,7 @@ ___
 
 ### BitsFromPartial
 
-▸ **BitsFromPartial**<`S`, `P`\>(`schema`, `bits`): [`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`S`\>
+▸ **BitsFromPartial**\<`S`, `P`\>(`schema`, `bits`): [`TypeFromBitSchema`](exports_schema.md#typefrombitschema)\<`S`\>
 
 Create a full bitmap schema from a partial bitmap schema
 
@@ -436,7 +436,7 @@ Create a full bitmap schema from a partial bitmap schema
 | Name | Type |
 | :------ | :------ |
 | `S` | extends [`BitSchema`](exports_schema.md#bitschema) |
-| `P` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<`S`\> |
+| `P` | extends [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<`S`\> |
 
 #### Parameters
 
@@ -447,7 +447,7 @@ Create a full bitmap schema from a partial bitmap schema
 
 #### Returns
 
-[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)<`S`\>
+[`TypeFromBitSchema`](exports_schema.md#typefrombitschema)\<`S`\>
 
 #### Defined in
 
@@ -457,7 +457,7 @@ ___
 
 ### ByteArrayBitmapSchema
 
-▸ **ByteArrayBitmapSchema**<`T`\>(`bitSchemas`): [`ByteArrayBitmapSchemaInternal`](../classes/exports_schema.ByteArrayBitmapSchemaInternal.md)<`T`\>
+▸ **ByteArrayBitmapSchema**\<`T`\>(`bitSchemas`): [`ByteArrayBitmapSchemaInternal`](../classes/exports_schema.ByteArrayBitmapSchemaInternal.md)\<`T`\>
 
 Declares a bitmap schema backed by a ByteArray by indicating the bit position and their names.
 
@@ -475,7 +475,7 @@ Declares a bitmap schema backed by a ByteArray by indicating the bit position an
 
 #### Returns
 
-[`ByteArrayBitmapSchemaInternal`](../classes/exports_schema.ByteArrayBitmapSchemaInternal.md)<`T`\>
+[`ByteArrayBitmapSchemaInternal`](../classes/exports_schema.ByteArrayBitmapSchemaInternal.md)\<`T`\>
 
 #### Defined in
 

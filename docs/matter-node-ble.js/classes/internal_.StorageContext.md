@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / StorageContext
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / StorageContext
 
 # Class: StorageContext
 
-[<internal>](../modules/internal_.md).StorageContext
+[\<internal\>](../modules/internal_.md).StorageContext
 
 ## Table of contents
 
@@ -30,7 +30,7 @@
 
 ### constructor
 
-• **new StorageContext**(`storage`, `contexts`)
+• **new StorageContext**(`storage`, `contexts`): [`StorageContext`](internal_.StorageContext.md)
 
 #### Parameters
 
@@ -38,6 +38,10 @@
 | :------ | :------ |
 | `storage` | [`Storage`](internal_.Storage.md) |
 | `contexts` | `string`[] |
+
+#### Returns
+
+[`StorageContext`](internal_.StorageContext.md)
 
 #### Defined in
 
@@ -139,7 +143,7 @@ ___
 
 ### get
 
-▸ **get**<`T`\>(`key`, `defaultValue?`): `T`
+▸ **get**\<`T`\>(`key`, `defaultValue?`): `T`
 
 #### Type parameters
 
@@ -200,7 +204,7 @@ ___
 
 ### set
 
-▸ **set**<`T`\>(`key`, `value`): `void`
+▸ **set**\<`T`\>(`key`, `value`): `void`
 
 #### Type parameters
 

@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventStorageData
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventStorageData
 
-# Interface: EventStorageData<T\>
+# Interface: EventStorageData\<T\>
 
-[<internal>](../modules/internal_.md).EventStorageData
+[\<internal\>](../modules/internal_.md).EventStorageData
 
 Data of an event which was triggered and stored internally
 
@@ -14,7 +14,7 @@ Data of an event which was triggered and stored internally
 
 ## Hierarchy
 
-- [`EventData`](internal_.EventData.md)<`T`\>
+- [`EventData`](internal_.EventData.md)\<`T`\>
 
   ↳ **`EventStorageData`**
 

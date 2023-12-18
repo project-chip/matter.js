@@ -9,7 +9,7 @@ but the contained event is unknown.
 
 ## Hierarchy
 
-- [`EventClient`](exports_cluster.EventClient.md)<`any`\>
+- [`EventClient`](exports_cluster.EventClient.md)\<`any`\>
 
   ↳ **`UnknownSupportedEventClient`**
 
@@ -39,17 +39,21 @@ but the contained event is unknown.
 
 ### constructor
 
-• **new UnknownSupportedEventClient**(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`)
+• **new UnknownSupportedEventClient**(`event`, `name`, `endpointId`, `clusterId`, `interactionClient`): [`UnknownSupportedEventClient`](exports_cluster.UnknownSupportedEventClient.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`Event`](../modules/exports_cluster.md#event)<`any`, `any`\> |
+| `event` | [`Event`](../modules/exports_cluster.md#event)\<`any`, `any`\> |
 | `name` | `string` |
 | `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
 | `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
 | `interactionClient` | [`InteractionClient`](exports_interaction.InteractionClient.md) |
+
+#### Returns
+
+[`UnknownSupportedEventClient`](exports_cluster.UnknownSupportedEventClient.md)
 
 #### Inherited from
 
@@ -91,7 +95,7 @@ ___
 
 ### event
 
-• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)<`any`, `any`\>
+• `Readonly` **event**: [`Event`](../modules/exports_cluster.md#event)\<`any`, `any`\>
 
 #### Inherited from
 
@@ -139,7 +143,7 @@ packages/matter.js/dist/esm/cluster/client/EventClient.d.ts:21
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`any`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`any`\>) => `void` |
 
 #### Returns
 
@@ -157,7 +161,7 @@ ___
 
 ### get
 
-▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`any`\>[]\>
+▸ **get**(`minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`any`\>[]\>
 
 #### Parameters
 
@@ -168,7 +172,7 @@ ___
 
 #### Returns
 
-`Promise`<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`any`\>[]\>
+`Promise`\<`undefined` \| [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`any`\>[]\>
 
 #### Inherited from
 
@@ -188,7 +192,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`any`\>) => `void` |
+| `listener` | (`newValue`: [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`any`\>) => `void` |
 
 #### Returns
 
@@ -206,7 +210,7 @@ ___
 
 ### subscribe
 
-▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`<`void`\>
+▸ **subscribe**(`minIntervalFloorSeconds`, `maxIntervalCeilingSeconds`, `isUrgent?`, `minimumEventNumber?`, `isFabricFiltered?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -220,7 +224,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -240,7 +244,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)<`any`\> |
+| `newEvent` | [`DecodedEventData`](../modules/exports_interaction.md#decodedeventdata)\<`any`\> |
 
 #### Returns
 

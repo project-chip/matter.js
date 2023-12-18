@@ -70,7 +70,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L13)
+[packages/matter.js/src/session/Session.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L13)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L12)
+[packages/matter.js/src/session/Session.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L12)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessenger.ts#L21)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessenger.ts#L21)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L14)
+[packages/matter.js/src/session/Session.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L14)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L22)
+[packages/matter.js/src/session/case/CaseMessages.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L22)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L26)
+[packages/matter.js/src/session/case/CaseMessages.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L26)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L23)
+[packages/matter.js/src/session/case/CaseMessages.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L23)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L27)
+[packages/matter.js/src/session/case/CaseMessages.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L27)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L24)
+[packages/matter.js/src/session/case/CaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L24)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L25)
+[packages/matter.js/src/session/case/CaseMessages.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L25)
 
 ___
 
@@ -172,7 +172,7 @@ Maximum sleep interval of node when in active mode.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L17)
+[packages/matter.js/src/session/Session.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L17)
 
 ___
 
@@ -184,7 +184,7 @@ Minimum amount the node SHOULD stay awake after network activity.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L23)
+[packages/matter.js/src/session/Session.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L23)
 
 ___
 
@@ -196,7 +196,7 @@ Maximum sleep interval of node when in idle mode.
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L20)
+[packages/matter.js/src/session/Session.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L20)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessenger.ts:22](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessenger.ts#L22)
+[packages/matter.js/src/session/pase/PaseMessenger.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessenger.ts#L22)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L28)
+[packages/matter.js/src/session/case/CaseMessages.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L28)
 
 ___
 
@@ -226,13 +226,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:29](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L29)
+[packages/matter.js/src/session/case/CaseMessages.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L29)
 
 ___
 
 ### TlvCaseSigma1
 
-• `Const` **TlvCaseSigma1**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `destinationId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvCaseSigma1**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `destinationId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 **`See`**
 
@@ -240,13 +240,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L41)
+[packages/matter.js/src/session/case/CaseMessages.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L41)
 
 ___
 
 ### TlvCaseSigma2
 
-• `Const` **TlvCaseSigma2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvCaseSigma2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 **`See`**
 
@@ -254,13 +254,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:52](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L52)
+[packages/matter.js/src/session/case/CaseMessages.ts:52](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L52)
 
 ___
 
 ### TlvCaseSigma2Resume
 
-• `Const` **TlvCaseSigma2Resume**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvCaseSigma2Resume**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 **`See`**
 
@@ -268,13 +268,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:61](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L61)
+[packages/matter.js/src/session/case/CaseMessages.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L61)
 
 ___
 
 ### TlvCaseSigma3
 
-• `Const` **TlvCaseSigma3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvCaseSigma3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -282,13 +282,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:68](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L68)
+[packages/matter.js/src/session/case/CaseMessages.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L68)
 
 ___
 
 ### TlvEncryptedDataSigma2
 
-• `Const` **TlvEncryptedDataSigma2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvEncryptedDataSigma2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -296,13 +296,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:81](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L81)
+[packages/matter.js/src/session/case/CaseMessages.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L81)
 
 ___
 
 ### TlvEncryptedDataSigma3
 
-• `Const` **TlvEncryptedDataSigma3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvEncryptedDataSigma3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `signature`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -310,13 +310,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:89](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L89)
+[packages/matter.js/src/session/case/CaseMessages.ts:89](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L89)
 
 ___
 
 ### TlvPasePake1
 
-• `Const` **TlvPasePake1**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `x`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvPasePake1**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `x`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -324,13 +324,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessages.ts#L48)
+[packages/matter.js/src/session/pase/PaseMessages.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessages.ts#L48)
 
 ___
 
 ### TlvPasePake2
 
-• `Const` **TlvPasePake2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `verifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvPasePake2**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `verifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `y`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -338,13 +338,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessages.ts#L53)
+[packages/matter.js/src/session/pase/PaseMessages.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessages.ts#L53)
 
 ___
 
 ### TlvPasePake3
 
-• `Const` **TlvPasePake3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `verifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvPasePake3**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `verifier`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -352,13 +352,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessages.ts#L59)
+[packages/matter.js/src/session/pase/PaseMessages.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessages.ts#L59)
 
 ___
 
 ### TlvPbkdfParamRequest
 
-• `Const` **TlvPbkdfParamRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `hasPbkdfParameters`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvPbkdfParamRequest**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `hasPbkdfParameters`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`boolean`\> ; `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `passcodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 **`See`**
 
@@ -366,13 +366,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessages.ts#L24)
+[packages/matter.js/src/session/pase/PaseMessages.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessages.ts#L24)
 
 ___
 
 ### TlvPbkdfParamResponse
 
-• `Const` **TlvPbkdfParamResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>
+• `Const` **TlvPbkdfParamResponse**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `mrpParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `pbkdfParameters`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `iterations`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\> ; `salt`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>\> ; `peerRandom`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>
 
 **`See`**
 
@@ -380,13 +380,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/pase/PaseMessages.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/pase/PaseMessages.ts#L33)
+[packages/matter.js/src/session/pase/PaseMessages.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/pase/PaseMessages.ts#L33)
 
 ___
 
 ### TlvSignedData
 
-• `Const` **TlvSignedData**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `peerEcdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\>
+• `Const` **TlvSignedData**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `intermediateCACert`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `nodeOpCert`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `peerEcdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\>
 
 **`See`**
 
@@ -394,7 +394,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessages.ts:73](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessages.ts#L73)
+[packages/matter.js/src/session/case/CaseMessages.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessages.ts#L73)
 
 ___
 
@@ -404,7 +404,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:21](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/SessionManager.ts#L21)
+[packages/matter.js/src/session/SessionManager.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/SessionManager.ts#L21)
 
 ___
 
@@ -414,13 +414,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/SessionManager.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/SessionManager.ts#L23)
+[packages/matter.js/src/session/SessionManager.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/SessionManager.ts#L23)
 
 ## Functions
 
 ### assertSecureSession
 
-▸ **assertSecureSession**<`T`\>(`session`, `errorText?`): asserts session is SecureSession<T\>
+▸ **assertSecureSession**\<`T`\>(`session`, `errorText?`): asserts session is SecureSession\<T\>
 
 #### Type parameters
 
@@ -432,13 +432,13 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`Session`](../interfaces/session_export.Session.md)<`T`\> |
+| `session` | [`Session`](../interfaces/session_export.Session.md)\<`T`\> |
 | `errorText?` | `string` |
 
 #### Returns
 
-asserts session is SecureSession<T\>
+asserts session is SecureSession\<T\>
 
 #### Defined in
 
-[packages/matter.js/src/session/SecureSession.ts:331](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/SecureSession.ts#L331)
+[packages/matter.js/src/session/SecureSession.ts:335](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/SecureSession.ts#L335)

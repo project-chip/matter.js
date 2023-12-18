@@ -18,26 +18,30 @@
 
 ### constructor
 
-• **new CaseClient**()
+• **new CaseClient**(): [`CaseClient`](exports_session.CaseClient.md)
+
+#### Returns
+
+[`CaseClient`](exports_session.CaseClient.md)
 
 ## Methods
 
 ### pair
 
-▸ **pair**(`client`, `exchange`, `fabric`, `peerNodeId`): `Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
+▸ **pair**(`client`, `exchange`, `fabric`, `peerNodeId`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `client` | [`MatterController`](export._internal_.MatterController.md) |
-| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](exports_protocol.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
 | `fabric` | [`Fabric`](exports_fabric.Fabric.md) |
 | `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
-`Promise`<[`SecureSession`](exports_session.SecureSession.md)<[`MatterController`](export._internal_.MatterController.md)\>\>
+`Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterController`](export._internal_.MatterController.md)\>\>
 
 #### Defined in
 

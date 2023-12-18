@@ -15,7 +15,7 @@
 
 ### Cluster
 
-• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)<{ `attributes`: { `validProxyList`: [`FixedAttribute`](cluster_export.md#fixedattribute)<[`TypeFromFields`](tlv_export.md#typefromfields)<{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `commands`: { `getValidProxiesRequest`: [`Command`](cluster_export.md#command)<`void`, `void`, `any`\>  } ; `id`: ``68`` = 0x44; `name`: ``"ValidProxies"`` = "ValidProxies"; `revision`: ``1`` = 1 }\>
+• `Const` **Cluster**: [`Definition`](cluster_export.ClusterFactory.md#definition)\<\{ `attributes`: \{ `validProxyList`: [`FixedAttribute`](cluster_export.md#fixedattribute)\<[`TypeFromFields`](tlv_export.md#typefromfields)\<\{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>[], `any`\>  } ; `commands`: \{ `getValidProxiesRequest`: [`Command`](cluster_export.md#command)\<`void`, `void`, `any`\>  } ; `id`: ``68`` = 0x44; `name`: ``"ValidProxies"`` = "ValidProxies"; `revision`: ``1`` = 1 }\>
 
 Proxy Valid
 
@@ -28,13 +28,13 @@ subscriptions on its behalf as per Section 9.15.7, “Proxy Discovery & Assignme
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L33)
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L33)
 
 ___
 
 ### TlvValidProxyStruct
 
-• `Const` **TlvValidProxyStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)<{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<[`NodeId`](datatype_export.md#nodeid)\>  }\>
+• `Const` **TlvValidProxyStruct**: [`ObjectSchema`](../classes/tlv_export.ObjectSchema.md)\<\{ `nodeId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<[`NodeId`](datatype_export.md#nodeid)\>  }\>
 
 Encapsulates the Node ID of a Valid Proxy.
 
@@ -44,4 +44,4 @@ Encapsulates the Node ID of a Valid Proxy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L23)
+[packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ValidProxiesCluster.ts#L23)

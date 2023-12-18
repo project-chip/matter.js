@@ -28,11 +28,11 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -52,7 +52,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `listener` | (`socket`: [`Channel`](exports_common.Channel.md)<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
+| `listener` | (`socket`: [`Channel`](exports_common.Channel.md)\<`Uint8Array`\>, `data`: `Uint8Array`) => `void` |
 
 #### Returns
 
@@ -70,7 +70,7 @@ ___
 
 ### openChannel
 
-▸ **openChannel**(`address`): `Promise`<[`Channel`](exports_common.Channel.md)<`Uint8Array`\>\>
+▸ **openChannel**(`address`): `Promise`\<[`Channel`](exports_common.Channel.md)\<`Uint8Array`\>\>
 
 #### Parameters
 
@@ -80,7 +80,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Channel`](exports_common.Channel.md)<`Uint8Array`\>\>
+`Promise`\<[`Channel`](exports_common.Channel.md)\<`Uint8Array`\>\>
 
 #### Defined in
 

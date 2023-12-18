@@ -67,7 +67,7 @@ It sends out queries to discover various types of Matter device types and listen
 
 ### constructor
 
-• **new MdnsScanner**(`multicastServer`, `enableIpv4?`)
+• **new MdnsScanner**(`multicastServer`, `enableIpv4?`): [`MdnsScanner`](exports_mdns.MdnsScanner.md)
 
 #### Parameters
 
@@ -75,6 +75,10 @@ It sends out queries to discover various types of Matter device types and listen
 | :------ | :------ |
 | `multicastServer` | [`UdpMulticastServer`](net_export.UdpMulticastServer.md) |
 | `enableIpv4?` | `boolean` |
+
+#### Returns
+
+[`MdnsScanner`](exports_mdns.MdnsScanner.md)
 
 #### Defined in
 
@@ -478,13 +482,13 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 Close all connects, end all timers and resolve all pending promises.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Implementation of
 
@@ -498,7 +502,7 @@ ___
 
 ### findCommissionableDevices
 
-▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+▸ **findCommissionableDevices**(`identifier`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 Discovers commissionable devices based on a defined identifier for maximal given timeout, but returns the
 first found entries. If already a discovered device matches in the cache the response is returned directly and
@@ -517,7 +521,7 @@ These can be requested by the getCommissionableDevices method.
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 #### Implementation of
 
@@ -531,7 +535,7 @@ ___
 
 ### findCommissionableDevicesContinuously
 
-▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+▸ **findCommissionableDevicesContinuously**(`identifier`, `callback`, `timeoutSeconds?`): `Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 Discovers commissionable devices based on a defined identifier and returns the first found entries. If already a
 
@@ -545,7 +549,7 @@ Discovers commissionable devices based on a defined identifier and returns the f
 
 #### Returns
 
-`Promise`<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
+`Promise`\<[`CommissionableDevice`](../modules/exports_common.md#commissionabledevice)[]\>
 
 #### Implementation of
 
@@ -559,7 +563,7 @@ ___
 
 ### findOperationalDevice
 
-▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
+▸ **findOperationalDevice**(`«destructured»`, `nodeId`, `timeoutSeconds?`, `ignoreExistingRecords?`): `Promise`\<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
 
 Method to find an operational device (already commissioned) and return a promise with the list of discovered
 IP/ports or an empty array if not found.
@@ -575,7 +579,7 @@ IP/ports or an empty array if not found.
 
 #### Returns
 
-`Promise`<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
+`Promise`\<[`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[]\>
 
 #### Implementation of
 
@@ -589,7 +593,7 @@ ___
 
 ### getDiscoveredCommissionableDevices
 
-▸ **getDiscoveredCommissionableDevices**(`identifier`): { `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
+▸ **getDiscoveredCommissionableDevices**(`identifier`): \{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
 
 Return already discovered commissionable devices and return them. Does not send out new DNS-SD queries.
 
@@ -601,7 +605,7 @@ Return already discovered commissionable devices and return them. Does not send 
 
 #### Returns
 
-{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
+\{ `CM`: `number` ; `D`: `number` ; `DN?`: `string` ; `DT?`: `number` ; `P?`: `number` ; `PH?`: `number` ; `PI?`: `string` ; `RI?`: `string` ; `SAI?`: `number` ; `SD`: `number` ; `SII?`: `number` ; `T?`: `number` ; `V?`: `number` ; `VP?`: `string` ; `addresses`: [`ServerAddressIp`](../modules/exports_common.md#serveraddressip)[] ; `deviceIdentifier`: `string` ; `expires`: `undefined` ; `instanceId`: `string`  }[]
 
 #### Implementation of
 
@@ -643,7 +647,7 @@ ___
 
 ### create
 
-▸ `Static` **create**(`options?`): `Promise`<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
+▸ **create**(`options?`): `Promise`\<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
 
 #### Parameters
 
@@ -655,7 +659,7 @@ ___
 
 #### Returns
 
-`Promise`<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
+`Promise`\<[`MdnsScanner`](exports_mdns.MdnsScanner.md)\>
 
 #### Defined in
 

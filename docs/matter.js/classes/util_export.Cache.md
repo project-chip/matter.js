@@ -1,6 +1,6 @@
 [@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [util/export](../modules/util_export.md) / Cache
 
-# Class: Cache<T\>
+# Class: Cache\<T\>
 
 [util/export](../modules/util_export.md).Cache
 
@@ -39,7 +39,7 @@
 
 ### constructor
 
-• **new Cache**<`T`\>(`generator`, `expirationMs`, `expireCallback?`)
+• **new Cache**\<`T`\>(`generator`, `expirationMs`, `expireCallback?`): [`Cache`](util_export.Cache.md)\<`T`\>
 
 #### Type parameters
 
@@ -53,11 +53,15 @@
 | :------ | :------ |
 | `generator` | (...`params`: `any`[]) => `T` |
 | `expirationMs` | `number` |
-| `expireCallback?` | (`key`: `string`, `value`: `T`) => `Promise`<`void`\> |
+| `expireCallback?` | (`key`: `string`, `value`: `T`) => `Promise`\<`void`\> |
+
+#### Returns
+
+[`Cache`](util_export.Cache.md)\<`T`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:17](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L17)
+[packages/matter.js/src/util/Cache.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L17)
 
 ## Properties
 
@@ -67,17 +71,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:19](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L19)
+[packages/matter.js/src/util/Cache.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L19)
 
 ___
 
 ### expireCallback
 
-• `Private` `Optional` `Readonly` **expireCallback**: (`key`: `string`, `value`: `T`) => `Promise`<`void`\>
+• `Private` `Optional` `Readonly` **expireCallback**: (`key`: `string`, `value`: `T`) => `Promise`\<`void`\>
 
 #### Type declaration
 
-▸ (`key`, `value`): `Promise`<`void`\>
+▸ (`key`, `value`): `Promise`\<`void`\>
 
 ##### Parameters
 
@@ -88,11 +92,11 @@ ___
 
 ##### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:20](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L20)
+[packages/matter.js/src/util/Cache.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L20)
 
 ___
 
@@ -116,17 +120,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:18](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L18)
+[packages/matter.js/src/util/Cache.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L18)
 
 ___
 
 ### knownKeys
 
-• `Private` `Readonly` **knownKeys**: `Set`<`string`\>
+• `Private` `Readonly` **knownKeys**: `Set`\<`string`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:12](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L12)
+[packages/matter.js/src/util/Cache.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L12)
 
 ___
 
@@ -136,61 +140,61 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:15](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L15)
+[packages/matter.js/src/util/Cache.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L15)
 
 ___
 
 ### timestamps
 
-• `Private` `Readonly` **timestamps**: `Map`<`string`, `number`\>
+• `Private` `Readonly` **timestamps**: `Map`\<`string`, `number`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L14)
+[packages/matter.js/src/util/Cache.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L14)
 
 ___
 
 ### values
 
-• `Private` `Readonly` **values**: `Map`<`string`, `T`\>
+• `Private` `Readonly` **values**: `Map`\<`string`, `T`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L13)
+[packages/matter.js/src/util/Cache.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L13)
 
 ## Methods
 
 ### clear
 
-▸ **clear**(): `Promise`<`void`\>
+▸ **clear**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:50](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L50)
+[packages/matter.js/src/util/Cache.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L50)
 
 ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:58](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L58)
+[packages/matter.js/src/util/Cache.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L58)
 
 ___
 
 ### deleteEntry
 
-▸ `Private` **deleteEntry**(`key`): `Promise`<`void`\>
+▸ **deleteEntry**(`key`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -200,25 +204,25 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:41](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L41)
+[packages/matter.js/src/util/Cache.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L41)
 
 ___
 
 ### expire
 
-▸ `Private` **expire**(): `Promise`<`void`\>
+▸ **expire**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:64](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L64)
+[packages/matter.js/src/util/Cache.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L64)
 
 ___
 
@@ -238,7 +242,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:25](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L25)
+[packages/matter.js/src/util/Cache.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L25)
 
 ___
 
@@ -252,4 +256,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Cache.ts:37](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/util/Cache.ts#L37)
+[packages/matter.js/src/util/Cache.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Cache.ts#L37)

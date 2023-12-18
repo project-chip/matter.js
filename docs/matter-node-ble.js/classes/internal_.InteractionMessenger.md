@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / InteractionMessenger
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / InteractionMessenger
 
-# Class: InteractionMessenger<ContextT\>
+# Class: InteractionMessenger\<ContextT\>
 
-[<internal>](../modules/internal_.md).InteractionMessenger
+[\<internal\>](../modules/internal_.md).InteractionMessenger
 
 ## Type parameters
 
@@ -40,7 +40,7 @@
 
 ### constructor
 
-• **new InteractionMessenger**<`ContextT`\>(`exchange`)
+• **new InteractionMessenger**\<`ContextT`\>(`exchange`): [`InteractionMessenger`](internal_.InteractionMessenger.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -52,35 +52,39 @@
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\> |
+| `exchange` | [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\> |
+
+#### Returns
+
+[`InteractionMessenger`](internal_.InteractionMessenger.md)\<`ContextT`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:39
 
 ## Properties
 
 ### exchange
 
-• `Protected` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+• `Protected` **exchange**: [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:38
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:50
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:44
 
 ___
 
@@ -94,13 +98,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:52
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
 
 ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Parameters
 
@@ -110,17 +114,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/internal_.Message.md)\>
+`Promise`\<[`Message`](../interfaces/internal_.Message.md)\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:49
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:43
 
 ___
 
 ### send
 
-▸ **send**(`messageType`, `payload`, `options?`): `Promise`<`void`\>
+▸ **send**(`messageType`, `payload`, `options?`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -132,17 +136,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:46
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:40
 
 ___
 
 ### sendStatus
 
-▸ **sendStatus**(`status`): `Promise`<`void`\>
+▸ **sendStatus**(`status`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -152,17 +156,17 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:47
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:41
 
 ___
 
 ### throwIfErrorStatusMessage
 
-▸ `Protected` **throwIfErrorStatusMessage**(`message`): `void`
+▸ **throwIfErrorStatusMessage**(`message`): `void`
 
 #### Parameters
 
@@ -176,18 +180,18 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:51
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:45
 
 ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
-matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:48
+matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:42

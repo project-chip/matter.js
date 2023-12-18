@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / PbkdfParameters
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / PbkdfParameters
 
 # Interface: PbkdfParameters
 
-[<internal>](../modules/internal_.md).PbkdfParameters
+[\<internal\>](../modules/internal_.md).PbkdfParameters
 
 ## Table of contents
 

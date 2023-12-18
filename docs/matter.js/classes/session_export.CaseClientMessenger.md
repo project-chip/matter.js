@@ -6,7 +6,7 @@
 
 ## Hierarchy
 
-- [`SecureChannelMessenger`](protocol_securechannel_export.SecureChannelMessenger.md)<[`MatterController`](export._internal_.MatterController.md)\>
+- [`SecureChannelMessenger`](protocol_securechannel_export.SecureChannelMessenger.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
   ↳ **`CaseClientMessenger`**
 
@@ -40,13 +40,17 @@
 
 ### constructor
 
-• **new CaseClientMessenger**(`exchange`)
+• **new CaseClientMessenger**(`exchange`): [`CaseClientMessenger`](session_export.CaseClientMessenger.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\> |
+| `exchange` | [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\> |
+
+#### Returns
+
+[`CaseClientMessenger`](session_export.CaseClientMessenger.md)
 
 #### Inherited from
 
@@ -54,13 +58,13 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Properties
 
 ### exchange
 
-• `Protected` `Readonly` **exchange**: [`MessageExchange`](protocol_export.MessageExchange.md)<[`MatterController`](export._internal_.MatterController.md)\>
+• `Protected` `Readonly` **exchange**: [`MessageExchange`](protocol_export.MessageExchange.md)\<[`MatterController`](export._internal_.MatterController.md)\>
 
 #### Inherited from
 
@@ -68,17 +72,17 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L31)
 
 ## Methods
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -86,7 +90,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L75)
 
 ___
 
@@ -104,13 +108,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L71)
 
 ___
 
 ### nextMessage
 
-▸ **nextMessage**(`expectedMessageType?`): `Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+▸ **nextMessage**(`expectedMessageType?`): `Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Parameters
 
@@ -120,7 +124,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Message`](../interfaces/codec_export.Message.md)\>
+`Promise`\<[`Message`](../interfaces/codec_export.Message.md)\>
 
 #### Inherited from
 
@@ -128,13 +132,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L33)
 
 ___
 
 ### nextMessageDecoded
 
-▸ **nextMessageDecoded**<`T`\>(`expectedMessageType`, `schema`): `Promise`<`T`\>
+▸ **nextMessageDecoded**\<`T`\>(`expectedMessageType`, `schema`): `Promise`\<`T`\>
 
 #### Type parameters
 
@@ -147,11 +151,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `expectedMessageType` | `number` |
-| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Inherited from
 
@@ -159,27 +163,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L44)
 
 ___
 
 ### readSigma2
 
-▸ **readSigma2**(): `Promise`<{ `sigma2`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` = payload; `sigma2Resume?`: `undefined`  } \| { `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` = payload; `sigma2Resume`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>  }\>
+▸ **readSigma2**(): `Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` = payload; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` = payload; `sigma2Resume`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Returns
 
-`Promise`<{ `sigma2`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` = payload; `sigma2Resume?`: `undefined`  } \| { `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` = payload; `sigma2Resume`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\>  }\>
+`Promise`\<\{ `sigma2`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> ; `sigma2Bytes`: `Uint8Array` = payload; `sigma2Resume?`: `undefined`  } \| \{ `sigma2?`: `undefined` ; `sigma2Bytes?`: `undefined` = payload; `sigma2Resume`: [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `resumeMic`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\>  }\>
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:40](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessenger.ts#L40)
+[packages/matter.js/src/session/case/CaseMessenger.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessenger.ts#L40)
 
 ___
 
 ### send
 
-▸ **send**<`T`\>(`message`, `type`, `schema`): `Promise`<`Uint8Array`\>
+▸ **send**\<`T`\>(`message`, `type`, `schema`): `Promise`\<`Uint8Array`\>
 
 #### Type parameters
 
@@ -193,11 +197,11 @@ ___
 | :------ | :------ |
 | `message` | `T` |
 | `type` | `number` |
-| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)<`T`\> |
+| `schema` | [`TlvSchema`](tlv_export.TlvSchema.md)\<`T`\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Inherited from
 
@@ -205,17 +209,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L53)
 
 ___
 
 ### sendCloseSession
 
-▸ **sendCloseSession**(): `Promise`<`void`\>
+▸ **sendCloseSession**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -223,13 +227,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L67)
 
 ___
 
 ### sendError
 
-▸ **sendError**(`code`): `Promise`<`void`\>
+▸ **sendError**(`code`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -239,7 +243,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -247,57 +251,57 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L59)
 
 ___
 
 ### sendSigma1
 
-▸ **sendSigma1**(`sigma1`): `Promise`<`Uint8Array`\>
+▸ **sendSigma1**(`sigma1`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sigma1` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `destinationId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`number`\>  }\> |
+| `sigma1` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `destinationId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `ecdhPublicKey`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `mrpParams`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<[`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `activeRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\> ; `idleRetransTimeoutMs`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`number`\>  }\>\> ; `random`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\> ; `resumeMic`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `resumptionId`: [`OptionalFieldType`](../interfaces/tlv_export.OptionalFieldType.md)\<`Uint8Array`\> ; `sessionId`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`number`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:36](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessenger.ts#L36)
+[packages/matter.js/src/session/case/CaseMessenger.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessenger.ts#L36)
 
 ___
 
 ### sendSigma3
 
-▸ **sendSigma3**(`sigma3`): `Promise`<`Uint8Array`\>
+▸ **sendSigma3**(`sigma3`): `Promise`\<`Uint8Array`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sigma3` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)<{ `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)<`Uint8Array`\>  }\> |
+| `sigma3` | [`TypeFromFields`](../modules/tlv_export.md#typefromfields)\<\{ `encrypted`: [`FieldType`](../interfaces/tlv_export.FieldType.md)\<`Uint8Array`\>  }\> |
 
 #### Returns
 
-`Promise`<`Uint8Array`\>
+`Promise`\<`Uint8Array`\>
 
 #### Defined in
 
-[packages/matter.js/src/session/case/CaseMessenger.ts:57](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/case/CaseMessenger.ts#L57)
+[packages/matter.js/src/session/case/CaseMessenger.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/case/CaseMessenger.ts#L57)
 
 ___
 
 ### sendSuccess
 
-▸ **sendSuccess**(): `Promise`<`void`\>
+▸ **sendSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -305,13 +309,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L63)
 
 ___
 
 ### throwIfErrorStatusReport
 
-▸ `Protected` **throwIfErrorStatusReport**(`message`): `void`
+▸ **throwIfErrorStatusReport**(`message`): `void`
 
 #### Parameters
 
@@ -329,17 +333,17 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L95)
 
 ___
 
 ### waitForSuccess
 
-▸ **waitForSuccess**(): `Promise`<`void`\>
+▸ **waitForSuccess**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Inherited from
 
@@ -347,4 +351,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L48)

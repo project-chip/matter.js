@@ -82,7 +82,7 @@ ___
 
 ### CommissionableDeviceIdentifiers
 
-Ƭ **CommissionableDeviceIdentifiers**: { `instanceId`: `string`  } \| { `longDiscriminator`: `number`  } \| { `shortDiscriminator`: `number`  } \| { `vendorId`: [`VendorId`](exports_datatype.md#vendorid)  } \| { `deviceType`: `number`  } \| { `productId`: `number`  } \| { [K in any]: never }
+Ƭ **CommissionableDeviceIdentifiers**: \{ `instanceId`: `string`  } \| \{ `longDiscriminator`: `number`  } \| \{ `shortDiscriminator`: `number`  } \| \{ `vendorId`: [`VendorId`](exports_datatype.md#vendorid)  } \| \{ `deviceType`: `number`  } \| \{ `productId`: `number`  } \| \{ [K in any]: never }
 
 Identifier to use to discover a commissionable device.
 Please decide for the best matching identifier that you have.
@@ -125,7 +125,7 @@ ___
 | `deviceName` | `string` | Device name for commissionable announcements. |
 | `deviceType` | `number` | Device type for commissionable announcements. |
 | `discriminator` | `number` | Device discriminator for commissionable announcements. |
-| `pairingHint?` | [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)<typeof [`PairingHintBitmap`](exports_common.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
+| `pairingHint?` | [`TypeFromPartialBitSchema`](exports_schema.md#typefrompartialbitschema)\<typeof [`PairingHintBitmap`](exports_common.md#pairinghintbitmap)\> | Pairing Hint of the device for commissionable announcements. |
 | `pairingInstructions?` | `string` | Pairing Instruction of the device for commissionable announcements. |
 | `productId` | `number` | Product ID for commissionable announcements. |
 | `sleepActiveInterval?` | `number` | Sleep Active Interval of the device for commissionable announcements. |
@@ -272,7 +272,7 @@ ___
 
 ### tryCatch
 
-▸ **tryCatch**<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `T`
+▸ **tryCatch**\<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `T`
 
 Try to execute the code block and catch the error if it is of the given type.
 If the error is of the given type, the fallback value or the result of the function is returned.
@@ -290,8 +290,8 @@ If the function returns undefined or the error type do not match, the error is n
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `codeBlock` | () => `T` | Code block to execute |
-| `errorType` | [`ClassExtends`](util_export.md#classextends)<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)<`T`, `E`\> | Fallback value or function to compute the fallback value |
+| `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`T`, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
@@ -305,7 +305,7 @@ ___
 
 ### tryCatchAsync
 
-▸ **tryCatchAsync**<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `Promise`<`T`\>
+▸ **tryCatchAsync**\<`T`, `E`\>(`codeBlock`, `errorType`, `fallbackValueOrFunction`): `Promise`\<`T`\>
 
 Try to execute the async code block and catch the error if it is of the given type.
 If the error is of the given type, the fallback value or the result of the function is returned.
@@ -322,13 +322,13 @@ If the function returns undefined or the error type do not match, the error is n
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `codeBlock` | () => `Promise`<`T`\> | Async code block to execute |
-| `errorType` | [`ClassExtends`](util_export.md#classextends)<`E`\> | Errortype to catch and handle |
-| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)<`Promise`<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
+| `codeBlock` | () => `Promise`\<`T`\> | Async code block to execute |
+| `errorType` | [`ClassExtends`](util_export.md#classextends)\<`E`\> | Errortype to catch and handle |
+| `fallbackValueOrFunction` | `T` \| [`ErrorHandler`](export._internal_.md#errorhandler)\<`Promise`\<`T`\>, `E`\> | Fallback value or function to compute the fallback value |
 
 #### Returns
 
-`Promise`<`T`\>
+`Promise`\<`T`\>
 
 #### Defined in
 

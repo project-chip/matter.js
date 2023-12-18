@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / ExchangeManager
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / ExchangeManager
 
-# Class: ExchangeManager<ContextT\>
+# Class: ExchangeManager\<ContextT\>
 
-[<internal>](../modules/internal_.md).ExchangeManager
+[\<internal\>](../modules/internal_.md).ExchangeManager
 
 ## Type parameters
 
@@ -44,7 +44,7 @@
 
 ### constructor
 
-• **new ExchangeManager**<`ContextT`\>(`sessionManager`, `channelManager`)
+• **new ExchangeManager**\<`ContextT`\>(`sessionManager`, `channelManager`): [`ExchangeManager`](internal_.ExchangeManager.md)\<`ContextT`\>
 
 #### Type parameters
 
@@ -56,8 +56,12 @@
 
 | Name | Type |
 | :------ | :------ |
-| `sessionManager` | [`SessionManager`](internal_.SessionManager.md)<`ContextT`\> |
+| `sessionManager` | [`SessionManager`](internal_.SessionManager.md)\<`ContextT`\> |
 | `channelManager` | [`ChannelManager`](internal_.ChannelManager.md) |
+
+#### Returns
+
+[`ExchangeManager`](internal_.ExchangeManager.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -163,7 +167,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
 
 | Name | Type |
 | :------ | :------ |
-| `protocol` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<`ContextT`\> |
+| `protocol` | [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<`ContextT`\> |
 
 #### Returns
 
@@ -197,11 +201,11 @@ ___
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -211,17 +215,17 @@ ___
 
 ### closeSession
 
-▸ **closeSession**(`session`): `Promise`<`void`\>
+▸ **closeSession**(`session`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `session` | [`SecureSession`](internal_.SecureSession.md)<`any`\> |
+| `session` | [`SecureSession`](internal_.SecureSession.md)\<`any`\> |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -231,7 +235,7 @@ ___
 
 ### deleteExchange
 
-▸ **deleteExchange**(`exchangeIndex`): `Promise`<`void`\>
+▸ **deleteExchange**(`exchangeIndex`): `Promise`\<`void`\>
 
 #### Parameters
 
@@ -241,7 +245,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -251,7 +255,7 @@ ___
 
 ### getProtocolHandler
 
-▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<`ContextT`\>
+▸ **getProtocolHandler**(`protocolId`): `undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -261,7 +265,7 @@ ___
 
 #### Returns
 
-`undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)<`ContextT`\>
+`undefined` \| [`ProtocolHandler`](../interfaces/internal_.ProtocolHandler.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -291,7 +295,7 @@ ___
 
 ### initiateExchange
 
-▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchange**(`fabric`, `nodeId`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -303,7 +307,7 @@ ___
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 
@@ -313,18 +317,18 @@ ___
 
 ### initiateExchangeWithChannel
 
-▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+▸ **initiateExchangeWithChannel**(`channel`, `protocolId`): [`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `channel` | [`MessageChannel`](internal_.MessageChannel.md)<`ContextT`\> |
+| `channel` | [`MessageChannel`](internal_.MessageChannel.md)\<`ContextT`\> |
 | `protocolId` | `number` |
 
 #### Returns
 
-[`MessageExchange`](internal_.MessageExchange.md)<`ContextT`\>
+[`MessageExchange`](internal_.MessageExchange.md)\<`ContextT`\>
 
 #### Defined in
 

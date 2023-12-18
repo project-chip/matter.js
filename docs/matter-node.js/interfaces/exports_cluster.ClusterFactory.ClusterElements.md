@@ -27,7 +27,7 @@ a cluster.
 
 ### attributes
 
-• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
+• `Readonly` **attributes**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Attribute`](../modules/exports_cluster.ClusterFactory.md#attribute)\>
 
 #### Defined in
 
@@ -37,7 +37,7 @@ ___
 
 ### commands
 
-• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
+• `Readonly` **commands**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Command`](../modules/exports_cluster.ClusterFactory.md#command)\>
 
 #### Defined in
 
@@ -47,7 +47,7 @@ ___
 
 ### events
 
-• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
+• `Readonly` **events**: [`ElementSet`](../modules/exports_cluster.ClusterFactory.md#elementset)\<[`Event`](../modules/exports_cluster.ClusterFactory.md#event)\>
 
 #### Defined in
 

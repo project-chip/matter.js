@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / EventHandler
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / EventHandler
 
 # Class: EventHandler
 
-[<internal>](../modules/internal_.md).EventHandler
+[\<internal\>](../modules/internal_.md).EventHandler
 
 Class that collects all triggered events up to a certain limit of events and handle logic
 to handle subscriptions (TBD)
@@ -30,13 +30,17 @@ to handle subscriptions (TBD)
 
 ### constructor
 
-• **new EventHandler**(`storage`)
+• **new EventHandler**(`storage`): [`EventHandler`](internal_.EventHandler.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `storage` | [`StorageContext`](internal_.StorageContext.md) |
+
+#### Returns
+
+[`EventHandler`](internal_.EventHandler.md)
 
 #### Defined in
 
@@ -100,18 +104,18 @@ ___
 
 ### getEvents
 
-▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/internal_.EventStorageData.md)<`any`\>[]
+▸ **getEvents**(`eventPath`, `filters?`): [`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `eventPath` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
-| `filters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)<{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
+| `eventPath` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `clusterId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`ClusterId`](../modules/internal_.md#clusterid)\> ; `endpointId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EndpointNumber`](../modules/internal_.md#endpointnumber)\> ; `eventId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`EventId`](../modules/internal_.md#eventid)\> ; `isUrgent`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<`boolean`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\> |
+| `filters?` | [`TypeFromFields`](../modules/internal_.md#typefromfields)\<\{ `eventMin`: [`FieldType`](../interfaces/internal_.FieldType.md)\<`number` \| `bigint`\> ; `nodeId`: [`OptionalFieldType`](../interfaces/internal_.OptionalFieldType.md)\<[`NodeId`](../modules/internal_.md#nodeid)\>  }\>[] |
 
 #### Returns
 
-[`EventStorageData`](../interfaces/internal_.EventStorageData.md)<`any`\>[]
+[`EventStorageData`](../interfaces/internal_.EventStorageData.md)\<`any`\>[]
 
 #### Defined in
 
@@ -127,7 +131,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `event` | [`EventData`](../interfaces/internal_.EventData.md)<`any`\> |
+| `event` | [`EventData`](../interfaces/internal_.EventData.md)\<`any`\> |
 
 #### Returns
 

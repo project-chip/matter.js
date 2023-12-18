@@ -1,8 +1,8 @@
-[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [<internal\>](../modules/export._internal_.md) / MrpParameters
+[@project-chip/matter.js](../README.md) / [Modules](../modules.md) / [export](../modules/export.md) / [\<internal\>](../modules/export._internal_.md) / MrpParameters
 
 # Interface: MrpParameters
 
-[export](../modules/export.md).[<internal>](../modules/export._internal_.md).MrpParameters
+[export](../modules/export.md).[\<internal\>](../modules/export._internal_.md).MrpParameters
 
 ## Table of contents
 
@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:27](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L27)
+[packages/matter.js/src/session/Session.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L27)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:26](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L26)
+[packages/matter.js/src/session/Session.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L26)
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:28](https://github.com/project-chip/matter.js/blob/b7330d72/packages/matter.js/src/session/Session.ts#L28)
+[packages/matter.js/src/session/Session.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L28)

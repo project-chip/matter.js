@@ -33,7 +33,11 @@
 
 ### constructor
 
-• **new Network**()
+• **new Network**(): [`Network`](net_export.Network.md)
+
+#### Returns
+
+[`Network`](net_export.Network.md)
 
 ## Properties
 
@@ -57,11 +61,11 @@ packages/matter.js/dist/esm/net/Network.d.ts:11
 
 ### close
 
-▸ **close**(): `Promise`<`void`\>
+▸ **close**(): `Promise`\<`void`\>
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -71,7 +75,7 @@ ___
 
 ### createUdpChannel
 
-▸ `Abstract` **createUdpChannel**(`options`): `Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+▸ **createUdpChannel**(`options`): `Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Parameters
 
@@ -81,7 +85,7 @@ ___
 
 #### Returns
 
-`Promise`<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
+`Promise`\<[`UdpChannel`](../interfaces/net_export.UdpChannel.md)\>
 
 #### Defined in
 
@@ -91,7 +95,7 @@ ___
 
 ### getIpMac
 
-▸ `Abstract` **getIpMac**(`netInterface`): `undefined` \| { `ips`: `string`[] ; `mac`: `string`  }
+▸ **getIpMac**(`netInterface`): `undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
 
 #### Parameters
 
@@ -101,7 +105,7 @@ ___
 
 #### Returns
 
-`undefined` \| { `ips`: `string`[] ; `mac`: `string`  }
+`undefined` \| \{ `ips`: `string`[] ; `mac`: `string`  }
 
 #### Defined in
 
@@ -111,7 +115,7 @@ ___
 
 ### getNetInterfaces
 
-▸ `Abstract` **getNetInterfaces**(): `string`[]
+▸ **getNetInterfaces**(): `string`[]
 
 #### Returns
 

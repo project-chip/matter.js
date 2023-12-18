@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](internal_.md) / FabricIndex
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](internal_.md) / FabricIndex
 
 # Namespace: FabricIndex
 
-[<internal>](internal_.md).FabricIndex
+[\<internal\>](internal_.md).FabricIndex
 
 ## Table of contents
 

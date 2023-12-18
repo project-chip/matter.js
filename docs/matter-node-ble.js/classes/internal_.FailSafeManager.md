@@ -1,8 +1,8 @@
-[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [<internal\>](../modules/internal_.md) / FailSafeManager
+[@project-chip/matter-node-ble.js](../README.md) / [Exports](../modules.md) / [\<internal\>](../modules/internal_.md) / FailSafeManager
 
 # Class: FailSafeManager
 
-[<internal>](../modules/internal_.md).FailSafeManager
+[\<internal\>](../modules/internal_.md).FailSafeManager
 
 Class to Handle one FailSafe context. This is mainly used when adding (Commissioning) or updating new Fabrics.
 
@@ -45,7 +45,7 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 
 ### constructor
 
-• **new FailSafeManager**(`device`, `associatedFabric`, `expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `expiryCallback`, `rootEndpoint`)
+• **new FailSafeManager**(`device`, `associatedFabric`, `expiryLengthSeconds`, `maxCumulativeFailsafeSeconds`, `expiryCallback`, `rootEndpoint`): [`FailSafeManager`](internal_.FailSafeManager.md)
 
 #### Parameters
 
@@ -55,8 +55,12 @@ Class to Handle one FailSafe context. This is mainly used when adding (Commissio
 | `associatedFabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
 | `expiryLengthSeconds` | `number` |
 | `maxCumulativeFailsafeSeconds` | `number` |
-| `expiryCallback` | () => `Promise`<`void`\> |
+| `expiryCallback` | () => `Promise`\<`void`\> |
 | `rootEndpoint` | [`Endpoint`](internal_.Endpoint.md) |
+
+#### Returns
+
+[`FailSafeManager`](internal_.FailSafeManager.md)
 
 #### Defined in
 
@@ -192,7 +196,7 @@ matter.js/dist/esm/common/FailSafeManager.d.ts:28
 
 ### buildFabric
 
-▸ **buildFabric**(`nocData`): `Promise`<[`Fabric`](internal_.Fabric.md)\>
+▸ **buildFabric**(`nocData`): `Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 Build a new Fabric object for a new fabric for the "AddNoc" case of the Operational Credentials cluster.
 
@@ -209,7 +213,7 @@ Build a new Fabric object for a new fabric for the "AddNoc" case of the Operatio
 
 #### Returns
 
-`Promise`<[`Fabric`](internal_.Fabric.md)\>
+`Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 #### Defined in
 
@@ -219,7 +223,7 @@ ___
 
 ### buildUpdatedFabric
 
-▸ **buildUpdatedFabric**(`nocValue`, `icacValue`): `Promise`<[`Fabric`](internal_.Fabric.md)\>
+▸ **buildUpdatedFabric**(`nocValue`, `icacValue`): `Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 Build a new Fabric object based on an existing fabric for the "UpdateNoc" case of the Operational Credentials
 cluster.
@@ -233,7 +237,7 @@ cluster.
 
 #### Returns
 
-`Promise`<[`Fabric`](internal_.Fabric.md)\>
+`Promise`\<[`Fabric`](internal_.Fabric.md)\>
 
 #### Defined in
 
@@ -283,13 +287,13 @@ ___
 
 ### expire
 
-▸ **expire**(): `Promise`<`void`\>
+▸ **expire**(): `Promise`\<`void`\>
 
 Expire the FailSafe context. This is called by the timer and can also be called manually if needed.
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
@@ -299,7 +303,7 @@ ___
 
 ### reArm
 
-▸ **reArm**(`associatedFabric`, `expiryLengthSeconds`): `Promise`<`void`\>
+▸ **reArm**(`associatedFabric`, `expiryLengthSeconds`): `Promise`\<`void`\>
 
 Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or fail if not allowed.
 
@@ -312,7 +316,7 @@ Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or f
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`\<`void`\>
 
 #### Defined in
 
