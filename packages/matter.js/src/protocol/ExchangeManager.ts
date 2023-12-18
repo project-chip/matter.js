@@ -252,18 +252,6 @@ export class ExchangeCounter {
     }
 }
 
-export class MessageCounter {
-    private messageCounter = Crypto.getRandomUInt32();
-
-    getIncrementedCounter() {
-        this.messageCounter++;
-        if (this.messageCounter > 0xffffffff) {
-            this.messageCounter = 0;
-        }
-        return this.messageCounter;
-    }
-}
-
 export class ExchangeProvider {
     constructor(
         private readonly exchangeManager: ExchangeManager<MatterController>,
