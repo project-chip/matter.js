@@ -38,7 +38,14 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             await this.handleSigma1(exchange.session.getContext(), messenger);
         } catch (error) {
             logger.error("An error occurred during the commissioning", error);
-            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+
+            if (error instanceof FabricNotFoundError) {
+                await messenger.sendError(ProtocolStatusCode.NoSharedTrustRoots);
+            }
+            // If we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
+            else if (!(error instanceof ChannelStatusResponseError)) {
+                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            }
         } finally {
             // Destroy the unsecure session used to establish the secure Case session
             await exchange.session.destroy();

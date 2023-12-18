@@ -161,11 +161,7 @@ export class MatterDevice {
             let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
-                if (
-                    session === undefined ||
-                    !session.isSecure() ||
-                    (session as SecureSession<this>).numberOfActiveSubscriptions === 0
-                ) {
+                if (session === undefined || !session.isSecure() || session.numberOfActiveSubscriptions === 0) {
                     fabricsWithoutSessions++;
                     logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
                 }
