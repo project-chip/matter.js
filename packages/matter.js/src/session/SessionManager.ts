@@ -14,12 +14,9 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { SecureSession } from "./SecureSession.js";
-import { Session } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
 
 const logger = Logger.get("SessionManager");
-
-export const UNDEFINED_NODE_ID = NodeId(0);
 
 export const UNICAST_UNSECURE_SESSION_ID = 0x0000;
 

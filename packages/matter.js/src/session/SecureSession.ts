@@ -23,7 +23,6 @@ import {
     SLEEPY_ACTIVE_THRESHOLD_MS,
     Session,
 } from "./Session.js";
-import { UNDEFINED_NODE_ID } from "./SessionManager.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -183,7 +182,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     isPase(): boolean {
-        return this.peerNodeId === UNDEFINED_NODE_ID;
+        return this.peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
     }
 
     async close(closeAfterExchangeFinished?: boolean) {
@@ -227,7 +226,9 @@ export class SecureSession<T> implements Session<T> {
         const { header, applicationPayload } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
-        const sessionNodeId = this.isPase() ? UNDEFINED_NODE_ID : this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
+        const sessionNodeId = this.isPase()
+            ? NodeId.UNSPECIFIED_NODE_ID
+            : this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, applicationPayload: Crypto.encrypt(this.encryptKey, applicationPayload, nonce, headerBytes) };
     }
@@ -276,7 +277,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     getNodeId() {
-        return this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
+        return this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
     }
 
     getPeerNodeId() {

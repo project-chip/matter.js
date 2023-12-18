@@ -9,6 +9,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
+import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
@@ -16,7 +17,6 @@ import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/s
 import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { Time, Timer } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const logger = Logger.get("PaseServer");
