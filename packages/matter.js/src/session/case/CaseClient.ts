@@ -130,10 +130,23 @@ export class CaseClient {
                 ellipticCurvePublicKey: peerPublicKey,
                 subject: { nodeId: peerNodeIdCert },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
-            if (peerNodeIdCert !== peerNodeId)
+
+            if (peerNodeIdCert !== peerNodeId) {
                 throw new UnexpectedDataError(
                     "The node ID in the peer certificate doesn't match the expected peer node ID",
                 );
+            }
+
+            // TODO also verify:
+            //  * FabricId matches
+            //  * If an ICAC is present, and it contains a Fabric ID in its subject, then it SHALL match the FabricID in
+            //    the NOC leaf certificate.
+            //  * The certificate chain SHALL chain back to the Trusted Root CA Certificate TrustedRCAC whose public key
+            //    was used in the computation of the Destination Identifier when generating Sigma1.
+            //  * All the elements in the certificate chain SHALL respect the Matter Certificate DN Encoding Rules,
+            //    including range checks for identifiers such as Fabric ID and Node ID.
+            //  * verify certificate chain of TBEData2.responderNOC (incl. ICAC if present)
+
             Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // Generate and send sigma3

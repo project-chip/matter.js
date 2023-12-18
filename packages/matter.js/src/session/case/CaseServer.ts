@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { FabricNotFoundError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import {
     KDFSR1_KEY_INFO,
@@ -131,8 +134,9 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
-        } else {
+        } else if (peerResumptionId === undefined && peerResumeMic === undefined) {
             // Generate sigma 2
+            // TODO: Pass through a group id?
             const fabric = server.findFabricFromDestinationId(destinationId, peerRandom);
             const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
             const { publicKey: ecdhPublicKey, sharedSecret } = Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
@@ -217,6 +221,8 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
+        } else {
+            throw new UnexpectedDataError("Invalid resumption ID or resume MIC.");
         }
     }
 
