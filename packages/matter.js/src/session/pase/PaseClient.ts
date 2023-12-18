@@ -70,16 +70,16 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession(
+        const secureSession = await client.createSecureSession({
             sessionId,
-            undefined,
-            UNDEFINED_NODE_ID,
+            fabric: undefined,
+            peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
-            Ke,
-            new ByteArray(0),
-            true,
-            false,
-        );
+            sharedSecret: Ke,
+            salt: new ByteArray(0),
+            isInitiator: true,
+            isResumption: false,
+        });
         await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);
 

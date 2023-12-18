@@ -666,18 +666,30 @@ export class MatterController {
         return this.sessionManager.getNextAvailableSessionId();
     }
 
-    async createSecureSession(
-        sessionId: number,
-        fabric: Fabric | undefined,
-        peerNodeId: NodeId,
-        peerSessionId: number,
-        sharedSecret: ByteArray,
-        salt: ByteArray,
-        isInitiator: boolean,
-        isResumption: boolean,
-        idleRetransmissionTimeoutMs?: number,
-        activeRetransmissionTimeoutMs?: number,
-    ) {
+    async createSecureSession(args: {
+        sessionId: number;
+        fabric: Fabric | undefined;
+        peerNodeId: NodeId;
+        peerSessionId: number;
+        sharedSecret: ByteArray;
+        salt: ByteArray;
+        isInitiator: boolean;
+        isResumption: boolean;
+        idleRetransmissionTimeoutMs?: number;
+        activeRetransmissionTimeoutMs?: number;
+    }) {
+        const {
+            sessionId,
+            fabric,
+            peerNodeId,
+            peerSessionId,
+            sharedSecret,
+            salt,
+            isInitiator,
+            isResumption,
+            idleRetransmissionTimeoutMs,
+            activeRetransmissionTimeoutMs,
+        } = args;
         const session = await this.sessionManager.createSecureSession({
             sessionId,
             fabric,

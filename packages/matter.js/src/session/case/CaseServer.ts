@@ -84,18 +84,18 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             // All good! Create secure session
             const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
-            const secureSession = await server.createSecureSession(
+            const secureSession = await server.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                false,
-                true,
-                mrpParams?.idleRetransTimeoutMs,
-                mrpParams?.activeRetransTimeoutMs,
-            );
+                salt: secureSessionSalt,
+                isInitiator: false,
+                isResumption: true,
+                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
+                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+            });
 
             // Generate sigma 2 resume
             const resumeSalt = ByteArray.concat(peerRandom, resumptionId);
@@ -183,18 +183,18 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            const secureSession = await server.createSecureSession(
+            const secureSession = await server.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                false,
-                false,
-                mrpParams?.idleRetransTimeoutMs,
-                mrpParams?.activeRetransTimeoutMs,
-            );
+                salt: secureSessionSalt,
+                isInitiator: false,
+                isResumption: false,
+                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
+                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+            });
             logger.info(
                 `session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,

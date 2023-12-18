@@ -83,16 +83,16 @@ export class CaseClient {
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = ByteArray.concat(random, resumptionRecord.resumptionId);
-            secureSession = await client.createSecureSession(
+            secureSession = await client.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                true,
-                true,
-            );
+                salt: secureSessionSalt,
+                isInitiator: true,
+                isResumption: true,
+            });
             await messenger.sendSuccess();
             logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
 
@@ -159,18 +159,23 @@ export class CaseClient {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            secureSession = await client.createSecureSession(
+            secureSession = await client.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                true,
-                false,
-            );
-            logger.info(`Case client: Paired succesfully with ${messenger.getChannelName()}`);
-            resumptionRecord = { fabric, peerNodeId, sharedSecret, resumptionId: peerResumptionId };
+                salt: secureSessionSalt,
+                isInitiator: true,
+                isResumption: false,
+            });
+            logger.info(`Case client: Paired successfully with ${messenger.getChannelName()}`);
+            resumptionRecord = {
+                fabric,
+                peerNodeId,
+                sharedSecret,
+                resumptionId: peerResumptionId,
+            };
         }
 
         await messenger.close();

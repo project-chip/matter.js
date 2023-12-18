@@ -125,18 +125,18 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         }
 
         // All good! Creating the secure PASE session
-        await server.createSecureSession(
+        await server.createSecureSession({
             sessionId,
-            undefined /* fabric */,
-            UNDEFINED_NODE_ID,
+            fabric: undefined,
+            peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
-            Ke,
-            new ByteArray(0),
-            false,
-            false,
-            mrpParameters?.idleRetransTimeoutMs,
-            mrpParameters?.activeRetransTimeoutMs,
-        );
+            sharedSecret: Ke,
+            salt: new ByteArray(0),
+            isInitiator: false,
+            isResumption: false,
+            idleRetransmissionTimeoutMs: mrpParameters?.idleRetransTimeoutMs,
+            activeRetransmissionTimeoutMs: mrpParameters?.activeRetransTimeoutMs,
+        });
         logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
 
         await messenger.sendSuccess();
