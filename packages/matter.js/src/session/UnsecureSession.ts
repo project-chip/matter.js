@@ -9,6 +9,7 @@ import { InternalError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
+import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
 import {
@@ -23,7 +24,6 @@ export class UnsecureSession<T> implements Session<T> {
     private readonly initiatorNodeId = NodeId.getRandomOperationalNodeId();
     readonly closingAfterExchangeFinished = false;
 
-    constructor(private readonly context: T) {}
     constructor(
         private readonly context: T,
         private readonly messageCounter: MessageCounter,
@@ -31,6 +31,7 @@ export class UnsecureSession<T> implements Session<T> {
         initiatorNodeId?: NodeId,
     ) {
         this.initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
+        this.messageReceptionState = new MessageReceptionStateUnencryptedWithRollover();
     }
 
     isSecure(): boolean {
@@ -111,5 +112,9 @@ export class UnsecureSession<T> implements Session<T> {
 
     getIncrementedMessageCounter() {
         return this.messageCounter.getIncrementedCounter();
+    }
+
+    updateMessageCounter(messageCounter: number) {
+        this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 }
