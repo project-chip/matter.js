@@ -17,7 +17,7 @@ import { UdpInterface } from "../net/UdpInterface.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
-import { SessionManager } from "../session/SessionManager.js";
+import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ChannelManager } from "./ChannelManager.js";
 import { MessageExchange } from "./MessageExchange.js";
@@ -145,8 +145,24 @@ export class ExchangeManager<ContextT> {
         if (packet.header.sessionType === SessionType.Group)
             throw new NotImplementedError("Group messages are not supported");
 
-        const session = this.sessionManager.getSession(packet.header.sessionId);
-        if (session === undefined) throw new MatterFlowError(`Cannot find a session for ID ${packet.header.sessionId}`);
+        let session: Session<ContextT> | undefined;
+        if (packet.header.sessionType === SessionType.Unicast) {
+            if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
+                const nodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+                session =
+                    this.sessionManager.getUnsecureSession(nodeId) ?? this.sessionManager.createUnsecureSession(nodeId);
+            } else {
+                session = this.sessionManager.getSession(packet.header.sessionId);
+            }
+        }
+
+        if (session === undefined) {
+            throw new MatterFlowError(
+                `Cannot find a session for ID ${packet.header.sessionId}${
+                    packet.header.sourceNodeId !== undefined ? ` and source NodeId ${packet.header.sourceNodeId}` : ""
+                }`,
+            );
+        }
 
         const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
         const message = session.decode(packet, aad);
