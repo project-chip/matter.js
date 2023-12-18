@@ -9,7 +9,7 @@ import { ByteArray } from "@project-chip/matter.js/util";
 
 import { FabricId, FabricIndex, NodeId, VendorId } from "@project-chip/matter.js/datatype";
 import { Fabric } from "@project-chip/matter.js/fabric";
-import { SecureSession, UNDEFINED_NODE_ID } from "@project-chip/matter.js/session";
+import { SecureSession } from "@project-chip/matter.js/session";
 import * as assert from "assert";
 import { buildFabric } from "./FabricTestingUtil.js";
 
@@ -125,7 +125,7 @@ describe("Fabric", () => {
                 context: {} as any,
                 id: 1,
                 fabric: undefined,
-                peerNodeId: UNDEFINED_NODE_ID,
+                peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
                 peerSessionId: 0x8d4b,
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
@@ -139,7 +139,7 @@ describe("Fabric", () => {
                 context: {} as any,
                 id: 2,
                 fabric: undefined,
-                peerNodeId: UNDEFINED_NODE_ID,
+                peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
                 peerSessionId: 0x8d4b,
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
@@ -178,7 +178,7 @@ describe("Fabric", () => {
                 context: {} as any,
                 id: 1,
                 fabric: undefined,
-                peerNodeId: UNDEFINED_NODE_ID,
+                peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
                 peerSessionId: 0x8d4b,
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,
@@ -192,7 +192,7 @@ describe("Fabric", () => {
                 context: {} as any,
                 id: 2,
                 fabric: undefined,
-                peerNodeId: UNDEFINED_NODE_ID,
+                peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
                 peerSessionId: 0x8d4b,
                 decryptKey: DECRYPT_KEY,
                 encryptKey: ENCRYPT_KEY,

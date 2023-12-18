@@ -5,7 +5,8 @@
  */
 
 import { Message, MessageCodec, SessionType } from "@project-chip/matter.js/codec";
-import { SecureSession, UNDEFINED_NODE_ID } from "@project-chip/matter.js/session";
+import { NodeId } from "@project-chip/matter.js/datatype";
+import { SecureSession } from "@project-chip/matter.js/session";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
@@ -49,7 +50,7 @@ describe("SecureSession", () => {
         context: {} as any,
         id: 1,
         fabric: undefined,
-        peerNodeId: UNDEFINED_NODE_ID,
+        peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
         peerSessionId: 0x8d4b,
         decryptKey: DECRYPT_KEY,
         encryptKey: ENCRYPT_KEY,
