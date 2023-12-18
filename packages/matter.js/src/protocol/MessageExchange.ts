@@ -317,6 +317,10 @@ export class MessageExchange<ContextT> {
                 this.sentMessageAckFailure = undefined;
                 this.sentMessageAckSuccess = undefined;
             }
+            if (this.closeTimer !== undefined) {
+                // All resubmissions done and in closing, no need to wait further
+                this.closeInternal().catch(error => logger.error("An error happened when closing the exchange", error));
+            }
             return;
         }
 
