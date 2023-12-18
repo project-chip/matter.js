@@ -8,6 +8,7 @@ import { DecodedMessage, DecodedPacket, Message, MessageCodec, Packet } from "..
 import { InternalError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { MessageCounter } from "../protocol/MessageCounter.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
 import {
@@ -23,6 +24,14 @@ export class UnsecureSession<T> implements Session<T> {
     readonly closingAfterExchangeFinished = false;
 
     constructor(private readonly context: T) {}
+    constructor(
+        private readonly context: T,
+        private readonly messageCounter: MessageCounter,
+        private readonly closeCallback: () => void,
+        initiatorNodeId?: NodeId,
+    ) {
+        this.initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
+    }
 
     isSecure(): boolean {
         return false;
@@ -98,5 +107,9 @@ export class UnsecureSession<T> implements Session<T> {
 
     getAssociatedFabric(): Fabric {
         throw new NoAssociatedFabricError("Session needs to be a secure session");
+    }
+
+    getIncrementedMessageCounter() {
+        return this.messageCounter.getIncrementedCounter();
     }
 }

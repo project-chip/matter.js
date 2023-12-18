@@ -10,6 +10,8 @@ import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
+import { MessageCounter } from "../protocol/MessageCounter.js";
+import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { Time } from "../time/Time.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
@@ -49,6 +51,11 @@ export class SecureSession<T> implements Session<T> {
     private readonly idleRetransmissionTimeoutMs: number;
     private readonly activeRetransmissionTimeoutMs: number;
     private readonly retransmissionRetries: number;
+    private readonly messageCounter = new MessageCounter(() => {
+        // Secure Session Message Counter
+        // Expire/End the session before the counter rolls over
+        this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
+    }); // Can be changed to a PersistedMessageCounter if we implement session storage
 
     static async create<T>(args: {
         context: T;
@@ -329,6 +336,10 @@ export class SecureSession<T> implements Session<T> {
         writer.writeUInt32(messageId);
         writer.writeUInt64(nodeId);
         return writer.toByteArray();
+    }
+
+    getIncrementedMessageCounter() {
+        return this.messageCounter.getIncrementedCounter();
     }
 }
 
