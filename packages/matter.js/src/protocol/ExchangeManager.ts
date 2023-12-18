@@ -9,6 +9,7 @@ import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/M
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
+import { tryCatch } from "../common/TryCatchHandler.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -154,6 +155,11 @@ export class ExchangeManager<ContextT> {
             } else {
                 session = this.sessionManager.getSession(packet.header.sessionId);
             }
+        } else if (packet.header.sessionType === SessionType.Group) {
+            if (packet.header.sourceNodeId !== undefined) {
+                //session = this.sessionManager.findGroupSession(packet.header.destGroupId, packet.header.sessionId);
+            }
+            // if (packet.header.destGroupId !== undefined) { ???
         }
 
         if (session === undefined) {
@@ -164,6 +170,16 @@ export class ExchangeManager<ContextT> {
             );
         }
 
+        const messageId = packet.header.messageId;
+        const isDuplicate = tryCatch(
+            () => {
+                session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
+                return false;
+            },
+            DuplicateMessageError,
+            () => true,
+        );
+
         const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
         const message = session.decode(packet, aad);
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
@@ -171,7 +187,7 @@ export class ExchangeManager<ContextT> {
             : message.payloadHeader.exchangeId | 0x10000;
         const exchange = this.exchanges.get(exchangeIndex);
         if (exchange !== undefined) {
-            await exchange.onMessageReceived(message);
+            await exchange.onMessageReceived(message, isDuplicate);
         } else {
             if (session.closingAfterExchangeFinished) {
                 throw new MatterFlowError(

@@ -147,16 +147,16 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    async onMessageReceived(message: Message) {
+    async onMessageReceived(message: Message, isDuplicate = false) {
         const {
             packetHeader: { messageId },
             payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType },
         } = message;
 
-        logger.debug("Message «", MessageCodec.messageDiagnostics(message));
+        logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
         this.session.notifyActivity(true);
 
-        if (messageId === this.receivedMessageToAck?.packetHeader.messageId) {
+        if (isDuplicate) {
             // Received a message retransmission but the reply is not ready yet, ignoring
             if (requiresAck) {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
