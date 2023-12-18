@@ -49,7 +49,6 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
     private async handleSigma1(server: MatterDevice, messenger: CaseServerMessenger) {
         logger.info(`Received pairing request from ${messenger.getChannelName()}`);
         // Generate pairing info
-        const sessionId = server.getNextAvailableSessionId();
         const random = Crypto.getRandom();
 
         // Read and process sigma 1
@@ -83,6 +82,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             Crypto.decrypt(peerResumeKey, peerResumeMic, RESUME1_MIC_NONCE);
 
             // All good! Create secure session
+            const sessionId = await server.getNextAvailableSessionId();
             const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
             const secureSession = await server.createSecureSession({
                 sessionId,
@@ -147,6 +147,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 resumptionId,
             });
             const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
+            const sessionId = await server.getNextAvailableSessionId();
             const sigma2Bytes = await messenger.sendSigma2({ random, sessionId, ecdhPublicKey, encrypted, mrpParams });
 
             // Read and process sigma 3

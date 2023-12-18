@@ -662,7 +662,7 @@ export class MatterController {
         );
     }
 
-    getNextAvailableSessionId() {
+    async getNextAvailableSessionId() {
         return this.sessionManager.getNextAvailableSessionId();
     }
 

@@ -226,7 +226,7 @@ export class MatterDevice {
         await this.startAnnouncement();
     }
 
-    getNextAvailableSessionId() {
+    async getNextAvailableSessionId() {
         return this.sessionManager.getNextAvailableSessionId();
     }
 

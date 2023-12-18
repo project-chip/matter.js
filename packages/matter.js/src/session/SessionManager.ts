@@ -113,8 +113,23 @@ export class SessionManager<ContextT> {
         this.storeResumptionRecords();
     }
 
-    getNextAvailableSessionId() {
-        while (true) {
+    findOldestInactiveSession() {
+        let oldestSessionId: number | undefined = undefined;
+        let oldestActiveTimestamp = Number.MAX_SAFE_INTEGER;
+        for (const session of this.sessions.values()) {
+            if (session.activeTimestamp < oldestActiveTimestamp) {
+                oldestActiveTimestamp = session.timestamp;
+                oldestSessionId = session.getId();
+            }
+        }
+        if (oldestSessionId === undefined) {
+            throw new MatterFlowError("No session found to close and all session ids are taken.");
+        }
+        return oldestSessionId;
+    }
+
+    async getNextAvailableSessionId() {
+        for (let i = 0; i < 0xffff; i++) {
             if (this.sessions.has(this.nextSessionId)) {
                 this.nextSessionId = (this.nextSessionId + 1) & 0xffff;
                 if (this.nextSessionId === 0) this.nextSessionId++;
@@ -122,6 +137,11 @@ export class SessionManager<ContextT> {
             }
             return this.nextSessionId++;
         }
+        // All session ids are taken, search for te oldest unused session id and close it and use this
+        const oldestSessionId = this.findOldestInactiveSession();
+        await this.sessions.get(oldestSessionId)?.end(true, false);
+        this.nextSessionId = oldestSessionId;
+        return this.nextSessionId++;
     }
 
     getSession(sessionId: number) {

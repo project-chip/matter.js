@@ -92,10 +92,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         this.pairingTimer = Time.getTimer(PASE_PAIRING_TIMEOUT_MS, () => this.cancelPairing(messenger)).start();
 
-        const sessionId = server.getNextAvailableSessionId();
-        const random = Crypto.getRandom();
-
-        // Read pbkdRequest and send pbkdResponse
+        // Read pbkdfRequest and send pbkdfResponse
         const {
             requestPayload,
             request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
@@ -103,6 +100,10 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         if (passcodeId !== DEFAULT_PASSCODE_ID) {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
         }
+
+        const sessionId = await server.getNextAvailableSessionId(); // Responder Session Id
+        const random = Crypto.getRandom();
+
         const responsePayload = await messenger.sendPbkdfParamResponse({
             peerRandom,
             random,

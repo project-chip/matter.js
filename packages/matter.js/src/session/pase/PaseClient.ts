@@ -39,9 +39,9 @@ export class PaseClient {
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
         const random = Crypto.getRandom();
-        const sessionId = client.getNextAvailableSessionId();
+        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
 
-        // Send pbkdRequest and Read pbkdResponse
+        // Send pbkdfRequest and Read pbkdfResponse
         const requestPayload = await messenger.sendPbkdfParamRequest({
             random,
             sessionId,

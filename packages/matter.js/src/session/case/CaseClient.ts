@@ -42,7 +42,7 @@ export class CaseClient {
 
         // Generate pairing info
         const random = Crypto.getRandom();
-        const sessionId = client.getNextAvailableSessionId();
+        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
         const { publicKey: ecdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
 
