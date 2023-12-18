@@ -66,7 +66,6 @@ export class MessageChannel<ContextT> implements Channel<Message> {
 
 export class ExchangeManager<ContextT> {
     private readonly exchangeCounter = new ExchangeCounter();
-    private readonly messageCounter = new MessageCounter();
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
     private readonly transportListeners = new Array<Listener>();
@@ -119,7 +118,6 @@ export class ExchangeManager<ContextT> {
             channel,
             exchangeId,
             protocolId,
-            this.messageCounter,
             async () => await this.deleteExchange(exchangeIndex),
         );
         // Ensure exchangeIds are not colliding in the Map by adding 1 in front of exchanges initiated by this device.
