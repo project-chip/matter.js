@@ -5,6 +5,7 @@
  */
 
 import { CommissioningServer } from "../../src/CommissioningServer.js";
+import { DeviceCertification } from "../../src/behavior/definitions/operational-credentials/DeviceCertification.js";
 import { AccessControlCluster } from "../../src/cluster/definitions/AccessControlCluster.js";
 import { AdministratorCommissioning } from "../../src/cluster/definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../../src/cluster/definitions/BasicInformationCluster.js";
@@ -37,14 +38,23 @@ import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
+import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer, attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { DUMMY_KEY } from "../crypto/test-util.js";
+
+const MockCertification = {
+    privateKey: DUMMY_KEY,
+    certificate: ByteArray.fromHex("00"),
+    intermediateCertificate: ByteArray.fromHex("00"),
+    declaration: ByteArray.fromHex("00"),
+};
 
 function addRequiredRootClusters(
-    rootEndpoint: RootEndpoint,
+    rootEndpoint: EndpointInterface,
     includeAdminCommissioningCluster = true,
     includeBasicInformationCluster = true,
 ) {
@@ -91,12 +101,14 @@ function addRequiredRootClusters(
                     trustedRootCertificates: [],
                     currentFabricIndex: FabricIndex.NO_FABRIC,
                 },
-                OperationalCredentialsClusterHandler({
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                }),
+                OperationalCredentialsClusterHandler(
+                    new DeviceCertification({
+                        privateKey: DUMMY_KEY,
+                        certificate: ByteArray.fromHex("00"),
+                        intermediateCertificate: ByteArray.fromHex("00"),
+                        declaration: ByteArray.fromHex("00"),
+                    }),
+                ),
             ),
         );
     }
@@ -249,12 +261,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             addRequiredRootClusters(node.getRootEndpoint());
 
@@ -289,7 +296,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -346,12 +353,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -377,7 +379,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -437,12 +439,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -468,7 +465,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -529,12 +526,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -560,7 +552,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -621,12 +613,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -652,7 +639,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -744,7 +731,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -856,7 +843,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1014,7 +1001,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1134,12 +1121,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -1207,7 +1189,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1328,12 +1310,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -1413,7 +1390,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1579,12 +1556,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -1664,7 +1636,7 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(BasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(OperationalCredentialsCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
-            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Cluster)).ok;
+            expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(NetworkCommissioning.Complete)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AccessControlCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(AdministratorCommissioning.Cluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
@@ -1886,12 +1858,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
@@ -2004,12 +1971,7 @@ describe("Endpoint Structures", () => {
                     },
                     serialNumber: `node-matter-0000`,
                 },
-                certificates: {
-                    devicePrivateKey: ByteArray.fromHex("00"),
-                    deviceCertificate: ByteArray.fromHex("00"),
-                    deviceIntermediateCertificate: ByteArray.fromHex("00"),
-                    certificationDeclaration: ByteArray.fromHex("00"),
-                },
+                certification: MockCertification,
             });
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());

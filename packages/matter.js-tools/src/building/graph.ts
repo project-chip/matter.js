@@ -48,7 +48,6 @@ export class Graph {
         for (const name in allDeps) {
             for (const dep of allDeps[name]) {
                 const depNode = nodeMap[dep];
-
                 // Note -- allow nodes to reference themselves, seems to be
                 // necessary on tools for use of tsc
                 if (depNode && depNode !== nodeMap[name]) {

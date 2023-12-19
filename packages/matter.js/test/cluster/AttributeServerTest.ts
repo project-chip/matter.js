@@ -10,7 +10,6 @@ import {
     FabricScopedAttributeServer,
     FixedAttributeServer,
 } from "../../src/cluster/server/AttributeServer.js";
-import { PrivateKey } from "../../src/crypto/Key.js";
 import { AttributeId } from "../../src/datatype/AttributeId.js";
 import { FabricId } from "../../src/datatype/FabricId.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -21,11 +20,9 @@ import { MatterDevice } from "../../src/MatterDevice.js";
 import { SecureSession } from "../../src/session/SecureSession.js";
 import { TlvUInt8 } from "../../src/tlv/TlvNumber.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
+import { DUMMY_KEY } from "../crypto/test-util.js";
 
 const ZERO = new ByteArray(1);
-const PRIVATE_KEY = new ByteArray(32);
-PRIVATE_KEY[31] = 1; // EC doesn't like all-zero private key
-const KEY = PrivateKey(PRIVATE_KEY);
 
 describe("AttributeServerTest", () => {
     describe("FixedAttributeServer", () => {
@@ -525,7 +522,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -558,7 +555,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -592,7 +589,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -631,7 +628,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -683,7 +680,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -748,7 +745,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -785,7 +782,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,
@@ -825,7 +822,7 @@ describe("AttributeServerTest", () => {
                 NodeId(BigInt(2)),
                 ZERO,
                 ZERO,
-                KEY,
+                DUMMY_KEY,
                 VendorId(1),
                 ZERO,
                 ZERO,

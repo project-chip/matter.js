@@ -15,10 +15,10 @@ import { Branded } from "../util/Type.js";
  *
  * @see {@link MatterCoreSpecificationV1_0} § 7.10
  */
-export type ClusterId = Branded<number, "ClusterId">;
+export type ClusterId<ID extends number = number> = Branded<ID, "ClusterId">;
 
-export function ClusterId(v: number): ClusterId {
-    return v as ClusterId;
+export function ClusterId<const ID extends number>(id: ID) {
+    return id as ClusterId<ID>;
 }
 
 /** Tlv schema for a cluster Id. */

@@ -1,9 +1,16 @@
+/**
+ * @license
+ * Copyright 2022-2023 Project CHIP Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import { MatterDevice } from "../MatterDevice.js";
 import { NetworkCommissioning } from "../cluster/definitions/index.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Endpoint } from "../device/Endpoint.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
@@ -33,7 +40,7 @@ export class FailSafeManager {
         expiryLengthSeconds: number,
         maxCumulativeFailsafeSeconds: number,
         private readonly expiryCallback: () => Promise<void>,
-        readonly rootEndpoint: Endpoint,
+        readonly rootEndpoint: EndpointInterface,
     ) {
         this.storeEndpointState();
         this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire()).start();
@@ -43,11 +50,11 @@ export class FailSafeManager {
     }
 
     /** Store required CLuster data when opening the FailSafe context to allow to restore them on expiry. */
-    private storeEndpointState(endpoint: Endpoint = this.rootEndpoint) {
+    private storeEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
         // TODO: When implementing Network clusters we somehow need to make sure that a "temporary" network
         //  configuration is not persisted to disk. The NetworkClusterHandlers need to make sure it is only persisted
         //  when the commissioning is completed.
-        const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Cluster);
+        const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
             this.storedNetworkClusterState.set(endpoint.getId(), networkCluster.getNetworksAttribute());
         }
@@ -57,11 +64,11 @@ export class FailSafeManager {
     }
 
     /** Restore Cluster data when the FailSafe context expired. */
-    restoreEndpointState(endpoint: Endpoint = this.rootEndpoint) {
+    restoreEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
         const endpointId = endpoint.getId();
         const networkState = this.storedNetworkClusterState.get(endpointId);
         if (networkState !== undefined) {
-            const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Cluster);
+            const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
             if (networkCluster !== undefined) {
                 networkCluster.setNetworksAttribute(networkState);
             } else {
@@ -72,7 +79,9 @@ export class FailSafeManager {
             this.storedNetworkClusterState.delete(endpointId);
         }
         for (const childEndpoint of endpoint.getChildEndpoints()) {
-            this.restoreEndpointState(childEndpoint);
+            if (childEndpoint instanceof Endpoint) {
+                this.restoreEndpointState(childEndpoint);
+            }
         }
     }
 

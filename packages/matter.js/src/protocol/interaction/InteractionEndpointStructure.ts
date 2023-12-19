@@ -15,7 +15,7 @@ import { CommandId } from "../../datatype/CommandId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
@@ -32,7 +32,7 @@ import {
 } from "./InteractionServer.js";
 
 export class InteractionEndpointStructure {
-    endpoints = new Map<EndpointNumber, Endpoint>();
+    endpoints = new Map<EndpointNumber, EndpointInterface>();
     attributes = new Map<string, AnyAttributeServer<any>>();
     attributePaths = new Array<AttributePath>();
     events = new Map<string, EventServer<any>>();
@@ -56,14 +56,14 @@ export class InteractionEndpointStructure {
         }
     }
 
-    public initializeFromEndpoint(endpoint: Endpoint) {
+    public initializeFromEndpoint(endpoint: EndpointInterface) {
         this.clear();
 
         this.verifyAndInitializeStructureElementsFromEndpoint(endpoint); // Initialize Data from Root Endpoint
         this.initializeStructureFromEndpoints(endpoint); // Initialize Data from Child Endpoints
     }
 
-    private initializeStructureFromEndpoints(endpoint: Endpoint) {
+    private initializeStructureFromEndpoints(endpoint: EndpointInterface) {
         const endpoints = endpoint.getChildEndpoints();
         for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
             this.verifyAndInitializeStructureElementsFromEndpoint(endpoints[endpointIndex]);
@@ -71,7 +71,7 @@ export class InteractionEndpointStructure {
         }
     }
 
-    private verifyAndInitializeStructureElementsFromEndpoint(endpoint: Endpoint) {
+    private verifyAndInitializeStructureElementsFromEndpoint(endpoint: EndpointInterface) {
         if (endpoint.id === undefined) {
             throw new InternalError(`Endpoint ID is undefined. It needs to be initialized first!`);
         }
@@ -173,7 +173,7 @@ export class InteractionEndpointStructure {
         return this.resolveGenericElementName(undefined, endpointId, clusterId, commandId, this.commands);
     }
 
-    getEndpoint(endpointId: EndpointNumber): Endpoint | undefined {
+    getEndpoint(endpointId: EndpointNumber): EndpointInterface | undefined {
         return this.endpoints.get(endpointId);
     }
 

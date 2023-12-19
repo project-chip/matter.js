@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FORBIDDEN_PASSCODES } from "../../CommissioningServer.js";
 import { MatterController } from "../../MatterController.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { Logger } from "../../log/Logger.js";
+import { CommissioningOptions } from "../../node/options/CommissioningOptions.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { UNDEFINED_NODE_ID } from "../SessionManager.js";
@@ -26,7 +26,7 @@ export class PaseClient {
     static generateRandomPasscode() {
         let passcode: number;
         passcode = (Crypto.getRandomUInt32() % 99999998) + 1; // prevents 00000000 and 99999999
-        if (FORBIDDEN_PASSCODES.includes(passcode)) {
+        if (CommissioningOptions.FORBIDDEN_PASSCODES.includes(passcode)) {
             passcode += 1; // With current forbidden passcode list can never collide
         }
         return passcode;

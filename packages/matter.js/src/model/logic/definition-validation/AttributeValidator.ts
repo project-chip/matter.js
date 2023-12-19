@@ -5,13 +5,13 @@
  */
 
 import { AttributeElement } from "../../elements/index.js";
-import { AttributeModel, DatatypeModel } from "../../models/index.js";
+import { AttributeModel, FieldModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
 import { ValueValidator } from "./ValueValidator.js";
 
 ModelValidator.validators[AttributeElement.Tag] = class AttributeValidator extends ValueValidator<AttributeModel> {
     override validate() {
-        this.validateStructure(true, DatatypeModel);
+        this.validateStructure(true, FieldModel);
 
         super.validate();
     }

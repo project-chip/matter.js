@@ -54,7 +54,6 @@ describe("WindowCoveringCluster", () => {
                 ]),
             ),
         ).deep.equal({
-            // TODO - make strict after updating web tester
             downOrClose: NONE,
             goToLiftPercentage: NONE,
             stopMotion: NONE,

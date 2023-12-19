@@ -9,7 +9,7 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -91,7 +91,7 @@ type OptionalCommandNames<C extends Commands> = {
 type AttributeGetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeGetter`]?: (args: {
         attributes: AttributeServers<A>;
-        endpoint?: Endpoint;
+        endpoint?: EndpointInterface;
         session?: Session<MatterDevice>;
         isFabricFiltered?: boolean;
     }) => AttributeJsType<A[P]>;
@@ -99,13 +99,13 @@ type AttributeGetters<A extends Attributes> = {
 type AttributeSetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeSetter`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
     ) => boolean;
 };
 type AttributeValidators<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeValidator`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
     ) => void;
 };
 export type CommandHandler<
@@ -119,7 +119,7 @@ export type CommandHandler<
           events: ES;
           session: Session<MatterDevice>;
           message: Message;
-          endpoint: Endpoint;
+          endpoint: EndpointInterface;
       }) => Promise<ResponseT> | ResponseT
     : never;
 type CommandHandlers<T extends Commands, AS extends AttributeServers<any>, ES extends EventServers<any>> = Merge<
@@ -140,7 +140,7 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
             initializeClusterServer?: (args: {
                 attributes: AttributeServers<C["attributes"]>;
                 events: EventServers<C["events"]>;
-                endpoint: Endpoint;
+                endpoint: EndpointInterface;
             }) => void;
             destroyClusterServer?: () => void;
         }
@@ -339,7 +339,7 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      *
      * @param endpoint Endpoint to assign to
      */
-    readonly _assignToEndpoint: (endpoint: Endpoint) => void;
+    readonly _assignToEndpoint: (endpoint: EndpointInterface) => void;
 
     /**
      * Register an event handler for this cluster

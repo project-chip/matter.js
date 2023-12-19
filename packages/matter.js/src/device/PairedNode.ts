@@ -38,11 +38,12 @@ import { PairedDevice, RootEndpoint } from "./Device.js";
 import { BasicInformation } from "../cluster/definitions/BasicInformationCluster.js";
 import { AdministratorCommissioning } from "../cluster/definitions/index.js";
 import { Crypto } from "../crypto/Crypto.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { DecodedEventReportValue } from "../protocol/interaction/EventDataDecoder.js";
 import { StatusResponseError } from "../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../protocol/interaction/InteractionProtocol.js";
 import {
-    CommissionningFlowType,
+    CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
     ManualPairingCodeCodec,
     QrPairingCodeCodec,
@@ -609,7 +610,7 @@ export class PairedNode {
     }
 
     /** Returns the functional devices/endpoints (those below the Root Endpoint) known for this node. */
-    getDevices(): Endpoint[] {
+    getDevices(): EndpointInterface[] {
         return this.endpoints.get(EndpointNumber(0))?.getChildEndpoints() ?? [];
     }
 
@@ -724,7 +725,7 @@ export class PairedNode {
             version: 0,
             vendorId,
             productId,
-            flowType: CommissionningFlowType.Standard,
+            flowType: CommissioningFlowType.Standard,
             discriminator: discriminator,
             passcode: passcode,
             discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({

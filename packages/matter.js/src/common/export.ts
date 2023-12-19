@@ -5,6 +5,7 @@
  */
 
 export * from "./Channel.js";
+export * from "./Environment.js";
 export * from "./FailSafeManager.js";
 export * from "./InstanceBroadcaster.js";
 export * from "./MatterError.js";

@@ -10,7 +10,7 @@ import { SupportedEventClient, UnknownSupportedEventClient } from "../cluster/cl
 import { GlobalAttributes } from "../cluster/Cluster.js";
 import { AnyAttributeServer, FabricScopeError } from "../cluster/server/AttributeServer.js";
 import { asClusterServerInternal, ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
-import { Endpoint } from "../device/Endpoint.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { Logger } from "../log/Logger.js";
 import { toHexString } from "../util/Number.js";
 
@@ -34,9 +34,9 @@ export type EndpointLoggingOptions = {
     logAttributePrimitiveValues?: boolean;
     logAttributeObjectValues?: boolean;
 
-    clusterServerFilter?: (endpoint: Endpoint, cluster: ClusterServerObj<any, any>) => boolean;
-    clusterClientFilter?: (endpoint: Endpoint, cluster: ClusterClientObj<any, any, any, any>) => boolean;
-    endpointFilter?: (endpoint: Endpoint) => boolean;
+    clusterServerFilter?: (endpoint: EndpointInterface, cluster: ClusterServerObj<any, any>) => boolean;
+    clusterClientFilter?: (endpoint: EndpointInterface, cluster: ClusterClientObj<any, any, any, any>) => boolean;
+    endpointFilter?: (endpoint: EndpointInterface) => boolean;
 };
 
 function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: EndpointLoggingOptions = {}) {
@@ -67,7 +67,7 @@ function getAttributeServerValue(attribute: AnyAttributeServer<any>, options: En
 }
 
 function logClusterServer(
-    endpoint: Endpoint,
+    endpoint: EndpointInterface,
     clusterServer: ClusterServerObj<any, any>,
     options: EndpointLoggingOptions = {},
 ) {
@@ -146,7 +146,7 @@ function logClusterServer(
 }
 
 function logClusterClient(
-    endpoint: Endpoint,
+    endpoint: EndpointInterface,
     clusterClient: ClusterClientObj<any, any, any, any>,
     options: EndpointLoggingOptions = {},
 ) {
@@ -233,7 +233,7 @@ function logClusterClient(
 }
 
 export function logEndpoint(
-    endpoint: Endpoint,
+    endpoint: EndpointInterface,
     options: EndpointLoggingOptions = {
         logNotSupportedClusterAttributes: false,
         logNotSupportedClusterEvents: false,

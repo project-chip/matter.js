@@ -55,10 +55,7 @@ export class ModelValidator<T extends Model> {
                     }
                 }
                 if (!ok) {
-                    this.error(
-                        "UNACCEPTABLE_TYPE",
-                        `${this.model.path}.children[${index}] type ${child.constructor.name} is not allowed`,
-                    );
+                    this.error("UNACCEPTABLE_TYPE", `${child.path} type ${child.constructor.name} is not allowed`);
                 }
                 index++;
             }

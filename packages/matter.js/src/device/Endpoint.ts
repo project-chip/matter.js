@@ -21,6 +21,7 @@ import {
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
@@ -30,10 +31,10 @@ export interface EndpointOptions {
     uniqueStorageKey?: string;
 }
 
-export class Endpoint {
+export class Endpoint implements EndpointInterface {
     private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
     private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
-    private readonly childEndpoints: Endpoint[] = [];
+    private readonly childEndpoints: EndpointInterface[] = [];
     id: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
@@ -253,20 +254,21 @@ export class Endpoint {
         );
     }
 
-    addChildEndpoint(endpoint: Endpoint): void {
+    addChildEndpoint(endpoint: EndpointInterface): void {
         if (endpoint.id !== undefined && this.getChildEndpoint(endpoint.id) !== undefined) {
             throw new ImplementationError(`Endpoint with id ${endpoint.id} already exists as child from ${this.id}.`);
         }
+
         this.childEndpoints.push(endpoint);
         endpoint.setStructureChangedCallback(this.structureChangedCallback);
         this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    getChildEndpoint(id: EndpointNumber): Endpoint | undefined {
+    getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
         return this.childEndpoints.find(endpoint => endpoint.id === id);
     }
 
-    getChildEndpoints(): Endpoint[] {
+    getChildEndpoints(): EndpointInterface[] {
         return this.childEndpoints;
     }
 

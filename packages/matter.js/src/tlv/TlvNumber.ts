@@ -5,6 +5,7 @@
  */
 import { UnexpectedDataError, ValidationError } from "../common/MatterError.js";
 import { BitSchema, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { Schema } from "../schema/Schema.js";
 import { MatterCoreSpecificationV1_0 } from "../spec/Specifications.js";
 import {
     FLOAT32_MAX,
@@ -169,9 +170,19 @@ export const TlvUInt64 = new TlvLongNumberSchema(
     0,
     UINT64_MAX,
 );
+
 export const TlvEnum = <T>() => TlvUInt32 as TlvSchema<number> as TlvSchema<T>;
 export const TlvBitmap = <T extends BitSchema>(underlyingSchema: TlvNumberSchema, bitSchema: T) => {
-    const bitmapSchema = BitmapSchema(bitSchema);
+    // BitmapSchema supports encoding partial bit schemas but specifies its
+    // type as TypeFromBitSchema.  Changing to TypeFromPartialBitSchema there
+    // probably the right thing to do but this would force us to treat all
+    // decoded values as potentially having missing fields.
+    //
+    // Best would probably be to support different types on decode and encode.
+    // In the meantime though we can just cast here as this utility function is
+    // only used in places where we want to support partial bitmaps.
+    const bitmapSchema = BitmapSchema(bitSchema) as Schema<TypeFromPartialBitSchema<T>, number>;
+
     return new TlvWrapper(
         underlyingSchema,
         (bitmapData: TypeFromPartialBitSchema<T>) => bitmapSchema.encode(bitmapData),

@@ -5,16 +5,17 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "clean": "build clean",
-        "build": "build",
-        "build-clean": "build --clean",
-        "console": "run dist/esm/repl.ts",
-        "generate-spec": "run bin/generate-spec.js",
-        "generate-chip": "run bin/generate-chip.js",
-        "generate-model": "build esm --prefix=../models && run bin/generate-model.js",
-        "generate-clusters": "build esm --prefix=../packages/matter.js && run bin/generate-clusters.js",
-        "dump-model-names": "build esm --prefix=../models && run bin/dump-model-names.ts",
-        "generate": "npm run generate-model && npm run generate-clusters"
+        "clean": "matter-build clean",
+        "build": "matter-build",
+        "build-clean": "matter-build --clean",
+        "console": "matter-run dist/esm/repl.ts",
+        "generate-spec": "matter-build esm --prefix=../packages/matter.js && matter-run bin/generate-spec.js",
+        "generate-chip": "matter-build esm --prefix=../packages/matter.js && matter-run bin/generate-chip.js",
+        "generate-model": "matter-build esm --prefix=../models && matter-run bin/generate-model.js",
+        "generate-clusters": "matter-build esm --prefix=../packages/matter.js; matter-run bin/generate-clusters.js",
+        "generate-endpoints": "matter-build esm --prefix=../packages/matter.js; matter-run bin/generate-endpoints.js",
+        "dump-model-names": "matter-build esm --prefix=../models && matter-run bin/dump-model-names.ts",
+        "generate": "npm run generate-model && npm run generate-endpoints && npm matter-run generate-devices"
     },
     "repository": {
         "type": "git",

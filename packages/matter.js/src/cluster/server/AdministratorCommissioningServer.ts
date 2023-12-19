@@ -210,6 +210,7 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
 };
 
 const AdministratorCommissioningBasicCluster = AdministratorCommissioning.Cluster.with("Basic");
+
 export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
     typeof AdministratorCommissioningBasicCluster
 > = () => {

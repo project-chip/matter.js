@@ -6,71 +6,36 @@
 
 // TODO: Rename to NodeOperationalCredentialsServer to match with specs
 
+import { DeviceCertification } from "../../behavior/definitions/operational-credentials/DeviceCertification.js";
+import {
+    TlvAttestation,
+    TlvCertSigningRequest,
+} from "../../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
 import { MatterFabricConflictError } from "../../common/FailSafeManager.js";
 import { MatterFlowError } from "../../common/MatterError.js";
-import { Crypto } from "../../crypto/Crypto.js";
-import { PrivateKey } from "../../crypto/Key.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { StatusResponseError } from "../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../protocol/interaction/InteractionProtocol.js";
-import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
-import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { TlvUInt32 } from "../../tlv/TlvNumber.js";
-import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
-import { TlvByteString } from "../../tlv/TlvString.js";
-import { ByteArray } from "../../util/ByteArray.js";
+import { assertSecureSession } from "../../session/SecureSession.js";
 import { BasicInformation } from "../definitions/BasicInformationCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("OperationalCredentialsServer");
 
-export interface OperationalCredentialsServerConf {
-    devicePrivateKey: ByteArray;
-    deviceCertificate: ByteArray;
-    deviceIntermediateCertificate: ByteArray;
-    certificationDeclaration: ByteArray;
-}
-
-/** @see {@link MatterCoreSpecificationV1_1} § 11.17.5.4 */
-export const TlvAttestation = TlvObject({
-    declaration: TlvField(1, TlvByteString),
-    attestationNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
-    timestamp: TlvField(3, TlvUInt32), // TODO: check actual max length in specs
-    firmwareInfo: TlvOptionalField(4, TlvByteString),
-});
-
-/** @see {@link MatterCoreSpecificationV1_1} § 11.17.5.6 */
-export const TlvCertSigningRequest = TlvObject({
-    certSigningRequest: TlvField(1, TlvByteString),
-    csrNonce: TlvField(2, TlvByteString.bound({ length: 32 })),
-    vendorReserved1: TlvOptionalField(3, TlvByteString),
-    vendorReserved2: TlvOptionalField(4, TlvByteString),
-    vendorReserved3: TlvOptionalField(5, TlvByteString),
-});
-
-function signWithDeviceKey(
-    conf: OperationalCredentialsServerConf,
-    session: SecureSession<MatterDevice>,
-    data: ByteArray,
-) {
-    return Crypto.sign(PrivateKey(conf.devicePrivateKey), [data, session.getAttestationChallengeKey()]);
-}
-
 export const OperationalCredentialsClusterHandler: (
-    conf: OperationalCredentialsServerConf,
-) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = conf => ({
+    cert: DeviceCertification,
+) => ClusterServerHandlers<typeof OperationalCredentials.Cluster> = cert => ({
     attestationRequest: async ({ request: { attestationNonce }, session }) => {
         assertSecureSession(session);
         const elements = TlvAttestation.encode({
-            declaration: conf.certificationDeclaration,
+            declaration: cert.declaration,
             attestationNonce,
             timestamp: 0,
         });
-        return { attestationElements: elements, attestationSignature: signWithDeviceKey(conf, session, elements) };
+        return { attestationElements: elements, attestationSignature: cert.sign(session, elements) };
     },
 
     csrRequest: async ({ request: { csrNonce, isForUpdateNoc }, session }) => {
@@ -97,15 +62,15 @@ export const OperationalCredentialsClusterHandler: (
             session.getId(),
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: signWithDeviceKey(conf, session, nocsrElements) };
+        return { nocsrElements, attestationSignature: cert.sign(session, nocsrElements) };
     },
 
     certificateChainRequest: async ({ request: { certificateType } }) => {
         switch (certificateType) {
             case OperationalCredentials.CertificateChainType.DacCertificate:
-                return { certificate: conf.deviceCertificate };
+                return { certificate: cert.certificate };
             case OperationalCredentials.CertificateChainType.PaiCertificate:
-                return { certificate: conf.deviceIntermediateCertificate };
+                return { certificate: cert.intermediateCertificate };
             default:
                 throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
         }

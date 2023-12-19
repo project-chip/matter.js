@@ -8,7 +8,6 @@ export * from "./ClusterVariance.js";
 export * from "./DefaultValue.js";
 export * from "./MergeModels.js";
 export * from "./ModelVariantTraversal.js";
-export * from "./RecordValidator.js";
 export * from "./ValidateModel.js";
 export * from "./cluster-variance/FeatureBitmap.js";
 export * from "./cluster-variance/IllegalFeatureCombinations.js";

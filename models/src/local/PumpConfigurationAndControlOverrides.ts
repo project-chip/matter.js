@@ -20,19 +20,19 @@ LocalMatter.children.push({
             name: "AlarmMask",
             children: [
                 {
-                    tag: "datatype",
+                    tag: "field",
                     constraint: "0",
                     name: "InitializationFailure",
                     details: "The device failed to complete initialization at powerup",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     constraint: "1",
                     name: "HardwareFailure",
                     details: "The device has detected a hardware fault",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     constraint: "2",
                     name: "SelfCalibrationFailure",
                     details: "The device was unable to complete self calibration",

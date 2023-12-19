@@ -26,8 +26,6 @@ import { TlvField, TlvObject } from "../../../src/tlv/TlvObject.js";
 import { TypeFromSchema } from "../../../src/tlv/TlvSchema.js";
 import { ByteArray } from "../../../src/util/ByteArray.js";
 
-//import { AllClustersMap } from "../../../src/cluster/ClusterHelper.js";
-
 const TlvAclTestSchema = TlvObject({
     privilege: TlvField(1, TlvUInt8),
     authMode: TlvField(2, TlvUInt8),

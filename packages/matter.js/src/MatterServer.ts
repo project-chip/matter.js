@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { CommissioningController } from "./CommissioningController.js";
-import { CommissioningServer } from "./CommissioningServer.js";
 import { Logger } from "./log/Logger.js";
 import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { NetworkError } from "./net/Network.js";
+import { BaseNodeServer } from "./node/server/BaseNodeServer.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
@@ -118,47 +118,48 @@ export class MatterServer {
     }
 
     /**
-     * Add a CommissioningServer node to the server
+     * Add a node server to the server
      *
-     * @param commissioningServer CommissioningServer node to add
+     * @param server node server to add
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    async addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
-        commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
-        const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.length.toString();
-        commissioningServer.setStorage(this.storageManager.createContext(storageKey));
+    async addCommissioningServer(server: BaseNodeServer, nodeOptions?: NodeOptions) {
+        server.setPort(this.getNextMatterPort(server.getPort()));
+        const storageKey =
+            nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueStorageKey ?? this.nodes.length.toString();
+        server.setStorage(this.storageManager.createContext(storageKey));
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
-        await this.prepareNode(commissioningServer);
-        this.nodes.push(commissioningServer);
+        await this.prepareNode(server);
+        this.nodes.push(server);
     }
 
     /**
-     * Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
+     * Remove a node server from the server, close the CommissioningServer and optionally destroy the
      * storage context.
      *
-     * @param commissioningServer CommissioningServer node to remove
+     * @param server node server to remove
      * @param destroyStorage If true the storage context will be destroyed
      */
-    async removeCommissioningServer(commissioningServer: CommissioningServer, destroyStorage = false) {
+    async removeCommissioningServer(server: BaseNodeServer, destroyStorage = false) {
         // Remove instance from list
-        const index = this.nodes.indexOf(commissioningServer);
+        const index = this.nodes.indexOf(server);
         if (index < 0) {
             throw new Error("CommissioningServer not found");
         }
         this.nodes.splice(index, 1);
 
-        const port = commissioningServer.getPort();
+        const port = server.getPort();
         if (port !== undefined) {
             // Remember port to not reuse for this run if not needed to prevent issues with controllers
             this.formerlyUsedPorts.push(port);
         }
 
         // Close instance
-        await commissioningServer.close();
+        await server.close();
 
         if (destroyStorage) {
             // Destroy storage
-            await commissioningServer.factoryReset();
+            await server.factoryReset();
         }
     }
 

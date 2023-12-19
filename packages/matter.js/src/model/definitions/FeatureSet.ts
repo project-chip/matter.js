@@ -44,5 +44,5 @@ export class FeatureSet extends Set<FeatureSet.Flag> {
 export namespace FeatureSet {
     export type Flag = string;
     export type Flags = Iterable<FeatureSet.Flag>;
-    export type Definition = Flags | { [name: string]: boolean };
+    export type Definition = Flags | { [name: string]: boolean | undefined };
 }

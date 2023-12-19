@@ -66,3 +66,68 @@ declare const __brand: unique symbol;
 // cluster definitions
 export type Brand<B> = { [__brand]: B };
 export type Branded<T, B> = T & Brand<B>;
+
+/**
+ * Make a type immutable.
+ */
+export type Immutable<T> = T extends (...args: any[]) => any
+    ? T
+    : T extends object
+      ? { readonly [K in keyof T]: Immutable<T[K]> }
+      : T;
+
+/**
+ * Return type for functions that are optionally asynchronous.
+ */
+export type MaybePromise<T = void> = T | Promise<T>;
+
+export namespace MaybePromise {
+    /**
+     * Determine whether a {@link MaybePromise} is a {@link Promise}.
+     */
+    export function is<T>(value: MaybePromise<T>): value is Promise<T> {
+        return !!(value as { then?: {} }).then;
+    }
+
+    /**
+     * Chained MaybePromise.  Invokes the resolve function immediately if the
+     * {@link MaybePromise} is not a {@link Promise}, otherwise the same as a
+     * normal {@link Promise.then}.
+     */
+    export function then<I, O>(value: MaybePromise<I>, resolve: (input: I) => O): MaybePromise<O> {
+        if (is(value)) {
+            return value.then(resolve);
+        }
+        return resolve(value);
+    }
+}
+
+/**
+ * Convert a union to an interface.
+ *
+ * {@see {@link https://stackoverflow.com/questions/50374908}}
+ */
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+
+/**
+ * An identity type.
+ *
+ * You can't do:
+ *
+ *     interface Foo extends typeof Bar {}
+ *
+ * But you can do:
+ *
+ *     interface Foo extends Identity<typeof Bar> {}
+ *
+ * Without this type you'd have to do:
+ *
+ *     interface FooType = typeof Bar;
+ *     interface Foo extends FooType {};
+ *
+ * We have to do this a lot because we generate complex objects with detailed
+ * type information.  When exported, TS (as of 5.2) inlines the type of these
+ * objects in declarations which makes our declarations massive.  To avoid this
+ * we create an interface from the type then cast to the interface for export.
+ */
+export type Identity<T> = T;

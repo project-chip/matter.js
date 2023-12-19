@@ -25,7 +25,7 @@ export class CommandModel extends ValueModel implements CommandElement {
     }
 
     get responseModel() {
-        return new ModelTraversal().findResponse(this);
+        return new ModelTraversal().findResponse(this) as ValueModel;
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 
 import {
-    CommissionningFlowType,
+    CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
     ManualPairingCodeCodec,
     ManualPairingData,
@@ -18,7 +18,7 @@ const QR_CODE_DATA: QrCodeData = {
     version: 0,
     vendorId: 9050,
     productId: 65279,
-    flowType: CommissionningFlowType.Standard,
+    flowType: CommissioningFlowType.Standard,
     discoveryCapabilities: DiscoveryCapabilitiesSchema.encode({
         onIpNetwork: false,
         ble: true,

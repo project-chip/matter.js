@@ -11,6 +11,7 @@ import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { MatterDevice } from "../../MatterDevice.js";
+import { SubscriptionOptions } from "../../node/options/SubscriptionOptions.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -39,16 +40,6 @@ import {
 } from "./InteractionServer.js";
 
 const logger = Logger.get("SubscriptionHandler");
-
-// We use 3 minutes as global max interval because with 60 min as defined by spec the timeframe
-// until the controller establishes a new subscription after e.g a reboot can be up to 60 min
-// and the controller would assume that the value is unchanged. this is too long.
-// chip-tool is not respecting the 60 min at all and only respects the max sent by the controller
-// which can lead to spamming the network with unneeded packages. So I decided for 3 minutes for now
-// as a compromise until we have something better.
-const SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S = 3 * 60; /** 3 min */ // Officially: 1000 * 60 * 60; /** 1 hour */
-const SUBSCRIPTION_MIN_INTERVAL_S = 2; // We do not send faster than 2 seconds
-const SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S = 10; // 10 seconds
 
 interface AttributePathWithValueVersion<T> {
     path: TypeFromSchema<typeof TlvAttributePath>;
@@ -108,10 +99,8 @@ export class SubscriptionHandler {
         private readonly isFabricFiltered: boolean,
         minIntervalFloor: number,
         maxIntervalCeiling: number,
-        subscriptionMaxIntervalSeconds: number | undefined,
-        subscriptionMinIntervalSeconds: number | undefined,
-        subscriptionRandomizationWindowSeconds: number | undefined,
         private readonly cancelCallback: () => void,
+        subscriptionOptions: SubscriptionOptions.Configuration,
     ) {
         this.server = this.session.getContext();
         this.fabric = this.session.getAssociatedFabric();
@@ -120,9 +109,9 @@ export class SubscriptionHandler {
         this.maxIntervalCeilingMs = maxIntervalCeiling * 1000;
 
         const { maxInterval, sendInterval } = this.determineSendingIntervals(
-            (subscriptionMinIntervalSeconds ?? SUBSCRIPTION_MIN_INTERVAL_S) * 1000,
-            (subscriptionMaxIntervalSeconds ?? SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT_S) * 1000,
-            (subscriptionRandomizationWindowSeconds ?? SUBSCRIPTION_DEFAULT_RANDOMIZATION_WINDOW_S) * 1000,
+            subscriptionOptions.minIntervalSeconds * 1000,
+            subscriptionOptions.maxIntervalSeconds * 1000,
+            subscriptionOptions.randomizationWindowSeconds * 1000,
         );
         this.maxInterval = maxInterval;
         this.sendInterval = sendInterval;
@@ -143,7 +132,7 @@ export class SubscriptionHandler {
         // devices sending at the same time.
         const maxInterval =
             Math.max(
-                Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000),
+                subscriptionMinIntervalMs,
                 Math.max(this.minIntervalFloorMs, Math.min(subscriptionMaxIntervalMs, this.maxIntervalCeilingMs)),
             ) + Math.floor(subscriptionRandomizationWindowMs * Math.random());
         let sendInterval = Math.floor(maxInterval / 2); // Ideally we send at half the max interval
@@ -158,7 +147,7 @@ export class SubscriptionHandler {
             logger.warn(
                 `Determined subscription send interval of ${sendInterval}ms is too low. Using maxInterval (${maxInterval}ms) instead.`,
             );
-            sendInterval = Math.max(subscriptionMinIntervalMs, SUBSCRIPTION_MIN_INTERVAL_S * 1000);
+            sendInterval = subscriptionMinIntervalMs;
         }
         return { maxInterval, sendInterval };
     }

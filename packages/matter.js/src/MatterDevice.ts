@@ -23,16 +23,15 @@ import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
-import { DeviceTypeId } from "./datatype/DeviceTypeId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { VendorId } from "./datatype/VendorId.js";
-import { Endpoint } from "./device/Endpoint.js";
+import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
 import { Logger } from "./log/Logger.js";
 import { isNetworkInterface, NetInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
+import { CommissioningOptions } from "./node/options/CommissioningOptions.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { StatusResponseError } from "./protocol/interaction/InteractionMessenger.js";
@@ -69,12 +68,7 @@ export class MatterDevice {
     private failSafeContext?: FailSafeManager;
 
     constructor(
-        private readonly deviceName: string,
-        private readonly deviceType: DeviceTypeId,
-        private readonly vendorId: VendorId,
-        private readonly productId: number,
-        private readonly discriminator: number,
-        private readonly initialPasscode: number,
+        private readonly commissioningOptions: CommissioningOptions.Configuration,
         private readonly storage: StorageContext,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
@@ -216,11 +210,8 @@ export class MatterDevice {
             await broadcaster.setCommissionMode(
                 mode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ? 2 : 1,
                 {
-                    deviceName: this.deviceName,
-                    deviceType: this.deviceType,
-                    vendorId: this.vendorId,
-                    productId: this.productId,
-                    discriminator: discriminator ?? this.discriminator,
+                    ...this.commissioningOptions.productDescription,
+                    discriminator: discriminator ?? this.commissioningOptions.discriminator,
                 },
             );
         }
@@ -437,7 +428,7 @@ export class MatterDevice {
         expiryLengthSeconds: number,
         maxCumulativeFailsafeSeconds: number,
         associatedFabric: Fabric | undefined,
-        endpoint: Endpoint,
+        endpoint: EndpointInterface,
     ) {
         if (this.failSafeContext === undefined) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
@@ -529,7 +520,7 @@ export class MatterDevice {
         }
 
         this.secureChannelProtocol.setPaseCommissioner(
-            await PaseServer.fromPin(this.initialPasscode, {
+            await PaseServer.fromPin(this.commissioningOptions.passcode, {
                 iterations: 1000,
                 salt: Crypto.get().getRandomData(32),
             }),

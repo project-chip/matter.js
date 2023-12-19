@@ -8,10 +8,11 @@
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
 
 import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { Endpoint, PairedNode } from "@project-chip/matter-node.js/device";
+import { PairedNode } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageBackendDisk, StorageContext, StorageManager } from "@project-chip/matter-node.js/storage";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
+import { EndpointInterface } from "@project-chip/matter.js/endpoint";
 
 requireMinNodeVersion(16);
 
@@ -125,7 +126,7 @@ export class MatterNode {
 
     async iterateNodeDevices(
         nodes: PairedNode[],
-        callback: (device: Endpoint, node: PairedNode) => Promise<void>,
+        callback: (device: EndpointInterface, node: PairedNode) => Promise<void>,
         endpointId?: number,
     ) {
         for (const node of nodes) {

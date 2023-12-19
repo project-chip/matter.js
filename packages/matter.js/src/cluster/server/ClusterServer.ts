@@ -9,7 +9,7 @@ import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -73,7 +73,7 @@ export function ClusterServer<
     const attributes = <AttributeServers<A>>{};
     const commands = <CommandServers<C>>{};
     const events = <EventServers<E>>{};
-    let assignedEndpoint: Endpoint | undefined = undefined;
+    let assignedEndpoint: EndpointInterface | undefined = undefined;
 
     const result: any = {
         id: clusterId,
@@ -84,7 +84,7 @@ export function ClusterServer<
         _commands: commands,
         _events: events,
 
-        _assignToEndpoint: (endpoint: Endpoint) => {
+        _assignToEndpoint: (endpoint: EndpointInterface) => {
             for (const name in attributes) {
                 (attributes as any)[name].assignToEndpoint(endpoint);
             }

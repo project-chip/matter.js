@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "@project-chip/matter.js/common";
 import { Specification } from "@project-chip/matter.js/model";
 import { serialize } from "@project-chip/matter.js/util";
-import { writeMatterFile } from "./file.js";
+import { readMatterFile, writeMatterFile } from "./file.js";
 import { asObjectKey, wordWrap } from "./string.js";
 
 const HEADER = `/**
@@ -16,12 +15,15 @@ const HEADER = `/**
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE IS GENERATED, DO NOT EDIT ***/`;
+`;
+
+const GENERATED_WARNING = "/*** THIS FILE IS GENERATED, DO NOT EDIT ***/";
+const EDITABLE_WARNING = "/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/";
 
 const INDENT = "    ";
 const WRAP_WIDTH = 120;
 
-type Documentation = {
+export type Documentation = {
     description?: string;
     details?: string;
     xref?: Specification.CrossReference;
@@ -66,7 +68,7 @@ export abstract class Entry {
         this.docText = extra;
         const spec = mapSpec(this.documentation.xref);
         if (spec) {
-            this.parentBlock?.file.addImport("spec/Specifications", spec);
+            this.parentBlock?.file.addImport("spec/Specifications.js", spec);
         }
         return this;
     }
@@ -256,6 +258,14 @@ export class Block extends Entry {
         }
     }
 
+    /**
+     * Remove a name from the defined pool.  This is necessary when e.g.
+     * defining a type and object with the same name.
+     */
+    undefine(name: string) {
+        this.definedNames.delete(name);
+    }
+
     /** Add entries.  Each entry will be serialized using toString() */
     add(...entries: Entry[]) {
         // Entries usually aren't fully defined when added but they do have
@@ -318,6 +328,16 @@ export class Block extends Entry {
         return block;
     }
 
+    /** Add a builder-style block */
+    builder(initialAtom?: string) {
+        const block = new BuilderBlock(this);
+        if (initialAtom !== undefined) {
+            block.atom(initialAtom);
+        }
+        this.add(block);
+        return block;
+    }
+
     /** Add a statement or expression that will be automatically delimited */
     atom(labelOrText: any, text?: any) {
         const atom = new Atom(this, labelOrText, text);
@@ -366,14 +386,18 @@ export class Block extends Entry {
     /** This is just a helper for guarding against duplicate definitions */
     nameDefined(name: string): void {
         if (this.definedNames.has(name)) {
-            throw new InternalError(`Conflicting definitions ${name} in same scope`);
+            throw new Error(`Conflicting definitions for ${name} in same scope`);
         }
         this.definedNames.add(name);
     }
 
     protected delimiterAfter(index: number, serialized: string): string {
         // Do not delimit functions structures that eslint will complain about
-        if (serialized.match(/^(?:\s*(?:\/\*.*\*\/|export|const))*\s*(?:export)?\s*(?:enum|function|namespace)/m)) {
+        if (
+            serialized.match(
+                /^(?:\s*(?:\/\*.*\*\/|export|const))*\s*(?:export)?\s*(?:enum|function|namespace|interface|class)/m,
+            )
+        ) {
             return "";
         }
 
@@ -404,6 +428,41 @@ abstract class NestedBlock extends Block {
 class StatementBlock extends NestedBlock {
     constructor(parent: Block | undefined, prefix = "{", suffix = "}") {
         super(parent, prefix, suffix);
+    }
+}
+
+class BuilderBlock extends NestedBlock {
+    constructor(parent: Block | undefined) {
+        super(parent, "", "");
+    }
+
+    override serialize(linePrefix = "") {
+        const first = this.entries[0]?.toString(linePrefix);
+        if (!first === undefined) {
+            return "";
+        }
+        if (this.entries.length === 1) {
+            return first;
+        }
+        if (this.entries.length === 2 && first.indexOf("\n") === -1) {
+            const second = this.entries[1]?.toString("");
+            if (second.indexOf("\n") === -1 && first.length + second.length + 1 < WRAP_WIDTH) {
+                return `${first}.${second}`;
+            }
+        }
+
+        // 2+ entries or first two entries don't fit on one line
+        const result = [first];
+
+        linePrefix = `${linePrefix}${INDENT}`;
+        for (let i = 1; i < this.entries.length; i++) {
+            if (this.entries[i].isDocumented) {
+                result.push("\n");
+            }
+            result.push(`${linePrefix}.${this.entries[i].toString(linePrefix).slice(linePrefix.length)}`);
+        }
+
+        return result.join("\n");
     }
 }
 
@@ -540,10 +599,21 @@ export class TsFile extends Block {
     private imports = new Map<string, Array<string>>();
     private header!: Block;
 
-    constructor(public name: string) {
+    constructor(
+        public name: string,
+        private editable = false,
+    ) {
         super(undefined);
+
         this.header = this.section();
-        this.header.raw(HEADER);
+
+        let header = HEADER;
+        if (editable) {
+            header += EDITABLE_WARNING;
+        } else {
+            header += GENERATED_WARNING;
+        }
+        this.header.raw(header);
     }
 
     addImport(file: string, name?: string) {
@@ -562,15 +632,29 @@ export class TsFile extends Block {
     }
 
     save() {
+        const filename = `${this.name}.ts`;
+
+        if (this.editable) {
+            try {
+                if (readMatterFile(filename).indexOf(EDITABLE_WARNING) === -1) {
+                    return;
+                }
+            } catch (e) {
+                if ((e as { code?: string }).code !== "ENOENT") {
+                    throw e;
+                }
+            }
+        }
+
         if (this.imports.size) {
             const importBlock = this.header.section();
             this.imports.forEach((symbols, name) => {
                 if (symbols.length) {
-                    const imp = importBlock.expressions("import {", `} from "${name}.js"`);
+                    const imp = importBlock.expressions("import {", `} from "${name}"`);
                     imp.shouldGroup = true;
                     symbols.forEach(s => imp.atom(s));
                 } else {
-                    importBlock.atom(`import "${name}.js"`);
+                    importBlock.atom(`import "${name}"`);
                 }
             });
         }
@@ -580,7 +664,7 @@ export class TsFile extends Block {
             body += "\n";
         }
 
-        writeMatterFile(`${this.name}.ts`, body);
+        writeMatterFile(filename, body);
         return this;
     }
 }

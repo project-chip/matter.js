@@ -277,7 +277,7 @@ const NODE_ID = NodeId(BigInt(1));
                 );
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -528,7 +528,7 @@ const NODE_ID = NodeId(BigInt(1));
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric]);
                 await broadcaster.setCommissionMode(PORT2, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -918,7 +918,7 @@ const NODE_ID = NodeId(BigInt(1));
                 });
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
@@ -1015,7 +1015,7 @@ const NODE_ID = NodeId(BigInt(1));
                 });
 
                 await broadcaster.setCommissionMode(PORT, 1, {
-                    deviceName: "Test Device",
+                    name: "Test Device",
                     deviceType: 1,
                     vendorId: VendorId(1),
                     productId: 0x8000,
