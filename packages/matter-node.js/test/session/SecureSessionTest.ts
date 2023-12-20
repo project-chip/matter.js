@@ -10,7 +10,7 @@ import { SecureSession } from "@project-chip/matter.js/session";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
-const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
+export const DECRYPT_KEY = ByteArray.fromHex("bacb178b2588443d5d5b1e4559e7accc");
 const MESSAGE_ENCRYPTED = ByteArray.fromHex(
     "001d350022145300ec2b931025dada82ed67521c966d2454d131a271023be699e4e2796650f568e590fd9b65f456c720a60a0da127eaa53974c5d41d3d933ed7b58a9ce5b5cb96ad94a7762611c48774cf75458327e74c34668a45dc9943546f8a6aa1dcd40bd4b8014befb49954a097a60cbdff333ee3f2fd1f49",
 );
@@ -18,7 +18,7 @@ const DECRYPTED_BYTES = ByteArray.fromHex(
     "153600172403312504fcff18172402002403302404001817240200240330240401181724020024033024040218172402002403302404031817240200240328240402181724020024032824040418172403312404031818290324ff0118",
 );
 
-const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
+export const ENCRYPT_KEY = ByteArray.fromHex("66951379d0a6d151cf5472cccf13f360");
 const MESSAGE: Message = {
     packetHeader: {
         messageId: 12519906,

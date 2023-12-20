@@ -154,12 +154,13 @@ export class SessionManager<ContextT> {
 
     async getNextAvailableSessionId() {
         for (let i = 0; i < 0xffff; i++) {
-            if (this.sessions.has(this.nextSessionId)) {
-                this.nextSessionId = (this.nextSessionId + 1) & 0xffff;
-                if (this.nextSessionId === 0) this.nextSessionId++;
-                continue;
+            const id = this.nextSessionId;
+            this.nextSessionId = (this.nextSessionId + 1) & 0xffff;
+            if (this.nextSessionId === 0) this.nextSessionId++;
+
+            if (!this.sessions.has(id)) {
+                return id;
             }
-            return this.nextSessionId++;
         }
         // All session ids are taken, search for te oldest unused session id and close it and use this
         const oldestSessionId = this.findOldestInactiveSession();
