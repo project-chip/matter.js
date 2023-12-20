@@ -389,6 +389,21 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         for (const values of writeData) {
             const { path, dataVersion } = values[0];
+
+            if (path.clusterId === undefined) {
+                throw new StatusResponseError(
+                    "Illegal write request with wildcard cluster ID",
+                    StatusCode.InvalidAction
+                );
+            }
+
+            if (path.attributeId === undefined) {
+                throw new StatusResponseError(
+                    "Illegal write request with wildcard attribute ID",
+                    StatusCode.InvalidAction
+                );
+            }
+
             const attributes = this.endpointStructure.getAttributes([path], true);
             const { endpointId, clusterId, attributeId } = path;
             if (attributes.length === 0) {
@@ -519,7 +534,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 exchange.channel.name
                             } to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
                         );
-                        // Should we continue here?  Currently we add a result
+                        // TODO - I think this behavior is wrong.  If a
+                        // wildcard write fails we should either ignore
+                        // entirely or add an error response for the concrete
+                        // attribute that failed.  Currently we return a
+                        // success response for the concrete path that failed
                     }
                 }
                 writeResults.push({ path, statusCode: StatusCode.Success });
