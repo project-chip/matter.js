@@ -534,11 +534,24 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 exchange.channel.name
                             } to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
                         );
-                        // TODO - I think this behavior is wrong.  If a
-                        // wildcard write fails we should either ignore
-                        // entirely or add an error response for the concrete
-                        // attribute that failed.  Currently we return a
-                        // success response for the concrete path that failed
+
+                        // TODO - This behavior may be wrong.
+                        //
+                        // If a wildcard write fails we should either:
+                        //
+                        //   1. Ignore entirely (add nothing to write results), or
+                        //   2. Add an error response for the concrete attribute that failed.
+                        //
+                        // Spec is a little ambiguous.  After request path expansion, in core 1.2 8.7.3.2 it states:
+                        //
+                        //   "If the path indicates attribute data that is not writable, then the path SHALL be
+                        //    discarded"
+                        //
+                        // So is this "not writable" -- so it should be #1 -- or is this "writable" but with invalid
+                        // data?  The latter is error case #2 but spec doesn't make clear what the status code would
+                        // be...  We could fall back to CONSTRAINT_ERROR like we do above though
+                        //
+                        // Currently what we do is add a success response for every concrete path that fails.
                     }
                 }
                 writeResults.push({ path, statusCode: StatusCode.Success });

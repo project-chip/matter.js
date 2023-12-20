@@ -119,7 +119,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         if (typeof value !== "number") {
             throw new ImplementationError(`Illegal endpoint ID type "${typeof value}"`);
         }
-        if (value < 1 || value > 65535) {
+        if (value < 0 || value > 65535) {
             throw new ImplementationError(`Endpoint ID ${value} is out of bounds`);
         }
         if (this.#id !== undefined && this.#id !== value) {

@@ -8,6 +8,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Project } from "../building/project.js";
 import { TestRunner } from "./runner.js";
+import { Graph } from "../building/graph.js";
+import { Builder } from "../building/builder.js";
 
 enum TestType {
     esm = "esm",
@@ -56,6 +58,7 @@ export async function main(argv = process.argv) {
         })
         .strict().argv;
 
+    const dependencies = await Graph.forProject(args.prefix);
     const project = new Project(args.prefix);
 
     // If no test types are specified explicitly, run all enabled types
@@ -71,34 +74,21 @@ export async function main(argv = process.argv) {
         }
     }
 
-    let esmBuilt = false;
-    async function buildEsm() {
-        if (esmBuilt) {
-            return;
-        }
-
-        await project.buildSource("esm");
-        await project.buildTests("esm");
-
-        esmBuilt = true;
-    }
+    const builder = new Builder();
+    await dependencies.build(builder);
 
     const progress = project.pkg.start("Testing");
     const runner = new TestRunner(project.pkg, progress, args);
 
     if (testTypes.has(TestType.esm)) {
-        await buildEsm();
         await runner.runNode("esm");
     }
 
     if (testTypes.has(TestType.cjs)) {
-        await project.buildSource("cjs");
-        await project.buildTests("cjs");
         await runner.runNode("cjs");
     }
 
     if (testTypes.has(TestType.web)) {
-        await buildEsm();
         await runner.runWeb(manual);
     }
 
