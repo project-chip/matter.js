@@ -182,8 +182,15 @@ export class CommissioningServer extends BaseNodeServer {
     constructor(readonly options: CommissioningServerOptions) {
         super();
 
+        this.#commissioningChangedCallback = options.commissioningChangedCallback;
+        this.#activeSessionsChangedCallback = options.activeSessionsChangedCallback;
+
         this.networkConfig = NetworkOptions.configurationFor({
-            port: options.port,
+            // TODO - For CommissioningServerOptions, undefined port means
+            // "automatic".  For NetworkOptions undefined means default (5540)
+            // and 0 means automatic.  "Auto" is nice to support but not sure
+            // it should be the default.  Need to confirm
+            port: options.port ?? 0,
             listeningAddressIpv4: options.listeningAddressIpv4,
             listeningAddressIpv6: options.listeningAddressIpv6,
         });

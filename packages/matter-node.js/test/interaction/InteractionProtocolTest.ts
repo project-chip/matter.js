@@ -759,7 +759,7 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(basicInfoClusterServer());
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
+            const result = await interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
 
             assert.deepEqual(result, READ_RESPONSE);
         });
@@ -768,7 +768,7 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(basicInfoClusterServer());
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(
+            const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
                 READ_REQUEST_WITH_UNUSED_FILTER,
             );
@@ -780,7 +780,7 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(basicInfoClusterServer());
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleReadRequest(
+            const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
                 READ_REQUEST_WITH_FILTER,
             );
@@ -898,7 +898,7 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), WRITE_REQUEST, {
+            const result = await interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), WRITE_REQUEST, {
                 packetHeader: { sessionType: SessionType.Unicast },
             } as Message);
 
@@ -926,7 +926,7 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(accessControlCluster);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 await getDummyMessageExchange(),
                 CHUNKED_ARRAY_WRITE_REQUEST,
                 { packetHeader: { sessionType: SessionType.Unicast } } as Message,
@@ -962,11 +962,11 @@ describe("InteractionProtocol", () => {
             endpoint.addClusterServer(basicInfoClusterServer);
             interactionProtocol.setRootEndpoint(endpoint);
 
-            const result = interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), MASS_WRITE_REQUEST, {
+            const result = await interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), MASS_WRITE_REQUEST, {
                 packetHeader: { sessionType: SessionType.Unicast },
             } as Message);
 
-            assert.deepEqual(result, MASS_WRITE_RESPONSE);
+            expect(result).deep.equals(MASS_WRITE_RESPONSE);
             assert.equal(basicInfoClusterServer.attributes.vendorName.getLocal(), "vendor");
             assert.equal(basicInfoClusterServer.attributes.productName.getLocal(), "product");
             assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
@@ -980,9 +980,9 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
                         packetHeader: { sessionType: SessionType.Unicast },
                     } as Message),
                 {
@@ -1002,9 +1002,9 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
+            assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
                         packetHeader: { sessionType: SessionType.Unicast },
                     } as Message),
                 {
@@ -1050,7 +1050,7 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
+            const result = await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST_TIMED_REQUIRED, {
                 packetHeader: { sessionType: SessionType.Unicast },
             } as Message);
 
@@ -1092,7 +1092,7 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST_TIMED_REQUIRED, timedRequest: true },
                 {
@@ -1112,9 +1112,9 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, true, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
                         packetHeader: { sessionType: SessionType.Unicast },
                     } as Message),
                 {
@@ -1133,9 +1133,9 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.throws(
-                () =>
-                    interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
+            await assert.rejects(
+                async () =>
+                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
                         packetHeader: { sessionType: SessionType.Group },
                     } as Message),
                 {
@@ -1155,7 +1155,7 @@ describe("InteractionProtocol", () => {
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            const result = interactionProtocol.handleWriteRequest(
+            const result = await interactionProtocol.handleWriteRequest(
                 messageExchange,
                 { ...WRITE_REQUEST, timedRequest: true },
                 {

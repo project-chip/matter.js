@@ -35,7 +35,7 @@ import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeReportPayload, DataReportPayload } from "./AttributeDataEncoder.js";
+import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionServerMessenger,
@@ -271,44 +271,47 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
         }
 
-        const eventReportsPayload = new Array();
-        for (const path of eventRequests ?? []) {
-            const events = this.endpointStructure.getEvents([path]);
-            if (events.length === 0) {
-                logger.debug(
-                    `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
-                        path,
-                    )}: unsupported path`,
-                );
-                eventReportsPayload.push({ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }); // TODO: Find correct status code
-                continue;
-            }
-
-            const reportsForPath = new Array();
-            for (const { path, event } of events) {
-                const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
-                logger.debug(
-                    `Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(
-                        path,
-                    )}=${Logger.toJSON(matchingEvents)}`,
-                );
-                const { schema } = event;
-                reportsForPath.push(
-                    ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
-                        eventData: {
+        let eventReportsPayload: undefined | EventReportPayload[];
+        if (eventRequests) {
+            eventReportsPayload = [];
+            for (const path of eventRequests) {
+                const events = this.endpointStructure.getEvents([path]);
+                if (events.length === 0) {
+                    logger.debug(
+                        `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
                             path,
-                            eventNumber,
-                            priority,
-                            epochTimestamp,
-                            payload: data,
-                            schema,
-                        },
-                    })),
+                        )}: unsupported path`,
+                    );
+                    eventReportsPayload.push({ eventStatus: { path, status: { status: StatusCode.UnsupportedEvent } } }); // TODO: Find correct status code
+                    continue;
+                }
+
+                const reportsForPath = new Array();
+                for (const { path, event } of events) {
+                    const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
+                    logger.debug(
+                        `Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(
+                            path,
+                        )}=${Logger.toJSON(matchingEvents)}`,
+                    );
+                    const { schema } = event;
+                    reportsForPath.push(
+                        ...matchingEvents.map(({ eventNumber, priority, epochTimestamp, data }) => ({
+                            eventData: {
+                                path,
+                                eventNumber,
+                                priority,
+                                epochTimestamp,
+                                payload: data,
+                                schema,
+                            },
+                        })),
+                    );
+                }
+                eventReportsPayload.push(
+                    ...reportsForPath.sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber),
                 );
             }
-            eventReportsPayload.push(
-                ...reportsForPath.sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber),
-            );
         }
 
         // TODO support suppressResponse for responses
@@ -516,7 +519,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 exchange.channel.name
                             } to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
                         );
-                        continue;
+                        // Should we continue here?  Currently we add a result
                     }
                 }
                 writeResults.push({ path, statusCode: StatusCode.Success });

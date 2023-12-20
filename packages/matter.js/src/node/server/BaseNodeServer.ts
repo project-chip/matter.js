@@ -485,7 +485,7 @@ export abstract class BaseNodeServer extends MatterNode {
     setPort(port: number) {
         if (port === this.networkConfig.port) return;
         if (this.deviceInstance !== undefined || this.mdnsInstanceBroadcaster !== undefined) {
-            throw new ImplementationError("Port can not be changed after device is initialized!");
+            throw new ImplementationError("Port cannot be changed after device is initialized!");
         }
         this.networkConfig.port = port;
     }

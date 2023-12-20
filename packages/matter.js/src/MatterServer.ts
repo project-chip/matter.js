@@ -75,6 +75,12 @@ export class MatterServer {
     }
 
     private getNextMatterPort(desiredPort?: number) {
+        // Support port 0 as "select open port" then it's easier to override
+        // from environment variables etc.
+        if (desiredPort === 0) {
+            desiredPort = undefined;
+        }
+
         // Build a temporary map with all ports in use
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes) {
