@@ -41,6 +41,10 @@ export class OnOffServer extends Base {
         this.state.onTime = 0;
     }
 
+    /**
+     * This method in the default implementation is implemented to use the on/off methods when timed actions should
+     * occur. This means that it is enough to override on() and off() with custom control logic.
+     */
     override toggle() {
         if (this.state.onOff) {
             this.off();
@@ -49,6 +53,10 @@ export class OnOffServer extends Base {
         }
     }
 
+    /**
+     * This method in the default implementation is implemented to use the on/off methods when timed actions should
+     * occur. This means that it is enough to override on() and off() with custom control logic.
+     */
     override onWithTimedOff(request: OnWithTimedOffRequest) {
         if (request.onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
@@ -62,11 +70,11 @@ export class OnOffServer extends Base {
 
         this.state.onTime = Math.max(request.onTime ?? 0, this.state.onTime ?? 0);
         this.state.offWaitTime = request.offWaitTime;
-        this.state.onOff = true;
         if (this.state.onTime !== 0 && this.state.offWaitTime !== 0) {
             // Specs talk about 0xffff aka "uint16 overflow", we set to 0 if negative
             this.timedOnTimer.start();
         }
+        this.on();
     }
 
     protected get timedOnTimer() {
@@ -77,10 +85,11 @@ export class OnOffServer extends Base {
                 if (time <= 0) {
                     time = 0;
                     timer?.stop();
-                    this.state.onOff = false;
                     this.state.offWaitTime = 0;
+                    this.off();
+                } else {
+                    this.state.onTime = time;
                 }
-                this.state.onTime = time;
             });
         }
         return timer;
