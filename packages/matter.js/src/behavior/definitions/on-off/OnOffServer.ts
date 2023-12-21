@@ -7,7 +7,7 @@
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
 import { Time, Timer } from "../../../time/Time.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
-import { OnWithTimedOffRequest} from "./OnOffInterface.js";
+import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
 const Base = OnOffBehavior.for({ ...OnOff.Complete, supportedFeatures: { levelControlForLighting: true } });
 
@@ -63,7 +63,8 @@ export class OnOffServer extends Base {
         this.state.onTime = Math.max(request.onTime ?? 0, this.state.onTime ?? 0);
         this.state.offWaitTime = request.offWaitTime;
         this.state.onOff = true;
-        if (this.state.onTime !== 0 && this.state.offWaitTime !== 0) { // Specs talk about 0xffff aka "uint16 overflow", we set to 0 if negative
+        if (this.state.onTime !== 0 && this.state.offWaitTime !== 0) {
+            // Specs talk about 0xffff aka "uint16 overflow", we set to 0 if negative
             this.timedOnTimer.start();
         }
     }
