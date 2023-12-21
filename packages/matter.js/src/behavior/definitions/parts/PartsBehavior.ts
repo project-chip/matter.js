@@ -86,9 +86,11 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
             child.owner = agent.part;
 
             const registerIfInitialized = () => {
-                if (lifecycle.state.initialized) {
-                    lifecycle.events.initialized$Change.off(registerIfInitialized);
+                if (!lifecycle.state.initialized) {
+                    return;
                 }
+
+                lifecycle.events.initialized$Change.off(registerIfInitialized);
                 state.initializing.delete(child);
 
                 partReady(child);
