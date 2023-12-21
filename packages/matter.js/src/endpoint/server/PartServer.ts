@@ -49,6 +49,8 @@ export class PartServer implements EndpointInterface {
 
         agent.get(LifecycleBehavior).events.structure$Change.on(() => this.#structureChangedCallback?.());
 
+        agent.require(PersistenceBehavior);
+
         // Initialize PersistenceBehavior early because it loads stored state
         // asynchronously
         agent.get(PersistenceBehavior);
@@ -192,9 +194,9 @@ export class PartServer implements EndpointInterface {
 
     static forPart(part: Part) {
         let server = (part as ServerPart)[SERVER];
-        if (server) {
-            return server;
+        if (!server) {
+            server = (part as ServerPart)[SERVER] = new PartServer(part);
         }
-        throw new InternalError("No server for part");
+        return server;
     }
 }
