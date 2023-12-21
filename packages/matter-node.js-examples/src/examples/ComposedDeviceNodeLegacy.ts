@@ -6,6 +6,11 @@
  */
 
 /**
+ * IMPORTANT: This example uses a Legacy API which will be deprecated in the future.
+ * It is just still here to support developers in converting their code to the new API!
+ */
+
+/**
  * This example shows how to create a new device node that is composed of multiple devices.
  * It creates multiple endpoints on the server. When you want to add a composed devices to a Aggregator you need to
  * add all endpoints of the composed device to an "ComposedDevice" instance! (not shown in this example).

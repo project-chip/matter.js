@@ -6,6 +6,7 @@
 
 // This demonstrates bringing a "light" device online with matter.js.
 
+// TODO: fix all reexports and import here matter-node.js only
 import { OnOffServer } from "@project-chip/matter.js/behaviors/on-off";
 import { OnOffLightDevice } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { NodeServer } from "@project-chip/matter.js/node";
