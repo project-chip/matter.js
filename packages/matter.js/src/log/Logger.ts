@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NotImplementedError } from "../common/MatterError.js";
+import { ImplementationError } from "../common/MatterError.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 
@@ -256,11 +256,44 @@ export class Logger {
     static nestingLevel = 0;
 
     /**
+     * Set log level using configuration-style level name or number.
+     */
+    public static set level(level: number | string) {
+        if (level === undefined) {
+            level = Level.DEBUG;
+        }
+
+        let levelNum;
+        if (typeof level === "string") {
+            if (level.match(/^[0-9]+$/)) {
+                levelNum = Number.parseInt(level);
+            } else {
+                levelNum = (Level as unknown as Record<string, number | undefined>)[level.toUpperCase()];
+                if (levelNum === undefined) {
+                    throw new ImplementationError(`Unsupported log level "${level}"`);
+                }
+            }
+        } else {
+            levelNum = level;
+        }
+
+        if (Level[levelNum] === undefined) {
+            throw new ImplementationError(`Unsupported log level "${level}"`);
+        }
+
+        this.defaultLogLevel = levelNum;
+    }
+
+    /**
      * Set logFormatter using configuration-style format name.
      *
      * @param format the name of the formatter (see Format enum)
      */
     public static set format(format: string) {
+        if (format === undefined) {
+            format = Format.ANSI;
+        }
+
         switch (format) {
             case Format.PLAIN:
                 Logger.logFormatter = plainLogFormatter;
@@ -272,7 +305,7 @@ export class Logger {
                 Logger.logFormatter = htmlLogFormatter;
                 break;
             default:
-                throw new NotImplementedError(`Unsupported log format "${format}"`);
+                throw new ImplementationError(`Unsupported log format "${format}"`);
         }
     }
 

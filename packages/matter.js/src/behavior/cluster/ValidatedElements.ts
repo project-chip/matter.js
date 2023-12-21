@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { GlobalAttributes } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
@@ -11,6 +12,8 @@ import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
 
 const logger = Logger.get("ElementSupport");
+
+const GlobalAttributeNames = new Set(Object.keys(GlobalAttributes({})));
 
 /**
  * Analyzes a ClusterBehavior implementation to ensure it conforms to the
@@ -95,6 +98,11 @@ export class ValidatedElements {
         }
 
         for (const name in attributes) {
+            // Global attributes currently handled in lower-level code
+            if (GlobalAttributeNames.has(name)) {
+                continue;
+            }
+
             const attr = attributes[name];
             if (!attr) {
                 this.error(`cluster.attributes.${name}`, "Undefined element");

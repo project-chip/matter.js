@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "../log/Logger.js";
 import type { Storage } from "../storage/Storage.js";
 import { StorageManager } from "../storage/StorageManager.js";
 import { BasicSet } from "../util/Set.js";
@@ -21,7 +22,19 @@ export class Environment {
     /**
      * The default environment.
      */
-    static default = new Environment();
+    static get default() {
+        return global;
+    }
+
+    /**
+     * Set the default environment.
+     */
+    static set default(env: Environment) {
+        global = env;
+
+        Logger.level = global.variables.log?.level;
+        Logger.format = global.variables.log?.format;
+    }
 
     /**
      * Configuration values.
@@ -74,3 +87,5 @@ export namespace Environment {
         abort(): void;
     }
 }
+
+let global: Environment = new Environment();
