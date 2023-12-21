@@ -10,7 +10,9 @@ The main work (all changes without a GitHub username in brackets in the below li
 -->
 
 ## __WORK IN PROGRESS__
-
+* Matter-Core functionality:
+  * Enhancement: Refactor Core Session management to match specification
+  * Enhancement: Refactor message duplication detection and handling to match specification
 
 ## 0.7.3 (2023-12-18)
 * Matter-Core functionality:
