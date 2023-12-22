@@ -230,7 +230,9 @@ export class ExchangeManager<ContextT> {
             } else {
                 if (protocolHandler === undefined)
                     throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
-                logger.debug(`Discarding message ${messageId} for protocol ${message.payloadHeader.protocolId}.`);
+                logger.warn(
+                    `Discarding message ${messageId} for unsupported protocol ${message.payloadHeader.protocolId}.`,
+                );
             }
 
             // TODO A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is

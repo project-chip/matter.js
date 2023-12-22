@@ -238,30 +238,9 @@ export class MatterDevice {
         idleRetransmissionTimeoutMs?: number;
         activeRetransmissionTimeoutMs?: number;
     }) {
-        const {
-            sessionId,
-            fabric,
-            peerNodeId,
-            peerSessionId,
-            sharedSecret,
-            salt,
-            isInitiator,
-            isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
-        } = args;
-
+        const { fabric } = args;
         const session = await this.sessionManager.createSecureSession({
-            sessionId,
-            fabric,
-            peerNodeId,
-            peerSessionId,
-            sharedSecret,
-            salt,
-            isInitiator,
-            isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            ...args,
             closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
                 if (session.isPase() && this.failSafeContext !== undefined) {

@@ -681,36 +681,15 @@ export class MatterController {
         idleRetransmissionTimeoutMs?: number;
         activeRetransmissionTimeoutMs?: number;
     }) {
-        const {
-            sessionId,
-            fabric,
-            peerNodeId,
-            peerSessionId,
-            sharedSecret,
-            salt,
-            isInitiator,
-            isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
-        } = args;
         const session = await this.sessionManager.createSecureSession({
-            sessionId,
-            fabric,
-            peerNodeId,
-            peerSessionId,
-            sharedSecret,
-            salt,
-            isInitiator,
-            isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            ...args,
             closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
                 if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
                 }
-                this.sessionClosedCallback?.(peerNodeId);
+                this.sessionClosedCallback?.(args.peerNodeId);
             },
         });
         return session;
