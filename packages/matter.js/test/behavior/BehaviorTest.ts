@@ -11,7 +11,7 @@ import { EventEmitter, Observable } from "../../src/util/Observable.js";
 import { MockPart } from "../endpoint/part-mocks.js";
 
 class TestBehavior extends Behavior {
-    static override id = "test";
+    static override readonly id = "test";
     declare readonly events: TestBehavior.Events;
     declare readonly state: TestBehavior.State;
 
@@ -52,8 +52,11 @@ describe("Behavior", () => {
         expect(state.valueTwo).equals(2);
     });
 
-    it("set creates new type with proper defaults", () => {
+    it("set creates new type with proper ID and defaults", () => {
         const NewBehavior = TestBehavior.set({ valueOne: 3 });
+        TestBehavior.id satisfies "test";
+        NewBehavior.id satisfies "test";
+
         const behavior = MockPart.createBehavior(NewBehavior);
         const state = behavior.state;
 

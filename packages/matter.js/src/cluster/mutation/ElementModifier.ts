@@ -90,7 +90,7 @@ export namespace ElementModifier {
             ? AlterationT extends { [n in name]: { optional: infer O extends boolean } }
                 ? Omit<OrigT, "optional"> & { optional: O }
                 : OrigT
-            : undefined;
+            : never;
     };
 
     /**

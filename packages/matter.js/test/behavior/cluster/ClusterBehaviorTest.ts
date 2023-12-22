@@ -8,10 +8,11 @@ import { Behavior } from "../../../src/behavior/Behavior.js";
 import { InvocationContext } from "../../../src/behavior/InvocationContext.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
+import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
 import { Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Type.js";
 import { MockPart } from "../../endpoint/part-mocks.js";
-import { MyBehavior } from "./cluster-behavior-test-util.js";
+import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
 
 describe("ClusterBehavior", () => {
     type Match<Input, Type> = Input extends Type ? true : false;
@@ -41,6 +42,8 @@ describe("ClusterBehavior", () => {
 
     describe("for", () => {
         it("exposes mandatory properties for enabled cluster elements", () => {
+            MyBehavior satisfies { id: "myCluster" };
+
             ({}) as MyBehavior satisfies {
                 state: {
                     reqAttr: string;
@@ -50,8 +53,10 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 reqCmd: (request: string, state: any) => MaybePromise<string>;
+                becomeAwesome?: undefined;
             };
             expect(typeof MyBehavior.prototype.reqCmd).equals("function");
+            expect(typeof (MyBehavior.prototype as any).becomeAwesome).equals(undefined);
 
             ({}) as MyBehavior satisfies {
                 events: {
@@ -65,6 +70,11 @@ describe("ClusterBehavior", () => {
                 };
             };
         });
+
+        it("maintains ID after second for", () => {
+            const ForBehavior = MyBehavior.for(MyCluster);
+            ForBehavior.id satisfies "myCluster";
+        })
 
         it("exposes optional properties for disabled cluster elements", () => {
             undefined satisfies MyBehavior["state"]["optAttr"];
@@ -107,4 +117,66 @@ describe("ClusterBehavior", () => {
             Ignored;
         });
     });
+
+    describe("set", () => {
+        it("recreates type", () => {
+            const SetBehavior = MyBehavior.set({});
+            SetBehavior.id satisfies "myCluster";
+            expect(SetBehavior.id).equals("myCluster");
+        });
+    });
+
+    describe("alter", () => {
+        it("recreates ID", () => {
+            // Test constituent parts
+            MyCluster.name satisfies "MyCluster";
+
+            const AlteredCluster = new ElementModifier(MyCluster).alter({});
+            AlteredCluster.name satisfies "MyCluster";
+            
+            const BehaviorForAlteredCluster = MyBehavior.for(AlteredCluster);
+            BehaviorForAlteredCluster.id satisfies "myCluster";
+
+            // Now test all together
+            const AlteredBehavior = MyBehavior.alter({});
+            AlteredBehavior.id satisfies "myCluster";
+            expect(AlteredBehavior.id).equals("myCluster");
+        })
+    });
+
+    describe("with", () => {
+        it("recreates ID", () => {
+            const AwesomeBehavior = MyBehavior.with("Awesome");
+            AwesomeBehavior.id satisfies "myCluster";
+            expect(AwesomeBehavior.id).equals("myCluster");
+        })
+
+        it("adds feature elements", () => {
+            const AwesomeBehavior = MyBehavior.with(My.Feature.Awesome);
+
+            ({}) as InstanceType<typeof AwesomeBehavior> satisfies {
+                state: {
+                    awesomeSauce: number,
+                };
+
+                becomeAwesome(value: number): void;
+
+                events: {
+                    becameAwesome: Observable<[ number, InvocationContext ]>
+                };
+            }
+        })
+
+        it("allows extension and base command overrides", () => {
+            const AwesomeBehavior = MyBehavior.with(My.Feature.Awesome);
+            class AwesomeServer extends AwesomeBehavior {
+                override reqCmd(): string {
+                    return "hi";
+                }
+                
+                override becomeAwesome(_value: number) {}
+            }
+            AwesomeServer
+        })
+    })
 });

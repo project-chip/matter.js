@@ -79,7 +79,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     protected override set nextEndpointId(id: EndpointNumber) {
-        this.nextEndpointId = id;
+        this.#nextEndpointId = id;
     }
 
     protected override get advertiseOnStartup() {
@@ -103,6 +103,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         this.#configuration = ServerOptions.configurationFor(options);
         this.#root = this.#configuration.root;
         this.#root.owner = this;
+        this.#root.behaviors.require(PartsBehavior);
         this.#nextEndpointId = this.#configuration.nextEndpointId;
     }
 
@@ -112,9 +113,7 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Add an endpoint.
      */
     add(endpoint: Part | EndpointType) {
-        if (typeof endpoint === "function") {
-            this.root.agent.get(PartsBehavior).add(endpoint);
-        }
+        this.root.agent.get(PartsBehavior).add(endpoint);
     }
 
     /**
@@ -188,10 +187,10 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         const config = { ...this.#configuration.commissioning };
 
-        if (config.passcode === undefined) {
+        if (config.passcode === undefined && this.#commissioningStorage.has("passcode")) {
             config.passcode = this.#commissioningStorage.get("passcode");
         }
-        if (config.discriminator === undefined) {
+        if (config.discriminator === undefined && this.#commissioningStorage.has("discriminator")) {
             config.discriminator = this.#commissioningStorage.get("discriminator");
         }
 

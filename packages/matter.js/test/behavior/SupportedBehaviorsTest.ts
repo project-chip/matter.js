@@ -20,7 +20,7 @@ type WC2 = typeof WC2;
 type CC = typeof CC;
 type OO = typeof OO;
 
-describe("BehaviorList", () => {
+describe("SupportedBehaviors", () => {
     type IsNever<T> = [T] extends [never] ? true : false;
 
     it("extends empty", () => {

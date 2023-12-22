@@ -100,7 +100,8 @@ export class ClusterBehavior extends Behavior {
         This extends ClusterBehavior.Type,
         const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
     >(this: This, ...features: FeaturesT) {
-        return this.for(new ClusterComposer(this.cluster).compose(features));
+        const newCluster = new ClusterComposer(this.cluster).compose(features) as ClusterComposer.WithFeatures<This["cluster"], FeaturesT>;
+        return this.for(newCluster);
     }
 
     /**
@@ -195,12 +196,48 @@ export namespace ClusterBehavior {
 
         readonly supervisor: RootSupervisor;
 
-        for: typeof ClusterBehavior.for;
-        with: typeof ClusterBehavior.with;
-        alter: typeof ClusterBehavior.alter;
-        set: typeof ClusterBehavior.set;
-        enable: typeof ClusterBehavior.enable;
         supports: typeof ClusterBehavior.supports;
+
+        // Prior to TS 5.4 could do this.  Sadly typing no longer carries
+        // through on these...  This["cluster"] reverts to ClusterType).  So we
+        // have to define the long way.
+        //
+        // This also means intellisense doesn't work unless we copy comments
+        // here (or move here and cast ClusterBehavior to
+        // ClusterBehavior.Type).
+        //
+        // for: typeof ClusterBehavior.for;
+        // with: typeof ClusterBehavior.with;
+        // alter: typeof ClusterBehavior.alter;
+        // set: typeof ClusterBehavior.set;
+        // enable: typeof ClusterBehavior.enable;
+
+        for<
+            This extends ClusterBehavior.Type,
+            const ClusterT extends ClusterType
+        >(this: This, cluster: ClusterT, schema?: Schema):
+            ClusterBehavior.Type<ClusterT, This>;
+
+        with<
+            This extends ClusterBehavior.Type,
+            const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
+        >(this: This, ...features: FeaturesT):
+            ClusterBehavior.Type<ClusterComposer.WithFeatures<This["cluster"], FeaturesT>, This>;
+
+        alter<
+            This extends ClusterBehavior.Type,
+            const AlterationsT extends ElementModifier.Alterations<This["cluster"]>,
+        >(this: This, alterations: AlterationsT):
+            ClusterBehavior.Type<ElementModifier.WithAlterations<This["cluster"], AlterationsT>, This>;
+        
+        set<This extends Behavior.Type>(this: This, defaults: Behavior.InputStateOf<This>):
+            This;
+
+        enable<
+            This extends ClusterBehavior.Type,
+            const FlagsT extends ElementModifier.ElementFlags<This["cluster"]>,
+        >(this: This, flags: FlagsT):
+            ClusterBehavior.Type<ElementModifier.WithAlterations<This["cluster"], ElementModifier.ElementFlagAlterations<FlagsT>>, This>;
     }
 
     /**

@@ -9,7 +9,6 @@ import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import type { ClusterServerObj, CommandHandler, SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
-import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import type { Part } from "../../endpoint/Part.js";
 import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
 import { SecureSession } from "../../session/SecureSession.js";
@@ -72,25 +71,34 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
-    session: Session<MatterDevice>,
+    session: Session<MatterDevice> | undefined,
     contextFields: Partial<InvocationContext>,
     fn: (behavior: Behavior) => T,
 ): T {
-    const fabric = session?.isSecure() ? session.getAssociatedFabric() : undefined;
-    const transaction = TransactionalInteractionServer.transactionFor(session);
+    let agent;
 
-    const context: InvocationContext = {
-        ...contextFields,
-        associatedFabric: fabric?.fabricIndex,
-        session,
-        transaction,
+    // TODO -ideally there'd be something more explicit here to indicate we're
+    // operating without ACL enforcement but currently lower levels just omit
+    // the session
+    if (!session) {
+        agent = backing.part.agent;
+    } else {
+        const fabric = session.isSecure() ? session.getAssociatedFabric() : undefined;
+        const transaction = TransactionalInteractionServer.transactionFor(session);
 
-        // TODO - this effectively disables access level enforcement because we
-        // don't have privilege management implemented yet
-        accessLevel: AccessLevel.Administer,
-    };
+        const context: InvocationContext = {
+            ...contextFields,
+            associatedFabric: fabric?.fabricIndex,
+            session,
+            transaction,
 
-    const agent = backing.part.getAgent(context);
+            // TODO - this effectively disables access level enforcement because we
+            // don't have privilege management implemented yet
+            accessLevel: AccessLevel.Administer,
+        };
+
+        agent = backing.part.getAgent(context);
+    }
 
     return fn(agent.get(backing.type));
 }
@@ -107,11 +115,11 @@ function createAttributeAccessors(
     backing: ClusterServerBehaviorBacking,
     name: string,
 ): {
-    get: (session: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => any;
-    set: (value: any, session: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean;
+    get: (params: { session?: Session<MatterDevice>, isFabricFiltered?: boolean }) => any;
+    set: (value: any, params: { session?: Session<MatterDevice> }) => boolean;
 } {
     return {
-        get(session, _endpoint, isFabricFiltered) {
+        get({ session, isFabricFiltered }) {
             return withBehavior(backing, session, { fabricFiltered: isFabricFiltered }, behavior => {
                 const state = behavior.state as Val.Struct;
 
@@ -121,7 +129,7 @@ function createAttributeAccessors(
             });
         },
 
-        set(value, session) {
+        set(value, { session }) {
             return withBehavior(backing, session, {}, behavior => {
                 const state = behavior.state as Record<string, any>;
 
