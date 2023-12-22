@@ -49,7 +49,7 @@ export const METADATA = {
     name: "MyCluster",
     revision: 2,
     features: FEATURES,
-};
+} as const;
 
 export function expectMetadata(component: ClusterType) {
     expect(component.id).equal(METADATA.id);

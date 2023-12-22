@@ -21,7 +21,7 @@ const logger = Logger.get("AdministratorCommissioningServer");
 export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
 export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
 
-const Base = AdministratorCommissioningBehavior.for(AdministratorCommissioning.Complete);
+const Base = AdministratorCommissioningBehavior.with(AdministratorCommissioning.Feature.Basic);
 
 /**
  * This is the default server implementation of AdministratorCommissioningBehavior.
@@ -68,7 +68,7 @@ export class AdministratorCommissioningServer extends Base {
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
     // TODO - investigate why this method doesn't allow normal override
-    openBasicCommissioningWindow = async function (this: AdministratorCommissioningServer, { commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
+    override async openBasicCommissioningWindow(this: AdministratorCommissioningServer, { commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
         const device = this.session.getContext();
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);

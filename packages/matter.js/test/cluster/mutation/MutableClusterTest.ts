@@ -86,6 +86,8 @@ describe("ClusterFactory", () => {
         it("is correct for automatic cluster", () => {
             const MyCluster = TestMutable.with("Extended");
 
+            MyCluster.name satisfies "MyCluster";
+
             // Create handlers directly
             const handlers: ClusterServerHandlers<typeof MyCluster> = {
                 cmd1: ({ attributes: { attr1, attr2 }, session, endpoint }) => {
