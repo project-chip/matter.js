@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
+import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
+import { FabricNotFoundError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/securechannel/SecureChannelMessages.js";
+import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import {
     KDFSR1_KEY_INFO,
@@ -38,7 +41,17 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             await this.handleSigma1(exchange.session.getContext(), messenger);
         } catch (error) {
             logger.error("An error occurred during the commissioning", error);
-            await messenger.sendError(ProtocolStatusCode.InvalidParam);
+
+            if (error instanceof FabricNotFoundError) {
+                await messenger.sendError(ProtocolStatusCode.NoSharedTrustRoots);
+            }
+            // If we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
+            else if (!(error instanceof ChannelStatusResponseError)) {
+                await messenger.sendError(ProtocolStatusCode.InvalidParam);
+            }
+        } finally {
+            // Destroy the unsecure session used to establish the secure Case session
+            await exchange.session.destroy();
         }
     }
 
@@ -49,7 +62,6 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
     private async handleSigma1(server: MatterDevice, messenger: CaseServerMessenger) {
         logger.info(`Received pairing request from ${messenger.getChannelName()}`);
         // Generate pairing info
-        const sessionId = server.getNextAvailableSessionId();
         const random = Crypto.getRandom();
 
         // Read and process sigma 1
@@ -83,19 +95,20 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             Crypto.decrypt(peerResumeKey, peerResumeMic, RESUME1_MIC_NONCE);
 
             // All good! Create secure session
+            const sessionId = await server.getNextAvailableSessionId();
             const secureSessionSalt = ByteArray.concat(peerRandom, peerResumptionId);
-            const secureSession = await server.createSecureSession(
+            const secureSession = await server.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                false,
-                true,
-                mrpParams?.idleRetransTimeoutMs,
-                mrpParams?.activeRetransTimeoutMs,
-            );
+                salt: secureSessionSalt,
+                isInitiator: false,
+                isResumption: true,
+                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
+                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+            });
 
             // Generate sigma 2 resume
             const resumeSalt = ByteArray.concat(peerRandom, resumptionId);
@@ -121,8 +134,9 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
-        } else {
+        } else if (peerResumptionId === undefined && peerResumeMic === undefined) {
             // Generate sigma 2
+            // TODO: Pass through a group id?
             const fabric = server.findFabricFromDestinationId(destinationId, peerRandom);
             const { operationalCert: nodeOpCert, intermediateCACert, operationalIdentityProtectionKey } = fabric;
             const { publicKey: ecdhPublicKey, sharedSecret } = Crypto.ecdhGeneratePublicKeyAndSecret(peerEcdhPublicKey);
@@ -147,6 +161,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 resumptionId,
             });
             const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
+            const sessionId = await server.getNextAvailableSessionId();
             const sigma2Bytes = await messenger.sendSigma2({ random, sessionId, ecdhPublicKey, encrypted, mrpParams });
 
             // Read and process sigma 3
@@ -183,18 +198,18 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            const secureSession = await server.createSecureSession(
+            const secureSession = await server.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                false,
-                false,
-                mrpParams?.idleRetransTimeoutMs,
-                mrpParams?.activeRetransTimeoutMs,
-            );
+                salt: secureSessionSalt,
+                isInitiator: false,
+                isResumption: false,
+                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
+                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+            });
             logger.info(
                 `session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
                     fabric.nodeId,
@@ -206,6 +221,8 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
+        } else {
+            throw new UnexpectedDataError("Invalid resumption ID or resume MIC.");
         }
     }
 

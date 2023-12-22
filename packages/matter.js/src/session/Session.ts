@@ -42,9 +42,11 @@ export interface Session<T> {
     getPeerSessionId(): number;
     getNodeId(): NodeId | undefined;
     getPeerNodeId(): NodeId | undefined;
+    getIncrementedMessageCounter(): number;
     end(sendClose: boolean): Promise<void>;
-    destroy(sendClose: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
+    destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
     notifyActivity(messageReceived: boolean): void;
     isPeerActive(): boolean;
     getAssociatedFabric(): Fabric;
+    updateMessageCounter(messageCounter: number, sourceNodeId?: NodeId): void;
 }

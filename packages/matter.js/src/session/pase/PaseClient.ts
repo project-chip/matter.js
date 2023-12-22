@@ -9,10 +9,10 @@ import { MatterController } from "../../MatterController.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
+import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const logger = Logger.get("PaseClient");
@@ -39,9 +39,9 @@ export class PaseClient {
     async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
         const random = Crypto.getRandom();
-        const sessionId = client.getNextAvailableSessionId();
+        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
 
-        // Send pbkdRequest and Read pbkdResponse
+        // Send pbkdfRequest and Read pbkdfResponse
         const requestPayload = await messenger.sendPbkdfParamRequest({
             random,
             sessionId,
@@ -70,16 +70,16 @@ export class PaseClient {
 
         // All good! Creating the secure session
         await messenger.waitForSuccess();
-        const secureSession = await client.createSecureSession(
+        const secureSession = await client.createSecureSession({
             sessionId,
-            undefined,
-            UNDEFINED_NODE_ID,
+            fabric: undefined,
+            peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
-            Ke,
-            new ByteArray(0),
-            true,
-            false,
-        );
+            sharedSecret: Ke,
+            salt: new ByteArray(0),
+            isInitiator: true,
+            isResumption: false,
+        });
         await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);
 

@@ -10,6 +10,8 @@ import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
+import { MessageCounter } from "../protocol/MessageCounter.js";
+import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { Time } from "../time/Time.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
@@ -21,7 +23,6 @@ import {
     SLEEPY_ACTIVE_THRESHOLD_MS,
     Session,
 } from "./Session.js";
-import { UNDEFINED_NODE_ID } from "./SessionManager.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -49,6 +50,12 @@ export class SecureSession<T> implements Session<T> {
     private readonly idleRetransmissionTimeoutMs: number;
     private readonly activeRetransmissionTimeoutMs: number;
     private readonly retransmissionRetries: number;
+    private readonly messageCounter = new MessageCounter(() => {
+        // Secure Session Message Counter
+        // Expire/End the session before the counter rolls over
+        this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
+    }); // Can be changed to a PersistedMessageCounter if we implement session storage
+    private readonly messageReceptionState = new MessageReceptionStateEncryptedWithoutRollover();
 
     static async create<T>(args: {
         context: T;
@@ -175,7 +182,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     isPase(): boolean {
-        return this.peerNodeId === UNDEFINED_NODE_ID;
+        return this.peerNodeId === NodeId.UNSPECIFIED_NODE_ID;
     }
 
     async close(closeAfterExchangeFinished?: boolean) {
@@ -219,7 +226,9 @@ export class SecureSession<T> implements Session<T> {
         const { header, applicationPayload } = MessageCodec.encodePayload(message);
         const headerBytes = MessageCodec.encodePacketHeader(message.packetHeader);
         const securityFlags = headerBytes[3];
-        const sessionNodeId = this.isPase() ? UNDEFINED_NODE_ID : this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
+        const sessionNodeId = this.isPase()
+            ? NodeId.UNSPECIFIED_NODE_ID
+            : this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
         const nonce = this.generateNonce(securityFlags, header.messageId, sessionNodeId);
         return { header, applicationPayload: Crypto.encrypt(this.encryptKey, applicationPayload, nonce, headerBytes) };
     }
@@ -268,7 +277,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     getNodeId() {
-        return this.fabric?.nodeId ?? UNDEFINED_NODE_ID;
+        return this.fabric?.nodeId ?? NodeId.UNSPECIFIED_NODE_ID;
     }
 
     getPeerNodeId() {
@@ -308,7 +317,7 @@ export class SecureSession<T> implements Session<T> {
     }
 
     /** Destroys a session. Outstanding subscription data will be discarded. */
-    async destroy(sendClose: boolean, closeAfterExchangeFinished = true) {
+    async destroy(sendClose = false, closeAfterExchangeFinished = true) {
         await this.clearSubscriptions(false);
         this.fabric?.removeSession(this);
         if (!sendClose) {
@@ -329,6 +338,14 @@ export class SecureSession<T> implements Session<T> {
         writer.writeUInt32(messageId);
         writer.writeUInt64(nodeId);
         return writer.toByteArray();
+    }
+
+    getIncrementedMessageCounter() {
+        return this.messageCounter.getIncrementedCounter();
+    }
+
+    updateMessageCounter(messageCounter: number) {
+        this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 }
 

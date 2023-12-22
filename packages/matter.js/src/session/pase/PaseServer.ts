@@ -9,6 +9,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { MatterFlowError, UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
+import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
@@ -16,7 +17,6 @@ import { ProtocolStatusCode, SECURE_CHANNEL_PROTOCOL_ID } from "../../protocol/s
 import { ChannelStatusResponseError } from "../../protocol/securechannel/SecureChannelMessenger.js";
 import { Time, Timer } from "../../time/Time.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { UNDEFINED_NODE_ID } from "../SessionManager.js";
 import { DEFAULT_PASSCODE_ID, PaseServerMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const logger = Logger.get("PaseServer");
@@ -59,7 +59,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             this.pairingErrors++;
             logger.error("An error occurred during the PASE commissioning.", error);
 
-            // if we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
+            // If we received a ChannelStatusResponseError we do not need to send one back, so just cancel pairing
             const sendError = !(error instanceof ChannelStatusResponseError);
             await this.cancelPairing(messenger, sendError);
 
@@ -68,6 +68,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
                     `Pase server: Too many errors during PASE commissioning, aborting commissioning window`,
                 );
             }
+        } finally {
+            // Destroy the unsecure session used to establish the secure Case session
+            await exchange.session.destroy();
         }
     }
 
@@ -92,10 +95,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         this.pairingTimer = Time.getTimer(PASE_PAIRING_TIMEOUT_MS, () => this.cancelPairing(messenger)).start();
 
-        const sessionId = server.getNextAvailableSessionId();
-        const random = Crypto.getRandom();
-
-        // Read pbkdRequest and send pbkdResponse
+        // Read pbkdfRequest and send pbkdfResponse
         const {
             requestPayload,
             request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
@@ -103,6 +103,10 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         if (passcodeId !== DEFAULT_PASSCODE_ID) {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
         }
+
+        const sessionId = await server.getNextAvailableSessionId(); // Responder Session Id
+        const random = Crypto.getRandom();
+
         const responsePayload = await messenger.sendPbkdfParamResponse({
             peerRandom,
             random,
@@ -125,18 +129,18 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         }
 
         // All good! Creating the secure PASE session
-        await server.createSecureSession(
+        await server.createSecureSession({
             sessionId,
-            undefined /* fabric */,
-            UNDEFINED_NODE_ID,
+            fabric: undefined,
+            peerNodeId: NodeId.UNSPECIFIED_NODE_ID,
             peerSessionId,
-            Ke,
-            new ByteArray(0),
-            false,
-            false,
-            mrpParameters?.idleRetransTimeoutMs,
-            mrpParameters?.activeRetransTimeoutMs,
-        );
+            sharedSecret: Ke,
+            salt: new ByteArray(0),
+            isInitiator: false,
+            isResumption: false,
+            idleRetransmissionTimeoutMs: mrpParameters?.idleRetransTimeoutMs,
+            activeRetransmissionTimeoutMs: mrpParameters?.activeRetransTimeoutMs,
+        });
         logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
 
         await messenger.sendSuccess();

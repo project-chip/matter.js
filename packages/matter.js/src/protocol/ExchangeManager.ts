@@ -9,6 +9,7 @@ import { MAX_MESSAGE_SIZE, Message, MessageCodec, SessionType } from "../codec/M
 import { Channel } from "../common/Channel.js";
 import { ImplementationError, MatterFlowError, NotImplementedError } from "../common/MatterError.js";
 import { Listener, TransportInterface } from "../common/TransportInterface.js";
+import { tryCatch } from "../common/TryCatchHandler.js";
 import { Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
@@ -17,12 +18,13 @@ import { UdpInterface } from "../net/UdpInterface.js";
 import { INTERACTION_PROTOCOL_ID } from "../protocol/interaction/InteractionServer.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { Session } from "../session/Session.js";
-import { SessionManager } from "../session/SessionManager.js";
+import { SessionManager, UNICAST_UNSECURE_SESSION_ID } from "../session/SessionManager.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { ChannelManager } from "./ChannelManager.js";
 import { MessageExchange } from "./MessageExchange.js";
+import { DuplicateMessageError } from "./MessageReceptionState.js";
 import { ProtocolHandler } from "./ProtocolHandler.js";
-import { SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
+import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelMessenger } from "./securechannel/SecureChannelMessenger.js";
 
 const logger = Logger.get("ExchangeManager");
@@ -65,7 +67,6 @@ export class MessageChannel<ContextT> implements Channel<Message> {
 
 export class ExchangeManager<ContextT> {
     private readonly exchangeCounter = new ExchangeCounter();
-    private readonly messageCounter = new MessageCounter();
     private readonly exchanges = new Map<number, MessageExchange<ContextT>>();
     private readonly protocols = new Map<number, ProtocolHandler<ContextT>>();
     private readonly transportListeners = new Array<Listener>();
@@ -118,7 +119,6 @@ export class ExchangeManager<ContextT> {
             channel,
             exchangeId,
             protocolId,
-            this.messageCounter,
             async () => await this.deleteExchange(exchangeIndex),
         );
         // Ensure exchangeIds are not colliding in the Map by adding 1 in front of exchanges initiated by this device.
@@ -146,35 +146,97 @@ export class ExchangeManager<ContextT> {
         if (packet.header.sessionType === SessionType.Group)
             throw new NotImplementedError("Group messages are not supported");
 
-        const session = this.sessionManager.getSession(packet.header.sessionId);
-        if (session === undefined) throw new MatterFlowError(`Cannot find a session for ID ${packet.header.sessionId}`);
+        let session: Session<ContextT> | undefined;
+        if (packet.header.sessionType === SessionType.Unicast) {
+            if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
+                const nodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+                session =
+                    this.sessionManager.getUnsecureSession(nodeId) ?? this.sessionManager.createUnsecureSession(nodeId);
+            } else {
+                session = this.sessionManager.getSession(packet.header.sessionId);
+            }
+        } else if (packet.header.sessionType === SessionType.Group) {
+            if (packet.header.sourceNodeId !== undefined) {
+                //session = this.sessionManager.findGroupSession(packet.header.destGroupId, packet.header.sessionId);
+            }
+            // if (packet.header.destGroupId !== undefined) { ???
+        }
+
+        if (session === undefined) {
+            throw new MatterFlowError(
+                `Cannot find a session for ID ${packet.header.sessionId}${
+                    packet.header.sourceNodeId !== undefined ? ` and source NodeId ${packet.header.sourceNodeId}` : ""
+                }`,
+            );
+        }
+
+        const messageId = packet.header.messageId;
+        const isDuplicate = tryCatch(
+            () => {
+                session?.updateMessageCounter(packet.header.messageId, packet.header.sourceNodeId);
+                return false;
+            },
+            DuplicateMessageError,
+            () => true,
+        );
 
         const aad = messageBytes.slice(0, messageBytes.length - packet.applicationPayload.length); // Header+Extensions
         const message = session.decode(packet, aad);
         const exchangeIndex = message.payloadHeader.isInitiatorMessage
             ? message.payloadHeader.exchangeId
             : message.payloadHeader.exchangeId | 0x10000;
-        const exchange = this.exchanges.get(exchangeIndex);
+        let exchange = this.exchanges.get(exchangeIndex);
+
+        if (
+            exchange !== undefined &&
+            (exchange.session.getId() !== session.getId() ||
+                exchange.isInitiator === message.payloadHeader.isInitiatorMessage) // Should always be ok, but just in case
+        ) {
+            exchange = undefined;
+        }
+
         if (exchange !== undefined) {
-            await exchange.onMessageReceived(message);
+            await exchange.onMessageReceived(message, isDuplicate);
         } else {
             if (session.closingAfterExchangeFinished) {
                 throw new MatterFlowError(
                     `Session with ID ${packet.header.sessionId} marked for closure, decline new exchange creation.`,
                 );
             }
-            const exchange = MessageExchange.fromInitialMessage(
-                await this.channelManager.getOrCreateChannel(channel, session),
-                this.messageCounter,
-                message,
-                async () => await this.deleteExchange(exchangeIndex),
-            );
-            this.exchanges.set(exchangeIndex, exchange);
-            await exchange.onMessageReceived(message);
+
             const protocolHandler = this.protocols.get(message.payloadHeader.protocolId);
-            if (protocolHandler === undefined)
-                throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
-            await protocolHandler.onNewExchange(exchange, message);
+
+            if (protocolHandler !== undefined && message.payloadHeader.isInitiatorMessage && !isDuplicate) {
+                const exchange = MessageExchange.fromInitialMessage(
+                    await this.channelManager.getOrCreateChannel(channel, session),
+                    message,
+                    async () => await this.deleteExchange(exchangeIndex),
+                );
+                this.exchanges.set(exchangeIndex, exchange);
+                await exchange.onMessageReceived(message);
+                await protocolHandler.onNewExchange(exchange, message);
+            } else if (message.payloadHeader.requiresAck) {
+                const exchange = MessageExchange.fromInitialMessage(
+                    await this.channelManager.getOrCreateChannel(channel, session),
+                    message,
+                    async () => await this.deleteExchange(exchangeIndex),
+                );
+                this.exchanges.set(exchangeIndex, exchange);
+                await exchange.send(MessageType.StandaloneAck, new ByteArray(0));
+                await exchange.close();
+                logger.debug(
+                    `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId}.`,
+                );
+            } else {
+                if (protocolHandler === undefined)
+                    throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
+                logger.warn(
+                    `Discarding message ${messageId} for unsupported protocol ${message.payloadHeader.protocolId}.`,
+                );
+            }
+
+            // TODO A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
+            //  to prevent a node from exhausting the message counter window of the peer node.
         }
     }
 
@@ -249,18 +311,6 @@ export class ExchangeCounter {
             this.exchangeCounter = 0;
         }
         return this.exchangeCounter;
-    }
-}
-
-export class MessageCounter {
-    private messageCounter = Crypto.getRandomUInt32();
-
-    getIncrementedCounter() {
-        this.messageCounter++;
-        if (this.messageCounter > 0xffffffff) {
-            this.messageCounter = 0;
-        }
-        return this.messageCounter;
     }
 }
 

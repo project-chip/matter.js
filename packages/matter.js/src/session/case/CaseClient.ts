@@ -42,7 +42,7 @@ export class CaseClient {
 
         // Generate pairing info
         const random = Crypto.getRandom();
-        const sessionId = client.getNextAvailableSessionId();
+        const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
         const { operationalIdentityProtectionKey, operationalCert: nodeOpCert, intermediateCACert } = fabric;
         const { publicKey: ecdhPublicKey, ecdh } = Crypto.ecdhGeneratePublicKey();
 
@@ -83,16 +83,16 @@ export class CaseClient {
             Crypto.decrypt(resumeKey, resumeMic, RESUME2_MIC_NONCE);
 
             const secureSessionSalt = ByteArray.concat(random, resumptionRecord.resumptionId);
-            secureSession = await client.createSecureSession(
+            secureSession = await client.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                true,
-                true,
-            );
+                salt: secureSessionSalt,
+                isInitiator: true,
+                isResumption: true,
+            });
             await messenger.sendSuccess();
             logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
 
@@ -130,10 +130,23 @@ export class CaseClient {
                 ellipticCurvePublicKey: peerPublicKey,
                 subject: { nodeId: peerNodeIdCert },
             } = TlvOperationalCertificate.decode(peerNewOpCert);
-            if (peerNodeIdCert !== peerNodeId)
+
+            if (peerNodeIdCert !== peerNodeId) {
                 throw new UnexpectedDataError(
                     "The node ID in the peer certificate doesn't match the expected peer node ID",
                 );
+            }
+
+            // TODO also verify:
+            //  * FabricId matches
+            //  * If an ICAC is present, and it contains a Fabric ID in its subject, then it SHALL match the FabricID in
+            //    the NOC leaf certificate.
+            //  * The certificate chain SHALL chain back to the Trusted Root CA Certificate TrustedRCAC whose public key
+            //    was used in the computation of the Destination Identifier when generating Sigma1.
+            //  * All the elements in the certificate chain SHALL respect the Matter Certificate DN Encoding Rules,
+            //    including range checks for identifiers such as Fabric ID and Node ID.
+            //  * verify certificate chain of TBEData2.responderNOC (incl. ICAC if present)
+
             Crypto.verify(PublicKey(peerPublicKey), peerSignatureData, peerSignature);
 
             // Generate and send sigma3
@@ -159,18 +172,23 @@ export class CaseClient {
                 operationalIdentityProtectionKey,
                 Crypto.hash([sigma1Bytes, sigma2Bytes, sigma3Bytes]),
             );
-            secureSession = await client.createSecureSession(
+            secureSession = await client.createSecureSession({
                 sessionId,
                 fabric,
                 peerNodeId,
                 peerSessionId,
                 sharedSecret,
-                secureSessionSalt,
-                true,
-                false,
-            );
-            logger.info(`Case client: Paired succesfully with ${messenger.getChannelName()}`);
-            resumptionRecord = { fabric, peerNodeId, sharedSecret, resumptionId: peerResumptionId };
+                salt: secureSessionSalt,
+                isInitiator: true,
+                isResumption: false,
+            });
+            logger.info(`Case client: Paired successfully with ${messenger.getChannelName()}`);
+            resumptionRecord = {
+                fabric,
+                peerNodeId,
+                sharedSecret,
+                resumptionId: peerResumptionId,
+            };
         }
 
         await messenger.close();

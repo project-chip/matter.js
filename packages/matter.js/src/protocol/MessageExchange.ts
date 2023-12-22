@@ -14,7 +14,7 @@ import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { createPromise } from "../util/Promises.js";
 import { Queue } from "../util/Queue.js";
-import { MessageChannel, MessageCounter } from "./ExchangeManager.js";
+import { MessageChannel } from "./ExchangeManager.js";
 import { StatusCode, StatusResponseError } from "./interaction/StatusCode.js";
 import { MessageType, SECURE_CHANNEL_PROTOCOL_ID } from "./securechannel/SecureChannelMessages.js";
 import { SecureChannelProtocol } from "./securechannel/SecureChannelProtocol.js";
@@ -68,7 +68,6 @@ const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms 
 export class MessageExchange<ContextT> {
     static fromInitialMessage<ContextT>(
         channel: MessageChannel<ContextT>,
-        messageCounter: MessageCounter,
         initialMessage: Message,
         closeCallback: () => Promise<void>,
     ) {
@@ -76,7 +75,6 @@ export class MessageExchange<ContextT> {
         return new MessageExchange<ContextT>(
             session,
             channel,
-            messageCounter,
             false,
             session.getId(),
             initialMessage.packetHeader.destNodeId,
@@ -91,14 +89,12 @@ export class MessageExchange<ContextT> {
         channel: MessageChannel<ContextT>,
         exchangeId: number,
         protocolId: number,
-        messageCounter: MessageCounter,
         closeCallback: () => Promise<void>,
     ) {
         const { session } = channel;
         return new MessageExchange(
             session,
             channel,
-            messageCounter,
             true,
             session.getPeerSessionId(),
             session.getNodeId(),
@@ -124,8 +120,7 @@ export class MessageExchange<ContextT> {
     constructor(
         readonly session: Session<ContextT>,
         readonly channel: MessageChannel<ContextT>,
-        private readonly messageCounter: MessageCounter,
-        private readonly isInitiator: boolean,
+        readonly isInitiator: boolean,
         private readonly peerSessionId: number,
         private readonly nodeId: NodeId | undefined,
         private readonly peerNodeId: NodeId | undefined,
@@ -152,16 +147,16 @@ export class MessageExchange<ContextT> {
         );
     }
 
-    async onMessageReceived(message: Message) {
+    async onMessageReceived(message: Message, isDuplicate = false) {
         const {
             packetHeader: { messageId },
             payloadHeader: { requiresAck, ackedMessageId, protocolId, messageType },
         } = message;
 
-        logger.debug("Message «", MessageCodec.messageDiagnostics(message));
+        logger.debug("Message «", MessageCodec.messageDiagnostics(message, isDuplicate));
         this.session.notifyActivity(true);
 
-        if (messageId === this.receivedMessageToAck?.packetHeader.messageId) {
+        if (isDuplicate) {
             // Received a message retransmission but the reply is not ready yet, ignoring
             if (requiresAck) {
                 await this.send(MessageType.StandaloneAck, new ByteArray(0));
@@ -219,11 +214,12 @@ export class MessageExchange<ContextT> {
 
         this.session.notifyActivity(false);
 
-        const message = {
+        // TODO Add support to also send controlMessages for Group messages, use different messagecounter!
+        const message: Message = {
             packetHeader: {
                 sessionId: this.peerSessionId,
-                sessionType: SessionType.Unicast, // TODO: support multicast
-                messageId: this.messageCounter.getIncrementedCounter(),
+                sessionType: SessionType.Unicast, // TODO: support multicast/groups
+                messageId: this.session.getIncrementedMessageCounter(),
                 destNodeId: this.peerNodeId,
                 sourceNodeId: this.nodeId,
                 hasPrivacyEnhancements: false,
@@ -320,6 +316,10 @@ export class MessageExchange<ContextT> {
                 this.sentMessageAckFailure(new RetransmissionLimitReachedError());
                 this.sentMessageAckFailure = undefined;
                 this.sentMessageAckSuccess = undefined;
+            }
+            if (this.closeTimer !== undefined) {
+                // All resubmissions done and in closing, no need to wait further
+                this.closeInternal().catch(error => logger.error("An error happened when closing the exchange", error));
             }
             return;
         }

@@ -241,16 +241,20 @@ export class MessageCodec {
         return writer.toByteArray();
     }
 
-    static messageDiagnostics({
-        packetHeader: { messageId, sessionId },
-        payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck },
-        payload,
-    }: Message) {
+    static messageDiagnostics(
+        {
+            packetHeader: { messageId, sessionId },
+            payloadHeader: { exchangeId, messageType, protocolId, ackedMessageId, requiresAck },
+            payload,
+        }: Message,
+        isDuplicate = false,
+    ) {
         return new DiagnosticDictionary({
             id: `${sessionId}/${exchangeId}/${messageId}`,
             type: `${protocolId}/${messageType}`,
             acked: ackedMessageId,
             reqAck: requiresAck,
+            duplicate: isDuplicate,
             payload: payload,
         });
     }
