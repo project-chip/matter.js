@@ -6,11 +6,10 @@
 
 import { OnOff } from "../../../cluster/definitions/OnOffCluster.js";
 import { Time, Timer } from "../../../time/Time.js";
-import { ClusterBehavior } from "../../cluster/ClusterBehavior.js";
 import { OnOffBehavior } from "./OnOffBehavior.js";
 import { OnWithTimedOffRequest } from "./OnOffInterface.js";
 
-const Base = OnOffBehavior.for(OnOff.Complete);
+const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
 
 /**
  * This is the default server implementation of OnOffBehavior.
@@ -23,7 +22,7 @@ export class OnOffServer extends Base {
 
     override on() {
         this.state.onOff = true;
-        if ((this.constructor as unknown as ClusterBehavior).cluster.supportedFeatures.levelControlForLighting) {
+        if (this.cluster.supportedFeatures.levelControlForLighting) {
             if (!this.timedOnTimer.isRunning) {
                 if (this.delayedOffTimer.isRunning) {
                     this.delayedOffTimer.stop();
@@ -35,7 +34,7 @@ export class OnOffServer extends Base {
 
     override off() {
         this.state.onOff = false;
-        if ((this.constructor as unknown as ClusterBehavior).cluster.supportedFeatures.levelControlForLighting) {
+        if (this.cluster.supportedFeatures.levelControlForLighting) {
             if (this.timedOnTimer.isRunning) {
                 this.timedOnTimer.stop();
                 if ((this.state.offWaitTime ?? 0) > 0) {
@@ -58,8 +57,7 @@ export class OnOffServer extends Base {
         }
     }
 
-    // TODO: Change back to a method override once issue is fixed
-    offWithEffect = () => {
+    override offWithEffect() {
         if (this.state.globalSceneControl) {
             // TODO Store state in global scene
             this.state.globalSceneControl = false;
@@ -67,8 +65,7 @@ export class OnOffServer extends Base {
         this.off();
     };
 
-    // TODO: Change back to a method override once issue is fixed
-    onWithRecallGlobalScene = () => {
+    override onWithRecallGlobalScene() {
         if (this.state.globalSceneControl) {
             return;
         }
@@ -83,8 +80,7 @@ export class OnOffServer extends Base {
      * This method in the default implementation is implemented to use the on/off methods when timed actions should
      * occur. This means that it is enough to override on() and off() with custom control logic.
      */
-    // TODO: Change back to a method override once issue is fixed
-    onWithTimedOff = (request: OnWithTimedOffRequest) => {
+    override onWithTimedOff(request: OnWithTimedOffRequest) {
         if (request.onOffControl.acceptOnlyWhenOn && !this.state.onOff) {
             return;
         }
