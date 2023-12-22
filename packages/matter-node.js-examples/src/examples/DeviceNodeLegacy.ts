@@ -6,6 +6,11 @@
  */
 
 /**
+ * IMPORTANT: This example uses a Legacy API which will be deprecated in the future.
+ * It is just still here to support developers in converting their code to the new API!
+ */
+
+/**
  * This example shows how to create a simple on-off Matter device.
  * It can be used as CLI script and starting point for your own device node implementation.
  */
