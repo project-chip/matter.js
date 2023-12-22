@@ -15,7 +15,7 @@ import { ServerBehaviorBacking } from "../../behavior/server/ServerBehaviorBacki
 import { Attributes, Commands, Events } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ClusterClientObj } from "../../cluster/client/ClusterClientTypes.js";
-import { ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
+import { ClusterServerObj, asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../../common/MatterError.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
@@ -66,6 +66,7 @@ export class PartServer implements EndpointInterface {
                 );
             }
             backing = new ClusterServerBehaviorBacking(this.#part, behavior as ClusterBehavior.Type);
+            asClusterServerInternal(backing.clusterServer)._assignToEndpoint(this);
             this.#clusterServers.set(cluster.id, backing.clusterServer);
         } else {
             backing = new ServerBehaviorBacking(this.#part, behavior);
