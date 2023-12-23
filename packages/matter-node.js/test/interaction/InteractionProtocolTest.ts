@@ -11,6 +11,7 @@ import {
     AccessControlCluster,
     AccessLevel,
     AdministratorCommissioning,
+    BasicInformation,
     BasicInformationCluster,
     ClusterServer,
     ClusterServerObjForCluster,
@@ -87,6 +88,12 @@ const READ_REQUEST: ReadRequest = {
         { endpointId: undefined, clusterId: ClusterId(0x99), attributeId: AttributeId(3) }, // ignore
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
+    eventRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
+    ],
 };
 
 const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
@@ -103,6 +110,13 @@ const READ_REQUEST_WITH_UNUSED_FILTER: ReadRequest = {
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 1 }],
+    eventRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
+    ],
+    eventFilters: [{ eventMin: 1 }],
 };
 
 const READ_REQUEST_WITH_FILTER: ReadRequest = {
@@ -119,12 +133,18 @@ const READ_REQUEST_WITH_FILTER: ReadRequest = {
         { endpointId: EndpointNumber(0), clusterId: ClusterId(0x1d), attributeId: AttributeId(1) },
     ],
     dataVersionFilters: [{ path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28) }, dataVersion: 0 }],
+    eventRequests: [
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(0) }, // existing event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) }, // unsupported event
+        { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) }, // unsupported cluster
+        { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) }, // unsupported endpoint
+    ],
+    eventFilters: [{ eventMin: 2 }],
 };
 
 const READ_RESPONSE: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
-    eventReportsPayload: undefined,
     attributeReportsPayload: [
         {
             attributeData: {
@@ -181,12 +201,65 @@ const READ_RESPONSE: DataReportPayload = {
             },
         },
     ],
+    eventReportsPayload: [
+        {
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                    isUrgent: undefined,
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 1,
+                },
+                eventNumber: 1,
+                priority: 2,
+                epochTimestamp: 0,
+            },
+        },
+        {
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                    isUrgent: undefined,
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 2,
+                },
+                eventNumber: 2,
+                priority: 2,
+                epochTimestamp: 0,
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) },
+                status: { status: 199 },
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) },
+                status: { status: 195 },
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
+                status: { status: 127 },
+            },
+        },
+    ],
 };
 
 const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
     interactionModelRevision: INTERACTION_MODEL_REVISION,
     suppressResponse: false,
-    eventReportsPayload: undefined,
     attributeReportsPayload: [
         {
             attributeStatus: {
@@ -216,6 +289,43 @@ const READ_RESPONSE_WITH_FILTER: DataReportPayload = {
                 schema: TlvArray(TlvClusterId),
                 payload: [ClusterId(29), ClusterId(40)],
                 dataVersion: 0,
+            },
+        },
+    ],
+    eventReportsPayload: [
+        {
+            eventData: {
+                path: {
+                    endpointId: EndpointNumber(0),
+                    clusterId: ClusterId(0x28),
+                    eventId: EventId(0),
+                    isUrgent: undefined,
+                },
+                schema: BasicInformation.TlvStartUpEvent,
+                payload: {
+                    softwareVersion: 2,
+                },
+                eventNumber: 2,
+                priority: 2,
+                epochTimestamp: 0,
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x28), eventId: EventId(400) },
+                status: { status: 199 },
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(0), clusterId: ClusterId(0x99), eventId: EventId(4) },
+                status: { status: 195 },
+            },
+        },
+        {
+            eventStatus: {
+                path: { endpointId: EndpointNumber(1), clusterId: ClusterId(0x28), eventId: EventId(1) },
+                status: { status: 127 },
             },
         },
     ],
@@ -765,6 +875,7 @@ describe("InteractionProtocol", () => {
         Crypto.get().getRandomData = (length: number) => {
             return new Uint8Array(length);
         };
+        MockTime.reset();
     });
 
     after(() => {
@@ -812,8 +923,13 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attribute values", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer());
+            const basicInfoServer = basicInfoClusterServer();
+
+            endpoint.addClusterServer(basicInfoServer);
             interactionProtocol.setRootEndpoint(endpoint);
+
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
 
@@ -821,8 +937,13 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attribute values using (unused) version filter", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer());
+            const basicInfoServer = basicInfoClusterServer();
+
+            endpoint.addClusterServer(basicInfoServer);
             interactionProtocol.setRootEndpoint(endpoint);
+
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
@@ -833,8 +954,13 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attribute values with active version filter", async () => {
-            endpoint.addClusterServer(basicInfoClusterServer());
+            const basicInfoServer = basicInfoClusterServer();
+
+            endpoint.addClusterServer(basicInfoServer);
             interactionProtocol.setRootEndpoint(endpoint);
+
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 1 });
+            basicInfoServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
