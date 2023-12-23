@@ -58,7 +58,7 @@ import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
-export const INTERACTION_MODEL_REVISION = 10;
+export const INTERACTION_MODEL_REVISION = 11;
 
 const logger = Logger.get("InteractionServer");
 

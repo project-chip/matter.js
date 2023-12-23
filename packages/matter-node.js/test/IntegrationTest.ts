@@ -35,7 +35,11 @@ import {
 } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation, OnOffLightDevice } from "@project-chip/matter.js/device";
 import { Fabric, FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { DecodedEventData, InteractionClientMessenger } from "@project-chip/matter.js/interaction";
+import {
+    DecodedEventData,
+    INTERACTION_MODEL_REVISION,
+    InteractionClientMessenger,
+} from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
@@ -505,6 +509,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
+
             const response = await (
                 await node.getInteractionClient()
             ).getMultipleAttributes({
