@@ -388,7 +388,7 @@ export class TlvGenerator {
         // an extension type at some point but AFAICT InteractionProtocol only
         // allows for codes in its enum to be used currently
         if (model.global && model.name === Globals.status.name) {
-            this.importTlv("protocol/interaction/InteractionProtocol", "StatusCode");
+            this.importTlv("protocol/interaction/StatusCode", "StatusCode");
             return "StatusCode";
         }
 
