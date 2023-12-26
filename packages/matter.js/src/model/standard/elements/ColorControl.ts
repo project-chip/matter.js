@@ -437,48 +437,48 @@ Matter.children.push({
             xref: { document: "cluster", section: "3.2.8" }
         },
         {
-            tag: "attribute", name: "Primary4X", id: 0x20, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary4X", id: 0x20, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 3", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
-            tag: "attribute", name: "Primary4Y", id: 0x21, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary4Y", id: 0x21, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 3", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
             tag: "attribute", name: "Primary4Intensity", id: 0x22, type: "uint8", access: "R V",
-            conformance: "M", quality: "X F",
+            conformance: "NumberOfPrimaries > 3", quality: "X F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
-            tag: "attribute", name: "Primary5X", id: 0x24, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary5X", id: 0x24, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 4", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
-            tag: "attribute", name: "Primary5Y", id: 0x25, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary5Y", id: 0x25, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 4", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
             tag: "attribute", name: "Primary5Intensity", id: 0x26, type: "uint8", access: "R V",
-            conformance: "M", quality: "X F",
+            conformance: "NumberOfPrimaries > 4", quality: "X F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
-            tag: "attribute", name: "Primary6X", id: 0x28, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary6X", id: 0x28, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 5", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
-            tag: "attribute", name: "Primary6Y", id: 0x29, type: "uint16", access: "R V", conformance: "M",
-            constraint: "0 to 65279", quality: "F",
+            tag: "attribute", name: "Primary6Y", id: 0x29, type: "uint16", access: "R V",
+            conformance: "NumberOfPrimaries > 5", constraint: "0 to 65279", quality: "F",
             xref: { document: "cluster", section: "3.2.9" }
         },
         {
             tag: "attribute", name: "Primary6Intensity", id: 0x2a, type: "uint8", access: "R V",
-            conformance: "M", quality: "X F",
+            conformance: "NumberOfPrimaries > 5", quality: "X F",
             xref: { document: "cluster", section: "3.2.9" }
         },
 

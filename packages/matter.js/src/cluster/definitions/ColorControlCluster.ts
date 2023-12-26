@@ -994,47 +994,47 @@ export namespace ColorControl {
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary4X: FixedAttribute(0x20, TlvUInt16.bound({ max: 65279 })),
+            primary4X: OptionalFixedAttribute(0x20, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary4Y: FixedAttribute(0x21, TlvUInt16.bound({ max: 65279 })),
+            primary4Y: OptionalFixedAttribute(0x21, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary4Intensity: FixedAttribute(0x22, TlvNullable(TlvUInt8)),
+            primary4Intensity: OptionalFixedAttribute(0x22, TlvNullable(TlvUInt8)),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary5X: FixedAttribute(0x24, TlvUInt16.bound({ max: 65279 })),
+            primary5X: OptionalFixedAttribute(0x24, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary5Y: FixedAttribute(0x25, TlvUInt16.bound({ max: 65279 })),
+            primary5Y: OptionalFixedAttribute(0x25, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary5Intensity: FixedAttribute(0x26, TlvNullable(TlvUInt8)),
+            primary5Intensity: OptionalFixedAttribute(0x26, TlvNullable(TlvUInt8)),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary6X: FixedAttribute(0x28, TlvUInt16.bound({ max: 65279 })),
+            primary6X: OptionalFixedAttribute(0x28, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary6Y: FixedAttribute(0x29, TlvUInt16.bound({ max: 65279 })),
+            primary6Y: OptionalFixedAttribute(0x29, TlvUInt16.bound({ max: 65279 })),
 
             /**
              * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.9
              */
-            primary6Intensity: FixedAttribute(0x2a, TlvNullable(TlvUInt8)),
+            primary6Intensity: OptionalFixedAttribute(0x2a, TlvNullable(TlvUInt8)),
 
             /**
              * The WhitePointX attribute contains the normalized chromaticity value x, as defined in the CIE xyY Color
