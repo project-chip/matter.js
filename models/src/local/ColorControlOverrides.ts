@@ -21,6 +21,15 @@ LocalMatter.children.push({
         { tag: "attribute", id: 0x19, name: "Primary3X", conformance: "NumberOfPrimaries > 2" },
         { tag: "attribute", id: 0x1a, name: "Primary3Y", conformance: "NumberOfPrimaries > 2" },
         { tag: "attribute", id: 0x1b, name: "Primary3Intensity", conformance: "NumberOfPrimaries > 2" },
+        { tag: "attribute", id: 0x20, name: "Primary4X", conformance: "NumberOfPrimaries > 3" },
+        { tag: "attribute", id: 0x21, name: "Primary4Y", conformance: "NumberOfPrimaries > 3" },
+        { tag: "attribute", id: 0x22, name: "Primary4Intensity", conformance: "NumberOfPrimaries > 3" },
+        { tag: "attribute", id: 0x24, name: "Primary5X", conformance: "NumberOfPrimaries > 4" },
+        { tag: "attribute", id: 0x25, name: "Primary5Y", conformance: "NumberOfPrimaries > 4" },
+        { tag: "attribute", id: 0x26, name: "Primary5Intensity", conformance: "NumberOfPrimaries > 4" },
+        { tag: "attribute", id: 0x28, name: "Primary6X", conformance: "NumberOfPrimaries > 5" },
+        { tag: "attribute", id: 0x29, name: "Primary6Y", conformance: "NumberOfPrimaries > 5" },
+        { tag: "attribute", id: 0x2a, name: "Primary6Intensity", conformance: "NumberOfPrimaries > 5" },
 
         // Spec defines conformance on these as "CT | ColorTemperatureMireds" which doesn't
         // make sense because conformance on ColorTemperatureMireds is "CT"
