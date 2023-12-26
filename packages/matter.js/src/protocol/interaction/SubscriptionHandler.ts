@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { tryCatchAsync } from "../../common/TryCatchHandler.js";
+import { InternalError } from "../../common/MatterError.js";
+import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -28,13 +29,13 @@ import {
     TlvEventStatus,
 } from "./InteractionProtocol.js";
 import {
-    attributePathToId,
     AttributeWithPath,
-    clusterPathToId,
-    eventPathToId,
     EventWithPath,
     INTERACTION_MODEL_REVISION,
     INTERACTION_PROTOCOL_ID,
+    attributePathToId,
+    clusterPathToId,
+    eventPathToId,
 } from "./InteractionServer.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
 
@@ -173,6 +174,7 @@ export class SubscriptionHandler {
                 const attributes = this.endpointStructure.getAttributes([path]);
 
                 if (attributes.length === 0) {
+                    // TODO: Also check nodeId
                     const { endpointId, clusterId, attributeId } = path;
                     if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                         // Wildcard path: Just leave out values
@@ -182,21 +184,39 @@ export class SubscriptionHandler {
                             )}: ignore non-existing attribute`,
                         );
                     } else {
-                        // Else return correct status
-                        let status = StatusCode.UnsupportedAttribute;
-                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
-                            status = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
-                            status = StatusCode.UnsupportedCluster;
-                        }
-                        logger.debug(
-                            `Subscription attribute ${this.endpointStructure.resolveAttributeName(
-                                path,
-                            )}: unsupported path: Status=${status}`,
+                        // was a concrete path
+                        attributeErrors.push(
+                            tryCatch(
+                                () => {
+                                    if (
+                                        this.endpointStructure.validateConcreteAttributePath(
+                                            endpointId,
+                                            clusterId,
+                                            attributeId,
+                                        )
+                                    ) {
+                                        throw new StatusResponseError(
+                                            `Attribute ${attributeId} is not writable.`,
+                                            StatusCode.UnsupportedWrite,
+                                        );
+                                    }
+                                    throw new InternalError(
+                                        "validateConcreteAttributePath check should throw StatusResponseError but did not.",
+                                    );
+                                },
+                                StatusResponseError,
+                                error => {
+                                    logger.debug(
+                                        `Subscription attribute ${this.endpointStructure.resolveAttributeName(
+                                            path,
+                                        )}: unsupported path: Status=${error.code}`,
+                                    );
+                                    return { path, status: { status: error.code } };
+                                },
+                            ),
                         );
-                        attributeErrors.push({ path, status: { status } });
-                        return;
                     }
+                    return;
                 }
 
                 attributes.forEach(({ path, attribute }) => {
@@ -255,10 +275,35 @@ export class SubscriptionHandler {
             this.eventRequests.forEach(path => {
                 const events = this.endpointStructure.getEvents([path]);
                 if (events.length === 0) {
-                    logger.debug(
-                        `Subscription event ${this.endpointStructure.resolveEventName(path)}: unsupported path`,
-                    );
-                    eventErrors.push({ path, status: { status: StatusCode.UnsupportedEvent } });
+                    const { endpointId, clusterId, eventId } = path;
+                    if (endpointId === undefined || clusterId === undefined || eventId === undefined) {
+                        // Wildcard path: Just leave out values
+                        logger.debug(
+                            `Subscription event ${this.endpointStructure.resolveEventName(
+                                path,
+                            )}: ignore non-existing event`,
+                        );
+                    } else {
+                        eventErrors.push(
+                            tryCatch(
+                                () => {
+                                    this.endpointStructure.validateConcreteEventPath(endpointId, clusterId, eventId);
+                                    throw new InternalError(
+                                        "validateConcreteEventPath should throw StatusResponseError but did not.",
+                                    );
+                                },
+                                StatusResponseError,
+                                error => {
+                                    logger.debug(
+                                        `Subscription event ${this.endpointStructure.resolveEventName(
+                                            path,
+                                        )}: unsupported path: Status=${error.code}`,
+                                    );
+                                    return { path, status: { status: error.code } };
+                                },
+                            ),
+                        );
+                    }
                     return;
                 }
 

@@ -13,6 +13,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 * Matter-Core functionality:
   * Enhancement: Refactor Core Session management to match specification
   * Enhancement: Refactor message duplication detection and handling to match specification
+  * Feature: Upgrade Interaction protocol revision to 11 (Matter 1.2) and adjust event error handling in DataReports
 
 ## 0.7.3 (2023-12-18)
 * Matter-Core functionality:

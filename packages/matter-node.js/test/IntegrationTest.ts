@@ -35,7 +35,11 @@ import {
 } from "@project-chip/matter.js/datatype";
 import { NodeStateInformation, OnOffLightDevice } from "@project-chip/matter.js/device";
 import { Fabric, FabricBuilder, FabricJsonObject } from "@project-chip/matter.js/fabric";
-import { DecodedEventData, InteractionClientMessenger } from "@project-chip/matter.js/interaction";
+import {
+    DecodedEventData,
+    INTERACTION_MODEL_REVISION,
+    InteractionClientMessenger,
+} from "@project-chip/matter.js/interaction";
 import { MdnsBroadcaster, MdnsScanner } from "@project-chip/matter.js/mdns";
 import { Network, NetworkFake } from "@project-chip/matter.js/net";
 import { ManualPairingCodeCodec } from "@project-chip/matter.js/schema";
@@ -78,6 +82,7 @@ describe("Integration Test", () => {
     let matterServer: MatterServer;
     let matterClient: MatterServer;
     let commissioningController: CommissioningController;
+    let commissioningController2: CommissioningController;
     let commissioningServer: CommissioningServer;
     let commissioningServer2: CommissioningServer;
     let onOffLightDeviceServer: OnOffLightDevice;
@@ -505,6 +510,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
+
             const response = await (
                 await node.getInteractionClient()
             ).getMultipleAttributes({
@@ -638,10 +644,15 @@ describe("Integration Test", () => {
                         eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
                     }, // 0/GeneralDiagnosticsCluster/bootReason
                     { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                    {
+                        endpointId: EndpointNumber(100),
+                        clusterId: GeneralDiagnostics.Cluster.id,
+                        eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                    }, // invalid endpoint
                 ],
             });
 
-            assert.equal(response.length, 2);
+            assert.equal(response.length, 2); // Error one is not returned currently
             assert.equal(
                 response.filter(
                     ({ path: { endpointId, clusterId } }) =>
@@ -1459,7 +1470,7 @@ describe("Integration Test", () => {
         it("connect this device to a new controller", async () => {
             Network.get = () => clientNetwork;
 
-            const commissioningController2 = new CommissioningController({
+            commissioningController2 = new CommissioningController({
                 listeningAddressIpv6: CLIENT_IPv6,
                 autoConnect: false,
                 autoSubscribe: false,
@@ -1583,6 +1594,90 @@ describe("Integration Test", () => {
 
         after(() => {
             Time.get = () => mockTimeInstance;
+        });
+    });
+
+    describe("Do some interactions with the second controller", () => {
+        it("read events", async () => {
+            const nodeId = commissioningController2.getCommissionedNodes()[0];
+            const node = commissioningController2.getConnectedNode(nodeId);
+            assert.ok(node);
+
+            let checked = false;
+            MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendReadRequest", async ({ resolve }) => {
+                assert.ok(resolve);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                assert.equal(resolve.interactionModelRevision, INTERACTION_MODEL_REVISION);
+                checked = true;
+            });
+
+            const response = await (
+                await node.getInteractionClient()
+            ).getMultipleEvents({
+                events: [
+                    { clusterId: BasicInformation.Cluster.id }, // * /BasicInformationCluster/ *
+                    {
+                        endpointId: EndpointNumber(0),
+                        clusterId: GeneralDiagnostics.Cluster.id,
+                        eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                    }, // 0/GeneralDiagnosticsCluster/bootReason
+                    { endpointId: EndpointNumber(2) }, // 2 / * /* - will be discarded in results!
+                    {
+                        endpointId: EndpointNumber(100),
+                        clusterId: GeneralDiagnostics.Cluster.id,
+                        eventId: GeneralDiagnostics.Cluster.events.bootReason.id,
+                    }, // invalid endpoint
+                ],
+            });
+
+            assert.equal(checked, true);
+
+            assert.equal(response.length, 3); // Error one is not returned currently
+            assert.equal(
+                response.filter(
+                    ({ path: { endpointId, clusterId } }) =>
+                        endpointId === 0 && clusterId === BasicInformation.Cluster.id,
+                ).length,
+                2,
+            );
+
+            const startUpEventData = response.find(
+                ({ path: { endpointId, clusterId, eventId } }) =>
+                    endpointId === 0 &&
+                    clusterId === BasicInformation.Cluster.id &&
+                    eventId === BasicInformation.Cluster.events.startUp.id,
+            );
+
+            assert.deepEqual(startUpEventData?.events, [
+                {
+                    eventNumber: 1,
+                    epochTimestamp: TIME_START,
+                    priority: BasicInformation.Cluster.events.startUp.priority,
+                    data: {
+                        softwareVersion: 1,
+                    },
+                    path: undefined,
+                },
+            ]);
+
+            const bootReasonEventData = response.find(
+                ({ path: { endpointId, clusterId, eventId } }) =>
+                    endpointId === 0 &&
+                    clusterId === GeneralDiagnostics.Cluster.id &&
+                    eventId === GeneralDiagnostics.Cluster.events.bootReason.id,
+            );
+            assert.deepEqual(bootReasonEventData?.events, [
+                {
+                    eventNumber: 2,
+                    epochTimestamp: TIME_START,
+                    priority: BasicInformation.Cluster.events.startUp.priority,
+                    data: {
+                        bootReason: GeneralDiagnostics.BootReason.Unspecified,
+                    },
+                    path: undefined,
+                },
+            ]);
         });
     });
 
