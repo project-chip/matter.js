@@ -133,7 +133,7 @@ export class MockTime {
      * Unhooks after completion.
      *
      * Handles both synchronous and asynchronous methods.  The interceptor
-     * should match the asynchronous of the intercepted method.
+     * should match the async-ness of the intercepted method.
      *
      * The interceptor can optionally access and/or replace the resolve/reject
      * value.

@@ -203,6 +203,7 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteAttributePath(endpointId: EndpointNumber, clusterId: ClusterId, attributeId: AttributeId) {
+        // TODO: Also hande the InvalidAction cases depending on the action for the check
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
@@ -222,6 +223,7 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteEventPath(endpointId: EndpointNumber, clusterId: ClusterId, eventId: EventId) {
+        // TODO: Also hande the InvalidAction cases depending on the action for the check
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
@@ -245,6 +247,7 @@ export class InteractionEndpointStructure {
     }
 
     validateConcreteCommandPath(endpointId: EndpointNumber, clusterId: ClusterId, commandId: CommandId) {
+        // TODO: Also hande the InvalidAction cases
         if (!this.hasEndpoint(endpointId)) {
             throw new StatusResponseError(`Endpoint ${endpointId} does not exist.`, StatusCode.UnsupportedEndpoint);
         }
