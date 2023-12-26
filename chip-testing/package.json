@@ -1,6 +1,6 @@
 {
     "name": "@project-chip/matter.js-chip-testing",
-    "version": "0.7.4-alpha.0-20231223-ec1d465a",
+    "version": "0.7.4-alpha.0-20231226-ae0424c2",
     "description": "Testing of matter.js with CHIP tool",
     "private": true,
     "license": "Apache-2.0",
@@ -20,8 +20,8 @@
         "test-chip": "matter-test --force-exit"
     },
     "dependencies": {
-        "@project-chip/matter-node.js": "0.7.4-alpha.0-20231223-ec1d465a",
-        "@project-chip/matter.js": "0.7.4-alpha.0-20231223-ec1d465a",
-        "@project-chip/matter.js-tools": "0.7.4-alpha.0-20231223-ec1d465a"
+        "@project-chip/matter-node.js": "0.7.4-alpha.0-20231226-ae0424c2",
+        "@project-chip/matter.js": "0.7.4-alpha.0-20231226-ae0424c2",
+        "@project-chip/matter.js-tools": "0.7.4-alpha.0-20231226-ae0424c2"
     }
 }
