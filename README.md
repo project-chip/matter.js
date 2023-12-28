@@ -4,7 +4,7 @@
 
 ## What is Matter?
 
-[Matter](https://csa-iot.org/all-solutions/matter/) is a new secure, reliable and local standard protocol for smart/IoT devices launched at the end of 2022 by the [Connectivity Standards Alliance]. 
+[Matter](https://csa-iot.org/all-solutions/matter/) is a new secure, reliable and local standard protocol for smart/IoT devices launched at the end of 2022 by the [Connectivity Standards Alliance](https://csa-iot.org/). 
 
 To learn more about Matter visit [https://csa-iot.org/all-solutions/matter/](https://csa-iot.org/all-solutions/matter/)
 
