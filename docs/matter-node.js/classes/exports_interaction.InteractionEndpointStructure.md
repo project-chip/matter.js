@@ -45,6 +45,9 @@
 - [resolveEventName](exports_interaction.InteractionEndpointStructure.md#resolveeventname)
 - [resolveGenericElementName](exports_interaction.InteractionEndpointStructure.md#resolvegenericelementname)
 - [toHex](exports_interaction.InteractionEndpointStructure.md#tohex)
+- [validateConcreteAttributePath](exports_interaction.InteractionEndpointStructure.md#validateconcreteattributepath)
+- [validateConcreteCommandPath](exports_interaction.InteractionEndpointStructure.md#validateconcretecommandpath)
+- [validateConcreteEventPath](exports_interaction.InteractionEndpointStructure.md#validateconcreteeventpath)
 
 ## Constructors
 
@@ -215,7 +218,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:51
 
 ___
 
@@ -258,7 +261,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:48
 
 ___
 
@@ -278,7 +281,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:53
 
 ___
 
@@ -320,7 +323,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
 
 ___
 
@@ -340,7 +343,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:52
 
 ___
 
@@ -405,7 +408,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:49
 
 ___
 
@@ -447,7 +450,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:45
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:46
 
 ___
 
@@ -572,3 +575,69 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:33
+
+___
+
+### validateConcreteAttributePath
+
+▸ **validateConcreteAttributePath**(`endpointId`, `clusterId`, `attributeId`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
+| `attributeId` | [`AttributeId`](../modules/exports_datatype.md#attributeid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:44
+
+___
+
+### validateConcreteCommandPath
+
+▸ **validateConcreteCommandPath**(`endpointId`, `clusterId`, `commandId`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
+| `commandId` | [`CommandId`](../modules/exports_datatype.md#commandid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:50
+
+___
+
+### validateConcreteEventPath
+
+▸ **validateConcreteEventPath**(`endpointId`, `clusterId`, `eventId`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `endpointId` | [`EndpointNumber`](../modules/exports_datatype.md#endpointnumber) |
+| `clusterId` | [`ClusterId`](../modules/exports_datatype.md#clusterid) |
+| `eventId` | [`EventId`](../modules/exports_datatype.md#eventid) |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+packages/matter.js/dist/esm/protocol/interaction/InteractionEndpointStructure.d.ts:47

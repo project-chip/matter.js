@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:305](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L305)
+[packages/matter.js/src/codec/BtpCodec.ts:305](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L305)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:325](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L325)
+[packages/matter.js/src/codec/BtpCodec.ts:325](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L325)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L72)
+[packages/matter.js/src/codec/BtpCodec.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L72)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:217](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L217)
+[packages/matter.js/src/codec/BtpCodec.ts:217](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L217)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L77)
+[packages/matter.js/src/codec/BtpCodec.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L77)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:235](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L235)
+[packages/matter.js/src/codec/BtpCodec.ts:235](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L235)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:115](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L115)
+[packages/matter.js/src/codec/BtpCodec.ts:115](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L115)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:178](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L178)
+[packages/matter.js/src/codec/BtpCodec.ts:178](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L178)
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:284](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L284)
+[packages/matter.js/src/codec/BtpCodec.ts:284](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L284)
 
 ___
 
@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L92)
+[packages/matter.js/src/codec/BtpCodec.ts:92](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L92)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L105)
+[packages/matter.js/src/codec/BtpCodec.ts:105](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L105)
 
 ___
 
@@ -293,7 +293,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L88)
+[packages/matter.js/src/codec/BtpCodec.ts:88](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L88)
 
 ___
 
@@ -313,7 +313,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:258](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L258)
+[packages/matter.js/src/codec/BtpCodec.ts:258](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L258)
 
 ___
 
@@ -334,4 +334,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/codec/BtpCodec.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/codec/BtpCodec.ts#L128)
+[packages/matter.js/src/codec/BtpCodec.ts:128](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/codec/BtpCodec.ts#L128)

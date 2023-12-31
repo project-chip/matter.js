@@ -40,7 +40,7 @@ For example, code of “1, 2, 3, 4” shall be represented as 0x31, 0x32, 0x33, 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:342](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L342)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:342](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L342)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:347](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L347)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:347](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L347)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:343](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L343)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:343](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L343)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:341](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L341)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:341](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L341)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:339](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L339)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:339](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L339)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:340](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L340)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:340](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L340)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:345](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L345)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:345](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L345)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:346](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L346)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:346](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L346)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:344](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L344)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:344](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L344)
 
 ___
 
@@ -130,4 +130,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:338](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L338)
+[packages/matter.js/src/cluster/definitions/DoorLockCluster.ts:338](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/DoorLockCluster.ts#L338)

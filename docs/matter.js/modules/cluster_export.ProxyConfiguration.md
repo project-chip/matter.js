@@ -27,7 +27,7 @@ This cluster provides a means for a proxy-capable device to be told the set of N
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L43)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L43)
 
 ___
 
@@ -51,4 +51,4 @@ specifically proxy.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L31)
+[packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyConfigurationCluster.ts#L31)

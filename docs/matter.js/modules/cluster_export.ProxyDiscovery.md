@@ -28,4 +28,4 @@ Discovery” and Section 9.15.7.4, “Step 3: Proxy Response” steps of the ove
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ProxyDiscoveryCluster.ts#L24)

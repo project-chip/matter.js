@@ -28,7 +28,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L54)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L54)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionClient.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L60)
+[packages/matter.js/src/protocol/interaction/InteractionClient.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionClient.ts#L60)

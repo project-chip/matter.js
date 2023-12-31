@@ -22,9 +22,12 @@
 
 ### Properties
 
+- [closeCallback](internal_.UnsecureSession.md#closecallback)
 - [closingAfterExchangeFinished](internal_.UnsecureSession.md#closingafterexchangefinished)
 - [context](internal_.UnsecureSession.md#context)
 - [initiatorNodeId](internal_.UnsecureSession.md#initiatornodeid)
+- [messageCounter](internal_.UnsecureSession.md#messagecounter)
+- [messageReceptionState](internal_.UnsecureSession.md#messagereceptionstate)
 
 ### Accessors
 
@@ -40,6 +43,7 @@
 - [getAttestationChallengeKey](internal_.UnsecureSession.md#getattestationchallengekey)
 - [getContext](internal_.UnsecureSession.md#getcontext)
 - [getId](internal_.UnsecureSession.md#getid)
+- [getIncrementedMessageCounter](internal_.UnsecureSession.md#getincrementedmessagecounter)
 - [getMrpParameters](internal_.UnsecureSession.md#getmrpparameters)
 - [getNodeId](internal_.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](internal_.UnsecureSession.md#getpeernodeid)
@@ -49,12 +53,13 @@
 - [isSecure](internal_.UnsecureSession.md#issecure)
 - [notifyActivity](internal_.UnsecureSession.md#notifyactivity)
 - [setFabric](internal_.UnsecureSession.md#setfabric)
+- [updateMessageCounter](internal_.UnsecureSession.md#updatemessagecounter)
 
 ## Constructors
 
 ### constructor
 
-• **new UnsecureSession**\<`T`\>(`context`): [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
+• **new UnsecureSession**\<`T`\>(`context`, `messageCounter`, `closeCallback`, `initiatorNodeId?`): [`UnsecureSession`](internal_.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -67,6 +72,9 @@
 | Name | Type |
 | :------ | :------ |
 | `context` | `T` |
+| `messageCounter` | [`MessageCounter`](internal_.MessageCounter.md) |
+| `closeCallback` | () => `void` |
+| `initiatorNodeId?` | [`NodeId`](../modules/internal_.md#nodeid) |
 
 #### Returns
 
@@ -74,9 +82,19 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:15
+matter.js/dist/esm/session/UnsecureSession.d.ts:19
 
 ## Properties
+
+### closeCallback
+
+• `Private` `Readonly` **closeCallback**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/session/UnsecureSession.d.ts:15
+
+___
 
 ### closingAfterExchangeFinished
 
@@ -88,7 +106,7 @@ matter.js/dist/esm/session/UnsecureSession.d.ts:15
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:14
+matter.js/dist/esm/session/UnsecureSession.d.ts:17
 
 ___
 
@@ -98,7 +116,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:12
+matter.js/dist/esm/session/UnsecureSession.d.ts:13
 
 ___
 
@@ -108,7 +126,27 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:13
+matter.js/dist/esm/session/UnsecureSession.d.ts:16
+
+___
+
+### messageCounter
+
+• `Private` `Readonly` **messageCounter**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/session/UnsecureSession.d.ts:14
+
+___
+
+### messageReceptionState
+
+• `Private` `Readonly` **messageReceptionState**: `any`
+
+#### Defined in
+
+matter.js/dist/esm/session/UnsecureSession.d.ts:18
 
 ## Accessors
 
@@ -126,7 +164,7 @@ matter.js/dist/esm/session/UnsecureSession.d.ts:13
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:24
+matter.js/dist/esm/session/UnsecureSession.d.ts:28
 
 ## Methods
 
@@ -150,7 +188,7 @@ matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:20
+matter.js/dist/esm/session/UnsecureSession.d.ts:24
 
 ___
 
@@ -168,7 +206,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:35
+matter.js/dist/esm/session/UnsecureSession.d.ts:39
 
 ___
 
@@ -192,19 +230,13 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:21
+matter.js/dist/esm/session/UnsecureSession.d.ts:25
 
 ___
 
 ### end
 
-▸ **end**(`_sendClose`): `Promise`\<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `_sendClose` | `boolean` |
+▸ **end**(): `Promise`\<`void`\>
 
 #### Returns
 
@@ -216,7 +248,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:36
+matter.js/dist/esm/session/UnsecureSession.d.ts:40
 
 ___
 
@@ -234,7 +266,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:37
+matter.js/dist/esm/session/UnsecureSession.d.ts:41
 
 ___
 
@@ -248,7 +280,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:22
+matter.js/dist/esm/session/UnsecureSession.d.ts:26
 
 ___
 
@@ -266,7 +298,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:30
+matter.js/dist/esm/session/UnsecureSession.d.ts:34
 
 ___
 
@@ -284,7 +316,25 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:31
+matter.js/dist/esm/session/UnsecureSession.d.ts:35
+
+___
+
+### getIncrementedMessageCounter
+
+▸ **getIncrementedMessageCounter**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[Session](../interfaces/internal_.Session.md).[getIncrementedMessageCounter](../interfaces/internal_.Session.md#getincrementedmessagecounter)
+
+#### Defined in
+
+matter.js/dist/esm/session/UnsecureSession.d.ts:42
 
 ___
 
@@ -308,7 +358,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:25
+matter.js/dist/esm/session/UnsecureSession.d.ts:29
 
 ___
 
@@ -326,7 +376,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:33
+matter.js/dist/esm/session/UnsecureSession.d.ts:37
 
 ___
 
@@ -344,7 +394,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:34
+matter.js/dist/esm/session/UnsecureSession.d.ts:38
 
 ___
 
@@ -362,7 +412,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:32
+matter.js/dist/esm/session/UnsecureSession.d.ts:36
 
 ___
 
@@ -380,7 +430,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:17
+matter.js/dist/esm/session/UnsecureSession.d.ts:21
 
 ___
 
@@ -398,7 +448,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:19
+matter.js/dist/esm/session/UnsecureSession.d.ts:23
 
 ___
 
@@ -416,7 +466,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:16
+matter.js/dist/esm/session/UnsecureSession.d.ts:20
 
 ___
 
@@ -440,7 +490,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:18
+matter.js/dist/esm/session/UnsecureSession.d.ts:22
 
 ___
 
@@ -460,4 +510,28 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/UnsecureSession.d.ts:23
+matter.js/dist/esm/session/UnsecureSession.d.ts:27
+
+___
+
+### updateMessageCounter
+
+▸ **updateMessageCounter**(`messageCounter`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messageCounter` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Session](../interfaces/internal_.Session.md).[updateMessageCounter](../interfaces/internal_.Session.md#updatemessagecounter)
+
+#### Defined in
+
+matter.js/dist/esm/session/UnsecureSession.d.ts:43

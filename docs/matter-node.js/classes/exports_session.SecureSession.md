@@ -35,6 +35,8 @@
 - [generateNonce](exports_session.SecureSession.md#generatenonce)
 - [id](exports_session.SecureSession.md#id)
 - [idleRetransmissionTimeoutMs](exports_session.SecureSession.md#idleretransmissiontimeoutms)
+- [messageCounter](exports_session.SecureSession.md#messagecounter)
+- [messageReceptionState](exports_session.SecureSession.md#messagereceptionstate)
 - [peerNodeId](exports_session.SecureSession.md#peernodeid)
 - [peerSessionId](exports_session.SecureSession.md#peersessionid)
 - [retransmissionRetries](exports_session.SecureSession.md#retransmissionretries)
@@ -65,6 +67,7 @@
 - [getContext](exports_session.SecureSession.md#getcontext)
 - [getFabric](exports_session.SecureSession.md#getfabric)
 - [getId](exports_session.SecureSession.md#getid)
+- [getIncrementedMessageCounter](exports_session.SecureSession.md#getincrementedmessagecounter)
 - [getMrpParameters](exports_session.SecureSession.md#getmrpparameters)
 - [getNodeId](exports_session.SecureSession.md#getnodeid)
 - [getPeerNodeId](exports_session.SecureSession.md#getpeernodeid)
@@ -74,6 +77,7 @@
 - [isSecure](exports_session.SecureSession.md#issecure)
 - [notifyActivity](exports_session.SecureSession.md#notifyactivity)
 - [removeSubscription](exports_session.SecureSession.md#removesubscription)
+- [updateMessageCounter](exports_session.SecureSession.md#updatemessagecounter)
 - [create](exports_session.SecureSession.md#create)
 
 ## Constructors
@@ -113,7 +117,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:48
+packages/matter.js/dist/esm/session/SecureSession.d.ts:50
 
 ## Properties
 
@@ -223,7 +227,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:96
+packages/matter.js/dist/esm/session/SecureSession.d.ts:98
 
 ___
 
@@ -244,6 +248,26 @@ ___
 #### Defined in
 
 packages/matter.js/dist/esm/session/SecureSession.d.ts:30
+
+___
+
+### messageCounter
+
+• `Private` `Readonly` **messageCounter**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:33
+
+___
+
+### messageReceptionState
+
+• `Private` `Readonly` **messageReceptionState**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:34
 
 ___
 
@@ -317,7 +341,7 @@ packages/matter.js/dist/esm/session/SecureSession.d.ts:16
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:63
+packages/matter.js/dist/esm/session/SecureSession.d.ts:65
 
 ___
 
@@ -335,7 +359,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:64
+packages/matter.js/dist/esm/session/SecureSession.d.ts:66
 
 ___
 
@@ -353,7 +377,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:77
+packages/matter.js/dist/esm/session/SecureSession.d.ts:79
 
 ___
 
@@ -367,7 +391,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:89
+packages/matter.js/dist/esm/session/SecureSession.d.ts:91
 
 ___
 
@@ -381,7 +405,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:65
+packages/matter.js/dist/esm/session/SecureSession.d.ts:67
 
 ## Methods
 
@@ -401,7 +425,7 @@ packages/matter.js/dist/esm/session/SecureSession.d.ts:65
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:75
+packages/matter.js/dist/esm/session/SecureSession.d.ts:77
 
 ___
 
@@ -421,7 +445,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:88
+packages/matter.js/dist/esm/session/SecureSession.d.ts:90
 
 ___
 
@@ -441,7 +465,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:91
+packages/matter.js/dist/esm/session/SecureSession.d.ts:93
 
 ___
 
@@ -461,7 +485,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:68
+packages/matter.js/dist/esm/session/SecureSession.d.ts:70
 
 ___
 
@@ -486,13 +510,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:71
+packages/matter.js/dist/esm/session/SecureSession.d.ts:73
 
 ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
+▸ **destroy**(`sendClose?`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 Destroys a session. Outstanding subscription data will be discarded.
 
@@ -500,7 +524,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 | Name | Type |
 | :------ | :------ |
-| `sendClose` | `boolean` |
+| `sendClose?` | `boolean` |
 | `closeAfterExchangeFinished?` | `boolean` |
 
 #### Returns
@@ -513,7 +537,7 @@ Destroys a session. Outstanding subscription data will be discarded.
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:95
+packages/matter.js/dist/esm/session/SecureSession.d.ts:97
 
 ___
 
@@ -537,7 +561,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:72
+packages/matter.js/dist/esm/session/SecureSession.d.ts:74
 
 ___
 
@@ -564,7 +588,7 @@ Ends a session. Outstanding subscription data will be flushed before the session
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:93
+packages/matter.js/dist/esm/session/SecureSession.d.ts:95
 
 ___
 
@@ -582,7 +606,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:76
+packages/matter.js/dist/esm/session/SecureSession.d.ts:78
 
 ___
 
@@ -596,7 +620,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:73
+packages/matter.js/dist/esm/session/SecureSession.d.ts:75
 
 ___
 
@@ -614,7 +638,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:83
+packages/matter.js/dist/esm/session/SecureSession.d.ts:85
 
 ___
 
@@ -628,7 +652,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:74
+packages/matter.js/dist/esm/session/SecureSession.d.ts:76
 
 ___
 
@@ -646,7 +670,25 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:84
+packages/matter.js/dist/esm/session/SecureSession.d.ts:86
+
+___
+
+### getIncrementedMessageCounter
+
+▸ **getIncrementedMessageCounter**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[getIncrementedMessageCounter](../interfaces/exports_session.Session.md#getincrementedmessagecounter)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:99
 
 ___
 
@@ -670,7 +712,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:78
+packages/matter.js/dist/esm/session/SecureSession.d.ts:80
 
 ___
 
@@ -688,7 +730,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:86
+packages/matter.js/dist/esm/session/SecureSession.d.ts:88
 
 ___
 
@@ -706,7 +748,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:87
+packages/matter.js/dist/esm/session/SecureSession.d.ts:89
 
 ___
 
@@ -724,7 +766,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:85
+packages/matter.js/dist/esm/session/SecureSession.d.ts:87
 
 ___
 
@@ -742,7 +784,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:67
+packages/matter.js/dist/esm/session/SecureSession.d.ts:69
 
 ___
 
@@ -760,7 +802,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:70
+packages/matter.js/dist/esm/session/SecureSession.d.ts:72
 
 ___
 
@@ -778,7 +820,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:66
+packages/matter.js/dist/esm/session/SecureSession.d.ts:68
 
 ___
 
@@ -802,7 +844,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:69
+packages/matter.js/dist/esm/session/SecureSession.d.ts:71
 
 ___
 
@@ -822,7 +864,31 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:90
+packages/matter.js/dist/esm/session/SecureSession.d.ts:92
+
+___
+
+### updateMessageCounter
+
+▸ **updateMessageCounter**(`messageCounter`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messageCounter` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Session](../interfaces/exports_session.Session.md).[updateMessageCounter](../interfaces/exports_session.Session.md#updatemessagecounter)
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SecureSession.d.ts:100
 
 ___
 
@@ -861,4 +927,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:33
+packages/matter.js/dist/esm/session/SecureSession.d.ts:35

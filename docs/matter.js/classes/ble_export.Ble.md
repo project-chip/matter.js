@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L17)
+[packages/matter.js/src/ble/Ble.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/ble/Ble.ts#L17)
 
 ## Methods
 
@@ -67,7 +67,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L23)
+[packages/matter.js/src/ble/Ble.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/ble/Ble.ts#L23)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L22)
+[packages/matter.js/src/ble/Ble.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/ble/Ble.ts#L22)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L21)
+[packages/matter.js/src/ble/Ble.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/ble/Ble.ts#L21)
 
 ___
 
@@ -109,4 +109,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/ble/Ble.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/ble/Ble.ts#L24)
+[packages/matter.js/src/ble/Ble.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/ble/Ble.ts#L24)

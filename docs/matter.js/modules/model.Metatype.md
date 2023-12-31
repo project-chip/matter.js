@@ -26,7 +26,7 @@ These are the native types used by this module.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:235](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Metatype.ts#L235)
+[packages/matter.js/src/model/definitions/Metatype.ts:235](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/Metatype.ts#L235)
 
 ## Functions
 
@@ -51,7 +51,7 @@ the cast value or FieldValue.Invalid if cast is not possible
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:83](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Metatype.ts#L83)
+[packages/matter.js/src/model/definitions/Metatype.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/Metatype.ts#L83)
 
 ___
 
@@ -73,7 +73,7 @@ Does the specific type have children?
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Metatype.ts#L31)
+[packages/matter.js/src/model/definitions/Metatype.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/Metatype.ts#L31)
 
 ___
 
@@ -95,4 +95,4 @@ Determine the JS type for a metatype.
 
 #### Defined in
 
-[packages/matter.js/src/model/definitions/Metatype.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/definitions/Metatype.ts#L46)
+[packages/matter.js/src/model/definitions/Metatype.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/definitions/Metatype.ts#L46)

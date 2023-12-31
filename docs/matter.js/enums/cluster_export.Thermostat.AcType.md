@@ -30,7 +30,7 @@ Cooling and Fixed Speed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:259](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L259)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:259](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L259)
 
 ___
 
@@ -42,7 +42,7 @@ Cooling and Inverter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:269](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L269)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:269](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L269)
 
 ___
 
@@ -54,7 +54,7 @@ Heat Pump and Fixed Speed
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:264](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L264)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:264](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L264)
 
 ___
 
@@ -66,7 +66,7 @@ Heat Pump and Inverter
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:274](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L274)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:274](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L274)
 
 ___
 
@@ -78,4 +78,4 @@ Unknown AC Type
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:254](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L254)
+[packages/matter.js/src/cluster/definitions/ThermostatCluster.ts:254](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ThermostatCluster.ts#L254)

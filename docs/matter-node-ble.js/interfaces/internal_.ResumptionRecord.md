@@ -21,7 +21,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:19
+matter.js/dist/esm/session/SessionManager.d.ts:17
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:20
+matter.js/dist/esm/session/SessionManager.d.ts:18
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:18
+matter.js/dist/esm/session/SessionManager.d.ts:16
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/SessionManager.d.ts:17
+matter.js/dist/esm/session/SessionManager.d.ts:15

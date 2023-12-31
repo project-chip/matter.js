@@ -410,7 +410,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:118
+matter.js/dist/esm/MatterController.d.ts:129
 
 ___
 
@@ -424,7 +424,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:119
+matter.js/dist/esm/MatterController.d.ts:130
 
 ___
 
@@ -500,22 +500,23 @@ ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterController`](internal_.MatterController.md)\>\>
+▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](internal_.SecureSession.md)\<[`MatterController`](internal_.MatterController.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sessionId` | `number` |
-| `fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
-| `peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
-| `peerSessionId` | `number` |
-| `sharedSecret` | `Uint8Array` |
-| `salt` | `Uint8Array` |
-| `isInitiator` | `boolean` |
-| `isResumption` | `boolean` |
-| `idleRetransmissionTimeoutMs?` | `number` |
-| `activeRetransmissionTimeoutMs?` | `number` |
+| `args` | `Object` |
+| `args.activeRetransmissionTimeoutMs?` | `number` |
+| `args.fabric` | `undefined` \| [`Fabric`](internal_.Fabric.md) |
+| `args.idleRetransmissionTimeoutMs?` | `number` |
+| `args.isInitiator` | `boolean` |
+| `args.isResumption` | `boolean` |
+| `args.peerNodeId` | [`NodeId`](../modules/internal_.md#nodeid) |
+| `args.peerSessionId` | `number` |
+| `args.salt` | `Uint8Array` |
+| `args.sessionId` | `number` |
+| `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
 
@@ -563,21 +564,21 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:116
+matter.js/dist/esm/MatterController.d.ts:127
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/internal_.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/internal_.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/internal_.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/internal_.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:120
+matter.js/dist/esm/MatterController.d.ts:131
 
 ___
 
@@ -597,11 +598,11 @@ ___
 
 ### getNextAvailableSessionId
 
-▸ **getNextAvailableSessionId**(): `number`
+▸ **getNextAvailableSessionId**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
@@ -625,7 +626,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:115
+matter.js/dist/esm/MatterController.d.ts:126
 
 ___
 
@@ -679,7 +680,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/MatterController.d.ts:117
+matter.js/dist/esm/MatterController.d.ts:128
 
 ___
 

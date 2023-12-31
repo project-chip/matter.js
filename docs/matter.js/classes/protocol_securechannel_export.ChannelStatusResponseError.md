@@ -47,7 +47,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L21)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L21)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Error base Class for all errors related to the status response messages.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L23)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L23)
 
 ___
 
@@ -67,4 +67,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L24)
+[packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/securechannel/SecureChannelMessenger.ts#L24)

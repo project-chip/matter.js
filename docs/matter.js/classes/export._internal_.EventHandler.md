@@ -44,7 +44,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L54)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L54)
 
 ## Properties
 
@@ -54,7 +54,7 @@ to handle subscriptions (TBD)
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L46)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L46)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L45)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L45)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L48)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L48)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L47)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L47)
 
 ## Methods
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L99)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:100](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L100)
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L60)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L60)
 
 ___
 
@@ -157,4 +157,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/EventHandler.ts:86](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/EventHandler.ts#L86)
+[packages/matter.js/src/protocol/interaction/EventHandler.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/EventHandler.ts#L87)

@@ -55,7 +55,7 @@ Bridged Device. See below for Conformance details.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L109)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:109](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L109)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L62)
 
 ___
 
@@ -81,7 +81,7 @@ Body of the BridgedDeviceBasicInformation reachableChanged event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L79)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L79)
 
 ___
 
@@ -97,4 +97,4 @@ Body of the BridgedDeviceBasicInformation startUp event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BridgedDeviceBasicInformationCluster.ts#L72)

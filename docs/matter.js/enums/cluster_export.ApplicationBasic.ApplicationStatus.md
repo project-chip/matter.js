@@ -27,7 +27,7 @@ Application is running but not visible to the user.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:65](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L65)
 
 ___
 
@@ -39,7 +39,7 @@ Application is running, is visible to the user, and is the active target for inp
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L60)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L60)
 
 ___
 
@@ -51,7 +51,7 @@ Application is running and visible, but is not the active target for input.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L70)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L70)
 
 ___
 
@@ -63,4 +63,4 @@ Application is not running.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:55](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L55)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:55](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L55)

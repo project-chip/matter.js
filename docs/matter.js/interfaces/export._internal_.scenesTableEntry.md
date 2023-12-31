@@ -27,7 +27,7 @@ these attributes for a cluster implemented on the same endpoint. The sum of all 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L36)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L36)
 
 ___
 
@@ -39,7 +39,7 @@ The identifier, unique within this group, which is used to identify this scene.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L23)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L23)
 
 ___
 
@@ -51,7 +51,7 @@ The name of the scene (optional)
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L26)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L26)
 
 ___
 
@@ -63,7 +63,7 @@ The amount of time, in seconds, it will take for a cluster to change from its cu
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L29)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L29)
 
 ___
 
@@ -75,7 +75,7 @@ The group identifier for which this scene applies, or 0 if the scene is not asso
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L20)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L20)
 
 ___
 
@@ -87,4 +87,4 @@ Together with the SceneTransitionTime field, this field allows the transition ti
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ScenesServer.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ScenesServer.ts#L39)
+[packages/matter.js/src/cluster/server/ScenesServer.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ScenesServer.ts#L39)

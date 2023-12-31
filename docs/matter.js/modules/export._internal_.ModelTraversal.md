@@ -18,4 +18,4 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)
+[packages/matter.js/src/model/logic/ModelTraversal.ts:561](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/logic/ModelTraversal.ts#L561)

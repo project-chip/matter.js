@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:363](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L363)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:363](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L363)
 
 ## Variables
 
@@ -57,7 +57,7 @@ These elements and properties are present in all Channel clusters.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:220](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L220)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:220](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L220)
 
 ___
 
@@ -69,7 +69,7 @@ A ChannelCluster supports these elements if it supports feature ChannelList.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:277](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L277)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:277](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L277)
 
 ___
 
@@ -81,7 +81,7 @@ A ChannelCluster supports these elements if it supports features ChannelList or 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:305](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L305)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:305](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L305)
 
 ___
 
@@ -101,7 +101,7 @@ ChannelCluster supports optional features that you can enable with the ChannelCl
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:332](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L332)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:332](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L332)
 
 ___
 
@@ -116,7 +116,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:379](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L379)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:379](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L379)
 
 ___
 
@@ -128,7 +128,7 @@ A ChannelCluster supports these elements if it supports feature LineupInfo.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:291](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L291)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:291](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L291)
 
 ___
 
@@ -144,7 +144,7 @@ Input to the Channel changeChannelByNumber command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L75)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:75](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L75)
 
 ___
 
@@ -160,7 +160,7 @@ Input to the Channel changeChannel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:146](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L146)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:146](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L146)
 
 ___
 
@@ -176,7 +176,7 @@ This command shall be generated in response to a ChangeChannel command.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:180](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L180)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:180](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L180)
 
 ___
 
@@ -195,7 +195,7 @@ other formats which can map into these numeric values.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L28)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L28)
 
 ___
 
@@ -212,7 +212,7 @@ LineupName, and PostalCode MUST uniquely identify a lineup.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:122](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L122)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:122](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L122)
 
 ___
 
@@ -228,4 +228,4 @@ Input to the Channel skipChannel command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:96](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/ChannelCluster.ts:96](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ChannelCluster.ts#L96)

@@ -44,7 +44,7 @@ majority of Nodes.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:428](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L428)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:428](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L428)
 
 ___
 
@@ -60,7 +60,7 @@ Body of the GeneralDiagnostics bootReason event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:400](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L400)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:400](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L400)
 
 ___
 
@@ -76,7 +76,7 @@ Body of the GeneralDiagnostics hardwareFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:356](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L356)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:356](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L356)
 
 ___
 
@@ -92,7 +92,7 @@ Body of the GeneralDiagnostics networkFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:390](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L390)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:390](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L390)
 
 ___
 
@@ -109,7 +109,7 @@ attribute.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L65)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:65](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L65)
 
 ___
 
@@ -125,7 +125,7 @@ Body of the GeneralDiagnostics radioFaultChange event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:380](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L380)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:380](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L380)
 
 ___
 
@@ -141,4 +141,4 @@ Input to the GeneralDiagnostics testEventTrigger command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:303](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L303)
+[packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts:303](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralDiagnosticsCluster.ts#L303)
