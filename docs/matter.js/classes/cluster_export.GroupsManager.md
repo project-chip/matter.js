@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L37)
 
 ___
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L53)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L45)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:74](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L74)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L60)
 
 ___
 
@@ -158,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)
+[packages/matter.js/src/cluster/server/GroupsServer.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/GroupsServer.ts#L24)

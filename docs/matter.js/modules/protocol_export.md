@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [MessageCounterTypes](../enums/protocol_export.MessageCounterTypes.md)
+
 ### Classes
 
 - [ChannelManager](../classes/protocol_export.ChannelManager.md)
@@ -11,13 +15,18 @@
 - [ControllerCommissioner](../classes/protocol_export.ControllerCommissioner.md)
 - [ControllerDiscovery](../classes/protocol_export.ControllerDiscovery.md)
 - [DiscoveryError](../classes/protocol_export.DiscoveryError.md)
+- [DuplicateMessageError](../classes/protocol_export.DuplicateMessageError.md)
 - [ExchangeCounter](../classes/protocol_export.ExchangeCounter.md)
 - [ExchangeManager](../classes/protocol_export.ExchangeManager.md)
 - [ExchangeProvider](../classes/protocol_export.ExchangeProvider.md)
 - [MessageChannel](../classes/protocol_export.MessageChannel.md)
 - [MessageCounter](../classes/protocol_export.MessageCounter.md)
 - [MessageExchange](../classes/protocol_export.MessageExchange.md)
+- [MessageReceptionStateEncryptedWithRollover](../classes/protocol_export.MessageReceptionStateEncryptedWithRollover.md)
+- [MessageReceptionStateEncryptedWithoutRollover](../classes/protocol_export.MessageReceptionStateEncryptedWithoutRollover.md)
+- [MessageReceptionStateUnencryptedWithRollover](../classes/protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
 - [NoChannelError](../classes/protocol_export.NoChannelError.md)
+- [PersistedMessageCounter](../classes/protocol_export.PersistedMessageCounter.md)
 - [RetransmissionLimitReachedError](../classes/protocol_export.RetransmissionLimitReachedError.md)
 - [UnexpectedMessageError](../classes/protocol_export.UnexpectedMessageError.md)
 
@@ -29,6 +38,10 @@
 
 - [CommissioningOptions](protocol_export.md#commissioningoptions)
 - [ExchangeSendOptions](protocol_export.md#exchangesendoptions)
+
+### Variables
+
+- [MAX\_COUNTER\_VALUE\_32BIT](protocol_export.md#max_counter_value_32bit)
 
 ## Type Aliases
 
@@ -54,7 +67,7 @@ User specific options for the Commissioning process
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L38)
 
 ___
 
@@ -72,4 +85,16 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/MessageExchange.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/MessageExchange.ts#L35)
+[packages/matter.js/src/protocol/MessageExchange.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageExchange.ts#L35)
+
+## Variables
+
+### MAX\_COUNTER\_VALUE\_32BIT
+
+• `Const` **MAX\_COUNTER\_VALUE\_32BIT**: ``4294967294``
+
+Maximum 32 bit counter value.
+
+#### Defined in
+
+[packages/matter.js/src/protocol/MessageCounter.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/MessageCounter.ts#L12)

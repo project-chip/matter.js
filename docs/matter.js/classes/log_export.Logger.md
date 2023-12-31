@@ -67,7 +67,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:353](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L353)
+[packages/matter.js/src/log/Logger.ts:353](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L353)
 
 ## Properties
 
@@ -77,7 +77,7 @@ Logger.format = Format.ANSI enables colorization via ANSI escape sequences in de
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:353](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L353)
+[packages/matter.js/src/log/Logger.ts:353](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L353)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:254](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L254)
+[packages/matter.js/src/log/Logger.ts:254](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L254)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:253](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L253)
+[packages/matter.js/src/log/Logger.ts:253](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L253)
 
 ___
 
@@ -139,7 +139,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:252](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L252)
+[packages/matter.js/src/log/Logger.ts:252](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L252)
 
 ___
 
@@ -153,7 +153,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:255](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L255)
+[packages/matter.js/src/log/Logger.ts:255](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L255)
 
 ___
 
@@ -163,7 +163,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:256](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L256)
+[packages/matter.js/src/log/Logger.ts:256](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L256)
 
 ## Accessors
 
@@ -185,7 +185,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:263](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L263)
+[packages/matter.js/src/log/Logger.ts:263](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L263)
 
 ## Methods
 
@@ -205,7 +205,7 @@ Set logFormatter using configuration-style format name.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:355](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L355)
+[packages/matter.js/src/log/Logger.ts:355](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L355)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:358](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L358)
+[packages/matter.js/src/log/Logger.ts:358](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L358)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:359](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L359)
+[packages/matter.js/src/log/Logger.ts:359](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L359)
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:356](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L356)
+[packages/matter.js/src/log/Logger.ts:356](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L356)
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:361](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L361)
+[packages/matter.js/src/log/Logger.ts:361](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L361)
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:357](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L357)
+[packages/matter.js/src/log/Logger.ts:357](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L357)
 
 ___
 
@@ -328,7 +328,7 @@ Shortcut for new DiagnosticDictionary().
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:324](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L324)
+[packages/matter.js/src/log/Logger.ts:324](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L324)
 
 ___
 
@@ -352,7 +352,7 @@ a new facility
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:285](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L285)
+[packages/matter.js/src/log/Logger.ts:285](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L285)
 
 ___
 
@@ -377,7 +377,7 @@ shown unmasked.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:315](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L315)
+[packages/matter.js/src/log/Logger.ts:315](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L315)
 
 ___
 
@@ -406,7 +406,7 @@ indented while the context executes.
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:332](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L332)
+[packages/matter.js/src/log/Logger.ts:332](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L332)
 
 ___
 
@@ -428,7 +428,7 @@ Async version of nest().
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:344](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L344)
+[packages/matter.js/src/log/Logger.ts:344](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L344)
 
 ___
 
@@ -452,4 +452,4 @@ the stringified value
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:295](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L295)
+[packages/matter.js/src/log/Logger.ts:295](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L295)

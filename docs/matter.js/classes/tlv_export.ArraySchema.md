@@ -81,7 +81,7 @@ TlvSchema\&lt;T[]\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L31)
+[packages/matter.js/src/tlv/TlvArray.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L31)
 
 ## Properties
 
@@ -91,7 +91,7 @@ TlvSchema\&lt;T[]\&gt;.constructor
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L32)
+[packages/matter.js/src/tlv/TlvArray.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L32)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L34)
+[packages/matter.js/src/tlv/TlvArray.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L34)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L33)
+[packages/matter.js/src/tlv/TlvArray.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L33)
 
 ## Methods
 
@@ -138,7 +138,7 @@ TlvSchema.decode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L16)
+[packages/matter.js/src/schema/Schema.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/Schema.ts#L16)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L91)
+[packages/matter.js/src/tlv/TlvArray.ts:91](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L91)
 
 ___
 
@@ -183,7 +183,7 @@ TlvSchema.decodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L14)
+[packages/matter.js/src/tlv/TlvSchema.ts:14](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvSchema.ts#L14)
 
 ___
 
@@ -207,7 +207,7 @@ TlvSchema.decodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L30)
+[packages/matter.js/src/tlv/TlvSchema.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvSchema.ts#L30)
 
 ___
 
@@ -236,7 +236,7 @@ TlvSchema.decodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L34)
+[packages/matter.js/src/tlv/TlvSchema.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvSchema.ts#L34)
 
 ___
 
@@ -261,7 +261,7 @@ TlvSchema.decodeTlvInternalValue
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L45)
+[packages/matter.js/src/tlv/TlvArray.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L45)
 
 ___
 
@@ -287,7 +287,7 @@ TlvSchema.encode
 
 #### Defined in
 
-[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/Schema.ts#L10)
+[packages/matter.js/src/schema/Schema.ts:10](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/Schema.ts#L10)
 
 ___
 
@@ -307,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L117)
+[packages/matter.js/src/tlv/TlvArray.ts:117](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L117)
 
 ___
 
@@ -331,7 +331,7 @@ TlvSchema.encodeInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L18)
+[packages/matter.js/src/tlv/TlvSchema.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvSchema.ts#L18)
 
 ___
 
@@ -355,7 +355,7 @@ TlvSchema.encodeTlv
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvSchema.ts#L24)
+[packages/matter.js/src/tlv/TlvSchema.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvSchema.ts#L24)
 
 ___
 
@@ -381,7 +381,7 @@ TlvSchema.encodeTlvInternal
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L39)
+[packages/matter.js/src/tlv/TlvArray.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L39)
 
 ___
 
@@ -408,7 +408,7 @@ TlvSchema.injectField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L58)
+[packages/matter.js/src/tlv/TlvArray.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L58)
 
 ___
 
@@ -434,7 +434,7 @@ TlvSchema.removeField
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L73)
+[packages/matter.js/src/tlv/TlvArray.ts:73](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L73)
 
 ___
 
@@ -458,4 +458,4 @@ TlvSchema.validate
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:82](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L82)
+[packages/matter.js/src/tlv/TlvArray.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L82)

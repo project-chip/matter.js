@@ -32,4 +32,4 @@ Bleno.PrimaryService.constructor
 
 #### Defined in
 
-[matter-node-ble.js/src/ble/BlenoBleServer.ts:106](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L106)
+[matter-node-ble.js/src/ble/BlenoBleServer.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node-ble.js/src/ble/BlenoBleServer.ts#L106)

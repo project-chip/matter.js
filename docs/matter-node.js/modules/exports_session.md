@@ -55,7 +55,6 @@
 - [TlvPbkdfParamRequest](exports_session.md#tlvpbkdfparamrequest)
 - [TlvPbkdfParamResponse](exports_session.md#tlvpbkdfparamresponse)
 - [TlvSignedData](exports_session.md#tlvsigneddata)
-- [UNDEFINED\_NODE\_ID](exports_session.md#undefined_node_id)
 - [UNICAST\_UNSECURE\_SESSION\_ID](exports_session.md#unicast_unsecure_session_id)
 
 ### Functions
@@ -398,23 +397,13 @@ packages/matter.js/dist/esm/session/case/CaseMessages.d.ts:48
 
 ___
 
-### UNDEFINED\_NODE\_ID
-
-• `Const` **UNDEFINED\_NODE\_ID**: [`NodeId`](exports_datatype.md#nodeid)
-
-#### Defined in
-
-packages/matter.js/dist/esm/session/SessionManager.d.ts:14
-
-___
-
 ### UNICAST\_UNSECURE\_SESSION\_ID
 
 • `Const` **UNICAST\_UNSECURE\_SESSION\_ID**: ``0``
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:15
+packages/matter.js/dist/esm/session/SessionManager.d.ts:13
 
 ## Functions
 
@@ -441,4 +430,4 @@ asserts session is SecureSession\<T\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SecureSession.d.ts:98
+packages/matter.js/dist/esm/session/SecureSession.d.ts:102

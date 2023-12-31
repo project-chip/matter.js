@@ -103,7 +103,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L70)
+[packages/matter.js/src/MatterDevice.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L70)
 
 ## Properties
 
@@ -121,7 +121,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L64)
+[packages/matter.js/src/MatterDevice.ts:64](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L64)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L63)
+[packages/matter.js/src/MatterDevice.ts:63](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L63)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L65)
+[packages/matter.js/src/MatterDevice.ts:65](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L65)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L66)
+[packages/matter.js/src/MatterDevice.ts:66](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L66)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:56](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L56)
+[packages/matter.js/src/MatterDevice.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L56)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L60)
+[packages/matter.js/src/MatterDevice.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L60)
 
 ___
 
@@ -195,7 +195,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:78](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L78)
+[packages/matter.js/src/MatterDevice.ts:78](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L78)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L71)
+[packages/matter.js/src/MatterDevice.ts:71](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L71)
 
 ___
 
@@ -215,7 +215,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L72)
+[packages/matter.js/src/MatterDevice.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L72)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L75)
+[packages/matter.js/src/MatterDevice.ts:75](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L75)
 
 ___
 
@@ -235,7 +235,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L61)
+[packages/matter.js/src/MatterDevice.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L61)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L58)
+[packages/matter.js/src/MatterDevice.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L58)
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L68)
+[packages/matter.js/src/MatterDevice.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L68)
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L76)
+[packages/matter.js/src/MatterDevice.ts:76](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L76)
 
 ___
 
@@ -275,7 +275,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:67](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L67)
+[packages/matter.js/src/MatterDevice.ts:67](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L67)
 
 ___
 
@@ -285,7 +285,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:74](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L74)
+[packages/matter.js/src/MatterDevice.ts:74](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L74)
 
 ___
 
@@ -295,7 +295,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:55](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L55)
+[packages/matter.js/src/MatterDevice.ts:55](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L55)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L62)
+[packages/matter.js/src/MatterDevice.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L62)
 
 ___
 
@@ -329,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L79)
+[packages/matter.js/src/MatterDevice.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L79)
 
 ___
 
@@ -339,7 +339,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L59)
+[packages/matter.js/src/MatterDevice.ts:59](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L59)
 
 ___
 
@@ -349,7 +349,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:77](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L77)
+[packages/matter.js/src/MatterDevice.ts:77](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L77)
 
 ___
 
@@ -359,7 +359,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L57)
+[packages/matter.js/src/MatterDevice.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L57)
 
 ___
 
@@ -369,7 +369,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L73)
+[packages/matter.js/src/MatterDevice.ts:73](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L73)
 
 ## Methods
 
@@ -389,7 +389,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:106](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L106)
+[packages/matter.js/src/MatterDevice.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L106)
 
 ___
 
@@ -409,7 +409,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:298](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L298)
+[packages/matter.js/src/MatterDevice.ts:286](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L286)
 
 ___
 
@@ -429,7 +429,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:121](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L121)
+[packages/matter.js/src/MatterDevice.ts:121](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L121)
 
 ___
 
@@ -449,7 +449,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:97](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L97)
+[packages/matter.js/src/MatterDevice.ts:97](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L97)
 
 ___
 
@@ -469,7 +469,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L111)
+[packages/matter.js/src/MatterDevice.ts:111](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L111)
 
 ___
 
@@ -489,7 +489,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:523](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L523)
+[packages/matter.js/src/MatterDevice.ts:511](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L511)
 
 ___
 
@@ -511,7 +511,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:504](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L504)
+[packages/matter.js/src/MatterDevice.ts:492](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L492)
 
 ___
 
@@ -531,7 +531,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L140)
+[packages/matter.js/src/MatterDevice.ts:140](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L140)
 
 ___
 
@@ -553,7 +553,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:189](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L189)
+[packages/matter.js/src/MatterDevice.ts:185](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L185)
 
 ___
 
@@ -576,7 +576,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:435](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L435)
+[packages/matter.js/src/MatterDevice.ts:423](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L423)
 
 ___
 
@@ -596,7 +596,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:345](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L345)
+[packages/matter.js/src/MatterDevice.ts:333](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L333)
 
 ___
 
@@ -610,28 +610,29 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:478](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L478)
+[packages/matter.js/src/MatterDevice.ts:466](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L466)
 
 ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`\<[`SecureSession`](session_export.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>\>
+▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](session_export.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sessionId` | `number` |
-| `fabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
-| `peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
-| `peerSessionId` | `number` |
-| `sharedSecret` | `Uint8Array` |
-| `salt` | `Uint8Array` |
-| `isInitiator` | `boolean` |
-| `isResumption` | `boolean` |
-| `idleRetransmissionTimeoutMs?` | `number` |
-| `activeRetransmissionTimeoutMs?` | `number` |
+| `args` | `Object` |
+| `args.activeRetransmissionTimeoutMs?` | `number` |
+| `args.fabric` | `undefined` \| [`Fabric`](fabric_export.Fabric.md) |
+| `args.idleRetransmissionTimeoutMs?` | `number` |
+| `args.isInitiator` | `boolean` |
+| `args.isResumption` | `boolean` |
+| `args.peerNodeId` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+| `args.peerSessionId` | `number` |
+| `args.salt` | `Uint8Array` |
+| `args.sessionId` | `number` |
+| `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
 
@@ -639,7 +640,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:233](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L233)
+[packages/matter.js/src/MatterDevice.ts:229](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L229)
 
 ___
 
@@ -653,7 +654,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:543](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L543)
+[packages/matter.js/src/MatterDevice.ts:531](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L531)
 
 ___
 
@@ -667,7 +668,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:566](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L566)
+[packages/matter.js/src/MatterDevice.ts:554](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L554)
 
 ___
 
@@ -681,7 +682,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:353](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L353)
+[packages/matter.js/src/MatterDevice.ts:341](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L341)
 
 ___
 
@@ -703,7 +704,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:570](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L570)
+[packages/matter.js/src/MatterDevice.ts:558](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L558)
 
 ___
 
@@ -724,7 +725,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:284](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L284)
+[packages/matter.js/src/MatterDevice.ts:272](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L272)
 
 ___
 
@@ -744,21 +745,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:330](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L330)
+[packages/matter.js/src/MatterDevice.ts:318](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L318)
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/datatype_export.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/datatype_export.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/datatype_export.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` = session.name; `nodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/datatype_export.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:606](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L606)
+[packages/matter.js/src/MatterDevice.ts:594](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L594)
 
 ___
 
@@ -778,7 +779,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:322](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L322)
+[packages/matter.js/src/MatterDevice.ts:310](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L310)
 
 ___
 
@@ -792,7 +793,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:474](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L474)
+[packages/matter.js/src/MatterDevice.ts:462](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L462)
 
 ___
 
@@ -806,21 +807,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:469](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L469)
+[packages/matter.js/src/MatterDevice.ts:457](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L457)
 
 ___
 
 ### getNextAvailableSessionId
 
-▸ **getNextAvailableSessionId**(): `number`
+▸ **getNextAvailableSessionId**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:229](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L229)
+[packages/matter.js/src/MatterDevice.ts:225](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L225)
 
 ___
 
@@ -834,7 +835,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:294](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L294)
+[packages/matter.js/src/MatterDevice.ts:282](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L282)
 
 ___
 
@@ -854,7 +855,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L102)
+[packages/matter.js/src/MatterDevice.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L102)
 
 ___
 
@@ -874,7 +875,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:117](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L117)
+[packages/matter.js/src/MatterDevice.ts:117](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L117)
 
 ___
 
@@ -896,7 +897,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:326](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L326)
+[packages/matter.js/src/MatterDevice.ts:314](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L314)
 
 ___
 
@@ -910,7 +911,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:500](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L500)
+[packages/matter.js/src/MatterDevice.ts:488](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L488)
 
 ___
 
@@ -924,7 +925,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:465](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L465)
+[packages/matter.js/src/MatterDevice.ts:453](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L453)
 
 ___
 
@@ -938,7 +939,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:338](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L338)
+[packages/matter.js/src/MatterDevice.ts:326](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L326)
 
 ___
 
@@ -958,7 +959,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:334](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L334)
+[packages/matter.js/src/MatterDevice.ts:322](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L322)
 
 ___
 
@@ -979,7 +980,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:210](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L210)
+[packages/matter.js/src/MatterDevice.ts:206](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L206)
 
 ___
 
@@ -1000,7 +1001,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:315](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L315)
+[packages/matter.js/src/MatterDevice.ts:303](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L303)
 
 ___
 
@@ -1014,7 +1015,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:126](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L126)
+[packages/matter.js/src/MatterDevice.ts:126](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L126)
 
 ___
 
@@ -1028,7 +1029,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L130)
+[packages/matter.js/src/MatterDevice.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L130)
 
 ___
 
@@ -1042,7 +1043,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:588](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L588)
+[packages/matter.js/src/MatterDevice.ts:576](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L576)
 
 ___
 
@@ -1062,4 +1063,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterDevice.ts:288](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterDevice.ts#L288)
+[packages/matter.js/src/MatterDevice.ts:276](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterDevice.ts#L276)

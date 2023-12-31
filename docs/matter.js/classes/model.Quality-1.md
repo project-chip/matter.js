@@ -78,7 +78,7 @@ Initialize from a Quality.All definition or a string conforming to the
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L30)
+[packages/matter.js/src/model/aspects/Quality.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L30)
 
 ## Properties
 
@@ -92,7 +92,7 @@ Quality.Ast.changesOmitted
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L20)
+[packages/matter.js/src/model/aspects/Quality.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L20)
 
 ___
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -120,7 +120,7 @@ Quality.Ast.disallowed
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L24)
+[packages/matter.js/src/model/aspects/Quality.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L24)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ___
 
@@ -148,7 +148,7 @@ Quality.Ast.fixed
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L19)
+[packages/matter.js/src/model/aspects/Quality.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L19)
 
 ___
 
@@ -162,7 +162,7 @@ Quality.Ast.nonvolatile
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L18)
+[packages/matter.js/src/model/aspects/Quality.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L18)
 
 ___
 
@@ -176,7 +176,7 @@ Quality.Ast.nullable
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L17)
+[packages/matter.js/src/model/aspects/Quality.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L17)
 
 ___
 
@@ -190,7 +190,7 @@ Quality.Ast.reportable
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L22)
+[packages/matter.js/src/model/aspects/Quality.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L22)
 
 ___
 
@@ -204,7 +204,7 @@ Quality.Ast.scene
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L21)
+[packages/matter.js/src/model/aspects/Quality.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L21)
 
 ___
 
@@ -218,7 +218,7 @@ Quality.Ast.singleton
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L23)
+[packages/matter.js/src/model/aspects/Quality.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L23)
 
 ## Accessors
 
@@ -236,7 +236,7 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L28)
+[packages/matter.js/src/model/aspects/Aspect.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L28)
 
 ___
 
@@ -254,7 +254,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -280,7 +280,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -305,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
@@ -329,7 +329,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
@@ -350,7 +350,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L42)
+[packages/matter.js/src/model/aspects/Quality.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L42)
 
 ___
 
@@ -370,7 +370,7 @@ Display quality using standard Matter syntax.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Quality.ts:83](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Quality.ts#L83)
+[packages/matter.js/src/model/aspects/Quality.ts:83](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Quality.ts#L83)
 
 ___
 
@@ -388,4 +388,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L47)

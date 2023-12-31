@@ -31,6 +31,7 @@
 - [getAssociatedFabric](internal_.Session.md#getassociatedfabric)
 - [getContext](internal_.Session.md#getcontext)
 - [getId](internal_.Session.md#getid)
+- [getIncrementedMessageCounter](internal_.Session.md#getincrementedmessagecounter)
 - [getMrpParameters](internal_.Session.md#getmrpparameters)
 - [getNodeId](internal_.Session.md#getnodeid)
 - [getPeerNodeId](internal_.Session.md#getpeernodeid)
@@ -39,6 +40,7 @@
 - [isPeerActive](internal_.Session.md#ispeeractive)
 - [isSecure](internal_.Session.md#issecure)
 - [notifyActivity](internal_.Session.md#notifyactivity)
+- [updateMessageCounter](internal_.Session.md#updatemessagecounter)
 
 ## Properties
 
@@ -85,13 +87,13 @@ ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
+▸ **destroy**(`sendClose?`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sendClose` | `boolean` |
+| `sendClose?` | `boolean` |
 | `closeAfterExchangeFinished?` | `boolean` |
 
 #### Returns
@@ -100,7 +102,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:38
+matter.js/dist/esm/session/Session.d.ts:39
 
 ___
 
@@ -140,7 +142,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:37
+matter.js/dist/esm/session/Session.d.ts:38
 
 ___
 
@@ -154,7 +156,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:41
+matter.js/dist/esm/session/Session.d.ts:42
 
 ___
 
@@ -183,6 +185,20 @@ ___
 #### Defined in
 
 matter.js/dist/esm/session/Session.d.ts:33
+
+___
+
+### getIncrementedMessageCounter
+
+▸ **getIncrementedMessageCounter**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:37
 
 ___
 
@@ -266,7 +282,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:40
+matter.js/dist/esm/session/Session.d.ts:41
 
 ___
 
@@ -300,4 +316,25 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/session/Session.d.ts:39
+matter.js/dist/esm/session/Session.d.ts:40
+
+___
+
+### updateMessageCounter
+
+▸ **updateMessageCounter**(`messageCounter`, `sourceNodeId?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messageCounter` | `number` |
+| `sourceNodeId?` | [`NodeId`](../modules/internal_.md#nodeid) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+matter.js/dist/esm/session/Session.d.ts:43

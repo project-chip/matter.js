@@ -71,7 +71,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L35)
+[packages/matter.js/src/model/aspects/Conformance.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L35)
 
 ## Properties
 
@@ -81,7 +81,7 @@ by the Matter Specification.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L21)
+[packages/matter.js/src/model/aspects/Conformance.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L21)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L17)
+[packages/matter.js/src/model/aspects/Aspect.ts:17](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L17)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L18)
+[packages/matter.js/src/model/aspects/Aspect.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L18)
 
 ## Accessors
 
@@ -127,7 +127,7 @@ Aspect.empty
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L27)
+[packages/matter.js/src/model/aspects/Conformance.ts:27](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L27)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L23)
+[packages/matter.js/src/model/aspects/Conformance.ts:23](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L23)
 
 ___
 
@@ -159,7 +159,7 @@ Aspect.valid
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L20)
+[packages/matter.js/src/model/aspects/Aspect.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L20)
 
 ## Methods
 
@@ -185,7 +185,7 @@ Test for logical equivalence.
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L40)
+[packages/matter.js/src/model/aspects/Aspect.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L40)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L54)
+[packages/matter.js/src/model/aspects/Aspect.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L54)
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L65)
+[packages/matter.js/src/model/aspects/Aspect.ts:65](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L65)
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:68](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L68)
+[packages/matter.js/src/model/aspects/Conformance.ts:68](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L68)
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Conformance.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Conformance.ts#L64)
+[packages/matter.js/src/model/aspects/Conformance.ts:64](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Conformance.ts#L64)
 
 ___
 
@@ -290,4 +290,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/aspects/Aspect.ts#L47)
+[packages/matter.js/src/model/aspects/Aspect.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/aspects/Aspect.ts#L47)

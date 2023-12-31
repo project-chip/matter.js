@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:26](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L26)
+[packages/matter.js/src/model/elements/AttributeElement.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/AttributeElement.ts#L26)
 
 ___
 
@@ -33,9 +33,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L24)
+[packages/matter.js/src/model/elements/AttributeElement.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/AttributeElement.ts#L24)
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L25)
+[packages/matter.js/src/model/elements/AttributeElement.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/AttributeElement.ts#L25)
 
 ## Variables
 
@@ -45,6 +45,6 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L24)
+[packages/matter.js/src/model/elements/AttributeElement.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/AttributeElement.ts#L24)
 
-[packages/matter.js/src/model/elements/AttributeElement.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/elements/AttributeElement.ts#L25)
+[packages/matter.js/src/model/elements/AttributeElement.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/elements/AttributeElement.ts#L25)

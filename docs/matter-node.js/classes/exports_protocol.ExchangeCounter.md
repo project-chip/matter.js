@@ -36,7 +36,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:51
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:50
 
 ## Methods
 
@@ -50,4 +50,4 @@ packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:51
 
 #### Defined in
 
-packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:52
+packages/matter.js/dist/esm/protocol/ExchangeManager.d.ts:51

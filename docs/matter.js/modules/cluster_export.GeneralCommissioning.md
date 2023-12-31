@@ -42,7 +42,7 @@ those other clusters may depend on.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:184](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L184)
 
 ___
 
@@ -58,7 +58,7 @@ Input to the GeneralCommissioning armFailSafe command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L76)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:76](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L76)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L118)
 
 ___
 
@@ -88,7 +88,7 @@ This structure provides some constant values that may be of use to all commissio
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L24)
 
 ___
 
@@ -107,7 +107,7 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:167](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L167)
 
 ___
 
@@ -123,7 +123,7 @@ Input to the GeneralCommissioning setRegulatoryConfig command
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L140)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:140](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L140)
 
 ___
 
@@ -142,4 +142,4 @@ See Section 11.9.6.1, “Common fields in General Commissioning cluster response
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts:154](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/GeneralCommissioningCluster.ts#L154)

@@ -48,7 +48,7 @@ The value of the WindowCovering endProductType attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:168](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L168)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:168](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L168)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:169](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L169)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:169](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L169)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:151](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L151)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L151)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:154](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L154)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:154](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L154)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:165](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L165)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:165](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L165)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:162](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L162)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L162)
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:167](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L167)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:167](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L167)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:159](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L159)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:159](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L159)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:161](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L161)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:161](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L161)
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:163](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L163)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:163](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L163)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:164](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L164)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:164](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L164)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:155](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L155)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L155)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:156](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L156)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:156](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L156)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:153](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L153)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:153](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L153)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:149](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L149)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:149](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L149)
 
 ___
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L166)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:166](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L166)
 
 ___
 
@@ -208,7 +208,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:150](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L150)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:150](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L150)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:157](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L157)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:157](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L157)
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:172](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L172)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:172](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L172)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:171](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L171)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:171](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L171)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:158](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L158)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:158](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L158)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:170](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L170)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:170](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L170)
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:173](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L173)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:173](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L173)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:160](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L160)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:160](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L160)
 
 ___
 
@@ -288,4 +288,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:152](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L152)
+[packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts:152](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WindowCoveringCluster.ts#L152)

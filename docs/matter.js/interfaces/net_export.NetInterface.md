@@ -40,7 +40,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/common/TransportInterface.ts:20](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TransportInterface.ts#L20)
+[packages/matter.js/src/common/TransportInterface.ts:20](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/TransportInterface.ts#L20)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/TransportInterface.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TransportInterface.ts#L19)
+[packages/matter.js/src/common/TransportInterface.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/TransportInterface.ts#L19)
 
 ___
 
@@ -84,4 +84,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/NetInterface.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/NetInterface.ts#L16)
+[packages/matter.js/src/net/NetInterface.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/NetInterface.ts#L16)

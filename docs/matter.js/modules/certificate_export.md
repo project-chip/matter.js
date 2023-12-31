@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:344](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L344)
+[packages/matter.js/src/certificate/CertificateManager.ts:344](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L344)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:345](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L345)
+[packages/matter.js/src/certificate/CertificateManager.ts:345](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L345)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:343](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L343)
+[packages/matter.js/src/certificate/CertificateManager.ts:343](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L343)
 
 ## Variables
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L32)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L32)
 
 ___
 
@@ -101,7 +101,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L25)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L25)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:28](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L28)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L28)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L31)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L31)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L19)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L19)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L15)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L15)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L12)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L12)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/ChipPAAuthorities.ts:18](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L18)
+[packages/matter.js/src/certificate/ChipPAAuthorities.ts:18](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/ChipPAAuthorities.ts#L18)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:325](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L325)
+[packages/matter.js/src/certificate/CertificateManager.ts:325](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L325)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:194](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L194)
+[packages/matter.js/src/certificate/CertificateManager.ts:194](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L194)
 
 ___
 
@@ -191,7 +191,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:151](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L151)
+[packages/matter.js/src/certificate/CertificateManager.ts:151](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L151)
 
 ___
 
@@ -201,7 +201,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:111](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L111)
+[packages/matter.js/src/certificate/CertificateManager.ts:111](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L111)
 
 ## Functions
 
@@ -223,7 +223,7 @@ commonName = ASN.1 OID 2.5.4.3
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L81)
+[packages/matter.js/src/certificate/CertificateManager.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L81)
 
 ___
 
@@ -245,7 +245,7 @@ matter-fabric-id = ASN.1 OID 1.3.6.1.4.1.37244.1.5
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:98](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L98)
+[packages/matter.js/src/certificate/CertificateManager.ts:98](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L98)
 
 ___
 
@@ -267,7 +267,7 @@ matter-firmware-signing-id = ASN.1 OID 1.3.6.1.4.1.37244.1.2
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:87](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L87)
+[packages/matter.js/src/certificate/CertificateManager.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L87)
 
 ___
 
@@ -289,7 +289,7 @@ matter-icac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.3
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:92](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L92)
+[packages/matter.js/src/certificate/CertificateManager.ts:92](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L92)
 
 ___
 
@@ -311,7 +311,7 @@ matter-noc-cat = ASN.1 OID 1.3.6.1.4.1.37244.1.6
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:101](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L101)
+[packages/matter.js/src/certificate/CertificateManager.ts:101](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L101)
 
 ___
 
@@ -333,7 +333,7 @@ matter-node-id = ASN.1 OID 1.3.6.1.4.1.37244.1.1
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:84](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L84)
+[packages/matter.js/src/certificate/CertificateManager.ts:84](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L84)
 
 ___
 
@@ -355,7 +355,7 @@ matter-oid-pid = ASN.1 OID 1.3.6.1.4.1.37244.2.2
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L109)
+[packages/matter.js/src/certificate/CertificateManager.ts:109](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L109)
 
 ___
 
@@ -377,7 +377,7 @@ matter-rcac-id = ASN.1 OID 1.3.6.1.4.1.37244.1.4
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L95)
+[packages/matter.js/src/certificate/CertificateManager.ts:95](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L95)
 
 ___
 
@@ -399,7 +399,7 @@ matter-oid-vid = ASN.1 OID 1.3.6.1.4.1.37244.2.1
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:104](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L104)
+[packages/matter.js/src/certificate/CertificateManager.ts:104](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L104)
 
 ___
 
@@ -420,7 +420,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:55](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L55)
+[packages/matter.js/src/certificate/CertificateManager.ts:55](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L55)
 
 ___
 
@@ -440,4 +440,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L51)
+[packages/matter.js/src/certificate/CertificateManager.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L51)

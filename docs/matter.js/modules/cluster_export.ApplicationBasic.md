@@ -32,7 +32,7 @@ an endpoint (see Device Type Library document).
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:81](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L81)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:81](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L81)
 
 ___
 
@@ -48,4 +48,4 @@ This indicates a global identifier for an Application given a catalog.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L24)
+[packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ApplicationBasicCluster.ts#L24)
