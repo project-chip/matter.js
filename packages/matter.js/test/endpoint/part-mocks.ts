@@ -27,15 +27,22 @@ export namespace MockBehavior2 {
 }
 
 export class MockPart<T extends EndpointType> extends Part<T> {
-    constructor(type: T, options?: MockPart.Options) {
+    constructor(type: T, options?: MockPart.Options<T>) {
         super(type, options);
 
+        let owner;
         if (options && "owner" in options) {
             if (options.owner !== undefined) {
-                this.owner = options.owner;
+                owner = options.owner;
             }
         } else {
-            this.owner = new MockOwner();
+            owner = new MockOwner();
+        }
+
+        // Testing logic is synchronous so we can safely initialize here
+        if (owner) {
+            this.owner = owner;
+            this.initialize();
         }
     }
 
@@ -50,7 +57,9 @@ export class MockPart<T extends EndpointType> extends Part<T> {
 }
 
 export namespace MockPart {
-    export interface Options extends Part.Options {
-        owner?: PartOwner;
-    }
+    export type Options<T extends EndpointType> =
+        & Part.Options<T>
+        & {
+            owner?: PartOwner;
+        };
 }
