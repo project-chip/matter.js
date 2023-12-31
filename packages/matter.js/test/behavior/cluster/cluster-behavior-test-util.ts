@@ -130,7 +130,3 @@ interface MyClusterInterface {
 export const BaseBehavior = ClusterBehavior.withInterface<MyClusterInterface>().for(MyCluster, MySchema);
 
 export class MyBehavior extends BaseBehavior {}
-function Field(arg0: { name: string; constraint: string; description: string; details: string; }) {
-    throw new Error("Function not implemented.");
-}
-
