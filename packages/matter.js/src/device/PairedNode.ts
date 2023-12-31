@@ -479,7 +479,7 @@ export class PairedNode {
 
                 if (parentEndpoint.getChildEndpoint(childEndpointId) === undefined) {
                     logger.debug(
-                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.id}`,
+                        `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.number}`,
                     );
 
                     parentEndpoint.addChildEndpoint(childEndpoint);

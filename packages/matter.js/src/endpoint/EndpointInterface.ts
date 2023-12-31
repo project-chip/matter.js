@@ -15,13 +15,13 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 /**
  * The primary interface for Matter.js endpoint implementations.
  *
- * TODO - this interface represents a wad of deferred architectural decisions,
- * a quick way to redirect to generated device cluster management
+ * TODO - this is a transitional interface that allows us to have multiple
+ * endpoint implementations
  */
 export interface EndpointInterface {
-    id: EndpointNumber | undefined;
     name: string;
-    getId(): EndpointNumber;
+    number: EndpointNumber | undefined;
+    getNumber(): EndpointNumber;
     removeFromStructure(): void;
     updatePartsList(): EndpointNumber[];
     getChildEndpoints(): EndpointInterface[];

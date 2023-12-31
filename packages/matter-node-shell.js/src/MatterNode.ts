@@ -132,7 +132,7 @@ export class MatterNode {
         for (const node of nodes) {
             let devices = node.getDevices();
             if (endpointId !== undefined) {
-                devices = devices.filter(device => device.id === endpointId);
+                devices = devices.filter(device => device.number === endpointId);
             }
 
             for (const device of devices) {

@@ -35,12 +35,6 @@ const SUPERVISOR = Symbol("supervisor");
 
 interface StaticInternal {
     [SUPERVISOR]?: RootSupervisor;
-
-    /**
-     * We don't place this in the public class definition but if derivatives
-     * provide a schema here it will be the basis for the operational schema.
-     */
-    logicalSchema?: Schema;
 }
 
 /**
@@ -69,6 +63,21 @@ export abstract class Behavior {
      * with() builder method.
      */
     static readonly id: string;
+
+    /**
+     * A behavior's schema controls access to data, commands and events.
+     * 
+     * Schema is inferred from the methods and properties of the behavior
+     * but you can specify explicitly for additional control.
+     */
+    static readonly schema?: Schema;
+
+    /**
+     * By default behaviors load lazily as they are accessed.  You can set
+     * this flag to true to force behaviors to load immediately when the part
+     * is initialized.
+     */
+    static readonly immediate?: boolean;
 
     /**
      * The agent that owns the behavior.
@@ -145,8 +154,8 @@ export abstract class Behavior {
     }
 
     /**
-     * The Matter schema for the behavior.  Schema metadata controls various
-     * aspects of behavior including data validation and authorization.
+     * The data supervisor for the behavior.  The supervisor controls
+     * validation and access to behavior data.
      */
     static get supervisor(): RootSupervisor {
         const internal = this as unknown as StaticInternal;
@@ -182,7 +191,7 @@ export abstract class Behavior {
      * behavior will not be available for external use until initialization
      * completes.
      */
-    initialize(): MaybePromise<void> {}
+    initialize(_options?: {}): MaybePromise<void> {}
 
     /**
      * Release resources.
@@ -273,6 +282,8 @@ export namespace Behavior {
         readonly supports: typeof Behavior.supports;
         readonly defaults: Record<string, any>;
 
+        readonly immediate?: boolean;
+        readonly schema?: Schema;
         readonly supervisor: RootSupervisor;
         readonly State: new () => {};
         readonly InternalState: new () => {};
@@ -297,4 +308,20 @@ export namespace Behavior {
      * Input variant of StateOf.
      */
     export type InputStateOf<B extends Type> = Partial<ClusterType.RelaxTypes<StateOf<B>>>;
+
+    /**
+     * Initialization options.
+     */
+    export type InitializationOptionsOf<B extends Type> =
+        Parameters<InstanceType<B>["initialize"]>[0] extends object
+            ? Parameters<InstanceType<B>["initialize"]>[0]
+            : {}
+
+    /**
+     * Configuration options you may set when adding a {@link Behavior} to a
+     * Part.
+     */
+    export type Options<T extends Behavior.Type = Behavior.Type> =
+        & Behavior.InputStateOf<T>
+        & Behavior.InitializationOptionsOf<T>;
 }

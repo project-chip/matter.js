@@ -55,7 +55,7 @@ export class Graph {
 
     // TODO - parallelization will be trivial except need to update Progress
     // to support display of multiple simultaneous tasks
-    async build(builder: Builder) {
+    async build(builder: Builder, showSkipped = true) {
         const toBuild = new Set(this.nodes);
 
         while (toBuild.size) {
@@ -77,7 +77,7 @@ export class Graph {
             if (node.dirty || builder.unconditional) {
                 await builder.build(new Project(node.pkg));
                 node.buildTime = Date.now();
-            } else {
+            } else if (showSkipped) {
                 new Progress().skip("Up to date", node.pkg);
             }
 

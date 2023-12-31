@@ -303,8 +303,8 @@ export class SubscriptionHandler {
     updateSubscription() {
         const { newAttributes } = this.registerNewAttributes();
 
-        for (const attributeWitPath of newAttributes) {
-            const { path, attribute } = attributeWitPath;
+        for (const attributeWithPath of newAttributes) {
+            const { path, attribute } = attributeWithPath;
             const { version, value } = attribute.getWithVersion(this.session, true);
             this.outstandingAttributeUpdates.set(attributePathToId(path), {
                 path,

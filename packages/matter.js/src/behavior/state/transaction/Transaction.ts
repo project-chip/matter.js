@@ -213,7 +213,7 @@ export class Transaction {
     }
 
     /**
-     * Retrieve a participant with a specific roll.
+     * Retrieve a participant with a specific role.
      */
     getParticipant(role: {}) {
         return this.#roles.get(role);

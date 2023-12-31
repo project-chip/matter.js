@@ -23,8 +23,8 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
     const namesUsed = new Set<string>();
 
     if (!schema) {
-        if ("logicalSchema" in base) {
-            schema = base.logicalSchema as Schema | undefined;
+        if (base.schema) {
+            schema = base.schema;
         }
         if (!schema) {
             schema = schemaForCluster(cluster);
@@ -56,7 +56,7 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
                 enumerable: true,
             },
 
-            logicalSchema: {
+            schema: {
                 value: schema,
             },
         },

@@ -35,7 +35,7 @@ export class Endpoint implements EndpointInterface {
     private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
     private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
     private readonly childEndpoints: EndpointInterface[] = [];
-    id: EndpointNumber | undefined;
+    number: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
     private structureChangedCallback: () => void = () => {
@@ -71,7 +71,7 @@ export class Endpoint implements EndpointInterface {
         this.setDeviceTypes(deviceTypes);
 
         if (options.endpointId !== undefined) {
-            this.id = options.endpointId;
+            this.number = options.endpointId;
         }
         if (options.uniqueStorageKey !== undefined) {
             this.uniqueStorageKey = options.uniqueStorageKey;
@@ -97,11 +97,11 @@ export class Endpoint implements EndpointInterface {
         }
     }
 
-    getId() {
-        if (this.id === undefined) {
+    getNumber() {
+        if (this.number === undefined) {
             throw new InternalError("Endpoint has not been assigned yet");
         }
-        return this.id;
+        return this.number;
     }
 
     addFixedLabel(label: string, value: string) {
@@ -255,8 +255,8 @@ export class Endpoint implements EndpointInterface {
     }
 
     addChildEndpoint(endpoint: EndpointInterface): void {
-        if (endpoint.id !== undefined && this.getChildEndpoint(endpoint.id) !== undefined) {
-            throw new ImplementationError(`Endpoint with id ${endpoint.id} already exists as child from ${this.id}.`);
+        if (endpoint.number !== undefined && this.getChildEndpoint(endpoint.number) !== undefined) {
+            throw new ImplementationError(`Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`);
         }
 
         this.childEndpoints.push(endpoint);
@@ -265,7 +265,7 @@ export class Endpoint implements EndpointInterface {
     }
 
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
-        return this.childEndpoints.find(endpoint => endpoint.id === id);
+        return this.childEndpoints.find(endpoint => endpoint.number === id);
     }
 
     getChildEndpoints(): EndpointInterface[] {
@@ -314,7 +314,7 @@ export class Endpoint implements EndpointInterface {
                             16,
                         )}) requires cluster server ${clusterName}(0x${clusterId.toString(
                             16,
-                        )}) but it is not present on endpoint ${this.id}`,
+                        )}) but it is not present on endpoint ${this.number}`,
                     );
                 }
             });
@@ -331,7 +331,7 @@ export class Endpoint implements EndpointInterface {
                             16,
                         )}) requires cluster client ${clusterName}(0x${clusterId.toString(
                             16,
-                        )}) but it is not present on endpoint ${this.id}`,
+                        )}) but it is not present on endpoint ${this.number}`,
                     );
                 }
             });
@@ -352,11 +352,11 @@ export class Endpoint implements EndpointInterface {
         for (const child of this.childEndpoints) {
             const childPartsList = child.updatePartsList();
 
-            if (child.id === undefined) {
+            if (child.number === undefined) {
                 throw new InternalError(`Child endpoint has no id, can not add to parts list`);
             }
 
-            newPartsList.push(EndpointNumber(child.id));
+            newPartsList.push(EndpointNumber(child.number));
             newPartsList.push(...childPartsList);
         }
 

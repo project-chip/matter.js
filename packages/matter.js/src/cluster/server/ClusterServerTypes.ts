@@ -15,7 +15,7 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
-import { StorageContext } from "../../storage/StorageContext.js";
+import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
 import { ClusterClientObj } from "../client/ClusterClientTypes.js";
@@ -260,6 +260,17 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
     C["events"]
 >;
 
+export interface ClusterDatasource {
+    readonly version: number;
+    readonly eventHandler?: EventHandler;
+    increaseVersion(): number;
+    changed(key: string, value: SupportedStorageTypes): void;
+}
+
+export namespace ClusterDatasource {
+    export type Factory = (endpoint: EndpointInterface, cluster: ClusterServerObj<any, any>) => ClusterDatasource;
+}
+
 export type ClusterServerObj<A extends Attributes, E extends Events> = {
     /**
      * Cluster ID
@@ -281,10 +292,10 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
     _type: "ClusterServer";
 
     /**
-     * Cluster data version
+     * Cluster datasource
      * @readonly
      */
-    readonly clusterDataVersion: number;
+    datasource?: ClusterDatasource;
 
     /**
      * Cluster attributes as named object that can be used to programmatically work with available attributes
@@ -340,20 +351,6 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * @param endpoint Endpoint to assign to
      */
     readonly _assignToEndpoint: (endpoint: EndpointInterface) => void;
-
-    /**
-     * Register an event handler for this cluster
-     * @private
-     *
-     * @param eventHandler
-     */
-    readonly _registerEventHandler: (eventHandler: EventHandler) => void;
-
-    /**
-     * Set Storage context used by this cluster
-     * @private
-     */
-    readonly _setStorage: (storageContext: StorageContext) => void;
 
     /**
      * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.

@@ -24,19 +24,16 @@ import { MdnsBroadcaster } from "../../mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "../../mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "../../mdns/MdnsScanner.js";
 import { UdpInterface } from "../../net/UdpInterface.js";
+import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
-import { BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
+import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     DiscoveryCapabilitiesBitmap,
-    DiscoveryCapabilitiesSchema,
-    ManualPairingCodeCodec,
-    QrPairingCodeCodec,
 } from "../../schema/PairingCodeSchema.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { NamedHandler } from "../../util/NamedHandler.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { NetworkOptions } from "../options/NetworkOptions.js";
-import { SubscriptionOptions } from "../options/SubscriptionOptions.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -63,24 +60,24 @@ type CommissioningServerCommands = {
  * BaseNodeServer implements NodeServer functionality using the lower-level
  * ClusterServer API.
  */
-export abstract class BaseNodeServer extends MatterNode {
-    private storage?: StorageContext;
-    private endpointStructureStorage?: StorageContext;
+export abstract class BaseNodeServer implements MatterNode {
+    #mdnsScanner?: MdnsScanner;
+    #mdnsBroadcaster?: MdnsInstanceBroadcaster;
 
-    private mdnsScanner?: MdnsScanner;
-    private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
+    #deviceInstance?: MatterDevice;
+    #interactionServer?: InteractionServer;
 
-    private deviceInstance?: MatterDevice;
-    private interactionServer?: InteractionServer;
+    protected endpointStructure = new InteractionEndpointStructure;
 
     protected readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
     protected abstract readonly networkConfig: NetworkOptions.Configuration;
-    protected abstract readonly subscriptionConfig: SubscriptionOptions.Configuration;
     protected abstract readonly commissioningConfig: CommissioningOptions.Configuration;
     protected abstract readonly rootEndpoint: EndpointInterface;
     protected abstract nextEndpointId: EndpointNumber;
     protected abstract readonly advertiseOnStartup: boolean;
+    protected abstract readonly sessionStorage: StorageContext;
+    protected abstract readonly fabricStorage: StorageContext;
 
     protected abstract emitCommissioningChanged(fabric: FabricIndex): void;
     protected abstract emitActiveSessionsChanged(fabric: FabricIndex): void;
@@ -182,17 +179,15 @@ export abstract class BaseNodeServer extends MatterNode {
      */
     async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
         if (
-            this.mdnsInstanceBroadcaster === undefined ||
-            this.mdnsScanner === undefined ||
-            this.storage === undefined ||
-            this.endpointStructureStorage === undefined
+            this.#mdnsBroadcaster === undefined ||
+            this.#mdnsScanner === undefined
         ) {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
-        if (this.interactionServer !== undefined && this.deviceInstance !== undefined) {
+        if (this.#interactionServer !== undefined && this.#deviceInstance !== undefined) {
             logger.debug("Device already initialized, just advertise the instance again ...");
-            await this.deviceInstance.announce();
+            await this.#deviceInstance.announce();
             return;
         }
 
@@ -201,29 +196,27 @@ export abstract class BaseNodeServer extends MatterNode {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
-        this.interactionServer = this.createInteractionServer(this.storage);
+        this.#interactionServer = this.createInteractionServer();
 
-        this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+        this.initializeEndpoints();
 
-        this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
-        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
-        this.interactionServer.setRootEndpoint(this.rootEndpoint); // Initialize the interaction server with the root endpoint
+        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
-        this.deviceInstance = new MatterDevice(
+        this.#deviceInstance = new MatterDevice(
             this.commissioningConfig,
-            this.storage,
+            this.sessionStorage,
+            this.fabricStorage,
             (fabricIndex: FabricIndex) => {
-                const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
+                const fabricsCount = this.#deviceInstance?.getFabrics().length ?? 0;
                 if (fabricsCount === 1) {
                     // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
                     // TODO Refactor this out when we remove MatterDevice class
                     if (
-                        this.mdnsInstanceBroadcaster !== undefined &&
-                        !this.deviceInstance?.hasBroadcaster(this.mdnsInstanceBroadcaster)
+                        this.#mdnsBroadcaster !== undefined &&
+                        !this.#deviceInstance?.hasBroadcaster(this.#mdnsBroadcaster)
                     ) {
-                        this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
+                        this.#deviceInstance?.addBroadcaster(this.#mdnsBroadcaster);
                     }
                 }
                 if (fabricsCount === 0) {
@@ -240,23 +233,23 @@ export abstract class BaseNodeServer extends MatterNode {
             .addTransportInterface(
                 await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6),
             )
-            .addScanner(this.mdnsScanner)
-            .addProtocolHandler(this.interactionServer);
+            .addScanner(this.#mdnsScanner)
+            .addProtocolHandler(this.#interactionServer);
         if (!this.networkConfig.disableIpv4) {
-            this.deviceInstance.addTransportInterface(
+            this.#deviceInstance.addTransportInterface(
                 await UdpInterface.create("udp4", this.networkConfig.port, this.networkConfig.listeningAddressIpv4),
             );
         }
 
-        if (this.isCommissioned()) {
+        if (this.commissioned) {
             limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
         } else {
             // BLE or SoftAP only relevant when not commissioned yet
             try {
                 const ble = Ble.get();
-                this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
+                this.#deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
                 if (limitTo === undefined || limitTo.ble) {
-                    this.deviceInstance.addBroadcaster(
+                    this.#deviceInstance.addBroadcaster(
                         ble.getBleBroadcaster(this.commissioningConfig.additionalBleAdvertisementData),
                     );
                 }
@@ -274,10 +267,10 @@ export abstract class BaseNodeServer extends MatterNode {
         }
 
         if (limitTo === undefined || limitTo.onIpNetwork) {
-            this.deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
+            this.#deviceInstance.addBroadcaster(this.#mdnsBroadcaster);
         }
 
-        await this.deviceInstance.start();
+        await this.#deviceInstance.start();
 
         // Send required events
         basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
@@ -290,149 +283,17 @@ export abstract class BaseNodeServer extends MatterNode {
         }
     }
 
-    protected createInteractionServer(storage: StorageContext) {
-        return new InteractionServer(storage, this.subscriptionConfig);
-    }
+    protected abstract initializeEndpoints(): void;
 
-    updateStructure() {
-        logger.debug("Endpoint structure got updated ...");
-        this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
-        this.interactionServer?.setRootEndpoint(this.rootEndpoint); // Reinitilize the interaction server structure
-    }
-
-    getNextEndpointId(increase = true) {
-        if (increase) {
-            this.nextEndpointId++;
-        }
-        return this.nextEndpointId;
-    }
-
-    assignEndpointIds() {
-        const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
-        this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
-        this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
-        this.endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
-    }
-
-    private initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {
-        if (this.endpointStructureStorage === undefined) {
-            throw new ImplementationError("Storage manager must be initialized to enable initialization from storage.");
-        }
-        const endpoints = endpoint.getChildEndpoints();
-        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
-            let endpointUniquePrefix = parentUniquePrefix;
-            const endpoint = endpoints[endpointIndex];
-            const thisUniqueId = endpoint.determineUniqueID();
-            if (thisUniqueId === undefined) {
-                if (endpoint.id === undefined) {
-                    logger.debug(
-                        `No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`,
-                    );
-                }
-                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
-            } else {
-                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
-            }
-
-            if (endpoint.id === undefined) {
-                if (this.endpointStructureStorage.has(endpointUniquePrefix)) {
-                    endpoint.id = this.endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
-                    logger.debug(
-                        `Restored endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`,
-                    );
-                }
-            }
-            if (endpoint.id !== undefined && endpoint.id > this.nextEndpointId) {
-                this.nextEndpointId = EndpointNumber(endpoint.id + 1);
-            }
-            this.initializeEndpointIdsFromStorage(endpoint, endpointUniquePrefix);
-        }
-    }
-
-    private fillAndStoreEndpointIds(endpoint: EndpointInterface, parentUniquePrefix = "") {
-        if (this.endpointStructureStorage === undefined) {
-            throw new ImplementationError("endpointStructureStorage not set!");
-        }
-        const endpoints = endpoint.getChildEndpoints();
-        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
-            let endpointUniquePrefix = parentUniquePrefix;
-            endpoint = endpoints[endpointIndex];
-            const thisUniqueId = endpoint.determineUniqueID();
-            if (thisUniqueId === undefined) {
-                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
-            } else {
-                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
-            }
-
-            if (endpoint.id === undefined) {
-                endpoint.id = EndpointNumber(this.nextEndpointId++);
-                this.endpointStructureStorage.set(endpointUniquePrefix, endpoint.id);
-                logger.debug(
-                    `Assigned endpoint id ${endpoint.id} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`,
-                );
-            }
-            this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
-        }
-    }
+    protected abstract createInteractionServer(): InteractionServer;
 
     /**
-     * Return info if the device is paired with at least one controller
+     * Is the device commissioned?
+     * 
+     * This is true if the device is paired with at least one controller.
      */
-    isCommissioned(): boolean {
-        return this.deviceInstance?.isCommissioned() ?? false;
-    }
-
-    /**
-     * Return the pairing information for the device
-     */
-    getPairingCode(
-        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
-    ): DevicePairingInformation {
-        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
-        if (basicInformation == undefined) {
-            throw new ImplementationError("BasicInformationCluster needs to be set!");
-        }
-        if (this.commissioningConfig === undefined) {
-            throw new ImplementationError("Pairing code is unavailable because commissioning is not configured");
-        }
-
-        const vendorId = basicInformation.attributes.vendorId.getLocal();
-        const productId = basicInformation.attributes.productId.getLocal();
-
-        let bleEnabled = false;
-        try {
-            bleEnabled = !!Ble.get();
-        } catch (error) {
-            if (!(error instanceof NoProviderError)) {
-                // only ignore NoProviderError cases
-                throw error;
-            }
-        }
-
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: vendorId,
-            productId,
-            flowType: this.commissioningConfig.flowType,
-            discriminator: this.commissioningConfig.discriminator,
-            passcode: this.commissioningConfig.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
-                discoveryCapabilities ?? {
-                    ble: bleEnabled,
-                    softAccessPoint: false,
-                    onIpNetwork: true,
-                },
-            ),
-        });
-
-        return {
-            manualPairingCode: ManualPairingCodeCodec.encode({
-                discriminator: this.commissioningConfig.discriminator,
-                passcode: this.commissioningConfig.passcode,
-            }),
-            qrPairingCode,
-        };
+    get commissioned() {
+        return this.#deviceInstance?.isCommissioned() ?? false;
     }
 
     /**
@@ -440,8 +301,8 @@ export abstract class BaseNodeServer extends MatterNode {
      *
      * @param mdnsScanner MdnsScanner instance
      */
-    setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.mdnsScanner = mdnsScanner;
+    set mdnsScanner(mdnsScanner: MdnsScanner) {
+        this.#mdnsScanner = mdnsScanner;
     }
 
     /**
@@ -449,20 +310,11 @@ export abstract class BaseNodeServer extends MatterNode {
      *
      * @param mdnsBroadcaster MdnsBroadcaster instance
      */
-    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+    set mdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
         if (this.networkConfig.port === undefined) {
             throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
         }
-        this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.networkConfig.port, mdnsBroadcaster);
-    }
-
-    /**
-     * Set the StorageManager instance. Should be only used internally
-     * @param storage
-     */
-    setStorage(storage: StorageContext) {
-        this.storage = storage;
-        this.endpointStructureStorage = this.storage.createContext("EndpointStructure");
+        this.#mdnsBroadcaster = new MdnsInstanceBroadcaster(this.networkConfig.port, mdnsBroadcaster);
     }
 
     /**
@@ -477,14 +329,14 @@ export abstract class BaseNodeServer extends MatterNode {
     /**
      * Return the port the device is listening on
      */
-    getPort(): number | undefined {
+    get port(): number | undefined {
         return this.networkConfig.port;
     }
 
     /** Set the port the device is listening on. Can only be called before the device is initialized. */
-    setPort(port: number) {
+    set port(port: number) {
         if (port === this.networkConfig.port) return;
-        if (this.deviceInstance !== undefined || this.mdnsInstanceBroadcaster !== undefined) {
+        if (this.#deviceInstance !== undefined || this.#mdnsBroadcaster !== undefined) {
             throw new ImplementationError("Port cannot be changed after device is initialized!");
         }
         this.networkConfig.port = port;
@@ -495,30 +347,28 @@ export abstract class BaseNodeServer extends MatterNode {
      */
     async close() {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
-        await this.interactionServer?.close();
-        this.interactionServer = undefined;
-        await this.deviceInstance?.stop();
-        this.deviceInstance = undefined;
+        await this.#interactionServer?.close();
+        this.#interactionServer = undefined;
+        await this.#deviceInstance?.stop();
+        this.#deviceInstance = undefined;
+        this.endpointStructure.destroy();
     }
-
+ 
     async factoryReset() {
-        if (this.storage === undefined) {
-            throw new ImplementationError(
-                "Storage not initialized. The instance was not added to a Matter instance yet.",
-            );
-        }
-        const wasStarted = this.interactionServer !== undefined || this.deviceInstance !== undefined;
+        const wasStarted = this.#interactionServer !== undefined || this.#deviceInstance !== undefined;
         if (wasStarted) {
             await this.close();
         }
 
-        this.storage.clear();
+        this.clearStorage();
 
         if (wasStarted) {
             await this.advertise();
         }
         logger.info(`The device was factory reset${wasStarted ? " and restarted" : ""}.`);
     }
+
+    protected abstract clearStorage(): Promise<void>;
 
     /**
      * Add a new command handler for the given command
@@ -588,8 +438,8 @@ export abstract class BaseNodeServer extends MatterNode {
      * @param fabricIndex Optional fabric index to filter for. If not set all fabrics are returned.
      */
     getCommissionedFabricInformation(fabricIndex?: FabricIndex) {
-        if (!this.isCommissioned()) return [];
-        const allFabrics = this.deviceInstance?.getFabrics() ?? [];
+        if (!this.commissioned) return [];
+        const allFabrics = this.#deviceInstance?.getFabrics() ?? [];
         const fabrics = fabricIndex === undefined ? allFabrics : allFabrics.filter(f => f.fabricIndex === fabricIndex);
         return fabrics.map(fabric => fabric.getExternalInformation()) ?? [];
     }
@@ -600,8 +450,8 @@ export abstract class BaseNodeServer extends MatterNode {
      * @param fabricIndex Optional fabric index to filter for. If not set all sessions are returned.
      */
     getActiveSessionInformation(fabricIndex?: FabricIndex) {
-        if (!this.isCommissioned()) return [];
-        const allSessions = this.deviceInstance?.getActiveSessionInformation() ?? [];
+        if (!this.commissioned) return [];
+        const allSessions = this.#deviceInstance?.getActiveSessionInformation() ?? [];
         return allSessions.filter(({ fabric }) => fabricIndex === undefined || fabric?.fabricIndex === fabricIndex);
     }
 }

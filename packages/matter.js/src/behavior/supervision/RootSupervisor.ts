@@ -39,20 +39,20 @@ export class RootSupervisor implements ValueSupervisor {
     /**
      * Create a new supervisor.
      *
-     * @param logicalSchema the logical {@link Schema}
+     * @param schema the {@link Schema} for the supervised data
      * @param managedBase the base class for managed value instances
      */
-    constructor(logicalSchema: Schema, managedBase?: new () => Val) {
-        if (logicalSchema instanceof ClusterModel) {
-            this.#featureMap = logicalSchema.featureMap;
-            this.#supportedFeatures = logicalSchema.supportedFeatures ?? new FeatureSet();
+    constructor(schema: Schema, managedBase?: new () => Val) {
+        if (schema instanceof ClusterModel) {
+            this.#featureMap = schema.featureMap;
+            this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
         } else {
             this.#featureMap = new AttributeModel(Globals.FeatureMap);
             this.#supportedFeatures = new FeatureSet();
         }
-        this.#members = new Set(logicalSchema.members);
+        this.#members = new Set(schema.members);
 
-        this.#root = this.#createValueSupervisor(logicalSchema, managedBase);
+        this.#root = this.#createValueSupervisor(schema, managedBase);
 
         for (const member of this.#members) {
             if (member.effectiveQuality.nonvolatile) {

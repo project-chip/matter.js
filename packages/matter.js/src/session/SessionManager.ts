@@ -46,9 +46,9 @@ export class SessionManager<ContextT> {
 
     constructor(
         private readonly context: ContextT,
-        storage: StorageContext,
+        sessionStorage: StorageContext,
     ) {
-        this.sessionStorage = storage.createContext("SessionManager");
+        this.sessionStorage = sessionStorage;
         this.unsecureSession = new UnsecureSession(context);
         this.sessions.set(UNICAST_UNSECURE_SESSION_ID, this.unsecureSession);
     }

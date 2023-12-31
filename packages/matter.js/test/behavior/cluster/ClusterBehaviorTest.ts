@@ -56,7 +56,7 @@ describe("ClusterBehavior", () => {
                 becomeAwesome?: undefined;
             };
             expect(typeof MyBehavior.prototype.reqCmd).equals("function");
-            expect(typeof (MyBehavior.prototype as any).becomeAwesome).equals(undefined);
+            expect((MyBehavior.prototype as any).becomeAwesome).equals(undefined);
 
             ({}) as MyBehavior satisfies {
                 events: {

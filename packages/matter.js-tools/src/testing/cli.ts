@@ -58,7 +58,6 @@ export async function main(argv = process.argv) {
         })
         .strict().argv;
 
-    const dependencies = await Graph.forProject(args.prefix);
     const project = new Project(args.prefix);
 
     // If no test types are specified explicitly, run all enabled types
@@ -75,7 +74,8 @@ export async function main(argv = process.argv) {
     }
 
     const builder = new Builder();
-    await dependencies.build(builder);
+    const dependencies = await Graph.forProject(args.prefix);
+    await dependencies.build(builder, false);
 
     const progress = project.pkg.start("Testing");
     const runner = new TestRunner(project.pkg, progress, args);

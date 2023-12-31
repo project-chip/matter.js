@@ -91,10 +91,21 @@ export class Agent {
     }
 
     /**
-     * Add support for the {@link Behavior.Type}if necessary.
+     * Trigger initialization of a supported {@link Behavior.Type}.
+     * 
+     * Functionally identical to {@link waitFor} but has no return value.
      */
-    require<T extends Behavior.Type>(type: T) {
-        this.#part.behaviors.require(type);
+    load(type: Behavior.Type): void {
+        // This may return a promise but it's tracked internally by the
+        // backing so we can safely ignore
+        this.#part.behaviors.createWhenReady(type, this);
+    }
+
+    /**
+     * Add support for a {@link Behavior.Type}.
+     */
+    require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
+        this.#part.behaviors.require(type, options);
     }
 
     /**

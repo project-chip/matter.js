@@ -5,6 +5,7 @@
  */
 
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
+import { Ble } from "./ble/Ble.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
@@ -24,24 +25,35 @@ import {
 import { OperationalCredentialsCluster } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { AdministratorCommissioningHandler } from "./cluster/server/AdministratorCommissioningServer.js";
 import { ClusterServer } from "./cluster/server/ClusterServer.js";
-import { AttributeInitialValues } from "./cluster/server/ClusterServerTypes.js";
+import { AttributeInitialValues, ClusterDatasource, ClusterServerObj } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
 import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
+import { ImplementationError } from "./common/MatterError.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { RootEndpoint } from "./device/Device.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
+import { Logger } from "./log/Logger.js";
+import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { CommissioningOptions } from "./node/options/CommissioningOptions.js";
 import { NetworkOptions } from "./node/options/NetworkOptions.js";
 import { SubscriptionOptions } from "./node/options/SubscriptionOptions.js";
-import { BaseNodeServer } from "./node/server/BaseNodeServer.js";
-import { CommissioningFlowType } from "./schema/PairingCodeSchema.js";
+import { BaseNodeServer, DevicePairingInformation } from "./node/server/BaseNodeServer.js";
+import { EventHandler } from "./protocol/interaction/EventHandler.js";
+import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
+import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { CommissioningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./schema/PairingCodeSchema.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { MatterCoreSpecificationV1_1 } from "./spec/Specifications.js";
+import { StorageContext } from "./storage/StorageContext.js";
+import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { ByteArray } from "./util/ByteArray.js";
+
+const logger = Logger.get("CommissioningServer");
 
 export const FORBIDDEN_PASSCODES = [
     0, 11111111, 22222222, 33333333, 44444444, 55555555, 66666666, 77777777, 88888888, 99999999, 12345678, 87654321,
@@ -166,13 +178,44 @@ export interface CommissioningServerOptions {
 export class CommissioningServer extends BaseNodeServer {
     #commissioningChangedCallback: CommissioningServerOptions["commissioningChangedCallback"];
     #activeSessionsChangedCallback: CommissioningServerOptions["activeSessionsChangedCallback"];
+    #storage?: StorageContext;
+    #endpointStructureStorage?: StorageContext;
+    #subscriptionOptions: SubscriptionOptions;
+    #eventHandler?: EventHandler;
 
     protected override networkConfig: NetworkOptions.Configuration;
-    protected override subscriptionConfig: SubscriptionOptions.Configuration;
     protected override commissioningConfig: CommissioningOptions.Configuration;
     protected override rootEndpoint: EndpointInterface;
     protected override nextEndpointId: EndpointNumber;
     protected override advertiseOnStartup: boolean;
+
+    protected override get sessionStorage() {
+        return this.storage.createContext("SessionManager")
+    }
+
+    protected override get fabricStorage() {
+        return this.storage.createContext("FabricManager");
+    }
+
+    /**
+     * Obtain the storage context.  
+     */
+    get storage() {
+        if (this.#storage === undefined) {
+            throw new ImplementationError(
+                "Storage not initialized. The instance was not added to a Matter instance yet.",
+            );
+        }
+        return this.#storage;
+    }
+
+    /**
+     * Set the storage context.  Should be only used internally
+     */
+    set storage(storage: StorageContext) {
+        this.#storage = storage;
+        this.#endpointStructureStorage = this.#storage.createContext("EndpointStructure");
+    }
 
     /**
      * Creates a new CommissioningServer node and add all needed Root clusters
@@ -195,31 +238,31 @@ export class CommissioningServer extends BaseNodeServer {
             listeningAddressIpv6: options.listeningAddressIpv6,
         });
 
-        this.subscriptionConfig = SubscriptionOptions.configurationFor({
+        this.#subscriptionOptions = {
             maxIntervalSeconds: options.subscriptionMaxIntervalSeconds,
             minIntervalSeconds: options.subscriptionMinIntervalSeconds,
             randomizationWindowSeconds: options.subscriptionRandomizationWindowSeconds,
-        });
+        };
 
-        const commissioning = CommissioningOptions.initialConfigurationFor({
-            passcode: options.passcode,
-            discriminator: options.discriminator,
-            flowType: options.flowType,
-            automaticAnnouncement: !options.delayedAnnouncement,
-            additionalBleAdvertisementData: options.additionalBleAdvertisementData,
-        });
+        if (options.passcode !== undefined && FORBIDDEN_PASSCODES.includes(options.passcode)) {
+            throw new ImplementationError(`Passcode ${options.passcode} is not allowed`);
+        }
+
         this.commissioningConfig = {
-            ...commissioning,
-
-            passcode: commissioning.passcode ?? PaseClient.generateRandomPasscode(),
-            discriminator: commissioning.discriminator ?? PaseClient.generateRandomDiscriminator(),
-
             productDescription: {
                 name: options.deviceName,
                 deviceType: options.deviceType,
                 vendorId: VendorId(options.basicInformation.vendorId),
                 productId: options.basicInformation.productId,
             },
+
+            passcode: options.passcode ?? PaseClient.generateRandomPasscode(),
+            discriminator: options.discriminator ?? PaseClient.generateRandomDiscriminator(),
+
+            flowType: options.flowType ?? CommissioningFlowType.Standard,
+            additionalBleAdvertisementData: options.additionalBleAdvertisementData,
+            automaticAnnouncement: !options.delayedAnnouncement,
+            ble: Ble.enabled,
         };
 
         this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
@@ -402,6 +445,205 @@ export class CommissioningServer extends BaseNodeServer {
                 AdministratorCommissioningHandler(),
             ),
         );
+
+        // We must register this event before creating an InteractionServer so
+        // we initialize endpoint datasources before the InteractionServer
+        // processes events
+        this.endpointStructure.change.on(() => {
+            for (const endpoint of this.endpointStructure.endpoints.values()) {
+                for (const cluster of endpoint.getAllClusterServers()) {
+                    new CommissioningServerClusterDatasource(
+                        endpoint,
+                        cluster,
+                        this.storage,
+                        this.eventHandler
+                    );
+                }
+            }
+        })
+    }
+
+    /**
+     * @deprecated use {@link BaseNodeServer.commissioned}
+     */
+    isCommissioned() {
+        return this.commissioned;
+    }
+    
+    /**
+     * @deprecated use {@link BaseNodeServer.mdnsScanner}
+     */
+    setMdnsScanner(mdnsScanner: MdnsScanner) {
+        this.mdnsScanner = mdnsScanner;
+    }
+
+    /**
+     * @deprecated use {@link BaseNodeServer.mdnsBroadcaster}
+     */
+    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+        this.mdnsBroadcaster = mdnsBroadcaster;
+    }
+
+    /**
+     * @deprecated use {@link BaseNodeServer.storage}
+     */
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
+    }
+
+    /**
+     * @deprecated use {@link BaseNodeServer.port}
+     */
+    getPort() {
+        return this.port;
+    }
+
+    /**
+     * @deprecated use {@link BaseNodeServer.port}
+     */
+    setPort(port: number) {
+        this.port = port;
+    }
+
+    /**
+     * Return the pairing information for the device
+     */
+    getPairingCode(
+        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+    ): DevicePairingInformation {
+        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+        if (basicInformation == undefined) {
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
+        }
+        if (this.commissioningConfig === undefined) {
+            throw new ImplementationError("Pairing code is unavailable because commissioning is not configured");
+        }
+
+        const vendorId = basicInformation.attributes.vendorId.getLocal();
+        const productId = basicInformation.attributes.productId.getLocal();
+
+        let bleEnabled = Ble.enabled;
+
+        const qrPairingCode = QrPairingCodeCodec.encode({
+            version: 0,
+            vendorId: vendorId,
+            productId,
+            flowType: this.commissioningConfig.flowType,
+            discriminator: this.commissioningConfig.discriminator,
+            passcode: this.commissioningConfig.passcode,
+            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
+                discoveryCapabilities ?? {
+                    ble: bleEnabled,
+                    softAccessPoint: false,
+                    onIpNetwork: true,
+                },
+            ),
+        });
+
+        return {
+            manualPairingCode: ManualPairingCodeCodec.encode({
+                discriminator: this.commissioningConfig.discriminator,
+                passcode: this.commissioningConfig.passcode,
+            }),
+            qrPairingCode,
+        };
+    }
+
+    updateStructure() {
+        logger.debug("Endpoint structure got updated ...");
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
+        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
+    }
+
+    getNextEndpointId(increase = true) {
+        if (increase) {
+            this.nextEndpointId++;
+        }
+        return this.nextEndpointId;
+    }
+
+    assignEndpointIds() {
+        const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
+        this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
+        this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
+        this.#endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    }
+
+    private initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {
+        if (this.#endpointStructureStorage === undefined) {
+            throw new ImplementationError("Storage manager must be initialized to enable initialization from storage.");
+        }
+        const endpoints = endpoint.getChildEndpoints();
+        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
+            let endpointUniquePrefix = parentUniquePrefix;
+            const endpoint = endpoints[endpointIndex];
+            const thisUniqueId = endpoint.determineUniqueID();
+            if (thisUniqueId === undefined) {
+                if (endpoint.number === undefined) {
+                    logger.debug(
+                        `No unique id found for endpoint on index ${endpointIndex} / device ${endpoint.name} - using index as unique identifier!`,
+                    );
+                }
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
+            } else {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
+            }
+
+            if (endpoint.number === undefined) {
+                if (this.#endpointStructureStorage.has(endpointUniquePrefix)) {
+                    endpoint.number = this.#endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
+                    logger.debug(
+                        `Restored endpoint id ${endpoint.number} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`,
+                    );
+                }
+            }
+            if (endpoint.number !== undefined && endpoint.number > this.nextEndpointId) {
+                this.nextEndpointId = EndpointNumber(endpoint.number + 1);
+            }
+            this.initializeEndpointIdsFromStorage(endpoint, endpointUniquePrefix);
+        }
+    }
+
+    private fillAndStoreEndpointIds(endpoint: EndpointInterface, parentUniquePrefix = "") {
+        if (this.#endpointStructureStorage === undefined) {
+            throw new ImplementationError("endpointStructureStorage not set!");
+        }
+        const endpoints = endpoint.getChildEndpoints();
+        for (let endpointIndex = 0; endpointIndex < endpoints.length; endpointIndex++) {
+            let endpointUniquePrefix = parentUniquePrefix;
+            endpoint = endpoints[endpointIndex];
+            const thisUniqueId = endpoint.determineUniqueID();
+            if (thisUniqueId === undefined) {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}index_${endpointIndex}`;
+            } else {
+                endpointUniquePrefix += `${endpointUniquePrefix === "" ? "" : "-"}${thisUniqueId}`;
+            }
+
+            if (endpoint.number === undefined) {
+                endpoint.number = EndpointNumber(this.nextEndpointId++);
+                this.#endpointStructureStorage.set(endpointUniquePrefix, endpoint.number);
+                logger.debug(
+                    `Assigned endpoint id ${endpoint.number} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`,
+                );
+            }
+            this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
+        }
+    }
+
+    protected initializeEndpoints() {
+        if (
+            this.#storage === undefined ||
+            this.#endpointStructureStorage === undefined
+        ) {
+            throw new ImplementationError("Storage not initialized");
+        }
+
+        this.nextEndpointId = this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
     }
 
     protected override emitCommissioningChanged(fabric: FabricIndex): void {
@@ -410,5 +652,102 @@ export class CommissioningServer extends BaseNodeServer {
 
     protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
         this.#activeSessionsChangedCallback?.(fabric);
+    }
+
+    protected override async clearStorage() {
+        this.storage.clear();
+    }
+
+    protected override createInteractionServer() {
+        return new InteractionServer({
+            subscriptionOptions: this.#subscriptionOptions,
+            eventHandler: this.eventHandler,
+            endpointStructure: this.endpointStructure,
+        })
+    }
+
+    protected get eventHandler() {
+        if (!this.#eventHandler) {
+            this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
+        }
+        return this.#eventHandler;
+    }
+}
+
+class CommissioningServerClusterDatasource implements ClusterDatasource {
+    #version: number;
+    #clusterDescription: string;
+    #storage: StorageContext;
+    #eventHandler: EventHandler;
+    
+    constructor(
+        endpoint: EndpointInterface,
+        cluster: ClusterServerObj<any, any>,
+        storage: StorageContext,
+        eventHandler: EventHandler
+    ) {
+        this.#eventHandler = eventHandler;
+        this.#clusterDescription = `cluster ${cluster.name} (${cluster.id})`;
+        this.#storage = storage = storage.createContext(`Cluster-${endpoint.number}-${cluster.id}`);
+
+        const version = storage.get<number>("_clusterDataVersion", cluster.datasource?.version ?? -1);
+        if (version === -1) {
+            this.#version = Crypto.getRandomUInt32();
+        } else {
+            this.#version = version;
+        }
+
+        logger.debug(
+            `${storage.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${
+                this.#version
+            } in ${this.#clusterDescription}`,
+        );
+        storage.set("_clusterDataVersion", this.#version);
+
+        for (const attributeName in cluster.attributes) {
+            const attribute = cluster.attributes[attributeName];
+            if (!attribute) {
+                // Shouldn't be possible
+                continue;
+            }
+            if (!this.#storage.has(attributeName)) continue;
+            try {
+                const value = storage.get<any>(attributeName);
+                logger.debug(
+                    `Restoring attribute ${attributeName} (${attribute.id}) in ${this.#clusterDescription}`,
+                );
+                attribute.init(value);
+            } catch (error) {
+                logger.warn(
+                    `Failed to restore attribute ${attributeName} (${attribute.id}) in ${this.#clusterDescription}`,
+                    error,
+                );
+                storage.delete(attribute.name); // Storage broken so we should delete it
+            }
+        }
+
+        cluster.datasource = this;
+    }
+
+    get version() {
+        return this.#version;
+    }
+
+    get eventHandler() {
+        return this.#eventHandler;
+    }
+
+    increaseVersion(): number {
+        if (this.#version === 0xffffffff) {
+            this.#version = -1;
+        }
+        this.#storage?.set("_clusterDataVersion", ++this.#version);
+        return this.#version;
+    }
+
+    changed(attributeName: string, value: SupportedStorageTypes) {
+        if (value === undefined) return;
+        logger.debug(`Storing attribute ${attributeName} in ${this.#clusterDescription}`);
+        this.#storage?.set(attributeName, value);
     }
 }

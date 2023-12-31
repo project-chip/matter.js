@@ -6,14 +6,12 @@
 
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
-import { BasicInformationBehavior } from "../../behavior/definitions/basic-information/BasicInformationBehavior.js";
+import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
 import { LifecycleBehavior } from "../../behavior/definitions/lifecycle/LifecycleBehavior.js";
-import { DeviceCertification } from "../../behavior/definitions/operational-credentials/DeviceCertification.js";
 import { PartsBehavior } from "../../behavior/definitions/parts/PartsBehavior.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { VendorId } from "../../datatype/VendorId.js";
 import { Part } from "../../endpoint/Part.js";
 import { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
 import { PartServer } from "../../endpoint/server/PartServer.js";
@@ -25,6 +23,7 @@ import { Node } from "../Node.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
+import { NodeStore } from "./NodeStore.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 
 const logger = Logger.get("NodeServer");
@@ -44,27 +43,215 @@ export class NodeServer extends BaseNodeServer implements Node {
     #rootServer?: PartServer;
     #nextEndpointId: EndpointNumber;
     #host?: Host;
-    #commissioningConfig?: CommissioningOptions.Configuration;
-    #certification?: DeviceCertification;
-    #commissioningStorage?: StorageContext;
+    #store?: NodeStore;
 
+    /**
+     * The {@link Part} that is the root endpoint.
+     */
+    get root() {
+        return this.#root;
+    }
+
+    /**
+     * The configuration of the server.
+     * 
+     * This is derived from {@link ServerOptions} during initialization.
+     */
     get configuration() {
         return this.#configuration;
     }
 
-    protected override get networkConfig() {
-        return this.#configuration.network;
+    /**
+     * Create a new NodeServer.
+     * 
+     * @param options server configuration options
+     */
+    constructor(options?: ServerOptions.Configuration) {
+        super();
+
+        this.#configuration = ServerOptions.configurationFor(options);
+        this.#root = this.#configuration.root;
+        this.#root.owner = this;
+        this.#root.number = EndpointNumber(0);
+        this.#root.behaviors.require(PartsBehavior);
+        this.#root.behaviors.require(CommissioningBehavior);
+        this.#nextEndpointId = this.#configuration.nextEndpointNumber;
     }
 
-    protected override get subscriptionConfig() {
-        return this.#configuration.subscription;
+    /**
+     * Initialize the node.
+     * 
+     * Loads persisted state and prepares parts for use.  This is separate
+     * from construction because persistence is asynchronous.
+     * 
+     * You cannot use the agent API until the NodeServer is initialized.
+     *
+     * Invoked automatically on start but you may invoke manually to enable
+     * agent API prior to startup.
+     */
+    override async initialize() {
+        if (this.#store) {
+            // Already initialized
+            return;
+        }
+
+        this.#store = new NodeStore(this.#configuration);
+        await this.#store.initialize();
+
+        this.#root.initialize();
+    }
+
+    /**
+     * Bring the device online.
+     */
+    override async start() {
+        await this.initialize();
+
+        const agent = this.#root.agent;
+
+        if (!this.commissioned) {
+            const commissioning = await agent.waitFor(CommissioningBehavior);
+            commissioning.initiateCommissioning();
+        }
+
+        await super.start();
+
+        agent.get(LifecycleBehavior).state.online = true;
+        logger.info(`Node "${this.description}" is online`);
+    }
+
+    /**
+     * Run the node in "standalone" mode.
+     *
+     * This mode creates a {@link Host} dedicated to this node.
+     */
+    async run() {
+        if (this.#host) {
+            throw new ImplementationError("Already running");
+        }
+        const runner = new Host(this.#configuration);
+        runner.add(this);
+        await runner.run();
+    }
+
+    /**
+     * Add an endpoint that implements a {@link EndpointType}.
+     */
+    add<T extends EndpointType>(type: T, options?: Part.Options<T>): void;
+
+    /**
+     * Add an endpoint implemented by a {@link Part}.
+     */
+    add(part: Part): void;
+
+    add(endpoint: Part | EndpointType, options?: Part.Options) {
+        this.root.agent.get(PartsBehavior).add(endpoint, options);
+    }
+
+    /**
+     * Terminate after starting with run().
+     */
+    abort() {
+        if (!this.#host) {
+            throw new ImplementationError("Not running");
+        }
+        this.#host.abort();
+    }
+
+    /**
+     * We are the root of the {@link Part} ownership hierarchy.  If the
+     * behavior is not requesting a {@link NodeServer} then this request fails.
+     */
+    getAncestor<T>(type: new (...args: any[]) => T) {
+        if (this instanceof type) {
+            return this;
+        }
+        throw new ImplementationError(`Behavior is not owned by ${type.name}`);
+    }
+
+    /**
+     * Support for JS "async using".  Cleans up resources when the server is
+     * no longer needed.
+     */
+    async [Symbol.asyncDispose]() {
+        await this.#rootServer?.[Symbol.asyncDispose]();
+        await this.#store?.[Symbol.asyncDispose]();
+    }
+
+    /**
+     * Set a Part's ID, number and storage.
+     */
+    initializePart(part: Part) {
+        if (part.id === undefined) {
+            part.id = this.#identifyPart(part);
+        }
+
+        const store = this.storeFor(part);
+        if (part.persistence) {
+            part.persistence.internal.partStore = store;
+        }
+
+        if (part.number === undefined) {
+            if (part === this.#root) {
+                part.number = EndpointNumber(1);
+            } else {
+                part.number = EndpointNumber(store.number ?? this.#initializedStore.allocateNumber());
+            }
+        }
+
+        // TODO - ensure ID and number are unique
+    }
+
+    /**
+     * If a {@link Part} does not yet have a {@link PartServer}, create one
+     * now, then create a {@link BehaviorBacking} for a specific
+     * {@link Behavior}.
+     * 
+     * This is where we adapt parts and behaviors for a server role.
+     */
+    initializeBehavior(part: Part, behavior: Behavior.Type): BehaviorBacking {
+        return PartServer.forPart(part).createBacking(behavior);
+    }
+
+    storeFor(part: Part) {
+        return this.#initializedStore.storeFor(part);
+    }
+
+    fallbackIdFor(part: Part) {
+        if (part === this.#root) {
+            return "root";
+        } else if (part.owner instanceof Part) {
+            let index = 0;
+            for (const part2 of part.owner.parts) {
+                if (part2 === part) {
+                    const id = `${part.owner.id}#${index}`;
+                    logger.warn(`Using fallback ID ${id} for unidentified part; set part ID to remove this warning`);
+                    return id;
+                }
+                index++;
+            }
+        }
+        throw new ImplementationError(`${part.description}: Cannot determine ID`);
+    }
+
+    /**
+     * Textual description of the node used in diagnostic messages.
+     */
+    get description() {
+        return this.commissioningConfig.productDescription.name;
+    }
+
+    override async close() {
+        this.#root.agent.get(LifecycleBehavior).state.online = false;
+        await super.close();
     }
 
     protected override get commissioningConfig() {
-        if (this.#commissioningConfig === undefined) {
-            throw new InternalError("Commissioning attempted prior to commissioning configuration");
-        }
-        return this.#commissioningConfig;
+        return this.root.agent.get(CommissioningBehavior).state as CommissioningOptions.Configuration;
+    }
+
+    protected override get networkConfig() {
+        return this.#configuration.network;
     }
 
     protected override get rootEndpoint() {
@@ -83,160 +270,85 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     protected override get advertiseOnStartup() {
-        return this.#configuration.commissioning?.automaticAnnouncement !== false;
+        return !!this.#root.agent.get(CommissioningBehavior).state.automaticAnnouncement;
     }
 
     protected override emitCommissioningChanged(_fabric: FabricIndex): void {}
 
     protected override emitActiveSessionsChanged(_fabric: FabricIndex): void {}
 
-    get certification() {
-        if (this.#certification === undefined) {
-            throw new InternalError("Certification attempted prior to certification configuration");
-        }
-        return this.#certification;
-    }
-
-    constructor(options?: ServerOptions.Configuration) {
-        super();
-
-        this.#configuration = ServerOptions.configurationFor(options);
-        this.#root = this.#configuration.root;
-        this.#root.owner = this;
-        this.#root.behaviors.require(PartsBehavior);
-        this.#nextEndpointId = this.#configuration.nextEndpointId;
-    }
-
-    indexOf(): undefined {}
-
-    /**
-     * Add an endpoint.
-     */
-    add(endpoint: Part | EndpointType) {
-        this.root.agent.get(PartsBehavior).add(endpoint);
-    }
-
-    /**
-     * Access the root endpoint {@link Part}.
-     */
-    get root() {
-        return this.#root;
-    }
-
-    /**
-     * Run the node in "standalone" mode.
-     *
-     * This mode creates a {@link Host} dedicated to this node.
-     */
-    async run() {
-        if (this.#host) {
-            throw new ImplementationError("Already running");
-        }
-        const runner = new Host(this.#configuration);
-        runner.add(this);
-        await runner.run();
-    }
-
-    /**
-     * Terminate after starting with run().
-     */
-    abort() {
-        if (!this.#host) {
-            throw new ImplementationError("Not running");
-        }
-        this.#host.abort();
-    }
-
-    async [Symbol.asyncDispose]() {
-        await this.#rootServer?.[Symbol.asyncDispose]();
-    }
-
-    getAncestor<T>(type: new (...args: any[]) => T) {
-        if (this instanceof type) {
-            return this;
-        }
-        throw new ImplementationError(`Behavior is not owned by ${type.name}`);
-    }
-
-    createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking {
-        return PartServer.forPart(part).createBacking(behavior);
-    }
-
-    override async start() {
-        this.configureProduct();
-        this.configureCommissioning();
-
-        await super.start();
-        this.#root.agent.get(LifecycleBehavior).state.online = true;
-    }
-
-    override async close() {
-        this.#root.agent.get(LifecycleBehavior).state.online = false;
-        await super.close();
-    }
-
-    override setStorage(storage: StorageContext) {
-        super.setStorage(storage);
-        this.#commissioningStorage = storage.createContext("Commissioning");
-    }
-
-    protected configureCommissioning() {
-        if (this.#commissioningStorage === undefined) {
-            throw new InternalError("Cannot configure commissioning because commissioning storage is not configured");
-        }
-
-        const config = { ...this.#configuration.commissioning };
-
-        if (config.passcode === undefined && this.#commissioningStorage.has("passcode")) {
-            config.passcode = this.#commissioningStorage.get("passcode");
-        }
-        if (config.discriminator === undefined && this.#commissioningStorage.has("discriminator")) {
-            config.discriminator = this.#commissioningStorage.get("discriminator");
-        }
-
-        this.#commissioningConfig = CommissioningOptions.finalConfigurationFor(
-            this.#configuration.commissioning,
-            this.root,
+    protected override createInteractionServer() {
+        return new TransactionalInteractionServer(
+            this.#root,
+            this.#initializedStore,
+            this.#configuration.subscription
         );
-
-        this.#certification = new DeviceCertification(
-            this.#configuration.certification,
-            this.#commissioningConfig.productDescription,
-        );
-
-        this.#commissioningStorage.set("passcode", this.#commissioningConfig.passcode);
-        this.#commissioningStorage.set("discriminator", this.#commissioningConfig.discriminator);
     }
 
-    protected configureProduct() {
-        const bi = this.root.agent.get(BasicInformationBehavior).state;
+    protected override get sessionStorage(): StorageContext {
+        return this.#initializedStore.sessionStorage;
+    }
 
-        const defaultsSet = {} as Record<string, any>;
+    protected override get fabricStorage(): StorageContext {
+        return this.#initializedStore.fabricStorage;
+    }
 
-        function setDefault<T extends keyof typeof bi>(name: T, value: (typeof bi)[T]) {
-            if (bi[name] === undefined) {
-                bi[name] = value;
-                defaultsSet[name] = value;
+    protected override initializeEndpoints(): void {
+        throw new Error("Method not implemented.");
+    }
+    
+    protected override clearStorage(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    get #initializedStore() {
+        if (this.#store === undefined) {
+            throw new ImplementationError(`${this.description}: Storage accessed prior to initialization`);
+        }
+        return this.#store;
+    }
+
+    /**
+     * Select an ID for a part automatically based on available metadata.
+     */
+    #identifyPart(part: Part) {
+        const basicInfo = part.behaviors.supported.basicInformation ?? part.behaviors.supported.bridgedDeviceBasicInformation;
+        if (basicInfo) {
+            const defaults = {
+                ...new basicInfo.State,
+                ...part.behaviors.defaultsFor(basicInfo),
+            }
+
+            let id = (defaults as Record<string, string>).uniqueId;
+            if (id) {
+                return id;
+            }
+
+            id = (defaults as Record<string, string>).serialNumber;
+            if (id) {
+                return id;
             }
         }
 
-        setDefault("vendorId", VendorId(0xfff1));
-        setDefault("vendorName", "Matter.js Test Vendor");
-        setDefault("productId", 0x8000);
-        setDefault("productName", "Matter.js Test Product");
-
-        if (Object.keys(defaultsSet).length) {
-            logger.warn("Using development values for some BasicInformation attributes:", Logger.dict(defaultsSet));
+        if (part === this.#root) {
+            return "root";
         }
 
-        setDefault("productLabel", bi.productName);
-        setDefault("nodeLabel", bi.productName);
-        setDefault("dataModelRevision", 1);
-        setDefault("hardwareVersionString", bi.hardwareVersion.toString());
-        setDefault("softwareVersionString", bi.softwareVersion.toString());
-    }
+        if (!(part.owner instanceof Part)) {
+            throw new InternalError("Cannot determine ID for part with unknown parent type");
+        }
+        if (part.owner.id === undefined) {
+            throw new InternalError("Cannot determine ID for part because parent has no ID");
+        }
 
-    protected override createInteractionServer(storage: StorageContext) {
-        return new TransactionalInteractionServer(storage, this.subscriptionConfig);
+        const index = part.owner.parts.indexOf(part);
+        if (index === -1) {
+            throw new InternalError("Cannot determine ID for part because parent does not list as child");
+        }
+
+        const id = `${part.owner.id}#${index}`;
+        logger.warn(`Assigning ID ${id} for anonymous part based on index within parent`);
+
+        return id;
     }
 }

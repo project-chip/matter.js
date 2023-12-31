@@ -69,13 +69,13 @@ export class DescriptorServer extends DescriptorBehavior {
     }
 
     private addParts(...parts: Part[]) {
-        this.state.partsList = this.addToList(this.state.partsList, this.defined(parts.map(part => part.id)));
+        this.state.partsList = this.addToList(this.state.partsList, this.defined(parts.map(part => part.number)));
     }
 
     private removeParts(...parts: Part[]) {
         this.state.partsList = this.removeFromList(
             this.state.partsList,
-            parts.map(part => part.id),
+            parts.map(part => part.number),
         );
     }
 

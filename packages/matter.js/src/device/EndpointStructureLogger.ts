@@ -242,7 +242,7 @@ export function logEndpoint(
 ) {
     if (options.endpointFilter !== undefined && !options.endpointFilter(endpoint)) return;
 
-    logger.info(`Endpoint ${endpoint.id} (${endpoint.name}):`);
+    logger.info(`Endpoint ${endpoint.number} (${endpoint.name}):`);
     if (options.logClusterServers !== false) {
         Logger.nest(() => {
             logger.info("Cluster-Servers:");

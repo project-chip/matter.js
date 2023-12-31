@@ -11,7 +11,6 @@ import {
     AttributeServer,
     FabricScopedAttributeServer,
 } from "../../cluster/server/AttributeServer.js";
-import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
@@ -30,7 +29,6 @@ import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
-import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
@@ -126,40 +124,31 @@ export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchem
  * Translates interactions from the Matter protocol to Matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    private endpointStructure = new InteractionEndpointStructure();
-    private nextSubscriptionId = Crypto.getRandomUInt32();
-    private eventHandler = new EventHandler(this.storage);
-    private readonly subscriptionMap = new Map<number, SubscriptionHandler>();
-    private isClosing = false;
+    #endpointStructure = new InteractionEndpointStructure();
+    #nextSubscriptionId = Crypto.getRandomUInt32();
+    readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
+    #isClosing = false;
+    #subscriptionConfig: SubscriptionOptions.Configuration;
+    #eventHandler: EventHandler;
 
-    constructor(
-        private readonly storage: StorageContext,
-        private readonly subscriptionOptions = SubscriptionOptions.configurationFor({}),
-    ) {}
+    constructor({ subscriptionOptions, eventHandler, endpointStructure }: InteractionServer.Configuration) {
+        this.#subscriptionConfig = SubscriptionOptions.configurationFor(subscriptionOptions);
+        this.#eventHandler = eventHandler;
+        this.#endpointStructure = endpointStructure;
+
+        this.#endpointStructure.change.on(() => {
+            for (const subscription of this.#subscriptionMap.values()) {
+                subscription.updateSubscription();
+            }
+        })
+    }
 
     getId() {
         return INTERACTION_PROTOCOL_ID;
     }
 
-    setRootEndpoint(endpoint: EndpointInterface) {
-        // Reset all data
-        this.endpointStructure.initializeFromEndpoint(endpoint);
-
-        for (const endpoint of this.endpointStructure.endpoints.values()) {
-            for (const cluster of endpoint.getAllClusterServers()) {
-                const clusterServer = asClusterServerInternal(cluster);
-                clusterServer._setStorage(this.storage.createContext(`Cluster-${endpoint.id}-${cluster.id}`));
-                clusterServer._registerEventHandler(this.eventHandler);
-            }
-        }
-
-        for (const subscription of this.subscriptionMap.values()) {
-            subscription.updateSubscription();
-        }
-    }
-
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
-        if (this.isClosing) return; // We are closing, ignore anything newly incoming
+        if (this.#isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
             readRequest => this.handleReadRequest(exchange, readRequest),
             (writeRequest, message) => this.handleWriteRequest(exchange, writeRequest, message),
@@ -182,9 +171,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     ): Promise<DataReportPayload> {
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
-                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
             }, events:${
-                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
             } isFabricFiltered=${isFabricFiltered}`,
         );
 
@@ -215,26 +204,26 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         let attributeReportsPayload = new Array<AttributeReportPayload>();
         for (const path of attributeRequests ?? []) {
-            const attributes = this.endpointStructure.getAttributes([path]);
+            const attributes = this.#endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
                 const { endpointId, clusterId, attributeId } = path;
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                     // Wildcard path: Just leave out values
                     logger.debug(
-                        `Read from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Read from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
                         )}: ignore non-existing attribute`,
                     );
                 } else {
                     // Else return correct status
                     let status = StatusCode.UnsupportedAttribute;
-                    if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                    if (!this.#endpointStructure.hasEndpoint(endpointId)) {
                         status = StatusCode.UnsupportedEndpoint;
-                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                    } else if (!this.#endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         status = StatusCode.UnsupportedCluster;
                     }
                     logger.debug(
-                        `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
                         )}: unsupported path: Status=${status}`,
                     );
@@ -253,7 +242,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         : undefined;
                 if (versionFilterValue !== undefined && versionFilterValue === version) {
                     logger.debug(
-                        `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
                         )}=${Logger.toJSON(value)} (version=${version}) ignored because of dataVersionFilter`,
                     );
@@ -261,7 +250,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 }
 
                 logger.debug(
-                    `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                    `Read attribute from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                         path,
                     )}=${Logger.toJSON(value)} (version=${version})`,
                 );
@@ -275,10 +264,10 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         if (eventRequests) {
             eventReportsPayload = [];
             for (const path of eventRequests) {
-                const events = this.endpointStructure.getEvents([path]);
+                const events = this.#endpointStructure.getEvents([path]);
                 if (events.length === 0) {
                     logger.debug(
-                        `Read event from ${exchange.channel.name}: ${this.endpointStructure.resolveEventName(
+                        `Read event from ${exchange.channel.name}: ${this.#endpointStructure.resolveEventName(
                             path,
                         )}: unsupported path`,
                     );
@@ -288,9 +277,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 const reportsForPath = new Array();
                 for (const { path, event } of events) {
-                    const matchingEvents = this.eventHandler.getEvents(path, eventFilters);
+                    const matchingEvents = this.#eventHandler.getEvents(path, eventFilters);
                     logger.debug(
-                        `Read event from ${exchange.channel.name}:  ${this.endpointStructure.resolveEventName(
+                        `Read event from ${exchange.channel.name}:  ${this.#endpointStructure.resolveEventName(
                             path,
                         )}=${Logger.toJSON(matchingEvents)}`,
                     );
@@ -338,7 +327,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     ): Promise<WriteResponse> {
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
-                .map(req => this.endpointStructure.resolveAttributeName(req.path))
+                .map(req => this.#endpointStructure.resolveAttributeName(req.path))
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
 
@@ -404,7 +393,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 );
             }
 
-            const attributes = this.endpointStructure.getAttributes([path], true);
+            const attributes = this.#endpointStructure.getAttributes([path], true);
             const { endpointId, clusterId, attributeId } = path;
             if (attributes.length === 0) {
                 // No attribute found
@@ -412,7 +401,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 if (endpointId === undefined || clusterId === undefined || attributeId === undefined) {
                     // Wildcard path: Just ignore
                     logger.debug(
-                        `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
                         )}: ignore non-existing attribute`,
                     );
@@ -420,22 +409,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 } else {
                     // Else return correct status
                     let statusCode = StatusCode.UnsupportedAttribute;
-                    if (this.endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) {
+                    if (this.#endpointStructure.hasAttribute(endpointId, clusterId, attributeId)) {
                         // If attribute exists but was not returned above, it is not writeable
                         statusCode = StatusCode.UnsupportedWrite;
-                    } else if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                    } else if (!this.#endpointStructure.hasEndpoint(endpointId)) {
                         statusCode = StatusCode.UnsupportedEndpoint;
-                    } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                    } else if (!this.#endpointStructure.hasClusterServer(endpointId, clusterId)) {
                         statusCode = StatusCode.UnsupportedCluster;
                     } else {
                         // check if concrete path and just "not writable"
-                        const allAttributes = this.endpointStructure.getAttributes([path]);
+                        const allAttributes = this.#endpointStructure.getAttributes([path]);
                         if (allAttributes.length > 0) {
                             statusCode = StatusCode.UnsupportedWrite;
                         }
                     }
                     logger.debug(
-                        `Write from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                        `Write from ${exchange.channel.name}: ${this.#endpointStructure.resolveAttributeName(
                             path,
                         )} not allowed: Status=${statusCode}`,
                     );
@@ -469,10 +458,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 }
 
                 if (dataVersion !== undefined) {
-                    const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
-                    if (cluster !== undefined && dataVersion !== cluster.clusterDataVersion) {
+                    const datasource = this.#endpointStructure.getClusterServer(endpointId, clusterId)?.datasource;
+                    
+                    if (datasource !== undefined && dataVersion !== datasource.version) {
                         logger.debug(
-                            `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${cluster.clusterDataVersion}).`,
+                            `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${datasource.version}).`,
                         );
                         writeResults.push({ path, statusCode: StatusCode.DataVersionMismatch });
                         continue;
@@ -488,7 +478,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     logger.debug(
                         `Handle write request from ${
                             exchange.channel.name
-                        } resolved to: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                        } resolved to: ${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
                             value,
                         )} (Version=${dataVersion})`,
                     );
@@ -520,7 +510,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         logger.error(
                             `Error while handling write request from ${
                                 exchange.channel.name
-                            } to ${this.endpointStructure.resolveAttributeName(path)}: ${error.message}`,
+                            } to ${this.#endpointStructure.resolveAttributeName(path)}: ${error.message}`,
                         );
                         if (error instanceof StatusResponseError) {
                             writeResults.push({ path, statusCode: error.code, clusterStatusCode: error.clusterCode });
@@ -532,7 +522,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         logger.debug(
                             `While handling write request from ${
                                 exchange.channel.name
-                            } to ${this.endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
+                            } to ${this.#endpointStructure.resolveAttributeName(path)} ignored: ${error.message}`,
                         );
 
                         // TODO - This behavior may be wrong.
@@ -566,7 +556,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     ? `with following errors: ${errorResults
                           .map(
                               ({ path, statusCode }) =>
-                                  `${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`,
+                                  `${this.#endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(statusCode)}`,
                           )
                           .join(", ")}`
                     : "without errors"
@@ -631,9 +621,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         logger.debug(
             `Subscribe to attributes:${
-                attributeRequests?.map(path => this.endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
+                attributeRequests?.map(path => this.#endpointStructure.resolveAttributeName(path)).join(", ") ?? "none"
             }, events:${
-                eventRequests?.map(path => this.endpointStructure.resolveEventName(path)).join(", ") ?? "none"
+                eventRequests?.map(path => this.#endpointStructure.resolveEventName(path)).join(", ") ?? "none"
             }`,
         );
 
@@ -674,22 +664,22 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         // TODO: Interpret specs:
         // The publisher SHALL compute an appropriate value for the MaxInterval field in the action. This SHALL respect the following constraint: MinIntervalFloor ≤ MaxInterval ≤ MAX(SUBSCRIPTION_MAX_INTERVAL_PUBLISHER_LIMIT=60mn, MaxIntervalCeiling)
 
-        if (this.nextSubscriptionId === 0xffffffff) this.nextSubscriptionId = 0;
-        const subscriptionId = this.nextSubscriptionId++;
+        if (this.#nextSubscriptionId === 0xffffffff) this.#nextSubscriptionId = 0;
+        const subscriptionId = this.#nextSubscriptionId++;
         const subscriptionHandler = new SubscriptionHandler(
             subscriptionId,
             session,
-            this.endpointStructure,
+            this.#endpointStructure,
             attributeRequests,
             dataVersionFilters,
             eventRequests,
             eventFilters,
-            this.eventHandler,
+            this.#eventHandler,
             isFabricFiltered,
             minIntervalFloorSeconds,
             maxIntervalCeilingSeconds,
-            () => this.subscriptionMap.delete(subscriptionId),
-            this.subscriptionOptions,
+            () => this.#subscriptionMap.delete(subscriptionId),
+            this.#subscriptionConfig,
         );
 
         try {
@@ -728,7 +718,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }),
         );
 
-        this.subscriptionMap.set(subscriptionId, subscriptionHandler);
+        this.#subscriptionMap.set(subscriptionId, subscriptionHandler);
         session.addSubscription(subscriptionHandler);
         subscriptionHandler.activateSendingUpdates();
     }
@@ -741,7 +731,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         logger.debug(
             `Received invoke request from ${exchange.channel.name}: ${invokeRequests
                 .map(({ commandPath: { endpointId, clusterId, commandId } }) =>
-                    this.endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
+                    this.#endpointStructure.resolveCommandName({ endpointId, clusterId, commandId }),
                 )
                 .join(", ")}, suppressResponse=${suppressResponse}`,
         );
@@ -783,7 +773,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         await Promise.all(
             invokeRequests.flatMap(async ({ commandPath, commandFields }) => {
-                const commands = this.endpointStructure.getCommands([commandPath]);
+                const commands = this.#endpointStructure.getCommands([commandPath]);
 
                 // TODO also check ACL and Timed, Fabric scoping constrains
 
@@ -793,20 +783,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     if (endpointId === undefined || clusterId === undefined || commandId === undefined) {
                         // Wildcard path: Just ignore
                         logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 commandPath,
                             )} ignore non-existing attribute`,
                         );
                     } else {
                         // Else return correct status
                         let status = StatusCode.UnsupportedCommand;
-                        if (!this.endpointStructure.hasEndpoint(endpointId)) {
+                        if (!this.#endpointStructure.hasEndpoint(endpointId)) {
                             status = StatusCode.UnsupportedEndpoint;
-                        } else if (!this.endpointStructure.hasClusterServer(endpointId, clusterId)) {
+                        } else if (!this.#endpointStructure.hasClusterServer(endpointId, clusterId)) {
                             status = StatusCode.UnsupportedCluster;
                         }
                         logger.debug(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 commandPath,
                             )} unsupported path: Status=${status}`,
                         );
@@ -820,7 +810,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     if (endpointId === undefined) {
                         // Should never happen
                         logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 path,
                             )} invalid path because empty endpoint!`,
                         );
@@ -829,11 +819,11 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         });
                         continue;
                     }
-                    const endpoint = this.endpointStructure.getEndpoint(endpointId);
+                    const endpoint = this.#endpointStructure.getEndpoint(endpointId);
                     if (endpoint === undefined) {
                         // Should never happen
                         logger.error(
-                            `Invoke from ${exchange.channel.name}: ${this.endpointStructure.resolveCommandName(
+                            `Invoke from ${exchange.channel.name}: ${this.#endpointStructure.resolveCommandName(
                                 path,
                             )} invalid path because endpoint not found!`,
                         );
@@ -928,10 +918,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     async close() {
-        this.isClosing = true;
-        this.endpointStructure.destroy();
-        for (const subscription of this.subscriptionMap.values()) {
+        this.#isClosing = true;
+        for (const subscription of this.#subscriptionMap.values()) {
             await subscription.cancel(true);
         }
+    }
+}
+
+export namespace InteractionServer {
+    export interface Configuration {
+        readonly subscriptionOptions?: SubscriptionOptions;
+        readonly eventHandler: EventHandler;
+        readonly endpointStructure: InteractionEndpointStructure;
     }
 }

@@ -8,8 +8,6 @@ import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
 import { BehaviorBacking } from "../behavior/BehaviorBacking.js";
 import type { InvocationContext } from "../behavior/InvocationContext.js";
-import { BasicInformationBehavior } from "../behavior/definitions/basic-information/BasicInformationBehavior.js";
-import { BridgedDeviceBasicInformationBehavior } from "../behavior/definitions/bridged-device-basic-information/BridgedDeviceBasicInformationBehavior.js";
 import { LifecycleBehavior } from "../behavior/definitions/lifecycle/LifecycleBehavior.js";
 import { PartsBehavior } from "../behavior/definitions/parts/PartsBehavior.js";
 import { ImplementationError } from "../common/MatterError.js";
@@ -18,6 +16,7 @@ import { Agent } from "./Agent.js";
 import { Behaviors } from "./part/Behaviors.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { EndpointType } from "./type/EndpointType.js";
+import { PersistenceBehavior } from "./server/PersistenceBehavior.js";
 
 /**
  * Endpoints consist of a root part and one or more child parts.  This class
@@ -28,54 +27,115 @@ import { EndpointType } from "./type/EndpointType.js";
  * instantiation so you can create them as needed then discard.
  */
 export class Part<T extends EndpointType = EndpointType.Empty> implements PartOwner {
-    #id?: EndpointNumber;
-    #key?: string | undefined;
+    #id?: string | undefined;
+    #number?: EndpointNumber;
     #type: EndpointType;
     #owner?: PartOwner;
     #agentType?: Agent.Type<T["behaviors"]>;
     #offlineAgent?: Agent.Instance<T["behaviors"]>;
     #behaviors: Behaviors;
+    #parts?: PartsBehavior;
+    #lifecycle?: LifecycleBehavior;
+    #persistence?: PersistenceBehavior;
 
-    constructor(type: T, options?: Part.Options) {
+    constructor(type: T, options?: Part.Options<T>) {
         if (type === null || typeof type !== "object") {
             throw new ImplementationError(`Part type is not an object`);
         }
 
         this.#type = type;
 
-        if (options?.id !== undefined) {
-            this.id = EndpointNumber(options.id);
+        if (options?.number !== undefined) {
+            this.number = EndpointNumber(options.number);
         }
 
-        if (options?.key !== undefined) {
-            // Any other limitations?
-            if (typeof options.key !== "string" || !options.key.length) {
-                throw new ImplementationError(`Illegal part identifier ${options.key}`);
-            }
-            this.#key = options.key;
+        if (options?.id !== undefined) {
+            this.id = options.id;
         }
 
         const behaviors = type.behaviors ?? [];
 
-        this.#behaviors = new Behaviors(this, behaviors);
+        this.#behaviors = new Behaviors(this, behaviors, { ...options });
 
         this.#behaviors.require(LifecycleBehavior);
     }
 
     /**
-     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely
-     * identifies the {@link Part} in the scope of the Matter node.
+     * Initialize the part.  Must be called after server structure is complete.
+     */
+    initialize() {
+        if (this.#owner === undefined) {
+            throw new ImplementationError("Cannot initialize uninstalled part");
+        }
+
+        this.#owner.initializePart(this);
+
+        if (this.#id === undefined) {
+            throw new ImplementationError("No part ID assigned after initialization");
+        }
+
+        if (this.number === undefined) {
+            throw new ImplementationError("No part number assigned after initialization");
+        }
+
+        this.lifecycle.state.installed = true;
+    }
+
+    /**
+     * A string that uniquely identifies a part.  This ID must be unique across
+     * the Matter node.
      */
     get id() {
         return this.#id;
     }
 
     /**
-     * A string that uniquely identifies a part.  This is an alternative ID
-     * that is unique across the Matter node.
+     * Assign the endpoint ID.  The endpoint ID must be unique across all
+     * endpoints in a node.  Once assigned the endpoint ID is permanent.
      */
-    get key() {
-        return this.#key;
+    set id(id: string | undefined) {
+        if (typeof id !== "string") {
+            throw new ImplementationError(`Illegal endpoint ID type "${typeof id}"`);
+        }
+        if (id === "") {
+            throw new ImplementationError("Endpoint ID may not be empty");
+        }
+        if (id.includes(".")) {
+            throw new ImplementationError('Endpoint ID may not include "."');
+        }
+        this.#id = id;
+    }
+
+    /**
+     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely
+     * identifies the {@link Part} in the scope of the Matter node.
+     */
+    get number() {
+        return this.#number;
+    }
+
+    /**
+     * Assign the endpoint number.  The endpoint number must be unique across
+     * all endpoints in a node.  Once assigned the endpoint number is
+     * permanent.
+     * 
+     * TS requires us to allow undefined here but it is not a legal argument type.
+     */
+    set number(value: EndpointNumber | undefined) {
+        if (typeof value !== "number") {
+            throw new ImplementationError(`Illegal endpoint number type "${typeof value}"`);
+        }
+        if (value < 0 || value > 0xffff) {
+            throw new ImplementationError(`Endpoint number ${value} is out of bounds`);
+        }
+        if (this.#number !== undefined && this.#number !== value) {
+            throw new ImplementationError(`Illegal attempt to reassign endpoint number ${this.#number} to ${value}`);
+        }
+        this.#number = value;
+
+        if (this.#owner !== undefined) {
+            this.lifecycle.state.installed = true;
+        }
     }
 
     /**
@@ -106,29 +166,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
         this.#owner = owner;
 
-        if (this.#id !== undefined) {
-            this.agent.get(LifecycleBehavior).state.installed = true;
-        }
-    }
-
-    /**
-     * Set endpoint ID.  TS requires us to allow undefined here but it is not
-     * a legal argument type.
-     */
-    set id(value: EndpointNumber | undefined) {
-        if (typeof value !== "number") {
-            throw new ImplementationError(`Illegal endpoint ID type "${typeof value}"`);
-        }
-        if (value < 0 || value > 65535) {
-            throw new ImplementationError(`Endpoint ID ${value} is out of bounds`);
-        }
-        if (this.#id !== undefined && this.#id !== value) {
-            throw new ImplementationError(`Illegal attempt to reassign endpoint ${this.#id} ID to ${value}`);
-        }
-        this.#id = value;
-
-        if (this.#owner !== undefined) {
-            this.agent.get(LifecycleBehavior).state.installed = true;
+        if (this.#number !== undefined) {
+            this.lifecycle.state.installed = true;
         }
     }
 
@@ -140,18 +179,50 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
+     * Access child parts.
+     */
+    get parts() {
+        if (!this.#parts) {
+            this.#agent.require(PartsBehavior);
+            this.#parts = this.#agent.get(PartsBehavior);
+        }
+        return this.#parts;
+    }
+
+    /**
+     * Access lifecycle information.
+     */
+    get lifecycle() {
+        if (!this.#lifecycle) {
+            this.#lifecycle = this.#agent.get(LifecycleBehavior);
+        }
+        return this.#lifecycle;
+    }
+
+    /**
+     * Access persistence implementation.  This will only be present if the
+     * part has non-volatile values in its schema.
+     */
+    get persistence() {
+        if (this.#behaviors.has(PersistenceBehavior) && !this.#persistence) {
+            this.#persistence = this.#agent.get(PersistenceBehavior);
+        }
+        return this.#persistence;
+    }
+
+    /**
      * Returns a human-readable name for the part.
      */
     get description() {
         let description;
-        if (this.key) {
-            description = ` ${this.key}`;
-        }
         if (this.id) {
+            description = ` ${this.id}`;
+        }
+        if (this.number) {
             if (description) {
-                description = `${description} (#${this.id})`;
+                description = `${description} (#${this.number})`;
             } else {
-                description = ` #${this.id}`;
+                description = ` #${this.number}`;
             }
         }
         description = `Endpoint ${description ?? ""} of type ${
@@ -163,55 +234,16 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
     toString() {
         const ident = Array<string>();
-        if (this.key) {
-            ident.push(this.key);
-        }
         if (this.id) {
-            ident.push(`#${this.id}`);
+            ident.push(this.id);
+        }
+        if (this.number) {
+            ident.push(`#${this.number}`);
         }
         if (!ident.length) {
             ident.push("anon");
         }
         return `${this.type.name}<${ident.join("; ")}>`;
-    }
-
-    /**
-     * Obtain the key used to identify this part across invocations.
-     *
-     * @returns the key, or undefined if the key is unavailable
-     */
-    get uniqueId() {
-        if (this.key) {
-            return `custom-${this.key}`;
-        }
-
-        const agent = this.agent;
-        let basicInfo:
-            | InstanceType<typeof BasicInformationBehavior.State>
-            | InstanceType<typeof BridgedDeviceBasicInformationBehavior.State>;
-        if (agent.has(BasicInformationBehavior)) {
-            basicInfo = agent.get(BasicInformationBehavior).state;
-        } else if (agent.has(BridgedDeviceBasicInformationBehavior)) {
-            basicInfo = agent.get(BridgedDeviceBasicInformationBehavior).state;
-        } else {
-            return;
-        }
-
-        const uniqueId = basicInfo.uniqueId;
-        if (uniqueId) {
-            return `unique-${uniqueId}`;
-        }
-
-        const serialNumber = basicInfo.serialNumber;
-        if (serialNumber) {
-            return `serial-${serialNumber}`;
-        }
-
-        const owner = this.owner;
-        if (owner) {
-            const index = this.#owner?.indexOf(this);
-            return `index-${index}`;
-        }
     }
 
     /**
@@ -222,22 +254,23 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * fail.
      */
     getAgent(context: InvocationContext): Agent.Instance<T["behaviors"]> {
-        if (!context.associatedFabric) {
-            throw new ImplementationError(`Cannot obtain agent for part ${this} without associated fabric`);
-        }
-        return new this.agentType(this, context);
+        return new this.#resolvedAgentType(this, context);
     }
 
     /**
      * Access an offline {@link Agent}.  An offline agent enforces no ACLs and
-     * all state is read/write..
+     * all state is read/write.
      *
      * This should only be used for local purposes.  All network interaction
      * should use {@link getAgent} to create a context-aware agent.
      */
     get agent() {
+        return this.#agent;
+    }
+
+    get #agent() {
         if (!this.#offlineAgent) {
-            this.#offlineAgent = new this.agentType(this, AccessControl.OfflineSession);
+            this.#offlineAgent = new this.#resolvedAgentType(this, AccessControl.OfflineSession);
         }
         return this.#offlineAgent;
     }
@@ -247,7 +280,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     async [Symbol.asyncDispose]() {
-        const destroyedEvent = this.agent.get(LifecycleBehavior).events.destroyed;
+        const destroyedEvent = this.lifecycle.events.destroyed;
         await this.behaviors[Symbol.asyncDispose]();
         destroyedEvent.emit(this);
     }
@@ -259,21 +292,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         return this.owner.getAncestor(type);
     }
 
-    indexOf(part: Part) {
-        let index = 0;
-        for (const child of this.agent.get(PartsBehavior)) {
-            if (child === part) {
-                return index;
-            }
-            index++;
-        }
+    initializePart(part: Part) {
+        this.owner.initializePart(part);
     }
 
-    createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking {
-        return this.owner.createBacking(part, behavior);
+    initializeBehavior(part: Part, behavior: Behavior.Type): BehaviorBacking {
+        return this.owner.initializeBehavior(part, behavior);
     }
 
-    private get agentType() {
+    get #resolvedAgentType() {
         if (!this.#agentType) {
             this.#agentType = Agent.for(this.type.name, this.#behaviors.supported);
         }
@@ -285,8 +312,12 @@ export namespace Part {
     /**
      * Construction options for {@link Part}.
      */
-    export interface Options {
-        key?: string;
-        id?: number;
-    }
+    export type Options<T extends EndpointType = EndpointType.Empty> = 
+        & {
+            id?: string;
+            number?: number;
+        }
+        & {
+            [id in keyof T["behaviors"]]?: Behavior.Options<T["behaviors"][id]>
+        }
 }

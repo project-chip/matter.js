@@ -94,6 +94,12 @@ export namespace Datasource {
         events?: Events;
 
         /**
+         * Default values.  These defaults override default properties in the
+         * state class but not values persisted in the store.
+         */
+        defaults?: Val.Struct;
+
+        /**
          * Optional storage for non-volatile values.
          */
         store?: Store;
@@ -117,11 +123,6 @@ export namespace Datasource {
          * Properties that are present but set to undefined are deleted.
          */
         set(transaction: Transaction, values: Val.Struct): Promise<void>;
-
-        /**
-         * Delete the store.
-         */
-        delete(transaction: Transaction): Promise<void>;
     }
 
     export interface ValueObserver {
@@ -145,11 +146,12 @@ interface Changes {
 function configure(options: Datasource.Options): Internals {
     const values = new options.type() as Val.Struct;
 
-    const initialValues = options.store?.initialValues;
-    if (initialValues) {
-        for (const key in initialValues) {
-            values[key] = initialValues[key];
-        }
+    const initialValues = {
+        ...options.defaults,
+        ...options.store?.initialValues
+    }
+    for (const key in initialValues) {
+        values[key] = initialValues[key];
     }
 
     return {
@@ -322,6 +324,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                 changes.persistent = {};
             }
 
+            // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 
             changes.persistent._version = internals.version;
@@ -333,9 +336,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
      */
     async function commit1() {
         computeChanges();
-
-        // We don't revert the version number on rollback.  Should be OK
-        incrementVersion();
 
         // No phase one commit if there are not persistent changes
         const persistent = changes?.persistent;

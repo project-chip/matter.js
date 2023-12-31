@@ -20,9 +20,16 @@ export class NodeClient implements Node {
         throw new NotImplementedError("Client nodes are TODO");
     }
 
-    indexOf(): undefined {}
+    async [Symbol.asyncDispose](): Promise<void> {
+    }
 
-    createBacking(_part: Part, _type: Behavior.Type): BehaviorBacking {
+    initializePart(part: Part) {
+        // TODO
+        part;
+        throw new NotImplementedError();
+    }
+
+    initializeBehavior(_part: Part, _type: Behavior.Type): BehaviorBacking {
         // TODO
         throw new NotImplementedError();
     }
@@ -32,9 +39,5 @@ export class NodeClient implements Node {
             return this;
         }
         throw new ImplementationError(`Behavior is not owned by ${type.name}`);
-    }
-
-    async [Symbol.asyncDispose]() {
-        // TODO
     }
 }

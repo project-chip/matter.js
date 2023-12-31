@@ -196,6 +196,10 @@ export namespace ClusterBehavior {
 
         readonly supervisor: RootSupervisor;
 
+        readonly immediate?: boolean;
+        
+        readonly schema?: Schema;
+
         supports: typeof ClusterBehavior.supports;
 
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries

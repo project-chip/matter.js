@@ -17,6 +17,7 @@ import { EventId } from "../../datatype/EventId.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { Observable } from "../../util/Observable.js";
 import { TlvAttributePath, TlvCommandPath, TlvEventPath } from "./InteractionProtocol.js";
 import {
     AttributePath,
@@ -39,6 +40,7 @@ export class InteractionEndpointStructure {
     eventPaths = new Array<EventPath>();
     commands = new Map<string, CommandServer<any, any>>();
     commandPaths = new Array<CommandPath>();
+    change = new Observable();
 
     public clear() {
         this.endpoints.clear();
@@ -61,6 +63,8 @@ export class InteractionEndpointStructure {
 
         this.verifyAndInitializeStructureElementsFromEndpoint(endpoint); // Initialize Data from Root Endpoint
         this.initializeStructureFromEndpoints(endpoint); // Initialize Data from Child Endpoints
+
+        this.change.emit();
     }
 
     private initializeStructureFromEndpoints(endpoint: EndpointInterface) {
@@ -72,7 +76,7 @@ export class InteractionEndpointStructure {
     }
 
     private verifyAndInitializeStructureElementsFromEndpoint(endpoint: EndpointInterface) {
-        if (endpoint.id === undefined) {
+        if (endpoint.number === undefined) {
             throw new InternalError(`Endpoint ID is undefined. It needs to be initialized first!`);
         }
 
@@ -85,10 +89,11 @@ export class InteractionEndpointStructure {
                 _events: clusterEvents,
                 _commands: clusterCommands,
             } = asClusterServerInternal(cluster);
+
             // Add attributes
             for (const name in clusterAttributes) {
                 const attribute = clusterAttributes[name];
-                const path = { endpointId: endpoint.id, clusterId, attributeId: attribute.id };
+                const path = { endpointId: endpoint.number, clusterId, attributeId: attribute.id };
                 this.attributes.set(attributePathToId(path), attribute);
                 this.attributePaths.push(path);
             }
@@ -96,7 +101,7 @@ export class InteractionEndpointStructure {
             // Add events
             for (const name in clusterEvents) {
                 const event = clusterEvents[name];
-                const path = { endpointId: endpoint.id, clusterId, eventId: event.id };
+                const path = { endpointId: endpoint.number, clusterId, eventId: event.id };
                 this.events.set(eventPathToId(path), event);
                 this.eventPaths.push(path);
             }
@@ -104,15 +109,15 @@ export class InteractionEndpointStructure {
             // Add commands
             for (const name in clusterCommands) {
                 const command = clusterCommands[name];
-                const path = { endpointId: endpoint.id, clusterId, commandId: command.invokeId };
+                const path = { endpointId: endpoint.number, clusterId, commandId: command.invokeId };
                 this.commands.set(commandPathToId(path), command);
                 this.commandPaths.push(path);
             }
         }
 
-        if (this.endpoints.has(endpoint.id)) throw new ImplementationError(`Endpoint ID ${endpoint.id} exists twice`);
+        if (this.endpoints.has(endpoint.number)) throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
 
-        this.endpoints.set(endpoint.id, endpoint);
+        this.endpoints.set(endpoint.number, endpoint);
     }
 
     toHex(value: number | bigint | undefined) {

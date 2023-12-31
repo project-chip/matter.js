@@ -71,7 +71,7 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
          * Validates and updates part status.
          */
         function partReady(child: Part) {
-            if (child.id === undefined) {
+            if (child.number === undefined) {
                 throw new InternalError("Part reports as initialized but has no assigned ID");
             }
 
@@ -111,7 +111,7 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
          * state.parts.
          */
         function disownPart(child: Part) {
-            if (child.id === undefined) {
+            if (child.number === undefined) {
                 return;
             }
 
@@ -127,8 +127,8 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
         return this.state.children.has(partFor(child));
     }
 
-    add(child: Part | Agent | EndpointType) {
-        this.state.children.add(partFor(child));
+    add(child: Part | Agent | EndpointType, options?: Part.Options) {
+        this.state.children.add(partFor(child, options));
     }
 
     delete(child: Part | Agent | EndpointType) {
@@ -137,6 +137,20 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
 
     clear() {
         this.state.children.clear();
+    }
+
+    indexOf(child: Part | Agent | EndpointType) {
+        const part = partFor(child);
+        let index = 0;
+
+        for (const other of this.state.children) {
+            if (part === other) {
+                return index;
+            }
+            index++;
+        }
+
+        return -1;
     }
 
     get added() {
@@ -170,7 +184,7 @@ export namespace PartsBehavior {
     }
 }
 
-function partFor(child: Part | Agent | EndpointType) {
+function partFor(child: Part | Agent | EndpointType, options?: Part.Options) {
     if (child instanceof Agent) {
         child = child.part;
     }
@@ -180,7 +194,7 @@ function partFor(child: Part | Agent | EndpointType) {
     }
 
     if (child.name != undefined && child.deviceType !== undefined && child.deviceRevision !== undefined) {
-        return new Part(child);
+        return new Part(child, options);
     }
 
     throw new ImplementationError(`Illegal part value type`);

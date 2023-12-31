@@ -6,17 +6,18 @@
 
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailSafeManager.js";
-import { MatterFlowError } from "../../../common/MatterError.js";
+import { InternalError, MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
-import { NodeServer } from "../../../node/server/NodeServer.js";
 import { StatusResponseError } from "../../../protocol/interaction/InteractionMessenger.js";
 import { StatusCode } from "../../../protocol/interaction/InteractionProtocol.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { StructManager } from "../../state/managed/values/StructManager.js";
 import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
+import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import { AddNocRequest, AddTrustedRootCertificateRequest, AttestationRequest, CertificateChainRequest, CsrRequest, RemoveFabricRequest, UpdateFabricLabelRequest, UpdateNocRequest } from "./OperationalCredentialsInterface.js";
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
@@ -31,19 +32,35 @@ const logger = Logger.get("OperationalCredentials");
  * OperationalCredentials state but right now we just sync the state
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
-    private get cert() {
-        return this.part.getAncestor(NodeServer).certification;
+    declare internal: OperationalCredentialsServer.Internal;
+    declare state: OperationalCredentialsServer.State;
+
+    override async initialize() {
+        const commissioning = await this.agent.waitFor(CommissioningBehavior);
+
+        this.internal.certification = new DeviceCertification(
+            this.state.certification,
+            commissioning.productDescription
+        );
+    }
+
+    get #certification() {
+        const certification = this.internal.certification;
+        if (certification === undefined) {
+            throw new InternalError("Operational credentials certification accessed before initialization");
+        }
+        return certification;
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
         const elements = TlvAttestation.encode({
-            declaration: this.cert.declaration,
+            declaration: this.#certification.declaration,
             attestationNonce: attestationNonce,
             timestamp: 0,
         });
         return {
             attestationElements: elements,
-            attestationSignature: this.cert.sign(
+            attestationSignature: this.#certification.sign(
                 this.session,
                 elements
             )
@@ -73,15 +90,15 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             this.session.getId(),
         );
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
-        return { nocsrElements, attestationSignature: this.cert.sign(this.session, nocsrElements) };
+        return { nocsrElements, attestationSignature: this.#certification.sign(this.session, nocsrElements) };
     }
 
     override certificateChainRequest({ certificateType }: CertificateChainRequest) {
         switch (certificateType) {
             case OperationalCredentials.CertificateChainType.DacCertificate:
-                return { certificate: this.cert.certificate };
+                return { certificate: this.#certification.certificate };
             case OperationalCredentials.CertificateChainType.PaiCertificate:
-                return { certificate: this.cert.intermediateCertificate };
+                return { certificate: this.#certification.intermediateCertificate };
             default:
                 throw new MatterFlowError(`Unsupported certificate type: ${certificateType}`);
         }
@@ -351,7 +368,24 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 }
 
 export namespace OperationalCredentialsServer {
+    export class Internal {
+        certification?: DeviceCertification;
+    }
+
     export class State extends OperationalCredentialsBehavior.State {
+        /**
+         * Device certification information.
+         * 
+         * Device certification provides a cryptographic certificate that asserts
+         * the official status of a device.  Production consumer-facing devices are
+         * certified by the CSA.
+         * 
+         * Development devices and those intended for personal use may use a
+         * development certificate.  This is the default if you do not provide
+         * an official certification in {@link ServerOptions.certification}.
+         */
+        certification?: DeviceCertification.Configuration;
+
         override get currentFabricIndex() {
             return StructManager.sessionOf(this).associatedFabric ?? FabricIndex.NO_FABRIC;
         }

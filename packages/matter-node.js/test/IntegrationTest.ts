@@ -264,7 +264,7 @@ describe("Integration Test", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
             clientMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 });
-            commissioningController.setMdnsScanner(clientMdnsScanner);
+            commissioningController.mdnsScanner = clientMdnsScanner;
 
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
@@ -404,7 +404,7 @@ describe("Integration Test", () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
                 const node = commissioningController.getConnectedNode(nodeId);
                 assert.ok(node);
-                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
@@ -422,7 +422,7 @@ describe("Integration Test", () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
                 const node = commissioningController.getConnectedNode(nodeId);
                 assert.ok(node);
-                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+                const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
                 const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
@@ -484,7 +484,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
             const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onoffCluster);
@@ -836,7 +836,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
             const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster);
             assert.ok(groupsCluster);
@@ -917,7 +917,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
             const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
@@ -957,7 +957,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
             const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster);
             assert.ok(scenesClient);
@@ -1145,7 +1145,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.id === 1);
+            const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
             const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster);
             assert.ok(identifyClient);
@@ -1471,7 +1471,7 @@ describe("Integration Test", () => {
             await matterClient.addCommissioningController(commissioningController2, {
                 uniqueStorageKey: "another-second",
             });
-            commissioningController2.setMdnsScanner(clientMdnsScanner);
+            commissioningController2.mdnsScanner = clientMdnsScanner;
 
             Network.get = () => serverNetwork;
 

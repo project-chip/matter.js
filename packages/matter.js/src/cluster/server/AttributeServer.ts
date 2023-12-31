@@ -19,6 +19,7 @@ import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
+import { ClusterDatasource } from "./ClusterServerTypes.js";
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -43,8 +44,7 @@ export function createAttributeServer<
     attributeDef: Attribute<T, F>,
     attributeName: string,
     defaultValue: T,
-    getClusterDataVersion: () => number,
-    increaseClusterDataVersion: () => number,
+    datasource: ClusterDatasource,
     getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
@@ -60,7 +60,7 @@ export function createAttributeServer<
             false,
             timed,
             defaultValue,
-            getClusterDataVersion,
+            datasource,
             getter,
         );
     }
@@ -75,8 +75,7 @@ export function createAttributeServer<
             timed,
             defaultValue,
             clusterDef,
-            getClusterDataVersion,
-            increaseClusterDataVersion,
+            datasource,
             getter,
             setter,
             validator,
@@ -91,8 +90,7 @@ export function createAttributeServer<
         !omitChanges,
         timed,
         defaultValue,
-        getClusterDataVersion,
-        increaseClusterDataVersion,
+        datasource,
         getter,
         setter,
         validator,
@@ -164,7 +162,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
         defaultValue: T,
-        protected readonly getClusterDataVersion: () => number,
+        protected readonly datasource: ClusterDatasource,
 
         /**
          * Optional getter function to handle special requirements or the data are stored in different places.
@@ -208,7 +206,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * attributes.
      */
     getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean) {
-        return { version: this.getClusterDataVersion(), value: this.get(session, isFabricFiltered) };
+        return { version: this.datasource.version, value: this.get(session, isFabricFiltered) };
     }
 
     /**
@@ -290,8 +288,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
         defaultValue: T,
-        getClusterDataVersion: () => number,
-        protected readonly increaseClusterDataVersion: () => number,
+        datasource: ClusterDatasource,
         getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
 
         /**
@@ -336,7 +333,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             isSubscribable,
             requiresTimedInteraction,
             defaultValue,
-            getClusterDataVersion,
+            datasource,
             getter,
         );
 
@@ -424,7 +421,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      */
     protected handleVersionAndTriggerListeners(value: T, oldValue: T | undefined, considerVersionChanged: boolean) {
         if (considerVersionChanged) {
-            const version = this.increaseClusterDataVersion();
+            const version = this.datasource.increaseVersion();
             this.valueChangeListeners.forEach(listener => listener(value, version));
         }
         if (oldValue !== undefined) {
@@ -522,8 +519,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         requiresTimedInteraction: boolean,
         defaultValue: T,
         readonly cluster: Cluster<any, any, any, any, any>,
-        getClusterDataVersion: () => number,
-        increaseClusterDataVersion: () => number,
+        datasource: ClusterDatasource,
         getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
         setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
@@ -595,8 +591,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             isSubscribable,
             requiresTimedInteraction,
             defaultValue,
-            getClusterDataVersion,
-            increaseClusterDataVersion,
+            datasource,
             getter,
             setter,
             validator,

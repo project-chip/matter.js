@@ -69,17 +69,18 @@ export class MatterDevice {
 
     constructor(
         private readonly commissioningOptions: CommissioningOptions.Configuration,
-        private readonly storage: StorageContext,
+        readonly sessionStorage: StorageContext,
+        readonly fabricStorage: StorageContext,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.fabricManager = new FabricManager(this.storage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+        this.fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
             // When fabric is removed, also remove the resumption record
             this.sessionManager.removeResumptionRecord(peerNodeId);
             this.commissioningChangedCallback(fabricIndex);
         });
 
-        this.sessionManager = new SessionManager(this, this.storage);
+        this.sessionManager = new SessionManager(this, sessionStorage);
         this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);

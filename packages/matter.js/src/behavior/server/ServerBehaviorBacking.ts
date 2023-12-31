@@ -12,6 +12,7 @@ import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../BehaviorBacking.js";
 import { InvocationContext } from "../InvocationContext.js";
 import { Datasource } from "../state/managed/Datasource.js";
+import { Transaction } from "../state/transaction/Transaction.js";
 
 /**
  * This class backs the server implementation of a behavior.
@@ -23,27 +24,34 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
     constructor(part: Part, type: Behavior.Type) {
         super(part, type);
+    }
 
-        // If we have persistent fields install supporting behavior and
-        // initiate load of state now
-        if (type.supervisor.persists) {
-            this.#loadingState = true;
-            part.agent.require(PersistenceBehavior);
-            const persistence = part.agent.waitFor(PersistenceBehavior);
-            MaybePromise.then(persistence, persistence => {
-                this.#loadingState = false;
-                this.#store = persistence.forBehavior(type);
-            });
+    protected override invokeInitializer(behavior: Behavior, transaction: Transaction, options?: Behavior.Options) {
+        // If we have persistent fields install a store before initializing.
+        // Loading of persistence may be asynchronous; chain promises if so.
+        //
+        // The default persistence implementation relies on async load of all
+        // state during node initialization.  But we support async persistence
+        // initialization for alternate persistence implementations
+        if (this.type.supervisor.persists) {
+            this.part.agent.require(PersistenceBehavior);
+            const persistence = this.part.agent.waitFor(PersistenceBehavior);
+            
             if (MaybePromise.is(persistence)) {
                 this.#loadingState = true;
-                this.initializing = persistence
+                return persistence
                     .then(persistence => {
                         this.#loadingState = false;
-                        this.#store = persistence.forBehavior(type);
+                        this.#store = persistence.storeFor(this.type);
+                        return super.invokeInitializer(behavior, transaction, options);
                     })
                     .finally(() => (this.#loadingState = false));
             }
+
+            this.#store = persistence.storeFor(this.type);
         }
+
+        return super.invokeInitializer(behavior, transaction, options);
     }
 
     /**
@@ -58,7 +66,9 @@ export class ServerBehaviorBacking extends BehaviorBacking {
      */
     get datasource() {
         if (this.#loadingState) {
-            throw new InternalError("Illegal datasource access while loading non-volatile values");
+            throw new InternalError(
+                "Cannot access behavior state because state is still loading; use agent.waitFor() to avoid this error"
+            );
         }
 
         if (!this.#datasource) {
@@ -66,6 +76,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 supervisor: this.type.supervisor,
                 type: this.type.State,
                 events: this.events as unknown as Datasource.Events,
+                defaults: this.part.behaviors.defaultsFor(this.type),
                 store: this.#store,
             });
         }

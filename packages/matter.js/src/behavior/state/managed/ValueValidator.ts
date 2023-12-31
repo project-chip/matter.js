@@ -74,6 +74,9 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             break;
 
         case undefined:
+            if (schema.type === undefined) {
+                throw new InternalError(`There is no type defined for ${schema.name}`);
+            }
             throw new InternalError(`Cannot determine metatype for ${schema.name} type ${schema.type}`);
 
         default:

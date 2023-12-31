@@ -56,7 +56,7 @@ export class FailSafeManager {
         //  when the commissioning is completed.
         const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
-            this.storedNetworkClusterState.set(endpoint.getId(), networkCluster.getNetworksAttribute());
+            this.storedNetworkClusterState.set(endpoint.getNumber(), networkCluster.getNetworksAttribute());
         }
         for (const childEndpoint of endpoint.getChildEndpoints()) {
             this.storeEndpointState(childEndpoint);
@@ -65,7 +65,7 @@ export class FailSafeManager {
 
     /** Restore Cluster data when the FailSafe context expired. */
     restoreEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
-        const endpointId = endpoint.getId();
+        const endpointId = endpoint.getNumber();
         const networkState = this.storedNetworkClusterState.get(endpointId);
         if (networkState !== undefined) {
             const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);

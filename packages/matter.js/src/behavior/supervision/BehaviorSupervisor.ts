@@ -18,7 +18,7 @@ import { Schema } from "./Schema.js";
  * {@link Behavior} uses this internally for its {@link Behavior.supervisor}.
  *
  * BehaviorSchema derives operational schema from a "logical" schema.  If the
- * {@link Behavior} implementation has a static logicalSchema property this
+ * {@link Behavior} implementation has a static schema property this
  * defines the logical schema.  Otherwise the logical schema is
  * {@link Schema.empty}.
  *
@@ -37,7 +37,7 @@ import { Schema } from "./Schema.js";
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
     let features: Set<string>, supportedFeatures: FeatureSet;
 
-    const logical = options.logicalSchema ?? Schema.empty;
+    const logical = options.schema ?? Schema.empty;
 
     // Extract features and supportedFeatures from the logical schema
     if (logical instanceof ClusterModel) {
@@ -69,6 +69,7 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
     } else {
         schema = new DatatypeModel({
             ...logical,
+            type: logical.type ?? "struct",
             name: `${camelize(options.id, true)}$State`,
             children,
         });
@@ -80,7 +81,7 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
 export namespace BehaviorSupervisor {
     export interface Options {
         id: string;
-        logicalSchema?: Schema;
+        schema?: Schema;
         State: StateType;
     }
 }

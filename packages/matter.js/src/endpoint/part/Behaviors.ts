@@ -8,6 +8,7 @@ import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { LifecycleBehavior } from "../../behavior/definitions/lifecycle/LifecycleBehavior.js";
+import { Val } from "../../behavior/state/managed/Val.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Observable } from "../../util/Observable.js";
 import { camelize, describeList } from "../../util/String.js";
@@ -24,6 +25,7 @@ export class Behaviors {
     #supported: SupportedBehaviors;
     #backings: Record<string, BehaviorBacking> = {};
     #supportAdded = Observable<[type: Behavior.Type]>();
+    #options: Record<string, object | undefined>;
 
     /**
      * Event emitted when support is added for a new behavior.
@@ -32,7 +34,7 @@ export class Behaviors {
         return this.#supportAdded;
     }
 
-    constructor(part: Part, supported: SupportedBehaviors) {
+    constructor(part: Part, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
         if (typeof supported !== "object") {
             throw new ImplementationError('Part "behaviors" option must be an array of Behavior.Type instances');
         }
@@ -47,6 +49,7 @@ export class Behaviors {
 
         this.#part = part;
         this.#supported = supported;
+        this.#options = options;
     }
 
     /**
@@ -68,7 +71,7 @@ export class Behaviors {
      * Add behavior support dynamically at runtime.  Typically called via
      * {@link Agent.require}.
      */
-    require(type: Behavior.Type) {
+    require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
         if (this.#supported[type.id]) {
             if (!this.has(type)) {
                 throw new ImplementationError(
@@ -83,6 +86,9 @@ export class Behaviors {
             }
             this.#supported[type.id] = type;
             this.#supportAdded.emit(type);
+        }
+        if (options) {
+            this.#options[type.id] = options;
         }
     }
 
@@ -158,6 +164,25 @@ export class Behaviors {
         }
     }
 
+    /**
+     * Obtain default values for a behavior.
+     */
+    defaultsFor(type: Behavior.Type) {
+        const options = this.#options[type.id];
+        let defaults: Val.Struct | undefined;
+        if (options) {
+            for (const key in type.defaults) {
+                if (key in options) {
+                    if (!defaults) {
+                        defaults = {};
+                    }
+                    defaults[key] = (options as Val.Struct)[key];
+                }
+            }
+        }
+        return defaults;
+    }
+
     #createBacking(type: Behavior.Type) {
         // Ensure the type is supported.  If it is, we instantiate with our
         // type rather than the specified type because our type might be an
@@ -169,38 +194,11 @@ export class Behaviors {
 
         // Ask the owner to create the backing.  This is specialized for the
         // owner (e.g. client or server)
-        const backing = this.#part.owner.createBacking(this.#part, myType);
+        const backing = this.#part.owner.initializeBehavior(this.#part, myType);
         this.#backings[type.id] = backing;
 
-        // Create an offline instance of the behavior to use for initialization
-        const agent = this.#part.agent;
-        const behavior = agent.get(type);
-
-        // Invoke initialize().  If the backing is already in initiazing state
-        // we defer initialization, otherwise we trigger immediately
-        let promise = backing.initializing;
-        if (promise) {
-            promise = promise.then(behavior.initialize);
-        } else {
-            behavior.initialize();
-        }
-
-        // If we have a promise, update lifecycle so the part doesn't register
-        // as initialized before we complete, add error handlers, and install
-        // into the backing
-        if (promise) {
-            const lifecycle = agent.get(LifecycleBehavior);
-            lifecycle.state.initializingBehaviors.add(behavior);
-            backing.initializing = promise
-                .catch(e => {
-                    e.message = `Error initializing ${type.name}: ${e.message}`;
-                    throw e;
-                })
-                .finally(() => {
-                    lifecycle.state.initializingBehaviors.delete(behavior);
-                    backing.initializing = undefined;
-                });
-        }
+        // Initialize backing state
+        backing.initialize(this.#options[myType.id]);
 
         // Our shiny new backing is ready
         return backing;

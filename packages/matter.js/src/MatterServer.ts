@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { CommissioningController } from "./CommissioningController.js";
+import { CommissioningServer } from "./CommissioningServer.js";
 import { Logger } from "./log/Logger.js";
 import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
@@ -84,7 +85,7 @@ export class MatterServer {
         // Build a temporary map with all ports in use
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes) {
-            const nodePort = node.getPort();
+            const nodePort = node.port;
             if (nodePort === undefined) continue;
             if (portCheckMap.has(nodePort)) {
                 throw new NetworkError(`Port ${nodePort} is already in use by other node.`);
@@ -130,10 +131,22 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     async addCommissioningServer(server: BaseNodeServer, nodeOptions?: NodeOptions) {
-        server.setPort(this.getNextMatterPort(server.getPort()));
+        server.port = this.getNextMatterPort(server.port);
         const storageKey =
             nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueStorageKey ?? this.nodes.length.toString();
-        server.setStorage(this.storageManager.createContext(storageKey));
+
+        // CommissioningServer is designed for lazy initialization of storage.
+        // Not changing that to keep API consistent.
+        //
+        // NodeServer is initialized with storage from the get-go so this call
+        // is not necessary.
+        //
+        // Keeping storage out of BaseNodeServer keeps concerns separated so
+        // just check for the CommissioningServer case explicitly
+        if (server instanceof CommissioningServer) {
+            server.storage = this.storageManager.createContext(storageKey);
+        }
+
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
         await this.prepareNode(server);
         this.nodes.push(server);
@@ -154,7 +167,7 @@ export class MatterServer {
         }
         this.nodes.splice(index, 1);
 
-        const port = server.getPort();
+        const port = server.port;
         if (port !== undefined) {
             // Remember port to not reuse for this run if not needed to prevent issues with controllers
             this.formerlyUsedPorts.push(port);
@@ -176,7 +189,7 @@ export class MatterServer {
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
     async addCommissioningController(commissioningController: CommissioningController, nodeOptions?: NodeOptions) {
-        const localPort = commissioningController.getPort();
+        const localPort = commissioningController.port;
         if (localPort !== undefined) {
             // If a local port for controller is defined verify that the port is not overlapping with other nodes
             // Method throws if port is already used
@@ -241,8 +254,8 @@ export class MatterServer {
             logger.debug("Mdns instances not yet created, delaying node preparation.");
             return;
         }
-        node.setMdnsBroadcaster(this.mdnsBroadcaster);
-        node.setMdnsScanner(this.mdnsScanner);
+        node.mdnsBroadcaster = this.mdnsBroadcaster;
+        node.mdnsScanner = this.mdnsScanner;
         if (this.started) {
             await node.start();
         }

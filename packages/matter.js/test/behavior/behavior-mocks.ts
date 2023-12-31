@@ -17,6 +17,9 @@ import { Part } from "../../src/endpoint/Part.js";
 import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
 import { MutableEndpoint } from "../../src/endpoint/type/MutableEndpoint.js";
 import type { Fabric } from "../../src/fabric/Fabric.js";
+import { PartStore } from "../../src/endpoint/part/PartStore.js";
+import { Val } from "../../src/behavior/state/managed/Val.js";
+import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 
 class MockFabricImplementation {
     fabricIndex;
@@ -30,17 +33,45 @@ class MockFabricImplementation {
 
 export const MockFabric = MockFabricImplementation as unknown as new (id?: number) => Fabric;
 
+export class MockPartStore implements PartStore {
+    initialValues: Record<string, Val.Struct> = {};
+    
+    async set(_values: Record<string, Val.Struct>): Promise<void> {
+        // No tests for this yet
+    }
+    
+    async delete(): Promise<void> {
+        // No tests for this yet
+    }
+}
+
 export class MockOwner implements PartOwner {
-    createBacking(part: Part, behavior: Behavior.Type) {
-        return new ServerBehaviorBacking(part, behavior);
+    #stores = new Map<Part, MockPartStore>();
+    #nextId = 1;
+
+    initializePart(part: Part) {
+        if (part.number === undefined) {
+            part.number = EndpointNumber(this.#nextId++);
+        }
+        if (part.id === undefined) {
+            part.id = part.number.toString();
+        }
     }
 
-    indexOf(_part: Part) {
-        return 0;
+    initializeBehavior(part: Part, behavior: Behavior.Type) {
+        return new ServerBehaviorBacking(part, behavior);
     }
 
     getAncestor(): any {
         throw new InternalError("No ancestor");
+    }
+
+    storeFor(part: Part) {
+        let store = this.#stores.get(part);
+        if (!store) {
+            this.#stores.set(part, store = new MockPartStore());
+        }
+        return store;
     }
 }
 

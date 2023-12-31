@@ -10,9 +10,14 @@ import { AnyAttributeServer, AttributeServer } from "../../cluster/server/Attrib
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
+import { Part } from "../../endpoint/Part.js";
+import { PartServer } from "../../endpoint/server/PartServer.js";
 import { Logger } from "../../log/Logger.js";
+import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { Session } from "../../session/Session.js";
+import { SubscriptionOptions } from "../options/SubscriptionOptions.js";
+import { NodeStore } from "./NodeStore.js";
 
 const TRANSACTION = Symbol("transaction");
 
@@ -44,6 +49,16 @@ interface InternalSession extends Session<MatterDevice> {
  * light for now.
  */
 export class TransactionalInteractionServer extends InteractionServer {
+    constructor(root: Part, store: NodeStore, subscriptionOptions: SubscriptionOptions) {
+        const structure = new InteractionEndpointStructure;
+        root.lifecycle.events.structure$Change.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
+        super({
+            eventHandler: store.eventHandler,
+            endpointStructure: structure,
+            subscriptionOptions: subscriptionOptions,
+        })
+    }
+
     /**
      * Obtain the transaction for a session.
      */
