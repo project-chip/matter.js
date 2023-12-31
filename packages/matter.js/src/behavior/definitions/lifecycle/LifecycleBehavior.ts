@@ -53,14 +53,16 @@ export class LifecycleBehavior extends Behavior {
 export namespace LifecycleBehavior {
     export class State {
         /**
-         * True when the part is installed into a parent.
+         * True when the part is installed into a parent and the parent has
+         * been initialized.
          *
          * Updated by the part when its owner is set.
          */
         installed = false;
 
         /**
-         * True when state and all behaviors have completed initialization.
+         * True when the part and all child parts have completed
+         * initialization.
          *
          * Set by LifecycleBehavior when the part is installed and
          * {@link initializingBehaviors} is empty.
@@ -83,9 +85,10 @@ export namespace LifecycleBehavior {
     }
 
     export class Events extends EventEmitter {
-        installed$Change = Observable();
-        initialized$Change = Observable();
-        online$Change = new Observable<[online: boolean]>();
+        number$Change = Observable<[number: number ]>();
+        installed$Change = Observable<[installed: boolean ]>();
+        initialized$Change = Observable<[initialized: boolean ]>();
+        online$Change = Observable<[online: boolean]>();
 
         /**
          * This event is special cased in Part.  It is invoked after all

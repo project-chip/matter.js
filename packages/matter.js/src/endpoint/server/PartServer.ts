@@ -53,7 +53,7 @@ export class PartServer implements EndpointInterface {
 
         // Initialize PersistenceBehavior early because it loads stored state
         // asynchronously
-        agent.get(PersistenceBehavior);
+        agent.load(PersistenceBehavior);
     }
 
     createBacking(behavior: Behavior.Type): BehaviorBacking {
@@ -74,12 +74,12 @@ export class PartServer implements EndpointInterface {
         return backing;
     }
 
-    get id() {
-        return this.#part.id;
+    get number() {
+        return this.#part.number;
     }
 
-    set id(value: EndpointNumber | undefined) {
-        this.#part.id = value;
+    set number(value: EndpointNumber | undefined) {
+        this.#part.number = value;
     }
 
     get name() {
@@ -90,11 +90,11 @@ export class PartServer implements EndpointInterface {
         return this.#part.agent;
     }
 
-    getId(): EndpointNumber {
-        if (this.id === undefined) {
+    getNumber(): EndpointNumber {
+        if (this.number === undefined) {
             throw new InternalError("Endpoint ID has not been assigned yet");
         }
-        return this.id;
+        return this.number;
     }
 
     removeFromStructure(): void {
@@ -118,7 +118,7 @@ export class PartServer implements EndpointInterface {
     }
 
     determineUniqueID(): string | undefined {
-        return this.#part.uniqueId;
+        return this.#part.id;
     }
 
     verifyRequiredClusters(): void {
@@ -187,7 +187,7 @@ export class PartServer implements EndpointInterface {
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
         const parts = this.#part.agent.get(PartsBehavior).state.children;
         for (const part of parts) {
-            if (part.id === id) {
+            if (part.number === id) {
                 return PartServer.forPart(part);
             }
         }

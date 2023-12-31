@@ -9,15 +9,15 @@ import { MockPart } from "../../../endpoint/part-mocks.js";
 import { MockEndpoint, MockParentEndpoint } from "../../behavior-mocks.js";
 
 function createParent() {
-    return new MockPart(MockParentEndpoint, { id: 1 }).agent;
+    return new MockPart(MockParentEndpoint, { number: 1 }).agent;
 }
 
 function createParentAndChild() {
-    return new MockPart(MockParentEndpoint, { id: 2, owner: undefined }).agent;
+    return new MockPart(MockParentEndpoint, { number: 2, owner: undefined }).agent;
 }
 
 function createChild() {
-    return new MockPart(MockEndpoint, { id: 3, owner: undefined }).agent;
+    return new MockPart(MockEndpoint, { number: 3, owner: undefined }).agent;
 }
 
 describe("PartsBehavior", () => {
