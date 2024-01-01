@@ -8,6 +8,7 @@ import type { Part } from "../../../endpoint/Part.js";
 import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { BasicSet } from "../../../util/Set.js";
 import { Behavior } from "../../Behavior.js";
+import { StructuralChangeType } from "./StructuralChangeType.js";
 
 /**
  * This behavior manages state related to the owning {@link Part}'s lifecycle.
@@ -97,9 +98,8 @@ export namespace LifecycleBehavior {
         destroyed = new Observable<[part: Part]>();
 
         /**
-         * This event bubbles up when any part or behavior is added or removed
-         * in the part ownership tree.
+         * This event bubbles up when the {@link Part} hierarchy changes.
          */
-        structure$Change = new Observable<[part: Part]>();
+        structure$Change = new Observable<[type: StructuralChangeType, part: Part]>();
     }
 }
