@@ -24,6 +24,8 @@ import { StructuralChangeType } from "./StructuralChangeType.js";
 export class LifecycleBehavior extends Behavior {
     static override readonly id = "lifecycle";
 
+    static override immediate = true;
+
     declare state: LifecycleBehavior.State;
     declare events: LifecycleBehavior.Events;
 
