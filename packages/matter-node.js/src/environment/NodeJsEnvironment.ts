@@ -12,7 +12,7 @@ import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 /**
  * This is the default environment implementation for Node:
  *
- * - Sets variables using extraordinarily rudimentary command line, environemnt
+ * - Sets variables using extraordinarily rudimentary command line, environment
  *   and configuration file parsers.
  * - Hooks SIGINT to abort each registered task.  The handler only runs once;
  *   subsequent interrupts will hard exit.
