@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { StructuralChangeType } from "../../../../src/behavior/definitions/lifecycle/StructuralChangeType.js";
 import { Part } from "../../../../src/endpoint/Part.js";
 import { MockPart } from "../../../endpoint/part-mocks.js";
 import { MockEndpoint, MockParentEndpoint } from "../../behavior-mocks.js";
@@ -49,7 +50,7 @@ describe("PartsBehavior", () => {
         expect(parts.state.children.size).equals(0);
     });
 
-    it("bubbles adds", () => {
+    it("bubbles add", () => {
         const parent = createParent();
         const child = createParentAndChild();
         const grandchild = createChild();
@@ -57,7 +58,10 @@ describe("PartsBehavior", () => {
         parent.parts.add(child);
 
         let bubbled: Part | undefined;
-        parent.lifecycle.events.structure$Change.on(part => (bubbled = part));
+        parent.lifecycle.events.structure$Change.on((type, part) => {
+            expect(type).equals(StructuralChangeType.PartAdded);
+            (bubbled = part)
+        });
 
         child.parts.add(grandchild);
 
@@ -73,7 +77,10 @@ describe("PartsBehavior", () => {
         child.parts.add(grandchild);
 
         let bubbled: Part | undefined;
-        parent.lifecycle.events.structure$Change.on(part => (bubbled = part));
+        parent.lifecycle.events.structure$Change.on((type, part) => {
+            expect(type).equals(StructuralChangeType.PartDeleted);
+            (bubbled = part)
+        });
 
         await grandchild.part.destroy();
 
