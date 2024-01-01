@@ -8,9 +8,9 @@ import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { LifecycleBehavior } from "../../behavior/definitions/lifecycle/LifecycleBehavior.js";
+import { StructuralChangeType } from "../../behavior/definitions/lifecycle/StructuralChangeType.js";
 import { Val } from "../../behavior/state/managed/Val.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { Observable } from "../../util/Observable.js";
 import { camelize, describeList } from "../../util/String.js";
 import { MaybePromise } from "../../util/Type.js";
 import type { Agent } from "../Agent.js";
@@ -24,15 +24,7 @@ export class Behaviors {
     #part: Part;
     #supported: SupportedBehaviors;
     #backings: Record<string, BehaviorBacking> = {};
-    #supportAdded = Observable<[type: Behavior.Type]>();
     #options: Record<string, object | undefined>;
-
-    /**
-     * Event emitted when support is added for a new behavior.
-     */
-    get supportAdded() {
-        return this.#supportAdded;
-    }
 
     /**
      * List the {@link SupportedBehaviors} of the {@link Part}.
@@ -85,10 +77,15 @@ export class Behaviors {
                 }
             }
             this.#supported[type.id] = type;
-            this.#supportAdded.emit(type);
+            this.#part.lifecycle.events.structure$Change.emit(StructuralChangeType.ServersChanged, this.#part);
         }
+
         if (options) {
             this.#options[type.id] = options;
+        }
+
+        if (type.immediate && this.#part.owner) {
+            this.#part.agent.load(type);
         }
     }
 
@@ -202,6 +199,9 @@ export class Behaviors {
 
         // Ask the owner to create the backing.  This is specialized for the
         // owner (e.g. client or server)
+        if (!this.#part.owner) {
+            throw new ImplementationError(`Attempted initialization of behavior ${type.id} of uninstalled part`);
+        }
         const backing = this.#part.owner.initializeBehavior(this.#part, myType);
         this.#backings[type.id] = backing;
 

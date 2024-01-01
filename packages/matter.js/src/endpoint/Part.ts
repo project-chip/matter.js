@@ -50,7 +50,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.#type = type;
 
         if (options?.number !== undefined) {
-            this.number = EndpointNumber(options.number);
+            this.#number = EndpointNumber(options.number);
         }
 
         if (options?.id !== undefined) {
@@ -83,6 +83,12 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
 
         this.lifecycle.state.installed = true;
+
+        for (const type of Object.values(this.behaviors.supported)) {
+            if (type.immediate) {
+                this.agent.load(type);
+            }
+        }
     }
 
     /**
@@ -169,9 +175,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * is installed in a Node.
      */
     get owner() {
-        if (this.#owner === undefined) {
-            throw new ImplementationError("Cannot access owner of uninstalled part");
-        }
         return this.#owner;
     }
 
@@ -179,9 +182,12 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * Set the part's owner.  Once set, the owner is responsible for managing
      * the part's lifecycle.
      */
-    set owner(owner: PartOwner) {
+    set owner(owner: PartOwner | undefined) {
+        if (owner === undefined) {
+            throw new ImplementationError("Cannot set owner to undefined");
+        }
         if (this.#owner !== undefined) {
-            throw new ImplementationError(`Cannot reparent installed part`);
+            throw new ImplementationError("Cannot reparent installed part");
         }
         this.#owner = owner;
 
@@ -306,10 +312,16 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     initializePart(part: Part) {
+        if (!this.owner) {
+            throw new ImplementationError("Cannot initialize part because parent is not installed");
+        }
         this.owner.initializePart(part);
     }
 
     initializeBehavior(part: Part, behavior: Behavior.Type): BehaviorBacking {
+        if (!this.owner) {
+            throw new ImplementationError("Cannot initialize behavior because parent is not installed");
+        }
         return this.owner.initializeBehavior(part, behavior);
     }
 

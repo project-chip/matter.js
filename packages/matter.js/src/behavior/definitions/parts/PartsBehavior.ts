@@ -177,10 +177,6 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
      * event.
      */
     #childDestroyed(part: Part) {
-        if (part.owner !== this.part) {
-            return;
-        }
-
         this.state.children.delete(part);
     }
 

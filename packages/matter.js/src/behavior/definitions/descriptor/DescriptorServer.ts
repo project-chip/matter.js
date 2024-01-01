@@ -8,7 +8,6 @@ import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { Part } from "../../../endpoint/Part.js";
-import { Time, Timer } from "../../../time/Time.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { IndexBehavior } from "../index/IndexBehavior.js";
@@ -20,7 +19,7 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
  * This is the default server implementation of DescriptorBehavior.
  */
 export class DescriptorServer extends DescriptorBehavior {
-    declare internal: DescriptorServer.Internal;
+    static override immediate = true;
 
     override initialize() {
         this.part.lifecycle.events.structure$Change.on(
@@ -35,12 +34,6 @@ export class DescriptorServer extends DescriptorBehavior {
                     revision: partType.deviceRevision,
                 },
             ];
-        }
-    }
-
-    override destroy() {
-        if (this.internal.updateTimer) {
-            this.internal.updateTimer.stop();
         }
     }
 
@@ -67,44 +60,23 @@ export class DescriptorServer extends DescriptorBehavior {
     #applyChange(type: StructuralChangeType, part: Part) {
         switch (type) {
             case StructuralChangeType.PartAdded:
-            case StructuralChangeType.PartDeleted:
             case StructuralChangeType.NumberAssigned:
+            case StructuralChangeType.PartDeleted:
                 if (part === this.part) {
                     return;
                 }
-                this.internal.updatePartsList = true;
+                this.state.partsList = this.#partsList;
                 break;
 
             case StructuralChangeType.ServersChanged:
                 if (part !== this.part) {
                     return;
                 }
-                this.internal.updateServerList = true;
+                this.state.serverList = this.#serverList;
                 break;
 
             default:
                 return;
-        }
-
-        if (this.internal.updateTimer !== undefined) {
-            this.internal.updateTimer = Time.getTimer(0, () => this.#update);
-        }
-    }
-
-    /**
-     * Apply updates.  We use an immediate timer to coalesce changes.
-     */
-    #update() {
-        delete this.internal.updateTimer;
-        
-        if (this.internal.updatePartsList) {
-            this.state.partsList = this.#partsList;
-            this.internal.updatePartsList = false;
-        }
-
-        if (this.internal.updateServerList) {
-            this.state.serverList = this.#serverList;
-            this.internal.updateServerList = false;
         }
     }
 
@@ -146,11 +118,5 @@ export class DescriptorServer extends DescriptorBehavior {
 }
 
 export namespace DescriptorServer {
-    export class Internal {
-        updateTimer?: Timer = undefined;
-        updatePartsList = false;
-        updateServerList = false;
-    }
-
     export type DeviceType = TypeFromSchema<typeof Descriptor.TlvDeviceTypeStruct>;
 }
