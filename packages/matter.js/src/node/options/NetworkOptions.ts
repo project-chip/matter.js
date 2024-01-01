@@ -8,8 +8,7 @@
  * Networking configuration for Matter.js nodes.
  */
 export interface NetworkOptions {
-    announceInterface?: string;
-    discoverInterface?: string;
+    mdnsInterface?: string;
     port?: number;
     listeningAddressIpv4?: string;
     listeningAddressIpv6?: string;

@@ -84,8 +84,7 @@ export class Host {
             }
 
             const server = new MatterServer(storage, {
-                mdnsAnnounceInterface: this.#configuration.network.announceInterface,
-                mdnsInterface: this.#configuration.network.discoverInterface,
+                mdnsInterface: this.#configuration.network.mdnsInterface,
                 disableIpv4: this.#configuration.network.disableIpv4,
             });
 

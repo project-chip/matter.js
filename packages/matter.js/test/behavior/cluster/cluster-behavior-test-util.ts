@@ -16,7 +16,13 @@ import {
     TlvNoResponse,
 } from "../../../src/cluster/Cluster.js";
 import { MutableCluster } from "../../../src/cluster/mutation/MutableCluster.js";
-import { AttributeElement, ClusterModel, CommandElement, EventElement, FieldElement } from "../../../src/model/index.js";
+import {
+    AttributeElement,
+    ClusterModel,
+    CommandElement,
+    EventElement,
+    FieldElement,
+} from "../../../src/model/index.js";
 import { BitFlag } from "../../../src/schema/BitmapSchema.js";
 import { TlvBoolean } from "../../../src/tlv/TlvBoolean.js";
 import { TlvUInt8 } from "../../../src/tlv/TlvNumber.js";
@@ -46,29 +52,27 @@ export namespace My {
         id: 1,
         revision: 1,
         name: "MyCluster",
-    
+
         features: {
             awesome: BitFlag(0),
         },
-    
+
         attributes: {
             reqAttr: Attribute(1, TlvString, { default: "hello" }),
             optAttr: OptionalAttribute(2, TlvBoolean, { default: true }),
         },
-    
+
         commands: {
             reqCmd: Command(5, TlvString, 5, TlvString),
             optCmd: OptionalCommand(6, TlvBoolean, 6, TlvBoolean),
         },
-    
+
         events: {
             reqEv: Event(7, EventPriority.Critical, TlvString),
             optEv: OptionalEvent(8, EventPriority.Debug, TlvString),
         },
 
-        extensions: MutableCluster.Extensions(
-            { flags: { awesome: true }, component: AwesomeComponent },
-        )
+        extensions: MutableCluster.Extensions({ flags: { awesome: true }, component: AwesomeComponent }),
     });
 
     export const Cluster = MutableCluster(Base);
@@ -92,11 +96,17 @@ export const MySchema = new ClusterModel({
         EventElement({ id: 8, name: "OptEv", priority: "debug", type: "string" }),
 
         AttributeElement({
-            name: "FeatureMap", id: 0xfffc, type: "FeatureMap",
-            children: [FieldElement({
-                name: "AWE", constraint: "0", description: "MoreAwesome",
-                details: "That which makes me more awesome."
-            })],
+            name: "FeatureMap",
+            id: 0xfffc,
+            type: "FeatureMap",
+            children: [
+                FieldElement({
+                    name: "AWE",
+                    constraint: "0",
+                    description: "MoreAwesome",
+                    details: "That which makes me more awesome.",
+                }),
+            ],
         }),
         AttributeElement({ id: 9, name: "AwesomeSauce", conformance: "AWE", type: "uint8" }),
         CommandElement({ id: 10, name: "BecomeAwesome", conformance: "AWE", type: "uint8" }),
@@ -110,7 +120,7 @@ interface MyClusterBaseInterface {
 }
 
 interface MyClusterAwesomeInterface {
-    becomeAwesome(request: number): MaybePromise<void>
+    becomeAwesome(request: number): MaybePromise<void>;
 }
 
 interface MyClusterInterface {
@@ -121,9 +131,9 @@ interface MyClusterInterface {
         },
 
         {
-            flags: { awesome: true },
-            methods: MyClusterAwesomeInterface
-        }
+            flags: { awesome: true };
+            methods: MyClusterAwesomeInterface;
+        },
     ];
 }
 
