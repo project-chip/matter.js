@@ -11,7 +11,6 @@ import { LifecycleBehavior } from "../../src/behavior/definitions/lifecycle/Life
 import { PartsBehavior } from "../../src/behavior/definitions/parts/PartsBehavior.js";
 import { ServerBehaviorBacking } from "../../src/behavior/server/ServerBehaviorBacking.js";
 import { AccessLevel } from "../../src/cluster/Cluster.js";
-import { InternalError } from "../../src/common/MatterError.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
@@ -49,6 +48,10 @@ export class MockOwner implements PartOwner {
     #stores = new Map<Part, MockPartStore>();
     #nextId = 1;
 
+    get owner() {
+        return undefined;
+    }
+
     initializePart(part: Part) {
         if (part.number === undefined) {
             part.number = EndpointNumber(this.#nextId++);
@@ -60,10 +63,6 @@ export class MockOwner implements PartOwner {
 
     initializeBehavior(part: Part, behavior: Behavior.Type) {
         return new ServerBehaviorBacking(part, behavior);
-    }
-
-    getAncestor(): any {
-        throw new InternalError("No ancestor");
     }
 
     storeFor(part: Part) {

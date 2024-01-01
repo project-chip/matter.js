@@ -7,7 +7,6 @@
 import { Val } from "../../behavior/state/managed/Val.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
-import { PartStore } from "../../endpoint/part/PartStore.js";
 import { Logger } from "../../log/Logger.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -15,6 +14,7 @@ import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { StorageManager } from "../../storage/StorageManager.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { Environment } from "../../common/Environment.js";
+import { PartStore } from "../../endpoint/part/PartStore.js";
 
 const logger = Logger.get("NodeStore");
 
@@ -34,7 +34,8 @@ export class NodeStore {
     #sessionStorage?: StorageContext;
     #fabricStorage?: StorageContext;
     #endpointStorage?: StorageContext;
-    #partStores = {} as Record<string, ServerPartStore>;
+    #parameterStorage?: StorageContext;
+    #partStores = {} as Record<string, NodePartStore>;
 
     constructor(configuration: ServerOptions.Configuration) {
         this.#environment = configuration.environment;
@@ -50,10 +51,17 @@ export class NodeStore {
     async initialize() {
         this.#storage = await this.#environment.createStorage();
 
+        this.#nextNumber = this.parameterStorage.get("nextEndpointNumber", this.#nextNumber);
+
         this.#endpointStorage = this.#storage.createContext("endpoints");
 
         for (const partId in this.#endpointStorage) {
-            const partStore = new ServerPartStore(partId, this.#storage, true);
+            const partStore = new NodePartStore(
+                partId,
+                this.#storage,
+                this.eventHandler,
+                true,
+            );
             this.#partStores[partId] = partStore;
 
             const number = partStore.number;
@@ -78,6 +86,7 @@ export class NodeStore {
 
         const number = this.#nextNumber++;
         this.#allocatedNumbers.add(number);
+        this.#endpointStorage?.set("nextEndpointNumber", this.#nextNumber);
         return number;
     }
 
@@ -87,51 +96,65 @@ export class NodeStore {
 
     get eventHandler() {
         if (!this.#eventHandler) {
-            this.#eventHandler = new EventHandler(this.storage.createContext("events"));
+            this.#eventHandler = new EventHandler(this.#initializedStorage.createContext("events"));
         }
         return this.#eventHandler;
     }
 
     get sessionStorage() {
         if (!this.#sessionStorage) {
-            this.#sessionStorage = this.storage.createContext("sessions");
+            this.#sessionStorage = this.#initializedStorage.createContext("sessions");
         }
         return this.#sessionStorage;
     }
 
     get fabricStorage() {
         if (!this.#fabricStorage) {
-            this.#fabricStorage = this.storage.createContext("fabrics");
+            this.#fabricStorage = this.#initializedStorage.createContext("fabrics");
         }
         return this.#fabricStorage;
     }
 
-    get storage() {
+    get parameterStorage() {
+        if (!this.#parameterStorage) {
+            this.#parameterStorage = this.#initializedStorage.createContext("parameters");
+        }
+        return this.#parameterStorage;
+    }
+
+    get #initializedStorage() {
         if (this.#storage === undefined) {
             throw new ImplementationError("Node storage accessed prior to initialization");
         }
         return this.#storage;
     }
 
-    storeFor(part: Part): ServerPartStore {
+    storeFor(part: Part): NodePartStore {
         if (part.id === undefined) {
             throw new ImplementationError("Cannot access part storage because part has no assigned ID");
         }
         let store = this.#partStores[part.id];
         if (store === undefined) {
-            store = this.#partStores[part.id] = new ServerPartStore(part.id, this.storage, true);
+            store = this.#partStores[part.id] = new NodePartStore(
+                part.id,
+                this.#initializedStorage,
+                this.eventHandler,
+                true
+            );
         }
         return store;
     }
 }
 
-class ServerPartStore implements PartStore {
+class NodePartStore implements PartStore {
     #storage: StorageContext;
+    #eventHandler: EventHandler;
     #initialValues = {} as Record<string, Val.Struct>;
     #number: number | undefined;
 
-    constructor(partId: string, storage: StorageManager, isNew: boolean) {
+    constructor(partId: string, storage: StorageManager, eventHandler: EventHandler, isNew: boolean) {
         this.#storage = storage.createContext(partId);
+        this.#eventHandler = eventHandler;
 
         this.#storage.set("defined", true);
 
@@ -156,6 +179,10 @@ class ServerPartStore implements PartStore {
 
     get number() {
         return this.#number;
+    }
+
+    get eventHandler() {
+        return this.#eventHandler;
     }
 
     async setNumber(number: number) {
