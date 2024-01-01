@@ -50,10 +50,10 @@ export class PartServer implements EndpointInterface {
         agent.get(LifecycleBehavior).events.structure$Change.on(() => this.#structureChangedCallback?.());
 
         agent.require(PersistenceBehavior);
-
-        // Initialize PersistenceBehavior early because it loads stored state
-        // asynchronously
         agent.load(PersistenceBehavior);
+
+        agent.require(DescriptorServer);
+        agent.load(DescriptorServer);
     }
 
     createBacking(behavior: Behavior.Type): BehaviorBacking {
