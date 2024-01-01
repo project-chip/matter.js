@@ -8,23 +8,28 @@ import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
 import { BehaviorBacking } from "../behavior/BehaviorBacking.js";
 import type { InvocationContext } from "../behavior/InvocationContext.js";
+import { IndexBehavior } from "../behavior/definitions/index/IndexBehavior.js";
 import { LifecycleBehavior } from "../behavior/definitions/lifecycle/LifecycleBehavior.js";
+import { StructuralChangeType } from "../behavior/definitions/lifecycle/StructuralChangeType.js";
 import { PartsBehavior } from "../behavior/definitions/parts/PartsBehavior.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Agent } from "./Agent.js";
+import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
 import { Behaviors } from "./part/Behaviors.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { EndpointType } from "./type/EndpointType.js";
-import { PersistenceBehavior } from "./server/PersistenceBehavior.js";
 
 /**
- * Endpoints consist of a root part and one or more child parts.  This class
- * manages the current state of a single part.
+ * Endpoints consist of a hierarchy of parts.  This class manages the current
+ * state of a single part.
  *
  * You can interact with endpoints using an {@link Agent} created
  * with {@link Part.getAgent}.  Agents are stateless and designed for quick
  * instantiation so you can create them as needed then discard.
+ * 
+ * Most often direct access to {@link Agent} is transparent as Matter.js
+ * acquires an agent as necessary for {@link Behavior} interactions.
  */
 export class Part<T extends EndpointType = EndpointType.Empty> implements PartOwner {
     #id?: string | undefined;
@@ -36,7 +41,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #behaviors: Behaviors;
     #parts?: PartsBehavior;
     #lifecycle?: LifecycleBehavior;
-    #persistence?: PersistenceBehavior;
 
     constructor(type: T, options?: Part.Options<T>) {
         if (type === null || typeof type !== "object") {
@@ -103,7 +107,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         if (id.includes(".")) {
             throw new ImplementationError('Endpoint ID may not include "."');
         }
+
+        this.root?.agent.get(IndexBehavior).assertIdAvailable(id, this);
+        
         this.#id = id;
+        this.lifecycle.events.structure$Change.emit(
+            StructuralChangeType.IdAssigned,
+            this
+        );
     }
 
     /**
@@ -121,21 +132,29 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * 
      * TS requires us to allow undefined here but it is not a legal argument type.
      */
-    set number(value: EndpointNumber | undefined) {
-        if (typeof value !== "number") {
-            throw new ImplementationError(`Illegal endpoint number type "${typeof value}"`);
+    set number(number: EndpointNumber | undefined) {
+        if (typeof number !== "number") {
+            throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
         }
-        if (value < 0 || value > 0xffff) {
-            throw new ImplementationError(`Endpoint number ${value} is out of bounds`);
+        if (number < 0 || number > 0xffff) {
+            throw new ImplementationError(`Endpoint number ${number} is out of bounds`);
         }
-        if (this.#number !== undefined && this.#number !== value) {
-            throw new ImplementationError(`Illegal attempt to reassign endpoint number ${this.#number} to ${value}`);
+        if (this.#number !== undefined && this.#number !== number) {
+            throw new ImplementationError(`Illegal attempt to reassign endpoint number ${this.#number} to ${number}`);
         }
-        this.#number = value;
+
+        this.root?.agent.get(IndexBehavior).assertNumberAvailable(number, this);
+
+        this.#number = number;
 
         if (this.#owner !== undefined) {
             this.lifecycle.state.installed = true;
         }
+
+        this.lifecycle.events.structure$Change.emit(
+            StructuralChangeType.NumberAssigned,
+            this
+        );
     }
 
     /**
@@ -200,17 +219,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Access persistence implementation.  This will only be present if the
-     * part has non-volatile values in its schema.
-     */
-    get persistence() {
-        if (this.#behaviors.has(PersistenceBehavior) && !this.#persistence) {
-            this.#persistence = this.#agent.get(PersistenceBehavior);
-        }
-        return this.#persistence;
-    }
-
-    /**
      * Returns a human-readable name for the part.
      */
     get description() {
@@ -232,18 +240,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         return description;
     }
 
-    toString() {
-        const ident = Array<string>();
-        if (this.id) {
-            ident.push(this.id);
+    /**
+     * Access the root of the part hierarchy.
+     */
+    get root(): Part<RootEndpoint> | undefined {
+        for (let part: PartOwner | undefined = this; part = part; part = part.owner) {
+            if (part instanceof Part && part.type.deviceClass === RootEndpoint.deviceClass) {
+                return part as Part<RootEndpoint>;
+            }
         }
-        if (this.number) {
-            ident.push(`#${this.number}`);
-        }
-        if (!ident.length) {
-            ident.push("anon");
-        }
-        return `${this.type.name}<${ident.join("; ")}>`;
     }
 
     /**
@@ -268,6 +273,20 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         return this.#agent;
     }
 
+    toString() {
+        const ident = Array<string>();
+        if (this.id) {
+            ident.push(this.id);
+        }
+        if (this.number) {
+            ident.push(`#${this.number}`);
+        }
+        if (!ident.length) {
+            ident.push("anon");
+        }
+        return `${this.type.name}<${ident.join("; ")}>`;
+    }
+
     get #agent() {
         if (!this.#offlineAgent) {
             this.#offlineAgent = new this.#resolvedAgentType(this, AccessControl.OfflineSession);
@@ -282,14 +301,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     async [Symbol.asyncDispose]() {
         const destroyedEvent = this.lifecycle.events.destroyed;
         await this.behaviors[Symbol.asyncDispose]();
+        this.#owner = undefined;
         destroyedEvent.emit(this);
-    }
-
-    getAncestor<T>(type: new (...arg: any[]) => T): T {
-        if (this instanceof type) {
-            return this;
-        }
-        return this.owner.getAncestor(type);
     }
 
     initializePart(part: Part) {

@@ -34,6 +34,13 @@ export class Behaviors {
         return this.#supportAdded;
     }
 
+    /**
+     * List the {@link SupportedBehaviors} of the {@link Part}.
+     */
+    get supported() {
+        return this.#supported;
+    }
+
     constructor(part: Part, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
         if (typeof supported !== "object") {
             throw new ImplementationError('Part "behaviors" option must be an array of Behavior.Type instances');
@@ -50,13 +57,6 @@ export class Behaviors {
         this.#part = part;
         this.#supported = supported;
         this.#options = options;
-    }
-
-    /**
-     * List the {@link SupportedBehaviors} of the {@link Part}.
-     */
-    get supported() {
-        return this.#supported;
     }
 
     /**
@@ -121,6 +121,14 @@ export class Behaviors {
         }
 
         return backing.createBehavior(agent, type);
+    }
+
+    /**
+     * Determine if a specified behavior is supported and active.
+     */
+    isActive(type: Behavior.Type) {
+        const backing = this.#backings[type.id];
+        return !!backing && backing.type.supports(type);
     }
 
     /**

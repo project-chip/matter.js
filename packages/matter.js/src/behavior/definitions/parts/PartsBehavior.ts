@@ -10,7 +10,8 @@ import { Part } from "../../../endpoint/Part.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { BasicSet, MutableSet } from "../../../util/Set.js";
 import { Behavior } from "../../Behavior.js";
-import { LifecycleBehavior } from "../lifecycle/LifecycleBehavior.js";
+import { IdentityConflictError, IndexBehavior } from "../index/IndexBehavior.js";
+import { StructuralChangeType } from "../lifecycle/StructuralChangeType.js";
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -24,103 +25,31 @@ import { LifecycleBehavior } from "../lifecycle/LifecycleBehavior.js";
 export class PartsBehavior extends Behavior implements MutableSet<Part, Part | Agent> {
     static override readonly id = "parts";
 
+    declare readonly internal: PartsBehavior.Internal;
     declare readonly state: PartsBehavior.State;
 
     override initialize() {
-        const children = this.state.children;
-        const state = this.state;
-        const agent = this.agent;
-        const lifecycle = agent.get(LifecycleBehavior);
+        this.internal.structureChanged = (type: StructuralChangeType, part: Part) =>
+            this.#emitChange(type, part);
+        this.internal.childDestroyed = (part: Part) =>
+            this.#childDestroyed(part);
 
         // Update state in response to the mutation state.parts
-        children.added.on(child => adoptPart(child));
-        children.deleted.on(child => disownPart(child));
+        const children = this.state.children;
+        children.added.on(child => this.#adoptPart(child));
+        children.deleted.on(child => this.#disownPart(child));
 
         // Immediately adopt any parts present in state upon initialization
         for (const part of this.state.children) {
-            adoptPart(part);
+            this.#adoptPart(part);
         }
 
-        // Monitor online state of owner so we can propagate to children
-        lifecycle.events.online$Change.on(online => {
-            for (const part of state.children) {
-                part.agent.get(LifecycleBehavior).state.online = online;
+        // Monitor online state so we can propagate to children
+        this.part.lifecycle.events.online$Change.on(online => {
+            for (const child of this.state.children) {
+                child.lifecycle.state.online = online;
             }
         });
-
-        /**
-         * Broadcast the lifecycle "structure changed" event.  Invoked in
-         * response to structure changes in children.  This is how the event
-         * bubbles.
-         */
-        function structureChangeEmitter(part: Part) {
-            agent.get(LifecycleBehavior).events.structure$Change.emit(part);
-        }
-
-        /**
-         * Remove a destroyed part.  Invoked in response to the child's
-         * "destroyed" event.
-         */
-        function childDestroyed(part: Part) {
-            if (children.has(part)) {
-                children.delete(part);
-            }
-        }
-
-        /**
-         * Validates and updates part status.
-         */
-        function partReady(child: Part) {
-            if (child.number === undefined) {
-                throw new InternalError("Part reports as initialized but has no assigned ID");
-            }
-
-            child.agent.get(LifecycleBehavior).state.online = lifecycle.state.online;
-        }
-
-        /**
-         * Take ownership of a part.  Invoked when a part is added to
-         * state.parts.
-         */
-        function adoptPart(child: Part) {
-            child.owner = agent.part;
-
-            const registerIfInitialized = () => {
-                if (!lifecycle.state.initialized) {
-                    return;
-                }
-
-                lifecycle.events.initialized$Change.off(registerIfInitialized);
-                state.initializing.delete(child);
-
-                partReady(child);
-            };
-
-            lifecycle.events.initialized$Change.on(registerIfInitialized);
-            registerIfInitialized();
-
-            const childLifecycle = child.agent.get(LifecycleBehavior);
-            childLifecycle.events.structure$Change.on(structureChangeEmitter);
-            childLifecycle.events.destroyed.on(childDestroyed);
-
-            structureChangeEmitter(agent.part);
-        }
-
-        /**
-         * Terminate ownership of a part.  Invoked when a part is removed from
-         * state.parts.
-         */
-        function disownPart(child: Part) {
-            if (child.number === undefined) {
-                return;
-            }
-
-            const childLifeCycle = child.agent.get(LifecycleBehavior);
-            childLifeCycle.events.structure$Change.off(structureChangeEmitter);
-            childLifeCycle.events.destroyed.off(childDestroyed);
-
-            structureChangeEmitter(agent.part);
-        }
     }
 
     has(child: Part | Agent | EndpointType) {
@@ -168,10 +97,151 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
     [Symbol.iterator]() {
         return this.state.children[Symbol.iterator]();
     }
+
+    /**
+     * Take ownership of a part.  Invoked when a part is added to
+     * {@link state.children}.
+     */
+    #adoptPart(child: Part) {
+        const lifecycle = this.part.lifecycle;
+
+        child.owner = this.agent.part;
+
+        const registerIfInitialized = () => {
+            if (!lifecycle.state.initialized) {
+                return;
+            }
+
+            lifecycle.events.initialized$Change.off(registerIfInitialized);
+            this.state.initializing.delete(child);
+
+            this.#partReady(child);
+        };
+
+        lifecycle.events.initialized$Change.on(registerIfInitialized);
+        registerIfInitialized();
+
+        const childLifecycle = child.lifecycle;
+
+        if (!this.internal.structureChanged || !this.internal.childDestroyed) {
+            throw new InternalError("Part adoption failed because PartsBehavior is not initialized");
+        }
+
+        childLifecycle.events.structure$Change.on(this.internal.structureChanged);
+        childLifecycle.events.destroyed.on(this.internal.childDestroyed);
+
+        this.#assertUniqueIdentities(child);
+
+        this.#emitChange(
+            StructuralChangeType.PartAdded,
+            child,
+        );
+    }
+
+    /**
+     * Terminate ownership of a part.  Invoked when a part is removed from
+     * state.parts.
+     */
+    #disownPart(child: Part) {
+        if (child.number === undefined) {
+            return;
+        }
+
+        if (!this.internal.structureChanged || !this.internal.childDestroyed) {
+            throw new InternalError("Part disown failed because PartsBehavior is not initialized");
+        }
+
+        const childLifeCycle = child.lifecycle;
+        childLifeCycle.events.structure$Change.off(this.internal.structureChanged);
+        childLifeCycle.events.destroyed.off(this.internal.childDestroyed);
+
+        this.internal.structureChanged?.(
+            StructuralChangeType.PartDeleted,
+            child
+        );
+    }
+
+    /**
+     * Validates and updates part status.
+     */
+    #partReady(child: Part) {
+        if (child.number === undefined) {
+            throw new InternalError("Part reports as initialized but has no assigned ID");
+        }
+
+        child.lifecycle.state.online = this.part.lifecycle.state.online;
+    }
+
+    /**
+     * Remove a destroyed part.  Invoked in response to the child's "destroyed"
+     * event.
+     */
+    #childDestroyed(part: Part) {
+        if (part.owner !== this.part) {
+            return;
+        }
+
+        this.state.children.delete(part);
+    }
+
+    #emitChange(type: StructuralChangeType, part: Part) {
+        this.part.lifecycle.events.structure$Change.emit(type, part)
+    }
+
+    #assertUniqueIdentities(part: Part, usedIds?: Set<string>, usedNumbers?: Set<number>) {
+        // If there is no index then we aren't yet installed.  This test
+        // will occur instead when we're installed
+        const index = this.part.root?.agent.get(IndexBehavior);
+        if (!index) {
+            return;
+        }
+
+        if (part.id) {
+            index.assertIdAvailable(part.id, part);
+            if (usedIds?.has(part.id)) {
+                throw new IdentityConflictError(
+                    `${part.description}: Cannot add part because descendents have conflicting definitions for ID ${part.id}`
+                );
+            }
+        }
+
+        if (part.number) {
+            index.assertNumberAvailable(part.number, part);
+            if (usedNumbers?.has(part.number)) {
+                throw new IdentityConflictError(
+                    `${part.description}: Cannot add part because descendents have conflicting definitions for endpoint number ${part.number}`
+                );
+            }
+        }
+
+        const children = this.state.children;
+        if (children.size) {
+            if (!usedIds) {
+                usedIds = new Set;
+            }
+            if (part.id) {
+                usedIds.add(part.id);
+            }
+            if (!usedNumbers) {
+                usedNumbers = new Set;
+            }
+            if (part.number) {
+                usedNumbers.add(part.number);
+            }
+            for (const child of children) {
+                this.#assertUniqueIdentities(child, usedIds, usedNumbers);
+            }
+        }
+    }
 }
 
 export namespace PartsBehavior {
-    export class State extends Behavior.State {
+    export class Internal {
+        structureChanged?: (type: StructuralChangeType, part: Part) => void;
+        childDestroyed?: (part: Part) => void;
+    }
+
+    export class State {
         /**
          * Child parts of the endpoint.
          */

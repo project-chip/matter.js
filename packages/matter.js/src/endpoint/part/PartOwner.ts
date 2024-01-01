@@ -15,6 +15,11 @@ import type { Part } from "../Part.js";
  */
 export interface PartOwner {
     /**
+     * The parent of the owner.
+     */
+    readonly owner: PartOwner | undefined;
+
+    /**
      * Initialize a {@link Part}.
      */
     initializePart(part: Part): void;
@@ -28,9 +33,4 @@ export interface PartOwner {
      * @returns a new {@link BehaviorBacking}
      */
     initializeBehavior(part: Part, behavior: Behavior.Type): BehaviorBacking;
-
-    /**
-     * Obtain an ancestor of a given class type.
-     */
-    getAncestor<T>(type: new (...args: any[]) => T): T;
 }

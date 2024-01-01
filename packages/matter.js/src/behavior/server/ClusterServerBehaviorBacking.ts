@@ -21,6 +21,7 @@ import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
+import { Transaction } from "../state/transaction/Transaction.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 
 /**
@@ -66,6 +67,32 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
     get clusterServer() {
         return this.#clusterServer;
+    }
+
+    protected override invokeInitializer(behavior: Behavior, transaction: Transaction, options?: Behavior.Options) {
+        super.invokeInitializer(behavior, transaction, options);
+
+        // After initialization our datasource is available so configure the
+        // cluster server's datasource
+        const datasource = this.datasource;
+        const eventHandler = this.eventHandler;
+        this.#clusterServer.datasource = {
+            get version() {
+                return datasource.version
+            },
+
+            get eventHandler() {
+                return eventHandler;
+            },
+
+            // We handle change management ourselves
+            changed() {},
+
+            // We handle version management ourselves
+            increaseVersion() {
+                return datasource.version;
+            },
+        }
     }
 }
 

@@ -14,7 +14,9 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
 import { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
+import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
 import { PartServer } from "../../endpoint/server/PartServer.js";
+import { PersistenceBehavior } from "../../endpoint/server/PersistenceBehavior.js";
 import { EndpointType } from "../../endpoint/type/EndpointType.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -45,9 +47,10 @@ export class NodeServer extends BaseNodeServer implements Node {
     #host?: Host;
     #store?: NodeStore;
 
-    /**
-     * The {@link Part} that is the root endpoint.
-     */
+    get owner() {
+        return undefined;
+    }
+
     get root() {
         return this.#root;
     }
@@ -75,6 +78,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         this.#root.number = EndpointNumber(0);
         this.#root.behaviors.require(PartsBehavior);
         this.#root.behaviors.require(CommissioningBehavior);
+        this.#root.behaviors.require(IndexBehavior);
         this.#nextEndpointId = this.#configuration.nextEndpointNumber;
     }
 
@@ -159,14 +163,17 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     /**
-     * We are the root of the {@link Part} ownership hierarchy.  If the
-     * behavior is not requesting a {@link NodeServer} then this request fails.
+     * An index of all parts.
      */
-    getAncestor<T>(type: new (...args: any[]) => T) {
-        if (this instanceof type) {
-            return this;
-        }
-        throw new ImplementationError(`Behavior is not owned by ${type.name}`);
+    get index() {
+        return this.root.agent.get(IndexBehavior);
+    }
+
+    /**
+     * Retrieve a part by number.
+     */
+    partForNumber(number: number) {
+       return this.root.agent.get(IndexBehavior).forNumber(number);
     }
 
     /**
@@ -186,10 +193,13 @@ export class NodeServer extends BaseNodeServer implements Node {
             part.id = this.#identifyPart(part);
         }
 
-        const store = this.storeFor(part);
-        if (part.persistence) {
-            part.persistence.internal.partStore = store;
-        }
+        const store = this.#initializedStore.storeFor(part);
+
+        part.agent.require(PersistenceBehavior);
+        part.agent.get(PersistenceBehavior).configureStorage(
+            store,
+            this.#initializedStore.eventHandler,
+        )
 
         if (part.number === undefined) {
             if (part === this.#root) {
@@ -198,8 +208,6 @@ export class NodeServer extends BaseNodeServer implements Node {
                 part.number = EndpointNumber(store.number ?? this.#initializedStore.allocateNumber());
             }
         }
-
-        // TODO - ensure ID and number are unique
     }
 
     /**
@@ -211,10 +219,6 @@ export class NodeServer extends BaseNodeServer implements Node {
      */
     initializeBehavior(part: Part, behavior: Behavior.Type): BehaviorBacking {
         return PartServer.forPart(part).createBacking(behavior);
-    }
-
-    storeFor(part: Part) {
-        return this.#initializedStore.storeFor(part);
     }
 
     fallbackIdFor(part: Part) {

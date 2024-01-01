@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Part } from "../endpoint/Part.js";
 import { PartOwner } from "../endpoint/part/PartOwner.js";
 
 /**
@@ -13,11 +12,6 @@ import { PartOwner } from "../endpoint/part/PartOwner.js";
  * NodeInterface offers interaction with a node.
  */
 export interface Node extends PartOwner {
-    /**
-     * Access the root part.
-     */
-    get root(): Part;
-
     /**
      * Clean up node resources.
      */

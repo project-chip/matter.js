@@ -7,6 +7,7 @@
 import { InternalError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
 import { PersistenceBehavior } from "../../endpoint/server/PersistenceBehavior.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Type.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../BehaviorBacking.js";
@@ -19,6 +20,7 @@ import { Transaction } from "../state/transaction/Transaction.js";
  */
 export class ServerBehaviorBacking extends BehaviorBacking {
     #store?: Datasource.Store;
+    #eventHandler?: EventHandler;
     #datasource?: Datasource;
     #loadingState = false;
 
@@ -43,12 +45,14 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                     .then(persistence => {
                         this.#loadingState = false;
                         this.#store = persistence.storeFor(this.type);
+                        this.#eventHandler = persistence.eventHandler;
                         return super.invokeInitializer(behavior, transaction, options);
                     })
                     .finally(() => (this.#loadingState = false));
             }
 
             this.#store = persistence.storeFor(this.type);
+            this.#eventHandler = persistence.eventHandler;
         }
 
         return super.invokeInitializer(behavior, transaction, options);
@@ -62,14 +66,10 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     /**
-     * Obtain the source of raw data that backs managed state instances.
+     * The source of raw data that backs managed state instances.
      */
     get datasource() {
-        if (this.#loadingState) {
-            throw new InternalError(
-                "Cannot access behavior state because state is still loading; use agent.waitFor() to avoid this error"
-            );
-        }
+        this.#assertLoaded();
 
         if (!this.#datasource) {
             this.#datasource = Datasource({
@@ -82,5 +82,22 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         }
 
         return this.#datasource;
+    }
+
+    /**
+     * The target for events.
+     */
+    get eventHandler() {
+        this.#assertLoaded();
+        
+        return this.#eventHandler as EventHandler;
+    }
+
+    #assertLoaded() {
+        if (this.#loadingState) {
+            throw new InternalError(
+                "Cannot access behavior state because state is still loading; use agent.waitFor() to avoid this error"
+            );
+        }
     }
 }
