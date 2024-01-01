@@ -41,7 +41,7 @@
         "@types/chai": "^4.3.11",
         "@types/elliptic": "^6.4.18",
         "@types/mocha": "^10.0.6",
-        "chai": "^4.3.10",
+        "chai": "^5.0.0",
         "mocha": "^10.2.0",
         "typescript": "^5.3.3"
     },
