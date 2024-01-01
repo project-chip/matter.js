@@ -60,12 +60,12 @@ describe("PartsBehavior", () => {
         let bubbled: Part | undefined;
         parent.lifecycle.events.structure$Change.on((type, part) => {
             expect(type).equals(StructuralChangeType.PartAdded);
-            (bubbled = part)
+            bubbled = part;
         });
 
         child.parts.add(grandchild);
 
-        expect(bubbled).equals(child.part);
+        expect(bubbled).equals(grandchild.part);
     });
 
     it("bubbles delete", async () => {
@@ -84,6 +84,6 @@ describe("PartsBehavior", () => {
 
         await grandchild.part.destroy();
 
-        expect(bubbled).equals(child.part);
+        expect(bubbled).equals(grandchild.part);
     });
 });
