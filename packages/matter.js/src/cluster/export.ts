@@ -11,8 +11,12 @@ export * from "./client/ClusterClientTypes.js";
 export * from "./client/EventClient.js";
 // Export all Client classes
 export * from "./Cluster.js";
-export * from "./ClusterFactory.js";
 export * from "./ClusterHelper.js";
+export * from "./ClusterRegistry.js";
+export * from "./ClusterType.js";
+export * from "./mutation/ClusterComposer.js";
+export * from "./mutation/ElementModifier.js";
+export * from "./mutation/MutableCluster.js";
 // Export all Cluster definitions
 export * from "./definitions/index.js";
 // Export all Server handler

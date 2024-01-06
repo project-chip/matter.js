@@ -10,6 +10,7 @@ import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { NetworkError } from "./net/Network.js";
+import { BaseNodeServer } from "./node/server/BaseNodeServer.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
@@ -75,10 +76,16 @@ export class MatterServer {
     }
 
     private getNextMatterPort(desiredPort?: number) {
+        // Support port 0 as "select open port" then it's easier to override
+        // from environment variables etc.
+        if (desiredPort === 0) {
+            desiredPort = undefined;
+        }
+
         // Build a temporary map with all ports in use
         const portCheckMap = new Map<number, boolean>();
         for (const node of this.nodes.values()) {
-            const nodePort = node.getPort();
+            const nodePort = node.port;
             if (nodePort === undefined) continue;
             if (portCheckMap.has(nodePort)) {
                 throw new NetworkError(`Port ${nodePort} is already in use by other node.`);
@@ -118,48 +125,57 @@ export class MatterServer {
     }
 
     /**
-     * Add a CommissioningServer node to the server
+     * Add a node server to the server
      *
-     * @param commissioningServer CommissioningServer node to add
+     * @param server node server to add
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    async addCommissioningServer(commissioningServer: CommissioningServer, nodeOptions?: NodeOptions) {
+    async addCommissioningServer(server: BaseNodeServer, nodeOptions?: NodeOptions) {
         const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.size.toString();
         if (this.nodes.has(storageKey)) {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
+        }        server.port = this.getNextMatterPort(server.port);
+
+        // CommissioningServer is designed for lazy initialization of storage.
+        // Not changing that to keep API consistent.
+        //
+        // NodeServer is initialized with storage from the get-go so this call
+        // is not necessary.
+        //
+        // Keeping storage out of BaseNodeServer keeps concerns separated so
+        // just check for the CommissioningServer case explicitly
+        if (server instanceof CommissioningServer) {
+            server.storage = this.storageManager.createContext(storageKey);
         }
-        commissioningServer.setPort(this.getNextMatterPort(commissioningServer.getPort()));
-        commissioningServer.setStorage(this.storageManager.createContext(storageKey));
+
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
-        await this.prepareNode(commissioningServer);
-        this.nodes.set(storageKey, commissioningServer);
+        await this.prepareNode(server);
+        this.nodes.set(storageKey, server);
     }
 
     /**
-     * Remove a CommissioningServer node from the server, close the CommissioningServer and optionally destroy the
+     * Remove a node server from the server, close the CommissioningServer and optionally destroy the
      * storage context.
      *
-     * @param commissioningServer CommissioningServer node to remove
+     * @param server node server to remove
      * @param destroyStorage If true the storage context will be destroyed
      */
-    async removeCommissioningServer(commissioningServer: CommissioningServer, destroyStorage = false) {
+    async removeCommissioningServer(server: BaseNodeServer, destroyStorage = false) {
         // Find instance from list
         for (const [key, value] of this.nodes.entries()) {
-            if (value === commissioningServer) {
+            if (value === server) {
                 this.nodes.delete(key);
 
-                const port = commissioningServer.getPort();
+                const port = server.port;
                 if (port !== undefined) {
                     // Remember port to not reuse for this run if not needed to prevent issues with controllers
                     this.formerlyUsedPorts.push(port);
                 }
-
                 // Close instance
-                await commissioningServer.close();
-
+                await server.close();
                 if (destroyStorage) {
                     // Destroy storage
-                    await commissioningServer.factoryReset();
+                    await server.factoryReset();
                 }
                 return;
             }
@@ -179,8 +195,8 @@ export class MatterServer {
         if (this.nodes.has(storageKey)) {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
         }
-
-        const localPort = commissioningController.getPort();
+        
+        const localPort = commissioningController.port;
         if (localPort !== undefined) {
             // If a local port for controller is defined verify that the port is not overlapping with other nodes
             // Method throws if port is already used
@@ -252,8 +268,8 @@ export class MatterServer {
             logger.debug("Mdns instances not yet created, delaying node preparation.");
             return;
         }
-        node.setMdnsBroadcaster(this.mdnsBroadcaster);
-        node.setMdnsScanner(this.mdnsScanner);
+        node.mdnsBroadcaster = this.mdnsBroadcaster;
+        node.mdnsScanner = this.mdnsScanner;
         if (this.started) {
             await node.start();
         }

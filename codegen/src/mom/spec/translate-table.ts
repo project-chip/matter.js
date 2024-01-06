@@ -5,7 +5,7 @@
  */
 
 import { Logger } from "@project-chip/matter.js/log";
-import { AnyElement, DatatypeElement, Specification } from "@project-chip/matter.js/model";
+import { AnyElement, FieldElement, Specification } from "@project-chip/matter.js/model";
 import { addDocumentation } from "./add-documentation.js";
 import { Str } from "./html-translators.js";
 import { HtmlReference } from "./spec-types.js";
@@ -32,7 +32,7 @@ type Constant<T> = { option: "constant"; value: T };
 export const Constant = <T>(value: T): Constant<T> => ({ option: "constant", value });
 
 /** Converts detail section into children */
-type ChildTranslator = (tag: string, parentRecord: any, definition: HtmlReference) => DatatypeElement[] | undefined;
+type ChildTranslator = (tag: string, parentRecord: any, definition: HtmlReference) => FieldElement[] | undefined;
 type Children = { option: "children"; translator: ChildTranslator };
 export const Children = (translator: ChildTranslator) => ({ option: "children", translator });
 
@@ -44,14 +44,13 @@ type TableSchema = {
     [name: string]: any;
 };
 
-type FieldType<F> =
-    F extends Optional<infer W>
-        ? W | undefined
-        : F extends Alias<infer W> | Translator<infer W> | Constant<infer W>
-          ? W
-          : F extends Children
-            ? DatatypeElement[]
-            : never;
+type FieldType<F> = F extends Optional<infer W>
+    ? W | undefined
+    : F extends Alias<infer W> | Translator<infer W> | Constant<infer W>
+      ? W
+      : F extends Children
+        ? FieldElement[]
+        : never;
 
 // Create TS object type from schema definition
 type TableRecord<T extends TableSchema> = {

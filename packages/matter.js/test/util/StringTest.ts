@@ -25,14 +25,14 @@ describe("String", () => {
     });
 
     describe("camelize", () => {
+        it(`camelizes lowercase`, () => {
+            expect(camelize("Foo")).equal("foo");
+        });
+
         for (const [k, v] of Object.entries(CAMELIZE_TESTS)) {
-            it(`camelizes "${k}"`, () => {
-                expect(camelize(k)).equal(v);
+            it(`camelizes uppercase "${k}"`, () => {
+                expect(camelize(k, true)).equal(v);
             });
         }
-
-        it(`camelizes lowercase`, () => {
-            expect(camelize("Foo", false)).equal("foo");
-        });
     });
 });

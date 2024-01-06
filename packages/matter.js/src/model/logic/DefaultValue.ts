@@ -135,7 +135,7 @@ function buildObject(model: ValueModel) {
     let result: { [key: string]: any } | undefined;
 
     for (const child of model.members) {
-        const name = camelize(child.name, false);
+        const name = camelize(child.name);
         if (result && result[name] !== undefined) {
             continue;
         }

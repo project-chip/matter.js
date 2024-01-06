@@ -30,7 +30,7 @@ describe("FabricManager", () => {
 
             assert.deepEqual(fabricManager.getFabrics(), [fabric]);
 
-            assert.deepEqual(storage.get(["Context", "FabricManager"], "fabrics"), undefined);
+            assert.deepEqual(storage.get(["Context"], "fabrics"), undefined);
         });
 
         it("adding a fabric with same index twice throws error", async () => {
@@ -55,12 +55,12 @@ describe("FabricManager", () => {
 
             assert.deepEqual(fabricManager.getFabrics(), [fabric]);
 
-            assert.deepEqual(storage.get(["Context", "FabricManager"], "fabrics"), [fabric.toStorageObject()]);
+            assert.deepEqual(storage.get(["Context"], "fabrics"), [fabric.toStorageObject()]);
         });
 
         it("restore a fabric from storage", async () => {
             const fabric = await buildFabric();
-            storage.set(["Context", "FabricManager"], "fabrics", [fabric.toStorageObject()]);
+            storage.set(["Context"], "fabrics", [fabric.toStorageObject()]);
 
             fabricManager = new FabricManager(storageManager.createContext("Context"));
             assert.equal(fabricManager.getFabrics().length, 1);

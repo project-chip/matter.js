@@ -124,8 +124,12 @@ export class Package {
     }
 
     static get workspace() {
+        return this.workspaceFor(workingDir);
+    }
+
+    static workspaceFor(cwd: string) {
         if (!workspace) {
-            workspace = find(workingDir, pkg => Array.isArray(pkg.json.workspaces));
+            workspace = find(cwd, pkg => Array.isArray(pkg.json.workspaces));
         }
         return workspace;
     }

@@ -30,7 +30,7 @@ export class BleBroadcaster implements InstanceBroadcaster {
 
     async setCommissionMode(
         mode: number,
-        { deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData,
+        { name: deviceName, deviceType, vendorId, productId, discriminator }: CommissioningModeInstanceData,
     ) {
         if (mode !== 1) {
             this.advertise = false;

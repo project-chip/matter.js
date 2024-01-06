@@ -5,12 +5,12 @@
  */
 
 import { FabricElement } from "../../elements/index.js";
-import { DatatypeModel, FabricModel } from "../../models/index.js";
+import { FabricModel, FieldModel } from "../../models/index.js";
 import { ModelValidator } from "./index.js";
 
 ModelValidator.validators[FabricElement.Tag] = class AttributeValidator extends ModelValidator<FabricModel> {
     override validate() {
-        this.validateStructure(true, DatatypeModel);
+        this.validateStructure(true, FieldModel);
         super.validate();
     }
 };

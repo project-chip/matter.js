@@ -9,7 +9,7 @@ import { ClusterModel } from "../../models/index.js";
 import { InferredComponent, InferredComponents } from "./InferredComponents.js";
 
 /**
- * An inferred with generated name and documentation.
+ * An inferred component with generated name and documentation.
  */
 export type NamedComponent = InferredComponent & {
     name: string;

@@ -98,7 +98,6 @@ export class Typescript {
         if (!this.options.noEmit) {
             diagnostics.push(...program.emit().diagnostics);
         }
-
         this.passTscErrors(diagnostics);
     }
 

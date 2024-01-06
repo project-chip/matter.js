@@ -65,6 +65,45 @@ export class Conformance extends Aspect<Conformance.Definition> {
         return Conformance.validateReferences(this, this.ast, lookup);
     }
 
+    /**
+     * Is the associated element mandatory?
+     *
+     * This supports a limited subset of conformance and is only appropriate
+     * for field and requirement conformance.
+     */
+    get mandatory() {
+        const conformance = this.ast;
+        if (conformance.type === Conformance.Flag.Mandatory) {
+            return true;
+        }
+        if (conformance.type === Conformance.Special.Group) {
+            for (const c of conformance.param) {
+                if (c.type === Conformance.Flag.Provisional) {
+                    continue;
+                }
+                if (c.type === Conformance.Flag.Mandatory) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Perform limited conformance evaluation to determine whether this
+     * conformance is applicable given a feature combination.
+     *
+     * Ignores subexpressions that reference field values.
+     *
+     * This is useful for filtering elements at compile time.  For complete
+     * accuracy you then need to filter at runtime once field values are known.
+     */
+    isApplicable(features: Iterable<string>, supportedFeatures: Iterable<string>) {
+        const fset = features instanceof Set ? (features as Set<string>) : new Set(features);
+        const sfset = supportedFeatures instanceof Set ? (features as Set<string>) : new Set(features);
+        return computeApplicability(fset, sfset, this.ast) !== false;
+    }
+
     override toString() {
         return Conformance.serialize(this.ast);
     }
@@ -776,4 +815,51 @@ namespace Parser {
     ];
 
     export const BinaryOperators = new Set(BinaryOperatorPrecedence.flat());
+}
+
+function computeApplicability(features: Set<string>, supportedFeatures: Set<string>, ast: Conformance.Ast) {
+    function processNode(ast: Conformance.Ast): boolean {
+        switch (ast.type) {
+            case Conformance.Special.Name:
+                if (features.has(ast.param)) {
+                    return supportedFeatures.has(ast.param);
+                }
+                break;
+
+            case Conformance.Operator.NOT:
+                const subvalue = processNode(ast.param);
+                if (typeof subvalue === "boolean") {
+                    return !subvalue;
+                }
+                break;
+
+            case Conformance.Operator.AND:
+                if (!processNode(ast.param.lhs) || !processNode(ast.param.rhs)) {
+                    return false;
+                }
+                break;
+
+            case Conformance.Operator.OR:
+                if (!processNode(ast.param.lhs) && !processNode(ast.param.rhs)) {
+                    return false;
+                }
+                break;
+
+            case Conformance.Flag.Disallowed:
+                return false;
+
+            case Conformance.Special.OptionalIf:
+                return processNode(ast.param);
+
+            case Conformance.Special.Group:
+                for (const child of ast.param) {
+                    if (processNode(child)) {
+                        return true;
+                    }
+                }
+                return false;
+        }
+        return true;
+    }
+    return processNode(ast);
 }

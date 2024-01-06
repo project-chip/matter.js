@@ -31,9 +31,9 @@ export async function main() {
 
         const file = new TsFile(`#elements/${elementFilename(element)}`);
 
-        file.addImport(`../Matter`, `Matter`);
+        file.addImport(`../Matter.js`, `Matter`);
 
-        generateElement(file, element, `Matter.children.push(`, ")");
+        generateElement(file, "../../elements/index.js", element, `Matter.children.push(`, ")");
 
         file.save();
     }
@@ -42,7 +42,7 @@ export async function main() {
         const file = new TsFile(`#elements/index`);
         elements.forEach(element => {
             if (!element.global) {
-                file.addImport(`./${elementFilename(element)}`);
+                file.addImport(`./${elementFilename(element)}.js`);
             }
         });
 

@@ -5,7 +5,7 @@
  */
 
 import { camelize } from "../../../util/String.js";
-import { ClusterModel, DatatypeModel } from "../../models/index.js";
+import { ClusterModel, FieldModel } from "../../models/index.js";
 
 export type FeatureFlags = string[];
 export type FeatureBitmap = { [name: string]: boolean };
@@ -29,8 +29,8 @@ export function FeatureBitmap(bitmap: FeatureBitmap | FeatureFlags = {}): Featur
 export function translateBitmap(bitmap: FeatureBitmap, cluster: ClusterModel) {
     return Object.fromEntries(
         Object.entries(bitmap).map(([k, v]) => {
-            const feature = cluster.featureMap.get(DatatypeModel, k);
-            return [camelize(feature?.description ?? k, false), v];
+            const feature = cluster.featureMap.get(FieldModel, k);
+            return [camelize(feature?.description ?? k), v];
         }),
     );
 }

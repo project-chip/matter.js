@@ -125,14 +125,14 @@ export type NodeCommissioningOptions = CommissioningControllerNodeOptions & {
 };
 
 /** Controller class to commission and connect multiple nodes into one fabric. */
-export class CommissioningController extends MatterNode {
+export class CommissioningController implements MatterNode {
     private started = false;
     private ipv4Disabled?: boolean;
     private readonly listeningAddressIpv4?: string;
     private readonly listeningAddressIpv6?: string;
 
-    private storage?: StorageContext;
-    private mdnsScanner?: MdnsScanner;
+    #storage?: StorageContext;
+    #mdnsScanner?: MdnsScanner;
 
     private controllerInstance?: MatterController;
     private connectedNodes = new Map<NodeId, PairedNode>();
@@ -144,7 +144,6 @@ export class CommissioningController extends MatterNode {
      * @param options The options for the CommissioningController
      */
     constructor(private readonly options: CommissioningControllerOptions) {
-        super();
     }
 
     get nodeId() {
@@ -152,13 +151,13 @@ export class CommissioningController extends MatterNode {
     }
 
     assertIsAddedToMatterServer() {
-        if (this.mdnsScanner === undefined || this.storage === undefined) {
+        if (this.#mdnsScanner === undefined || this.#storage === undefined) {
             throw new ImplementationError("Add the node to the Matter instance before.");
         }
         if (!this.started) {
             throw new ImplementationError("The node needs to be started before interacting with the controller.");
         }
-        return { mdnsScanner: this.mdnsScanner, storage: this.storage };
+        return { mdnsScanner: this.#mdnsScanner, storage: this.#storage };
     }
 
     assertControllerIsStarted(errorText?: string) {
@@ -364,30 +363,12 @@ export class CommissioningController extends MatterNode {
     }
 
     /**
-     * Set the MDNS Scanner instance. Should be only used internally
-     *
-     * @param mdnsScanner MdnsScanner instance
-     */
-    setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.mdnsScanner = mdnsScanner;
-    }
-
-    /**
-     * Set the MDNS Broadcaster instance. Should be only used internally
-     *
-     * @param _mdnsBroadcaster MdnsBroadcaster instance
-     */
-    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
-        // not needed
-    }
-
-    /**
      * Set the Storage instance. Should be only used internally
      *
      * @param storage storage context to use
      */
     setStorage(storage: StorageContext) {
-        this.storage = storage;
+        this.#storage = storage;
     }
 
     /** Returns true if t least one node is commissioned/paired with this controller instance. */
@@ -436,8 +417,20 @@ export class CommissioningController extends MatterNode {
         this.started = false;
     }
 
-    getPort(): number | undefined {
+    get port(): number | undefined {
         return this.options.localPort;
+    }
+
+    set storage(storage: StorageContext) {
+        this.#storage = storage;
+    }
+
+    set mdnsScanner(mdnsScanner: MdnsScanner) {
+        this.#mdnsScanner = mdnsScanner;
+    }
+
+    set mdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
+        // Controller does not use a broadcaster
     }
 
     initialize(ipv4Disabled: boolean) {
