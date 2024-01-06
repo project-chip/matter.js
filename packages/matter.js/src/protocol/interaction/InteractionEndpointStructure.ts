@@ -53,19 +53,19 @@ export class InteractionEndpointStructure {
         this.commandPaths.length = 0;
     }
 
-    public destroy() {
+    public async destroy() {
         for (const endpoint of this.endpoints.values()) {
-            endpoint.destroy();
+            await endpoint.destroy();
         }
     }
 
-    public initializeFromEndpoint(endpoint: EndpointInterface) {
+    public async initializeFromEndpoint(endpoint: EndpointInterface) {
         this.clear();
 
         this.verifyAndInitializeStructureElementsFromEndpoint(endpoint); // Initialize Data from Root Endpoint
         this.initializeStructureFromEndpoints(endpoint); // Initialize Data from Child Endpoints
 
-        this.change.emit();
+        await this.change.emit();
     }
 
     private initializeStructureFromEndpoints(endpoint: EndpointInterface) {
@@ -116,7 +116,8 @@ export class InteractionEndpointStructure {
             }
         }
 
-        if (this.endpoints.has(endpoint.number)) throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
+        if (this.endpoints.has(endpoint.number))
+            throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
 
         this.endpoints.set(endpoint.number, endpoint);
     }
@@ -192,7 +193,7 @@ export class InteractionEndpointStructure {
     }
 
     hasClusterServer(endpointId: EndpointNumber, clusterId: ClusterId): boolean {
-        return !!this.getClusterServer(endpointId, clusterId);
+        return !!this.endpoints.get(endpointId)?.hasClusterServerById(clusterId);
     }
 
     getAttribute(

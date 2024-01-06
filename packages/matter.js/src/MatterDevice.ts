@@ -43,6 +43,7 @@ import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
 import { Time, Timer } from "./time/Time.js";
+import { AsyncConstruction } from "./util/AsyncConstruction.js";
 import { ByteArray } from "./util/ByteArray.js";
 
 const logger = Logger.get("MatterDevice");
@@ -60,11 +61,17 @@ export class MatterDevice {
     private readonly exchangeManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
     private activeCommissioningMode = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
-    private activeCommissioningEndCallback?: () => void;
+    private activeCommissioningEndCallback?: () => Promise<void>;
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
     private isClosing = false;
     private failSafeContext?: FailSafeManager;
+
+    #construction: AsyncConstruction<MatterDevice>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(
         private readonly commissioningOptions: CommissioningOptions.Configuration,
@@ -73,20 +80,24 @@ export class MatterDevice {
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+        this.fabricManager = new FabricManager(fabricStorage, async (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
             // When fabric is removed, also remove the resumption record
-            this.sessionManager.removeResumptionRecord(peerNodeId);
+            await this.sessionManager.removeResumptionRecord(peerNodeId);
             this.commissioningChangedCallback(fabricIndex);
         });
 
         this.sessionManager = new SessionManager(this, sessionStorage);
-        this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
 
         this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
 
         this.addProtocolHandler(this.secureChannelProtocol);
 
         this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL_MS, () => this.announce());
+
+        this.#construction = AsyncConstruction(this, async () => {
+            await this.fabricManager.initializeFromStorage();
+            await this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
+        });
     }
 
     addScanner(scanner: Scanner) {
@@ -179,7 +190,7 @@ export class MatterDevice {
 
     private async announceAsCommissionable(
         mode: AdministratorCommissioning.CommissioningWindowStatus,
-        activeCommissioningEndCallback?: () => void,
+        activeCommissioningEndCallback?: () => Promise<void>,
         discriminator?: number,
     ) {
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
@@ -265,9 +276,9 @@ export class MatterDevice {
         return this.fabricManager.findFabricFromDestinationId(destinationId, peerRandom);
     }
 
-    updateFabric(fabric: Fabric) {
+    async updateFabric(fabric: Fabric) {
         this.fabricManager.updateFabric(fabric);
-        this.sessionManager.updateFabricForResumptionRecords(fabric);
+        await this.sessionManager.updateFabricForResumptionRecords(fabric);
         this.commissioningChangedCallback(fabric.fabricIndex);
     }
 
@@ -311,7 +322,7 @@ export class MatterDevice {
         return this.sessionManager.findResumptionRecordById(resumptionId);
     }
 
-    saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+    async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         return this.sessionManager.saveResumptionRecord(resumptionRecord);
     }
 
@@ -361,7 +372,7 @@ export class MatterDevice {
 
         // 4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
         //    Fail-Safe being armed.
-        failSafeContext.restoreEndpointState();
+        await failSafeContext.restoreEndpointState();
 
         // 5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
         //    ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that was
@@ -369,14 +380,18 @@ export class MatterDevice {
         if (failSafeContext.associatedFabric !== undefined) {
             if (failSafeContext.forUpdateNoc) {
                 // update FabricManager and Resumption records but leave current session intact
-                this.updateFabric(failSafeContext.associatedFabric);
+                await this.updateFabric(failSafeContext.associatedFabric);
             }
 
-            const operationalCredentialsCluster = failSafeContext.rootEndpoint.getClusterServer(
+            const operationalCredentialsCluster = await failSafeContext.rootEndpoint.getClusterServer(
                 OperationalCredentials.Cluster,
             );
-            operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(failSafeContext.associatedFabric);
-            operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(failSafeContext.associatedFabric);
+            await operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(
+                failSafeContext.associatedFabric,
+            );
+            await operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(
+                failSafeContext.associatedFabric,
+            );
         }
 
         // 6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that was the subject of the AddNOC command. This SHALL remove all associations to that Fabric including all fabric-scoped data, and MAY possibly factory-reset the device depending on current device state. This SHALL only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
@@ -386,27 +401,29 @@ export class MatterDevice {
             if (fabricIndex !== undefined) {
                 const fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
                 if (fabric !== undefined) {
-                    const basicInformationCluster = failSafeContext.rootEndpoint.getClusterServer(
+                    const basicInformationCluster = await failSafeContext.rootEndpoint.getClusterServer(
                         BasicInformation.Cluster,
                     );
-                    basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
+                    await basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
 
                     await fabric.remove();
 
-                    const operationalCredentialsCluster = failSafeContext.rootEndpoint.getClusterServer(
+                    const operationalCredentialsCluster = await failSafeContext.rootEndpoint.getClusterServer(
                         OperationalCredentials.Cluster,
                     );
-                    operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(fabric);
-                    operationalCredentialsCluster?.attributes.commissionedFabrics.updatedLocal();
-                    operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(fabric);
-                    operationalCredentialsCluster?.attributes.trustedRootCertificates.updatedLocal();
+                    await operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(fabric);
+                    await operationalCredentialsCluster?.attributes.commissionedFabrics.updatedLocal();
+                    await operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(fabric);
+                    await operationalCredentialsCluster?.attributes.trustedRootCertificates.updatedLocal();
                 }
             }
         }
 
         // 8. Reset the Breadcrumb attribute to zero.
-        const generalCommissioningCluster = failSafeContext.rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
-        generalCommissioningCluster?.setBreadcrumbAttribute(0);
+        const generalCommissioningCluster = await failSafeContext.rootEndpoint.getClusterServer(
+            GeneralCommissioning.Cluster,
+        );
+        await generalCommissioningCluster?.setBreadcrumbAttribute(0);
 
         // TODO 9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the
         //  Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
@@ -425,7 +442,7 @@ export class MatterDevice {
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
             // timer SHALL be armed for that duration.
-            this.failSafeContext = new FailSafeManager(
+            this.failSafeContext = await FailSafeManager.create(
                 this,
                 associatedFabric,
                 expiryLengthSeconds,
@@ -463,7 +480,7 @@ export class MatterDevice {
         this.failSafeContext.complete();
 
         if (this.failSafeContext.fabricIndex !== undefined) {
-            this.fabricManager.persistFabrics();
+            await this.fabricManager.persistFabrics();
         }
 
         this.failSafeContext = undefined;
@@ -484,7 +501,7 @@ export class MatterDevice {
     async allowEnhancedCommissioning(
         discriminator: number,
         paseServer: PaseServer,
-        commissioningEndCallback: () => void,
+        commissioningEndCallback: () => Promise<void>,
     ) {
         if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen) {
             throw new MatterFlowError(
@@ -500,7 +517,7 @@ export class MatterDevice {
         );
     }
 
-    async allowBasicCommissioning(commissioningEndCallback?: () => void) {
+    async allowBasicCommissioning(commissioningEndCallback?: () => Promise<void>) {
         if (this.activeCommissioningMode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen) {
             throw new MatterFlowError(
                 "Enhanced commissioning window is already open! Can not set Basic commissioning mode.",
@@ -535,7 +552,7 @@ export class MatterDevice {
         if (this.activeCommissioningEndCallback !== undefined) {
             const activeCommissioningEndCallback = this.activeCommissioningEndCallback;
             this.activeCommissioningEndCallback = undefined;
-            activeCommissioningEndCallback();
+            await activeCommissioningEndCallback();
         }
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireCommissioningAnnouncement();

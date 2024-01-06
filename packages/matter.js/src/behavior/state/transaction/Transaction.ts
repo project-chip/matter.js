@@ -5,9 +5,8 @@
  */
 
 import { Logger } from "../../../log/Logger.js";
-import { createPromise } from "../../../util/Promises.js";
+import { createPromise, MaybePromise } from "../../../util/Promises.js";
 import { describeList } from "../../../util/String.js";
-import { MaybePromise } from "../../../util/Promises.js";
 import { FinalizationError, TransactionFlowError } from "./Errors.js";
 import { Participant as ParticipantType } from "./Participant.js";
 import type { Resource as ResourceType } from "./Resource.js";
@@ -299,7 +298,7 @@ export class Transaction {
             this.#promise = undefined;
             this.#resolve = undefined;
             resolve?.();
-        }
+        };
 
         // Perform the commit or rollback
         let promise: MaybePromise<void> = undefined;
@@ -341,7 +340,7 @@ export class Transaction {
                     `Transaction rolled back due to unhandled error in commit (phase one) participant ${participant}`,
                 );
             });
-        }
+        };
 
         // Ugh.  Iterating with MaybePromise sucks, need to make a proper
         // sync/async wrapper that acts like a promise
@@ -360,7 +359,9 @@ export class Transaction {
                 const promise = participant.commit1();
                 if (MaybePromise.is(promise)) {
                     return promise
-                        .then(() => { commitNextParticipant() })
+                        .then(() => {
+                            commitNextParticipant();
+                        })
                         .catch(e => phase1Error(participant.description, e));
                 } else {
                     commitNextParticipant();
@@ -376,20 +377,17 @@ export class Transaction {
     #executeCommit2() {
         // Commit phase 2
         const phase2Error = (participant: string, error: any) => {
-            logger.error(
-                `Error committing (phase two) ${participant}, state may become inconsistent:`,
-                error,
-            );
+            logger.error(`Error committing (phase two) ${participant}, state may become inconsistent:`, error);
 
             if (errored) {
                 errored.push(participant);
             } else {
-                errored = [ participant ];
+                errored = [participant];
             }
-        }
+        };
 
         this.#status = StatusType.CommittingPhaseTwo;
-        let errored: undefined |Array<string>;
+        let errored: undefined | Array<string>;
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
             try {
@@ -400,7 +398,7 @@ export class Transaction {
                     if (ongoing) {
                         ongoing.push(promise);
                     } else {
-                        ongoing = [ promise ];
+                        ongoing = [promise];
                     }
                 }
             } catch (e) {
@@ -432,7 +430,7 @@ export class Transaction {
                     if (ongoing) {
                         ongoing.push(promise);
                     } else {
-                        ongoing = [ promise ];
+                        ongoing = [promise];
                     }
                 }
             } catch (e) {
@@ -447,7 +445,7 @@ export class Transaction {
             if (errored) {
                 errored.push(participant);
             } else {
-                errored = [ participant ];
+                errored = [participant];
             }
         }
     }

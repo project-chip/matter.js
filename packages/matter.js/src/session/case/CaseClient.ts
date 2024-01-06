@@ -192,7 +192,7 @@ export class CaseClient {
         }
 
         await messenger.close();
-        client.saveResumptionRecord(resumptionRecord);
+        await client.saveResumptionRecord(resumptionRecord);
 
         return secureSession;
     }

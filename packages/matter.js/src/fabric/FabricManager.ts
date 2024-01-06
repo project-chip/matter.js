@@ -21,11 +21,13 @@ export class FabricManager {
 
     constructor(
         private fabricStorage: StorageContext,
-        private readonly fabricRemoveCallback?: (fabricIndex: FabricIndex, peerNodeId: NodeId) => void,
-    ) {
-        const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
+        private readonly fabricRemoveCallback?: (fabricIndex: FabricIndex, peerNodeId: NodeId) => Promise<void>,
+    ) {}
+
+    async initializeFromStorage() {
+        const fabrics = await this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
-        this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
+        this.nextFabricIndex = await this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
     }
 
     getNextFabricIndex() {
@@ -39,12 +41,12 @@ export class FabricManager {
         throw new FabricTableFullError("No free fabric index available.");
     }
 
-    persistFabrics() {
-        this.fabricStorage.set(
+    async persistFabrics() {
+        await this.fabricStorage.set(
             "fabrics",
             Array.from(this.fabrics.values()).map(fabric => fabric.toStorageObject()),
         );
-        this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
+        await this.fabricStorage.set("nextFabricIndex", this.nextFabricIndex);
     }
 
     addFabric(fabric: Fabric) {
@@ -53,19 +55,19 @@ export class FabricManager {
             throw new MatterFlowError(`Fabric with index ${fabricIndex} already exists.`);
         }
         this.fabrics.set(fabricIndex, fabric);
-        fabric.addRemoveCallback(() => this.removeFabric(fabricIndex));
-        fabric.setPersistCallback(() => this.persistFabrics());
+        fabric.addRemoveCallback(async () => this.removeFabric(fabricIndex));
+        fabric.setPersistCallback(async () => this.persistFabrics());
     }
 
-    removeFabric(fabricIndex: FabricIndex) {
+    async removeFabric(fabricIndex: FabricIndex) {
         const fabric = this.fabrics.get(fabricIndex);
         if (fabric === undefined)
             throw new FabricNotFoundError(
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
         this.fabrics.delete(fabricIndex);
-        this.persistFabrics();
-        this.fabricRemoveCallback?.(fabricIndex, fabric.rootNodeId);
+        await this.persistFabrics();
+        await this.fabricRemoveCallback?.(fabricIndex, fabric.rootNodeId);
     }
 
     getFabrics() {

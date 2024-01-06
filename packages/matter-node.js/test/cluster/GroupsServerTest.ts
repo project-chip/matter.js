@@ -49,8 +49,8 @@ describe("Groups Server test", () => {
         testFabric = testSession.getFabric();
 
         endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-        endpoint.addClusterServer(groupsServer);
-        endpoint.addClusterServer(identifyServer);
+        await endpoint.addClusterServer(groupsServer);
+        await endpoint.addClusterServer(identifyServer);
 
         endpoint2 = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(2) });
     }
@@ -62,7 +62,7 @@ describe("Groups Server test", () => {
 
         it("add new group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -89,7 +89,7 @@ describe("Groups Server test", () => {
 
         it("add another new group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -127,7 +127,7 @@ describe("Groups Server test", () => {
 
         it("add another new group on other endpoint and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -251,7 +251,7 @@ describe("Groups Server test", () => {
 
         it("delete group and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -284,7 +284,7 @@ describe("Groups Server test", () => {
 
         it("delete all groups and verify storage", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -366,7 +366,7 @@ describe("Groups Server test", () => {
 
         it("add group while identifying", async () => {
             const { promise: firstPromise, resolver: firstResolver } = createPromise<FabricJsonObject>();
-            testFabric?.setPersistCallback(() => firstResolver(testFabric!.toStorageObject()));
+            testFabric?.setPersistCallback(async () => firstResolver(testFabric!.toStorageObject()));
 
             const result = await callCommandOnClusterServer(
                 groupsServer!,
@@ -391,9 +391,9 @@ describe("Groups Server test", () => {
     describe("Add group while identifying without identifying test", () => {
         before(async () => {
             await initializeTestEnv();
-            const identifyCluster = endpoint?.getClusterServer(Identify.Cluster);
+            const identifyCluster = await endpoint?.getClusterServer(Identify.Cluster);
             assert.ok(identifyCluster);
-            identifyCluster.attributes.identifyTime.setLocal(0); // Change to not identifying
+            await identifyCluster.attributes.identifyTime.setLocal(0); // Change to not identifying
         });
 
         it("nothing is added because we are not identifying", async () => {

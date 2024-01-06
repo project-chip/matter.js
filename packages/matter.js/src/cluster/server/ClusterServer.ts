@@ -13,6 +13,7 @@ import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { capitalize } from "../../util/String.js";
 import { Attributes, Cluster, Commands, ConditionalFeatureList, Events, TlvNoResponse } from "../Cluster.js";
 import { Scenes } from "../definitions/ScenesCluster.js";
@@ -80,20 +81,20 @@ export function ClusterServer<
     // a random version that will be overwritten when we receive a datasource
     const datasourceProxy: ClusterDatasource = {
         get version() {
-            return datasource?.version ?? 0
+            return datasource?.version ?? 0;
         },
 
         get eventHandler() {
             return datasource?.eventHandler;
         },
 
-        increaseVersion() {
-            return datasource?.increaseVersion() ?? 0;
+        async increaseVersion() {
+            return (await datasource?.increaseVersion()) ?? 0;
         },
 
-        changed(key, value) {
-            datasource?.changed(key, value);
-        }
+        async changed(key, value) {
+            await datasource?.changed(key, value);
+        },
     };
 
     const result: any = {
@@ -108,12 +109,10 @@ export function ClusterServer<
             return datasource;
         },
 
-        set datasource(newDatasource: ClusterDatasource | undefined) {
+        _setDatasource: async (newDatasource: ClusterDatasource | undefined) => {
             // This is not legal but TS requires setters to accept getter type
             if (newDatasource === undefined) {
-                throw new InternalError(
-                    "Cluster datasource cannot be unset"
-                )
+                throw new InternalError("Cluster datasource cannot be unset");
             }
 
             datasource = newDatasource;
@@ -123,9 +122,8 @@ export function ClusterServer<
                     "The Endpoint always needs to be existing before storage is initialized for an Endpoint.",
                 );
             }
-            
-            if (typeof handlers.initializeClusterServer === "function") {
-                handlers.initializeClusterServer({
+            if (handlers.initializeClusterServer !== undefined) {
+                await handlers.initializeClusterServer({
                     attributes,
                     events,
                     endpoint: assignedEndpoint,
@@ -134,7 +132,7 @@ export function ClusterServer<
 
             if (datasource.eventHandler) {
                 for (const eventName in events) {
-                    (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
+                    await (events as any)[eventName].bindToEventHandler(datasource.eventHandler);
                 }
             }
         },
@@ -149,9 +147,9 @@ export function ClusterServer<
             assignedEndpoint = endpoint;
         },
 
-        _destroy: () => {
+        _destroy: async () => {
             if (typeof handlers.destroyClusterServer === "function") {
-                handlers.destroyClusterServer();
+                await handlers.destroyClusterServer();
             }
         },
 
@@ -336,7 +334,7 @@ export function ClusterServer<
                 result[`set${capitalizedAttributeName}Attribute`] = <T>(value: T, fabric: Fabric) =>
                     (attributes as any)[attributeName].setLocalForFabric(value, fabric);
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T>(
-                    listener: (newValue: T, oldValue: T) => void,
+                    listener: (newValue: T, oldValue: T) => MaybePromise<void>,
                 ) => (attributes as any)[attributeName].addValueSetListener(listener);
             } else {
                 if (scene) {
@@ -346,7 +344,7 @@ export function ClusterServer<
                 result[`set${capitalizedAttributeName}Attribute`] = <T>(value: T) =>
                     (attributes as any)[attributeName].setLocal(value);
                 result[`subscribe${capitalizedAttributeName}Attribute`] = <T>(
-                    listener: (newValue: T, oldValue: T) => void,
+                    listener: (newValue: T, oldValue: T) => MaybePromise<void>,
                 ) => (attributes as any)[attributeName].addValueSetListener(listener);
             }
             if (persistent || getter || setter) {

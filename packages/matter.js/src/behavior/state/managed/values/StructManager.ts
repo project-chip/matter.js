@@ -47,7 +47,7 @@ export function StructManager(owner: RootSupervisor, schema: Schema, base?: new 
         }
     }
 
-    let Wrapper = GeneratedClass({
+    const Wrapper = GeneratedClass({
         name: `${schema.name}$Managed`,
         base,
 
@@ -160,9 +160,9 @@ interface Wrapper extends Val.Struct {
 
 function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
-    let { access, manage, validate } = manager.get(schema);
+    const { access, manage, validate } = manager.get(schema);
 
-    let descriptor: PropertyDescriptor = {
+    const descriptor: PropertyDescriptor = {
         enumerable: true,
 
         set(this: Wrapper, value: Val) {
@@ -229,7 +229,7 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 return undefined;
             }
 
-            let managed = this[REF].subreferences?.[name];
+            const managed = this[REF].subreferences?.[name];
             if (managed) {
                 return managed.owner;
             }

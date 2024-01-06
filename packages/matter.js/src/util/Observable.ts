@@ -6,13 +6,14 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { Logger } from "../log/Logger.js";
+import { MaybePromise } from "./Promises.js";
 
 const logger = Logger.get("Event");
 
 /**
  * A callback function for observables.
  */
-export type Observer<T extends any[] = any[]> = (...payload: T) => void;
+export type Observer<T extends any[] = any[]> = (...payload: T) => MaybePromise<void>;
 
 /**
  * A discrete event that may be monitored via callback.  Could call it "event"
@@ -24,7 +25,7 @@ export interface Observable<T extends any[] = any[]> {
     /**
      * Notify observers.
      */
-    emit(...args: T): void;
+    emit(...args: T): MaybePromise<void>;
 
     /**
      * Add an observer.
@@ -59,9 +60,28 @@ class Event<T extends any[] = any[]> implements Observable<T> {
 
     emit(...payload: T) {
         if (this.#observers) {
+            const promiseArray = new Array<Promise<void>>();
             for (const observer of this.#observers) {
                 try {
-                    observer(...payload);
+                    const result = observer(...payload);
+                    if (result !== undefined && MaybePromise.is(result)) {
+                        promiseArray.push(
+                            result
+                                .then(() => {
+                                    if (this.#once?.has(observer)) {
+                                        this.#once.delete(observer);
+                                        this.#observers?.delete(observer);
+                                    }
+                                })
+                                .catch(e => {
+                                    if (!(e instanceof Error)) {
+                                        e = new Error(`${e}`);
+                                    }
+                                    this.#errorHandler(e as Error, observer as Observer);
+                                }),
+                        );
+                        continue;
+                    }
                 } catch (e) {
                     if (!(e instanceof Error)) {
                         e = new Error(`${e}`);
@@ -72,6 +92,9 @@ class Event<T extends any[] = any[]> implements Observable<T> {
                     this.#once.delete(observer);
                     this.#observers.delete(observer);
                 }
+            }
+            if (promiseArray.length > 0) {
+                return Promise.all(promiseArray).then(() => {});
             }
         }
     }
@@ -124,8 +147,12 @@ function event<E, N extends string>(emitter: E, name: N) {
  * properties.
  */
 export class EventEmitter {
-    emit<This, N extends EventEmitter.NamesOf<This>>(this: This, name: N, ...payload: EventEmitter.PayloadOf<This, N>) {
-        event(this, name).emit(...payload);
+    async emit<This, N extends EventEmitter.NamesOf<This>>(
+        this: This,
+        name: N,
+        ...payload: EventEmitter.PayloadOf<This, N>
+    ) {
+        await event(this, name).emit(...payload);
     }
 
     addListener<This, N extends EventEmitter.NamesOf<This>>(

@@ -4,16 +4,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
-import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
-import { Logger } from "../../../log/Logger.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { OpenBasicCommissioningWindowRequest, OpenCommissioningWindowRequest } from "./AdministratorCommissioningInterface.js";
-import { InternalError } from "../../../common/MatterError.js";
-import { PaseServer } from "../../../session/pase/PaseServer.js";
 import { MatterDevice } from "../../../MatterDevice.js";
+import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import { InternalError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
+import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { PaseServer } from "../../../session/pase/PaseServer.js";
+import { Time, Timer } from "../../../time/Time.js";
+import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
+import {
+    OpenBasicCommissioningWindowRequest,
+    OpenCommissioningWindowRequest,
+} from "./AdministratorCommissioningInterface.js";
 
 const logger = Logger.get("AdministratorCommissioningServer");
 
@@ -52,13 +55,13 @@ export class AdministratorCommissioningServer extends Base {
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
-            AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen
+            AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
         );
 
         await device.allowEnhancedCommissioning(
             discriminator,
             PaseServer.fromVerificationValue(pakePasscodeVerifier, { iterations, salt }),
-            () => {
+            async () => {
                 this.session.getAssociatedFabric().deleteRemoveCallback(this.internal.fabricRemoveHandler);
                 this.#endCommissioning();
             },
@@ -67,17 +70,20 @@ export class AdministratorCommissioningServer extends Base {
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
     // TODO - investigate why this method doesn't allow normal override
-    override async openBasicCommissioningWindow(this: AdministratorCommissioningServer, { commissioningTimeout }: OpenBasicCommissioningWindowRequest) {
+    override async openBasicCommissioningWindow(
+        this: AdministratorCommissioningServer,
+        { commissioningTimeout }: OpenBasicCommissioningWindowRequest,
+    ) {
         const device = this.session.getContext();
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
-            AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen
+            AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
-        await device.allowBasicCommissioning(() => {
+        await device.allowBasicCommissioning(async () => {
             this.session.getAssociatedFabric().deleteRemoveCallback(this.internal.fabricRemoveHandler);
             this.#endCommissioning();
         });
@@ -102,13 +108,15 @@ export class AdministratorCommissioningServer extends Base {
      */
     #initializeCommissioningWindow(
         commissioningTimeout: number,
-        windowStatus: AdministratorCommissioning.CommissioningWindowStatus
+        windowStatus: AdministratorCommissioning.CommissioningWindowStatus,
     ) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             // Should never happen, but let's make sure
             throw new InternalError("Commissioning window already initialized.");
         }
-        logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${this.context.session?.name}.`);
+        logger.debug(
+            `Commissioning window timer started for ${commissioningTimeout} seconds for ${this.context.session?.name}.`,
+        );
         this.internal.commissioningWindowTimeout = Time.getTimer(
             commissioningTimeout * 1000,
             async () => await this.#closeCommissioningWindow(),
@@ -193,20 +201,13 @@ export namespace AdministratorCommissioningServer {
     export class Internal {
         part?: Part;
         commissioningWindowTimeout?: Timer;
-        fabricRemoveHandler = () => {
+        fabricRemoveHandler = async () => {
             if (!this.part) {
-                throw new InternalError(
-                    "AdministratorCommissioningServer part not initialized"
-                );
+                throw new InternalError("AdministratorCommissioningServer part not initialized");
             }
 
-            this
-                .part
-                .agent
-                .get(AdministratorCommissioningServer)
-                .state
-                .adminFabricIndex = null;
-        }
+            this.part.agent.get(AdministratorCommissioningServer).state.adminFabricIndex = null;
+        };
     }
 
     export class State extends AdministratorCommissioningBehavior.State {

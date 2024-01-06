@@ -134,7 +134,8 @@ export class MatterServer {
         const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.size.toString();
         if (this.nodes.has(storageKey)) {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
-        }        server.port = this.getNextMatterPort(server.port);
+        }
+        server.port = this.getNextMatterPort(server.port);
 
         // CommissioningServer is designed for lazy initialization of storage.
         // Not changing that to keep API consistent.
@@ -145,7 +146,7 @@ export class MatterServer {
         // Keeping storage out of BaseNodeServer keeps concerns separated so
         // just check for the CommissioningServer case explicitly
         if (server instanceof CommissioningServer) {
-            server.storage = this.storageManager.createContext(storageKey);
+            await server.setStorage(this.storageManager.createContext(storageKey));
         }
 
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
@@ -195,7 +196,7 @@ export class MatterServer {
         if (this.nodes.has(storageKey)) {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
         }
-        
+
         const localPort = commissioningController.port;
         if (localPort !== undefined) {
             // If a local port for controller is defined verify that the port is not overlapping with other nodes
@@ -225,7 +226,7 @@ export class MatterServer {
 
                 if (destroyStorage) {
                     // Destroy storage
-                    commissioningController.resetStorage();
+                    await commissioningController.resetStorage();
                 }
                 return;
             }

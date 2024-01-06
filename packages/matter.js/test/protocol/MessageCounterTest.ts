@@ -49,57 +49,59 @@ describe("MessageCounter", () => {
     });
 
     describe("General Messagecounter tests", () => {
-        it("gets initialized with a random value modified to 28bit", () => {
+        it("gets initialized with a random value modified to 28bit", async () => {
             const messageCounter = new MessageCounter();
-            expect(messageCounter.getIncrementedCounter()).to.equal((0x12345679 >>> 4) + 2);
+            expect(await messageCounter.getIncrementedCounter()).to.equal((0x12345679 >>> 4) + 2);
         });
 
-        it("counter increases by 1", () => {
+        it("counter increases by 1", async () => {
             const messageCounter = new MessageCounter();
-            const initCounter = messageCounter.getIncrementedCounter();
+            const initCounter = await messageCounter.getIncrementedCounter();
             expect(initCounter).to.equal((0x12345679 >>> 4) + 2);
-            expect(messageCounter.getIncrementedCounter()).to.equal(initCounter + 1);
+            expect(await messageCounter.getIncrementedCounter()).to.equal(initCounter + 1);
         });
     });
 
     describe("Persisted MessageCounter tests", () => {
-        it("persistent initialization of counter with no persisted value", () => {
+        it("persistent initialization of counter with no persisted value", async () => {
             const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
-            const counter = messageCounter.getIncrementedCounter();
+            await messageCounter.construction;
+            const counter = await messageCounter.getIncrementedCounter();
             expect(counter).to.equal((0x12345679 >>> 4) + 2);
             expect(testStorageContext.get<number>("counter"), counter.toString());
         });
 
-        it("persistent initialization of counter with persisted value", () => {
-            testStorageContext.set("counter", 0x12345678);
+        it("persistent initialization of counter with persisted value", async () => {
+            await testStorageContext.set("counter", 0x12345678);
             const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
-            const counter = messageCounter.getIncrementedCounter();
+            await messageCounter.construction;
+            const counter = await messageCounter.getIncrementedCounter();
             expect(counter).to.equal(0x12345679);
             expect(testStorageContext.get<number>("counter"), counter.toString());
         });
 
-        it("persisted counter increases by 1", () => {
+        it("persisted counter increases by 1", async () => {
             getRandom32BitNumber = () => 0x23456789;
-            testStorageContext.set("counter", 0x12345678);
+            await testStorageContext.set("counter", 0x12345678);
             const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
-            const initCounter = messageCounter.getIncrementedCounter();
+            await messageCounter.construction;
+            const initCounter = await messageCounter.getIncrementedCounter();
             expect(initCounter).to.equal(0x12345679);
             expect(testStorageContext.get<number>("counter"), initCounter.toString());
-            expect(messageCounter.getIncrementedCounter()).to.equal(initCounter + 1);
+            expect(await messageCounter.getIncrementedCounter()).to.equal(initCounter + 1);
             expect(testStorageContext.get<number>("counter"), (initCounter + 1).toString());
         });
 
-        it("persisted counter constructor throws in negative value in storage", () => {
-            testStorageContext.set("counter", -1);
-            expect(() => new PersistedMessageCounter(testStorageContext, "counter")).throws(
-                InternalError,
-                "Invalid message counter value: -1",
-            );
+        it("persisted counter constructor throws in negative value in storage", async () => {
+            await testStorageContext.set("counter", -1);
+            const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
+            await expect(messageCounter.construction).rejectedWith(InternalError, "Invalid message counter value: -1");
         });
 
-        it("persisted counter constructor throws in too large value in storage", () => {
-            testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT + 1);
-            expect(() => new PersistedMessageCounter(testStorageContext, "counter")).throws(
+        it("persisted counter constructor throws in too large value in storage", async () => {
+            await testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT + 1);
+            const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
+            await expect(messageCounter.construction).rejectedWith(
                 InternalError,
                 `Invalid message counter value: ${MAX_COUNTER_VALUE_32BIT + 1}`,
             );
@@ -108,24 +110,26 @@ describe("MessageCounter", () => {
 
     // Rollover tests use persisted message counter class because easier to inject the "high" value and code is the same
     describe("MessageCounter rollover tests", () => {
-        it("Message counter throws if rollover is not allowed", () => {
-            testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT);
+        it("Message counter throws if rollover is not allowed", async () => {
+            await testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT);
             const messageCounter = new PersistedMessageCounter(testStorageContext, "counter");
-            expect(() => messageCounter.getIncrementedCounter()).throws(
+            await messageCounter.construction;
+            await expect(messageCounter.getIncrementedCounter()).rejectedWith(
                 InternalError,
                 "Message counter rollover not allowed.",
             );
         });
 
-        it("Message counter rolls over if allowed", () => {
-            testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT);
+        it("Message counter rolls over if allowed", async () => {
+            await testStorageContext.set("counter", MAX_COUNTER_VALUE_32BIT);
             const messageCounter = new PersistedMessageCounter(testStorageContext, "counter", () => {});
-            expect(messageCounter.getIncrementedCounter()).equals(0);
+            await messageCounter.construction;
+            expect(await messageCounter.getIncrementedCounter()).equals(0);
         });
 
-        it("Message counter rolls over if allowed and calls callback on increase once", () => {
+        it("Message counter rolls over if allowed and calls callback on increase once", async () => {
             const initCounter = MAX_COUNTER_VALUE_32BIT - 101;
-            testStorageContext.set("counter", initCounter);
+            await testStorageContext.set("counter", initCounter);
             let callbackCalled = false;
             const messageCounter = new PersistedMessageCounter(
                 testStorageContext,
@@ -135,17 +139,19 @@ describe("MessageCounter", () => {
                 },
                 100,
             );
+            await messageCounter.construction;
+
             expect(callbackCalled).to.be.false;
-            expect(messageCounter.getIncrementedCounter()).equals(initCounter + 1);
+            expect(await messageCounter.getIncrementedCounter()).equals(initCounter + 1);
             expect(callbackCalled).to.be.true;
             callbackCalled = false;
-            expect(messageCounter.getIncrementedCounter()).equals(initCounter + 2);
+            expect(await messageCounter.getIncrementedCounter()).equals(initCounter + 2);
             expect(callbackCalled).to.be.false;
         });
 
-        it("Message counter rolls over if allowed and calls callback already on init once", () => {
+        it("Message counter rolls over if allowed and calls callback already on init once", async () => {
             const initCounter = MAX_COUNTER_VALUE_32BIT - 100;
-            testStorageContext.set("counter", initCounter);
+            await testStorageContext.set("counter", initCounter);
             let callbackCalled = false;
             const messageCounter = new PersistedMessageCounter(
                 testStorageContext,
@@ -155,9 +161,10 @@ describe("MessageCounter", () => {
                 },
                 100,
             );
+            await messageCounter.construction;
             expect(callbackCalled).to.be.true;
             callbackCalled = false;
-            expect(messageCounter.getIncrementedCounter()).equals(initCounter + 1);
+            expect(await messageCounter.getIncrementedCounter()).equals(initCounter + 1);
             expect(callbackCalled).to.be.false;
         });
     });

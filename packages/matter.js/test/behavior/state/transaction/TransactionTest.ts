@@ -112,13 +112,13 @@ describe("Transaction", () => {
         transaction.expectInvoked("rollback");
     });
 
-    describe("keeps its promises", async () => {
+    describe("keeps its promises", () => {
         it("after commit", async () => {
             const transaction = create();
 
             await transaction.begin();
             const promise = transaction.promise;
-            transaction.commit();
+            await transaction.commit();
 
             expect(promise).eventually.equals(undefined);
         });
@@ -162,14 +162,14 @@ describe("Transaction", () => {
 
             await transaction.begin();
 
-            await expect(transaction.commit()).rejectedWith(FinalizationError);
+            await expect(async () => transaction.commit()).rejectedWith(FinalizationError);
 
             transaction.expectInvoked("commit1", "rollback");
         });
     });
 
-    describe("locks and unlocks resource", async () => {
-        describe("asynchronously", async () => {
+    describe("locks and unlocks resource", () => {
+        describe("asynchronously", () => {
             it("on becoming exclusive & committing", async () => {
                 const transaction = create();
 
@@ -198,7 +198,7 @@ describe("Transaction", () => {
             });
         });
 
-        describe("synchronously", async () => {
+        describe("synchronously", () => {
             it("on becoming exclusive & rolling back", async () => {
                 const transaction = create();
 
@@ -228,8 +228,8 @@ describe("Transaction", () => {
         });
     });
 
-    describe("blocking locks", async () => {
-        describe("synchronously", async () => {
+    describe("blocking locks", () => {
+        describe("synchronously", () => {
             it("throws on becoming exclusive", async () => {
                 const resource = new TestResource();
 
@@ -257,7 +257,7 @@ describe("Transaction", () => {
             });
         });
 
-        describe("asynchronously", async () => {
+        describe("asynchronously", () => {
             it("waits on becoming exclusive", async () => {
                 const resource = new TestResource();
 

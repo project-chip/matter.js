@@ -18,14 +18,14 @@ export class Test_TC_OO_2_2 extends MinimalOnOffDeviceTestInstance {
     override async handleUserprompt(testDescription: string, userPrompt: string) {
         if (testDescription.includes("set OnOff attribute manually to on")) {
             if (this.onOffDevice !== undefined) {
-                this.onOffDevice.setOnOff(true);
+                await this.onOffDevice.setOnOff(true);
                 return "y\n";
             } else {
                 return "n\n";
             }
         } else if (testDescription.includes("set OnOff attribute manually to off")) {
             if (this.onOffDevice !== undefined) {
-                this.onOffDevice.setOnOff(false);
+                await this.onOffDevice.setOnOff(false);
                 return "y\n";
             } else {
                 return "n\n";

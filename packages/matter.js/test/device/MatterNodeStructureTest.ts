@@ -54,13 +54,13 @@ const MockCertification = {
     declaration: ByteArray.fromHex("00"),
 };
 
-function addRequiredRootClusters(
+async function addRequiredRootClusters(
     rootEndpoint: EndpointInterface,
     includeAdminCommissioningCluster = true,
     includeBasicInformationCluster = true,
 ) {
     if (includeBasicInformationCluster) {
-        rootEndpoint.addClusterServer(
+        await rootEndpoint.addClusterServer(
             ClusterServer(
                 BasicInformationCluster,
                 {
@@ -91,7 +91,7 @@ function addRequiredRootClusters(
             ),
         );
 
-        rootEndpoint.addClusterServer(
+        await rootEndpoint.addClusterServer(
             ClusterServer(
                 OperationalCredentialsCluster,
                 {
@@ -114,7 +114,7 @@ function addRequiredRootClusters(
         );
     }
 
-    rootEndpoint.addClusterServer(
+    await rootEndpoint.addClusterServer(
         ClusterServer(
             GeneralCommissioning.Cluster,
             {
@@ -131,7 +131,7 @@ function addRequiredRootClusters(
         ),
     );
 
-    rootEndpoint.addClusterServer(
+    await rootEndpoint.addClusterServer(
         ClusterServer(
             NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),
             {
@@ -153,7 +153,7 @@ function addRequiredRootClusters(
         ),
     );
 
-    rootEndpoint.addClusterServer(
+    await rootEndpoint.addClusterServer(
         ClusterServer(
             AccessControlCluster,
             {
@@ -171,7 +171,7 @@ function addRequiredRootClusters(
         ),
     );
 
-    rootEndpoint.addClusterServer(
+    await rootEndpoint.addClusterServer(
         ClusterServer(
             GroupKeyManagementCluster,
             {
@@ -184,7 +184,7 @@ function addRequiredRootClusters(
         ),
     );
 
-    rootEndpoint.addClusterServer(
+    await rootEndpoint.addClusterServer(
         ClusterServer(
             GeneralDiagnostics.Cluster,
             {
@@ -210,7 +210,7 @@ function addRequiredRootClusters(
     );
 
     if (includeAdminCommissioningCluster) {
-        rootEndpoint.addClusterServer(
+        await rootEndpoint.addClusterServer(
             ClusterServer(
                 AdministratorCommissioning.Cluster,
                 {
@@ -228,14 +228,17 @@ let testStorageManager: StorageManager;
 let endpointStorage: StorageContext;
 let rootEndpoint: EndpointInterface;
 
-async function commissioningServer({ storage, values }: { storage?: boolean, values?: Record<string, any> } = {}) {
+async function commissioningServer({
+    storage = true,
+    values,
+}: { storage?: boolean; values?: Record<string, any> } = {}) {
     const testStorage = new StorageBackendMemory();
     testStorageManager = new StorageManager(testStorage);
     await testStorageManager.initialize();
     const testStorageContext = testStorageManager.createContext("TestContext");
     endpointStorage = testStorageContext.createContext("EndpointStructure");
 
-    const node = new CommissioningServer({
+    const node = await CommissioningServer.create({
         port: 5540,
         deviceName: "Test Device",
         deviceType: DeviceTypeId(0x16),
@@ -263,27 +266,28 @@ async function commissioningServer({ storage, values }: { storage?: boolean, val
         certification: MockCertification,
     });
 
-    if (storage !== false) {
-        node.storage = testStorageContext;
+    if (storage) {
+        await node.setStorage(testStorageContext);
     }
 
     if (values) {
         for (const key in values) {
-            endpointStorage.set(key, values[key]);
+            await endpointStorage.set(key, values[key]);
         }
     }
 
     rootEndpoint = node.getRootEndpoint();
 
-    addRequiredRootClusters(rootEndpoint);
+    await addRequiredRootClusters(rootEndpoint);
     return node;
 }
 
 describe("Endpoint Structures", () => {
     describe("Simple Endpoint structure", () => {
-        it("Root Endpoint with missing required cluster throws exception", () => {
+        it("Root Endpoint with missing required cluster throws exception", async () => {
             const root = new RootEndpoint();
-            addRequiredRootClusters(root, false);
+            await root.construction;
+            await addRequiredRootClusters(root, false);
 
             expect(() => root.verifyRequiredClusters()).throw(
                 ImplementationError,
@@ -295,9 +299,9 @@ describe("Endpoint Structures", () => {
             const node = await commissioningServer({ storage: false });
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             const rootPartsListAttribute = attributes.get(
@@ -335,14 +339,14 @@ describe("Endpoint Structures", () => {
             expect(commandPaths.length).equal(18);
             expect(eventPaths.length).equal(6);
 
-            const basicInformationCluster = rootEndpoint.getClusterServer(BasicInformationCluster);
+            const basicInformationCluster = await rootEndpoint.getClusterServer(BasicInformationCluster);
             expect(basicInformationCluster).exist;
             expect((basicInformationCluster?.attributes as any).attributeList.get().length).equal(20);
             expect((basicInformationCluster?.attributes as any).eventList.get().length).equal(3);
             expect((basicInformationCluster?.attributes as any).generatedCommandList.get().length).equal(0);
             expect((basicInformationCluster?.attributes as any).acceptedCommandList.get().length).equal(0);
 
-            const generalCommissioningCluster = rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
+            const generalCommissioningCluster = await rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
             expect(generalCommissioningCluster).exist;
             expect((generalCommissioningCluster?.attributes as any).attributeList.get().length).equal(11);
             expect((generalCommissioningCluster?.attributes as any).eventList.get().length).equal(0);
@@ -353,17 +357,17 @@ describe("Endpoint Structures", () => {
         it("One device with one Light endpoints - no unique id, use index", async () => {
             const node = await commissioningServer();
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffLightDevice = await OnOffLightDevice.create();
 
-            node.addDevice(onoffLightDevice);
+            await node.addDevice(onoffLightDevice);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(1);
@@ -380,13 +384,13 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(GroupsCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(BindingCluster)).ok;
+            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(6);
 
             const rootPartsListAttribute = attributes.get(
                 attributePathToId({
@@ -405,17 +409,17 @@ describe("Endpoint Structures", () => {
         it("One device with one Light endpoints - with uniqueid", async () => {
             const node = await commissioningServer();
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
+            const onoffLightDevice = await OnOffLightDevice.create(undefined, { uniqueStorageKey: "test-unique-id" });
 
-            node.addDevice(onoffLightDevice);
+            await node.addDevice(onoffLightDevice);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(1);
@@ -456,20 +460,20 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0": 10 }
-            })
+                values: { "serial_node-matter-0000-index_0": 10 },
+            });
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffLightDevice = await OnOffLightDevice.create();
 
-            node.addDevice(onoffLightDevice);
+            await node.addDevice(onoffLightDevice);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(11);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-index_0")).equal(10);
@@ -510,20 +514,20 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-custom_test-unique-id": 10 }
+                values: { "serial_node-matter-0000-custom_test-unique-id": 10 },
             });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
+            const onoffLightDevice = await OnOffLightDevice.create(undefined, { uniqueStorageKey: "test-unique-id" });
 
-            node.addDevice(onoffLightDevice);
+            await node.addDevice(onoffLightDevice);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(11);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpointStorage.get("serial_node-matter-0000-custom_test-unique-id")).equal(10);
@@ -564,14 +568,15 @@ describe("Endpoint Structures", () => {
     });
 
     describe("Aggregator/Bridged Endpoint structures", () => {
-        it("Creating Structure with duplicate endpoint id throws error", () => {
+        it("Creating Structure with duplicate endpoint id throws error", async () => {
             const rootEndpoint = new RootEndpoint();
-            addRequiredRootClusters(rootEndpoint);
+            await rootEndpoint.construction;
+            await addRequiredRootClusters(rootEndpoint);
 
-            const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
+            const aggregator = await Aggregator.create([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            onoffLightDevice.addClusterServer(
+            const onoffLightDevice = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(11) });
+            await onoffLightDevice.addClusterServer(
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
@@ -585,20 +590,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            aggregator.addBridgedDevice(onoffLightDevice);
-            expect(() => aggregator.addBridgedDevice(onoffLightDevice)).throw(
+            await aggregator.addBridgedDevice(onoffLightDevice);
+            await expect(aggregator.addBridgedDevice(onoffLightDevice)).rejectedWith(
                 `Endpoint with id 11 already exists as child from 1.`,
             );
         });
 
-        it("Aggregator Structure with one Light endpoint and defined endpoint IDs", () => {
+        it("Aggregator Structure with one Light endpoint and defined endpoint IDs", async () => {
             const rootEndpoint = new RootEndpoint();
-            addRequiredRootClusters(rootEndpoint);
+            await rootEndpoint.construction;
+            await addRequiredRootClusters(rootEndpoint);
 
-            const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
+            const aggregator = await Aggregator.create([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            onoffLightDevice.addClusterServer(
+            const onoffLightDevice = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(11) });
+            await onoffLightDevice.addClusterServer(
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
@@ -612,12 +618,12 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            aggregator.addBridgedDevice(onoffLightDevice);
-            rootEndpoint.addChildEndpoint(aggregator);
+            await aggregator.addBridgedDevice(onoffLightDevice);
+            await rootEndpoint.addChildEndpoint(aggregator);
 
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(3);
@@ -708,28 +714,29 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(7);
         });
 
-        it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
+        it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", async () => {
             const rootEndpoint = new RootEndpoint();
-            addRequiredRootClusters(rootEndpoint);
+            await rootEndpoint.construction;
+            await addRequiredRootClusters(rootEndpoint);
 
-            const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
+            const aggregator = await Aggregator.create([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(12) });
+            const onoffLightDevice11 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(11) });
+            const onoffLightDevice12 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(12) });
 
-            aggregator.addBridgedDevice(onoffLightDevice11, {
+            await aggregator.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1",
                 reachable: true,
             });
-            aggregator.addBridgedDevice(onoffLightDevice12, {
+            await aggregator.addBridgedDevice(onoffLightDevice12, {
                 nodeLabel: "Socket 2",
                 reachable: true,
             });
-            rootEndpoint.addChildEndpoint(aggregator);
+            await rootEndpoint.addChildEndpoint(aggregator);
 
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(4);
@@ -833,12 +840,13 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(8);
         });
 
-        it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
+        it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", async () => {
             const rootEndpoint = new RootEndpoint();
-            addRequiredRootClusters(rootEndpoint);
+            await rootEndpoint.construction;
+            await addRequiredRootClusters(rootEndpoint);
 
-            const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(1) });
-            aggregator1.addClusterServer(
+            const aggregator1 = await Aggregator.create([], { endpointId: EndpointNumber(1) });
+            await aggregator1.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -848,21 +856,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(12) });
+            const onoffLightDevice11 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(11) });
+            const onoffLightDevice12 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(12) });
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            await aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            await aggregator1.addBridgedDevice(onoffLightDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
-            rootEndpoint.addChildEndpoint(aggregator1);
+            await rootEndpoint.addChildEndpoint(aggregator1);
 
-            const aggregator2 = new Aggregator([], { endpointId: EndpointNumber(2) });
-            aggregator2.addClusterServer(
+            const aggregator2 = await Aggregator.create([], { endpointId: EndpointNumber(2) });
+            await aggregator2.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -872,22 +880,22 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(21) });
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(22) });
+            const onoffLightDevice21 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(21) });
+            const onoffLightDevice22 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(22) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            await aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            await aggregator2.addBridgedDevice(onoffLightDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
-            rootEndpoint.addChildEndpoint(aggregator2);
+            await rootEndpoint.addChildEndpoint(aggregator2);
 
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(7);
@@ -988,8 +996,8 @@ describe("Endpoint Structures", () => {
         it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
             const node = await commissioningServer();
 
-            const aggregator1 = new Aggregator();
-            aggregator1.addClusterServer(
+            const aggregator1 = await Aggregator.create();
+            await aggregator1.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -999,21 +1007,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice();
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffLightDevice11 = await OnOffLightDevice.create();
+            const onoffLightDevice12 = await OnOffLightDevice.create();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            await aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            await aggregator1.addBridgedDevice(onoffLightDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
-            node.addDevice(aggregator1);
+            await node.addDevice(aggregator1);
 
-            const aggregator2 = new Aggregator();
-            aggregator2.addClusterServer(
+            const aggregator2 = await Aggregator.create();
+            await aggregator2.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -1023,26 +1031,26 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice();
+            const onoffLightDevice21 = await OnOffLightDevice.create();
+            const onoffLightDevice22 = await OnOffLightDevice.create();
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            await aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            await aggregator2.addBridgedDevice(onoffLightDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
-            node.addDevice(aggregator2);
+            await node.addDevice(aggregator2);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(7);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(7);
@@ -1143,8 +1151,8 @@ describe("Endpoint Structures", () => {
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
             const node = await commissioningServer();
 
-            const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
-            aggregator1.addClusterServer(
+            const aggregator1 = await Aggregator.create([], { endpointId: EndpointNumber(37) });
+            await aggregator1.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -1154,21 +1162,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(3) });
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffLightDevice11 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(3) });
+            const onoffLightDevice12 = await OnOffLightDevice.create();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            await aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            await aggregator1.addBridgedDevice(onoffLightDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
-            node.addDevice(aggregator1);
+            await node.addDevice(aggregator1);
 
-            const aggregator2 = new Aggregator();
-            aggregator2.addClusterServer(
+            const aggregator2 = await Aggregator.create();
+            await aggregator2.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -1178,38 +1186,38 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(18) });
+            const onoffLightDevice21 = await OnOffLightDevice.create();
+            const onoffLightDevice22 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(18) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            await aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            await aggregator2.addBridgedDevice(onoffLightDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
 
-            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
-                new OnOffPluginUnitDevice(),
+            const composedDevice = await ComposedDevice.create(DeviceTypes.ON_OFF_LIGHT, [
+                await OnOffLightDevice.create(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
+                await OnOffPluginUnitDevice.create(),
             ]);
-            aggregator2.addBridgedDevice(composedDevice, {
+            await aggregator2.addBridgedDevice(composedDevice, {
                 nodeLabel: "Composed 2-3",
                 uniqueId: "COMPOSED2",
                 reachable: true,
             });
 
-            node.addDevice(aggregator2);
+            await node.addDevice(aggregator2);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(44);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(10);
@@ -1353,11 +1361,11 @@ describe("Endpoint Structures", () => {
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0-custom_3333": 3 }
+                values: { "serial_node-matter-0000-index_0-custom_3333": 3 },
             });
 
-            const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });
-            aggregator1.addClusterServer(
+            const aggregator1 = await Aggregator.create([], { endpointId: EndpointNumber(37) });
+            await aggregator1.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -1367,21 +1375,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffLightDevice11 = await OnOffLightDevice.create(undefined, { uniqueStorageKey: "3333" });
+            const onoffLightDevice12 = await OnOffLightDevice.create();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            await aggregator1.addBridgedDevice(onoffLightDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            await aggregator1.addBridgedDevice(onoffLightDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
-            node.addDevice(aggregator1);
+            await node.addDevice(aggregator1);
 
-            const aggregator2 = new Aggregator();
-            aggregator2.addClusterServer(
+            const aggregator2 = await Aggregator.create();
+            await aggregator2.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -1391,38 +1399,38 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(18) });
+            const onoffLightDevice21 = await OnOffLightDevice.create();
+            const onoffLightDevice22 = await OnOffLightDevice.create(undefined, { endpointId: EndpointNumber(18) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            await aggregator2.addBridgedDevice(onoffLightDevice21, {
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            await aggregator2.addBridgedDevice(onoffLightDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
 
-            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
-                new OnOffPluginUnitDevice(),
+            const composedDevice = await ComposedDevice.create(DeviceTypes.ON_OFF_LIGHT, [
+                await OnOffLightDevice.create(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
+                await OnOffPluginUnitDevice.create(),
             ]);
-            aggregator2.addBridgedDevice(composedDevice, {
+            await aggregator2.addBridgedDevice(composedDevice, {
                 nodeLabel: "Composed 2-3",
                 uniqueId: "COMPOSED2",
                 reachable: true,
             });
 
-            node.addDevice(aggregator2);
+            await node.addDevice(aggregator2);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(44);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
             const { endpoints, attributes, attributePaths, commandPaths, eventPaths } = endpointStructure;
 
             expect(endpoints.size).equal(10);
@@ -1564,16 +1572,16 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(11);
 
             let structureChangeCounter = 0;
-            rootEndpoint.setStructureChangedCallback(() => {
+            rootEndpoint.setStructureChangedCallback(async () => {
                 structureChangeCounter++;
 
-                node.assignEndpointIds();
-                rootEndpoint.updatePartsList();
+                await node.assignEndpointIds();
+                await rootEndpoint.updatePartsList();
             });
 
             // Add another device
-            const onoffLightDevice13 = new OnOffLightDevice();
-            aggregator1.addBridgedDevice(onoffLightDevice13, {
+            const onoffLightDevice13 = await OnOffLightDevice.create();
+            await aggregator1.addBridgedDevice(onoffLightDevice13, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
@@ -1581,13 +1589,13 @@ describe("Endpoint Structures", () => {
             expect(endpointStorage.get("serial_node-matter-0000-index_0-index_2")).equal(44);
 
             // And remove one
-            aggregator1.removeBridgedDevice(onoffLightDevice11);
+            await aggregator1.removeBridgedDevice(onoffLightDevice11);
 
             expect(node.getNextEndpointId(false)).equal(45);
             expect(structureChangeCounter).equal(2);
 
             const endpointStructure2 = new InteractionEndpointStructure();
-            endpointStructure2.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure2.initializeFromEndpoint(rootEndpoint);
             const { endpoints: endpoints2 } = endpointStructure2;
 
             expect(endpoints2.size).equal(10);
@@ -1603,8 +1611,8 @@ describe("Endpoint Structures", () => {
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
 
             // Add the removed back and verify it gets same endpointID as before
-            const onoffLightDevice11New = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
-            aggregator1.addBridgedDevice(onoffLightDevice11New, {
+            const onoffLightDevice11New = await OnOffLightDevice.create(undefined, { uniqueStorageKey: "3333" });
+            await aggregator1.addBridgedDevice(onoffLightDevice11New, {
                 nodeLabel: "Socket 1-1 NEW",
                 reachable: true,
             });
@@ -1613,7 +1621,7 @@ describe("Endpoint Structures", () => {
             expect(structureChangeCounter).equal(3);
 
             const endpointStructure3 = new InteractionEndpointStructure();
-            endpointStructure3.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure3.initializeFromEndpoint(rootEndpoint);
             const { endpoints: endpoints3 } = endpointStructure3;
 
             expect(endpoints3.size).equal(11);
@@ -1625,12 +1633,12 @@ describe("Endpoint Structures", () => {
         it("Init and destroy is called when cluster server are overwritten", async () => {
             const node = await commissioningServer();
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffLightDevice = await OnOffLightDevice.create();
 
             let initCalled = false;
             let destroyCalled = false;
             // Overwrite Identify Cluster with init and destroy methods
-            onoffLightDevice.addClusterServer(
+            await onoffLightDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -1641,10 +1649,10 @@ describe("Endpoint Structures", () => {
                         identify: async () => {
                             /* dummy */
                         },
-                        initializeClusterServer: async () => {
+                        initializeClusterServer: () => {
                             initCalled = true;
                         },
-                        destroyClusterServer: async () => {
+                        destroyClusterServer: () => {
                             destroyCalled = true;
                         },
                     },
@@ -1653,15 +1661,15 @@ describe("Endpoint Structures", () => {
             expect(initCalled).false;
             expect(destroyCalled).false;
 
-            node.addDevice(onoffLightDevice);
+            await node.addDevice(onoffLightDevice);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             rootEndpoint.setStructureChangedCallback(() => node.updateStructure());
-            node.updateStructure();
+            await node.updateStructure();
 
             expect(initCalled).true;
             expect(destroyCalled).false;
@@ -1669,7 +1677,7 @@ describe("Endpoint Structures", () => {
             // Overwrite cluster server - old gets destroyed, new initialized
             let init2Called = false;
             let destroy2Called = false;
-            onoffLightDevice.addClusterServer(
+            await onoffLightDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -1680,10 +1688,10 @@ describe("Endpoint Structures", () => {
                         identify: async () => {
                             /* dummy */
                         },
-                        initializeClusterServer: async () => {
+                        initializeClusterServer: () => {
                             init2Called = true;
                         },
-                        destroyClusterServer: async () => {
+                        destroyClusterServer: () => {
                             destroy2Called = true;
                         },
                     },
@@ -1701,13 +1709,13 @@ describe("Endpoint Structures", () => {
         it("Destroy is called when device is removed", async () => {
             const node = await commissioningServer();
 
-            const aggregator = new Aggregator();
-            const onoffLightDevice = new OnOffLightDevice();
+            const aggregator = await Aggregator.create();
+            const onoffLightDevice = await OnOffLightDevice.create();
 
             let initCalled = false;
             let destroyCalled = false;
             // Overwrite Identify Cluster with init and destroy methods
-            onoffLightDevice.addClusterServer(
+            await onoffLightDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -1718,10 +1726,10 @@ describe("Endpoint Structures", () => {
                         identify: async () => {
                             /* dummy */
                         },
-                        initializeClusterServer: async () => {
+                        initializeClusterServer: () => {
                             initCalled = true;
                         },
-                        destroyClusterServer: async () => {
+                        destroyClusterServer: () => {
                             destroyCalled = true;
                         },
                     },
@@ -1730,27 +1738,27 @@ describe("Endpoint Structures", () => {
             expect(initCalled).false;
             expect(destroyCalled).false;
 
-            aggregator.addBridgedDevice(onoffLightDevice, {
+            await aggregator.addBridgedDevice(onoffLightDevice, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            node.addDevice(aggregator);
+            await node.addDevice(aggregator);
 
-            node.assignEndpointIds();
+            await node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(3);
 
             const rootEndpoint = node.getRootEndpoint();
-            rootEndpoint.updatePartsList();
+            await rootEndpoint.updatePartsList();
             rootEndpoint.setStructureChangedCallback(() => node.updateStructure());
-            node.updateStructure();
+            await node.updateStructure();
 
             const endpointStructure = new InteractionEndpointStructure();
-            endpointStructure.initializeFromEndpoint(rootEndpoint);
+            await endpointStructure.initializeFromEndpoint(rootEndpoint);
 
             expect(initCalled).true;
             expect(destroyCalled).false;
 
-            aggregator.removeBridgedDevice(onoffLightDevice);
+            await aggregator.removeBridgedDevice(onoffLightDevice);
 
             expect(destroyCalled).true;
         });

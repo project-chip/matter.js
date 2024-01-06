@@ -134,15 +134,15 @@ describe("Integration Test", () => {
         // make cluster data version deterministic
         const nodeContext = serverStorageManager.createContext("0");
         const cluster16Context = nodeContext.createContext("Cluster-1-6");
-        cluster16Context.set("_clusterDataVersion", 0); // Make sure the onoff attribute has deterministic start version for tests
+        await cluster16Context.set("_clusterDataVersion", 0); // Make sure the onoff attribute has deterministic start version for tests
         const cluster029Context = nodeContext.createContext("Cluster-0-29");
-        cluster029Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+        await cluster029Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
         const cluster040Context = nodeContext.createContext("Cluster-0-40");
-        cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
+        await cluster040Context.set("_clusterDataVersion", 0); // Make sure the serverList attribute has deterministic start version for tests
 
         matterServer = new MatterServer(serverStorageManager, { disableIpv4: true });
 
-        commissioningServer = new CommissioningServer({
+        commissioningServer = await CommissioningServer.create({
             listeningAddressIpv6: SERVER_IPv6,
             port: 0,
             deviceName,
@@ -167,12 +167,12 @@ describe("Integration Test", () => {
         });
         assert.equal(commissioningServer.getPort(), 0);
 
-        onOffLightDeviceServer = new OnOffLightDevice();
-        commissioningServer.addDevice(onOffLightDeviceServer);
+        onOffLightDeviceServer = await OnOffLightDevice.create();
+        await commissioningServer.addDevice(onOffLightDeviceServer);
 
         const netCluster = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
         // Override NetworkCommissioning Cluster for now unless configurable
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 netCluster,
                 {
@@ -228,7 +228,7 @@ describe("Integration Test", () => {
         commissioningServer.setMdnsBroadcaster(mdnsBroadcaster);
         await commissioningServer.advertise();
 
-        assert.ok(onOffLightDeviceServer.getClusterServer(OnOffCluster));
+        assert.ok(await onOffLightDeviceServer.getClusterServer(OnOffCluster));
     });
 
     afterEach(async () => {
@@ -240,7 +240,7 @@ describe("Integration Test", () => {
 
     describe("Check Server API", () => {
         it("Access cluster servers via api", async () => {
-            const basicInfoCluster = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
+            const basicInfoCluster = await commissioningServer.getRootClusterServer(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             // check API access for a Mandatory field with both APIs, get and set
@@ -251,10 +251,10 @@ describe("Integration Test", () => {
             assert.ok(basicInfoCluster.attributes.nodeLabel);
             const nodeLabel_objApi = basicInfoCluster.attributes.nodeLabel.getLocal();
             assert.equal(nodeLabel_objApi, "");
-            basicInfoCluster.attributes.nodeLabel.setLocal("234567");
+            await basicInfoCluster.attributes.nodeLabel.setLocal("234567");
             const nodeLabel_accessorApi = basicInfoCluster.getNodeLabelAttribute();
             assert.equal(nodeLabel_accessorApi, "234567");
-            basicInfoCluster.setNodeLabelAttribute("345678");
+            await basicInfoCluster.setNodeLabelAttribute("345678");
             const nodeLabel_accessorApi2 = basicInfoCluster.getNodeLabelAttribute();
             assert.equal(nodeLabel_accessorApi2, "345678");
 
@@ -368,13 +368,13 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const generalCommissioningCluster = node.getRootClusterClient(GeneralCommissioning.Cluster);
+            const generalCommissioningCluster = await node.getRootClusterClient(GeneralCommissioning.Cluster);
             assert.equal(
                 await generalCommissioningCluster?.getRegulatoryConfigAttribute(),
                 GeneralCommissioning.RegulatoryLocationType.Indoor,
             );
 
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.equal(await basicInfoCluster?.getLocationAttribute(), "DE");
         });
     });
@@ -385,7 +385,7 @@ describe("Integration Test", () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
                 const node = commissioningController.getConnectedNode(nodeId);
                 assert.ok(node);
-                const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
+                const adminCommissioningCluster = await node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
                 MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
                     MockTime.advance(10),
@@ -411,7 +411,7 @@ describe("Integration Test", () => {
                 assert.ok(node);
                 const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
-                const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+                const onoffCluster = await onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
                 MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
@@ -429,7 +429,7 @@ describe("Integration Test", () => {
                 assert.ok(node);
                 const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
                 assert.ok(onoffEndpoint);
-                const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+                const onoffCluster = await onoffEndpoint.getClusterClient(OnOffCluster);
                 assert.ok(onoffCluster);
 
                 MockTime.interceptOnce(InteractionClientMessenger.prototype, "sendTimedRequest", async () =>
@@ -442,7 +442,7 @@ describe("Integration Test", () => {
                 const nodeId = commissioningController.getCommissionedNodes()[0];
                 const node = commissioningController.getConnectedNode(nodeId);
                 assert.ok(node);
-                const adminCommissioningCluster = node.getRootClusterClient(AdministratorCommissioning.Cluster);
+                const adminCommissioningCluster = await node.getRootClusterClient(AdministratorCommissioning.Cluster);
                 assert.ok(adminCommissioningCluster);
                 await adminCommissioningCluster.openCommissioningWindow(
                     {
@@ -463,7 +463,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             // Access a Mandatory field with both APIs
@@ -491,7 +491,7 @@ describe("Integration Test", () => {
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
-            const onoffCluster = onoffEndpoint.getClusterClient(OnOffCluster);
+            const onoffCluster = await onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onoffCluster);
 
             assert.equal(await onoffCluster.attributes.onOff.get(), false);
@@ -706,7 +706,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel");
@@ -734,7 +734,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await assert.rejects(async () => await basicInfoCluster.attributes.location.set("XXX"), {
@@ -768,7 +768,7 @@ describe("Integration Test", () => {
             assert.equal(Array.isArray(response), true);
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel2");
             assert.equal(await basicInfoCluster.getLocationAttribute(true), "GB");
@@ -801,7 +801,7 @@ describe("Integration Test", () => {
             assert.equal(response[0].path.attributeId, BasicInformation.Cluster.attributes.location.id);
             assert.equal(response[0].status, 135 /* StatusCode.ConstraintError */);
 
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel3");
@@ -834,7 +834,7 @@ describe("Integration Test", () => {
 
             assert.equal(response.length, 0);
 
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             assert.equal(await basicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
@@ -849,7 +849,7 @@ describe("Integration Test", () => {
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
-            const groupsCluster = onoffEndpoint.getClusterClient(Groups.Cluster);
+            const groupsCluster = await onoffEndpoint.getClusterClient(Groups.Cluster);
             assert.ok(groupsCluster);
             await groupsCluster.commands.addGroup({ groupId: GroupId(1), groupName: "Group 1" });
         });
@@ -892,7 +892,7 @@ describe("Integration Test", () => {
             callback = (value: boolean) => updateResolver({ value, time: Time.nowMs() });
 
             await MockTime.advance(2 * 1000);
-            onOffLightDeviceServer.setOnOff(true);
+            await onOffLightDeviceServer.setOnOff(true);
             await MockTime.advance(100);
             const updateReport = await updatePromise;
 
@@ -909,7 +909,7 @@ describe("Integration Test", () => {
             await MockTime.advance(10 * 1000);
 
             // ... but on next change immediately (means immediately + 50ms, so wait 100ms) then
-            onOffLightDeviceServer.setOnOff(false);
+            await onOffLightDeviceServer.setOnOff(false);
             await MockTime.advance(100);
             const lastReport = await lastPromise;
 
@@ -930,7 +930,7 @@ describe("Integration Test", () => {
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
-            const onOffClient = onoffEndpoint.getClusterClient(OnOffCluster);
+            const onOffClient = await onoffEndpoint.getClusterClient(OnOffCluster);
             assert.ok(onOffClient);
 
             assert.ok(onOffLightDeviceServer);
@@ -956,7 +956,7 @@ describe("Integration Test", () => {
             assert.deepEqual(pushedUpdates, []);
 
             await MockTime.advance(2 * 1000);
-            onOffLightDeviceServer.setOnOff(true);
+            await onOffLightDeviceServer.setOnOff(true);
             await MockTime.advance(100);
 
             await updatePromise;
@@ -970,10 +970,10 @@ describe("Integration Test", () => {
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
-            const scenesClient = onoffEndpoint.getClusterClient(Scenes.Cluster);
+            const scenesClient = await onoffEndpoint.getClusterClient(Scenes.Cluster);
             assert.ok(scenesClient);
 
-            const scenesServer = onOffLightDeviceServer.getClusterServer(Scenes.Cluster);
+            const scenesServer = await onOffLightDeviceServer.getClusterServer(Scenes.Cluster);
             assert.ok(scenesServer);
 
             const startTime = Time.nowMs();
@@ -1017,7 +1017,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInformationClient = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
 
             const basicInformationServer = commissioningServer.getRootClusterServer(BasicInformation.Cluster);
@@ -1056,7 +1056,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInformationClient = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInformationClient = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInformationClient);
 
             const startTime = Time.nowMs();
@@ -1080,7 +1080,7 @@ describe("Integration Test", () => {
             callback = (value: DecodedEventData<any>) => updateResolver({ value, time: Time.nowMs() });
 
             await MockTime.advance(200);
-            commissioningServer.setReachability(false);
+            await commissioningServer.setReachability(false);
             await MockTime.advance(100);
             await MockTime.advance(1);
 
@@ -1136,7 +1136,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const accessControlCluster = node.getRootClusterClient(AccessControl.Cluster);
+            const accessControlCluster = await node.getRootClusterClient(AccessControl.Cluster);
             assert.ok(accessControlCluster);
             await accessControlCluster.attributes.acl.set([]);
             await accessControlCluster.setAclAttribute([]);
@@ -1158,7 +1158,7 @@ describe("Integration Test", () => {
             assert.ok(node);
             const onoffEndpoint = node.getDevices().find(endpoint => endpoint.number === 1);
             assert.ok(onoffEndpoint);
-            const identifyClient = onoffEndpoint.getClusterClient(Identify.Cluster);
+            const identifyClient = await onoffEndpoint.getClusterClient(Identify.Cluster);
             assert.ok(identifyClient);
 
             const { promise: firstPromise, resolver: firstResolver } = createPromise<number>();
@@ -1192,10 +1192,10 @@ describe("Integration Test", () => {
 
             assert.equal(fakeServerStorage.get(["0", "FabricManager"], "nextFabricIndex"), 2);
 
-            const onOffValue = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "onOff");
+            const onOffValue = fakeServerStorage.get<boolean>(["0", "Cluster-1-6"], "onOff");
             assert.equal(onOffValue, true);
 
-            const onOffClusterDataVerison = fakeServerStorage.get<any>(["0", "Cluster-1-6"], "_clusterDataVersion");
+            const onOffClusterDataVerison = fakeServerStorage.get<number>(["0", "Cluster-1-6"], "_clusterDataVersion");
             assert.equal(onOffClusterDataVerison, 3);
 
             const storedServerResumptionRecords = fakeServerStorage.get(["0", "SessionManager"], "resumptionRecords");
@@ -1212,7 +1212,10 @@ describe("Integration Test", () => {
 
         it("controller storage is as expected", async () => {
             assert.equal(fakeControllerStorage.get(["0", "RootCertificateManager"], "rootCertId"), BigInt(0));
-            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            const nodeData = await fakeControllerStorage.get<[NodeId, any][]>(
+                ["0", "MatterController"],
+                "commissionedNodes",
+            );
             assert.ok(nodeData);
             assert.equal(nodeData.length, 1);
             assert.deepEqual(nodeData[0][1], {
@@ -1223,7 +1226,7 @@ describe("Integration Test", () => {
                 },
             });
 
-            const storedControllerFabric = fakeControllerStorage.get<FabricJsonObject>(
+            const storedControllerFabric = await fakeControllerStorage.get<FabricJsonObject>(
                 ["0", "MatterController"],
                 "fabric",
             );
@@ -1237,7 +1240,7 @@ describe("Integration Test", () => {
         it("start second server", async () => {
             Network.get = () => serverNetwork;
 
-            commissioningServer2 = new CommissioningServer({
+            commissioningServer2 = await CommissioningServer.create({
                 listeningAddressIpv6: SERVER_IPv6,
                 deviceName: `${deviceName} 2`,
                 deviceType,
@@ -1260,8 +1263,8 @@ describe("Integration Test", () => {
                     sessionChangedCallsServer2.push({ fabricIndex, time: MockTime.nowMs() }),
             });
 
-            onOffLightDeviceServer = new OnOffLightDevice();
-            commissioningServer2.addDevice(onOffLightDeviceServer);
+            onOffLightDeviceServer = await OnOffLightDevice.create();
+            await commissioningServer2.addDevice(onOffLightDeviceServer);
 
             await matterServer.addCommissioningServer(commissioningServer2, { uniqueStorageKey: "second" });
             assert.equal(commissioningServer2.getPort(), matterPort2);
@@ -1349,7 +1352,10 @@ describe("Integration Test", () => {
         });
 
         it("controller storage is updated for second device", async () => {
-            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            const nodeData = await fakeControllerStorage.get<[NodeId, any][]>(
+                ["0", "MatterController"],
+                "commissionedNodes",
+            );
             assert.ok(nodeData);
             assert.equal(nodeData.length, 2);
             assert.deepEqual(nodeData[0][1], {
@@ -1372,7 +1378,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[1];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const basicInfoCluster = node.getRootClusterClient(BasicInformation.Cluster);
+            const basicInfoCluster = await node.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(basicInfoCluster);
 
             await basicInfoCluster.attributes.nodeLabel.set("testLabel-second");
@@ -1399,7 +1405,7 @@ describe("Integration Test", () => {
             const firstNodeId = commissioningController.getCommissionedNodes()[0];
             const firstNode = commissioningController.getConnectedNode(firstNodeId);
             assert.ok(firstNode);
-            const firstBasicInfoCluster = firstNode.getRootClusterClient(BasicInformation.Cluster);
+            const firstBasicInfoCluster = await firstNode.getRootClusterClient(BasicInformation.Cluster);
             assert.ok(firstBasicInfoCluster);
             // Request remotely
             assert.equal(await firstBasicInfoCluster.attributes.nodeLabel.get(true), "testLabel4");
@@ -1553,7 +1559,10 @@ describe("Integration Test", () => {
         });
 
         it("verify that the controller storage got updated", async () => {
-            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            const nodeData = await fakeControllerStorage.get<[NodeId, any][]>(
+                ["0", "MatterController"],
+                "commissionedNodes",
+            );
             assert.ok(nodeData);
             assert.equal(nodeData.length, 2);
             assert.deepEqual(nodeData[0][1], {
@@ -1571,7 +1580,7 @@ describe("Integration Test", () => {
                 },
             });
 
-            const nodeData2 = fakeControllerStorage.get<[NodeId, any][]>(
+            const nodeData2 = await fakeControllerStorage.get<[NodeId, any][]>(
                 ["another-second", "MatterController"],
                 "commissionedNodes",
             );
@@ -1585,7 +1594,7 @@ describe("Integration Test", () => {
                 },
             });
 
-            const storedControllerFabrics = fakeControllerStorage.get<FabricJsonObject>(
+            const storedControllerFabrics = await fakeControllerStorage.get<FabricJsonObject>(
                 ["another-second", "MatterController"],
                 "fabric",
             );
@@ -1687,7 +1696,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
+            const operationalCredentialsCluster = await node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);
 
             const result = await operationalCredentialsCluster.commands.removeFabric({ fabricIndex: FabricIndex(250) });
@@ -1720,7 +1729,7 @@ describe("Integration Test", () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
             assert.ok(node);
-            const operationalCredentialsCluster = node.getRootClusterClient(OperationalCredentials.Cluster);
+            const operationalCredentialsCluster = await node.getRootClusterClient(OperationalCredentials.Cluster);
             assert.ok(operationalCredentialsCluster);
 
             const fabricIndex = await operationalCredentialsCluster.attributes.currentFabricIndex.get();
@@ -1765,7 +1774,10 @@ describe("Integration Test", () => {
         }).timeout(30_000);
 
         it("controller storage is updated for removed nodes", async () => {
-            const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
+            const nodeData = await fakeControllerStorage.get<[NodeId, any][]>(
+                ["0", "MatterController"],
+                "commissionedNodes",
+            );
             assert.ok(nodeData);
             assert.equal(nodeData.length, 0);
         });

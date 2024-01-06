@@ -133,7 +133,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             await messenger.waitForSuccess();
 
             await messenger.close();
-            server.saveResumptionRecord(resumptionRecord);
+            await server.saveResumptionRecord(resumptionRecord);
         } else if (peerResumptionId === undefined && peerResumeMic === undefined) {
             // Generate sigma 2
             // TODO: Pass through a group id?
@@ -220,7 +220,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
 
             await messenger.close();
-            server.saveResumptionRecord(resumptionRecord);
+            await server.saveResumptionRecord(resumptionRecord);
         } else {
             throw new UnexpectedDataError("Invalid resumption ID or resume MIC.");
         }

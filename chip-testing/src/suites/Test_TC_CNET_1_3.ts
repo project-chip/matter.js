@@ -21,7 +21,7 @@ export class Test_TC_CNET_1_3_F02 extends MinimalOnOffDeviceTestInstance {
         const commissioningServer = await super.setupCommissioningServer();
 
         const networkId = new ByteArray(32);
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 NetworkCommissioningCluster.with("EthernetNetworkInterface"),
                 {

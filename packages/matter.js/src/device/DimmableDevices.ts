@@ -2,15 +2,20 @@
 
 import { LevelControl } from "../cluster/definitions/LevelControlCluster.js";
 import { OnOff } from "../cluster/definitions/OnOffCluster.js";
-import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
+import {
+    AttributeInitialValues,
+    ClusterServerHandlers,
+    ClusterServerObjForCluster,
+} from "../cluster/server/ClusterServerTypes.js";
 
 import { createDefaultLevelControlClusterServer } from "../cluster/server/LevelControlServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
+import { MaybePromise } from "../util/Promises.js";
 import { DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";
-import { getClusterInitialAttributeValues, OnOffBaseDevice } from "./OnOffDevices.js";
+import { OnOffBaseDevice, getClusterInitialAttributeValues } from "./OnOffDevices.js";
 
 type DimmableDeviceCommands = {
     moveToLevel: ClusterServerHandlers<typeof LevelControl.Complete>["moveToLevel"];
@@ -26,41 +31,45 @@ type DimmableDeviceCommands = {
 class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands>(
     OnOffBaseDevice,
 ) {
-    protected override addDeviceClusters(
+    protected levelControlCluster?: ClusterServerObjForCluster<typeof LevelControl.Cluster>;
+
+    protected override async addDeviceClusters(
         attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
         excludeList: ClusterId[] = [],
     ) {
-        super.addDeviceClusters(attributeInitialValues, [...excludeList, OnOff.Cluster.id, LevelControl.Cluster.id]);
+        await super.addDeviceClusters(attributeInitialValues, [
+            ...excludeList,
+            OnOff.Cluster.id,
+            LevelControl.Cluster.id,
+        ]);
         if (!excludeList.includes(OnOff.Cluster.id)) {
-            this.addClusterServer(
-                createDefaultOnOffClusterServer(
-                    this.commandHandler,
-                    getClusterInitialAttributeValues(
-                        attributeInitialValues,
-                        OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
-                    ),
+            this.onoffCluster = createDefaultOnOffClusterServer(
+                this.commandHandler,
+                getClusterInitialAttributeValues(
+                    attributeInitialValues,
+                    OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
                 ),
             );
+            await this.addClusterServer(this.onoffCluster);
         }
         if (!excludeList.includes(LevelControl.Cluster.id)) {
-            this.addClusterServer(
-                createDefaultLevelControlClusterServer(
-                    this.commandHandler,
-                    getClusterInitialAttributeValues(
-                        attributeInitialValues,
-                        LevelControl.Cluster.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting),
-                    ),
+            this.levelControlCluster = createDefaultLevelControlClusterServer(
+                this.commandHandler,
+                getClusterInitialAttributeValues(
+                    attributeInitialValues,
+                    LevelControl.Cluster.with(LevelControl.Feature.OnOff, LevelControl.Feature.Lighting),
                 ),
             );
+            await this.addClusterServer(this.levelControlCluster);
         }
     }
 
     getCurrentLevel() {
-        return this.getClusterServer(LevelControl.Cluster)?.getCurrentLevelAttribute() ?? 0;
+        return this.levelControlCluster?.getCurrentLevelAttribute() ?? 0;
     }
 
-    setCurrentLevel(level: number | null) {
-        this.getClusterServer(LevelControl.Cluster)?.setCurrentLevelAttribute(level);
+    async setCurrentLevel(level: number | null) {
+        await this.levelControlCluster?.setCurrentLevelAttribute(level);
     }
 
     /**
@@ -68,8 +77,8 @@ class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevi
      *
      * @param listener Listener function to be called when the attribute changes
      */
-    addCurrentLevelListener(listener: (newValue: number | null, oldValue: number | null) => void) {
-        this.getClusterServer(LevelControl.Cluster)?.subscribeCurrentLevelAttribute(listener);
+    addCurrentLevelListener(listener: (newValue: number | null, oldValue: number | null) => MaybePromise<void>) {
+        this.levelControlCluster?.subscribeCurrentLevelAttribute(listener);
     }
 }
 
@@ -88,6 +97,16 @@ export class DimmablePluginUnitDevice extends DimmableBaseDevice {
         }
         super(DeviceTypes.DIMMABLE_PLUGIN_UNIT, initialAttributeValues, options);
     }
+
+    static async create(
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
+        dimmableAttributeValues?: AttributeInitialValues<typeof LevelControl.Cluster.attributes>,
+        options: EndpointOptions = {},
+    ) {
+        const device = new DimmablePluginUnitDevice(onOffAttributeInitialValues, dimmableAttributeValues, options);
+        await device.construction;
+        return device;
+    }
 }
 
 export class DimmableLightDevice extends DimmableBaseDevice {
@@ -104,5 +123,15 @@ export class DimmableLightDevice extends DimmableBaseDevice {
             initialAttributeValues[LevelControl.Cluster.id] = dimmableAttributeValues;
         }
         super(DeviceTypes.DIMMABLE_LIGHT, initialAttributeValues, options);
+    }
+
+    static async create(
+        onOffAttributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
+        dimmableAttributeValues?: AttributeInitialValues<typeof LevelControl.Cluster.attributes>,
+        options: EndpointOptions = {},
+    ) {
+        const device = new DimmableLightDevice(onOffAttributeInitialValues, dimmableAttributeValues, options);
+        await device.construction;
+        return device;
     }
 }

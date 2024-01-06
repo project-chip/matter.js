@@ -86,16 +86,12 @@ async function main() {
                 const theShell = new Shell(theNode, PROMPT);
 
                 if (ble) {
+                    const hciId = await theNode.Store.get<number>("BleHciId", 0);
                     // Initialize Ble
-                    Ble.get = singleton(
-                        () =>
-                            new BleNode({
-                                hciId: theNode.Store.get<number>("BleHciId", 0),
-                            }),
-                    );
+                    Ble.get = singleton(() => new BleNode({ hciId }));
                 }
 
-                setLogLevel(theNode.Store.get<string>("LogLevel", "info"));
+                setLogLevel(await theNode.Store.get<string>("LogLevel", "info"));
 
                 console.log(`Started Node #${nodeNum} (Type: ${nodeType}) ${ble ? "with" : "without"} BLE`);
                 theShell.start();

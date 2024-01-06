@@ -19,14 +19,14 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
     const getTimedOnTimer = (onTime: AttributeServer<number | null>, onOff: AttributeServer<boolean>) => {
         if (timedOnTimer === undefined) {
-            timedOnTimer = Time.getPeriodicTimer(100, () => {
+            timedOnTimer = Time.getPeriodicTimer(100, async () => {
                 let time = onTime.getLocal() ?? 0 - 0.1;
                 if (time <= 0) {
                     time = 0;
                     timedOnTimer?.stop();
-                    onOff.setLocal(false); // Timed on state end by turning off
+                    await onOff.setLocal(false); // Timed on state end by turning off
                 }
-                onTime.setLocal(time);
+                await onTime.setLocal(time);
             });
         }
         return timedOnTimer;
@@ -34,13 +34,13 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
     const getDelayedOffTimer = (offWaitTime: AttributeServer<number | null>) => {
         if (delayedOffTimer === undefined) {
-            delayedOffTimer = Time.getTimer(100, () => {
+            delayedOffTimer = Time.getTimer(100, async () => {
                 let time = offWaitTime.getLocal() ?? 0 - 0.1;
                 if (time <= 0) {
                     time = 0;
                     delayedOffTimer?.stop(); //Delayed off
                 }
-                offWaitTime.setLocal(time);
+                await offWaitTime.setLocal(time);
             });
         }
         return delayedOffTimer;
@@ -48,16 +48,16 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
     return {
         on: async ({ attributes: { onOff } }) => {
-            onOff.setLocal(true);
+            await onOff.setLocal(true);
         },
         off: async ({ attributes: { onOff } }) => {
-            onOff.setLocal(false);
+            await onOff.setLocal(false);
         },
         toggle: async ({ attributes: { onOff } }) => {
             if (onOff.getLocal()) {
-                onOff.setLocal(false);
+                await onOff.setLocal(false);
             } else {
-                onOff.setLocal(true);
+                await onOff.setLocal(true);
             }
         },
         offWithEffect: async () => {
@@ -82,12 +82,12 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
             if (delayedOffTimer.isRunning && !onOffState) {
                 // we are already in "Delayed off state" - this means reqOffWaitTime attribute > 0 and the device is off now
-                offWaitTime.setLocal(Math.min(reqOffWaitTime ?? 0, offWaitTime.getLocal() ?? 0));
+                await offWaitTime.setLocal(Math.min(reqOffWaitTime ?? 0, offWaitTime.getLocal() ?? 0));
                 delayedOffTimer.start();
                 timedOnTimer.stop();
             } else {
-                onTime.setLocal(Math.max(reqOnTime ?? 0, onTime.getLocal() ?? 0));
-                offWaitTime.setLocal(reqOffWaitTime);
+                await onTime.setLocal(Math.max(reqOnTime ?? 0, onTime.getLocal() ?? 0));
+                await offWaitTime.setLocal(reqOffWaitTime);
                 timedOnTimer.start();
                 delayedOffTimer.stop();
             }

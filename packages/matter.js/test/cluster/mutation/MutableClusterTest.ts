@@ -301,7 +301,7 @@ describe("ClusterFactory", () => {
             );
         });
 
-        it("is correct for a WritableFabricScopedAttribute", () => {
+        it("is correct for a WritableFabricScopedAttribute", async () => {
             const MyCluster = TestMutable.with("AlsoExtended");
 
             // Create handlers directly
@@ -363,7 +363,7 @@ describe("ClusterFactory", () => {
             } as unknown as Fabric;
             const wfs = server.getWfsAttribute(fabric);
             expect(wfs).deep.equal(value);
-            server.setWfsAttribute(wfs, fabric);
+            await server.setWfsAttribute(wfs, fabric);
         });
     });
 });

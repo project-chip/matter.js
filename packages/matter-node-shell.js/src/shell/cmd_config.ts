@@ -29,7 +29,7 @@ export default function commands(theNode: MatterNode) {
                                     type: "string",
                                 });
                             },
-                            argv => void doLogLevel(theNode, argv),
+                            async argv => doLogLevel(theNode, argv),
                         )
                         .command(
                             "set <value>",
@@ -42,7 +42,7 @@ export default function commands(theNode: MatterNode) {
                                     demandOption: true,
                                 });
                             },
-                            argv => void doLogLevel(theNode, { action: "set", ...argv }),
+                            async argv => doLogLevel(theNode, { action: "set", ...argv }),
                         );
                 })
 
@@ -60,7 +60,7 @@ export default function commands(theNode: MatterNode) {
                                     type: "string",
                                 });
                             },
-                            argv => void doBleHci(theNode, argv),
+                            async argv => doBleHci(theNode, argv),
                         )
                         .command(
                             "set <value>",
@@ -72,7 +72,7 @@ export default function commands(theNode: MatterNode) {
                                     demandOption: true,
                                 });
                             },
-                            argv => void doBleHci(theNode, { action: "set", ...argv }),
+                            async argv => doBleHci(theNode, { action: "set", ...argv }),
                         );
                 })
 
@@ -90,7 +90,7 @@ export default function commands(theNode: MatterNode) {
                                     type: "string",
                                 });
                             },
-                            argv => void doWifiCredentials(theNode, argv),
+                            async argv => doWifiCredentials(theNode, argv),
                         )
                         .command(
                             "set <wifi-ssid> <wifi-password>",
@@ -108,7 +108,7 @@ export default function commands(theNode: MatterNode) {
                                         demandOption: true,
                                     });
                             },
-                            argv => void doWifiCredentials(theNode, { action: "set", ...argv }),
+                            async argv => doWifiCredentials(theNode, { action: "set", ...argv }),
                         );
                 })
 
@@ -126,7 +126,7 @@ export default function commands(theNode: MatterNode) {
                                     type: "string",
                                 });
                             },
-                            argv => void doThreadCredentials(theNode, argv),
+                            async argv => doThreadCredentials(theNode, argv),
                         )
                         .command(
                             "set <thread-name> <thread-operational-dataset>",
@@ -144,7 +144,7 @@ export default function commands(theNode: MatterNode) {
                                         demandOption: true,
                                     });
                             },
-                            argv => void doThreadCredentials(theNode, { action: "set", ...argv }),
+                            async argv => doThreadCredentials(theNode, { action: "set", ...argv }),
                         );
                 }),
         handler: async (argv: any) => {
@@ -153,7 +153,7 @@ export default function commands(theNode: MatterNode) {
     };
 }
 
-function doLogLevel(
+async function doLogLevel(
     theNode: MatterNode,
     args: {
         action: string;
@@ -163,27 +163,26 @@ function doLogLevel(
     const { action, value } = args;
     switch (action) {
         case "get":
-            console.log(`Current Loglevel: ${theNode.Store.get<string>("LogLevel", "info")}`);
+            console.log(`Current Loglevel: ${await theNode.Store.get<string>("LogLevel", "info")}`);
             break;
         case "set":
             if (value === undefined) {
                 console.log(`Can not change Loglevel: New Loglevel value not provided`);
-                return 1;
+                return;
             }
-            theNode.Store.set("LogLevel", value);
+            await theNode.Store.set("LogLevel", value);
             console.log(`New Loglevel:" ${value}"`);
             setLogLevel(value);
             break;
         case "delete":
-            theNode.Store.delete("LogLevel");
+            await theNode.Store.delete("LogLevel");
             console.log(`Loglevel Reset to "info"`);
             setLogLevel("info");
             break;
     }
-    return 0;
 }
 
-function doBleHci(
+async function doBleHci(
     theNode: MatterNode,
     args: {
         action: string;
@@ -193,25 +192,23 @@ function doBleHci(
     const { action, value } = args;
     switch (action) {
         case "get":
-            console.log(`Current BLE HCI ID: ${theNode.Store.get<number>("BleHciId", 0)}`);
+            console.log(`Current BLE HCI ID: ${await theNode.Store.get<number>("BleHciId", 0)}`);
             break;
         case "set":
             if (value === undefined) {
                 console.log(`Can not change HCI ID: New HCI ID value not provided`);
-                return 1;
             }
-            theNode.Store.set("BleHciId", value);
+            await theNode.Store.set("BleHciId", value);
             console.log(`New HCI ID:" ${value}". Please restart the shell for teh changes to take effect.`);
             break;
         case "delete":
-            theNode.Store.delete("BleHciId");
+            await theNode.Store.delete("BleHciId");
             console.log(`BLE HCI ID reset to default (0). Please restart the shell for teh changes to take effect.`);
             break;
     }
-    return 0;
 }
 
-function doWifiCredentials(
+async function doWifiCredentials(
     theNode: MatterNode,
     args: {
         action: string;
@@ -223,36 +220,33 @@ function doWifiCredentials(
     switch (action) {
         case "get":
             console.log(
-                `Current Wifi-Credentials: SSID="${theNode.Store.get<string>(
+                `Current Wifi-Credentials: SSID="${await theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword", ""))}"`,
+                )}, Password="${Logger.maskString(await theNode.Store.get<string>("WiFiPassword", ""))}"`,
             );
             break;
         case "set":
             if (wifiSsid === undefined || wifiPassword === undefined) {
                 console.log(`Can not change Wi-Fi credentials: New values not provided`);
-                return 1;
             }
-            theNode.Store.set("WiFiSsid", wifiSsid);
-            theNode.Store.set("WiFiPassword", wifiPassword);
+            await theNode.Store.set("WiFiSsid", wifiSsid);
+            await theNode.Store.set("WiFiPassword", wifiPassword);
             console.log(
-                `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
+                `New Wifi-Credentials: SSID="${await theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword"))}"`,
+                )}, Password="${Logger.maskString(await theNode.Store.get<string>("WiFiPassword"))}"`,
             );
             break;
         case "delete":
-            theNode.Store.delete("WiFiSsid");
-            theNode.Store.delete("WiFiPassword");
+            await theNode.Store.delete("WiFiSsid");
+            await theNode.Store.delete("WiFiPassword");
             console.log(`Wi-Fi credentials were deleted`);
-            break;
     }
-    return 0;
 }
 
-function doThreadCredentials(
+async function doThreadCredentials(
     theNode: MatterNode,
     args: {
         action: string;
@@ -264,33 +258,33 @@ function doThreadCredentials(
     switch (action) {
         case "get":
             console.log(
-                `Current Thread network credentials: name="${theNode.Store.get<string>(
+                `Current Thread network credentials: name="${await theNode.Store.get<string>(
                     "ThreadName",
                     "-",
                 )}, Operational-Dataset="${Logger.maskString(
-                    theNode.Store.get<string>("ThreadOperationalDataset", ""),
+                    await theNode.Store.get<string>("ThreadOperationalDataset", ""),
                 )}"`,
             );
             break;
         case "set":
             if (threadName === undefined || threadOperationalDataset === undefined) {
                 console.log(`Can not change Thread network credentials: New values not provided`);
-                return 1;
+                return;
             }
-            theNode.Store.set("ThreadName", threadName);
-            theNode.Store.set("ThreadOperationalDataset", threadOperationalDataset);
+            await theNode.Store.set("ThreadName", threadName);
+            await theNode.Store.set("ThreadOperationalDataset", threadOperationalDataset);
             console.log(
-                `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
+                `New Wifi-Credentials: SSID="${await theNode.Store.get<string>(
                     "ThreadName",
                     "-",
-                )}, OperationalDataset="${Logger.maskString(theNode.Store.get<string>("ThreadOperationalDataset"))}"`,
+                )}, OperationalDataset="${Logger.maskString(
+                    await theNode.Store.get<string>("ThreadOperationalDataset"),
+                )}"`,
             );
             break;
         case "delete":
-            theNode.Store.delete("ThreadName");
-            theNode.Store.delete("ThreadOperationalDataset");
+            await theNode.Store.delete("ThreadName");
+            await theNode.Store.delete("ThreadOperationalDataset");
             console.log(`Thread network credentials were deleted`);
-            break;
     }
-    return 0;
 }

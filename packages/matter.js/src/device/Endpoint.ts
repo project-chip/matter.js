@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { getClusterNameById } from "../cluster/ClusterHelper.js";
+import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
 import { BasicInformationCluster } from "../cluster/definitions/BasicInformationCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { DescriptorCluster } from "../cluster/definitions/DescriptorCluster.js";
@@ -14,9 +14,9 @@ import { FixedLabelCluster } from "../cluster/definitions/FixedLabelCluster.js";
 import { UserLabelCluster } from "../cluster/definitions/UserLabelCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import {
-    asClusterServerInternal,
     ClusterServerObj,
     ClusterServerObjForCluster,
+    asClusterServerInternal,
 } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
@@ -24,6 +24,7 @@ import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../endpoint/EndpointInterface.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
+import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 
 export interface EndpointOptions {
@@ -38,11 +39,16 @@ export class Endpoint implements EndpointInterface {
     number: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
-    private structureChangedCallback: () => void = () => {
+    private structureChangedCallback: () => Promise<void> = async () => {
         /** noop until officially set **/
     };
 
-    private descriptorCluster: ClusterServerObjForCluster<typeof DescriptorCluster>;
+    private descriptorCluster?: ClusterServerObjForCluster<typeof DescriptorCluster>;
+    #construction: AsyncConstruction<Endpoint>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     /**
      * Create a new Endpoint instance.
@@ -54,46 +60,50 @@ export class Endpoint implements EndpointInterface {
         protected deviceTypes: AtLeastOne<DeviceTypeDefinition>,
         options: EndpointOptions = {},
     ) {
-        this.descriptorCluster = ClusterServer(
-            DescriptorCluster,
-            {
-                deviceTypeList: deviceTypes.map(deviceType => ({
-                    deviceType: deviceType.code,
-                    revision: deviceType.revision,
-                })),
-                serverList: [],
-                clientList: [],
-                partsList: [],
-            },
-            {},
-        );
-        this.addClusterServer(this.descriptorCluster);
-        this.setDeviceTypes(deviceTypes);
-
         if (options.endpointId !== undefined) {
             this.number = options.endpointId;
         }
         if (options.uniqueStorageKey !== undefined) {
             this.uniqueStorageKey = options.uniqueStorageKey;
         }
+
+        this.#construction = AsyncConstruction(this, async () => {
+            this.descriptorCluster = ClusterServer(
+                DescriptorCluster,
+                {
+                    deviceTypeList: deviceTypes.map(deviceType => ({
+                        deviceType: deviceType.code,
+                        revision: deviceType.revision,
+                    })),
+                    serverList: [],
+                    clientList: [],
+                    partsList: [],
+                },
+                {},
+            );
+            await this.addClusterServer(this.descriptorCluster);
+            this.setDeviceTypes(deviceTypes);
+        });
     }
 
-    setStructureChangedCallback(callback: () => void) {
+    async setStructureChangedCallback(callback: () => Promise<void>) {
         this.structureChangedCallback = callback;
         this.childEndpoints.forEach(endpoint => endpoint.setStructureChangedCallback(callback));
     }
 
-    removeFromStructure() {
-        this.destroy();
-        this.structureChangedCallback = () => {
+    async removeFromStructure() {
+        await this.destroy();
+        this.structureChangedCallback = async () => {
             /** noop **/
         };
-        this.childEndpoints.forEach(endpoint => endpoint.removeFromStructure());
+        for (const endpoint of this.childEndpoints) {
+            await endpoint.removeFromStructure();
+        }
     }
 
-    destroy() {
+    async destroy() {
         for (const clusterServer of this.clusterServers.values()) {
-            asClusterServerInternal(clusterServer)._destroy();
+            await asClusterServerInternal(clusterServer)._destroy();
         }
     }
 
@@ -104,9 +114,9 @@ export class Endpoint implements EndpointInterface {
         return this.number;
     }
 
-    addFixedLabel(label: string, value: string) {
+    async addFixedLabel(label: string, value: string) {
         if (!this.hasClusterServer(FixedLabelCluster)) {
-            this.addClusterServer(
+            await this.addClusterServer(
                 ClusterServer(
                     FixedLabelCluster,
                     {
@@ -116,17 +126,17 @@ export class Endpoint implements EndpointInterface {
                 ),
             );
         }
-        const fixedLabelCluster = this.getClusterServer(FixedLabelCluster);
+        const fixedLabelCluster = await this.getClusterServer(FixedLabelCluster);
         const labelList = (fixedLabelCluster?.getLabelListAttribute() ?? []).filter(
             ({ label: entryLabel }) => entryLabel !== label, // Prevent adding duplicate labels
         );
         labelList.push({ label, value });
-        fixedLabelCluster?.setLabelListAttribute(labelList);
+        await fixedLabelCluster?.setLabelListAttribute(labelList);
     }
 
-    addUserLabel(label: string, value: string) {
+    async addUserLabel(label: string, value: string) {
         if (!this.hasClusterServer(UserLabelCluster)) {
-            this.addClusterServer(
+            await this.addClusterServer(
                 ClusterServer(
                     UserLabelCluster,
                     {
@@ -136,18 +146,22 @@ export class Endpoint implements EndpointInterface {
                 ),
             );
         }
-        const userLabelCluster = this.getClusterServer(UserLabelCluster);
+        const userLabelCluster = await this.getClusterServer(UserLabelCluster);
         const labelList = (userLabelCluster?.getLabelListAttribute() ?? []).filter(
             ({ label: entryLabel }) => entryLabel !== label, // Prevent adding duplicate labels
         );
         labelList.push({ label, value });
-        userLabelCluster?.setLabelListAttribute(labelList);
+        await userLabelCluster?.setLabelListAttribute(labelList);
     }
 
-    addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    async addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+        if (this.descriptorCluster === undefined) {
+            throw new ImplementationError(`Initializatipn not completed`);
+        }
+
         const currentCluster = this.clusterServers.get(cluster.id);
         if (currentCluster !== undefined) {
-            asClusterServerInternal(currentCluster)._destroy();
+            await asClusterServerInternal(currentCluster)._destroy();
         }
         asClusterServerInternal(cluster)._assignToEndpoint(this);
         if (cluster.id === DescriptorCluster.id) {
@@ -168,26 +182,31 @@ export class Endpoint implements EndpointInterface {
         this.clusterServers.set(cluster.id, cluster as any);
 
         this.descriptorCluster.attributes.serverList.init(Array.from(this.clusterServers.keys()).sort((a, b) => a - b));
-        this.structureChangedCallback(); // Inform parent about structure change
+        await this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    async addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
+        this.#construction.assert();
+        if (this.descriptorCluster === undefined) {
+            throw new ImplementationError(`Initialization not completed`);
+        }
+
         this.clusterClients.set(cluster.id, cluster);
         this.descriptorCluster.attributes.clientList.init(Array.from(this.clusterClients.keys()).sort((a, b) => a - b));
-        this.structureChangedCallback(); // Inform parent about structure change
+        await this.structureChangedCallback(); // Inform parent about structure change
     }
 
     // TODO cleanup with id number vs ClusterId
     // TODO add instance if optional and not existing, maybe get rid of undefined by throwing?
-    getClusterServer<
+    async getClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
         const clusterServer = this.clusterServers.get(cluster.id);
         if (clusterServer !== undefined) {
             // See comment in addClusterServer, this is the inverse of that
@@ -196,13 +215,13 @@ export class Endpoint implements EndpointInterface {
         }
     }
 
-    getClusterClient<
+    async getClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.clusterClients.get(cluster.id) as ClusterClientObj<F, A, C, E>;
     }
 
@@ -224,6 +243,10 @@ export class Endpoint implements EndpointInterface {
         return this.clusterServers.has(cluster.id);
     }
 
+    hasClusterServerById(clusterId: ClusterId): boolean {
+        return this.clusterServers.has(clusterId);
+    }
+
     hasClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
@@ -240,6 +263,10 @@ export class Endpoint implements EndpointInterface {
 
     setDeviceTypes(deviceTypes: AtLeastOne<DeviceTypeDefinition>): void {
         // Remove duplicates, for now we ignore that there could be different revisions
+        if (this.descriptorCluster === undefined) {
+            throw new ImplementationError(`Initializatipn not completed`);
+        }
+
         const deviceTypeList = new Map<number, DeviceTypeDefinition>();
         deviceTypes.forEach(deviceType => deviceTypeList.set(deviceType.code, deviceType));
         this.deviceTypes = Array.from(deviceTypeList.values()) as AtLeastOne<DeviceTypeDefinition>;
@@ -254,14 +281,16 @@ export class Endpoint implements EndpointInterface {
         );
     }
 
-    addChildEndpoint(endpoint: EndpointInterface): void {
+    async addChildEndpoint(endpoint: EndpointInterface): Promise<void> {
         if (endpoint.number !== undefined && this.getChildEndpoint(endpoint.number) !== undefined) {
-            throw new ImplementationError(`Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`);
+            throw new ImplementationError(
+                `Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`,
+            );
         }
 
         this.childEndpoints.push(endpoint);
         endpoint.setStructureChangedCallback(this.structureChangedCallback);
-        this.structureChangedCallback(); // Inform parent about structure change
+        await this.structureChangedCallback(); // Inform parent about structure change
     }
 
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
@@ -272,17 +301,17 @@ export class Endpoint implements EndpointInterface {
         return this.childEndpoints;
     }
 
-    protected removeChildEndpoint(endpoint: Endpoint): void {
+    protected async removeChildEndpoint(endpoint: Endpoint): Promise<void> {
         const index = this.childEndpoints.indexOf(endpoint);
         if (index === -1) {
             throw new ImplementationError(`Provided endpoint for deletion does not exist as child endpoint.`);
         }
         this.childEndpoints.splice(index, 1);
-        endpoint.removeFromStructure();
-        this.structureChangedCallback(); // Inform parent about structure change
+        await endpoint.removeFromStructure();
+        await this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    determineUniqueID(): string | undefined {
+    async determineUniqueID(): Promise<string | undefined> {
         // if the options in constructor contained a custom uniqueStorageKey, use this
         if (this.uniqueStorageKey !== undefined) {
             return `custom_${this.uniqueStorageKey}`;
@@ -290,8 +319,8 @@ export class Endpoint implements EndpointInterface {
         // Else we check if we have a basic information cluster or bridged device basic information cluster and
         // use the uniqueId or serial number, if provided
         const basicInformationCluster =
-            this.getClusterServer(BasicInformationCluster) ??
-            this.getClusterServer(BridgedDeviceBasicInformationCluster);
+            (await this.getClusterServer(BasicInformationCluster)) ??
+            (await this.getClusterServer(BridgedDeviceBasicInformationCluster));
         if (basicInformationCluster !== undefined) {
             const uniqueId = basicInformationCluster.getUniqueIdAttribute?.();
             if (uniqueId !== undefined) {
@@ -346,11 +375,16 @@ export class Endpoint implements EndpointInterface {
         return Array.from(this.clusterClients.values());
     }
 
-    updatePartsList() {
+    async updatePartsList() {
+        this.#construction.assert();
+        if (this.descriptorCluster === undefined) {
+            throw new ImplementationError(`Initializatipn not completed`);
+        }
+
         const newPartsList = new Array<EndpointNumber>();
 
         for (const child of this.childEndpoints) {
-            const childPartsList = child.updatePartsList();
+            const childPartsList = await child.updatePartsList();
 
             if (child.number === undefined) {
                 throw new InternalError(`Child endpoint has no id, can not add to parts list`);
@@ -360,7 +394,7 @@ export class Endpoint implements EndpointInterface {
             newPartsList.push(...childPartsList);
         }
 
-        this.descriptorCluster.attributes.partsList.setLocal(newPartsList);
+        await this.descriptorCluster.attributes.partsList.setLocal(newPartsList);
 
         return newPartsList;
     }

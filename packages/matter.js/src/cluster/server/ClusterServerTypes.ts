@@ -17,6 +17,7 @@ import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
 import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { Merge } from "../../util/Type.js";
 import { ClusterClientObj } from "../client/ClusterClientTypes.js";
 import {
@@ -141,8 +142,8 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
                 attributes: AttributeServers<C["attributes"]>;
                 events: EventServers<C["events"]>;
                 endpoint: EndpointInterface;
-            }) => void;
-            destroyClusterServer?: () => void;
+            }) => MaybePromise<void>;
+            destroyClusterServer?: () => MaybePromise<void>;
         }
     >
 >;
@@ -225,20 +226,22 @@ type ServerAttributeGetters<A extends Attributes> = {
     ) => GetterTypeFromSpec<A[P]>;
 };
 type ServerAttributeSetters<A extends Attributes> = {
-    [P in NonFixedAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (value: AttributeJsType<A[P]>) => void;
+    [P in NonFixedAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (
+        value: AttributeJsType<A[P]>,
+    ) => Promise<void>;
 } & {
     [P in FabricScopedAttributeNames<A> as `set${Capitalize<string & P>}Attribute`]: (
         value: AttributeJsType<A[P]>,
         fabric: Fabric,
-    ) => void;
+    ) => Promise<void>;
 };
 type ServerAttributeSubscribers<A extends Attributes> = {
     [P in NonFixedAttributeNames<A> as `subscribe${Capitalize<string & P>}Attribute`]: (
-        listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void,
+        listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => MaybePromise<void>,
     ) => void;
 } & {
     [P in FabricScopedAttributeNames<A> as `subscribe${Capitalize<string & P>}Attribute`]: (
-        listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => void,
+        listener: (newValue: AttributeJsType<A[P]>, oldValue: AttributeJsType<A[P]>) => MaybePromise<void>,
         fabric: Fabric,
     ) => void;
 };
@@ -248,8 +251,10 @@ export type EventServers<E extends Events> = Merge<
     { [P in OptionalEventNames<E>]?: EventServer<EventType<E[P]>> }
 >;
 type ServerEventTriggers<E extends Events> = {
-    [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => void;
-} & { [P in OptionalEventNames<E> as `trigger${Capitalize<string & P>}Event`]?: (event: EventType<E[P]>) => void };
+    [P in MandatoryEventNames<E> as `trigger${Capitalize<string & P>}Event`]: (event: EventType<E[P]>) => Promise<void>;
+} & {
+    [P in OptionalEventNames<E> as `trigger${Capitalize<string & P>}Event`]?: (event: EventType<E[P]>) => Promise<void>;
+};
 export type SupportedEventsList<E extends Events> = Merge<
     { [P in MandatoryEventNames<E>]: true },
     { [P in OptionalEventNames<E>]?: boolean }
@@ -263,8 +268,8 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
 export interface ClusterDatasource {
     readonly version: number;
     readonly eventHandler?: EventHandler;
-    increaseVersion(): number;
-    changed(key: string, value: SupportedStorageTypes): void;
+    increaseVersion(): Promise<number>;
+    changed(key: string, value: SupportedStorageTypes): Promise<void>;
 }
 
 export namespace ClusterDatasource {
@@ -295,7 +300,7 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
      * Cluster datasource
      * @readonly
      */
-    datasource?: ClusterDatasource;
+    datasource: ClusterDatasource;
 
     /**
      * Cluster attributes as named object that can be used to programmatically work with available attributes
@@ -377,7 +382,13 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      * Destroy internal cluster logics, timers and such
      * @private
      */
-    readonly _destroy: () => void;
+    readonly _destroy: () => Promise<void>;
+
+    /**
+     * Sets the cluster datasource
+     * @private
+     */
+    readonly _setDatasource: (newDatasource: ClusterDatasource | undefined) => Promise<void>;
 };
 
 export function isClusterServer<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(

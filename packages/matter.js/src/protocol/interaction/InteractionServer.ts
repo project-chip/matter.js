@@ -34,7 +34,12 @@ import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { toHexString } from "../../util/Number.js";
 import { decodeAttributeValueWithSchema, normalizeAttributeData } from "./AttributeDataDecoder.js";
-import { AttributeReportPayload, DataReportPayload, EventReportPayload } from "./AttributeDataEncoder.js";
+import {
+    AttributeReportPayload,
+    DataReportPayload,
+    EventDataPayload,
+    EventReportPayload,
+} from "./AttributeDataEncoder.js";
 import { InteractionEndpointStructure } from "./InteractionEndpointStructure.js";
 import {
     InteractionServerMessenger,
@@ -140,7 +145,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             for (const subscription of this.#subscriptionMap.values()) {
                 subscription.updateSubscription();
             }
-        })
+        });
     }
 
     getId() {
@@ -200,7 +205,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             );
         }
 
-        let attributeReportsPayload = new Array<AttributeReportPayload>();
+        const attributeReportsPayload = new Array<AttributeReportPayload>();
         for (const path of attributeRequests ?? []) {
             const attributes = this.#endpointStructure.getAttributes([path]);
             if (attributes.length === 0) {
@@ -239,7 +244,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 { attributeStatus: { path, status: { status: error.code } } }
                             );
                         },
-                    );                
+                    );
                 }
                 continue;
             }
@@ -313,7 +318,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     continue;
                 }
 
-                const reportsForPath = new Array();
+                const reportsForPath = new Array<{ eventData: EventDataPayload }>();
                 for (const { path, event } of events) {
                     const matchingEvents = this.#eventHandler.getEvents(path, eventFilters);
                     logger.debug(
@@ -336,7 +341,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     );
                 }
                 eventReportsPayload.push(
-                    ...reportsForPath.sort((a, b) => a.eventData.eventNumber - b.eventData.eventNumber),
+                    ...reportsForPath.sort((a, b) => {
+                        const eventNumberA = a.eventData?.eventNumber ?? 0;
+                        const eventNumberB = b.eventData?.eventNumber ?? 0;
+                        if (eventNumberA > eventNumberB) {
+                            return 1;
+                        } else if (eventNumberA < eventNumberB) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    }),
                 );
             }
         }
@@ -420,14 +435,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             if (path.clusterId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard cluster ID",
-                    StatusCode.InvalidAction
+                    StatusCode.InvalidAction,
                 );
             }
 
             if (path.attributeId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard attribute ID",
-                    StatusCode.InvalidAction
+                    StatusCode.InvalidAction,
                 );
             }
 
@@ -506,7 +521,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 if (dataVersion !== undefined) {
                     const datasource = this.#endpointStructure.getClusterServer(endpointId, clusterId)?.datasource;
-                    
+
                     if (datasource !== undefined && dataVersion !== datasource.version) {
                         logger.debug(
                             `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${datasource.version}).`,
@@ -620,7 +635,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     }
 
     protected async writeAttribute(attribute: AttributeServer<any>, value: any, session: Session<MatterDevice>) {
-        attribute.set(value, session);
+        await attribute.set(value, session);
     }
 
     async handleSubscribeRequest(

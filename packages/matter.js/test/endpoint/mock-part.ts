@@ -1,6 +1,7 @@
 import { Behavior } from "../../src/behavior/Behavior.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { AsyncConstruction } from "../../src/util/AsyncConstruction.js";
 import { MockContext, MockEndpoint } from "../behavior/mock-behavior.js";
 import { MockOwner } from "./mock-part-owner.js";
 
@@ -39,19 +40,29 @@ export class MockPart<T extends EndpointType> extends Part<T> {
         if (!options) {
             options = {};
         }
-        if (!("owner" in options)) {
-            options.owner = new MockOwner();
-        }
 
         super(definition, options);
+
+        const partConstruction = this._construction;
+        this._construction = AsyncConstruction(this, async () => {
+            await partConstruction;
+            if (!options) {
+                options = {};
+            }
+            if (!("owner" in options)) {
+                options.owner = new MockOwner();
+                await (options.owner as MockOwner).construction;
+            }
+        });
     }
 
     get mockAgent() {
         return this.getAgent(new MockContext());
     }
 
-    static createBehavior<T extends Behavior.Type>(type: T) {
+    static async createBehavior<T extends Behavior.Type>(type: T) {
         const part = new MockPart(MockEndpoint.with(type));
+        await part.construction;
         return part.mockAgent.get(type);
     }
 }

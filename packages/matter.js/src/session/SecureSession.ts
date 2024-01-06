@@ -340,7 +340,7 @@ export class SecureSession<T> implements Session<T> {
         return writer.toByteArray();
     }
 
-    getIncrementedMessageCounter() {
+    async getIncrementedMessageCounter() {
         return this.messageCounter.getIncrementedCounter();
     }
 

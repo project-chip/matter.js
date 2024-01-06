@@ -3,8 +3,9 @@
  * Copyright 2022 The matter.js Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+import { MaybePromise } from "./Promises.js";
 
-export type HandlerFunction = (...args: any[]) => any;
+export type HandlerFunction = (...args: any[]) => MaybePromise<any>;
 
 export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
     private handler: { action: keyof H; handler: H[keyof H] }[] = [];
@@ -33,7 +34,7 @@ export class NamedHandler<H extends Record<keyof H, HandlerFunction>> {
 }
 
 type ExtendPublicHandlerMethods<
-    ParentClass extends new (...args: any[]) => any,
+    ParentClass extends new (...args: any[]) => MaybePromise<any>,
     H extends Record<keyof H, HandlerFunction>,
 > = ParentClass extends new (...args: infer TArgs) => infer T
     ? new (...args: TArgs) => T & {
@@ -44,7 +45,7 @@ type ExtendPublicHandlerMethods<
     : never;
 
 export function extendPublicHandlerMethods<
-    ParentClass extends new (...args: any[]) => any,
+    ParentClass extends new (...args: any[]) => MaybePromise<any>,
     H extends Record<keyof H, HandlerFunction>,
 >(parentClass: ParentClass): ExtendPublicHandlerMethods<ParentClass, H> {
     // This is a type-level cheat

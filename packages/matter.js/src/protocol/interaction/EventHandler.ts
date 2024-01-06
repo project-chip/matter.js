@@ -12,6 +12,7 @@ import { EventId } from "../../datatype/EventId.js";
 import { Logger } from "../../log/Logger.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { AsyncConstruction } from "../../util/AsyncConstruction.js";
 import { TlvEventFilter, TlvEventPath } from "./InteractionProtocol.js";
 
 const logger = Logger.get("EventHandler");
@@ -49,10 +50,17 @@ export class EventHandler {
         [EventPriority.Info]: new Array<EventStorageData<any>>(),
         [EventPriority.Debug]: new Array<EventStorageData<any>>(),
     };
+    #construction: AsyncConstruction<EventHandler>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(private readonly eventStorage: StorageContext) {
-        this.eventNumber = this.eventStorage.get("lastEventNumber", this.eventNumber);
-        logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
+        this.#construction = AsyncConstruction(this, async () => {
+            this.eventNumber = await this.eventStorage.get("lastEventNumber", this.eventNumber);
+            logger.debug(`Set/Restore last event number: ${this.eventNumber}`);
+        });
     }
 
     getEvents(eventPath: TypeFromSchema<typeof TlvEventPath>, filters?: TypeFromSchema<typeof TlvEventFilter>[]) {
@@ -82,7 +90,7 @@ export class EventHandler {
         return events;
     }
 
-    pushEvent(event: EventData<any>) {
+    async pushEvent(event: EventData<any>) {
         const eventData = {
             eventNumber: ++this.eventNumber,
             ...event,
@@ -90,7 +98,7 @@ export class EventHandler {
         logger.debug(`Received event: ${JSON.stringify(eventData)}`);
         this.events[event.priority].push(eventData);
         this.storedEventCount++;
-        this.eventStorage.set("lastEventNumber", this.eventNumber);
+        await this.eventStorage.set("lastEventNumber", this.eventNumber);
         this.cleanUpEvents();
         return eventData;
     }

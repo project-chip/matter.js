@@ -6,39 +6,45 @@
 
 import { Part } from "../../../src/endpoint/Part.js";
 import { Lifecycle } from "../../../src/endpoint/part/Lifecycle.js";
-import { MockPart } from "../mock-part.js";
 import { MockEndpoint } from "../../behavior/mock-behavior.js";
+import { MockPart } from "../mock-part.js";
 
-function createParent() {
-    return new MockPart(MockEndpoint, { number: 1 }).agent;
+async function createParent() {
+    const part = new MockPart(MockEndpoint, { number: 1 });
+    await part.construction;
+    return part.agent;
 }
 
-function createParentAndChild() {
-    return new MockPart(MockEndpoint, { number: 2, owner: undefined });
+async function createParentAndChild() {
+    const part = new MockPart(MockEndpoint, { number: 2, owner: undefined });
+    await part.construction;
+    return part;
 }
 
-function createChild() {
-    return new MockPart(MockEndpoint, { number: 3, owner: undefined });
+async function createChild() {
+    const part = new MockPart(MockEndpoint, { number: 3, owner: undefined });
+    await part.construction;
+    return part;
 }
 
 describe("Parts", () => {
-    it("adopts parts", () => {
-        const parent = createParent();
-        const child = createChild();
+    it("adopts parts", async () => {
+        const parent = await createParent();
+        const child = await createChild();
 
         const parts = parent.part.parts;
-        parts.add(child);
+        await parts.add(child);
 
         expect(parts.size).equals(1);
         expect(child.owner).equals(parent.part);
     });
 
     it("disowns destroyed parts", async () => {
-        const parent = createParent();
-        const child = createChild();
+        const parent = await createParent();
+        const child = await createChild();
 
         const parts = parent.part.parts;
-        parts.add(child);
+        await parts.add(child);
 
         expect(parts.size).equals(1);
 
@@ -47,39 +53,36 @@ describe("Parts", () => {
         expect(parts.size).equals(0);
     });
 
-    it("bubbles initialization", () => {
-        const parent = createParent();
-        const child = createParentAndChild();
-        const grandchild = createChild();
+    it("bubbles initialization", async () => {
+        const parent = await createParent();
+        const child = await createParentAndChild();
+        const grandchild = await createChild();
 
-        parent.part.parts.add(child);
+        await parent.part.parts.add(child);
 
-        let bubbled = Array<Lifecycle.Change>();
+        const bubbled = Array<Lifecycle.Change>();
         parent.part.lifecycle.changed.on((type, part) => {
             expect(part).equals(grandchild);
             bubbled.push(type);
         });
 
-        child.parts.add(grandchild);
+        await child.parts.add(grandchild);
 
-        expect(bubbled).deep.equals([
-            Lifecycle.Change.Installed,
-            Lifecycle.Change.Ready
-        ]);
+        expect(bubbled).deep.equals([Lifecycle.Change.Installed, Lifecycle.Change.Ready]);
     });
 
     it("bubbles destruction", async () => {
-        const parent = createParent();
-        const child = createParentAndChild();
-        const grandchild = createChild();
+        const parent = await createParent();
+        const child = await createParentAndChild();
+        const grandchild = await createChild();
 
-        parent.part.parts.add(child);
-        child.parts.add(grandchild);
+        await parent.part.parts.add(child);
+        await child.parts.add(grandchild);
 
         let bubbled: Part | undefined;
         parent.part.lifecycle.changed.on((type, part) => {
             expect(type).equals(Lifecycle.Change.Destroyed);
-            (bubbled = part)
+            bubbled = part;
         });
 
         await grandchild.destroy();

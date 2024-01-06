@@ -21,8 +21,8 @@ export const GeneralCommissioningClusterHandler: (options?: {
     /** If set, only these country codes are allowed to be set when changing country is allowed. */
     countryCodeWhitelist?: string[];
 }) => ClusterServerHandlers<typeof GeneralCommissioningCluster> = options => ({
-    initializeClusterServer: ({ attributes: { breadcrumb } }) => {
-        breadcrumb.setLocal(BigInt(0));
+    initializeClusterServer: async ({ attributes: { breadcrumb } }) => {
+        await breadcrumb.setLocal(BigInt(0));
     },
 
     armFailSafe: async ({
@@ -42,7 +42,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
             // relatively short commissioning window.
             if (
                 !device.isFailsafeArmed() &&
-                endpoint.getClusterServer(AdministratorCommissioning.Cluster)?.getWindowStatusAttribute() !==
+                (await endpoint.getClusterServer(AdministratorCommissioning.Cluster))?.getWindowStatusAttribute() !==
                     AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen &&
                 !session.isPase()
             ) {
@@ -58,7 +58,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
 
             if (device.isFailsafeArmed()) {
                 // If failsafe is armed after the command, set breadcrumb (not when expired)
-                breadcrumb.setLocal(breadcrumbStep);
+                await breadcrumb.setLocal(breadcrumbStep);
             }
         } catch (error) {
             if (error instanceof MatterFlowError) {
@@ -82,7 +82,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         const locationCapabilityValue = locationCapability.getLocal();
 
         // Check and handle country code
-        const basicInformationCluster = endpoint.getClusterServer(BasicInformationCluster);
+        const basicInformationCluster = await endpoint.getClusterServer(BasicInformationCluster);
         if (basicInformationCluster === undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be present on the root endpoint");
         }
@@ -102,7 +102,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 };
             }
             if (countryCode !== "XX") {
-                basicInformationCluster.setLocationAttribute(countryCode);
+                await basicInformationCluster.setLocationAttribute(countryCode);
             }
         }
 
@@ -140,9 +140,9 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 }`,
             };
         }
-        regulatoryConfig.setLocal(newRegulatoryConfig);
+        await regulatoryConfig.setLocal(newRegulatoryConfig);
 
-        breadcrumb.setLocal(breadcrumbStep);
+        await breadcrumb.setLocal(breadcrumbStep);
         return SuccessResponse;
     },
 
@@ -176,7 +176,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         await device.completeCommission();
 
         // 5. The Breadcrumb attribute SHALL be reset to zero.
-        breadcrumb.setLocal(BigInt(0));
+        await breadcrumb.setLocal(BigInt(0));
 
         logger.info(`Commissioning completed on fabric #${fabric.fabricId} as node #${fabric.nodeId}.`);
 

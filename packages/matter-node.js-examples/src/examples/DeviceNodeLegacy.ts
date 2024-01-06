@@ -116,30 +116,30 @@ class Device {
 
         const deviceStorage = storageManager.createContext("Device");
 
-        if (deviceStorage.has("isSocket")) {
+        if (await deviceStorage.has("isSocket")) {
             logger.info("Device type found in storage. -type parameter is ignored.");
         }
-        const isSocket = deviceStorage.get("isSocket", getParameter("type") === "socket");
+        const isSocket = await deviceStorage.get("isSocket", getParameter("type") === "socket");
         const deviceName = "Matter test device";
         const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
-        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
+        const passcode = getIntParameter("passcode") ?? (await deviceStorage.get("passcode", 20202021));
+        const discriminator = getIntParameter("discriminator") ?? (await deviceStorage.get("discriminator", 3840));
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+        const vendorId = getIntParameter("vendorid") ?? (await deviceStorage.get("vendorid", 0xfff1));
         const productName = `node-matter OnOff ${isSocket ? "Socket" : "Light"}`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
+        const productId = getIntParameter("productid") ?? (await deviceStorage.get("productid", 0x8000));
 
         const netInterface = getParameter("netinterface");
         const port = getIntParameter("port") ?? 5540;
 
-        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+        const uniqueId = getIntParameter("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs()));
 
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("isSocket", isSocket);
-        deviceStorage.set("uniqueid", uniqueId);
+        await deviceStorage.set("passcode", passcode);
+        await deviceStorage.set("discriminator", discriminator);
+        await deviceStorage.set("vendorid", vendorId);
+        await deviceStorage.set("productid", productId);
+        await deviceStorage.set("isSocket", isSocket);
+        await deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Device instance and add needed Listener
@@ -153,7 +153,7 @@ class Device {
          * like identify that can be implemented with the logic when these commands are called.
          */
 
-        const onOffDevice = isSocket ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+        const onOffDevice = isSocket ? await OnOffPluginUnitDevice.create() : await OnOffLightDevice.create();
         onOffDevice.addOnOffListener(on => commandExecutor(on ? "on" : "off")?.());
 
         onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
@@ -175,7 +175,7 @@ class Device {
 
         this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
 
-        const commissioningServer = new CommissioningServer({
+        const commissioningServer = await CommissioningServer.create({
             port,
             deviceName,
             deviceType: DeviceTypeId(onOffDevice.deviceType),
@@ -226,10 +226,10 @@ class Device {
             // purposes and just "simulates" the actions to be done. In a real world implementation this would be done by
             // the device implementor based on the relevant networking stack.
             // The NetworkCommissioningCluster and all logics are described in Matter Core Specifications section 11.8
-            commissioningServer.addRootClusterServer(DummyWifiNetworkCommissioningClusterServer);
+            await commissioningServer.addRootClusterServer(DummyWifiNetworkCommissioningClusterServer);
         }
 
-        commissioningServer.addDevice(onOffDevice);
+        await commissioningServer.addDevice(onOffDevice);
 
         await this.matterServer.addCommissioningServer(commissioningServer);
 

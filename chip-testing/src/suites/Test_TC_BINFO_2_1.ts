@@ -22,7 +22,7 @@ export class Test_TC_BINFO_2_1 extends Test_TC_BINFO_1_1 {
             return "y\n";
         }
         if (testDescription.includes("Verify that the Location is same as CountryCode value saved from")) {
-            const basicInfo = this.commissioningServer?.getRootClusterServer(BasicInformation.Cluster);
+            const basicInfo = await this.commissioningServer?.getRootClusterServer(BasicInformation.Cluster);
             console.log(basicInfo?.getLocationAttribute());
             if (basicInfo?.getLocationAttribute() === "XX") {
                 return "y\n";

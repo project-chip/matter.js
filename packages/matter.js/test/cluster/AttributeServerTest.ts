@@ -35,25 +35,25 @@ class MockClusterDatasource implements ClusterDatasource {
         return this.#version;
     }
 
-    increaseVersion() {
+    async increaseVersion() {
         return ++this.#version;
     }
 
-    changed() {}
+    async changed() {}
 }
 
 interface CreateOptions<T> {
-    id: AttributeId,
-    name: string,
-    schema: TlvSchema<T>,
-    isWritable: boolean,
-    isSubscribable: boolean,
-    requiresTimedInteraction: boolean,
-    defaultValue: T,
-    readonly datasource: ClusterDatasource,
-    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
-    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
+    id: AttributeId;
+    name: string;
+    schema: TlvSchema<T>;
+    isWritable: boolean;
+    isSubscribable: boolean;
+    requiresTimedInteraction: boolean;
+    defaultValue: T;
+    readonly datasource: ClusterDatasource;
+    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T;
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>;
+    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 }
 
 function withDefaults(options: Partial<CreateOptions<number>>) {
@@ -65,9 +65,9 @@ function withDefaults(options: Partial<CreateOptions<number>>) {
         isSubscribable: false,
         requiresTimedInteraction: false,
         defaultValue: 3,
-        datasource: new MockClusterDatasource,
-        ...options
-    } as CreateOptions<number>
+        datasource: new MockClusterDatasource(),
+        ...options,
+    } as CreateOptions<number>;
 }
 
 describe("AttributeServerTest", () => {
@@ -75,9 +75,9 @@ describe("AttributeServerTest", () => {
         function create(options: Partial<CreateOptions<number>> = {}) {
             const config = withDefaults({
                 isWritable: false,
-                ...options
+                ...options,
             });
-        
+
             return new FixedAttributeServer(
                 config.id,
                 config.name,
@@ -128,7 +128,7 @@ describe("AttributeServerTest", () => {
                 config.getter,
                 config.setter,
                 config.validator,
-            )
+            );
         }
 
         it("should return the value set in the constructor", () => {
@@ -136,7 +136,7 @@ describe("AttributeServerTest", () => {
             expect(server.getLocal()).equal(3);
         });
 
-        it("should set the value locally and trigger listeners on change", () => {
+        it("should set the value locally and trigger listeners on change", async () => {
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
@@ -152,7 +152,7 @@ describe("AttributeServerTest", () => {
             });
 
             expect(server.getLocal()).equal(3);
-            server.setLocal(4);
+            await server.setLocal(4);
             expect(server.getLocal()).equal(4);
             expect(valueTriggered).equal(4);
             expect(versionTriggered).equal(1);
@@ -160,7 +160,7 @@ describe("AttributeServerTest", () => {
             expect(oldValueTriggered2).equal(3);
         });
 
-        it("should set the value locally and trigger listeners on non change", () => {
+        it("should set the value locally and trigger listeners on non change", async () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = create({ isWritable: false });
@@ -173,16 +173,16 @@ describe("AttributeServerTest", () => {
             });
 
             expect(server.getLocal()).equal(3);
-            server.setLocal(3);
+            await server.setLocal(3);
             expect(server.getLocal()).equal(3);
             expect(valueTriggered2).equal(3);
             expect(oldValueTriggered2).equal(3);
         });
 
-        it("should throw an error if the value is set non locally and not writable", () => {
+        it("should throw an error if the value is set non locally and not writable", async () => {
             const server = create({ isWritable: false });
             expect(server.getLocal()).equal(3);
-            expect(() => server.set(4, {} as SecureSession<MatterDevice>)).throws(
+            await expect(server.set(4, {} as SecureSession<MatterDevice>)).rejectedWith(
                 '(136) Attribute "test" is not writable.',
             );
         });
@@ -192,17 +192,20 @@ describe("AttributeServerTest", () => {
             expect(server.getLocal()).equal(4);
         });
 
-        it("should return the value from getter also with setter but increased version on change", () => {
+        it("should return the value from getter also with setter but increased version on change", async () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return true; },
+                setter: async value => {
+                    valueSet = value;
+                    return true;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.setLocal(5);
+            await server.setLocal(5);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 1,
@@ -211,17 +214,20 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(1);
         });
 
-        it("should return the value from getter also with setter but not increased version when no change", () => {
+        it("should return the value from getter also with setter but not increased version when no change", async () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: async value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.setLocal(5);
+            await server.setLocal(5);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
@@ -230,18 +236,21 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(0);
         });
 
-        it("should return the value from getter and increased version after update", () => {
+        it("should return the value from getter and increased version after update", async () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: async value => {
+                    valueSet = value;
+                    return false;
+                },
             });
 
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.updated({} as SecureSession<MatterDevice>);
+            await server.updated({} as SecureSession<MatterDevice>);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 1,
@@ -250,7 +259,7 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(1);
         });
 
-        it("should trigger listeners with getter also with setter but increased version on change", () => {
+        it("should trigger listeners with getter also with setter but increased version on change", async () => {
             let valueSet: number | undefined = undefined;
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;
@@ -258,7 +267,10 @@ describe("AttributeServerTest", () => {
             let oldValueTriggered2: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return true; },
+                setter: async value => {
+                    valueSet = value;
+                    return true;
+                },
             });
             server.addValueChangeListener((value, version) => {
                 valueTriggered = value;
@@ -272,7 +284,7 @@ describe("AttributeServerTest", () => {
                 value: 4,
                 version: 0,
             });
-            server.setLocal(5);
+            await server.setLocal(5);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 1,
@@ -285,13 +297,16 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(1);
         });
 
-        it("should return the value from getter also with setter but not increased version when no change", () => {
+        it("should return the value from getter also with setter but not increased version when no change", async () => {
             let valueSet: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: async value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             server.addValueChangeListener(() => {
                 throw new Error("Should not be triggered");
@@ -304,7 +319,7 @@ describe("AttributeServerTest", () => {
                 value: 4,
                 version: 0,
             });
-            server.setLocal(5);
+            await server.setLocal(5);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
@@ -315,17 +330,20 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(0);
         });
 
-        it("should return the value from getter and increased version after update", () => {
+        it("should return the value from getter and increased version after update", async () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: async value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 0,
             });
-            server.updated({} as SecureSession<MatterDevice>);
+            await server.updated({} as SecureSession<MatterDevice>);
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
                 version: 1,
@@ -354,7 +372,12 @@ describe("AttributeServerTest", () => {
 
         it("setter is not called when initialized", () => {
             let setterCalled = false;
-            const server = create({ setter: () => { setterCalled = true; return true } });
+            const server = create({
+                setter: async () => {
+                    setterCalled = true;
+                    return true;
+                },
+            });
             server.init(1);
             expect(setterCalled).equal(false);
         });
@@ -364,22 +387,27 @@ describe("AttributeServerTest", () => {
                 () => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })
             ).throws(
                 'Validation error for attribute "test": (Validation/135) Invalid value: 3 is above the maximum, 2.'
+            ,
             );
         });
 
-        it("should throw an error if set value is invalid according to schema validator", () => {
+        it("should throw an error if set value is invalid according to schema validator", async () => {
             const server = create({
                 schema: TlvUInt8.bound({ min: 0, max: 3 }),
-                setter: () => true,
+                setter: async () => true,
             });
-            expect(() => server.setLocal(11)).throw(
+            await expect(server.setLocal(11)).rejectedWith(
                 'Validation error for attribute "test": (Validation/135) Invalid value: 11 is above the maximum, 3.',
             );
         });
 
-        it("should throw an error if set value is invalid according to custom validator only on set", () => {
-            const server = create({ validator: () => { throw Error("Validator error") } });
-            expect(() => server.setLocal(11)).throw("Validator error");
+        it("should throw an error if set value is invalid according to custom validator only on set", async () => {
+            const server = create({
+                validator: () => {
+                    throw Error("Validator error");
+                },
+            });
+            await expect(server.setLocal(11)).rejectedWith("Validator error");
         });
     });
 
@@ -403,7 +431,6 @@ describe("AttributeServerTest", () => {
                 ZERO,
                 ZERO,
                 "",
-
             );
 
             const config = withDefaults(options);
@@ -422,7 +449,7 @@ describe("AttributeServerTest", () => {
                 config.getter,
                 config.setter,
                 config.validator,
-            )
+            );
         }
 
         it("should return the value set in the constructor if fabric context is empty", () => {
@@ -430,26 +457,26 @@ describe("AttributeServerTest", () => {
             expect(server.getLocalForFabric(testFabric)).equal(3);
         });
 
-        it("should return the value from fabric context if set", () => {
+        it("should return the value from fabric context if set", async () => {
             const server = create();
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
-        it("should return the value from fabric scoped storage when changed", () => {
+        it("should return the value from fabric scoped storage when changed", async () => {
             const server = create();
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.getLocalForFabric(testFabric)).equal(5);
         });
 
-        it("should update the value from fabric scoped storage when set and trigger listeners", () => {
+        it("should update the value from fabric scoped storage when set and trigger listeners", async () => {
             let valueTriggered: number | undefined = undefined;
             let versionTriggered: number | undefined = undefined;
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
             const server = create();
 
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             server.addValueChangeListener((value, version) => {
                 valueTriggered = value;
@@ -460,7 +487,7 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            server.setLocalForFabric(7, testFabric);
+            await server.setLocalForFabric(7, testFabric);
             expect(server.getLocalForFabric(testFabric)).equal(7);
             expect(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test")).deep.equal({ value: 7 });
             expect(valueTriggered).equal(7);
@@ -470,12 +497,12 @@ describe("AttributeServerTest", () => {
             expect(datasource.version).equal(1);
         });
 
-        it("should handle the value from fabric scoped storage when set and trigger ony external listeners", () => {
+        it("should handle the value from fabric scoped storage when set and trigger ony external listeners", async () => {
             let valueTriggered2: number | undefined = undefined;
             let oldValueTriggered2: number | undefined = undefined;
 
             const server = create({ isWritable: true });
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             server.addValueChangeListener(() => {
                 throw new Error("Should not be triggered");
@@ -485,7 +512,7 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            server.setLocalForFabric(5, testFabric);
+            await server.setLocalForFabric(5, testFabric);
             expect(server.getLocalForFabric(testFabric)).equal(5);
             expect(testFabric.getScopedClusterDataValue(BasicInformationCluster, "test")).deep.equal({ value: 5 });
             expect(valueTriggered2).equal(5);
@@ -493,32 +520,32 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if only getter is implemented but writable", () => {
-            expect(
-                () => create({ isWritable: true, getter: () => 7 })
-            ).throw('Getter and setter must be implemented together writeable fabric scoped attribute "test".');
+            expect(() => create({ isWritable: true, getter: () => 7 })).throw(
+                'Getter and setter must be implemented together writeable fabric scoped attribute "test".',
+            );
         });
 
-        it("should throw an error when trying to get getter method value locally", () => {
+        it("should throw an error when trying to get getter method value locally", async () => {
             const server = create({ getter: () => 7 });
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
 
             expect(() => server.getLocalForFabric(testFabric)).throw(
                 'Fabric scoped attribute "test" can not be read locally when a custom getter is defined.',
             );
         });
 
-        it("should return value from getter when used non-locally", () => {
+        it("should return value from getter when used non-locally", async () => {
             const server = create({ getter: () => 7 });
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
-            testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
+            await testFabric.setScopedClusterDataValue(BasicInformationCluster, "test", { value: 5 });
             expect(server.get(testSession, true)).equal(7);
         });
 
-        it("should use getter and setter and trigger listeners", () => {
+        it("should use getter and setter and trigger listeners", async () => {
             const server = create({
                 isWritable: true,
                 getter: () => 7,
-                setter: () => true
+                setter: async () => true,
             });
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
 
@@ -537,7 +564,7 @@ describe("AttributeServerTest", () => {
                 oldValueTriggered2 = oldValue;
             });
 
-            server.set(9, testSession);
+            await server.set(9, testSession);
             expect(server.get(testSession, false)).equal(7);
             expect(valueTriggered).equal(9);
             expect(versionTriggered).equal(1);

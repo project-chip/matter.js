@@ -18,7 +18,7 @@ describe("StorageManager", () => {
 
         const storageContext = storageManager.createContext("context");
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
         const valueFromStorage = storageContext.get("key");
         expect(valueFromStorage).equal("value");
@@ -55,7 +55,7 @@ describe("StorageManager", () => {
         const storageContext1 = storageManager.createContext("context");
         const storageContext2 = storageManager.createContext("context");
 
-        storageContext1.set("key", "value");
+        await storageContext1.set("key", "value");
 
         const valueFromStorage2 = storageContext2.get("key");
         expect(valueFromStorage2).equal("value");
@@ -73,7 +73,7 @@ describe("StorageManager", () => {
         const storageContext2 = storageManager.createContext("context");
         const storageSubContext2 = storageContext2.createContext("subcontext");
 
-        storageSubContext1.set("key", "value");
+        await storageSubContext1.set("key", "value");
 
         const valueFromStorage2 = storageSubContext2.get("key");
         expect(valueFromStorage2).equal("value");

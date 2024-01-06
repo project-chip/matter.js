@@ -77,8 +77,8 @@ describe("GeneralCommissioning Server test", () => {
         testSession = await createTestSessionWithFabric();
 
         endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-        endpoint.addClusterServer(basicInformationServer);
-        endpoint.addClusterServer(generalCommissioningServer);
+        await endpoint.addClusterServer(basicInformationServer);
+        await endpoint.addClusterServer(generalCommissioningServer);
     }
 
     describe("setRegulatoryConfig: Allow changing commissionable info and country", () => {

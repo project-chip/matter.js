@@ -37,7 +37,7 @@ export default function commands(theNode: MatterNode) {
             await theNode.iterateNodeDevices(
                 await theNode.connectAndGetNodes(nodeId),
                 async (device, node) => {
-                    const identifyCluster = device.getClusterClient(IdentifyCluster);
+                    const identifyCluster = await device.getClusterClient(IdentifyCluster);
                     if (identifyCluster === undefined) {
                         return;
                     }

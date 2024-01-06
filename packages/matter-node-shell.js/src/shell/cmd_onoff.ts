@@ -37,7 +37,7 @@ export default function commands(theNode: MatterNode) {
             await theNode.iterateNodeDevices(
                 await theNode.connectAndGetNodes(nodeId),
                 async device => {
-                    const onOff = device.getClusterClient(OnOffCluster);
+                    const onOff = await device.getClusterClient(OnOffCluster);
                     if (onOff === undefined) {
                         return;
                     }

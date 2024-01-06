@@ -1,18 +1,18 @@
+import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { Val } from "../../../behavior/state/managed/Val.js";
+import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
+import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
-import { PartStore } from "../../../endpoint/storage/PartStore.js";
-import { logger } from "./ServerStore.js";
-import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
-import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { logger } from "./ServerStore.js";
 
 const NUMBER_KEY = "__number__";
 const KNOWN_KEY = "__known__";
 
 /**
  * The server implementation of {@link PartStore}.
- * 
+ *
  * Manages storage for a specific endpoint.
  */
 export class ServerPartStore implements PartStore {
@@ -35,7 +35,7 @@ export class ServerPartStore implements PartStore {
 
     get number() {
         this.#construction.assert();
-        
+
         return this.#number;
     }
 
@@ -53,30 +53,27 @@ export class ServerPartStore implements PartStore {
         this.#storage = storage.createContext(partId);
         this.#isNew = isNew;
 
-        this.#construction = AsyncConstruction(
-            this,
-            () => {
-                if (isNew) {
-                    return;
-                }
-                return this.#load(partId);
+        this.#construction = AsyncConstruction(this, () => {
+            if (isNew) {
+                return;
             }
-        )
+            return this.#load(partId);
+        });
     }
 
     async #load(partId: string) {
-        this.#knownBehaviors = new Set(this.#storage.get(KNOWN_KEY, Array<string>()));
+        this.#knownBehaviors = new Set(await this.#storage.get(KNOWN_KEY, Array<string>()));
 
         for (const behaviorId of this.#knownBehaviors) {
-            const behaviorValues = this.#initialValues[behaviorId] = {} as Val.Struct;
+            const behaviorValues = (this.#initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
-            for (const key of behaviorStorage.keys()) {
-                behaviorValues[key] = behaviorStorage.get(key);
+            for (const key of await behaviorStorage.keys()) {
+                behaviorValues[key] = await behaviorStorage.get(key);
             }
         }
 
-        const number = this.#storage.get(NUMBER_KEY, -1) as number | undefined;
+        const number = (await this.#storage.get(NUMBER_KEY, -1)) as number | undefined;
         if (number !== -1) {
             this.#number = number;
         } else {
@@ -93,7 +90,7 @@ export class ServerPartStore implements PartStore {
     async saveNumber() {
         await this.#construction;
 
-        this.#storage.set(NUMBER_KEY, this.number);
+        await this.#storage.set(NUMBER_KEY, this.number);
     }
 
     async set(values: Record<string, undefined | Val.Struct>) {
@@ -107,7 +104,7 @@ export class ServerPartStore implements PartStore {
 
             if (behaviorValues === undefined) {
                 if (this.#knownBehaviors.has(behaviorId)) {
-                    behaviorStorage.clearAll();
+                    await behaviorStorage.clearAll();
                     this.#knownBehaviors.delete(behaviorId);
                     persistKnown = true;
                 }
@@ -122,21 +119,21 @@ export class ServerPartStore implements PartStore {
             for (const key in behaviorValues) {
                 const value = behaviorValues[key];
                 if (value === undefined) {
-                    behaviorStorage.delete(key);
+                    await behaviorStorage.delete(key);
                 } else {
-                    behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
+                    await behaviorStorage.set(key, behaviorValues[key] as SupportedStorageTypes);
                 }
             }
         }
 
         if (persistKnown) {
-            this.#storage.set(KNOWN_KEY, [ ...this.#knownBehaviors ]);
+            await this.#storage.set(KNOWN_KEY, [...this.#knownBehaviors]);
         }
     }
 
     async delete() {
         await this.#construction;
 
-        this.#storage.clearAll();
+        await this.#storage.clearAll();
     }
 }

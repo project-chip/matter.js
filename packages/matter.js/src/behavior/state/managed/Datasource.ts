@@ -50,11 +50,11 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
 
     /**
      * Persist non-volatile values modified without a transaction.
-     * 
+     *
      * Currently will throw an error if resources cannot be locked.  And
      * transaction isolation means values may be overwritten in a shared
      * environment.
-     * 
+     *
      * So this is intended for use in non-shared contexts like behavior
      * initialization.
      */
@@ -175,8 +175,8 @@ function configure(options: Datasource.Options): Internals {
 
     const initialValues = {
         ...options.defaults,
-        ...options.store?.initialValues
-    }
+        ...options.store?.initialValues,
+    };
     for (const key in initialValues) {
         values[key] = initialValues[key];
     }
@@ -245,7 +245,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
                 // Upgrade transaction if not already exclusive
                 transaction.beginSync();
-        
+
                 // Clone values if we haven't already
                 if (values === internals.values) {
                     const old = values;
@@ -267,7 +267,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
          * Post-processing for non-transactional changes, which take immediate
          * effect.
          */
-        notify(index?: string, oldValue?: Val, newValue?: Val) {
+        async notify(index?: string, oldValue?: Val, newValue?: Val) {
             // Index should be set because we only parent a struct reference
             if (!index) {
                 return;
@@ -285,7 +285,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
             const event = internals.events?.[index];
             if (event) {
-                event.emit(newValue, oldValue, session);
+                await event.emit(newValue, oldValue, session);
             }
         },
 
@@ -364,7 +364,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     /**
      * For commit phase one we pass values to the persistence layer if present.
      */
-    function commit1() {
+    async function commit1() {
         computeChanges();
 
         // No phase one commit if there are not persistent changes
@@ -377,14 +377,14 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             throw new InternalError("Datasource commit triggered without transaction");
         }
 
-        return internals.store?.set(session.transaction, persistent);
+        await internals.store?.set(session.transaction, persistent);
     }
 
     /**
      * For commit phase two we make the working values canonical and notify
      * listeners.
      */
-    function commit2() {
+    async function commit2() {
         internals.values = values;
 
         // Any lingering changes we are not responsible for persist here
@@ -396,7 +396,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         if (internals.events) {
             for (const notification of changes.notifications) {
-                notification.event.emit(...notification.params);
+                await notification.event.emit(...notification.params);
             }
         }
     }

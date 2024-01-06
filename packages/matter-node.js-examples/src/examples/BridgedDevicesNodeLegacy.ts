@@ -105,23 +105,23 @@ class BridgedDevice {
         const deviceName = "Matter Bridge device";
         const deviceType = DeviceTypes.AGGREGATOR.code;
         const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
-        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
+        const passcode = getIntParameter("passcode") ?? (await deviceStorage.get("passcode", 20202021));
+        const discriminator = getIntParameter("discriminator") ?? (await deviceStorage.get("discriminator", 3840));
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+        const vendorId = getIntParameter("vendorid") ?? (await deviceStorage.get("vendorid", 0xfff1));
         const productName = `node-matter OnOff-Bridge`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
+        const productId = getIntParameter("productid") ?? (await deviceStorage.get("productid", 0x8000));
 
         const netInterface = getParameter("netinterface");
         const port = getIntParameter("port") ?? 5540;
 
-        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+        const uniqueId = getIntParameter("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs()));
 
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("uniqueid", uniqueId);
+        await deviceStorage.set("passcode", passcode);
+        await deviceStorage.set("discriminator", discriminator);
+        await deviceStorage.set("vendorid", vendorId);
+        await deviceStorage.set("productid", productId);
+        await deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -138,7 +138,7 @@ class BridgedDevice {
 
         this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
 
-        const commissioningServer = new CommissioningServer({
+        const commissioningServer = await CommissioningServer.create({
             port,
             deviceName,
             deviceType,
@@ -167,12 +167,14 @@ class BridgedDevice {
          * like identify that can be implemented with the logic when these commands are called.
          */
 
-        const aggregator = new Aggregator();
+        const aggregator = await Aggregator.create();
 
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
             const onOffDevice =
-                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
+                getParameter(`type${i}`) === "socket"
+                    ? await OnOffPluginUnitDevice.create()
+                    : await OnOffLightDevice.create();
 
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
@@ -182,7 +184,7 @@ class BridgedDevice {
             );
 
             const name = `OnOff ${onOffDevice instanceof OnOffPluginUnitDevice ? "Socket" : "Light"} ${i}`;
-            aggregator.addBridgedDevice(onOffDevice, {
+            await aggregator.addBridgedDevice(onOffDevice, {
                 nodeLabel: name,
                 productName: name,
                 productLabel: name,
@@ -191,7 +193,7 @@ class BridgedDevice {
             });
         }
 
-        commissioningServer.addDevice(aggregator);
+        await commissioningServer.addDevice(aggregator);
 
         await this.matterServer.addCommissioningServer(commissioningServer);
 

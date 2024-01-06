@@ -42,22 +42,29 @@ describe("FailSafeManager Test", () => {
             );
 
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
-            rootEndpoint.addClusterServer(networkServer1);
+            await rootEndpoint.addClusterServer(networkServer1);
             const otherEndpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            otherEndpoint.addClusterServer(networkServer2);
-            rootEndpoint.addChildEndpoint(otherEndpoint);
+            await otherEndpoint.addClusterServer(networkServer2);
+            await rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const failSafe = new FailSafeManager({} as any, undefined, 100, 100, () => Promise.resolve(), rootEndpoint);
+            const failSafe = await FailSafeManager.create(
+                {} as any,
+                undefined,
+                100,
+                100,
+                () => Promise.resolve(),
+                rootEndpoint,
+            );
 
             // Now lets change network details
             const newNetworkId = new ByteArray(32);
             newNetworkId[0] = 1;
-            networkServer1.setNetworksAttribute([{ networkId: newNetworkId, connected: false }]);
-            networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);
+            await networkServer1.setNetworksAttribute([{ networkId: newNetworkId, connected: false }]);
+            await networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);
 
             // Restore network data
-            failSafe.restoreEndpointState();
+            await failSafe.restoreEndpointState();
 
             // Check if network data is restored
             assert.deepEqual(networkServer1.getNetworksAttribute(), [{ networkId: networkId, connected: true }]);
@@ -69,7 +76,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
-            new FailSafeManager({} as any, undefined, 1, 100, async () => resolver(), rootEndpoint);
+            await FailSafeManager.create({} as any, undefined, 1, 100, async () => resolver(), rootEndpoint);
 
             await MockTime.advance(1000);
 
@@ -79,7 +86,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when failsafe expires after being rearmed (extended)", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = await FailSafeManager.create(
                 {} as any,
                 undefined,
                 3,
@@ -105,7 +112,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = await FailSafeManager.create(
                 {} as any,
                 undefined,
                 3,
@@ -125,7 +132,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = await FailSafeManager.create(
                 {} as any,
                 undefined,
                 3,
@@ -147,7 +154,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is not called when failsafe was completed", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = await FailSafeManager.create(
                 {} as any,
                 undefined,
                 3,

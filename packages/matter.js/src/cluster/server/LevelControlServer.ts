@@ -13,7 +13,7 @@ import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTy
 
 export const LevelControlDefaultClusterHandler: () => ClusterServerHandlers<typeof LevelControl.Complete> = () => ({
     moveToLevel: async ({ request: { level }, attributes: { currentLevel } }) => {
-        currentLevel.setLocal(level);
+        await currentLevel.setLocal(level);
     },
 
     // TODO: How much this capability should be in the library vs. in the caller of the library? Doing the
@@ -41,7 +41,7 @@ export const LevelControlDefaultClusterHandler: () => ClusterServerHandlers<type
         }
         */
 
-        currentLevel.setLocal(level);
+        await currentLevel.setLocal(level);
     },
 
     moveWithOnOff: async () => {

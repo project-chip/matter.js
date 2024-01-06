@@ -5,6 +5,7 @@
  */
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/index.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { asyncNew } from "../util/AsyncConstruction.js";
 import { Device } from "./Device.js";
 import { DeviceTypeDefinition } from "./DeviceTypes.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
@@ -21,17 +22,28 @@ export class ComposedDevice extends Endpoint {
      * @param devices Array with devices that should be combined into one device that are directly added.
      * @param options Optional Endpoint options
      */
-    constructor(definition: DeviceTypeDefinition, devices: Device[] = [], options: EndpointOptions = {}) {
+    constructor(definition: DeviceTypeDefinition, options: EndpointOptions = {}) {
         super([definition], options);
-        devices.forEach(device => this.addDevice(device));
+    }
+
+    static async create(
+        definition: DeviceTypeDefinition,
+        devices: Device[] = [],
+        options: EndpointOptions = {},
+    ): Promise<ComposedDevice> {
+        const composedDevice = await asyncNew(ComposedDevice, definition, options);
+        for (const device of devices) {
+            await composedDevice.addDevice(device);
+        }
+        return composedDevice;
     }
 
     /**
      * Add a sub-device to the composed device.
      * @param device Device instance to add
      */
-    addDevice(device: Device) {
-        this.addChildEndpoint(device);
+    async addDevice(device: Device) {
+        await this.addChildEndpoint(device);
     }
 
     /**
@@ -58,13 +70,13 @@ export class ComposedDevice extends Endpoint {
      *
      * @param reachable true if reachable, false otherwise
      */
-    setBridgedDeviceReachability(reachable: boolean) {
-        const bridgedBasicInformationCluster = this.getClusterServer(BridgedDeviceBasicInformationCluster);
+    async setBridgedDeviceReachability(reachable: boolean) {
+        const bridgedBasicInformationCluster = await this.getClusterServer(BridgedDeviceBasicInformationCluster);
         if (bridgedBasicInformationCluster === undefined) {
             throw new ImplementationError(
                 "The reachability flag can only be set for bridged devices this way. To set the reachability flag for a non-bridged device or for the bridget itself please set it on the CommissioningServer!",
             );
         }
-        bridgedBasicInformationCluster.setReachableAttribute(reachable);
+        await bridgedBasicInformationCluster.setReachableAttribute(reachable);
     }
 }

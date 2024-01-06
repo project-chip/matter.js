@@ -60,14 +60,11 @@ export class MatterNode {
 
     async close() {
         await this.matterController?.close();
-        this.closeStorage();
+        await this.closeStorage();
     }
 
-    closeStorage() {
-        this.storage
-            ?.close()
-            .then(() => process.exit(0))
-            .catch(() => process.exit(1));
+    async closeStorage() {
+        await this.storage?.close();
     }
 
     async start() {

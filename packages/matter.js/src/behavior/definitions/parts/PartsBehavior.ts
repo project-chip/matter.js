@@ -15,14 +15,14 @@ import { Behavior } from "../../Behavior.js";
 export class PartsBehavior extends Behavior implements MutableSet<Part, Part | Agent> {
     static override readonly id = "parts";
 
-    add(child: Part.Definition | Agent) {
+    async add(child: Part.Definition | Agent) {
         this.part.parts.add(child);
     }
 
-    delete(child: Part | Agent) {
+    async delete(child: Part | Agent) {
         return this.part.parts.delete(child);
     }
- 
+
     clear() {
         this.part.parts.clear();
     }

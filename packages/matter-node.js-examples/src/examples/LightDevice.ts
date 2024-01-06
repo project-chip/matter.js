@@ -20,7 +20,7 @@ class ReportingOnOffServer extends OnOffLightRequirements.server.mandatory.OnOff
     // message.
     override on() {
         console.log("Turning light ON");
-        super.on();
+        return super.on();
     }
 
     // This is the functional inverse of on() above.
@@ -57,7 +57,7 @@ const server = await NodeServer.create();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node,
 // our example light device.
-server.add(ExampleLight);
+await server.add(ExampleLight);
 
 // Our device is now built and we can bring the node online.
 //

@@ -249,7 +249,7 @@ export class PairedNode {
             }
             await this.initializeEndpointStructure(initialSubscriptionData.attributeReports ?? []);
 
-            const rootDescriptorCluster = this.getRootClusterClient(DescriptorCluster);
+            const rootDescriptorCluster = await this.getRootClusterClient(DescriptorCluster);
             rootDescriptorCluster?.addPartsListAttributeListener(() => {
                 logger.info(`Node ${this.nodeId}: PartsList changed, reinitializing endpoint structure ...`);
                 this.updateEndpointStructureTimer.stop().start(); // Restart timer
@@ -419,7 +419,7 @@ export class PairedNode {
             // And remove all endpoints no longer in the structure
             for (const endpointId of endpointsToRemove.values()) {
                 logger.debug("Removing device", endpointId);
-                this.endpoints.get(endpointId)?.removeFromStructure();
+                await this.endpoints.get(endpointId)?.removeFromStructure();
                 this.endpoints.delete(endpointId);
             }
         } else {
@@ -441,14 +441,17 @@ export class PairedNode {
             }
 
             logger.debug("Creating device", endpointId, Logger.toJSON(clusters));
-            this.endpoints.set(endpointIdNumber, this.createDevice(endpointIdNumber, clusters, interactionClient));
+            this.endpoints.set(
+                endpointIdNumber,
+                await this.createDevice(endpointIdNumber, clusters, interactionClient),
+            );
         }
 
-        this.structureEndpoints(partLists);
+        await this.structureEndpoints(partLists);
     }
 
     /** Bring the endpoints in a structure based on their partsList attribute. */
-    private structureEndpoints(partLists: Map<EndpointNumber, EndpointNumber[]>) {
+    private async structureEndpoints(partLists: Map<EndpointNumber, EndpointNumber[]>) {
         logger.debug(`Node ${this.nodeId}: Endpoints from PartsLists`, Logger.toJSON(Array.from(partLists.entries())));
 
         const endpointUsages: { [key: EndpointNumber]: EndpointNumber[] } = {};
@@ -473,7 +476,7 @@ export class PairedNode {
             logger.debug(`Node ${this.nodeId}: Processing Endpoint ${JSON.stringify(singleUsageEndpoints)}`);
 
             const idsToCleanup: { [key: EndpointNumber]: boolean } = {};
-            singleUsageEndpoints.forEach(([childId, usages]) => {
+            for (const [childId, usages] of singleUsageEndpoints) {
                 const childEndpointId = EndpointNumber(parseInt(childId));
                 const childEndpoint = this.endpoints.get(childEndpointId);
                 const parentEndpoint = this.endpoints.get(usages[0]);
@@ -486,12 +489,12 @@ export class PairedNode {
                         `Node ${this.nodeId}: Endpoint structure: Child: ${childEndpointId} -> Parent: ${parentEndpoint.number}`,
                     );
 
-                    parentEndpoint.addChildEndpoint(childEndpoint);
+                    await parentEndpoint.addChildEndpoint(childEndpoint);
                 }
 
                 delete endpointUsages[EndpointNumber(parseInt(childId))];
                 idsToCleanup[usages[0]] = true;
-            });
+            }
             logger.debug(`Node ${this.nodeId}: Endpoint data Cleanup`, JSON.stringify(idsToCleanup));
             Object.keys(idsToCleanup).forEach(idToCleanup => {
                 Object.keys(endpointUsages).forEach(id => {
@@ -515,7 +518,7 @@ export class PairedNode {
      * @param interactionClient InteractionClient to use for the device
      * @private
      */
-    private createDevice(
+    private async createDevice(
         endpointId: EndpointNumber,
         data: { [key: ClusterId]: { [key: string]: any } },
         interactionClient: InteractionClient,
@@ -570,45 +573,55 @@ export class PairedNode {
         if (endpointId === 0) {
             // Endpoint 0 is the root endpoint, so we use a RootEndpoint object
             const rootEndpoint = new RootEndpoint();
+            await rootEndpoint.construction;
             rootEndpoint.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>); // Ideally only root one as defined
-            endpointClusters.forEach(cluster => {
+            for (const cluster of endpointClusters) {
                 if (isClusterServer(cluster)) {
-                    rootEndpoint.addClusterServer(cluster);
+                    await rootEndpoint.addClusterServer(cluster);
                 } else if (isClusterClient(cluster)) {
-                    rootEndpoint.addClusterClient(cluster);
+                    await rootEndpoint.addClusterClient(cluster);
                 }
-            });
+            }
             return rootEndpoint;
         } else if (deviceTypes.find(deviceType => deviceType.code === DeviceTypes.AGGREGATOR.code) !== undefined) {
             // When AGGREGATOR is in the device type list, this is an aggregator
-            const aggregator = new Aggregator([], { endpointId });
+            const aggregator = await Aggregator.create([], { endpointId });
             aggregator.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
-            endpointClusters.forEach(cluster => {
+            for (const cluster of endpointClusters) {
                 // TODO There should be none?
                 if (isClusterServer(cluster)) {
-                    aggregator.addClusterServer(cluster);
+                    await aggregator.addClusterServer(cluster);
                 } else if (isClusterClient(cluster)) {
-                    aggregator.addClusterClient(cluster);
+                    await aggregator.addClusterClient(cluster);
                 }
-            });
+            }
             return aggregator;
         } else {
             // It seems to be device but has a partsList, so it is a composed device
             if (descriptorData.partsList.length > 0) {
-                const composedDevice = new ComposedDevice(deviceTypes[0], [], { endpointId });
+                const composedDevice = await ComposedDevice.create(deviceTypes[0], [], { endpointId });
                 composedDevice.setDeviceTypes(deviceTypes as AtLeastOne<DeviceTypeDefinition>);
-                endpointClusters.forEach(cluster => {
+                for (const cluster of endpointClusters) {
                     if (isClusterServer(cluster)) {
-                        composedDevice.addClusterServer(cluster);
+                        await composedDevice.addClusterServer(cluster);
                     } else if (isClusterClient(cluster)) {
-                        composedDevice.addClusterClient(cluster);
+                        await composedDevice.addClusterClient(cluster);
                     }
-                });
+                }
                 return composedDevice;
             } else {
                 // else it's a normal Device
                 // TODO Should we find the really correct Device derived class to instance?
-                return new PairedDevice(deviceTypes as AtLeastOne<DeviceTypeDefinition>, endpointClusters, endpointId);
+                const device = await PairedDevice.create(deviceTypes as AtLeastOne<DeviceTypeDefinition>, endpointId);
+                await device.construction;
+                for (const cluster of endpointClusters) {
+                    if (isClusterServer(cluster)) {
+                        await device.addClusterServer(cluster);
+                    } else if (isClusterClient(cluster)) {
+                        await device.addClusterClient(cluster);
+                    }
+                }
+                return device;
             }
         }
     }
@@ -632,7 +645,7 @@ export class PairedNode {
         if (!this.commissioningController.isNodeCommissioned(this.nodeId)) {
             throw new ImplementationError(`This Node ${this.nodeId} is not commissioned.`);
         }
-        const operationalCredentialsCluster = this.getRootClusterClient(OperationalCredentials.Cluster);
+        const operationalCredentialsCluster = await this.getRootClusterClient(OperationalCredentials.Cluster);
 
         if (operationalCredentialsCluster === undefined) {
             throw new ImplementationError(`OperationalCredentialsCluster for node ${this.nodeId} not found.`);
@@ -655,7 +668,9 @@ export class PairedNode {
 
     /** Opens a Basic Commissioning Window (uses the original Passcode printed on the device) with the device. */
     async openBasicCommissioningWindow(commissioningTimeout = 900 /* 15 minutes */) {
-        const adminCommissioningCluster = this.getRootClusterClient(AdministratorCommissioning.Cluster.with("Basic"));
+        const adminCommissioningCluster = await this.getRootClusterClient(
+            AdministratorCommissioning.Cluster.with("Basic"),
+        );
         if (adminCommissioningCluster === undefined) {
             throw new ImplementationError(`AdministratorCommissioningCluster for node ${this.nodeId} not found.`);
         }
@@ -683,7 +698,7 @@ export class PairedNode {
 
     /** Opens an Enhanced Commissioning Window (uses a generated random Passcode) with the device. */
     async openEnhancedCommissioningWindow(commissioningTimeout = 900 /* 15 minutes */) {
-        const adminCommissioningCluster = this.getRootClusterClient(AdministratorCommissioning.Cluster);
+        const adminCommissioningCluster = await this.getRootClusterClient(AdministratorCommissioning.Cluster);
         if (adminCommissioningCluster === undefined) {
             throw new ImplementationError(`AdministratorCommissioningCluster for node ${this.nodeId} not found.`);
         }
@@ -701,7 +716,7 @@ export class PairedNode {
             }
         }
 
-        const basicInformationCluster = this.getRootClusterClient(BasicInformation.Cluster);
+        const basicInformationCluster = await this.getRootClusterClient(BasicInformation.Cluster);
         if (basicInformationCluster == undefined) {
             throw new ImplementationError(`BasicInformationCluster for node ${this.nodeId} not found.`);
         }
@@ -762,13 +777,13 @@ export class PairedNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
+    async getRootClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
         return this.endpoints.get(EndpointNumber(0))?.getClusterServer(cluster);
     }
 
@@ -777,13 +792,13 @@ export class PairedNode {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
+    async getRootClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.endpoints.get(EndpointNumber(0))?.getClusterClient(cluster);
     }
 
@@ -793,13 +808,13 @@ export class PairedNode {
      * @param endpointId EndpointNumber to get the cluster from
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getClusterServerForDevice<
+    async getClusterServerForDevice<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
         return this.getDeviceById(endpointId)?.getClusterServer(cluster);
     }
 
@@ -809,13 +824,13 @@ export class PairedNode {
      * @param endpointId EndpointNumber to get the cluster from
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getClusterClientForDevice<
+    async getClusterClientForDevice<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(endpointId: EndpointNumber, cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.getDeviceById(endpointId)?.getClusterClient(cluster);
     }
 }

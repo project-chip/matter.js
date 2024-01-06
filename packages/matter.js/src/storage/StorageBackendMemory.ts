@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MaybePromise } from "../util/Promises.js";
 import { Storage, StorageError } from "./Storage.js";
 import { SupportedStorageTypes } from "./StringifyTools.js";
 
@@ -29,12 +30,12 @@ export class StorageBackendMemory implements Storage {
         this.store = {};
     }
 
-    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
+    get<T extends SupportedStorageTypes>(contexts: string[], key: string): MaybePromise<T | undefined> {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         return this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T): void {
+    set<T extends SupportedStorageTypes>(contexts: string[], key: string, value: T) {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         const contextKey = this.createContextKey(contexts);
         if (this.store[contextKey] === undefined) {
@@ -43,17 +44,17 @@ export class StorageBackendMemory implements Storage {
         this.store[contextKey][key] = value;
     }
 
-    delete(contexts: string[], key: string): void {
+    delete(contexts: string[], key: string) {
         if (!contexts.length || !key.length) throw new StorageError("Context and key must not be empty.");
         delete this.store[this.createContextKey(contexts)]?.[key];
     }
 
-    keys(contexts: string[]): string[] {
+    keys(contexts: string[]) {
         if (!contexts.length) throw new StorageError("Context must not be empty!");
         return Object.keys(this.store[this.createContextKey(contexts)] ?? {});
     }
 
-    clearAll(contexts: string[]): void {
+    clearAll(contexts: string[]) {
         const contextKey = this.createContextKey(contexts);
         if (contextKey.length) {
             delete this.store[contextKey];

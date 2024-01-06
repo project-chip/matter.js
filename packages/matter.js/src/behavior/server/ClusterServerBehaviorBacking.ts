@@ -8,7 +8,12 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
-import type { ClusterServerObj, CommandHandler, SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
+import {
+    ClusterServerObj,
+    CommandHandler,
+    SupportedEventsList,
+    asClusterServerInternal,
+} from "../../cluster/server/ClusterServerTypes.js";
 import type { Part } from "../../endpoint/Part.js";
 import { Logger } from "../../log/Logger.js";
 import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
@@ -76,29 +81,30 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         MaybePromise.then(
             super.invokeInitializer(behavior, options),
 
-            () => {
+            async () => {
                 // After initialization our datasource is available so we may configure the
                 // cluster server's datasource
                 const datasource = this.datasource;
                 const eventHandler = this.eventHandler;
-                this.#clusterServer.datasource = {
+                await asClusterServerInternal(this.#clusterServer)._setDatasource({
                     get version() {
-                        return datasource.version
+                        return datasource.version;
                     },
 
                     get eventHandler() {
                         return eventHandler;
+                        return eventHandler;
                     },
 
                     // We handle change management ourselves
-                    changed() {},
+                    async changed() {},
 
                     // We handle version management ourselves
-                    increaseVersion() {
+                    async increaseVersion() {
                         return datasource.version;
                     },
-                }
-            }
+                });
+            },
         );
     }
 }
@@ -141,7 +147,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
     return ({ request, session, message }) => {
         logger.debug(
             `Invoke <part ${backing.part.id}>.${backing.type.id}.${name}`,
-            typeof request === "object" ? Logger.dict(request as object) : request
+            typeof request === "object" ? Logger.dict(request as object) : request,
         );
         return withBehavior(backing, session, { message }, behavior =>
             (behavior as unknown as Record<string, (arg: any) => any>)[name](request),
@@ -153,7 +159,7 @@ function createAttributeAccessors(
     backing: ClusterServerBehaviorBacking,
     name: string,
 ): {
-    get: (params: { session?: Session<MatterDevice>, isFabricFiltered?: boolean }) => any;
+    get: (params: { session?: Session<MatterDevice>; isFabricFiltered?: boolean }) => any;
     set: (value: any, params: { session?: Session<MatterDevice> }) => boolean;
 } {
     return {
@@ -193,21 +199,21 @@ function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string
     }
 
     if (attributeServer instanceof FabricScopedAttributeServer) {
-        observable.on((_value, _oldValue, context) => {
+        observable.on(async (_value, _oldValue, context) => {
             const session = context.session;
             if (session instanceof SecureSession) {
-                attributeServer.updated(session);
+                await attributeServer.updated(session);
             } else {
                 // Can't notify if we don't know the fabric
             }
         });
     } else if (attributeServer instanceof AttributeServer) {
-        observable.on((_value, _oldValue, context) => {
+        observable.on(async (_value, _oldValue, context) => {
             const session = context.session;
             if (session instanceof SecureSession) {
-                attributeServer.updated(session);
+                await attributeServer.updated(session);
             } else {
-                attributeServer.updatedLocal();
+                await attributeServer.updatedLocal();
             }
         });
     }

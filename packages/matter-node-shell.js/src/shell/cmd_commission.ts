@@ -103,19 +103,22 @@ export default function commands(theNode: MatterNode) {
 
                                     console.log(Logger.toJSON(options));
 
-                                    if (theNode.Store.has("WiFiSsid") && theNode.Store.has("WiFiPassword")) {
+                                    if (
+                                        (await theNode.Store.has("WiFiSsid")) &&
+                                        (await theNode.Store.has("WiFiPassword"))
+                                    ) {
                                         options.commissioning.wifiNetwork = {
-                                            wifiSsid: theNode.Store.get<string>("WiFiSsid", ""),
-                                            wifiCredentials: theNode.Store.get<string>("WiFiPassword", ""),
+                                            wifiSsid: await theNode.Store.get<string>("WiFiSsid", ""),
+                                            wifiCredentials: await theNode.Store.get<string>("WiFiPassword", ""),
                                         };
                                     }
                                     if (
-                                        theNode.Store.has("ThreadName") &&
-                                        theNode.Store.has("ThreadOperationalDataset")
+                                        (await theNode.Store.has("ThreadName")) &&
+                                        (await theNode.Store.has("ThreadOperationalDataset"))
                                     ) {
                                         options.commissioning.threadNetwork = {
-                                            networkName: theNode.Store.get<string>("ThreadName", ""),
-                                            operationalDataset: theNode.Store.get<string>(
+                                            networkName: await theNode.Store.get<string>("ThreadName", ""),
+                                            operationalDataset: await theNode.Store.get<string>(
                                                 "ThreadOperationalDataset",
                                                 "",
                                             ),
@@ -130,7 +133,7 @@ export default function commands(theNode: MatterNode) {
                                     // It is provided to proof the concept
 
                                     // Example to initialize a ClusterClient and access concrete fields as API methods
-                                    const descriptor = node.getRootClusterClient(DescriptorCluster);
+                                    const descriptor = await node.getRootClusterClient(DescriptorCluster);
                                     if (descriptor !== undefined) {
                                         console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
                                         console.log(await descriptor.getServerListAttribute()); // or more convenient that way
@@ -139,7 +142,7 @@ export default function commands(theNode: MatterNode) {
                                     }
 
                                     // Example to subscribe to a field and get the value
-                                    const info = node.getRootClusterClient(BasicInformationCluster);
+                                    const info = await node.getRootClusterClient(BasicInformationCluster);
                                     if (info !== undefined) {
                                         console.log(await info.getProductNameAttribute()); // This call is executed remotely
                                         //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));

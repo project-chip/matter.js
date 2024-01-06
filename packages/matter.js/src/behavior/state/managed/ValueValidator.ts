@@ -218,7 +218,7 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
     const entry = schema.listEntry;
     let validateEntries: undefined | ((list: Val.List) => void);
     if (entry) {
-        let entryValidator = factory.get(entry).validate;
+        const entryValidator = factory.get(entry).validate;
 
         validateEntries = (list: Val.List) => {
             for (const e of list) {

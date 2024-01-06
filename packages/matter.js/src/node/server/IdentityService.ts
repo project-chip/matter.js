@@ -11,7 +11,7 @@ import { Part } from "../../endpoint/Part.js";
 /**
  * Thrown when there is a part ID or number conflict.
  */
-export class IdentityConflictError extends ImplementationError {};
+export class IdentityConflictError extends ImplementationError {}
 
 export class IdentityService {
     #port?: number;
@@ -23,7 +23,7 @@ export class IdentityService {
         const acquireIndex = () => {
             root.behaviors.require(IndexBehavior);
             this.#index = root.agent.get(IndexBehavior);
-        }
+        };
 
         // Obtain the part index used for validating identity availability.  If the root part isn't yet initialized we
         // don't need to validate identities anyway
@@ -47,7 +47,7 @@ export class IdentityService {
     assertIdAvailable(id: string, part: Part) {
         const other = this.#index?.forId(id);
         if (other && other !== part) {
-            throw new IdentityConflictError(`Another part already exists with ID ${id}`)
+            throw new IdentityConflictError(`Another part already exists with ID ${id}`);
         }
     }
 
@@ -57,7 +57,7 @@ export class IdentityService {
     assertNumberAvailable(number: number, part: Part) {
         const other = this.#index?.forNumber(number);
         if (other && other !== part) {
-            throw new IdentityConflictError(`Another part already exists with number ${number}`)
+            throw new IdentityConflictError(`Another part already exists with number ${number}`);
         }
     }
 }

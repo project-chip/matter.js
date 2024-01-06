@@ -19,8 +19,8 @@ export interface ImmutableSet<T> {
  * A write-only set.
  */
 export interface MutableSet<T, AddT = T> {
-    add(definition: AddT): void;
-    delete(definition: T): boolean;
+    add(definition: AddT): Promise<void>;
+    delete(definition: T): Promise<boolean>;
     clear(): void;
 }
 
@@ -64,7 +64,7 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         return this.#entries.has(item);
     }
 
-    add(item: AddT) {
+    async add(item: AddT) {
         const created = this.create(item);
 
         if (this.#entries.has(item as any)) {
@@ -89,7 +89,7 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
             }
         }
 
-        this.#added?.emit(created);
+        await this.#added?.emit(created);
     }
 
     get(key: string, field: keyof T) {
@@ -111,7 +111,7 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
         return index?.get(key);
     }
 
-    delete(item: T) {
+    async delete(item: T) {
         if (!this.#entries.delete(item)) {
             return false;
         }
@@ -130,7 +130,7 @@ export class BasicSet<T, AddT = T> implements ImmutableSet<T>, MutableSet<T, Add
             }
         }
 
-        this.#deleted?.emit(item);
+        await this.#deleted?.emit(item);
 
         return true;
     }

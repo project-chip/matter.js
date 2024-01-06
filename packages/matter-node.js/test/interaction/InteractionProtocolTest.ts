@@ -11,14 +11,15 @@ import {
     AccessControlCluster,
     AccessLevel,
     AdministratorCommissioning,
-    BasicInformation,
     Attributes,
+    BasicInformation,
     BasicInformationCluster,
     ClusterServer,
     ClusterServerObj,
     Events,
     OnOffCluster,
     WritableAttribute,
+    asClusterServerInternal,
 } from "@project-chip/matter.js/cluster";
 import { Message, SessionType } from "@project-chip/matter.js/codec";
 import {
@@ -39,8 +40,8 @@ import { DeviceClasses, DeviceTypeDefinition, Endpoint } from "@project-chip/mat
 import { Fabric } from "@project-chip/matter.js/fabric";
 import {
     DataReportPayload,
-    INTERACTION_MODEL_REVISION,
     EventHandler,
+    INTERACTION_MODEL_REVISION,
     InteractionEndpointStructure,
     InteractionServer,
     InteractionServerMessenger,
@@ -848,16 +849,14 @@ describe("InteractionProtocol", () => {
         BasicInformationCluster["events"]
     >;
 
-    function withClusters<
-        A extends Attributes,
-        E extends Events,
-        A2 extends Attributes,
-        E2 extends Events,
-    >(cluster?: ClusterServerObj<A, E>, cluster2?: ClusterServerObj<A2, E2>) {
-        function addClusterServer(cluster: ClusterServerObj<any, any>) {
-            endpoint.addClusterServer(cluster);
+    async function withClusters<A extends Attributes, E extends Events, A2 extends Attributes, E2 extends Events>(
+        cluster?: ClusterServerObj<A, E>,
+        cluster2?: ClusterServerObj<A2, E2>,
+    ) {
+        async function addClusterServer(cluster: ClusterServerObj<any, any>) {
+            await endpoint.addClusterServer(cluster);
             let version = 0;
-            cluster.datasource = {
+            await asClusterServerInternal(cluster)._setDatasource({
                 get version() {
                     return version;
                 },
@@ -866,18 +865,18 @@ describe("InteractionProtocol", () => {
                     return eventHandler;
                 },
 
-                increaseVersion() {
+                async increaseVersion() {
                     return ++version;
                 },
 
-                changed() {}
-            }
+                async changed() {},
+            });
         }
 
         if (cluster) {
-            addClusterServer(cluster as any);
+            await addClusterServer(cluster as any);
             if (cluster2) {
-                addClusterServer(cluster2 as any);
+                await addClusterServer(cluster2 as any);
             }
         } else {
             basicInfoClusterServer = ClusterServer(
@@ -903,12 +902,12 @@ describe("InteractionProtocol", () => {
                 {},
                 {
                     startUp: true,
-                }
+                },
             );
-            addClusterServer(basicInfoClusterServer as ClusterServerObj<any, any>);
+            await addClusterServer(basicInfoClusterServer as ClusterServerObj<any, any>);
         }
 
-        endpointStructure.initializeFromEndpoint(endpoint);
+        await endpointStructure.initializeFromEndpoint(endpoint);
     }
 
     beforeEach(async () => {
@@ -917,18 +916,20 @@ describe("InteractionProtocol", () => {
         storageContext = storageManager.createContext("test");
         endpoint = new Endpoint([DummyTestDevice], { endpointId: EndpointNumber(0) });
         endpointStructure = new InteractionEndpointStructure();
+        eventHandler = new EventHandler(storageContext.createContext("EventHandler"));
+        await eventHandler.construction;
         interactionProtocol = new InteractionServer({
             endpointStructure: endpointStructure,
-            eventHandler: eventHandler = new EventHandler(storageContext.createContext("EventHandler")),
+            eventHandler,
         });
-    })
+    });
 
     describe("handleReadRequest", () => {
         it("replies with attributes and events", async () => {
-            withClusters();
+            await withClusters();
 
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = await interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST);
 
@@ -936,10 +937,10 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attributes and events using (unused) version filter", async () => {
-            withClusters();
+            await withClusters();
 
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
@@ -950,10 +951,10 @@ describe("InteractionProtocol", () => {
         });
 
         it("replies with attributes and events with active version filter", async () => {
-            withClusters();
+            await withClusters();
 
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
-            basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
+            await basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
             const result = await interactionProtocol.handleReadRequest(
                 await getDummyMessageExchange(),
@@ -967,7 +968,7 @@ describe("InteractionProtocol", () => {
     describe("handleSubscribeRequest", () => {
         // Success case is tested in Integration test
         it("errors when no path match the requested path's", async () => {
-            withClusters();
+            await withClusters();
 
             let statusSent = -1;
             let closed = false;
@@ -991,14 +992,21 @@ describe("InteractionProtocol", () => {
 
     describe("handleWriteRequest", () => {
         it("write values and return errors on invalid values", async () => {
-            withClusters();
+            await withClusters();
 
-            const result = await interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), WRITE_REQUEST, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            const result = await interactionProtocol.handleWriteRequest(
+                await getDummyMessageExchange(),
+                WRITE_REQUEST,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
 
             assert.deepEqual(result, WRITE_RESPONSE);
-            assert.equal(endpoint.getClusterServer(BasicInformationCluster)?.attributes.nodeLabel.getLocal(), "test");
+            assert.equal(
+                (await endpoint.getClusterServer(BasicInformationCluster))?.attributes.nodeLabel.getLocal(),
+                "test",
+            );
         });
 
         it("write chunked array values with Fabric Index handling", async () => {
@@ -1018,7 +1026,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(accessControlCluster);
+            await withClusters(accessControlCluster);
 
             const result = await interactionProtocol.handleWriteRequest(
                 await getDummyMessageExchange(),
@@ -1053,38 +1061,46 @@ describe("InteractionProtocol", () => {
         });
 
         it("rejects mass write with wildcard attribute", async () => {
-            withClusters();
+            await withClusters();
 
-            assert.rejects(
+            await assert.rejects(
                 interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), ILLEGAL_MASS_WRITE_REQUEST, {
                     packetHeader: { sessionType: SessionType.Unicast },
-                } as Message)
+                } as Message),
             );
         });
 
         it("performs mass write with wildcard endpoint", async () => {
-            withClusters();
+            await withClusters();
 
-            const result = await interactionProtocol.handleWriteRequest(await getDummyMessageExchange(), MASS_WRITE_REQUEST, {
-                packetHeader: { sessionType: SessionType.Unicast },
-            } as Message);
+            const result = await interactionProtocol.handleWriteRequest(
+                await getDummyMessageExchange(),
+                MASS_WRITE_REQUEST,
+                {
+                    packetHeader: { sessionType: SessionType.Unicast },
+                } as Message,
+            );
 
             expect(result).deep.equals(MASS_WRITE_RESPONSE);
             assert.equal(basicInfoClusterServer.attributes.location.getLocal(), "US");
             assert.equal(basicInfoClusterServer.attributes.nodeLabel.getLocal(), "test");
-        })
+        });
 
         it("write values and return errors on invalid values timed interaction mismatch request", async () => {
             let timedInteractionCleared = false;
-            withClusters();
+            await withClusters();
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
                 async () =>
-                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Unicast },
-                    } as Message),
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Unicast },
+                        } as Message,
+                    ),
                 {
                     message:
                         "(201) timedRequest flag of write interaction (true) mismatch with expected timed interaction (false).",
@@ -1097,11 +1113,11 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction mismatch timed expected", async () => {
             let timedInteractionCleared = false;
-            withClusters();
+            await withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
-            assert.rejects(
+            await assert.rejects(
                 async () =>
                     await interactionProtocol.handleWriteRequest(messageExchange, WRITE_REQUEST, {
                         packetHeader: { sessionType: SessionType.Unicast },
@@ -1144,7 +1160,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(basicCluster);
+            await withClusters(basicCluster);
             const messageExchange = await getDummyMessageExchange(false, false, () => {
                 timedInteractionCleared = true;
             });
@@ -1185,7 +1201,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(basicCluster);
+            await withClusters(basicCluster);
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
@@ -1204,15 +1220,19 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction expired", async () => {
             let timedInteractionCleared = false;
-            withClusters();
+            await withClusters();
             const messageExchange = await getDummyMessageExchange(true, true, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
                 async () =>
-                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Unicast },
-                    } as Message),
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Unicast },
+                        } as Message,
+                    ),
                 {
                     message: "(148) Timed request window expired. Decline write request.",
                 },
@@ -1224,15 +1244,19 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values timed interaction in group message", async () => {
             let timedInteractionCleared = false;
-            withClusters();
+            await withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
             await assert.rejects(
                 async () =>
-                    await interactionProtocol.handleWriteRequest(messageExchange, { ...WRITE_REQUEST, timedRequest: true }, {
-                        packetHeader: { sessionType: SessionType.Group },
-                    } as Message),
+                    await interactionProtocol.handleWriteRequest(
+                        messageExchange,
+                        { ...WRITE_REQUEST, timedRequest: true },
+                        {
+                            packetHeader: { sessionType: SessionType.Group },
+                        } as Message,
+                    ),
                 {
                     message:
                         "(128) Write requests are only allowed on unicast sessions when a timed interaction is running.",
@@ -1245,7 +1269,7 @@ describe("InteractionProtocol", () => {
 
         it("write values and return errors on invalid values in timed interaction", async () => {
             let timedInteractionCleared = false;
-            withClusters();
+            await withClusters();
             const messageExchange = await getDummyMessageExchange(true, false, () => {
                 timedInteractionCleared = true;
             });
@@ -1300,7 +1324,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(onOffCluster, adminCommissioningCluster);
+            await withClusters(onOffCluster, adminCommissioningCluster);
         });
 
         it("invoke command with empty args", async () => {
@@ -1360,7 +1384,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(onOffCluster);
+            await withClusters(onOffCluster);
 
             const result = await interactionProtocol.handleInvokeRequest(
                 await getDummyMessageExchange(),
@@ -1389,7 +1413,7 @@ describe("InteractionProtocol", () => {
                 },
             );
 
-            withClusters(onOffCluster);
+            await withClusters(onOffCluster);
 
             const result = await interactionProtocol.handleInvokeRequest(
                 await getDummyMessageExchange(),

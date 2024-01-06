@@ -16,8 +16,8 @@ import { DeviceTestInstance } from "../DeviceTestInstance";
  * 130.1.1. [TC-BRBINFO-1.1] Global Attributes for Bridged Device Basic Information Cluster [DUT-Server]
  */
 export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
-    onOffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(3) });
-    aggregator = new Aggregator();
+    onOffDevice?: OnOffPluginUnitDevice;
+    aggregator?: Aggregator;
     commissioningServer?: CommissioningServer;
 
     constructor(storage: StorageBackendMemory, overrideTestName?: string) {
@@ -25,7 +25,9 @@ export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
     }
 
     async setupCommissioningServer() {
-        this.commissioningServer = new CommissioningServer({
+        this.onOffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(3) });
+        this.aggregator = await Aggregator.create();
+        this.commissioningServer = await CommissioningServer.create({
             port: 5540,
             deviceName: "Testdevice",
             deviceType: DeviceTypeId(this.onOffDevice.deviceType),
@@ -43,7 +45,7 @@ export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
             delayedAnnouncement: false,
         });
 
-        this.aggregator.addBridgedDevice(this.onOffDevice, {
+        await this.aggregator.addBridgedDevice(this.onOffDevice, {
             vendorName: "Vendorname",
             vendorId: VendorId(0xfff1),
             nodeLabel: "",
@@ -65,7 +67,7 @@ export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
             },
         });
 
-        this.commissioningServer.addDevice(this.aggregator);
+        await this.commissioningServer.addDevice(this.aggregator);
 
         return this.commissioningServer;
     }

@@ -168,10 +168,10 @@ export const OperationalCredentialsClusterHandler: (
         }
 
         // Update connected attributes
-        nocs.updated(session);
-        commissionedFabrics.updated(session);
-        fabrics.updated(session);
-        trustedRootCertificates.updated(session);
+        await nocs.updated(session);
+        await commissionedFabrics.updated(session);
+        await fabrics.updated(session);
+        await trustedRootCertificates.updated(session);
 
         // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
         //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
@@ -276,11 +276,11 @@ export const OperationalCredentialsClusterHandler: (
         const updateFabric = await failSafeContext.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        device.updateFabric(updateFabric);
+        await device.updateFabric(updateFabric);
 
         // Update connected attributes
-        nocs.updated(session);
-        fabrics.updated(session);
+        await nocs.updated(session);
+        await fabrics.updated(session);
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -305,9 +305,9 @@ export const OperationalCredentialsClusterHandler: (
             };
         }
 
-        fabric.setLabel(label);
+        await fabric.setLabel(label);
 
-        fabrics.updated(session);
+        await fabrics.updated(session);
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     },
@@ -329,16 +329,16 @@ export const OperationalCredentialsClusterHandler: (
             };
         }
 
-        const basicInformationCluster = endpoint.getClusterServer(BasicInformation.Cluster);
-        basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
+        const basicInformationCluster = await endpoint.getClusterServer(BasicInformation.Cluster);
+        await basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
 
         assertSecureSession(session);
 
         await fabric.remove(session.getId());
-        nocs.updated(session);
-        commissionedFabrics.updated(session);
-        fabrics.updated(session);
-        trustedRootCertificates.updated(session);
+        await nocs.updated(session);
+        await commissionedFabrics.updated(session);
+        await fabrics.updated(session);
+        await trustedRootCertificates.updated(session);
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,

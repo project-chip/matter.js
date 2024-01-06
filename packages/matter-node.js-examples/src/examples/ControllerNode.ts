@@ -114,8 +114,10 @@ class ControllerNode {
          */
 
         const controllerStorage = storageManager.createContext("Controller");
-        const ip = controllerStorage.has("ip") ? controllerStorage.get<string>("ip") : getParameter("ip");
-        const port = controllerStorage.has("port") ? controllerStorage.get<number>("port") : getIntParameter("port");
+        const ip = controllerStorage.has("ip") ? await controllerStorage.get<string>("ip") : getParameter("ip");
+        const port = controllerStorage.has("port")
+            ? await controllerStorage.get<number>("port")
+            : getIntParameter("port");
 
         const pairingCode = getParameter("pairingcode");
         let longDiscriminator, setupPin, shortDiscriminator;
@@ -127,9 +129,9 @@ class ControllerNode {
             logger.debug(`Data extracted from pairing code: ${Logger.toJSON(pairingCodeCodec)}`);
         } else {
             longDiscriminator =
-                getIntParameter("longDiscriminator") ?? controllerStorage.get("longDiscriminator", 3840);
+                getIntParameter("longDiscriminator") ?? (await controllerStorage.get("longDiscriminator", 3840));
             if (longDiscriminator > 4095) throw new Error("Discriminator value must be less than 4096");
-            setupPin = getIntParameter("pin") ?? controllerStorage.get("pin", 20202021);
+            setupPin = getIntParameter("pin") ?? (await controllerStorage.get("pin", 20202021));
         }
         if ((shortDiscriminator === undefined && longDiscriminator === undefined) || setupPin === undefined) {
             throw new Error(
@@ -271,7 +273,7 @@ class ControllerNode {
             node.logStructure();
 
             // Example to initialize a ClusterClient and access concrete fields as API methods
-            const descriptor = node.getRootClusterClient(DescriptorCluster);
+            const descriptor = await node.getRootClusterClient(DescriptorCluster);
             if (descriptor !== undefined) {
                 console.log(await descriptor.attributes.deviceTypeList.get()); // you can call that way
                 console.log(await descriptor.getServerListAttribute()); // or more convenient that way
@@ -280,7 +282,7 @@ class ControllerNode {
             }
 
             // Example to subscribe to a field and get the value
-            const info = node.getRootClusterClient(BasicInformationCluster);
+            const info = await node.getRootClusterClient(BasicInformationCluster);
             if (info !== undefined) {
                 console.log(await info.getProductNameAttribute()); // This call is executed remotely
                 //console.log(await info.subscribeProductNameAttribute(value => console.log("productName", value), 5, 30));
@@ -308,7 +310,7 @@ class ControllerNode {
                 //    console.log("Subscribe-All Data:", Logger.toJSON(data));
                 //});
 
-                const onOff = devices[0].getClusterClient(OnOffCluster);
+                const onOff = await devices[0].getClusterClient(OnOffCluster);
                 if (onOff !== undefined) {
                     let onOffStatus = await onOff.getOnOffAttribute();
                     console.log("initial onOffStatus", onOffStatus);

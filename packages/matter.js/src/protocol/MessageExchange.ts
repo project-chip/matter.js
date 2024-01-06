@@ -219,7 +219,7 @@ export class MessageExchange<ContextT> {
             packetHeader: {
                 sessionId: this.peerSessionId,
                 sessionType: SessionType.Unicast, // TODO: support multicast/groups
-                messageId: this.session.getIncrementedMessageCounter(),
+                messageId: await this.session.getIncrementedMessageCounter(),
                 destNodeId: this.peerNodeId,
                 sourceNodeId: this.nodeId,
                 hasPrivacyEnhancements: false,

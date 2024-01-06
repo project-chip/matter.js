@@ -18,6 +18,7 @@ import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../
 import { Session } from "../../session/Session.js";
 import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
 
@@ -46,7 +47,7 @@ export function createAttributeServer<
     defaultValue: T,
     datasource: ClusterDatasource,
     getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
     const { id, schema, writable, fabricScoped, fixed, omitChanges, timed } = attributeDef;
@@ -235,14 +236,14 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * Add an internal listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the version number.
      */
-    addValueChangeListener(_listener: (value: T, version: number) => void) {
+    addValueChangeListener(_listener: (value: T, version: number) => MaybePromise<void>) {
         /** Fixed attributes do not change. */
     }
 
     /**
      * Remove an internal listener.
      */
-    removeValueChangeListener(_listener: (value: T, version: number) => void) {
+    removeValueChangeListener(_listener: (value: T, version: number) => MaybePromise<void>) {
         /** Fixed attributes do not change. */
     }
 
@@ -250,7 +251,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
      * Add an external listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the old value.
      */
-    addValueSetListener(_listener: (newValue: T, oldValue: T) => void) {
+    addValueSetListener(_listener: (newValue: T, oldValue: T) => MaybePromise<void>) {
         /** Fixed attributes do not change. */
     }
 
@@ -275,9 +276,13 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
  */
 export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
-    protected readonly valueChangeListeners = new Array<(value: T, version: number) => void>();
-    protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => void>();
-    protected readonly setter: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean;
+    protected readonly valueChangeListeners = new Array<(value: T, version: number) => MaybePromise<void>>();
+    protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => MaybePromise<void>>();
+    protected readonly setter: (
+        value: T,
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+    ) => Promise<boolean>;
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 
     constructor(
@@ -301,7 +306,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          * @returns true if the value has changed, false otherwise.
          */
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
+        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>,
 
         /**
          * Optional Validator function to handle special requirements for verification of stored data.
@@ -325,20 +330,10 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             );
         }
 
-        super(
-            id,
-            name,
-            schema,
-            isWritable,
-            isSubscribable,
-            requiresTimedInteraction,
-            defaultValue,
-            datasource,
-            getter,
-        );
+        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue, datasource, getter);
 
         if (setter === undefined) {
-            this.setter = value => {
+            this.setter = async value => {
                 const oldValue = this.value;
                 this.value = value;
                 return !isDeepEqual(value, oldValue);
@@ -376,20 +371,20 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * If a setter is defined this setter method is called to store the value.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    set(value: T, session: Session<MatterDevice>) {
+    async set(value: T, session: Session<MatterDevice>) {
         if (!this.isWritable) {
             throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
         // TODO: check ACL
 
-        this.setRemote(value, session);
+        await this.setRemote(value, session);
     }
 
     /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client).
      */
-    protected setRemote(value: T, session: Session<MatterDevice>) {
-        this.processSet(value, session);
+    protected async setRemote(value: T, session: Session<MatterDevice>) {
+        await this.processSet(value, session);
         this.value = value;
     }
 
@@ -400,32 +395,40 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Else if a validator is defined the value is validated before it is stored.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    setLocal(value: T) {
-        this.processSet(value, undefined);
+    async setLocal(value: T) {
+        await this.processSet(value, undefined);
         this.value = value;
     }
 
     /**
      * Helper Method to process the set of a value in a generic way. This method is used internally.
      */
-    protected processSet(value: T, session?: Session<MatterDevice>) {
+    protected async processSet(value: T, session?: Session<MatterDevice>) {
         this.validator(value, session, this.endpoint);
         const oldValue = this.getter(session, this.endpoint);
-        const valueChanged = this.setter(value, session, this.endpoint);
-        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
+        const valueChanged = await this.setter(value, session, this.endpoint);
+        await this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
     }
 
     /**
      * Helper Method to handle needed version increases and trigger the relevant listeners. This method is used
      * internally.
      */
-    protected handleVersionAndTriggerListeners(value: T, oldValue: T | undefined, considerVersionChanged: boolean) {
+    protected async handleVersionAndTriggerListeners(
+        value: T,
+        oldValue: T | undefined,
+        considerVersionChanged: boolean,
+    ) {
         if (considerVersionChanged) {
-            const version = this.datasource.increaseVersion();
-            this.valueChangeListeners.forEach(listener => listener(value, version));
+            const version = await this.datasource.increaseVersion();
+            for (const listener of this.valueChangeListeners) {
+                await listener(value, version);
+            }
         }
         if (oldValue !== undefined) {
-            this.valueSetListeners.forEach(listener => listener(value, oldValue));
+            for (const listener of this.valueSetListeners) {
+                await listener(value, oldValue);
+            }
         }
     }
 
@@ -435,14 +438,14 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * listeners.
      * ACL checks needs to be performed before calling this method.
      */
-    updated(session: SecureSession<MatterDevice>) {
+    async updated(session: SecureSession<MatterDevice>) {
         const oldValue = this.value ?? this.defaultValue;
         this.value = tryCatch(
             () => this.get(session, false),
             NoAssociatedFabricError, // Handle potential error cases where the session does not have a fabric assigned.
             this.value ?? this.defaultValue,
         );
-        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
+        await this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
     /**
@@ -451,24 +454,24 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * This will increase the version number and trigger the listeners.
      * ACL checks needs to be performed before calling this method.
      */
-    updatedLocal() {
+    async updatedLocal() {
         const oldValue = this.value ?? this.defaultValue;
         this.value = this.getLocal();
-        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
+        await this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
     /**
      * Add an internal listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the version number.
      */
-    override addValueChangeListener(listener: (value: T, version: number) => void) {
+    override addValueChangeListener(listener: (value: T, version: number) => MaybePromise<void>) {
         this.valueChangeListeners.push(listener);
     }
 
     /**
      * Remove an internal listener.
      */
-    override removeValueChangeListener(listener: (value: T, version: number) => void) {
+    override removeValueChangeListener(listener: (value: T, version: number) => MaybePromise<void>) {
         const entryIndex = this.valueChangeListeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.valueChangeListeners.splice(entryIndex, 1);
@@ -479,7 +482,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Add an external listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the old value.
      */
-    override addValueSetListener(listener: (newValue: T, oldValue: T) => void) {
+    override addValueSetListener(listener: (newValue: T, oldValue: T) => MaybePromise<void>) {
         this.valueSetListeners.push(listener);
     }
 
@@ -487,14 +490,14 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * Add an external listener that is called when the value of the attribute changes. The listener is called with the
      * new value and the old value. This method is a convenient alias for addValueSetListener.
      */
-    override subscribe(listener: (newValue: T, oldValue: T) => void) {
+    override subscribe(listener: (newValue: T, oldValue: T) => MaybePromise<void>) {
         this.addValueSetListener(listener);
     }
 
     /**
      * Remove an external listener.
      */
-    override removeValueSetListener(listener: (newValue: T, oldValue: T) => void) {
+    override removeValueSetListener(listener: (newValue: T, oldValue: T) => MaybePromise<void>) {
         const entryIndex = this.valueSetListeners.indexOf(listener);
         if (entryIndex !== -1) {
             this.valueSetListeners.splice(entryIndex, 1);
@@ -521,7 +524,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         readonly cluster: Cluster<any, any, any, any, any>,
         datasource: ClusterDatasource,
         getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
+        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
     ) {
         if (
@@ -564,7 +567,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
 
         let isCustomSetter = false;
         if (setter === undefined) {
-            setter = (value, session) => {
+            setter = async (value, session) => {
                 if (session === undefined)
                     throw new FabricScopeError(`Session is required for fabric scoped attribute "${name}".`);
 
@@ -574,7 +577,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
                 const oldData = fabric.getScopedClusterDataValue<{ value: T }>(this.cluster, this.name);
                 const oldValue = oldData?.value ?? this.defaultValue;
                 if (!isDeepEqual(value, oldValue)) {
-                    fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+                    await fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
                     return true;
                 }
                 return false;
@@ -614,7 +617,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
-    protected override setRemote(value: T, session: Session<MatterDevice>) {
+    protected override async setRemote(value: T, session: Session<MatterDevice>) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
@@ -623,13 +626,13 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             existingFieldIndex => existingFieldIndex === undefined,
         );
 
-        super.setRemote(value, session);
+        await super.setRemote(value, session);
     }
 
     /**
      * Set Local is not allowed for fabric scoped attributes. Use setLocalForFabric instead.
      */
-    override setLocal(_value: T) {
+    override async setLocal(_value: T) {
         throw new FabricScopeError(
             `Fabric scoped attribute "${this.name}" can only be set locally by providing a Fabric. Use setLocalForFabric instead.`,
         );
@@ -642,7 +645,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * If a validator is defined the value is validated before it is stored.
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    setLocalForFabric(value: T, fabric: Fabric) {
+    async setLocalForFabric(value: T, fabric: Fabric) {
         if (this.isCustomSetter) {
             throw new FabricScopeError(
                 `Fabric scoped attribute "${this.name}" can not be set locally when a custom setter is defined.`,
@@ -653,9 +656,9 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         const oldValue = this.getLocalForFabric(fabric);
         const valueChanged = !isDeepEqual(value, oldValue);
         if (valueChanged) {
-            fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
+            await fabric.setScopedClusterDataValue(this.cluster, this.name, { value });
         }
-        this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
+        await this.handleVersionAndTriggerListeners(value, oldValue, valueChanged); // TODO Make callbacks sense without fabric, but then they would have other signature?
     }
 
     /**
@@ -664,14 +667,14 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * This will increase the version number and trigger the listeners.
      * ACL checks needs to be performed before calling this method.
      */
-    updatedLocalForFabric(fabric: Fabric) {
+    async updatedLocalForFabric(fabric: Fabric) {
         const oldValue = this.value ?? this.defaultValue;
         this.value = tryCatch(
             () => this.getLocalForFabric(fabric),
             FabricScopeError, // Handle potential error cases where a custom getter is used.
             this.value ?? this.defaultValue,
         );
-        this.handleVersionAndTriggerListeners(this.value, oldValue, true);
+        await this.handleVersionAndTriggerListeners(this.value, oldValue, true);
     }
 
     /**

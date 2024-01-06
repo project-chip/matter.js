@@ -7,6 +7,7 @@ import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/Bri
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
 import { AttributeInitialValues } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { asyncNew } from "../util/AsyncConstruction.js";
 import { ComposedDevice } from "./ComposedDevice.js";
 import { Device } from "./Device.js";
 import { DeviceTypes } from "./DeviceTypes.js";
@@ -26,10 +27,17 @@ export class Aggregator extends Endpoint {
      * @param devices Array of devices to add
      * @param options Optional Endpoint options
      */
-    constructor(devices: Device[] = [], options: EndpointOptions = {}) {
+    constructor(options: EndpointOptions = {}) {
         // Aggregator is a Composed device with an DeviceTypes.AGGREGATOR device type
         super([DeviceTypes.AGGREGATOR], options);
-        devices.forEach(device => this.addBridgedDevice(device));
+    }
+
+    static async create(devices: Device[] = [], options: EndpointOptions = {}): Promise<Aggregator> {
+        const aggregator = await asyncNew(Aggregator, options);
+        for (const device of devices) {
+            await aggregator.addBridgedDevice(device);
+        }
+        return aggregator;
     }
 
     /**
@@ -41,10 +49,10 @@ export class Aggregator extends Endpoint {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDevice(
+    async addBridgedDevice(
         device: Device | ComposedDevice,
         bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>,
-    ): void {
+    ): Promise<void> {
         // Add DeviceTypes.BRIDGED_DEVICE device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_NODE)) {
@@ -60,11 +68,11 @@ export class Aggregator extends Endpoint {
                     reachableChanged: true,
                 },
             );
-            device.addClusterServer(bridgedBasicInformationCluster);
+            await device.addClusterServer(bridgedBasicInformationCluster);
 
-            bridgedBasicInformationCluster.subscribeReachableAttribute(newValue => {
-                bridgedBasicInformationCluster.triggerReachableChangedEvent({ reachableNewValue: newValue });
-            });
+            bridgedBasicInformationCluster.subscribeReachableAttribute(async newValue =>
+                bridgedBasicInformationCluster.triggerReachableChangedEvent({ reachableNewValue: newValue }),
+            );
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
                 throw new ImplementationError(
@@ -72,7 +80,7 @@ export class Aggregator extends Endpoint {
                 );
             }
         }
-        this.addChildEndpoint(device);
+        await this.addChildEndpoint(device);
     }
 
     /**
@@ -84,10 +92,10 @@ export class Aggregator extends Endpoint {
      * @param device Device instance to add
      * @param bridgedBasicInformation Optional BridgedDeviceBasicInformationCluster attribute values to
      */
-    addBridgedDeviceWithPowerSourceInfo(
+    async addBridgedDeviceWithPowerSourceInfo(
         device: Device | ComposedDevice,
         bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>,
-    ): void {
+    ): Promise<void> {
         // Add DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
         if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
@@ -95,7 +103,9 @@ export class Aggregator extends Endpoint {
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
-            device.addClusterServer(ClusterServer(BridgedDeviceBasicInformationCluster, bridgedBasicInformation, {}));
+            await device.addClusterServer(
+                ClusterServer(BridgedDeviceBasicInformationCluster, bridgedBasicInformation, {}),
+            );
         } else {
             if (!device.hasClusterServer(BridgedDeviceBasicInformationCluster)) {
                 throw new ImplementationError(
@@ -103,7 +113,7 @@ export class Aggregator extends Endpoint {
                 );
             }
         }
-        this.addChildEndpoint(device);
+        await this.addChildEndpoint(device);
     }
 
     /**
@@ -115,7 +125,7 @@ export class Aggregator extends Endpoint {
         return this.getChildEndpoints();
     }
 
-    removeBridgedDevice(device: Device | ComposedDevice) {
-        this.removeChildEndpoint(device);
+    async removeBridgedDevice(device: Device | ComposedDevice) {
+        return this.removeChildEndpoint(device);
     }
 }

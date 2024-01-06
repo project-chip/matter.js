@@ -13,6 +13,7 @@ import { StatusCode, StatusResponseError } from "../../protocol/interaction/Stat
 import { Session } from "../../session/Session.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { Time, Timer } from "../../time/Time.js";
+import { AsyncConstruction } from "../../util/AsyncConstruction.js";
 import { ByteArray } from "../../util/ByteArray.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
@@ -31,20 +32,27 @@ export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
 class AdministratorCommissioningManager {
     private commissioningWindowTimeout?: Timer;
     private fabricRemoveHandler = () => this.adminFabricIndexAttribute.setLocal(null);
+    #construction: AsyncConstruction<AdministratorCommissioningManager>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(
         private readonly windowStatusAttribute: AttributeServer<AdministratorCommissioning.CommissioningWindowStatus>,
         private readonly adminFabricIndexAttribute: AttributeServer<FabricIndex | null>,
         private readonly adminVendorIdAttribute: AttributeServer<VendorId | null>,
     ) {
-        windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
+        this.#construction = AsyncConstruction(this, async () => {
+            await windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
+        });
     }
 
     /**
      * Called whenever a Commissioning/Announcement Window is opened by this cluster. This method starts the timer and
      * adjusts the needed attributes.
      */
-    initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
+    async initializeCommissioningWindow(commissioningTimeout: number, session: Session<MatterDevice>) {
         if (this.commissioningWindowTimeout !== undefined) {
             // Should never happen, but let's make sure
             throw new InternalError("Commissioning window already initialized.");
@@ -55,8 +63,8 @@ class AdministratorCommissioningManager {
             async () => await this.closeCommissioningWindow(session),
         ).start();
 
-        this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);
-        this.adminVendorIdAttribute.setLocal(session.getAssociatedFabric().rootVendorId);
+        await this.adminFabricIndexAttribute.setLocal(session.getAssociatedFabric().fabricIndex);
+        await this.adminVendorIdAttribute.setLocal(session.getAssociatedFabric().rootVendorId);
         session.getAssociatedFabric().addRemoveCallback(this.fabricRemoveHandler);
     }
 
@@ -109,15 +117,17 @@ class AdministratorCommissioningManager {
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
-        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen);
-        this.initializeCommissioningWindow(commissioningTimeout, session);
+        await this.windowStatusAttribute.setLocal(
+            AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
+        );
+        await this.initializeCommissioningWindow(commissioningTimeout, session);
 
         await device.allowEnhancedCommissioning(
             discriminator,
             PaseServer.fromVerificationValue(pakeVerifier, { iterations, salt }),
-            () => {
+            async () => {
                 session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
-                this.endCommissioning();
+                await this.endCommissioning();
             },
         );
     }
@@ -128,32 +138,32 @@ class AdministratorCommissioningManager {
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
 
-        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen);
-        this.initializeCommissioningWindow(commissioningTimeout, session);
+        await this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen);
+        await this.initializeCommissioningWindow(commissioningTimeout, session);
 
-        await device.allowBasicCommissioning(() => {
+        await device.allowBasicCommissioning(async () => {
             session.getAssociatedFabric().deleteRemoveCallback(this.fabricRemoveHandler);
-            this.endCommissioning();
+            await this.endCommissioning();
         });
     }
 
     /**
      * This method is used internally when the commissioning window timer expires or the commissioning was completed.
      */
-    private endCommissioning() {
+    private async endCommissioning() {
         logger.debug("End commissioning window.");
         if (this.commissioningWindowTimeout !== undefined) {
             this.commissioningWindowTimeout.stop();
             this.commissioningWindowTimeout = undefined;
         }
-        this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
-        this.adminFabricIndexAttribute.setLocal(null);
-        this.adminVendorIdAttribute.setLocal(null);
+        await this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
+        await this.adminFabricIndexAttribute.setLocal(null);
+        await this.adminVendorIdAttribute.setLocal(null);
     }
 
     /** This method is used to close a commissioning window. */
     async closeCommissioningWindow(session: Session<MatterDevice>) {
-        this.endCommissioning();
+        await this.endCommissioning();
         await session.getContext().endCommissioning();
     }
 
@@ -185,8 +195,9 @@ export const AdministratorCommissioningHandler: () => ClusterServerHandlers<
     let manager: AdministratorCommissioningManager;
 
     return {
-        initializeClusterServer: ({ attributes: { windowStatus, adminVendorId, adminFabricIndex } }) => {
+        initializeClusterServer: async ({ attributes: { windowStatus, adminVendorId, adminFabricIndex } }) => {
             manager = new AdministratorCommissioningManager(windowStatus, adminFabricIndex, adminVendorId);
+            await manager.construction;
         },
 
         openCommissioningWindow: async ({
@@ -216,8 +227,9 @@ export const BasicAdminCommissioningHandler: () => ClusterServerHandlers<
     let manager: AdministratorCommissioningManager;
 
     return {
-        initializeClusterServer: ({ attributes: { windowStatus, adminVendorId, adminFabricIndex } }) => {
+        initializeClusterServer: async ({ attributes: { windowStatus, adminVendorId, adminFabricIndex } }) => {
             manager = new AdministratorCommissioningManager(windowStatus, adminFabricIndex, adminVendorId);
+            await manager.construction;
         },
 
         openCommissioningWindow: async ({

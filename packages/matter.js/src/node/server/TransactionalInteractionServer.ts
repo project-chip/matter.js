@@ -50,13 +50,13 @@ interface InternalSession extends Session<MatterDevice> {
  */
 export class TransactionalInteractionServer extends InteractionServer {
     constructor(root: Part, store: ServerStore, subscriptionOptions: SubscriptionOptions) {
-        const structure = new InteractionEndpointStructure;
-        root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
+        const structure = new InteractionEndpointStructure();
+        root.lifecycle.changed.on(async () => structure.initializeFromEndpoint(PartServer.forPart(root)));
         super({
             eventHandler: store.eventHandler,
             endpointStructure: structure,
             subscriptionOptions: subscriptionOptions,
-        })
+        });
     }
 
     /**
@@ -113,13 +113,13 @@ export class TransactionalInteractionServer extends InteractionServer {
             return fn();
         } catch (e) {
             try {
-                this.#endTransaction(session, "rollback");
+                await this.#endTransaction(session, "rollback");
             } catch (e) {
                 logger.error("Unhandled error in transaction rollback", e);
             }
             throw e;
         } finally {
-            this.#endTransaction(session, "commit");
+            await this.#endTransaction(session, "commit");
         }
     }
 

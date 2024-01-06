@@ -15,7 +15,7 @@ import { DeviceTestInstance } from "../DeviceTestInstance";
  * 95.1.1. [TC-ULABEL-1.1] Global Attributes with DUT as Server
  */
 export class Test_TC_FLABEL_1_1 extends DeviceTestInstance {
-    onOffDevice = new OnOffPluginUnitDevice();
+    onOffDevice?: OnOffPluginUnitDevice;
     commissioningServer?: CommissioningServer;
 
     constructor(storage: StorageBackendMemory, overrideTestName?: string) {
@@ -23,7 +23,8 @@ export class Test_TC_FLABEL_1_1 extends DeviceTestInstance {
     }
 
     async setupCommissioningServer() {
-        this.commissioningServer = new CommissioningServer({
+        this.onOffDevice = await OnOffPluginUnitDevice.create();
+        this.commissioningServer = await CommissioningServer.create({
             port: 5540,
             deviceName: "Testdevice",
             deviceType: DeviceTypeId(this.onOffDevice.deviceType),
@@ -41,10 +42,10 @@ export class Test_TC_FLABEL_1_1 extends DeviceTestInstance {
             delayedAnnouncement: false,
         });
 
-        this.onOffDevice.addFixedLabel("foo", "bar");
-        this.onOffDevice.addFixedLabel("foo", "bar2");
+        await this.onOffDevice.addFixedLabel("foo", "bar");
+        await this.onOffDevice.addFixedLabel("foo", "bar2");
 
-        this.commissioningServer.addDevice(this.onOffDevice);
+        await this.commissioningServer.addDevice(this.onOffDevice);
 
         return this.commissioningServer;
     }

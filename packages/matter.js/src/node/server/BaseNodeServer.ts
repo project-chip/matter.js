@@ -28,11 +28,10 @@ import { UdpInterface } from "../../net/UdpInterface.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import {
-    DiscoveryCapabilitiesBitmap,
-} from "../../schema/PairingCodeSchema.js";
+import { DiscoveryCapabilitiesBitmap } from "../../schema/PairingCodeSchema.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { NamedHandler } from "../../util/NamedHandler.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { NetworkOptions } from "../options/NetworkOptions.js";
 
@@ -68,7 +67,7 @@ export abstract class BaseNodeServer implements MatterNode {
     #deviceInstance?: MatterDevice;
     #interactionServer?: InteractionServer;
 
-    protected endpointStructure = new InteractionEndpointStructure;
+    protected endpointStructure = new InteractionEndpointStructure();
 
     protected readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
@@ -94,7 +93,7 @@ export abstract class BaseNodeServer implements MatterNode {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): MaybePromise<ClusterServerObj<A, E> | undefined> {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
@@ -106,7 +105,7 @@ export abstract class BaseNodeServer implements MatterNode {
     addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
-        this.rootEndpoint.addClusterClient(cluster);
+        return this.rootEndpoint.addClusterClient(cluster);
     }
 
     /**
@@ -120,7 +119,7 @@ export abstract class BaseNodeServer implements MatterNode {
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): MaybePromise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.rootEndpoint.getClusterClient(cluster);
     }
 
@@ -137,8 +136,8 @@ export abstract class BaseNodeServer implements MatterNode {
      * @param endpoint Endpoint to add
      * @protected
      */
-    protected addEndpoint(endpoint: EndpointInterface) {
-        this.rootEndpoint.addChildEndpoint(endpoint);
+    protected async addEndpoint(endpoint: EndpointInterface) {
+        await this.rootEndpoint.addChildEndpoint(endpoint);
     }
 
     /**
@@ -158,7 +157,7 @@ export abstract class BaseNodeServer implements MatterNode {
      *
      * @param cluster
      */
-    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    async addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new ImplementationError(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!",
@@ -169,7 +168,7 @@ export abstract class BaseNodeServer implements MatterNode {
                 "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
             );
         }
-        this.rootEndpoint.addClusterServer(cluster);
+        await this.rootEndpoint.addClusterServer(cluster);
     }
 
     /**
@@ -179,10 +178,7 @@ export abstract class BaseNodeServer implements MatterNode {
      *                and BLE if configured
      */
     async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
-        if (
-            this.#mdnsBroadcaster === undefined ||
-            this.#mdnsScanner === undefined
-        ) {
+        if (this.#mdnsBroadcaster === undefined || this.#mdnsScanner === undefined) {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
@@ -192,16 +188,16 @@ export abstract class BaseNodeServer implements MatterNode {
             return;
         }
 
-        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+        const basicInformation = await this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
         this.#interactionServer = this.createInteractionServer();
 
-        this.initializeEndpoints();
+        await this.initializeEndpoints();
 
-        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
+        await this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
         this.#deviceInstance = new MatterDevice(
@@ -274,23 +270,25 @@ export abstract class BaseNodeServer implements MatterNode {
         await this.#deviceInstance.start();
 
         // Send required events
-        basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
+        await basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
 
-        const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
+        const generalDiagnostics = await this.getRootClusterServer(GeneralDiagnosticsCluster);
         if (generalDiagnostics !== undefined) {
-            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({
+            await (
+                await this.getRootClusterServer(GeneralDiagnosticsCluster)
+            )?.triggerBootReasonEvent({
                 bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified,
             });
         }
     }
 
-    protected abstract initializeEndpoints(): void;
+    protected abstract initializeEndpoints(): Promise<void>;
 
     protected abstract createInteractionServer(): InteractionServer;
 
     /**
      * Is the device commissioned?
-     * 
+     *
      * This is true if the device is paired with at least one controller.
      */
     get commissioned() {
@@ -323,8 +321,8 @@ export abstract class BaseNodeServer implements MatterNode {
      *
      * @param device Device or Aggregator instance to add
      */
-    addDevice(device: Device | Aggregator) {
-        this.addEndpoint(device);
+    async addDevice(device: Device | Aggregator) {
+        await this.addEndpoint(device);
     }
 
     /**
@@ -347,14 +345,14 @@ export abstract class BaseNodeServer implements MatterNode {
      * Close network connections of the device and stop responding to requests
      */
     async close() {
-        this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
+        await (await this.rootEndpoint.getClusterServer(BasicInformationCluster))?.triggerShutDownEvent?.();
         await this.#interactionServer?.close();
         this.#interactionServer = undefined;
         await this.#deviceInstance?.stop();
         this.#deviceInstance = undefined;
-        this.endpointStructure.destroy();
+        await this.endpointStructure.destroy();
     }
- 
+
     async factoryReset() {
         const wasStarted = this.#interactionServer !== undefined || this.#deviceInstance !== undefined;
         let fabrics = new Array<Fabric>();
@@ -363,7 +361,7 @@ export abstract class BaseNodeServer implements MatterNode {
             await this.close();
         }
 
-        this.clearStorage();
+        await this.clearStorage();
 
         if (wasStarted) {
             await this.advertise();
@@ -406,13 +404,13 @@ export abstract class BaseNodeServer implements MatterNode {
      *
      * @param reachable true if reachable, false otherwise
      */
-    setReachability(reachable: boolean) {
-        const basicInformationCluster = this.getRootClusterServer(BasicInformationCluster);
+    async setReachability(reachable: boolean) {
+        const basicInformationCluster = await this.getRootClusterServer(BasicInformationCluster);
         if (basicInformationCluster === undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
         if (basicInformationCluster.attributes.reachable !== undefined) {
-            basicInformationCluster.setReachableAttribute(reachable);
+            await basicInformationCluster.setReachableAttribute(reachable);
         }
     }
 

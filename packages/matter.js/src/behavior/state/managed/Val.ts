@@ -67,7 +67,7 @@ export namespace Val {
          * @param oldValue the previous value of the property
          * @param newValue the new value
          */
-        notify(index?: string, oldValue?: Val, newValue?: Val): void;
+        notify(index?: string, oldValue?: Val, newValue?: Val): Promise<void>;
 
         /**
          * Refresh any internal cache from the referenced container.

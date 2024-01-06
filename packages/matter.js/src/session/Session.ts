@@ -42,7 +42,7 @@ export interface Session<T> {
     getPeerSessionId(): number;
     getNodeId(): NodeId | undefined;
     getPeerNodeId(): NodeId | undefined;
-    getIncrementedMessageCounter(): number;
+    getIncrementedMessageCounter(): Promise<number>;
     end(sendClose: boolean): Promise<void>;
     destroy(sendClose?: boolean, closeAfterExchangeFinished?: boolean): Promise<void>;
     notifyActivity(messageReceived: boolean): void;

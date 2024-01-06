@@ -138,8 +138,7 @@ export class CommissioningController implements MatterNode {
      *
      * @param options The options for the CommissioningController
      */
-    constructor(private readonly options: CommissioningControllerOptions) {
-    }
+    constructor(private readonly options: CommissioningControllerOptions) {}
 
     get nodeId() {
         return this.controllerInstance?.nodeId;
@@ -418,12 +417,12 @@ export class CommissioningController implements MatterNode {
         );
     }
 
-    resetStorage() {
+    async resetStorage() {
         this.assertControllerIsStarted(
             "Storage can not be reset while the controller is operating! Please close the controller first.",
         );
         const { storage } = this.assertIsAddedToMatterServer();
-        storage.clearAll();
+        await storage.clearAll();
     }
 
     /** Returns active session information for all connected nodes. */

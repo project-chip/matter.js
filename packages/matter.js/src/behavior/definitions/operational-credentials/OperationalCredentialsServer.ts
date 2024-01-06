@@ -18,14 +18,23 @@ import { BasicInformationBehavior } from "../basic-information/BasicInformationB
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
-import { AddNocRequest, AddTrustedRootCertificateRequest, AttestationRequest, CertificateChainRequest, CsrRequest, RemoveFabricRequest, UpdateFabricLabelRequest, UpdateNocRequest } from "./OperationalCredentialsInterface.js";
+import {
+    AddNocRequest,
+    AddTrustedRootCertificateRequest,
+    AttestationRequest,
+    CertificateChainRequest,
+    CsrRequest,
+    RemoveFabricRequest,
+    UpdateFabricLabelRequest,
+    UpdateNocRequest,
+} from "./OperationalCredentialsInterface.js";
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
 
 const logger = Logger.get("OperationalCredentials");
 
 /**
  * This is the default server implementation of OperationalCredentialsBehavior.
- * 
+ *
  * TODO - currently "source of truth" for fabric data is persisted by
  * FabricManager.  I'd probably convert so we just load fabrics from persisted
  * OperationalCredentials state but right now we just sync the state
@@ -39,7 +48,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         this.internal.certification = new DeviceCertification(
             this.state.certification,
-            commissioning.state.productDescription
+            commissioning.state.productDescription,
         );
     }
 
@@ -59,10 +68,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         });
         return {
             attestationElements: elements,
-            attestationSignature: this.#certification.sign(
-                this.session,
-                elements
-            )
+            attestationSignature: this.#certification.sign(this.session, elements),
         };
     }
 
@@ -103,9 +109,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
     }
 
-    override async addNoc(
-        { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest
-    ) {
+    override async addNoc({ nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest) {
         // TODO 1. Verify the NOC using:
         //         a. Crypto_VerifyChain(certificates = [NOCValue, ICACValue, RootCACertificate]) if ICACValue is present,
         //         b. Crypto_VerifyChain(certificates = [NOCValue, RootCACertificate]) if ICACValue is not present. If this
@@ -229,7 +233,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
-            fabricIndex: fabric.fabricIndex
+            fabricIndex: fabric.fabricIndex,
         };
     }
 
@@ -278,7 +282,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         const updateFabric = await failSafeContext.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        device.updateFabric(updateFabric);
+        await device.updateFabric(updateFabric);
 
         // Update attributes
         this.state.nocs[updateFabric.fabricIndex] = {
@@ -293,7 +297,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         };
     }
 
-    override updateFabricLabel({ label }: UpdateFabricLabelRequest) {
+    override async updateFabricLabel({ label }: UpdateFabricLabelRequest) {
         const fabric = this.session.getFabric();
         if (fabric === undefined) throw new MatterFlowError("updateOperationalCert on a session linked to a fabric.");
 
@@ -309,7 +313,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             };
         }
 
-        fabric.setLabel(label);
+        await fabric.setLabel(label);
         this.state.fabrics[fabric.fabricIndex].label = label;
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
@@ -328,10 +332,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         const bi = this.agent.get(BasicInformationBehavior);
-        bi.events.leave?.emit({ fabricIndex }, this.context);
+        await bi.events.leave?.emit({ fabricIndex }, this.context);
 
         await fabric.remove(this.session.getId());
-        for (const array of [ this.state.fabrics, this.state.nocs, this.state.trustedRootCertificates]) {
+        for (const array of [this.state.fabrics, this.state.nocs, this.state.trustedRootCertificates]) {
             array.splice(fabricIndex, 1);
             this.state.commissionedFabrics = this.state.fabrics.length;
         }
@@ -374,11 +378,11 @@ export namespace OperationalCredentialsServer {
     export class State extends OperationalCredentialsBehavior.State {
         /**
          * Device certification information.
-         * 
+         *
          * Device certification provides a cryptographic certificate that asserts
          * the official status of a device.  Production consumer-facing devices are
          * certified by the CSA.
-         * 
+         *
          * Development devices and those intended for personal use may use a
          * development certificate.  This is the default if you do not provide
          * an official certification in {@link ServerOptions.certification}.

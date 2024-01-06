@@ -178,7 +178,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        await handleTimedRequest(timedRequest);
+                        handleTimedRequest(timedRequest);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;

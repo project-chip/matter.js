@@ -140,37 +140,39 @@ class Device {
 
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
-            if (deviceStorage.has(`isSocket${i}`)) {
+            if (await deviceStorage.has(`isSocket${i}`)) {
                 logger.info("Device type found in storage. -type parameter is ignored.");
             }
-            const isSocket = deviceStorage.get(`isSocket${i}`, getParameter(`type${i}`) === "socket");
+            const isSocket = await deviceStorage.get(`isSocket${i}`, getParameter(`type${i}`) === "socket");
             const deviceName = `Matter ${getParameter(`type${i}`) ?? "light"} device ${i}`;
             const deviceType =
                 getParameter(`type${i}`) === "socket"
                     ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code
                     : DeviceTypes.ON_OFF_LIGHT.code;
             const vendorName = "matter-node.js";
-            const passcode = getIntParameter(`passcode${i}`) ?? deviceStorage.get(`passcode${i}`, defaultPasscode++);
+            const passcode =
+                getIntParameter(`passcode${i}`) ?? (await deviceStorage.get(`passcode${i}`, defaultPasscode++));
             const discriminator =
-                getIntParameter(`discriminator${i}`) ?? deviceStorage.get(`discriminator${i}`, defaultDiscriminator++);
+                getIntParameter(`discriminator${i}`) ??
+                (await deviceStorage.get(`discriminator${i}`, defaultDiscriminator++));
             // product name / id and vendor id should match what is in the device certificate
-            const vendorId = getIntParameter(`vendorid${i}`) ?? deviceStorage.get(`vendorid${i}`, 0xfff1);
+            const vendorId = getIntParameter(`vendorid${i}`) ?? (await deviceStorage.get(`vendorid${i}`, 0xfff1));
             const productName = `node-matter OnOff-Device ${i}`;
-            const productId = getIntParameter(`productid${i}`) ?? deviceStorage.get(`productid${i}`, 0x8000);
+            const productId = getIntParameter(`productid${i}`) ?? (await deviceStorage.get(`productid${i}`, 0x8000));
 
             const port = getIntParameter(`port${i}`) ?? defaultPort++;
 
             const uniqueId =
-                getIntParameter(`uniqueid${i}`) ?? deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`);
+                getIntParameter(`uniqueid${i}`) ?? (await deviceStorage.get(`uniqueid${i}`, `${i}-${Time.nowMs()}`));
 
-            deviceStorage.set(`passcode${i}`, passcode);
-            deviceStorage.set(`discriminator${i}`, discriminator);
-            deviceStorage.set(`vendorid${i}`, vendorId);
-            deviceStorage.set(`productid${i}`, productId);
-            deviceStorage.set(`isSocket${i}`, isSocket);
-            deviceStorage.set(`uniqueid${i}`, uniqueId);
+            await deviceStorage.set(`passcode${i}`, passcode);
+            await deviceStorage.set(`discriminator${i}`, discriminator);
+            await deviceStorage.set(`vendorid${i}`, vendorId);
+            await deviceStorage.set(`productid${i}`, productId);
+            await deviceStorage.set(`isSocket${i}`, isSocket);
+            await deviceStorage.set(`uniqueid${i}`, uniqueId);
 
-            const commissioningServer = new CommissioningServer({
+            const commissioningServer = await CommissioningServer.create({
                 port,
                 deviceName,
                 deviceType,
@@ -192,10 +194,12 @@ class Device {
             );
 
             const onOffDevice =
-                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
-            onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
+                getParameter(`type${i}`) === "socket"
+                    ? await OnOffPluginUnitDevice.create()
+                    : await OnOffLightDevice.create();
+            await onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
-            commissioningServer.addDevice(onOffDevice);
+            await commissioningServer.addDevice(onOffDevice);
 
             await this.matterServer.addCommissioningServer(commissioningServer);
 

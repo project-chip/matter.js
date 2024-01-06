@@ -24,7 +24,7 @@ export class TestCommissioningWindow extends MinimalOnOffDeviceTestInstance {
     override async setupCommissioningServer() {
         const commissioningServer = await super.setupCommissioningServer();
 
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 AdministratorCommissioningCluster.with("Basic"),
                 {

@@ -73,9 +73,9 @@ describe("ClusterServer structure", () => {
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             expect(basic2?.attributes.softwareVersion.getLocal()).equal(1);
@@ -121,23 +121,23 @@ describe("ClusterServer structure", () => {
             expect(basic.attributes.nodeLabel.getLocal()).equal("");
             expect(basic.attributes.nodeLabel.isFixed).not.ok;
             expect(basic.getNodeLabelAttribute()).equal("");
-            basic.attributes.nodeLabel.setLocal("new");
-            basic.setNodeLabelAttribute("new 2");
+            await basic.attributes.nodeLabel.setLocal("new");
+            await basic.setNodeLabelAttribute("new 2");
             expect(typeof basic.subscribeNodeLabelAttribute === "function").ok;
             expect(basic.getNodeLabelAttribute()).equal("new 2");
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             expect(basic2?.attributes.nodeLabel.getLocal()).equal("new 2");
             expect(basic2?.attributes.nodeLabel instanceof AttributeServer).ok;
             expect(basic2?.getNodeLabelAttribute()).equal("new 2");
-            basic2?.attributes.nodeLabel.setLocal("new");
-            basic2?.setNodeLabelAttribute("new");
+            await basic2?.attributes.nodeLabel.setLocal("new");
+            await basic2?.setNodeLabelAttribute("new");
             expect(typeof basic2?.subscribeNodeLabelAttribute === "function").ok;
             expect(basic2?.getNodeLabelAttribute()).equal("new");
         });
@@ -191,9 +191,9 @@ describe("ClusterServer structure", () => {
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
@@ -247,15 +247,15 @@ describe("ClusterServer structure", () => {
             expect(basic.attributes.reachable instanceof AttributeServer).ok;
             // guard needed because as per types optional are potentially undefined
             expect(basic.getReachableAttribute?.()).equal(true);
-            basic.attributes.reachable?.setLocal(false);
+            await basic.attributes.reachable?.setLocal(false);
             expect(typeof basic.subscribeReachableAttribute === "function").ok;
-            basic.setReachableAttribute(true);
+            await basic.setReachableAttribute(true);
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
@@ -263,9 +263,9 @@ describe("ClusterServer structure", () => {
             expect(basic2?.attributes.reachable instanceof AttributeServer).ok;
             // guard needed because as per types optional are potentially undefined
             expect(basic2?.getReachableAttribute?.()).equal(true);
-            basic2?.attributes.reachable?.setLocal(false);
+            await basic2?.attributes.reachable?.setLocal(false);
             expect(typeof basic2?.subscribeReachableAttribute === "function").ok;
-            basic2?.setReachableAttribute(true);
+            await basic2?.setReachableAttribute(true);
         });
 
         it("Optional non-existing fixed attribute returns undefined but do not exist in named object", async () => {
@@ -307,9 +307,9 @@ describe("ClusterServer structure", () => {
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             // guard needed because as per types optional are potentially undefined
@@ -368,9 +368,9 @@ describe("ClusterServer structure", () => {
 
             // Now we set this Cluster into Endpoint and retrieve it again and verify it is the same
             const endpoint = new Endpoint([DeviceTypes.ON_OFF_LIGHT], { endpointId: EndpointNumber(1) });
-            endpoint.addClusterServer(basic);
+            await endpoint.addClusterServer(basic);
 
-            const basic2 = endpoint.getClusterServer(BasicInformationCluster);
+            const basic2 = await endpoint.getClusterServer(BasicInformationCluster);
             expect(basic2).ok;
 
             expect(basic2?.attributes.localConfigDisabled).undefined;
@@ -391,7 +391,7 @@ describe("ClusterServer structure", () => {
             );
         });
 
-        it("Fabric scoped attribute servers call fabric methods", () => {
+        it("Fabric scoped attribute servers call fabric methods", async () => {
             const binding = ClusterServer(
                 BindingCluster,
                 {
@@ -423,9 +423,9 @@ describe("ClusterServer structure", () => {
             } as Fabric;
 
             expect(binding.attributes.binding.getLocalForFabric(fabric)).deep.equal([]);
-            binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
+            await binding.attributes.binding.setLocalForFabric([{ fabricIndex: FabricIndex(1) }], fabric);
             expect(binding.getBindingAttribute(fabric)).deep.equal([]);
-            binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
+            await binding.setBindingAttribute([{ fabricIndex: FabricIndex(1) }], fabric);
 
             expect(getScopedClusterDataValueCalledCounter).equal(4);
             expect(setScopedClusterDataValueCalledCounter).equal(2);
@@ -567,7 +567,52 @@ describe("ClusterServer structure", () => {
             expect((server.attributes as any).generatedCommandList.get()).deep.equal([]);
         });
 
-        it("Verify init/destroy is called on CLusterServe when definedr", async () => {
+        it("Verify init/destroy is called on ClusterServer when defined sync", async () => {
+            let initCalled = false;
+            let destroyCalled = false;
+            const server = ClusterServer(
+                IdentifyCluster,
+                {
+                    identifyTime: 100,
+                    identifyType: Identify.IdentifyType.None,
+                },
+                {
+                    identify: async () => {
+                        /* dummy */
+                    },
+                    initializeClusterServer: () => {
+                        initCalled = true;
+                    },
+                    destroyClusterServer: () => {
+                        destroyCalled = true;
+                    },
+                },
+            );
+            expect(server).ok;
+
+            asClusterServerInternal(server)._assignToEndpoint({} as any);
+            expect(initCalled).false;
+
+            const testStorage = new StorageBackendMemory();
+            const testStorageManager = new StorageManager(testStorage);
+            await testStorageManager.initialize();
+            let version = 1;
+            await asClusterServerInternal(server)._setDatasource({
+                get version() {
+                    return version;
+                },
+                async increaseVersion() {
+                    return ++version;
+                },
+                async changed() {},
+            });
+            expect(initCalled).true;
+
+            await asClusterServerInternal(server)._destroy();
+            expect(destroyCalled).true;
+        });
+
+        it("Verify init/destroy is called on ClusterServer when defined async", async () => {
             let initCalled = false;
             let destroyCalled = false;
             const server = ClusterServer(
@@ -597,18 +642,22 @@ describe("ClusterServer structure", () => {
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
             let version = 1;
-            asClusterServerInternal(server).datasource = {
-                get version() { return version },
-                increaseVersion() { return ++version },
-                changed() {},
-            };
+            await asClusterServerInternal(server)._setDatasource({
+                get version() {
+                    return version;
+                },
+                async increaseVersion() {
+                    return ++version;
+                },
+                async changed() {},
+            });
             expect(initCalled).true;
 
-            asClusterServerInternal(server)._destroy();
+            await asClusterServerInternal(server)._destroy();
             expect(destroyCalled).true;
         });
 
-        it("Verify not used init/destroy are not making issues", () => {
+        it("Verify not used init/destroy are not making issues", async () => {
             const server = ClusterServer(
                 IdentifyCluster,
                 {
@@ -624,7 +673,7 @@ describe("ClusterServer structure", () => {
             expect(server).ok;
 
             asClusterServerInternal(server)._assignToEndpoint({} as any);
-            asClusterServerInternal(server)._destroy();
+            await asClusterServerInternal(server)._destroy();
         });
 
         it("GroupsCluster", () => {

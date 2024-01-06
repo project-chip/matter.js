@@ -96,8 +96,8 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 };
             }
             if (
-                this.state.countryCodeWhitelist !== undefined
-                && !this.state.countryCodeWhitelist.includes(countryCode)
+                this.state.countryCodeWhitelist !== undefined &&
+                !this.state.countryCodeWhitelist.includes(countryCode)
             ) {
                 return {
                     errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,

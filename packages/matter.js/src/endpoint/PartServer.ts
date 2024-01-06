@@ -20,6 +20,7 @@ import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Logger } from "../log/Logger.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { PartStoreService } from "../node/server/storage/PartStoreService.js";
+import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { EndpointInterface } from "./EndpointInterface.js";
 import { Part } from "./Part.js";
 
@@ -52,6 +53,12 @@ export class PartServer implements EndpointInterface {
         }
 
         part.lifecycle.changed.on(() => this.#structureChangedCallback?.());
+    }
+
+    get construction(): AsyncConstruction<PartServer> {
+        return AsyncConstruction(this, async () => {
+            // Nothing to do
+        });
     }
 
     createBacking(behavior: Behavior.Type): BehaviorBacking {
@@ -91,7 +98,7 @@ export class PartServer implements EndpointInterface {
         return this.number;
     }
 
-    removeFromStructure(): void {
+    async removeFromStructure(): Promise<void> {
         //this.destroy();
         this.#structureChangedCallback = undefined;
     }
@@ -139,6 +146,10 @@ export class PartServer implements EndpointInterface {
         return this.#clusterServers.has(cluster.id);
     }
 
+    hasClusterServerById(clusterId: ClusterId): boolean {
+        return this.#clusterServers.has(clusterId);
+    }
+
     getClusterServer<const T extends ClusterType>(
         cluster: T,
     ): ClusterServerObj<T["attributes"], T["events"]> | undefined {
@@ -169,9 +180,9 @@ export class PartServer implements EndpointInterface {
         throw new NotImplementedError("Cluster clients unavailable on PartServer");
     }
 
-    addChildEndpoint(endpoint: EndpointInterface): void {
+    async addChildEndpoint(endpoint: EndpointInterface): Promise<void> {
         if (endpoint instanceof PartServer) {
-            this.#part.parts.add(endpoint.#part);
+            await this.#part.parts.add(endpoint.#part);
         } else {
             throw new ImplementationError("Attempt to add unmanaged endpoint as child of Part");
         }
@@ -203,14 +214,9 @@ export class PartServer implements EndpointInterface {
      * Log details of fully initialized part.
      */
     #logPart() {
-        const isNew = this.#part.owner
-            .serviceFor(PartStoreService)
-            .storeForPart(this.#part)
-            .isNew;
+        const isNew = this.#part.owner.serviceFor(PartStoreService).storeForPart(this.#part).isNew;
 
-        const port = this.#part.owner
-            .serviceFor(IdentityService)
-            .port;
+        const port = this.#part.owner.serviceFor(IdentityService).port;
 
         const { active, inactive } = this.#part.behaviors;
 
@@ -223,10 +229,10 @@ export class PartServer implements EndpointInterface {
                 "endpoint#": this.#part.number,
                 type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
                 port,
-                "known": !isNew,
-                "active": active.length ? this.#part.behaviors.active.join(", ") : "(none)",
-                "inactive": inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
-            })
+                known: !isNew,
+                active: active.length ? this.#part.behaviors.active.join(", ") : "(none)",
+                inactive: inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
+            }),
         );
     }
 }

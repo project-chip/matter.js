@@ -28,7 +28,7 @@ import { EndpointType } from "./type/EndpointType.js";
  * You can interact with endpoints using an {@link Agent} created
  * with {@link Part.getAgent}.  Agents are stateless and designed for quick
  * instantiation so you can create them as needed then discard.
- * 
+ *
  * Most often direct access to {@link Agent} is transparent as Matter.js
  * acquires an agent as necessary for {@link Behavior} interactions.
  */
@@ -42,7 +42,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #behaviors?: Behaviors;
     #lifecycle: Lifecycle;
     #parts?: Parts;
-    #construction: AsyncConstruction<Part<T>>;
+    protected _construction: AsyncConstruction<Part<T>>;
 
     /**
      * A string that uniquely identifies a part.  This ID must be unique across
@@ -51,7 +51,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get id() {
         if (this.#id === undefined) {
             throw new NotInitializedError(
-                "Part ID is not yet assigned; set ID or await part.construction to avoid this error"
+                "Part ID is not yet assigned; set ID or await part.construction to avoid this error",
             );
         }
         return this.#id;
@@ -64,7 +64,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get number(): EndpointNumber {
         if (this.#number === undefined) {
             throw new NotInitializedError(
-                "Part number is not yet assigned; set number or await part.construction to avoid this error"
+                "Part number is not yet assigned; set number or await part.construction to avoid this error",
             );
         }
         return this.#number;
@@ -75,9 +75,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get owner(): PartOwner {
         if (!this.#owner) {
-            throw new ImplementationError(
-                "Part owner is not available until node is installed"
-            );
+            throw new ImplementationError("Part owner is not available until node is installed");
         }
         return this.#owner;
     }
@@ -88,14 +86,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get behaviors() {
         if (this.#behaviors === undefined) {
             throw new NotInitializedError(
-                "Part behaviors not yet initialized; await part.construction to avoid this error"
+                "Part behaviors not yet initialized; await part.construction to avoid this error",
             );
         }
         return this.#behaviors;
     }
-    
+
     get construction() {
-        return this.#construction;
+        return this._construction;
     }
 
     constructor(config: Part.Configuration<T> | T);
@@ -105,7 +103,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
         if (Part.isConfiguration(definition)) {
             options = definition;
-            definition = definition.type
+            definition = definition.type;
         }
 
         this.#type = definition;
@@ -126,13 +124,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             this.owner = options.owner;
         }
 
-        if (options?.parts) {
-            for (const part of options.parts) {
-                this.parts.add(part);
+        this._construction = AsyncConstruction(this, async () => {
+            if (options?.parts) {
+                for (const part of options.parts) {
+                    await this.parts.add(part);
+                }
             }
-        }
 
-        this.#construction = AsyncConstruction(this, () => {
             if (this.#lifecycle.isInstalled) {
                 // Immediate initialization
                 return this.#initialize();
@@ -141,10 +139,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             // Deferred initialization -- wait for installation
             return new Promise<void>(fulfilled => {
                 this.#lifecycle.installed.once(() => {
-                    MaybePromise.then(
-                        this.#initialize(),
-                        fulfilled
-                    );
+                    MaybePromise.then(this.#initialize(), fulfilled);
                 });
             });
         });
@@ -159,10 +154,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.owner.serviceFor(BehaviorInitializer).initializeDescendent(this);
 
         const promise = this.behaviors.initialize();
-        return MaybePromise.then(
-            promise,
-            () => this.lifecycle.change(Lifecycle.Change.Ready),
-        )
+        return MaybePromise.then(promise, () => this.lifecycle.change(Lifecycle.Change.Ready));
     }
 
     set id(id: string) {
@@ -185,7 +177,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         if (this.lifecycle.isInstalled) {
             this.owner.serviceFor(IdentityService).assertIdAvailable(id, this);
         }
-        
+
         this.#id = id;
         this.lifecycle.change(Lifecycle.Change.IdAssigned);
     }
@@ -195,7 +187,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#number !== undefined) {
-            throw new ImplementationError(`Part ${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`)
+            throw new ImplementationError(
+                `Part ${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`,
+            );
         }
         if (typeof number !== "number") {
             throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
@@ -235,7 +229,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
 
         this.#owner = owner;
-        
+
         try {
             owner.adoptChild(this);
         } catch (e) {
@@ -378,11 +372,11 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.#owner = undefined;
     }
 
-    adoptChild(part: Part) {
-        this.parts.add(part);
+    async adoptChild(part: Part) {
+        await this.parts.add(part);
     }
 
-    serviceFor<T>(type: abstract new(...args: any[]) => T): T {
+    serviceFor<T>(type: abstract new (...args: any[]) => T): T {
         if (!this.#owner) {
             throw new ImplementationError("Cannot access services because owner is not installed");
         }
@@ -401,41 +395,33 @@ export namespace Part {
     /**
      * Construction options for {@link Part}.
      */
-    export type Options<T extends EndpointType = EndpointType.Empty> = 
-        & {
-            owner?: PartOwner;
-            id?: string;
-            number?: number;
-            config?: BehaviorConfigurations<T>;
-            parts?: Iterable<Part.Definition>;
-        };
+    export type Options<T extends EndpointType = EndpointType.Empty> = {
+        owner?: PartOwner;
+        id?: string;
+        number?: number;
+        config?: BehaviorConfigurations<T>;
+        parts?: Iterable<Part.Definition>;
+    };
 
     /**
      * Options with embedded type.
      */
-     export type Configuration<T extends EndpointType = EndpointType.Empty> =
-        & { type: T }
-        & Options<T>;
+    export type Configuration<T extends EndpointType = EndpointType.Empty> = { type: T } & Options<T>;
 
     export type BehaviorConfigurations<T extends EndpointType> = {
-        [id in keyof T["behaviors"]]?: Behavior.Options<T["behaviors"][id]>
-    }    
+        [id in keyof T["behaviors"]]?: Behavior.Options<T["behaviors"][id]>;
+    };
 
     /**
      * Definition of a Part.  May be an {@link EndpointType},
      * {@link Configuration}, or a {@link Part} instance.
      */
-    export type Definition<T extends EndpointType = EndpointType.Empty> =
-        | T
-        | Configuration<T>
-        | Part<T>;
+    export type Definition<T extends EndpointType = EndpointType.Empty> = T | Configuration<T> | Part<T>;
 
     /**
      * Determine whether a {@link Definition} is a {@link Configuration}.
      */
-    export function isConfiguration<T extends EndpointType>(
-        definition: Definition<T>
-    ): definition is Configuration<T> {
+    export function isConfiguration<T extends EndpointType>(definition: Definition<T>): definition is Configuration<T> {
         return !(definition instanceof Part) && !!(definition as Configuration<T>).type;
     }
 

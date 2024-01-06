@@ -20,9 +20,9 @@ export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
     onOffDevice: OnOffPluginUnitDevice | undefined;
 
     async setupCommissioningServer() {
-        this.onOffDevice = new OnOffPluginUnitDevice();
+        this.onOffDevice = await OnOffPluginUnitDevice.create();
 
-        const commissioningServer = new CommissioningServer({
+        const commissioningServer = await CommissioningServer.create({
             port: 5540,
             deviceName: "Testdevice",
             deviceType: DeviceTypeId(this.onOffDevice.deviceType),
@@ -42,7 +42,7 @@ export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
         });
 
         // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 AdministratorCommissioningCluster.with("Basic"),
                 {
@@ -54,7 +54,7 @@ export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
             ),
         );
 
-        commissioningServer.addDevice(this.onOffDevice);
+        await commissioningServer.addDevice(this.onOffDevice);
 
         return commissioningServer;
     }

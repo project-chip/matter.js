@@ -53,8 +53,8 @@ export class Fabric {
 
     private readonly scopedClusterData: Map<number, any>;
 
-    private removeCallbacks = new Array<() => void>();
-    private persistCallback: (() => void) | undefined;
+    private removeCallbacks = new Array<() => Promise<void>>();
+    private persistCallback: (() => Promise<void>) | undefined;
 
     constructor(
         readonly fabricIndex: FabricIndex,
@@ -119,9 +119,9 @@ export class Fabric {
         );
     }
 
-    setLabel(label: string) {
+    async setLabel(label: string) {
         this.label = label;
-        this.persist();
+        await this.persist();
     }
 
     getPublicKey() {
@@ -161,30 +161,32 @@ export class Fabric {
         }
     }
 
-    addRemoveCallback(callback: () => void) {
+    addRemoveCallback(callback: () => Promise<void>) {
         this.removeCallbacks.push(callback);
     }
 
-    deleteRemoveCallback(callback: () => void) {
+    deleteRemoveCallback(callback: () => Promise<void>) {
         const index = this.removeCallbacks.indexOf(callback);
         if (index >= 0) {
             this.removeCallbacks.splice(index, 1);
         }
     }
 
-    setPersistCallback(callback: () => void) {
+    setPersistCallback(callback: () => Promise<void>) {
         this.persistCallback = callback;
     }
 
     async remove(currentSessionId?: number) {
-        this.removeCallbacks.forEach(callback => callback());
+        for (const callback of this.removeCallbacks) {
+            await callback();
+        }
         for (const session of [...this.sessions]) {
             await session.destroy(false, session.getId() === currentSessionId); // Delay Close for current session only
         }
     }
 
-    persist() {
-        this.persistCallback?.();
+    async persist() {
+        await this.persistCallback?.();
     }
 
     getScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string): T | undefined {
@@ -195,29 +197,29 @@ export class Fabric {
         return dataMap.get(clusterDataKey);
     }
 
-    setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
+    async setScopedClusterDataValue<T>(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string, value: T) {
         if (!this.scopedClusterData.has(cluster.id)) {
             this.scopedClusterData.set(cluster.id, new Map<string, SupportedStorageTypes>());
         }
         this.scopedClusterData.get(cluster.id).set(clusterDataKey, value);
-        this.persist();
+        await this.persist();
     }
 
-    deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
+    async deleteScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
         if (!this.scopedClusterData.has(cluster.id)) {
             return;
         }
         this.scopedClusterData.get(cluster.id).delete(clusterDataKey);
-        this.persist();
+        await this.persist();
     }
 
     hasScopedClusterDataValue(cluster: Cluster<any, any, any, any, any>, clusterDataKey: string) {
         return this.scopedClusterData.has(cluster.id) && this.scopedClusterData.get(cluster.id).has(clusterDataKey);
     }
 
-    deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
+    async deleteScopedClusterData(cluster: Cluster<any, any, any, any, any>) {
         this.scopedClusterData.delete(cluster.id);
-        this.persist();
+        await this.persist();
     }
 
     getScopedClusterDataKeys(cluster: Cluster<any, any, any, any, any>): string[] {

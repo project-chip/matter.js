@@ -18,7 +18,7 @@ export class TestUserLabelCluster extends Test_TC_ULABEL_1_1 {
 
     override async setupCommissioningServer() {
         const commissioningServer = await super.setupCommissioningServer();
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 UserLabelCluster,
                 {

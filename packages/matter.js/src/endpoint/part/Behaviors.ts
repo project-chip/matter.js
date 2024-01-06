@@ -7,18 +7,18 @@
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
-import { Lifecycle } from "./Lifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";
+import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
-import { MaybePromise } from "../../util/Promises.js";
 import type { Agent } from "../Agent.js";
 import type { Part } from "../Part.js";
-import type { SupportedBehaviors } from "./SupportedBehaviors.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { BehaviorInitializer } from "./BehaviorInitializer.js";
+import { Lifecycle } from "./Lifecycle.js";
+import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 
 const logger = Logger.get("Behaviors");
 
@@ -40,7 +40,7 @@ export class Behaviors {
     }
 
     /**
-     * The IDs of active {@link Behavior}s. 
+     * The IDs of active {@link Behavior}s.
      */
     get active() {
         return Object.keys(this.#backings);
@@ -54,7 +54,7 @@ export class Behaviors {
         for (const key of Object.keys(this.#backings)) {
             inactive.delete(key);
         }
-        return [ ...inactive ];
+        return [...inactive];
     }
 
     constructor(part: Part, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
@@ -91,13 +91,13 @@ export class Behaviors {
             return;
         }
 
-        return new Promise<void>((fulfilled) => {
+        return new Promise<void>(fulfilled => {
             const initializationListener = () => {
                 if (initializing.size === 0) {
                     initializing.deleted.off(initializationListener);
                     fulfilled();
                 }
-            }
+            };
 
             initializing.deleted.on(initializationListener);
         });
@@ -132,7 +132,7 @@ export class Behaviors {
         this.#supported[type.id] = type;
 
         this.#part.lifecycle.change(Lifecycle.Change.ServersChanged);
-            
+
         if (type.immediate && this.#part.lifecycle.isInstalled) {
             this.#part.agent.activate(type);
         }
@@ -157,7 +157,7 @@ export class Behaviors {
      */
     createAsync(type: Behavior.Type, agent: Agent): MaybePromise<Behavior> {
         this.activate(type);
-        let backing = this.#backings[type.id];
+        const backing = this.#backings[type.id];
 
         if (!backing.construction.ready) {
             return backing.construction.then(() => backing.createBehavior(agent, type));
@@ -275,7 +275,7 @@ export class Behaviors {
         // Initialize backing state
         if (!backing.construction.ready) {
             if (!this.#initializing) {
-                this.#initializing = new BasicSet;
+                this.#initializing = new BasicSet();
             }
             this.#initializing.add(backing);
 

@@ -11,6 +11,8 @@ import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { AsyncConstruction } from "../util/AsyncConstruction.js";
+import { MaybePromise } from "../util/Promises.js";
 
 /**
  * The primary interface for Matter.js endpoint implementations.
@@ -22,16 +24,18 @@ export interface EndpointInterface {
     name: string;
     number: EndpointNumber | undefined;
     getNumber(): EndpointNumber;
-    removeFromStructure(): void;
-    updatePartsList(): EndpointNumber[];
+    removeFromStructure(): Promise<void>;
+    updatePartsList(): MaybePromise<EndpointNumber[]>;
     getChildEndpoints(): EndpointInterface[];
-    determineUniqueID(): string | undefined;
+    determineUniqueID(): MaybePromise<string | undefined>;
     verifyRequiredClusters(): void;
-    destroy(): void;
-    setStructureChangedCallback(callback: () => void): void;
+    destroy(): MaybePromise<void>;
+    setStructureChangedCallback(callback: () => Promise<void>): void;
+    construction: AsyncConstruction<any>;
 
-    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void;
+    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): MaybePromise<void>;
     hasClusterServer(cluster: ClusterType): boolean;
+    hasClusterServerById(clusterId: ClusterId): boolean;
     getClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
@@ -40,13 +44,13 @@ export interface EndpointInterface {
         E extends Events,
     >(
         cluster: Cluster<F, SF, A, C, E>,
-    ): ClusterServerObj<A, E> | undefined;
+    ): MaybePromise<ClusterServerObj<A, E> | undefined>;
     getClusterServerById(clusterId: ClusterId): ClusterServerObj<Attributes, Events> | undefined;
     getAllClusterServers(): ClusterServerObj<Attributes, Events>[];
 
     addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         client: ClusterClientObj<F, A, C, E>,
-    ): void;
+    ): MaybePromise<void>;
     getClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
@@ -55,9 +59,9 @@ export interface EndpointInterface {
         E extends Events,
     >(
         cluster: Cluster<F, SF, A, C, E>,
-    ): ClusterClientObj<F, A, C, E> | undefined;
+    ): MaybePromise<ClusterClientObj<F, A, C, E> | undefined>;
     getAllClusterClients(): ClusterClientObj<any, Attributes, Commands, Events>[];
 
-    addChildEndpoint(endpoint: EndpointInterface): void;
+    addChildEndpoint(endpoint: EndpointInterface): Promise<void>;
     getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined;
 }

@@ -19,9 +19,9 @@ export class TestBasicInformation extends DeviceTestInstance {
     }
 
     async setupCommissioningServer() {
-        const onOffDevice = new OnOffPluginUnitDevice();
+        const onOffDevice = await OnOffPluginUnitDevice.create();
 
-        const commissioningServer = new CommissioningServer({
+        const commissioningServer = await CommissioningServer.create({
             port: 5540,
             deviceName: "Testdevice",
             deviceType: DeviceTypeId(onOffDevice.deviceType),
@@ -47,7 +47,7 @@ export class TestBasicInformation extends DeviceTestInstance {
             delayedAnnouncement: false,
         });
 
-        commissioningServer.addDevice(onOffDevice);
+        await commissioningServer.addDevice(onOffDevice);
 
         return commissioningServer;
     }

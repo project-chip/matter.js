@@ -5,31 +5,31 @@
  */
 
 import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
+import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
+import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { ImplementationError, NotImplementedError, NotInitializedError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
-import { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
-import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
 import { PartServer } from "../../endpoint/PartServer.js";
+import { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
+import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
+import { Lifecycle } from "../../endpoint/part/Lifecycle.js";
 import { EndpointType } from "../../endpoint/type/EndpointType.js";
 import { Logger } from "../../log/Logger.js";
+import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../storage/StorageContext.js";
+import { AsyncConstruction, asyncNew } from "../../util/AsyncConstruction.js";
 import { Host } from "../Host.js";
 import { Node } from "../Node.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
-import { ServerStore } from "./storage/ServerStore.js";
-import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
-import { AsyncConstruction, asyncNew } from "../../util/AsyncConstruction.js";
-import { Lifecycle } from "../../endpoint/part/Lifecycle.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
-import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
-import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
-import { PartStoreService } from "./storage/PartStoreService.js";
-import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { IdentityService } from "./IdentityService.js";
+import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
+import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
+import { PartStoreService } from "./storage/PartStoreService.js";
+import { ServerStore } from "./storage/ServerStore.js";
 
 const logger = Logger.get("NodeServer");
 
@@ -64,7 +64,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     get rootPart() {
         if (!this.#root) {
             throw new NotInitializedError(
-                "Root part is unavailable because initialization is incomplete; await the NodeServer to avoid this error"
+                "Root part is unavailable because initialization is incomplete; await the NodeServer to avoid this error",
             );
         }
         return this.#root;
@@ -79,7 +79,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     /**
      * The configuration of the server.
-     * 
+     *
      * This is derived from {@link ServerOptions} during initialization.
      */
     get configuration() {
@@ -92,7 +92,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     /**
      * Create a new NodeServer.
-     * 
+     *
      * @param options server configuration options
      */
     constructor(options?: ServerOptions.Configuration) {
@@ -100,36 +100,33 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         this.#configuration = ServerOptions.configurationFor(options);
 
-        const root = this.#root = Part.partFor(this.#configuration.root);
+        const root = (this.#root = Part.partFor(this.#configuration.root));
 
         if (root.type.deviceType !== RootEndpoint.deviceType) {
             throw new ImplementationError(`Root node device type must be a ${RootEndpoint.deviceType}`);
         }
 
         root.owner = this;
-    
+
         if (!root.lifecycle.hasNumber) {
             root.number = EndpointNumber(0);
         } else if (root.number !== 0) {
             throw new ImplementationError(`Root node ID must be 0`);
         }
-    
+
         root.behaviors.require(CommissioningBehavior);
         root.behaviors.require(IndexBehavior);
         this.#nextEndpointId = this.#configuration.nextEndpointNumber;
 
-        this.#construction = AsyncConstruction(
-            this,
-            async () => {
-                this.#store = await ServerStore.create(this.#configuration);
-                
-                root.lifecycle.change(Lifecycle.Change.Installed);
-            }
-        );
+        this.#construction = AsyncConstruction(this, async () => {
+            this.#store = await ServerStore.create(this.#configuration);
+
+            root.lifecycle.change(Lifecycle.Change.Installed);
+        });
     }
 
-    static async create(options?: ServerOptions.Configuration) {
-        return asyncNew(NodeServer, options);
+    static async create(options?: ServerOptions.Configuration): Promise<NodeServer> {
+        return asyncNew(this, options);
     }
 
     /**
@@ -169,15 +166,15 @@ export class NodeServer extends BaseNodeServer implements Node {
     /**
      * Add an endpoint that implements a {@link EndpointType}.
      */
-    add<T extends EndpointType>(type: T, options?: Part.Options<T>): void;
+    async add<T extends EndpointType>(type: T, options?: Part.Options<T>): Promise<void>;
 
     /**
      * Add an endpoint implemented by a {@link Part}.
      */
-    add(part: Part): void;
+    async add(part: Part): Promise<void>;
 
-    add(endpoint: Part.Definition) {
-        this.rootPart.parts.add(endpoint);
+    async add(endpoint: Part.Definition) {
+        return this.rootPart.parts.add(endpoint);
     }
 
     /**
@@ -201,7 +198,7 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Retrieve a part by number.
      */
     partForNumber(number: number) {
-       return this.root.get(IndexBehavior).forNumber(number);
+        return this.root.get(IndexBehavior).forNumber(number);
     }
 
     /**
@@ -301,11 +298,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     protected override emitActiveSessionsChanged(_fabric: FabricIndex): void {}
 
     protected override createInteractionServer() {
-        return new TransactionalInteractionServer(
-            this.rootPart,
-            this.store,
-            this.#configuration.subscription
-        );
+        return new TransactionalInteractionServer(this.rootPart, this.store, this.#configuration.subscription);
     }
 
     protected override get sessionStorage(): StorageContext {
@@ -316,7 +309,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         return this.store.fabricStorage;
     }
 
-    protected override initializeEndpoints(): void {
+    protected override async initializeEndpoints(): Promise<void> {
         // Nothing to do
     }
 
@@ -327,7 +320,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     /**
      * We don't run behavior initializers transactionally.
-     * 
+     *
      * Instead we save dirty values at server startup.
      */
     async #saveInitialValues() {

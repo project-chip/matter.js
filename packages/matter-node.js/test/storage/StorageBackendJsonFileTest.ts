@@ -112,11 +112,11 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    it("Throws error when context is empty on get", () => {
-        assert.throws(
-            () => {
+    it("Throws error when context is empty on get", async () => {
+        await assert.rejects(
+            async () => {
                 const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-                storage.get([""], "key");
+                await storage.get([""], "key");
             },
             {
                 message: "Context must not be an empty string.",
@@ -124,11 +124,11 @@ describe("Storage in JSON File", () => {
         );
     });
 
-    it("Throws error when key is empty on get", () => {
-        assert.throws(
-            () => {
+    it("Throws error when key is empty on get", async () => {
+        await assert.rejects(
+            async () => {
                 const storage = new StorageBackendJsonFile(TEST_STORAGE_LOCATION);
-                storage.get(["context"], "");
+                await storage.get(["context"], "");
             },
             {
                 message: "Context and key must not be empty.",

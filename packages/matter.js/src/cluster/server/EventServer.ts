@@ -35,17 +35,17 @@ export class EventServer<T> {
 
     // TODO Try to get rid of that late binding and simply things again
     //      potentially with refactoring out MatterDevice and MatterController
-    bindToEventHandler(eventHandler: EventHandler) {
+    async bindToEventHandler(eventHandler: EventHandler) {
         this.eventHandler = eventHandler;
         // Send all stored events to the new listener
         for (const event of this.eventList) {
-            const finalEvent = this.eventHandler.pushEvent(event);
+            const finalEvent = await this.eventHandler.pushEvent(event);
             this.listeners.forEach(listener => listener(finalEvent));
         }
         this.eventList = [];
     }
 
-    triggerEvent(data: T) {
+    async triggerEvent(data: T) {
         if (this.endpoint === undefined || this.endpoint.number === undefined) {
             throw new InternalError("Endpoint not assigned");
         }
@@ -61,7 +61,7 @@ export class EventServer<T> {
             // As long as we have no eventManager, we store the events
             this.eventList.push(event);
         } else {
-            const finalEvent = this.eventHandler.pushEvent(event);
+            const finalEvent = await this.eventHandler.pushEvent(event);
             this.listeners.forEach(listener => listener(finalEvent));
         }
     }

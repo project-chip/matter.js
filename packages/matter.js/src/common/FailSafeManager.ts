@@ -15,6 +15,7 @@ import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
+import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { MatterFlowError } from "./MatterError.js";
 
@@ -33,6 +34,11 @@ export class FailSafeManager {
     >();
     public csrSessionId: number | undefined;
     public forUpdateNoc: boolean | undefined;
+    #construction: AsyncConstruction<FailSafeManager>;
+
+    get construction() {
+        return this.#construction;
+    }
 
     constructor(
         private readonly device: MatterDevice,
@@ -42,35 +48,58 @@ export class FailSafeManager {
         private readonly expiryCallback: () => Promise<void>,
         readonly rootEndpoint: EndpointInterface,
     ) {
-        this.storeEndpointState();
-        this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire()).start();
-        this.maxCumulativeFailsafeTimer = Time.getTimer(maxCumulativeFailsafeSeconds * 1000, () =>
-            this.expire(),
-        ).start();
+        this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire());
+        this.maxCumulativeFailsafeTimer = Time.getTimer(maxCumulativeFailsafeSeconds * 1000, () => this.expire());
+
+        this.#construction = AsyncConstruction(this, async () => {
+            await this.storeEndpointState();
+            this.failSafeTimer.start();
+            this.maxCumulativeFailsafeTimer.start();
+        });
+    }
+
+    static async create(
+        device: MatterDevice,
+        associatedFabric: Fabric | undefined,
+        expiryLengthSeconds: number,
+        maxCumulativeFailsafeSeconds: number,
+        expiryCallback: () => Promise<void>,
+        rootEndpoint: EndpointInterface,
+    ) {
+        const failSafeManager = new FailSafeManager(
+            device,
+            associatedFabric,
+            expiryLengthSeconds,
+            maxCumulativeFailsafeSeconds,
+            expiryCallback,
+            rootEndpoint,
+        );
+        await failSafeManager.construction;
+        return failSafeManager;
     }
 
     /** Store required CLuster data when opening the FailSafe context to allow to restore them on expiry. */
-    private storeEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
+    private async storeEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
         // TODO: When implementing Network clusters we somehow need to make sure that a "temporary" network
         //  configuration is not persisted to disk. The NetworkClusterHandlers need to make sure it is only persisted
         //  when the commissioning is completed.
-        const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
+        const networkCluster = await endpoint.getClusterServer(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
             this.storedNetworkClusterState.set(endpoint.getNumber(), networkCluster.getNetworksAttribute());
         }
         for (const childEndpoint of endpoint.getChildEndpoints()) {
-            this.storeEndpointState(childEndpoint);
+            await this.storeEndpointState(childEndpoint);
         }
     }
 
     /** Restore Cluster data when the FailSafe context expired. */
-    restoreEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
+    async restoreEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
         const endpointId = endpoint.getNumber();
         const networkState = this.storedNetworkClusterState.get(endpointId);
         if (networkState !== undefined) {
-            const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
+            const networkCluster = await endpoint.getClusterServer(NetworkCommissioning.Complete);
             if (networkCluster !== undefined) {
-                networkCluster.setNetworksAttribute(networkState);
+                await networkCluster.setNetworksAttribute(networkState);
             } else {
                 logger.warn(
                     `NetworkCluster not found for endpoint ${endpointId}, but expected. Can not restore network data!`,
@@ -80,7 +109,7 @@ export class FailSafeManager {
         }
         for (const childEndpoint of endpoint.getChildEndpoints()) {
             if (childEndpoint instanceof Endpoint) {
-                this.restoreEndpointState(childEndpoint);
+                await this.restoreEndpointState(childEndpoint);
             }
         }
     }

@@ -75,7 +75,7 @@ logger.info(
     'Use the parameter "-store NAME" to specify a different storage location, use -clearstorage to start with an empty storage.',
 );
 
-class ComposedDevice {
+class ComposedExampleDevice {
     private matterServer: MatterServer | undefined;
 
     async start() {
@@ -107,29 +107,29 @@ class ComposedDevice {
         if (deviceStorage.has("isSocket")) {
             logger.info("Device type found in storage. -type parameter is ignored.");
         }
-        const isSocket = deviceStorage.get("isSocket", getParameter("type") === "socket");
+        const isSocket = await deviceStorage.get("isSocket", getParameter("type") === "socket");
         const deviceName = "Matter composed device";
         const deviceType =
             getParameter("type") === "socket" ? DeviceTypes.ON_OFF_PLUGIN_UNIT.code : DeviceTypes.ON_OFF_LIGHT.code;
         const vendorName = "matter-node.js";
-        const passcode = getIntParameter("passcode") ?? deviceStorage.get("passcode", 20202021);
-        const discriminator = getIntParameter("discriminator") ?? deviceStorage.get("discriminator", 3840);
+        const passcode = getIntParameter("passcode") ?? (await deviceStorage.get("passcode", 20202021));
+        const discriminator = getIntParameter("discriminator") ?? (await deviceStorage.get("discriminator", 3840));
         // product name / id and vendor id should match what is in the device certificate
-        const vendorId = getIntParameter("vendorid") ?? deviceStorage.get("vendorid", 0xfff1);
+        const vendorId = getIntParameter("vendorid") ?? (await deviceStorage.get("vendorid", 0xfff1));
         const productName = `node-matter OnOff-Bridge`;
-        const productId = getIntParameter("productid") ?? deviceStorage.get("productid", 0x8000);
+        const productId = getIntParameter("productid") ?? (await deviceStorage.get("productid", 0x8000));
 
         const netInterface = getParameter("netinterface");
         const port = getIntParameter("port") ?? 5540;
 
-        const uniqueId = getIntParameter("uniqueid") ?? deviceStorage.get("uniqueid", Time.nowMs());
+        const uniqueId = getIntParameter("uniqueid") ?? (await deviceStorage.get("uniqueid", Time.nowMs()));
 
-        deviceStorage.set("passcode", passcode);
-        deviceStorage.set("discriminator", discriminator);
-        deviceStorage.set("vendorid", vendorId);
-        deviceStorage.set("productid", productId);
-        deviceStorage.set("isSocket", isSocket);
-        deviceStorage.set("uniqueid", uniqueId);
+        await deviceStorage.set("passcode", passcode);
+        await deviceStorage.set("discriminator", discriminator);
+        await deviceStorage.set("vendorid", vendorId);
+        await deviceStorage.set("productid", productId);
+        await deviceStorage.set("isSocket", isSocket);
+        await deviceStorage.set("uniqueid", uniqueId);
 
         /**
          * Create Matter Server and CommissioningServer Node
@@ -146,7 +146,7 @@ class ComposedDevice {
 
         this.matterServer = new MatterServer(storageManager, { mdnsInterface: netInterface });
 
-        const commissioningServer = new CommissioningServer({
+        const commissioningServer = await CommissioningServer.create({
             port,
             deviceName,
             deviceType,
@@ -178,8 +178,10 @@ class ComposedDevice {
         const numDevices = getIntParameter("num") || 2;
         for (let i = 1; i <= numDevices; i++) {
             const onOffDevice =
-                getParameter(`type${i}`) === "socket" ? new OnOffPluginUnitDevice() : new OnOffLightDevice();
-            onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
+                getParameter(`type${i}`) === "socket"
+                    ? await OnOffPluginUnitDevice.create()
+                    : await OnOffLightDevice.create();
+            await onOffDevice.addFixedLabel("orientation", getParameter(`orientation${i}`) ?? `orientation ${i}`);
 
             onOffDevice.addOnOffListener(on => commandExecutor(on ? `on${i}` : `off${i}`)?.());
             onOffDevice.addCommandHandler("identify", async ({ request: { identifyTime } }) =>
@@ -188,7 +190,7 @@ class ComposedDevice {
                 ),
             );
 
-            commissioningServer.addDevice(onOffDevice);
+            await commissioningServer.addDevice(onOffDevice);
         }
 
         await this.matterServer.addCommissioningServer(commissioningServer);
@@ -229,7 +231,7 @@ class ComposedDevice {
     }
 }
 
-const device = new ComposedDevice();
+const device = new ComposedExampleDevice();
 device
     .start()
     .then(() => {

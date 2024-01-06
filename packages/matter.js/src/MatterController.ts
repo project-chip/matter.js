@@ -48,6 +48,7 @@ import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
 import { TypeFromSchema } from "./tlv/TlvSchema.js";
 import { TlvString } from "./tlv/TlvString.js";
+import { AsyncConstruction } from "./util/AsyncConstruction.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { isIPv6 } from "./util/Ip.js";
 import { anyPromise, createPromise } from "./util/Promises.js";
@@ -92,12 +93,16 @@ export class MatterController {
         caseAuthenticatedTags?: CaseAuthenticatedTag[],
     ): Promise<MatterController> {
         const certificateManager = new RootCertificateManager(storage);
+        await certificateManager.construction;
 
         // Check if we have a fabric stored in the storage, if yes initialize this one, else build a new one
         const controllerStorage = storage.createContext("MatterController");
-        if (controllerStorage.has("fabric")) {
-            const storedFabric = Fabric.createFromStorageObject(controllerStorage.get<FabricJsonObject>("fabric"));
-            return new MatterController(
+        let controller: MatterController;
+        if (await controllerStorage.has("fabric")) {
+            const storedFabric = Fabric.createFromStorageObject(
+                await controllerStorage.get<FabricJsonObject>("fabric"),
+            );
+            controller = new MatterController(
                 scanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
@@ -124,7 +129,7 @@ export class MatterController {
                 ),
             );
 
-            return new MatterController(
+            controller = new MatterController(
                 scanner,
                 netInterfaceIpv4,
                 netInterfaceIpv6,
@@ -135,6 +140,14 @@ export class MatterController {
                 sessionClosedCallback,
             );
         }
+        await controller.construction;
+        return controller;
+    }
+
+    #construction: AsyncConstruction<MatterController>;
+
+    get construction() {
+        return this.#construction;
     }
 
     private readonly sessionManager;
@@ -159,28 +172,7 @@ export class MatterController {
     ) {
         this.controllerStorage = this.storage.createContext("MatterController");
 
-        // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
-        if (this.controllerStorage.has("commissionedNodes")) {
-            const commissionedNodes =
-                this.controllerStorage.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
-            this.commissionedNodes.clear();
-            for (const [nodeId, details] of commissionedNodes) {
-                this.commissionedNodes.set(nodeId, details);
-            }
-        } else if (this.controllerStorage.has("operationalServerAddress")) {
-            // Migrate legacy storages, TODO: Remove later
-            const operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
-            this.setOperationalServerAddress(this.fabric.nodeId, operationalServerAddress);
-            this.controllerStorage.delete("operationalServerAddress");
-        } else if (this.controllerStorage.has("fabricCommissioned")) {
-            // Migrate legacy storages, TODO: Remove later
-            this.commissionedNodes.set(this.fabric.nodeId, {});
-            this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
-            this.controllerStorage.delete("fabricCommissioned");
-        }
-
         this.sessionManager = new SessionManager(this, this.storage);
-        this.sessionManager.initFromStorage([this.fabric]);
 
         this.exchangeManager = new ExchangeManager<MatterController>(this.sessionManager, this.channelManager);
         this.exchangeManager.addProtocolHandler(new StatusReportOnlySecureChannelProtocol());
@@ -188,6 +180,20 @@ export class MatterController {
             this.addTransportInterface(netInterfaceIpv4);
         }
         this.addTransportInterface(netInterfaceIpv6);
+
+        this.#construction = AsyncConstruction(this, async () => {
+            // If controller has a stored operational server address, use it, irrelevant what was passed in the constructor
+            if (await this.controllerStorage.has("commissionedNodes")) {
+                const commissionedNodes =
+                    await this.controllerStorage.get<[NodeId, CommissionedNodeDetails][]>("commissionedNodes");
+                this.commissionedNodes.clear();
+                for (const [nodeId, details] of commissionedNodes) {
+                    this.commissionedNodes.set(nodeId, details);
+                }
+            }
+
+            await this.sessionManager.initFromStorage([this.fabric]);
+        });
     }
 
     get nodeId() {
@@ -330,10 +336,10 @@ export class MatterController {
     async removeNode(nodeId: NodeId) {
         logger.info(`Removing commissioned node ${nodeId} from controller.`);
         await this.sessionManager.removeAllSessionsForNode(nodeId);
-        this.sessionManager.removeResumptionRecord(nodeId);
+        await this.sessionManager.removeResumptionRecord(nodeId);
         await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
-        this.storeCommisionedNodes();
+        await this.storeCommisionedNodes();
     }
 
     /**
@@ -454,7 +460,7 @@ export class MatterController {
 
         await commissioningManager.executeCommissioning();
 
-        this.controllerStorage.set("fabric", this.fabric.toStorageObject());
+        await this.controllerStorage.set("fabric", this.fabric.toStorageObject());
 
         return peerNodeId;
     }
@@ -467,7 +473,7 @@ export class MatterController {
         try {
             logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
             const channel = await this.pair(peerNodeId, operationalAddress);
-            this.setOperationalServerAddress(peerNodeId, operationalAddress);
+            await this.setOperationalServerAddress(peerNodeId, operationalAddress);
             return channel;
         } catch (error) {
             if (
@@ -540,7 +546,7 @@ export class MatterController {
                 async address => await this.pair(peerNodeId, address),
             );
 
-            this.setOperationalServerAddress(peerNodeId, resultAddress);
+            await this.setOperationalServerAddress(peerNodeId, resultAddress);
             return result;
         });
 
@@ -625,19 +631,19 @@ export class MatterController {
         return Array.from(this.commissionedNodes.keys());
     }
 
-    private setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+    private async setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
         const nodeDetails = this.commissionedNodes.get(nodeId) ?? { operationalServerAddress };
         nodeDetails.operationalServerAddress = operationalServerAddress;
         this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommisionedNodes();
+        await this.storeCommisionedNodes();
     }
 
     private getLastOperationalAddress(nodeId: NodeId) {
         return this.commissionedNodes.get(nodeId)?.operationalServerAddress;
     }
 
-    private storeCommisionedNodes() {
-        this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
+    private async storeCommisionedNodes() {
+        await this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
     /**
@@ -703,7 +709,7 @@ export class MatterController {
         return this.sessionManager.findResumptionRecordByNodeId(nodeId);
     }
 
-    saveResumptionRecord(resumptionRecord: ResumptionRecord) {
+    async saveResumptionRecord(resumptionRecord: ResumptionRecord) {
         return this.sessionManager.saveResumptionRecord(resumptionRecord);
     }
 

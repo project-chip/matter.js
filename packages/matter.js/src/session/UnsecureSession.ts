@@ -111,7 +111,7 @@ export class UnsecureSession<T> implements Session<T> {
         throw new NoAssociatedFabricError("Session needs to be a secure session");
     }
 
-    getIncrementedMessageCounter() {
+    async getIncrementedMessageCounter() {
         return this.messageCounter.getIncrementedCounter();
     }
 

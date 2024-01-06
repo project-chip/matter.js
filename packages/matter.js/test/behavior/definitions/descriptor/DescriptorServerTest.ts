@@ -13,15 +13,17 @@ import { MutableEndpoint } from "../../../../src/endpoint/type/MutableEndpoint.j
 import { MockPart } from "../../../endpoint/mock-part.js";
 import { MockEndpoint } from "../../mock-behavior.js";
 
-function createFamily() {
+async function createFamily() {
     const parent = new MockPart({
         type: MockEndpoint,
         number: 1,
     });
+    await parent.construction;
 
     const child = new MockPart({ type: MockEndpoint, number: 2, owner: undefined });
+    await child.construction;
 
-    parent.parts.add(child);
+    await parent.parts.add(child);
 
     return { parent, child };
 }
@@ -44,8 +46,10 @@ describe("DescriptorServer", () => {
         };
     });
 
-    it("adds device type automatically if necessary", () => {
-        const device = new MockPart(MockEndpoint).agent;
+    it("adds device type automatically if necessary", async () => {
+        const part = new MockPart(MockEndpoint);
+        await part.construction;
+        const device = part.agent;
         expect(device.descriptor.state.deviceTypeList).deep.equals([
             {
                 deviceType: 1,
@@ -54,12 +58,14 @@ describe("DescriptorServer", () => {
         ]);
     });
 
-    it("does not add device type automatically if unnecessary", () => {
+    it("does not add device type automatically if unnecessary", async () => {
         const Device2Endpoint = MockEndpoint.set({
             descriptor: { deviceTypeList: [{ deviceType: 2, revision: 2 }] },
         });
 
-        const device = new MockPart(Device2Endpoint).agent;
+        const part = new MockPart(Device2Endpoint);
+        await part.construction;
+        const device = part.agent;
         expect(device.descriptor.state.deviceTypeList).deep.equals([
             {
                 deviceType: 2,
@@ -68,23 +74,25 @@ describe("DescriptorServer", () => {
         ]);
     });
 
-    it("adds servers automatically", () => {
-        const device = new MockPart(MockEndpoint).agent;
+    it("adds servers automatically", async () => {
+        const part = new MockPart(MockEndpoint);
+        await part.construction;
+        const device = part.agent;
 
         device.require(OnOffServer);
 
         expect(device.descriptor.state.serverList).deep.equals([29, 6]);
     });
 
-    it("adds parts automatically", () => {
-        const { parent } = createFamily();
+    it("adds parts automatically", async () => {
+        const { parent } = await createFamily();
 
         const partsList = parent.agent.descriptor.state.partsList;
         expect(partsList).deep.equals([2]);
     });
 
     it("removes parts automatically", async () => {
-        const { parent, child } = createFamily();
+        const { parent, child } = await createFamily();
 
         const partsState = parent.agent.descriptor.state;
         expect(partsState.partsList).deep.equals([2]);

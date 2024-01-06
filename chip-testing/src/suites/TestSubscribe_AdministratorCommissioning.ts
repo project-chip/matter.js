@@ -24,7 +24,7 @@ export class TestSubscribe_AdministratorCommissioning extends MinimalOnOffDevice
     override async setupCommissioningServer() {
         const commissioningServer = await super.setupCommissioningServer();
 
-        commissioningServer.addRootClusterServer(
+        await commissioningServer.addRootClusterServer(
             ClusterServer(
                 AdministratorCommissioningCluster.with("Basic"),
                 {

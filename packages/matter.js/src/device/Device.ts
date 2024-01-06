@@ -9,12 +9,19 @@ import { ClusterClientObj, isClusterClient } from "../cluster/client/ClusterClie
 import { Binding } from "../cluster/definitions/BindingCluster.js";
 import { BridgedDeviceBasicInformationCluster } from "../cluster/definitions/BridgedDeviceBasicInformationCluster.js";
 import { ClusterServer } from "../cluster/server/ClusterServer.js";
-import { ClusterServerHandlers, ClusterServerObj, isClusterServer } from "../cluster/server/ClusterServerTypes.js";
+import {
+    AttributeInitialValues,
+    ClusterServerHandlers,
+    ClusterServerObj,
+    isClusterServer,
+} from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NotImplementedError } from "../common/MatterError.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 import { DeviceTypeId } from "../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { AtLeastOne } from "../util/Array.js";
+import { asyncNew } from "../util/AsyncConstruction.js";
 import { HandlerFunction, NamedHandler } from "../util/NamedHandler.js";
 import { DeviceClasses, DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { Endpoint, EndpointOptions } from "./Endpoint.js";
@@ -50,28 +57,37 @@ export const WrapCommandHandler = <C extends Cluster<any, any, any, any, any>>(
  * based on the device classes and features of the paired device
  */
 export class PairedDevice extends Endpoint {
-    private readonly declineAddingMoreClusters: boolean;
+    private declineAddingMoreClusters = false;
     /**
      * Create a new PairedDevice instance. All data are automatically parsed from the paired device!
      *
      * @param definition DeviceTypeDefinitions of the paired device as reported by the device
-     * @param clusters Clusters of the paired device as reported by the device
      * @param endpointId Endpoint ID of the paired device as reported by the device
      */
-    constructor(
-        definition: AtLeastOne<DeviceTypeDefinition>,
-        clusters: (ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
-        endpointId: EndpointNumber,
-    ) {
+    constructor(definition: AtLeastOne<DeviceTypeDefinition>, endpointId: EndpointNumber) {
         super(definition, { endpointId });
-        clusters.forEach(cluster => {
-            if (isClusterServer(cluster)) {
-                this.addClusterServer(cluster);
-            } else if (isClusterClient(cluster)) {
-                this.addClusterClient(cluster);
-            }
-        });
+    }
 
+    static async create(
+        definition: AtLeastOne<DeviceTypeDefinition>,
+        endpointId: EndpointNumber,
+    ): Promise<PairedDevice> {
+        return asyncNew(PairedDevice, definition, endpointId);
+    }
+
+    async initializeDeviceClusters(
+        clusters: (ClusterServerObj<Attributes, Events> | ClusterClientObj<any, Attributes, Commands, Events>)[] = [],
+    ): Promise<void> {
+        if (this.declineAddingMoreClusters) {
+            throw new ImplementationError("PairedDevice does not support adding additional clusters");
+        }
+        for (const cluster of clusters) {
+            if (isClusterServer(cluster)) {
+                await this.addClusterServer(cluster);
+            } else if (isClusterClient(cluster)) {
+                await this.addClusterClient(cluster);
+            }
+        }
         this.declineAddingMoreClusters = true;
     }
 
@@ -79,7 +95,7 @@ export class PairedDevice extends Endpoint {
      * Add cluster servers (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    override async addClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         if (this.declineAddingMoreClusters) {
             throw new ImplementationError("PairedDevice does not support adding additional clusters");
         }
@@ -90,7 +106,7 @@ export class PairedDevice extends Endpoint {
      * Add cluster clients (used internally only!)
      * @deprecated PairedDevice does not support adding additional clusters
      */
-    override addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    override async addClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
         if (this.declineAddingMoreClusters) {
@@ -119,13 +135,13 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
+    async getRootClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
         return this.getClusterServer(cluster);
     }
 
@@ -134,10 +150,10 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterClient object to add
      */
-    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    async addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
-        this.addClusterClient(cluster);
+        await this.addClusterClient(cluster);
     }
 
     /**
@@ -145,13 +161,13 @@ export class RootEndpoint extends Endpoint {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
+    async getRootClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.getClusterClient(cluster);
     }
 }
@@ -165,6 +181,7 @@ export class RootEndpoint extends Endpoint {
  */
 export class Device extends Endpoint {
     readonly deviceType: number;
+    readonly deviceClass: DeviceClasses;
     protected commandHandler = new NamedHandler<any>();
 
     /**
@@ -179,8 +196,18 @@ export class Device extends Endpoint {
         }
         super([definition], options);
         this.deviceType = definition.code;
-        if (definition.deviceClass === DeviceClasses.Simple || definition.deviceClass === DeviceClasses.Client) {
-            this.addClusterServer(
+        this.deviceClass = definition.deviceClass;
+    }
+
+    protected async addDeviceClusters(
+        _attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
+        excludeList: ClusterId[] = [],
+    ) {
+        if (
+            !excludeList.includes(Binding.Cluster.id) &&
+            (this.deviceClass === DeviceClasses.Simple || this.deviceClass === DeviceClasses.Client)
+        ) {
+            await this.addClusterServer(
                 ClusterServer(
                     Binding.Cluster,
                     {
@@ -248,33 +275,33 @@ export class Device extends Endpoint {
         throw new ImplementationError("createOptionalClusterClient needs to be implemented by derived classes");
     }
 
-    override getClusterServer<
+    override async getClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
-        const clusterServer = super.getClusterServer(cluster);
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
+        const clusterServer = await super.getClusterServer(cluster);
         if (clusterServer !== undefined) {
             return clusterServer;
         }
         for (const deviceType of this.deviceTypes) {
             if (deviceType.optionalServerClusters.includes(cluster.id)) {
                 const clusterServer = this.createOptionalClusterServer<F, SF, A, C, E>(cluster);
-                this.addClusterServer(clusterServer);
+                await this.addClusterServer(clusterServer);
                 return clusterServer;
             }
         }
     }
 
-    override getClusterClient<
+    override async getClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         const clusterClient = super.getClusterClient(cluster);
         if (clusterClient !== undefined) {
             return clusterClient;
@@ -282,7 +309,7 @@ export class Device extends Endpoint {
         for (const deviceType of this.deviceTypes) {
             if (deviceType.optionalClientClusters.includes(cluster.id)) {
                 const clusterClient = this.createOptionalClusterClient(cluster);
-                this.addClusterClient(clusterClient);
+                await this.addClusterClient(clusterClient);
             }
         }
     }
@@ -293,13 +320,13 @@ export class Device extends Endpoint {
      *
      * @param reachable true if reachable, false otherwise
      */
-    setBridgedDeviceReachability(reachable: boolean) {
-        const bridgedBasicInformationCluster = this.getClusterServer(BridgedDeviceBasicInformationCluster);
+    async setBridgedDeviceReachability(reachable: boolean) {
+        const bridgedBasicInformationCluster = await this.getClusterServer(BridgedDeviceBasicInformationCluster);
         if (bridgedBasicInformationCluster === undefined) {
             throw new ImplementationError(
                 "The reachability flag can only be set for bridged devices this way. To set the reachability flag for a non-bridged device or for the bridget itself please set it on the CommissioningServer!",
             );
         }
-        bridgedBasicInformationCluster.setReachableAttribute(reachable);
+        await bridgedBasicInformationCluster.setReachableAttribute(reachable);
     }
 }

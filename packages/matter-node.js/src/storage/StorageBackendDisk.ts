@@ -5,6 +5,7 @@
  */
 
 import { fromJson, Storage, StorageError, SupportedStorageTypes, toJson } from "@project-chip/matter.js/storage";
+import { MaybePromise } from "@project-chip/matter.js/util";
 
 import { LocalStorage } from "node-localstorage";
 
@@ -48,7 +49,7 @@ export class StorageBackendDisk implements Storage {
         return `${contextKey}.${key}`;
     }
 
-    get<T extends SupportedStorageTypes>(contexts: string[], key: string): T | undefined {
+    get<T extends SupportedStorageTypes>(contexts: string[], key: string): MaybePromise<T | undefined> {
         const value = this.localStorage.getItem(this.buildStorageKey(contexts, key));
         if (value === null) return undefined;
         return fromJson(value) as T;

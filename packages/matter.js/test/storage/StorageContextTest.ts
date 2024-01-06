@@ -33,9 +33,9 @@ describe("StorageContext", () => {
         const storageContext = new StorageContext(storage, ["context"]);
 
         for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
-            it(testName, () => {
-                storageContext.set(testVector.key, testVector.input);
-                const valueFromStorage = storageContext.get(testVector.key);
+            it(testName, async () => {
+                await storageContext.set(testVector.key, testVector.input);
+                const valueFromStorage = await storageContext.get(testVector.key);
                 expect(valueFromStorage).deep.equal(testVector.input);
             });
         }
@@ -46,99 +46,100 @@ describe("StorageContext", () => {
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
         for (const [testName, testVector] of Object.entries(validateStorageTestVector)) {
-            it(testName, () => {
-                storageContext.set(testVector.key, testVector.input);
-                const valueFromStorage = storageContext.get(testVector.key);
+            it(testName, async () => {
+                await storageContext.set(testVector.key, testVector.input);
+                const valueFromStorage = await storageContext.get(testVector.key);
                 expect(valueFromStorage).deep.equal(testVector.input);
             });
         }
     });
 
-    it("write and read", () => {
+    it("write and read", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        const valueFromStorage = storageContext.get("key");
+        const valueFromStorage = await storageContext.get("key");
         expect(valueFromStorage).equal("value");
 
-        const valueFromStorageWithContext = storage.get(["context"], "key");
+        const valueFromStorageWithContext = await storage.get(["context"], "key");
         expect(valueFromStorageWithContext).equal("value");
     });
 
-    it("write and read wib subcontexts", () => {
+    it("write and read wib subcontexts", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        const valueFromStorage = storageContext.get("key");
+        const valueFromStorage = await storageContext.get("key");
         expect(valueFromStorage).equal("value");
 
-        const valueFromStorageWithContext = storage.get(["context", "subcontext", "subsubcontext"], "key");
+        const valueFromStorageWithContext = await storage.get(["context", "subcontext", "subsubcontext"], "key");
         expect(valueFromStorageWithContext).equal("value");
     });
 
-    it("read with default value", () => {
+    it("read with default value", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context"]);
 
-        const valueFromStorage = storageContext.get("key", "defaultValue");
+        const valueFromStorage = await storageContext.get("key", "defaultValue");
         expect(valueFromStorage).equal("defaultValue");
     });
 
-    it("Throws error when reading a not set key without default value", () => {
+    it("Throws error when reading a not set key without default value", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context"]);
 
-        expect(() => {
-            storageContext.get("key");
-        }).throw(StorageError, "No value found for key key in context context and no default value specified!");
+        expect(() => storageContext.get("key")).throws(
+            StorageError,
+            "No value found for key key in context context and no default value specified!",
+        );
     });
 
-    it("check if key is set", () => {
+    it("check if key is set", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        expect(storageContext.has("key")).equal(true);
+        expect(await storageContext.has("key")).equal(true);
     });
 
-    it("check if key is not set", () => {
+    it("check if key is not set", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        expect(storageContext.has("key2")).equal(false);
+        expect(await storageContext.has("key2")).equal(false);
     });
 
-    it("check if key is set with subcontext", () => {
+    it("check if key is set with subcontext", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        expect(storageContext.has("key")).equal(true);
+        expect(await storageContext.has("key")).equal(true);
     });
 
-    it("check if key is not set with subcontext", () => {
+    it("check if key is not set with subcontext", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext.set("key", "value");
+        await storageContext.set("key", "value");
 
-        expect(storageContext.has("key2")).equal(false);
+        expect(await storageContext.has("key2")).equal(false);
     });
 
     it("create sub StorageContext write and read success", async () => {
@@ -151,9 +152,9 @@ describe("StorageContext", () => {
         const storageContext = storageManager.createContext("context");
         const subStorageContext = storageContext.createContext("subcontext");
 
-        subStorageContext.set("key", "value");
+        await subStorageContext.set("key", "value");
 
-        const valueFromStorage = subStorageContext.get("key");
+        const valueFromStorage = await subStorageContext.get("key");
         expect(valueFromStorage).equal("value");
     });
 
@@ -167,88 +168,88 @@ describe("StorageContext", () => {
         const storageContext = storageManager.createContext("context");
         const subStorageContext = storageContext.createContext("subcontext");
 
-        subStorageContext.set("key", "value1");
-        storageContext.set("subcontext", "value2");
+        await subStorageContext.set("key", "value1");
+        await storageContext.set("subcontext", "value2");
 
-        const valueFromStorage = subStorageContext.get("key");
+        const valueFromStorage = await subStorageContext.get("key");
         expect(valueFromStorage).equal("value1");
 
-        const valueFromStorage2 = storageContext.get("subcontext");
+        const valueFromStorage2 = await storageContext.get("subcontext");
         expect(valueFromStorage2).equal("value2");
     });
 
-    it("getting all keys in a context works", () => {
+    it("getting all keys in a context works", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext.set("key", "value");
-        storageContext.set("key2", "value2");
-        storageContext.set("key3", "value3");
-        storageContext.set("key4", "value4");
+        await storageContext.set("key", "value");
+        await storageContext.set("key2", "value2");
+        await storageContext.set("key3", "value3");
+        await storageContext.set("key4", "value4");
 
-        const result = storageContext.keys();
+        const result = await storageContext.keys();
 
         expect(result).deep.equal(["key", "key2", "key3", "key4"]);
     });
 
-    it("getting all keys in a context works also with sub contexts", () => {
+    it("getting all keys in a context works also with sub contexts", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext"]);
 
-        storageContext.set("key", "value");
-        storageContext.set("key2", "value2");
-        storageContext.set("key3", "value3");
-        storageContext.set("key4", "value4");
+        await storageContext.set("key", "value");
+        await storageContext.set("key2", "value2");
+        await storageContext.set("key3", "value3");
+        await storageContext.set("key4", "value4");
 
         const storageContext2 = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext2.set("subkey", "value");
+        await storageContext2.set("subkey", "value");
 
-        const result = storageContext.keys();
+        const result = await storageContext.keys();
 
         expect(result).deep.equal(["key", "key2", "key3", "key4"]);
     });
 
-    it("clearing keys in a context works", () => {
+    it("clearing keys in a context works", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext", "subsubcontext"]);
 
-        storageContext.set("key", "value");
-        storageContext.set("key2", "value2");
-        storageContext.set("key3", "value3");
-        storageContext.set("key4", "value4");
+        await storageContext.set("key", "value");
+        await storageContext.set("key2", "value2");
+        await storageContext.set("key3", "value3");
+        await storageContext.set("key4", "value4");
 
-        storageContext.clear();
+        await storageContext.clear();
 
-        expect(storageContext.has("key")).equal(false);
-        expect(storageContext.has("ke2")).equal(false);
-        expect(storageContext.has("key3")).equal(false);
-        expect(storageContext.has("key4")).equal(false);
+        expect(await storageContext.has("key")).equal(false);
+        expect(await storageContext.has("ke2")).equal(false);
+        expect(await storageContext.has("key3")).equal(false);
+        expect(await storageContext.has("key4")).equal(false);
     });
 
-    it("clearing all keys in a context with subcontext works", () => {
+    it("clearing all keys in a context with subcontext works", async () => {
         const storage = new StorageBackendMemory();
 
         const storageContext = new StorageContext(storage, ["context", "subcontext"]);
 
-        storageContext.set("key", "value");
-        storageContext.set("key2", "value2");
-        storageContext.set("key3", "value3");
-        storageContext.set("key4", "value4");
+        await storageContext.set("key", "value");
+        await storageContext.set("key2", "value2");
+        await storageContext.set("key3", "value3");
+        await storageContext.set("key4", "value4");
 
         const subContext = storageContext.createContext("subsubcontext");
 
-        subContext.set("subkey", "value");
+        await subContext.set("subkey", "value");
 
-        storageContext.clearAll();
+        await storageContext.clearAll();
 
-        expect(storageContext.has("key")).equal(false);
-        expect(storageContext.has("ke2")).equal(false);
-        expect(storageContext.has("key3")).equal(false);
-        expect(storageContext.has("key4")).equal(false);
-        expect(subContext.has("subkey")).equal(false);
+        expect(await storageContext.has("key")).equal(false);
+        expect(await storageContext.has("ke2")).equal(false);
+        expect(await storageContext.has("key3")).equal(false);
+        expect(await storageContext.has("key4")).equal(false);
+        expect(await subContext.has("subkey")).equal(false);
     });
 });

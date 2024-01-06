@@ -150,12 +150,12 @@ export class RootSupervisor implements ValueSupervisor {
                         throw new InternalError("Deferred I/O generation invoked impossibly early");
                     }
 
-                    (manager as any)[name] = generator(schema, this, managedBase) as any;
+                    (manager as any)[name] = generator(schema, this, managedBase);
 
                     generated = true;
                 }
 
-                return (manager as any)[name](...args) as any;
+                return (manager as any)[name](...args);
             }) as any;
         };
 

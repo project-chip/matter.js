@@ -48,12 +48,12 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
 
             // Simulate successful scan
             if (breadcrumb !== undefined) {
-                const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                const generalCommissioningCluster = await endpoint.getClusterServer(GeneralCommissioningCluster);
+                await generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
             }
 
             const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
-            lastNetworkingStatus?.setLocal(networkingStatus);
+            await lastNetworkingStatus?.setLocal(networkingStatus);
 
             return {
                 networkingStatus,
@@ -87,13 +87,13 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
-                const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                const generalCommissioningCluster = await endpoint.getClusterServer(GeneralCommissioningCluster);
+                await generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
             }
 
             const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
-            lastNetworkingStatus?.setLocal(networkingStatus);
-            lastNetworkId?.setLocal(firstNetworkId);
+            await lastNetworkingStatus?.setLocal(networkingStatus);
+            await lastNetworkId?.setLocal(firstNetworkId);
 
             return {
                 networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
@@ -114,13 +114,13 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
 
             // Simulate successful add or update
             if (breadcrumb !== undefined) {
-                const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                const generalCommissioningCluster = await endpoint.getClusterServer(GeneralCommissioningCluster);
+                await generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
             }
 
             const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
-            lastNetworkingStatus?.setLocal(networkingStatus);
-            lastNetworkId?.setLocal(firstNetworkId);
+            await lastNetworkingStatus?.setLocal(networkingStatus);
+            await lastNetworkId?.setLocal(firstNetworkId);
 
             return {
                 networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
@@ -141,18 +141,18 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
 
             // Simulate successful connection
             if (breadcrumb !== undefined) {
-                const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                const generalCommissioningCluster = await endpoint.getClusterServer(GeneralCommissioningCluster);
+                await generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
             }
 
             const networkList = networks.getLocal();
             networkList[0].connected = true;
-            networks.setLocal(networkList);
+            await networks.setLocal(networkList);
 
             const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
-            lastNetworkingStatus?.setLocal(networkingStatus);
-            lastNetworkId?.setLocal(firstNetworkId);
-            lastConnectErrorValue?.setLocal(null);
+            await lastNetworkingStatus?.setLocal(networkingStatus);
+            await lastNetworkId?.setLocal(firstNetworkId);
+            await lastConnectErrorValue?.setLocal(null);
 
             // Announce operational in IP network
             const device = session.getContext();
@@ -174,12 +174,12 @@ const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterSer
 
             // Simulate successful connection
             if (breadcrumb !== undefined) {
-                const generalCommissioningCluster = endpoint.getClusterServer(GeneralCommissioningCluster);
-                generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
+                const generalCommissioningCluster = await endpoint.getClusterServer(GeneralCommissioningCluster);
+                await generalCommissioningCluster?.setBreadcrumbAttribute(breadcrumb);
             }
 
             const networkingStatus = NetworkCommissioning.NetworkCommissioningStatus.Success;
-            lastNetworkingStatus?.setLocal(networkingStatus);
+            await lastNetworkingStatus?.setLocal(networkingStatus);
 
             return {
                 networkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,

@@ -70,7 +70,7 @@ export class Host {
 
         let storage: StorageManager | undefined;
 
-        environment.tasks.add(this.task);
+        await environment.tasks.add(this.task);
 
         try {
             try {
@@ -122,7 +122,7 @@ export class Host {
             // Can't abort this
             await storage?.close();
 
-            environment.tasks.delete(this.task);
+            await environment.tasks.delete(this.task);
         }
         this.#status = Status.INACTIVE;
     }
