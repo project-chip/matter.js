@@ -21,7 +21,7 @@ LocalMatter.children.push({
             name: "OpenCommissioningWindow",
 
             children: [
-                { tag: "datatype", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH },
+                { tag: "field", id: 1, name: "PakePasscodeVerifier", constraint: PAKE_PASSCODE_VERIFIER_LENGTH },
             ],
         },
     ],

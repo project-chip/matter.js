@@ -5,6 +5,7 @@
  */
 
 import { InternalError } from "../../common/MatterError.js";
+import { camelize } from "../../util/String.js";
 import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
@@ -54,10 +55,30 @@ export abstract class Model {
     }
 
     /**
-     * The full path ("." delimited) in the Matter tree.
+     * The path ("." delimited) in the Matter tree.
+     *
+     * This is informational and generally tries to adhere to JS API
+     * conventions.
      */
     get path(): string {
         if (this.parent && this.parent.tag !== ElementTag.Matter) {
+            if (this.parent.tag === ElementTag.Field) {
+                return `${this.parent.path}.${camelize(this.name)}`;
+            }
+
+            if (this.parent.tag === ElementTag.Cluster) {
+                switch (this.tag) {
+                    case ElementTag.Attribute:
+                        return `${this.parent.path}.state.${camelize(this.name)}`;
+
+                    case ElementTag.Command:
+                        return `${this.parent.path}.${camelize(this.name)}`;
+
+                    case ElementTag.Event:
+                        return `${this.parent.path}.events.${camelize(this.name)}`;
+                }
+            }
+
             return `${this.parent.path}.${this.name}`;
         } else {
             return this.name;
@@ -275,14 +296,14 @@ export abstract class Model {
     get<T extends Model>(constructor: Model.Constructor<T>, key: number | string) {
         return this.children.find(c =>
             c instanceof constructor && typeof key === "number" ? c.effectiveId === key : c.name === key,
-        ) as T;
+        ) as T | undefined;
     }
 
     /**
      * Retrieve a model of a specific type from the ownership hierarchy.
      */
     owner<T extends Model>(constructor: Model.Constructor<T>) {
-        return new ModelTraversal().findOwner(constructor, this.parent);
+        return new ModelTraversal().findOwner(constructor, this);
     }
 
     /**
@@ -362,7 +383,7 @@ export abstract class Model {
      */
     member(
         key: ModelTraversal.ElementSelector,
-        allowedTags = [ElementTag.Datatype, ElementTag.Attribute],
+        allowedTags = [ElementTag.Field, ElementTag.Attribute],
     ): Model | undefined {
         return new ModelTraversal().findMember(this, key, allowedTags);
     }
@@ -372,6 +393,27 @@ export abstract class Model {
      */
     instanceOf(other: Model | AnyElement) {
         return new ModelTraversal().instanceOf(this, other);
+    }
+
+    /**
+     * Clone the model.  This deep copies all descendant child models but
+     * not other properties.
+     */
+    clone() {
+        const clone = Object.create(Object.getPrototypeOf(this));
+
+        const descriptors = Object.getOwnPropertyDescriptors(this);
+        if (this.children) {
+            delete (descriptors as any)[CHILDREN];
+        }
+
+        Object.defineProperties(clone, Object.getOwnPropertyDescriptors(this));
+
+        if (this[CHILDREN]) {
+            clone.children = this[CHILDREN].map(child => child.clone());
+        }
+
+        return clone;
     }
 
     constructor(definition: BaseElement) {
@@ -392,6 +434,7 @@ export abstract class Model {
 
 export namespace Model {
     export type Constructor<T extends Model> = abstract new (...args: any) => T;
+    export type Type = abstract new (...args: any) => Model;
 
     export type LookupPredicate<T extends Model> =
         | Constructor<T>

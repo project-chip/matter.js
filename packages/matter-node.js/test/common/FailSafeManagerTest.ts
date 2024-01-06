@@ -122,7 +122,7 @@ describe("FailSafeManager Test", () => {
             assert.equal(expired, true);
         });
 
-        it("Expiry callback is called when max cummulative failsafe expires", async () => {
+        it("Expiry callback is called when max cumulative failsafe expires", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
             const failSafe = new FailSafeManager(

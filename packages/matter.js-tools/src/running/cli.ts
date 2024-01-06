@@ -8,6 +8,8 @@ import { dirname, resolve } from "path";
 import { exit } from "process";
 import { Project } from "../building/project.js";
 import { executeNode } from "./execute.js";
+import { Builder } from "../building/builder.js";
+import { Graph } from "../building/graph.js";
 
 /**
  * Build and execute a matter.js script.
@@ -47,7 +49,13 @@ export async function main(argv = process.argv) {
         exit(2);
     }
 
-    await project.buildSource(format);
+    // TODO - should we do a full build of dependencies unconditionally or
+    // as an option?  Currently doing the former
+    const builder = new Builder();
+    const dependencies = await Graph.forProject(dir);
+    await dependencies.build(builder, false);
+
+    //await project.buildSource(format);
 
     script = project.pkg.resolve(
         project.pkg

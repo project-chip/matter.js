@@ -13,7 +13,6 @@ import { EventId } from "../datatype/EventId.js";
 import { FabricId } from "../datatype/FabricId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { GroupId } from "../datatype/GroupId.js";
-import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { ByteArray } from "../util/ByteArray.js";
 
@@ -32,7 +31,7 @@ type SupportedStorageBaseTypes =
     | FabricId
     | FabricIndex
     | GroupId
-    | NodeId
+    // | NodeId -- duplicative of bigint as not currently branded
     | VendorId;
 
 /** Supported combined types to stringify the data for the storage that can be used as values. */

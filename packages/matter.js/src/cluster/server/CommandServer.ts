@@ -7,7 +7,7 @@
 import { MatterDevice } from "../../MatterDevice.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { CommandId } from "../../datatype/CommandId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Logger } from "../../log/Logger.js";
 import { Globals } from "../../model/index.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
@@ -29,7 +29,7 @@ export class CommandServer<RequestT, ResponseT> {
             request: RequestT,
             session: Session<MatterDevice>,
             message: Message,
-            endpoint: Endpoint,
+            endpoint: EndpointInterface,
         ) => Promise<ResponseT> | ResponseT,
     ) {}
 
@@ -37,7 +37,7 @@ export class CommandServer<RequestT, ResponseT> {
         session: Session<MatterDevice>,
         args: TlvStream,
         message: Message,
-        endpoint: Endpoint,
+        endpoint: EndpointInterface,
     ): Promise<{
         /** Primary StatusCode of the invoke request  as defined by Interaction proptocol. */
         code: StatusCode;

@@ -6,61 +6,52 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ClusterFactory } from "../../cluster/ClusterFactory.js";
+import { MutableCluster } from "../../cluster/mutation/MutableCluster.js";
+import { FixedAttribute, Command, AccessLevel, Attribute, WritableAttribute } from "../../cluster/Cluster.js";
+import { TlvUInt8, TlvUInt64, TlvEnum, TlvBitmap, TlvUInt16, TlvInt8, TlvInt32 } from "../../tlv/TlvNumber.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
-import { BitFlag, BitFlags, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
-import { FixedAttribute, AccessLevel, Attribute, WritableAttribute, Command } from "../../cluster/Cluster.js";
-import { TlvUInt8, TlvEnum, TlvInt32, TlvUInt64, TlvBitmap, TlvUInt16, TlvInt8 } from "../../tlv/TlvNumber.js";
-import { TlvArray } from "../../tlv/TlvArray.js";
-import { TlvObject, TlvField, TlvOptionalField } from "../../tlv/TlvObject.js";
+import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
 import { TlvByteString, TlvString } from "../../tlv/TlvString.js";
-import { TlvBoolean } from "../../tlv/TlvBoolean.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
+import { TypeFromSchema } from "../../tlv/TlvSchema.js";
+import { TlvArray } from "../../tlv/TlvArray.js";
+import { BitFlag } from "../../schema/BitmapSchema.js";
+import { TlvBoolean } from "../../tlv/TlvBoolean.js";
+import { Identity } from "../../util/Type.js";
+import { ClusterRegistry } from "../../cluster/ClusterRegistry.js";
 
 export namespace NetworkCommissioning {
     /**
-     * NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
+     * Input to the NetworkCommissioning scanNetworks command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
      */
-    export const TlvNetworkInfoStruct = TlvObject({
+    export const TlvScanNetworksRequest = TlvObject({
         /**
-         * Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the following
-         * technology-specific properties:
+         * This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. Otherwise,
+         * if the field is absent, or it is null, this shall indicate scanning of all BSSID in range. This field shall
+         * be ignored for ScanNetworks invocations on non-Wi-Fi server instances.
          *
-         *   • SSID for Wi-Fi
-         *
-         *   • Extended PAN ID for Thread
-         *
-         *   • Network interface instance name at operating system (or equivalent unique name) for Ethernet.
-         *
-         * The semantics of the NetworkID field therefore varies between network types accordingly. It contains SSID
-         * for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet networks.
-         *
-         * NOTE
-         *
-         * SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. Implementations
-         * must be careful to support reporting byte strings without requiring a particular encoding for transfer. Only
-         * the commissioner should try to potentially decode the bytes. The most common encoding is UTF-8, however this
-         * is just a convention. Some configurations may use Latin-1 or other character sets. A commissioner may decode
-         * using UTF-8, replacing encoding errors with "?" at the application level while retaining the underlying
-         * representation.
-         *
-         * XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet string.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.1
+         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.1
          */
-        networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
+        ssid: TlvOptionalField(0, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 }))),
 
         /**
-         * This field shall indicate the connected status of the associated network, where "connected" means currently
-         * linked to the network technology (e.g. Associated for a Wi-Fi network, media connected for an Ethernet
-         * network).
+         * The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the General
+         * Commissioning cluster on success of the associated command. If the command fails, the Breadcrumb attribute
+         * in the General Commissioning cluster shall be left unchanged.
          *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.2
+         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.2
          */
-        connected: TlvField(1, TlvBoolean)
+        breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
+
+    /**
+     * Input to the NetworkCommissioning scanNetworks command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
+     */
+    export interface ScanNetworksRequest extends TypeFromSchema<typeof TlvScanNetworksRequest> {}
 
     /**
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.3
@@ -131,31 +122,6 @@ export namespace NetworkCommissioning {
          */
         UnknownError = 12
     }
-
-    /**
-     * Input to the NetworkCommissioning scanNetworks command
-     *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1
-     */
-    export const TlvScanNetworksRequest = TlvObject({
-        /**
-         * This field, if present, shall contain the SSID for a directed scan of that particular Wi-Fi SSID. Otherwise,
-         * if the field is absent, or it is null, this shall indicate scanning of all BSSID in range. This field shall
-         * be ignored for ScanNetworks invocations on non-Wi-Fi server instances.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.1
-         */
-        ssid: TlvOptionalField(0, TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 }))),
-
-        /**
-         * The Breadcrumb field, if present, shall be used to atomically set the Breadcrumb attribute in the General
-         * Commissioning cluster on success of the associated command. If the command fails, the Breadcrumb attribute
-         * in the General Commissioning cluster shall be left unchanged.
-         *
-         * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.1.2
-         */
-        breadcrumb: TlvOptionalField(1, TlvUInt64)
-    });
 
     /**
      * WiFiSecurityBitmap encodes the supported Wi-Fi security types present in the Security field of the
@@ -251,6 +217,13 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * WiFiInterfaceScanResultStruct represents a single Wi-Fi network scan result.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.5
+     */
+    export interface WiFiInterfaceScanResultStruct extends TypeFromSchema<typeof TlvWiFiInterfaceScanResultStruct> {}
+
+    /**
      * ThreadInterfaceScanResultStruct represents a single Thread network scan result.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6
@@ -272,6 +245,13 @@ export namespace NetworkCommissioning {
         rssi: TlvOptionalField(6, TlvInt8),
         lqi: TlvOptionalField(7, TlvUInt8)
     });
+
+    /**
+     * ThreadInterfaceScanResultStruct represents a single Thread network scan result.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.6
+     */
+    export interface ThreadInterfaceScanResultStruct extends TypeFromSchema<typeof TlvThreadInterfaceScanResultStruct> {}
 
     /**
      * This command shall contain the status of the last ScanNetworks command, and the associated scan results if the
@@ -348,6 +328,19 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * This command shall contain the status of the last ScanNetworks command, and the associated scan results if the
+     * operation was successful.
+     *
+     * Results are valid only if NetworkingStatus is Success.
+     *
+     * Before generating a ScanNetworksResponse, the server shall set the LastNetworkingStatus attribute value to the
+     * NetworkingStatus matching the response.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.2
+     */
+    export interface ScanNetworksResponse extends TypeFromSchema<typeof TlvScanNetworksResponse> {}
+
+    /**
      * Input to the NetworkCommissioning removeNetwork command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
@@ -356,6 +349,13 @@ export namespace NetworkCommissioning {
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
+
+    /**
+     * Input to the NetworkCommissioning removeNetwork command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.7
+     */
+    export interface RemoveNetworkRequest extends TypeFromSchema<typeof TlvRemoveNetworkRequest> {}
 
     /**
      * This response command relates status information for some commands which require it as their response command.
@@ -402,6 +402,38 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * This response command relates status information for some commands which require it as their response command.
+     * See each individual cluster server command for the situations that may cause a NetworkingStatus different than
+     * Success.
+     *
+     * Before generating a NetworkConfigResponse, the server shall set the LastNetworkingStatus attribute value to the
+     * NetworkingStatus matching the response.
+     *
+     * Before generating a NetworkConfigResponse, the server shall set the LastNetworkID attribute value to the
+     * NetworkID that was used in the command for which an invocation caused the response to be generated.
+     *
+     * The NetworkingStatus field shall indicate the status of the last operation attempting to modify the Networks
+     * attribute configuration, taking one of these values:
+     *
+     *   • Success: Operation succeeded.
+     *
+     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+     *
+     *   • BoundsExceeded: Adding this network configuration would exceed the limit defined by Section 11.8.6.1,
+     *     “MaxNetworks Attribute”.
+     *
+     *   • NetworkIdNotFound: The network identifier was expected to be found, but was not found among the added
+     *     network configurations in Networks attribute.
+     *
+     *   • UnknownError: An internal error occurred during the operation.
+     *
+     * See Section 11.8.7.2.2, “DebugText Field” for usage.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.8
+     */
+    export interface NetworkConfigResponse extends TypeFromSchema<typeof TlvNetworkConfigResponse> {}
+
+    /**
      * Input to the NetworkCommissioning connectNetwork command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
@@ -410,6 +442,13 @@ export namespace NetworkCommissioning {
         networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
         breadcrumb: TlvOptionalField(1, TlvUInt64)
     });
+
+    /**
+     * Input to the NetworkCommissioning connectNetwork command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.9
+     */
+    export interface ConnectNetworkRequest extends TypeFromSchema<typeof TlvConnectNetworkRequest> {}
 
     /**
      * Before generating a ConnectNetworkResponse, the server shall:
@@ -475,6 +514,42 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * Before generating a ConnectNetworkResponse, the server shall:
+     *
+     *   • Set the LastNetworkingStatus attribute value to the NetworkingStatus matching the response.
+     *
+     *   • Set the LastNetworkID attribute value to the NetworkID that was used in the ConnectNetwork command which
+     *     caused the response to be generated.
+     *
+     *   • Set the LastConnectErrorValue attribute value to the ErrorValue matching the response, including setting it
+     *     to null if the ErrorValue is not applicable.
+     *
+     * The NetworkingStatus field shall indicate the status of the last connection attempt, taking one of these values:
+     *
+     *   • Success: Connection succeeded.
+     *
+     *   • NetworkNotFound: No instance of an explicitly-provided network identifier was found during the attempt to
+     *     join the network.
+     *
+     *   • OutOfRange: Network identifier was invalid (e.g. empty, too long, etc).
+     *
+     *   • NetworkIdNotFound: The network identifier was not found among the added network configurations in Networks
+     *     attribute.
+     *
+     *   • RegulatoryError: Could not connect to a network due to lack of regulatory configuration.
+     *
+     *   • UnknownError: An internal error occurred during the operation.
+     *
+     *   • Association errors (see also description of errors in Section 11.8.5.3, “NetworkCommissioningStatusEnum”):
+     *     AuthFailure, UnsupportedSecurity, OtherConnectionFailure, IPV6Failed, IPBindFailed
+     *
+     * See Section 11.8.7.2.2, “DebugText Field” for usage.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.10
+     */
+    export interface ConnectNetworkResponse extends TypeFromSchema<typeof TlvConnectNetworkResponse> {}
+
+    /**
      * Input to the NetworkCommissioning reorderNetwork command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
@@ -484,6 +559,13 @@ export namespace NetworkCommissioning {
         networkIndex: TlvField(1, TlvUInt8),
         breadcrumb: TlvOptionalField(2, TlvUInt64)
     });
+
+    /**
+     * Input to the NetworkCommissioning reorderNetwork command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.11
+     */
+    export interface ReorderNetworkRequest extends TypeFromSchema<typeof TlvReorderNetworkRequest> {}
 
     /**
      * Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
@@ -538,6 +620,13 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * Input to the NetworkCommissioning addOrUpdateWiFiNetwork command
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.3
+     */
+    export interface AddOrUpdateWiFiNetworkRequest extends TypeFromSchema<typeof TlvAddOrUpdateWiFiNetworkRequest> {}
+
+    /**
      * Input to the NetworkCommissioning addOrUpdateThreadNetwork command
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
@@ -560,194 +649,68 @@ export namespace NetworkCommissioning {
     });
 
     /**
-     * These are optional features supported by NetworkCommissioningCluster.
+     * Input to the NetworkCommissioning addOrUpdateThreadNetwork command
      *
-     * @see {@link MatterCoreSpecificationV1_1} § 11.8.4
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.7.4
      */
-    export enum Feature {
-        /**
-         * WiFiNetworkInterface
-         *
-         * Wi-Fi related features
-         */
-        WiFiNetworkInterface = "WiFiNetworkInterface",
-
-        /**
-         * ThreadNetworkInterface
-         *
-         * Thread related features
-         */
-        ThreadNetworkInterface = "ThreadNetworkInterface",
-
-        /**
-         * EthernetNetworkInterface
-         *
-         * Ethernet related features
-         */
-        EthernetNetworkInterface = "EthernetNetworkInterface"
-    }
+    export interface AddOrUpdateThreadNetworkRequest extends TypeFromSchema<typeof TlvAddOrUpdateThreadNetworkRequest> {}
 
     /**
-     * These elements and properties are present in all NetworkCommissioning clusters.
+     * NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4
      */
-    export const Base = ClusterFactory.Definition({
-        id: 0x31,
-        name: "NetworkCommissioning",
-        revision: 1,
+    export const TlvNetworkInfoStruct = TlvObject({
+        /**
+         * Every network is uniquely identified (for purposes of commissioning) by a NetworkID mapping to the following
+         * technology-specific properties:
+         *
+         *   • SSID for Wi-Fi
+         *
+         *   • Extended PAN ID for Thread
+         *
+         *   • Network interface instance name at operating system (or equivalent unique name) for Ethernet.
+         *
+         * The semantics of the NetworkID field therefore varies between network types accordingly. It contains SSID
+         * for Wi-Fi networks, Extended PAN ID (XPAN ID) for Thread networks and netif name for Ethernet networks.
+         *
+         * NOTE
+         *
+         * SSID in Wi-Fi is a collection of 1-32 bytes, the text encoding of which is not specified. Implementations
+         * must be careful to support reporting byte strings without requiring a particular encoding for transfer. Only
+         * the commissioner should try to potentially decode the bytes. The most common encoding is UTF-8, however this
+         * is just a convention. Some configurations may use Latin-1 or other character sets. A commissioner may decode
+         * using UTF-8, replacing encoding errors with "?" at the application level while retaining the underlying
+         * representation.
+         *
+         * XPAN ID is a big-endian 64-bit unsigned number, represented on the first 8 octets of the octet string.
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.1
+         */
+        networkId: TlvField(0, TlvByteString.bound({ minLength: 1, maxLength: 32 })),
 
-        features: {
-            /**
-             * WiFiNetworkInterface
-             *
-             * Wi-Fi related features
-             */
-            wiFiNetworkInterface: BitFlag(0),
-
-            /**
-             * ThreadNetworkInterface
-             *
-             * Thread related features
-             */
-            threadNetworkInterface: BitFlag(1),
-
-            /**
-             * EthernetNetworkInterface
-             *
-             * Ethernet related features
-             */
-            ethernetNetworkInterface: BitFlag(2)
-        },
-
-        attributes: {
-            /**
-             * This shall indicate the maximum number of network configuration entries that can be added, based on
-             * available device resources. The length of the Networks attribute list shall be less than or equal to
-             * this value.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.1
-             */
-            maxNetworks: FixedAttribute(
-                0x0,
-                TlvUInt8.bound({ min: 1 }),
-                { readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * This attribute shall indicate the network configurations that are usable on the network interface
-             * represented by this cluster server instance.
-             *
-             * The order of configurations in the list reflects precedence. That is, any time the Node attempts to
-             * connect to the network it shall attempt to do so using the configurations in Networks Attribute in the
-             * order as they appear in the list.
-             *
-             * The order of list items shall only be modified by the AddOrUpdateThreadNetwork, AddOrUpdateWiFiNetwork
-             * and ReorderNetwork commands. In other words, the list shall be stable over
-             *
-             * time, unless mutated externally.
-             *
-             * Ethernet networks shall be automatically populated by the cluster server. Ethernet Network Commissioning
-             * Cluster instances shall always have exactly one Section 11.8.5.4, “NetworkInfoStruct” instance in their
-             * Networks attribute. There shall be no way to add, update or remove Ethernet network configurations to
-             * those Cluster instances.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.2
-             */
-            networks: Attribute(
-                0x1,
-                TlvArray(TlvNetworkInfoStruct),
-                { default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * This attribute shall indicate whether the associated network interface is enabled or not. By default all
-             * network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true).
-             *
-             * It is undefined what happens if InterfaceEnabled is written to false on the same interface as that which
-             * is used to write the value. In that case, it is possible that the Administrator would have to await
-             * expiry of the fail-safe, and associated recovery of network configuration to prior safe values, before
-             * being able to communicate with the node again (see Section 11.9.6.2, “ArmFailSafe Command”).
-             *
-             * It may be possible to disable Ethernet interfaces but it is implementation-defined. If not supported, a
-             * write to this attribute with a value of false shall fail with a status of INVALID_ACTION. When disabled,
-             * an Ethernet interface would longer employ media detection. That is, a simple unplug and replug of the
-             * cable shall NOT re-enable the interface.
-             *
-             * On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server cluster
-             * instances with InterfaceEnabled set to true.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.5
-             */
-            interfaceEnabled: WritableAttribute(
-                0x4,
-                TlvBoolean,
-                { persistent: true, default: true, writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * This attribute shall indicate the status of the last attempt either scan or connect to an operational
-             * network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous
-             * connection after loss of connectivity or during initial establishment. If no such attempt was made, or
-             * no network configurations exist in the Networks attribute, then this attribute shall be set to null.
-             *
-             * This attribute is present to assist with error recovery during Network commissioning and to assist in
-             * non-concurrent networking commissioning flows.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.6
-             */
-            lastNetworkingStatus: Attribute(
-                0x5,
-                TlvNullable(TlvEnum<NetworkCommissioningStatus>()),
-                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * This attribute shall indicate the NetworkID used in the last attempt to connect to an operational
-             * network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous
-             * connection after loss of connectivity or during initial establishment. If no such attempt was made, or
-             * no network configurations exist in the Networks attribute, then this attribute shall be set to null.
-             *
-             * If a network configuration is removed from the Networks attribute using the RemoveNetwork command after
-             * a connection attempt, this field may indicate a NetworkID that is no longer configured on the Node.
-             *
-             * This attribute is present to assist with error recovery during Network commissioning and to assist in
-             * non-concurrent networking commissioning flows.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.7
-             */
-            lastNetworkId: Attribute(
-                0x6,
-                TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 })),
-                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
-            ),
-
-            /**
-             * This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an
-             * operational network, using this interface, whether by invocation of the ConnectNetwork command or by
-             * autonomous connection after loss of connectivity or during initial establishment. If no such attempt was
-             * made, or no network configurations exist in the Networks attribute, then this attribute shall be set to
-             * null.
-             *
-             * If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus
-             * attribute, then this field shall be set to null.
-             *
-             * This attribute is present to assist with error recovery during Network commissioning and to assist in
-             * non-concurrent networking commissioning flows.
-             *
-             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.8
-             */
-            lastConnectErrorValue: Attribute(
-                0x7,
-                TlvNullable(TlvInt32),
-                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
-            )
-        }
+        /**
+         * This field shall indicate the connected status of the associated network, where "connected" means currently
+         * linked to the network technology (e.g. Associated for a Wi-Fi network, media connected for an Ethernet
+         * network).
+         *
+         * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4.2
+         */
+        connected: TlvField(1, TlvBoolean)
     });
+
+    /**
+     * NetworkInfoStruct struct describes an existing network configuration, as provided in the Networks attribute.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.5.4
+     */
+    export interface NetworkInfoStruct extends TypeFromSchema<typeof TlvNetworkInfoStruct> {}
 
     /**
      * A NetworkCommissioningCluster supports these elements if it supports features WiFiNetworkInterface or
      * ThreadNetworkInterface.
      */
-    export const WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent = ClusterFactory.Component({
+    export const WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent = MutableCluster.Component({
         attributes: {
             /**
              * This attribute shall indicate the maximum duration taken, in seconds, by the network interface on this
@@ -994,7 +957,7 @@ export namespace NetworkCommissioning {
     /**
      * A NetworkCommissioningCluster supports these elements if it supports feature WiFiNetworkInterface.
      */
-    export const WiFiNetworkInterfaceComponent = ClusterFactory.Component({
+    export const WiFiNetworkInterfaceComponent = MutableCluster.Component({
         commands: {
             /**
              * This command shall be used to add or modify Wi-Fi network configurations.
@@ -1026,7 +989,7 @@ export namespace NetworkCommissioning {
     /**
      * A NetworkCommissioningCluster supports these elements if it supports feature ThreadNetworkInterface.
      */
-    export const ThreadNetworkInterfaceComponent = ClusterFactory.Component({
+    export const ThreadNetworkInterfaceComponent = MutableCluster.Component({
         commands: {
             /**
              * This command shall be used to add or modify Thread network configurations.
@@ -1057,6 +1020,216 @@ export namespace NetworkCommissioning {
     });
 
     /**
+     * These are optional features supported by NetworkCommissioningCluster.
+     *
+     * @see {@link MatterCoreSpecificationV1_1} § 11.8.4
+     */
+    export enum Feature {
+        /**
+         * WiFiNetworkInterface
+         *
+         * Wi-Fi related features
+         */
+        WiFiNetworkInterface = "WiFiNetworkInterface",
+
+        /**
+         * ThreadNetworkInterface
+         *
+         * Thread related features
+         */
+        ThreadNetworkInterface = "ThreadNetworkInterface",
+
+        /**
+         * EthernetNetworkInterface
+         *
+         * Ethernet related features
+         */
+        EthernetNetworkInterface = "EthernetNetworkInterface"
+    }
+
+    /**
+     * These elements and properties are present in all NetworkCommissioning clusters.
+     */
+    export const Base = MutableCluster.Component({
+        id: 0x31,
+        name: "NetworkCommissioning",
+        revision: 1,
+
+        features: {
+            /**
+             * WiFiNetworkInterface
+             *
+             * Wi-Fi related features
+             */
+            wiFiNetworkInterface: BitFlag(0),
+
+            /**
+             * ThreadNetworkInterface
+             *
+             * Thread related features
+             */
+            threadNetworkInterface: BitFlag(1),
+
+            /**
+             * EthernetNetworkInterface
+             *
+             * Ethernet related features
+             */
+            ethernetNetworkInterface: BitFlag(2)
+        },
+
+        attributes: {
+            /**
+             * This shall indicate the maximum number of network configuration entries that can be added, based on
+             * available device resources. The length of the Networks attribute list shall be less than or equal to
+             * this value.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.1
+             */
+            maxNetworks: FixedAttribute(
+                0x0,
+                TlvUInt8.bound({ min: 1 }),
+                { readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * This attribute shall indicate the network configurations that are usable on the network interface
+             * represented by this cluster server instance.
+             *
+             * The order of configurations in the list reflects precedence. That is, any time the Node attempts to
+             * connect to the network it shall attempt to do so using the configurations in Networks Attribute in the
+             * order as they appear in the list.
+             *
+             * The order of list items shall only be modified by the AddOrUpdateThreadNetwork, AddOrUpdateWiFiNetwork
+             * and ReorderNetwork commands. In other words, the list shall be stable over
+             *
+             * time, unless mutated externally.
+             *
+             * Ethernet networks shall be automatically populated by the cluster server. Ethernet Network Commissioning
+             * Cluster instances shall always have exactly one Section 11.8.5.4, “NetworkInfoStruct” instance in their
+             * Networks attribute. There shall be no way to add, update or remove Ethernet network configurations to
+             * those Cluster instances.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.2
+             */
+            networks: Attribute(
+                0x1,
+                TlvArray(TlvNetworkInfoStruct),
+                { default: [], readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * This attribute shall indicate whether the associated network interface is enabled or not. By default all
+             * network interfaces SHOULD be enabled during initial commissioning (InterfaceEnabled set to true).
+             *
+             * It is undefined what happens if InterfaceEnabled is written to false on the same interface as that which
+             * is used to write the value. In that case, it is possible that the Administrator would have to await
+             * expiry of the fail-safe, and associated recovery of network configuration to prior safe values, before
+             * being able to communicate with the node again (see Section 11.9.6.2, “ArmFailSafe Command”).
+             *
+             * It may be possible to disable Ethernet interfaces but it is implementation-defined. If not supported, a
+             * write to this attribute with a value of false shall fail with a status of INVALID_ACTION. When disabled,
+             * an Ethernet interface would longer employ media detection. That is, a simple unplug and replug of the
+             * cable shall NOT re-enable the interface.
+             *
+             * On Ethernet-only Nodes, there shall always be at least one of the Network Commissioning server cluster
+             * instances with InterfaceEnabled set to true.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.5
+             */
+            interfaceEnabled: WritableAttribute(
+                0x4,
+                TlvBoolean,
+                { persistent: true, default: true, writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * This attribute shall indicate the status of the last attempt either scan or connect to an operational
+             * network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous
+             * connection after loss of connectivity or during initial establishment. If no such attempt was made, or
+             * no network configurations exist in the Networks attribute, then this attribute shall be set to null.
+             *
+             * This attribute is present to assist with error recovery during Network commissioning and to assist in
+             * non-concurrent networking commissioning flows.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.6
+             */
+            lastNetworkingStatus: Attribute(
+                0x5,
+                TlvNullable(TlvEnum<NetworkCommissioningStatus>()),
+                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * This attribute shall indicate the NetworkID used in the last attempt to connect to an operational
+             * network, using this interface, whether by invocation of the ConnectNetwork command or by autonomous
+             * connection after loss of connectivity or during initial establishment. If no such attempt was made, or
+             * no network configurations exist in the Networks attribute, then this attribute shall be set to null.
+             *
+             * If a network configuration is removed from the Networks attribute using the RemoveNetwork command after
+             * a connection attempt, this field may indicate a NetworkID that is no longer configured on the Node.
+             *
+             * This attribute is present to assist with error recovery during Network commissioning and to assist in
+             * non-concurrent networking commissioning flows.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.7
+             */
+            lastNetworkId: Attribute(
+                0x6,
+                TlvNullable(TlvByteString.bound({ minLength: 1, maxLength: 32 })),
+                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
+            ),
+
+            /**
+             * This attribute shall indicate the ErrorValue used in the last failed attempt to connect to an
+             * operational network, using this interface, whether by invocation of the ConnectNetwork command or by
+             * autonomous connection after loss of connectivity or during initial establishment. If no such attempt was
+             * made, or no network configurations exist in the Networks attribute, then this attribute shall be set to
+             * null.
+             *
+             * If the last connection succeeded, as indicated by a value of Success in the LastNetworkingStatus
+             * attribute, then this field shall be set to null.
+             *
+             * This attribute is present to assist with error recovery during Network commissioning and to assist in
+             * non-concurrent networking commissioning flows.
+             *
+             * @see {@link MatterCoreSpecificationV1_1} § 11.8.6.8
+             */
+            lastConnectErrorValue: Attribute(
+                0x7,
+                TlvNullable(TlvInt32),
+                { default: null, readAcl: AccessLevel.Administer, writeAcl: AccessLevel.Administer }
+            )
+        },
+
+        /**
+         * This metadata controls which NetworkCommissioningCluster elements matter.js activates for specific feature
+         * combinations.
+         */
+        extensions: MutableCluster.Extensions(
+            { flags: { wiFiNetworkInterface: true }, component: WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent },
+            {
+                flags: { threadNetworkInterface: true },
+                component: WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent
+            },
+            { flags: { wiFiNetworkInterface: true }, component: WiFiNetworkInterfaceComponent },
+            { flags: { threadNetworkInterface: true }, component: ThreadNetworkInterfaceComponent },
+            { flags: { wiFiNetworkInterface: true, threadNetworkInterface: true }, component: false },
+            { flags: { wiFiNetworkInterface: true, ethernetNetworkInterface: true }, component: false },
+            { flags: { threadNetworkInterface: true, ethernetNetworkInterface: true }, component: false },
+            {
+                flags: { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false },
+                component: false
+            }
+        )
+    })
+
+    /**
+     * @see {@link Cluster}
+     */
+    export const ClusterInstance = MutableCluster.ExtensibleOnly(Base);
+
+    /**
      * Network Commissioning
      *
      * Network commissioning is part of the overall Node commissioning. The main goal of Network Commissioning Cluster
@@ -1073,64 +1246,65 @@ export namespace NetworkCommissioning {
      * interface, in this context, is a unique entity that can have an IPv6 address assigned to it and ingress and
      * egress IP packets.
      *
-     * NetworkCommissioningCluster supports optional features that you can enable with the
-     * NetworkCommissioningCluster.with() factory method.
+     * Per the Matter specification you cannot use {@link NetworkCommissioningCluster} without enabling certain feature
+     * combinations. You must use the NetworkCommissioningCluster.with() factory method to obtain a working cluster.
      *
      * @see {@link MatterCoreSpecificationV1_1} § 11.8
      */
-    export const Cluster = ClusterFactory.Extensible(
-        Base,
+    export interface Cluster extends Identity<typeof ClusterInstance> {}
 
-        /**
-         * Use this factory method to create a NetworkCommissioning cluster with support for optional features. Include
-         * each {@link Feature} you wish to support.
-         *
-         * @param features the optional features to support
-         * @returns a NetworkCommissioning cluster with specified features enabled
-         * @throws {IllegalClusterError} if the feature combination is disallowed by the Matter specification
-         */
-        <T extends `${Feature}`[]>(...features: [...T]) => {
-            ClusterFactory.validateFeatureSelection(features, Feature);
-            const cluster = ClusterFactory.Definition({
-                ...Base,
-                supportedFeatures: BitFlags(Base.features, ...features)
-            });
-
-            ClusterFactory.extend(
-                cluster,
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent,
-                { wiFiNetworkInterface: true },
-                { threadNetworkInterface: true }
-            );
-
-            ClusterFactory.extend(cluster, WiFiNetworkInterfaceComponent, { wiFiNetworkInterface: true });
-            ClusterFactory.extend(cluster, ThreadNetworkInterfaceComponent, { threadNetworkInterface: true });
-
-            ClusterFactory.prevent(
-                cluster,
-                { wiFiNetworkInterface: true, threadNetworkInterface: true },
-                { wiFiNetworkInterface: true, ethernetNetworkInterface: true },
-                { threadNetworkInterface: true, ethernetNetworkInterface: true },
-                { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false }
-            );
-
-            return cluster as unknown as Extension<BitFlags<typeof Base.features, T>>;
-        }
-    );
-
-    export type Extension<SF extends TypeFromPartialBitSchema<typeof Base.features>> =
-        Omit<typeof Base, "supportedFeatures">
-        & { supportedFeatures: SF }
-        & (SF extends { wiFiNetworkInterface: true } | { threadNetworkInterface: true } ? typeof WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent : {})
-        & (SF extends { wiFiNetworkInterface: true } ? typeof WiFiNetworkInterfaceComponent : {})
-        & (SF extends { threadNetworkInterface: true } ? typeof ThreadNetworkInterfaceComponent : {})
-        & (SF extends { wiFiNetworkInterface: true, threadNetworkInterface: true } ? never : {})
-        & (SF extends { wiFiNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-        & (SF extends { threadNetworkInterface: true, ethernetNetworkInterface: true } ? never : {})
-        & (SF extends { wiFiNetworkInterface: false, threadNetworkInterface: false, ethernetNetworkInterface: false } ? never : {});
-
+    export const Cluster: Cluster = ClusterInstance;
     const WI = { wiFiNetworkInterface: true };
     const TH = { threadNetworkInterface: true };
+
+    /**
+     * @see {@link Complete}
+     */
+    export const CompleteInstance = MutableCluster({
+        id: Base.id,
+        name: Base.name,
+        revision: Base.revision,
+        features: Base.features,
+
+        attributes: {
+            ...Base.attributes,
+            scanMaxTimeSeconds: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.scanMaxTimeSeconds,
+                { mandatoryIf: [WI, TH] }
+            ),
+            connectMaxTimeSeconds: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.connectMaxTimeSeconds,
+                { mandatoryIf: [WI, TH] }
+            )
+        },
+
+        commands: {
+            scanNetworks: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks,
+                { mandatoryIf: [WI, TH] }
+            ),
+            addOrUpdateWiFiNetwork: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceComponent.commands.addOrUpdateWiFiNetwork,
+                { mandatoryIf: [WI] }
+            ),
+            addOrUpdateThreadNetwork: MutableCluster.AsConditional(
+                ThreadNetworkInterfaceComponent.commands.addOrUpdateThreadNetwork,
+                { mandatoryIf: [TH] }
+            ),
+            removeNetwork: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.removeNetwork,
+                { mandatoryIf: [WI, TH] }
+            ),
+            connectNetwork: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.connectNetwork,
+                { mandatoryIf: [WI, TH] }
+            ),
+            reorderNetwork: MutableCluster.AsConditional(
+                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.reorderNetwork,
+                { mandatoryIf: [WI, TH] }
+            )
+        }
+    });
 
     /**
      * This cluster supports all NetworkCommissioning features. It may support illegal feature combinations.
@@ -1138,52 +1312,11 @@ export namespace NetworkCommissioning {
      * If you use this cluster you must manually specify which features are active and ensure the set of active
      * features is legal per the Matter specification.
      */
-    export const Complete = ClusterFactory.Definition({
-        id: Cluster.id,
-        name: Cluster.name,
-        revision: Cluster.revision,
-        features: Cluster.features,
+    export interface Complete extends Identity<typeof CompleteInstance> {}
 
-        attributes: {
-            ...Cluster.attributes,
-            scanMaxTimeSeconds: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.scanMaxTimeSeconds,
-                { mandatoryIf: [WI, TH] }
-            ),
-            connectMaxTimeSeconds: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.attributes.connectMaxTimeSeconds,
-                { mandatoryIf: [WI, TH] }
-            )
-        },
-
-        commands: {
-            scanNetworks: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.scanNetworks,
-                { mandatoryIf: [WI, TH] }
-            ),
-            addOrUpdateWiFiNetwork: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceComponent.commands.addOrUpdateWiFiNetwork,
-                { mandatoryIf: [WI] }
-            ),
-            addOrUpdateThreadNetwork: ClusterFactory.AsConditional(
-                ThreadNetworkInterfaceComponent.commands.addOrUpdateThreadNetwork,
-                { mandatoryIf: [TH] }
-            ),
-            removeNetwork: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.removeNetwork,
-                { mandatoryIf: [WI, TH] }
-            ),
-            connectNetwork: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.connectNetwork,
-                { mandatoryIf: [WI, TH] }
-            ),
-            reorderNetwork: ClusterFactory.AsConditional(
-                WiFiNetworkInterfaceOrThreadNetworkInterfaceComponent.commands.reorderNetwork,
-                { mandatoryIf: [WI, TH] }
-            )
-        }
-    });
+    export const Complete: Complete = CompleteInstance;
 }
 
-export type NetworkCommissioningCluster = typeof NetworkCommissioning.Cluster;
+export type NetworkCommissioningCluster = NetworkCommissioning.Cluster;
 export const NetworkCommissioningCluster = NetworkCommissioning.Cluster;
+ClusterRegistry.register(NetworkCommissioning.Complete);

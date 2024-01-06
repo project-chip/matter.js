@@ -20,19 +20,19 @@ LocalMatter.children.push({
 
             children: [
                 {
-                    tag: "datatype",
+                    tag: "field",
                     id: 0,
                     name: "Stopped",
                     details: "Covering is not moving",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     id: 1,
                     name: "Opening",
                     details: "Covering is moving from closed to open",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     id: 2,
                     name: "Closing",
                     details: "Covering is moving from open to closed",
@@ -49,10 +49,10 @@ LocalMatter.children.push({
             name: "Mode",
 
             children: [
-                { tag: "datatype", name: "MotorDirectionReversed", constraint: "0" },
-                { tag: "datatype", name: "CalibrationMode", constraint: "1" },
-                { tag: "datatype", name: "MaintenanceMode", constraint: "2" },
-                { tag: "datatype", name: "LedFeedback", constraint: "3" },
+                { tag: "field", name: "MotorDirectionReversed", constraint: "0" },
+                { tag: "field", name: "CalibrationMode", constraint: "1" },
+                { tag: "field", name: "MaintenanceMode", constraint: "2" },
+                { tag: "field", name: "LedFeedback", constraint: "3" },
             ],
         },
 
@@ -64,13 +64,13 @@ LocalMatter.children.push({
             name: "ConfigStatus",
 
             children: [
-                { tag: "datatype", name: "Operational", constraint: "0" },
-                { tag: "datatype", name: "OnlineReserved", constraint: "1" },
-                { tag: "datatype", name: "LiftMovementReversed", constraint: "2" },
-                { tag: "datatype", name: "LiftPositionAware", constraint: "3" },
-                { tag: "datatype", name: "TiltPositionAware", constraint: "4" },
-                { tag: "datatype", name: "LiftEncoderControlled", constraint: "5" },
-                { tag: "datatype", name: "TiltEncoderControlled", constraint: "6" },
+                { tag: "field", name: "Operational", constraint: "0" },
+                { tag: "field", name: "OnlineReserved", constraint: "1" },
+                { tag: "field", name: "LiftMovementReversed", constraint: "2" },
+                { tag: "field", name: "LiftPositionAware", constraint: "3" },
+                { tag: "field", name: "TiltPositionAware", constraint: "4" },
+                { tag: "field", name: "LiftEncoderControlled", constraint: "5" },
+                { tag: "field", name: "TiltEncoderControlled", constraint: "6" },
             ],
         },
 
@@ -85,21 +85,21 @@ LocalMatter.children.push({
 
             children: [
                 {
-                    tag: "datatype",
+                    tag: "field",
                     name: "Global",
                     type: "MovementStatus",
                     constraint: "0 to 2",
                     description: "Movement status of the cover",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     name: "Lift",
                     type: "MovementStatus",
                     constraint: "2 to 4",
                     description: "Movement status of the cover's lift function",
                 },
                 {
-                    tag: "datatype",
+                    tag: "field",
                     name: "Tilt",
                     type: "MovementStatus",
                     constraint: "4 to 6",

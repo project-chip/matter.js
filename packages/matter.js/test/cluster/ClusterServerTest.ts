@@ -595,8 +595,12 @@ describe("ClusterServer structure", () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
-            const testStorageContext = testStorageManager.createContext("TestContext");
-            asClusterServerInternal(server)._setStorage(testStorageContext);
+            let version = 1;
+            asClusterServerInternal(server).datasource = {
+                get version() { return version },
+                increaseVersion() { return ++version },
+                changed() {},
+            };
             expect(initCalled).true;
 
             asClusterServerInternal(server)._destroy();

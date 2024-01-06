@@ -28,7 +28,6 @@ export class TestRunner {
             constructor() {
                 super(progress);
             }
-
             override failRun(message: string, stack?: string) {
                 fatal(message, stack);
             }

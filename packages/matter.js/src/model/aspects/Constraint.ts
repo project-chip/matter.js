@@ -48,31 +48,47 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         Object.assign(this, ast);
     }
-
     /**
-     * Test a value against a constraint.
+
+     * Test a value against a constraint.  Only tests primitive values; does
+     * not perform recursion into arrays.
      */
-    test(value: FieldValue) {
+    test(value: FieldValue, properties?: Record<string, any>) {
+        // Helper that looks up "reference" field values in properties.  This
+        // is for constraints such as "min FieldName"
+        function valueOf(value: any) {
+            if (typeof value === "object") {
+                if (value.type === FieldValue.reference) {
+                    value = properties?.[camelize(value.name)];
+                }
+            }
+
+            return value;
+        }
+
         if (value === undefined) {
             return false;
         }
 
-        if (this.value === value) {
+        const v = valueOf(this.value);
+        if (v === value) {
             return true;
         }
 
-        if (this.value !== undefined || value === null) {
+        if (v !== undefined || value === null) {
             return false;
         }
 
         if (this.min !== undefined && this.min !== null) {
-            if (typeof this.min !== typeof value || this.min > value) {
+            const min = valueOf(this.min);
+            if (typeof min !== typeof value || min > value) {
                 return false;
             }
         }
 
         if (this.max !== undefined && this.max !== null) {
-            if (typeof this.max !== typeof value || this.max <= value) {
+            const max = valueOf(this.max);
+            if (typeof max !== typeof value || max <= value) {
                 return false;
             }
         }

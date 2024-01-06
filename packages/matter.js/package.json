@@ -96,6 +96,36 @@
                 "default": "./dist/cjs/protocol/securechannel/export.js"
             }
         },
+        "./behaviors/*": {
+            "import": {
+                "types": "./dist/esm/behavior/definitions/*/export.d.ts",
+                "default": "./dist/esm/behavior/definitions/*/export.js"
+            },
+            "require": {
+                "types": "./dist/cjs/behavior/definitions/*/export.d.ts",
+                "default": "./dist/cjs/behavior/definitions/*/export.js"
+            }
+        },
+        "./devices/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/device/*.js"
+            },
+            "require": {
+                "types": "./dist/esm/endpoint/definitions/device/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/device/*.js"
+            }
+        },
+        "./endpoints/*": {
+            "import": {
+                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/system/*.js"
+            },
+            "require": {
+                "types": "./dist/esm/endpoint/definitions/system/*.d.ts",
+                "default": "./dist/esm/endpoint/definitions/system/*.js"
+            }
+        },
         "./*": {
             "import": {
                 "types": "./dist/esm/*/export.d.ts",

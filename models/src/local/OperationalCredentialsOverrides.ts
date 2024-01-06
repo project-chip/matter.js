@@ -25,13 +25,13 @@ LocalMatter.children.push({
             tag: "command",
             name: "AttestationResponse",
             id: 0x1,
-            children: [{ tag: "datatype", id: 0x0, name: "AttestationElements", constraint: { max: 900 } }],
+            children: [{ tag: "field", id: 0x0, name: "AttestationElements", constraint: { max: 900 } }],
         },
         {
             tag: "command",
             name: "CsrResponse",
             id: 0x5,
-            children: [{ tag: "datatype", id: 0x0, name: "NocsrElements", constraint: { max: 900 } }],
+            children: [{ tag: "field", id: 0x0, name: "NocsrElements", constraint: { max: 900 } }],
         },
 
         // TODO: Temporarily remove "fabric sensitive" quality.  This

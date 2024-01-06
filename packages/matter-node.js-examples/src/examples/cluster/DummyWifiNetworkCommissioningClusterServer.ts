@@ -5,8 +5,10 @@
  */
 
 import {
+    ClusterComposer,
     ClusterServer,
     ClusterServerObjForCluster,
+    ClusterType,
     GeneralCommissioningCluster,
     NetworkCommissioning,
 } from "@project-chip/matter-node.js/cluster";
@@ -14,14 +16,21 @@ import { ByteArray, getParameter } from "@project-chip/matter-node.js/util";
 
 const firstNetworkId = new ByteArray(32);
 
-const WifiNetworkCluster = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
+// TODO - Without explicit type annotations on WifiNetworkCluster and Server
+// we get TS error TS2742.
+//
+// Needs further investigation but the manual types, while ugly, do function.
+const WifiNetworkCluster: ClusterComposer.WithFeatures<
+    ClusterType.Of<typeof NetworkCommissioning.Base>,
+    ["WiFiNetworkInterface"]
+> = NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface);
 
 /**
  * This represents a Dummy version of a Wifi Network Commissioning Cluster Server without real Wifi related logic, beside
  * returning some values provided as CLI parameters. This dummy implementation is only there for tests/as showcase for BLE
  * commissioning of a device.
  */
-export default ClusterServer(
+const Server: ClusterServerObjForCluster<typeof WifiNetworkCluster> = ClusterServer(
     NetworkCommissioning.Cluster.with(NetworkCommissioning.Feature.WiFiNetworkInterface),
     {
         maxNetworks: 1,
@@ -178,4 +187,6 @@ export default ClusterServer(
             };
         },
     },
-) as ClusterServerObjForCluster<typeof WifiNetworkCluster>;
+);
+
+export default Server;

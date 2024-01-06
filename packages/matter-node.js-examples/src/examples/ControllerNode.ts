@@ -308,7 +308,7 @@ class ControllerNode {
             //console.log("Attributes-BasicInformation:", JSON.stringify(attributesBasicInformation, null, 2));
 
             const devices = node.getDevices();
-            if (devices[0] && devices[0].id === 1) {
+            if (devices[0] && devices[0].number === 1) {
                 // Example to subscribe to all Attributes of endpoint 1 of the commissioned node: */*/*
                 //await interactionClient.subscribeMultipleAttributes([{ endpointId: 1, /* subscribe anything from endpoint 1 */ }], 0, 180, data => {
                 //    console.log("Subscribe-All Data:", Logger.toJSON(data));

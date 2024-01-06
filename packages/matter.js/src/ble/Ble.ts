@@ -13,10 +13,16 @@ import { ByteArray } from "../util/ByteArray.js";
 
 export class BleError extends MatterError {}
 
+function BleDisabled(): Ble {
+    throw new NoProviderError("No provider configured");
+}
+
 export abstract class Ble {
-    static get: () => Ble = () => {
-        throw new NoProviderError("No provider configured");
-    };
+    static get = BleDisabled;
+
+    static get enabled() {
+        return this.get === BleDisabled;
+    }
 
     abstract getBlePeripheralInterface(): TransportInterface;
     abstract getBleCentralInterface(): NetInterface;

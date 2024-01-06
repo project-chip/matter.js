@@ -19,7 +19,7 @@ LocalMatter.children.push({
             children: [
                 // The presence of this field is a CHIP bug in 1.1 branch.
                 // They fixed in their main branch...  Remove via conformance
-                { tag: "datatype", id: 0x1, name: "GroupKeySetIDs", conformance: "X" },
+                { tag: "field", id: 0x1, name: "GroupKeySetIDs", conformance: "X" },
             ],
         },
     ],

@@ -117,7 +117,7 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         mode: number,
         {
-            deviceName,
+            name: deviceName,
             deviceType,
             vendorId,
             productId,

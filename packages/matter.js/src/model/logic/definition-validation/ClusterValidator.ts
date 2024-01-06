@@ -10,6 +10,8 @@ import { ModelValidator } from "./ModelValidator.js";
 
 ModelValidator.validators[ClusterElement.Tag] = class DeviceTypeValidator extends ModelValidator<ClusterModel> {
     override validate() {
+        // Note -- we allow FieldModel in operation schema so it's in the child
+        // type but it is not valid for canonical schema
         this.validateStructure(false, DatatypeModel, AttributeModel, CommandModel, EventModel);
 
         this.validateProperty({ name: "singleton", type: "boolean" });

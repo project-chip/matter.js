@@ -82,7 +82,7 @@ namespace Fixtures {
                 {
                     tag: "datatype",
                     name: "OccupancyBitmap",
-                    children: [{ tag: "datatype", id: 0x0001, name: "Occupied" }],
+                    children: [{ tag: "field", id: 0x0001, name: "Occupied" }],
                 },
             ],
         }),
@@ -146,21 +146,21 @@ namespace Fixtures {
                     type: "struct",
                     children: [
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "Label",
                             conformance: "M",
                             type: "string",
                         },
 
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "Mode",
                             conformance: "M",
                             type: "uint8",
                         },
 
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "SemanticTags",
                             conformance: "M",
                             type: "SemanticTagStruct",
@@ -192,7 +192,7 @@ namespace Fixtures {
                     type: "struct",
                     children: [
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "CaseSessionsPerFabric",
                             id: 0x0,
                             type: "uint16",
@@ -201,7 +201,7 @@ namespace Fixtures {
                             default: 3,
                         },
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "SubscriptionsPerFabric",
                             id: 0x1,
                             type: "uint16",
@@ -233,8 +233,8 @@ namespace Fixtures {
                     type: "struct",
                     conformance: "M",
                     children: [
-                        { tag: "datatype", name: "CaseSessionsPerFabric", type: "uint16", conformance: "M" },
-                        { tag: "datatype", name: "SubscriptionsPerFabric", type: "uint16", conformance: "M" },
+                        { tag: "field", name: "CaseSessionsPerFabric", type: "uint16", conformance: "M" },
+                        { tag: "field", name: "SubscriptionsPerFabric", type: "uint16", conformance: "M" },
                     ],
                 },
             ],
@@ -286,28 +286,28 @@ namespace Fixtures {
                     conformance: "M",
                     children: [
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "MotorDirectionReversed",
                             constraint: "1",
                             conformance: "M",
                         },
 
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "CalibrationMode",
                             constraint: "2",
                             conformance: "M",
                         },
 
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "MaintenanceMode",
                             constraint: "3",
                             conformance: "M",
                         },
 
                         {
-                            tag: "datatype",
+                            tag: "field",
                             name: "LedFeedback",
                             constraint: "4",
                             conformance: "M",

@@ -11,13 +11,13 @@ import { ValueElement } from "./ValueElement.js";
 /**
  * An event is triggered by endpoints.
  */
-export type EventElement = ValueElement & {
+export interface EventElement extends ValueElement {
     id: Mei;
     tag: `${EventElement.Tag}`;
 
     // Priority is required but we handle missing priority in validation
     priority?: `${EventElement.Priority}`;
-};
+}
 
 export function EventElement(definition: EventElement.Properties) {
     return ValueElement(EventElement.Tag, definition) as EventElement;
