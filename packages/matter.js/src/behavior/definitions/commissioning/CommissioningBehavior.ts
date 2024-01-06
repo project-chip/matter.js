@@ -82,7 +82,7 @@ export class CommissioningBehavior extends Behavior {
     initiateCommissioning() {
         const { passcode, discriminator } = this.state;
 
-        logger.info(`Node is uncommissioned`);
+        logger.notice(`Node is uncommissioned`);
         logger.info("Passcode is", Logger.em(passcode), "discriminator is", Logger.em(discriminator));
 
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
