@@ -118,8 +118,6 @@ export class PartStoreService {
                 }
                 return;
             }
-
-            store.number = part.number;
         } else {
             // Allocate number
             const knownNumber = store.number;
@@ -143,6 +141,7 @@ export class PartStoreService {
             this.#allocatedNumbers.add(number);
         }
 
+        store.number = part.number;
         this.#persistNumber(part);
     }
 
