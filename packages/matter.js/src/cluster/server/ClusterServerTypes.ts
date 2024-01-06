@@ -9,13 +9,13 @@ import { AttributeId } from "../../datatype/AttributeId.js";
 import { ClusterId } from "../../datatype/ClusterId.js";
 import { CommandId } from "../../datatype/CommandId.js";
 import { EventId } from "../../datatype/EventId.js";
-import { Endpoint } from "../../device/Endpoint.js";
+import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { MatterDevice } from "../../MatterDevice.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { BitSchema } from "../../schema/BitmapSchema.js";
 import { Session } from "../../session/Session.js";
-import { StorageContext } from "../../storage/StorageContext.js";
+import { SupportedStorageTypes } from "../../storage/StringifyTools.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { Merge } from "../../util/Type.js";
 import { ClusterClientObj } from "../client/ClusterClientTypes.js";
@@ -91,7 +91,7 @@ type OptionalCommandNames<C extends Commands> = {
 type AttributeGetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeGetter`]?: (args: {
         attributes: AttributeServers<A>;
-        endpoint?: Endpoint;
+        endpoint?: EndpointInterface;
         session?: Session<MatterDevice>;
         isFabricFiltered?: boolean;
     }) => AttributeJsType<A[P]>;
@@ -99,13 +99,13 @@ type AttributeGetters<A extends Attributes> = {
 type AttributeSetters<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeSetter`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
     ) => boolean;
 };
 type AttributeValidators<A extends Attributes> = {
     [P in keyof A as `${string & P}AttributeValidator`]?: (
         value: AttributeJsType<A[P]>,
-        args: { attributes: AttributeServers<A>; endpoint?: Endpoint; session?: Session<MatterDevice> },
+        args: { attributes: AttributeServers<A>; endpoint?: EndpointInterface; session?: Session<MatterDevice> },
     ) => void;
 };
 export type CommandHandler<
@@ -119,7 +119,7 @@ export type CommandHandler<
           events: ES;
           session: Session<MatterDevice>;
           message: Message;
-          endpoint: Endpoint;
+          endpoint: EndpointInterface;
       }) => Promise<ResponseT> | ResponseT
     : never;
 type CommandHandlers<T extends Commands, AS extends AttributeServers<any>, ES extends EventServers<any>> = Merge<
@@ -140,7 +140,7 @@ export type ClusterServerHandlers<C extends Cluster<any, any, any, any, any>> = 
             initializeClusterServer?: (args: {
                 attributes: AttributeServers<C["attributes"]>;
                 events: EventServers<C["events"]>;
-                endpoint: Endpoint;
+                endpoint: EndpointInterface;
             }) => void;
             destroyClusterServer?: () => void;
         }
@@ -260,6 +260,17 @@ export type ClusterServerObjForCluster<C extends Cluster<any, any, any, any, any
     C["events"]
 >;
 
+export interface ClusterDatasource {
+    readonly version: number;
+    readonly eventHandler?: EventHandler;
+    increaseVersion(): number;
+    changed(key: string, value: SupportedStorageTypes): void;
+}
+
+export namespace ClusterDatasource {
+    export type Factory = (endpoint: EndpointInterface, cluster: ClusterServerObj<any, any>) => ClusterDatasource;
+}
+
 export type ClusterServerObj<A extends Attributes, E extends Events> = {
     /**
      * Cluster ID
@@ -281,10 +292,10 @@ export type ClusterServerObj<A extends Attributes, E extends Events> = {
     _type: "ClusterServer";
 
     /**
-     * Cluster data version
+     * Cluster datasource
      * @readonly
      */
-    readonly clusterDataVersion: number;
+    datasource?: ClusterDatasource;
 
     /**
      * Cluster attributes as named object that can be used to programmatically work with available attributes
@@ -339,21 +350,7 @@ export type ClusterServerObjInternal<A extends Attributes, C extends Commands, E
      *
      * @param endpoint Endpoint to assign to
      */
-    readonly _assignToEndpoint: (endpoint: Endpoint) => void;
-
-    /**
-     * Register an event handler for this cluster
-     * @private
-     *
-     * @param eventHandler
-     */
-    readonly _registerEventHandler: (eventHandler: EventHandler) => void;
-
-    /**
-     * Set Storage context used by this cluster
-     * @private
-     */
-    readonly _setStorage: (storageContext: StorageContext) => void;
+    readonly _assignToEndpoint: (endpoint: EndpointInterface) => void;
 
     /**
      * Get the Scene Extension Fields for this cluster. Used by the Scenes cluster.

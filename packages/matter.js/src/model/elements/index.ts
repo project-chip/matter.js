@@ -15,6 +15,7 @@ export * from "./DeviceTypeElement.js";
 export * from "./EndpointElement.js";
 export * from "./EventElement.js";
 export * from "./FabricElement.js";
+export * from "./FieldElement.js";
 export * from "./Globals.js";
 export * from "./MatterElement.js";
 export * from "./NodeElement.js";

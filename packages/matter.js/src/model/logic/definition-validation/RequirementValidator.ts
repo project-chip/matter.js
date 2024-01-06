@@ -6,14 +6,14 @@
 
 import { ElementTag } from "../../definitions/index.js";
 import { RequirementElement } from "../../elements/index.js";
-import { DatatypeModel, RequirementModel } from "../../models/index.js";
+import { FieldModel, RequirementModel } from "../../models/index.js";
 import { ModelValidator } from "./ModelValidator.js";
 
 ModelValidator.validators[RequirementElement.Tag] = class RequirementValidator extends (
     ModelValidator
 )<RequirementModel> {
     override validate() {
-        this.validateStructure(false, RequirementModel, RequirementModel, DatatypeModel);
+        this.validateStructure(false, RequirementModel, RequirementModel, FieldModel);
         this.validateProperty({
             name: "element",
             type: RequirementElement.ElementType,

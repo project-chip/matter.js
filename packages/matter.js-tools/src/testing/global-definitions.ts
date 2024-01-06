@@ -14,6 +14,7 @@ import { cryptoSetup } from "./mocks/crypto.js";
 import { TheMockLogger, loggerSetup } from "./mocks/logging.js";
 import { TheMockTime, timeSetup } from "./mocks/time.js";
 
+Chai.config.truncateThreshold = 200;
 Chai.use(ChaiAsPromised);
 
 Object.assign(globalThis as any, {

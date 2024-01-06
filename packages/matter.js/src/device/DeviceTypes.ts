@@ -18,6 +18,12 @@ export enum DeviceClasses {
     Node = "Node",
 
     /**
+     * Utility device type.
+     * A Utility device type supports configuration and settings.
+     */
+    Utility = "Utility",
+
+    /**
      * Application device type.
      * Application devices types are typically the most datatype endpoints on a node and in the network.
      */

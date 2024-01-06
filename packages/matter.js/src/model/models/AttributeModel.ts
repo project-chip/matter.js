@@ -7,14 +7,14 @@
 import { Mei } from "../definitions/index.js";
 import { AttributeElement } from "../elements/index.js";
 import { Model } from "./Model.js";
-import { ValueModel } from "./ValueModel.js";
+import { PropertyModel } from "./PropertyModel.js";
 
-export class AttributeModel extends ValueModel implements AttributeElement {
+export class AttributeModel extends PropertyModel implements AttributeElement {
     override tag: AttributeElement.Tag = AttributeElement.Tag;
     override id!: Mei;
 
     get writable() {
-        return this.effectiveAccess.writable;
+        return !this.fixed && this.effectiveAccess.writable;
     }
 
     get fabricScoped() {

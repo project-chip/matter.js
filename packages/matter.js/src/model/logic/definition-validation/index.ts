@@ -15,6 +15,7 @@ import "./DeviceTypeValidator.js";
 import "./EndpointValidator.js";
 import "./EventValidator.js";
 import "./FabricValidator.js";
+import "./FieldValidator.js";
 import "./MatterValidator.js";
 import "./NodeValidator.js";
 import "./RequirementValidator.js";

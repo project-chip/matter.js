@@ -19,6 +19,7 @@ export enum ElementTag {
     Attribute = "attribute",
     DeviceType = "deviceType",
     Datatype = "datatype",
+    Field = "field",
 
     // Device cluster element requirement - not formally an "element" in the
     // specification

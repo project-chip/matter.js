@@ -8,6 +8,7 @@ import {
     AttributeModel,
     ClusterModel,
     DatatypeModel,
+    FieldModel,
     Globals,
     MatterModel,
     Metatype,
@@ -85,8 +86,8 @@ describe("Model", () => {
         it("finds all models by type", () => {
             expect(Fixtures.matter.all(ClusterModel).length).equal(3);
 
-            // 68 standard datatypes + 3 defined in our fake model
-            expect(Fixtures.matter.all(DatatypeModel).length).equal(70);
+            // 66 standard datatypes + 3 defined in our fake model
+            expect(Fixtures.matter.all(DatatypeModel).length).equal(69);
         });
     });
 
@@ -175,24 +176,24 @@ namespace Fixtures {
         name: "GlobalStruct",
         type: "struct",
         children: [
-            { tag: "datatype", name: "numField", type: "uint16" },
-            { tag: "datatype", name: "strField", type: "string" },
+            { tag: "field", name: "numField", type: "uint16" },
+            { tag: "field", name: "strField", type: "string" },
         ],
     });
 
-    export const cluster1StructFieldOverride = new DatatypeModel({ name: "strField" });
+    export const cluster1StructFieldOverride = new FieldModel({ name: "strField" });
     export const cluster1StructType = new DatatypeModel({
         name: "ClusterDatatype",
         type: "GlobalStruct",
-        children: [{ tag: "datatype", name: "numField2", type: "single" }, cluster1StructFieldOverride],
+        children: [{ tag: "field", name: "numField2", type: "single" }, cluster1StructFieldOverride],
     });
 
-    export const cluster1StructField1 = new DatatypeModel({ name: "structField", type: "ClusterDatatype" });
+    export const cluster1StructField1 = new FieldModel({ name: "structField", type: "ClusterDatatype" });
     export const cluster1StructAttr = new AttributeModel({ id: 3, name: "structAttr2", type: "ClusterDatatype" });
 
     export const globalAttr = new AttributeModel({ id: 1, name: "Attr1" });
 
-    export const feature = new DatatypeModel({ tag: "datatype", name: "PIN" });
+    export const feature = new FieldModel({ name: "PIN" });
 
     export const cluster1 = new ClusterModel({
         id: 1,
@@ -212,8 +213,8 @@ namespace Fixtures {
                 name: "structAttr1",
                 type: "struct",
                 children: [
-                    { tag: "datatype", name: "numField", type: "double" },
-                    { tag: "datatype", name: "enumField", type: "GlobalEnum" },
+                    { tag: "field", name: "numField", type: "double" },
+                    { tag: "field", name: "enumField", type: "GlobalEnum" },
                     cluster1StructField1,
                 ],
             },
@@ -222,8 +223,8 @@ namespace Fixtures {
         ],
     });
 
-    export const cluster2StructFieldOverride = new DatatypeModel({ name: "strField" });
-    export const cluster2StructField = new DatatypeModel({
+    export const cluster2StructFieldOverride = new FieldModel({ name: "strField" });
+    export const cluster2StructField = new FieldModel({
         id: 1,
         name: "inheritedStruct",
         type: "ClusterDatatype",
@@ -232,7 +233,7 @@ namespace Fixtures {
     export const cluster2Attr1 = new AttributeModel({ id: 1, name: "byteAttr" });
     export const cluster2Attr2 = new AttributeModel({ id: 3, name: "structAttr2" });
 
-    export const enumValue2 = new DatatypeModel({ name: "Value2" });
+    export const enumValue2 = new FieldModel({ name: "Value2" });
 
     export const matter = new MatterModel({
         name: "Fake Matter",
@@ -253,7 +254,7 @@ namespace Fixtures {
                 tag: "datatype",
                 type: "enum16",
                 name: "GlobalEnum",
-                children: [{ tag: "datatype", name: "Value1" }, enumValue2],
+                children: [{ tag: "field", name: "Value1" }, enumValue2],
             },
         ],
     });

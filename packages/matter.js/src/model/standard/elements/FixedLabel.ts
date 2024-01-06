@@ -7,10 +7,14 @@
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
 import { Matter } from "../Matter.js";
+import {
+    ClusterElement as Cluster,
+    AttributeElement as Attribute,
+    FieldElement as Field
+} from "../../elements/index.js";
 
-Matter.children.push({
-    tag: "cluster", name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint",
-    description: "Fixed Label",
+Matter.children.push(Cluster({
+    name: "FixedLabel", id: 0x40, type: "Label", classification: "endpoint", description: "Fixed Label",
 
     details: "This cluster provides a feature for the device to tag an endpoint with zero or more read only " +
         "labels. Examples:" +
@@ -27,13 +31,13 @@ Matter.children.push({
     xref: { document: "core", section: "9.8" },
 
     children: [
-        { tag: "attribute", name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 },
+        Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
-        {
-            tag: "attribute", name: "LabelList", id: 0x0, type: "list", access: "R V", conformance: "M",
-            default: [], quality: "N",
+        Attribute({
+            name: "LabelList", id: 0x0, type: "list", access: "R V", conformance: "M", default: [],
+            quality: "N",
             xref: { document: "core", section: "9.8.4" },
-            children: [{ tag: "datatype", name: "entry", type: "LabelStruct" }]
-        }
+            children: [Field({ name: "entry", type: "LabelStruct" })]
+        })
     ]
-});
+}));

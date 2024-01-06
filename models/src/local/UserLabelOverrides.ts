@@ -18,7 +18,7 @@ LocalMatter.children.push({
             id: 0x0,
             type: "list",
             constraint: "min 0",
-            children: [{ tag: "datatype", name: "entry", type: "LabelStruct" }],
+            children: [{ tag: "field", name: "entry", type: "LabelStruct" }],
         },
     ],
 });

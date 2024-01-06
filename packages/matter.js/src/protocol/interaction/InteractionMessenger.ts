@@ -130,8 +130,8 @@ class InteractionMessenger<ContextT> {
 
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(
-        handleReadRequest: (request: ReadRequest) => DataReport,
-        handleWriteRequest: (request: WriteRequest, message: Message) => WriteResponse,
+        handleReadRequest: (request: ReadRequest) => Promise<DataReport>,
+        handleWriteRequest: (request: WriteRequest, message: Message) => Promise<WriteResponse>,
         handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
         handleTimedRequest: (request: TimedRequest) => void,
@@ -145,13 +145,13 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        await this.sendDataReport(handleReadRequest(readRequest));
+                        await this.sendDataReport(await handleReadRequest(readRequest));
                         break;
                     }
                     case MessageType.WriteRequest: {
                         const writeRequest = TlvWriteRequest.decode(message.payload);
                         const { suppressResponse } = writeRequest;
-                        const writeResponse = handleWriteRequest(writeRequest, message);
+                        const writeResponse = await handleWriteRequest(writeRequest, message);
                         if (!suppressResponse && !isGroupSession) {
                             await this.send(MessageType.WriteResponse, TlvWriteResponse.encode(writeResponse));
                         }
@@ -178,7 +178,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        handleTimedRequest(timedRequest);
+                        await handleTimedRequest(timedRequest);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;

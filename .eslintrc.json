@@ -120,7 +120,11 @@
 
         // This makes it impossible to compare non-enums to enums, like one
         // might do with a value off the wire
-        "@typescript-eslint/no-unsafe-enum-comparison": "off"
+        "@typescript-eslint/no-unsafe-enum-comparison": "off",
+
+        // tsc catches these for us and eslint doesn't recognize referenceds
+        // to type imports in comment @links
+        "@typescript-eslint/no-unused-vars": "off"
     },
     "settings": {
         "import/extensions": [".ts"],

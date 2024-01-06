@@ -18,13 +18,11 @@ export class FabricTableFullError extends MatterError {}
 export class FabricManager {
     private nextFabricIndex = 1;
     private readonly fabrics = new Map<FabricIndex, Fabric>();
-    private readonly fabricStorage: StorageContext;
 
     constructor(
-        storage: StorageContext,
+        private fabricStorage: StorageContext,
         private readonly fabricRemoveCallback?: (fabricIndex: FabricIndex, peerNodeId: NodeId) => void,
     ) {
-        this.fabricStorage = storage.createContext("FabricManager");
         const fabrics = this.fabricStorage.get<FabricJsonObject[]>("fabrics", []);
         fabrics.forEach(fabric => this.addFabric(Fabric.createFromStorageObject(fabric)));
         this.nextFabricIndex = this.fabricStorage.get("nextFabricIndex", this.nextFabricIndex);
