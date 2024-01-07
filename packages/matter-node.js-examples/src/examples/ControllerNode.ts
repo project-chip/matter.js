@@ -142,7 +142,10 @@ class ControllerNode {
             regulatoryLocation: GeneralCommissioning.RegulatoryLocationType.IndoorOutdoor,
             regulatoryCountryCode: "XX",
         };
+
+        let ble = false;
         if (hasParameter("ble")) {
+            ble = true;
             const wifiSsid = getParameter("ble-wifi-ssid");
             const wifiCredentials = getParameter("ble-wifi-credentials");
             const threadNetworkName = getParameter("ble-thread-networkname");
@@ -202,6 +205,9 @@ class ControllerNode {
                             : shortDiscriminator !== undefined
                               ? { shortDiscriminator }
                               : {},
+                    discoveryCapabilities: {
+                        ble,
+                    },
                 },
                 passcode: setupPin,
             } as NodeCommissioningOptions;
