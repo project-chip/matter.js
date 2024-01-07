@@ -83,6 +83,7 @@ class AdministratorCommissioningManager {
         }
         logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${session.name}.`);
         this.commissioningWindowTimeout = Time.getTimer(
+            "Commissioning timeout",
             commissioningTimeout * 1000,
             async () => await this.closeCommissioningWindow(session),
         ).start();

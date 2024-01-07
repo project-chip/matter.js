@@ -17,6 +17,7 @@ import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/Clu
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { PartStoreService } from "../node/server/storage/PartStoreService.js";
@@ -200,9 +201,32 @@ export class PartServer implements EndpointInterface {
     }
 
     /**
+     * Hierarchical diagnostics of part and children.
+     */
+    get [Diagnostic.value]() {
+        const diagnostics = [ "Part", Diagnostic.em(this.#part.id), this.#diagnosticDict ];
+        if (this.#part.parts.size) {
+            diagnostics.push(Diagnostic.list(
+                [ ...this.#part.parts ].map(part => PartServer.forPart(part)[Diagnostic.value])
+            ));
+        }
+        return diagnostics as unknown;
+    }
+
+    /**
      * Log details of fully initialized part.
      */
     #logPart() {
+        logger.info(
+            // Temporary easter egg for Ingo
+            "🎉 Part",
+            Diagnostic.em(this.#part.id),
+            "ready",
+            this.#diagnosticDict,
+        );
+    }
+
+    get #diagnosticDict() {
         const isNew = this.#part.owner
             .serviceFor(PartStoreService)
             .storeForPart(this.#part)
@@ -214,19 +238,13 @@ export class PartServer implements EndpointInterface {
 
         const { active, inactive } = this.#part.behaviors;
 
-        logger.info(
-            // Temporary easter egg for Ingo
-            "🎉 Part",
-            Logger.em(this.#part.id),
-            "ready",
-            Logger.dict({
-                "endpoint#": this.#part.number,
-                type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
-                port,
-                "known": !isNew,
-                "active": active.length ? this.#part.behaviors.active.join(", ") : "(none)",
-                "inactive": inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
-            })
-        );
+        return             Diagnostic.dict({
+            "endpoint#": this.#part.number,
+            type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
+            port,
+            "known": !isNew,
+            "active": active.length ? this.#part.behaviors.active.join(", ") : "(none)",
+            "inactive": inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
+        })
     }
 }

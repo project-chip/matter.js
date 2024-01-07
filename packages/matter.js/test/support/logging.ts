@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Format, Level, Logger } from "../../src/log/Logger.js";
+import { Format } from "../../src/log/Format.js";
+import { Level } from "../../src/log/Level.js";
+import { Logger } from "../../src/log/Logger.js";
 
 /**
  * Invoke logic and return any log messages produced.

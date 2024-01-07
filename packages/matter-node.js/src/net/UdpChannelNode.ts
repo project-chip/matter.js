@@ -9,6 +9,7 @@ import { NetworkError, UdpChannel, UdpChannelOptions } from "@project-chip/matte
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as dgram from "dgram";
 import { NetworkNode } from "./NetworkNode.js";
+import { Diagnostic } from "../exports/log.js";
 
 const logger = Logger.get("UdpChannelNode");
 
@@ -28,7 +29,7 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
             const { address: localHost, port: localPort } = socket.address();
             logger.debug(
                 "Socket created and bound ",
-                Logger.dict({
+                Diagnostic.dict({
                     remoteAddress: `${host}:${port}`,
                     localAddress: `${localHost}:${localPort}`,
                 }),
@@ -71,7 +72,7 @@ export class UdpChannelNode implements UdpChannel {
             }
             logger.debug(
                 "Initialize multicast",
-                Logger.dict({
+                Diagnostic.dict({
                     address: `${multicastInterface}:${listeningPort}`,
                     interface: netInterface,
                     type: type,

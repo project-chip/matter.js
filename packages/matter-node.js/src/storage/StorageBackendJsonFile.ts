@@ -19,7 +19,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
     static commitDelay = 1000;
     committed = Promise.resolve();
 
-    private readonly commitTimer = Time.getTimer(StorageBackendJsonFile.commitDelay, () => this.commit());
+    private readonly commitTimer = Time.getTimer("Storage commit", StorageBackendJsonFile.commitDelay, () => this.commit());
     private closed = false;
     private initialized = false;
     private resolveCommitted?: () => void;

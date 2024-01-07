@@ -57,7 +57,7 @@ export class BleScanner implements Scanner {
      */
     private async registerWaiterPromise(queryId: string, timeoutSeconds: number, resolveOnUpdatedRecords = true) {
         const { promise, resolver } = createPromise<void>();
-        const timer = Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start();
+        const timer = Time.getTimer("BLE query timeout", timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start();
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(
             `Registered waiter for query ${queryId} with timeout ${timeoutSeconds} seconds${

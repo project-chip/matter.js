@@ -178,7 +178,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
         logger.debug(`sending BTP handshake request: ${Logger.toJSON(btpHandshakeRequest)}`);
         await characteristicC1ForWrite.writeAsync(Buffer.from(btpHandshakeRequest.buffer), false);
 
-        const btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, async () => {
+        const btpHandshakeTimeout = Time.getTimer("BLE handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, async () => {
             await peripheral.disconnectAsync();
             logger.debug("Handshake Response not received. Disconnected from peripheral");
         }).start();

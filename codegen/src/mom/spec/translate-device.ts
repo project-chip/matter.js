@@ -11,6 +11,7 @@ import { addDocumentation } from "./add-documentation.js";
 import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
 import { DeviceReference } from "./spec-types.js";
 import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
+import { Diagnostic } from "../../../../packages/matter.js/src/log/Diagnostic.js";
 
 const logger = Logger.get("translate-devices");
 
@@ -115,7 +116,7 @@ function createDevice(deviceRef: DeviceReference) {
         }),
     ];
 
-    logger.debug("metadata", Logger.dict({ ...definition, revision, type: metadata.superset }));
+    logger.debug("metadata", Diagnostic.dict({ ...definition, revision, type: metadata.superset }));
 
     return device;
 }

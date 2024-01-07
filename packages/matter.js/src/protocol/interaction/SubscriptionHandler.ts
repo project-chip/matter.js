@@ -117,8 +117,8 @@ export class SubscriptionHandler {
         this.maxInterval = maxInterval;
         this.sendInterval = sendInterval;
 
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()); // will be started later
-        this.sendDelayTimer = Time.getTimer(50, () => this.sendUpdate()); // will be started later
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()); // will be started later
+        this.sendDelayTimer = Time.getTimer("Subscription delay", 50, () => this.sendUpdate()); // will be started later
     }
 
     private determineSendingIntervals(
@@ -379,7 +379,7 @@ export class SubscriptionHandler {
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()).start();
     }
 
     /**
@@ -401,14 +401,14 @@ export class SubscriptionHandler {
         const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
         if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
             // Respect minimum delay time between updates
-            this.updateTimer = Time.getTimer(this.minIntervalFloorMs - timeSinceLastUpdateMs, () =>
+            this.updateTimer = Time.getTimer("Subscription update", this.minIntervalFloorMs - timeSinceLastUpdateMs, () =>
                 this.prepareDataUpdate(),
             ).start();
             return;
         }
 
         this.sendDelayTimer.start();
-        this.updateTimer = Time.getTimer(this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()).start();
     }
 
     /**

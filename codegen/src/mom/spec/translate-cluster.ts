@@ -27,6 +27,7 @@ import {
     translateRecordsToMatter,
     translateTable,
 } from "./translate-table.js";
+import { Diagnostic } from "../../../../packages/matter.js/src/log/Diagnostic.js";
 
 const logger = Logger.get("translate-cluster");
 
@@ -61,7 +62,7 @@ export function* translateCluster(definition: ClusterReference) {
 
     for (const [id, name] of metadata.ids.entries()) {
         const idStr = id === undefined ? "(no ID)" : `0x${id.toString(16)}`;
-        logger.debug(`${idStr} ${name}`, Logger.dict({ rev: metadata.revision, cls: metadata.classification }));
+        logger.debug(`${idStr} ${name}`, Diagnostic.dict({ rev: metadata.revision, cls: metadata.classification }));
         const cluster = ClusterElement({
             id: id,
             name: name,

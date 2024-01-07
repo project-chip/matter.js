@@ -5,6 +5,7 @@
  */
 
 import { VendorId } from "../../../datatype/VendorId.js";
+import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
@@ -34,7 +35,7 @@ export class BasicInformationServer extends BasicInformationBehavior {
 
         // Warn if we used development defaults
         if (Object.keys(defaultsSet).length) {
-            logger.warn("Using development values for some BasicInformation attributes:", Logger.dict(defaultsSet));
+            logger.warn("Using development values for some BasicInformation attributes:", Diagnostic.dict(defaultsSet));
         }
 
         // These defaults are appropriate for development or production so do

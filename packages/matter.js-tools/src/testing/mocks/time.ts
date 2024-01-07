@@ -8,6 +8,11 @@ type TimerCallback = () => any;
 
 // Must match matter.js Timer interface
 class MockTimer {
+    name = "Test";
+    systemId = 0;
+    intervalMs = 0;
+    isPeriodic = false;
+
     isRunning = false;
     private readonly callback: TimerCallback;
 
@@ -80,11 +85,11 @@ export class MockTime {
         return this.timeMs;
     }
 
-    getTimer(durationMs: number, callback: TimerCallback): MockTimer {
+    getTimer(_name: string, durationMs: number, callback: TimerCallback): MockTimer {
         return new MockTimer(this, durationMs, callback);
     }
 
-    getPeriodicTimer(intervalMs: number, callback: TimerCallback): MockTimer {
+    getPeriodicTimer(_name: string, intervalMs: number, callback: TimerCallback): MockTimer {
         return new MockInterval(this, intervalMs, callback);
     }
 
