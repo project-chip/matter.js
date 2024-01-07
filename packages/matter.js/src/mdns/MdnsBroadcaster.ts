@@ -17,6 +17,7 @@ import { Crypto } from "../crypto/Crypto.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { Network } from "../net/Network.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
@@ -156,7 +157,7 @@ export class MdnsBroadcaster {
 
             logger.debug(
                 "Announcement Generator: Commission mode ",
-                Logger.dict({
+                Diagnostic.dict({
                     mode,
                     qname: deviceQname,
                     port: announcedNetPort,
@@ -238,7 +239,7 @@ export class MdnsBroadcaster {
 
                 logger.debug(
                     "Announcement Generator: Fabric",
-                    Logger.dict({
+                    Diagnostic.dict({
                         id: `${operationalId.toHex()}/${nodeId}`,
                         qname: deviceMatterQname,
                         port: announcedNetPort,
@@ -280,7 +281,7 @@ export class MdnsBroadcaster {
     ) {
         logger.debug(
             "Announcement: Commissioner",
-            Logger.dict({
+            Diagnostic.dict({
                 port: announcedNetPort,
                 deviceType,
             }),

@@ -7,7 +7,7 @@
 import { NotImplementedError, UnexpectedDataError } from "../common/MatterError.js";
 import { GroupId } from "../datatype/GroupId.js";
 import { NodeId } from "../datatype/NodeId.js";
-import { DiagnosticDictionary } from "../log/Logger.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataReader } from "../util/DataReader.js";
 import { DataWriter } from "../util/DataWriter.js";
@@ -249,7 +249,7 @@ export class MessageCodec {
         }: Message,
         isDuplicate = false,
     ) {
-        return new DiagnosticDictionary({
+        return Diagnostic.dict({
             id: `${sessionId}/${exchangeId}/${messageId}`,
             type: `${protocolId}/${messageType}`,
             acked: ackedMessageId,

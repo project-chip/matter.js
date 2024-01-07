@@ -40,8 +40,8 @@ export class FailSafeManager {
         readonly rootEndpoint: EndpointInterface,
     ) {
         this.storeEndpointState();
-        this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire()).start();
-        this.maxCumulativeFailsafeTimer = Time.getTimer(maxCumulativeFailsafeSeconds * 1000, () =>
+        this.failSafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();
+        this.maxCumulativeFailsafeTimer = Time.getTimer("Max cumulative failsafe", maxCumulativeFailsafeSeconds * 1000, () =>
             this.expire(),
         ).start();
     }
@@ -105,7 +105,7 @@ export class FailSafeManager {
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
             // matches the fail-safe context’s associated Fabric, then the fail-safe timer SHALL be re- armed to expire
             // in ExpiryLengthSeconds.
-            this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire()).start();
+            this.failSafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () => this.expire()).start();
         }
     }
 

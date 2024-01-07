@@ -7,6 +7,7 @@
 import { GlobalAttributes } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError } from "../../common/MatterError.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
@@ -74,7 +75,7 @@ export class ValidatedElements {
         }
 
         for (const error of this.errors) {
-            logger.error("Cluster implementation error", Logger.dict(error));
+            logger.error("Cluster implementation error", Diagnostic.dict(error));
         }
 
         throw new ImplementationError(

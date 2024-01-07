@@ -261,7 +261,7 @@ describe("Logger", () => {
             const result = logTestLine({ format: Format.ANSI });
 
             expect(result?.message).equal(
-                '\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG \u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mtest\u001b[0m',
+                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mtest\u001b[0m",
             );
         });
 
@@ -269,7 +269,7 @@ describe("Logger", () => {
             const result = logTestDict({ format: Format.ANSI });
 
             expect(result?.message).equal(
-                '\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG \u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mdict test \u001b[34mfoo:\u001b[90m bar \u001b[34mbiz:\u001b[90m 1\u001b[0m',
+                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mUnitTest            \u001b[0m \u001b[90mdict test \u001b[34mfoo:\u001b[90m bar \u001b[34mbiz:\u001b[90m 1\u001b[0m",
             );
         });
 
@@ -280,7 +280,7 @@ describe("Logger", () => {
                 logger.debug("test");
             });
             expect(result?.message).equal(
-                '\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG \u001b[0m \u001b[90m\u001b[1mThisIsAFac~yLongName\u001b[0m \u001b[90mtest\u001b[0m',
+                "\u001b[90m\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG\u001b[0m \u001b[90m\u001b[1mThisIsAFac~yLongName\u001b[0m \u001b[90mtest\u001b[0m",
             );
         });
     });

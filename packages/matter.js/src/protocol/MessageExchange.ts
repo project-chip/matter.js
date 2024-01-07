@@ -7,6 +7,7 @@
 import { Message, MessageCodec, SessionType } from "../codec/MessageCodec.js";
 import { MatterError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import {
     MRP_MAX_TRANSMISSIONS,
@@ -124,7 +125,7 @@ export class MessageExchange<ContextT> {
     private readonly retransmissionRetries: number;
     private readonly messagesQueue = new Queue<Message>();
     private receivedMessageToAck: Message | undefined;
-    private receivedMessageAckTimer = Time.getTimer(MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
+    private receivedMessageAckTimer = Time.getTimer("Ack receipt timeout", MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
         if (this.receivedMessageToAck !== undefined) {
             const messageToAck = this.receivedMessageToAck;
             this.receivedMessageToAck = undefined;
@@ -159,7 +160,7 @@ export class MessageExchange<ContextT> {
         this.retransmissionRetries = MRP_MAX_TRANSMISSIONS;
         logger.debug(
             "New exchange",
-            Logger.dict({
+            Diagnostic.dict({
                 protocol: this.protocolId,
                 id: this.exchangeId,
                 session: session.name,
@@ -300,7 +301,7 @@ export class MessageExchange<ContextT> {
         let ackPromise: Promise<Message> | undefined;
         if (message.payloadHeader.requiresAck) {
             this.sentMessageToAck = message;
-            this.retransmissionTimer = Time.getTimer(this.getResubmissionBackOffTime(0), () =>
+            this.retransmissionTimer = Time.getTimer("Message retransmission", this.getResubmissionBackOffTime(0), () =>
                 this.retransmitMessage(
                     message,
                     0,
@@ -392,7 +393,7 @@ export class MessageExchange<ContextT> {
         this.channel
             .send(message)
             .then(() => {
-                this.retransmissionTimer = Time.getTimer(resubmissionBackoffTime, () =>
+                this.retransmissionTimer = Time.getTimer("Message retransmission", resubmissionBackoffTime, () =>
                     this.retransmitMessage(message, retransmissionCount, notTimeoutBeforeTimeMs),
                 ).start();
             })
@@ -424,7 +425,7 @@ export class MessageExchange<ContextT> {
         logger.debug(
             `Starting timed interaction with Transaction ID ${this.exchangeId} for ${timeoutMs}ms from ${this.channel.name}`,
         );
-        this.timedInteractionTimer = Time.getTimer(timeoutMs, () => {
+        this.timedInteractionTimer = Time.getTimer("Timed interaction", timeoutMs, () => {
             logger.debug(
                 `Timed interaction with Transaction ID ${this.exchangeId} from ${this.channel.name} timed out`,
             );
@@ -456,7 +457,7 @@ export class MessageExchange<ContextT> {
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks
         // TODO: Make this dynamic based on the values?
-        this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
+        this.closeTimer = Time.getTimer("Message exchange cleanup", MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
 
         if (this.receivedMessageToAck !== undefined) {
             this.receivedMessageAckTimer.stop();
