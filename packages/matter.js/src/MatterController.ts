@@ -251,17 +251,18 @@ export class MatterController {
         const commissionableDevice =
             "commissionableDevice" in options.discovery ? options.discovery.commissionableDevice : undefined;
         let {
-            discovery: { discoveryCapabilities, knownAddress },
+            discovery: { discoveryCapabilities = {}, knownAddress },
         } = options;
         let identifierData = "identifierData" in options.discovery ? options.discovery.identifierData : {};
 
+        discoveryCapabilities.onIpNetwork = true; // We always discover on network as defined by specs
         if (commissionableDevice !== undefined) {
             let { addresses } = commissionableDevice;
-            if (discoveryCapabilities !== undefined && discoveryCapabilities.ble !== true) {
-                // do not use BLE if not specified
-                addresses = addresses.filter(address => address.type !== "ble");
-            } else if (discoveryCapabilities === undefined) {
+            if (discoveryCapabilities.ble === true) {
                 discoveryCapabilities = { onIpNetwork: true, ble: addresses.some(address => address.type === "ble") };
+            } else {
+                // do not use BLE if not specified, even if existing
+                addresses = addresses.filter(address => address.type !== "ble");
             }
             addresses.sort(a => (a.type === "udp" ? -1 : 1)); // Sort addresses to use UDP first
             knownAddress = addresses[0];
@@ -272,8 +273,6 @@ export class MatterController {
                 identifierData = { longDiscriminator: commissionableDevice.D };
             }
         }
-
-        discoveryCapabilities = discoveryCapabilities ?? { onIpNetwork: true };
 
         const scannersToUse = this.collectScanners(discoveryCapabilities);
 
