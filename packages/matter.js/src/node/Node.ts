@@ -8,6 +8,7 @@ import { Agent } from "../endpoint/Agent.js";
 import { Part } from "../endpoint/Part.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartOwner } from "../endpoint/part/PartOwner.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 
 /**
  * A "node" is a top-level resource that is addressable directly on a network.
@@ -15,11 +16,6 @@ import { PartOwner } from "../endpoint/part/PartOwner.js";
  * NodeInterface offers interaction with a node.
  */
 export interface Node extends PartOwner {
-    /**
-     * Clean up node resources.
-     */
-    [Symbol.asyncDispose](): Promise<void>;
-
     /**
      * Access the root endpoint.
      */
@@ -32,6 +28,16 @@ export interface Node extends PartOwner {
      * {@link root}.
      */
     readonly rootPart: Part;
+
+    /**
+     * Clean up node resources.
+     */
+    [Symbol.asyncDispose](): Promise<void>;
+
+    /**
+     * Provide diagnostic information.
+     */
+    readonly [Diagnostic.value]: unknown;
 
     // The batch interface that follows would be an efficiency win but most
     // features are marked as provisional as of Matter 1.2 implying they are

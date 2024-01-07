@@ -16,35 +16,22 @@ import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
  *   and configuration file parsers.
  * - Hooks SIGINT to abort each registered task.  The handler only runs once;
  *   subsequent interrupts will hard exit.
+ * - Hooks SIGUSR2 for writing diagnostic information.
  * - Creates a default storage pool using the loaded configuration.
  *
  * You can modify any of the functionality by overriding or replacing the
  * environment altogether.
  */
 export class NodeJsEnvironment extends Environment {
-    #interruptHandlers?: WeakMap<Environment.Task, () => void>;
+    #installed = false;
+    readonly #interrupt = (): void => this.interrupt();
+    readonly #diagnose = (): void => { process.on("SIGUSR2", this.#diagnose); this.diagnose(); };
 
-    protected override loadTasks() {
-        const tasks = super.loadTasks();
+    constructor() {
+        super();
 
-        tasks.added.on(task => {
-            if (this.#interruptHandlers === undefined) {
-                this.#interruptHandlers = new WeakMap();
-            }
-
-            const handler = () => task.abort();
-            this.#interruptHandlers.set(task, handler);
-            process.once("SIGINT", handler);
-        });
-
-        tasks.deleted.off(task => {
-            const handler = this.#interruptHandlers?.get(task);
-            if (handler) {
-                process.off("SIGINT", handler);
-            }
-        });
-
-        return tasks;
+        this.tasks.added.on(() => this.setInstalled());
+        this.tasks.deleted.on(() => this.setInstalled());
     }
 
     protected override loadVariables() {
@@ -63,6 +50,19 @@ export class NodeJsEnvironment extends Environment {
             path = resolve(this.variables.path.root, path);
         }
         return new StorageBackendDisk(path, this.variables.storage?.clear === "true");
+    }
+
+    protected setInstalled() {
+        if (!this.#installed && this.tasks.size) {
+            process.on("SIGINT", this.#interrupt);
+            process.on("SIGUSR2", this.#diagnose);
+            this.#installed = true;
+        }
+        if (this.#installed && !this.tasks.size) {
+            process.off("SIGINT", this.#interrupt);
+            process.off("SIGUSR2", this.#diagnose);
+            this.#installed = false;
+        }
     }
 }
 

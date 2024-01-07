@@ -27,7 +27,11 @@ export class Queue<T> implements Stream<T> {
         this.pendingRead = {
             resolver,
             rejecter,
-            timeoutTimer: Time.getTimer(timeoutMs, () => rejecter(new NoResponseTimeoutError())).start(),
+            timeoutTimer: Time.getTimer(
+                "Queue timeout",
+                timeoutMs,
+                () => rejecter(new NoResponseTimeoutError()),
+            ).start(),
         };
         return promise;
     }

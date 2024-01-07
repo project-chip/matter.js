@@ -28,6 +28,7 @@ import { NodeId } from "./datatype/NodeId.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
+import { Diagnostic } from "./log/Diagnostic.js";
 import { Logger } from "./log/Logger.js";
 import { NetInterface, isNetworkInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
@@ -86,7 +87,7 @@ export class MatterDevice {
 
         this.addProtocolHandler(this.secureChannelProtocol);
 
-        this.announceInterval = Time.getPeriodicTimer(DEVICE_ANNOUNCEMENT_INTERVAL_MS, () => this.announce());
+        this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () => this.announce());
     }
 
     addScanner(scanner: Scanner) {
@@ -158,7 +159,7 @@ export class MatterDevice {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session === undefined || !session.isSecure() || session.numberOfActiveSubscriptions === 0) {
                     fabricsWithoutSessions++;
-                    logger.debug("Announcing", Logger.dict({ fabric: fabric.fabricId }));
+                    logger.debug("Announcing", Diagnostic.dict({ fabric: fabric.fabricId }));
                 }
             }
             for (const broadcaster of this.broadcasters) {
@@ -288,7 +289,7 @@ export class MatterDevice {
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
-        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId }));
+        logger.info("Announce done", Diagnostic.dict({ fabric: fabric.fabricId }));
         return fabric.fabricIndex;
     }
 

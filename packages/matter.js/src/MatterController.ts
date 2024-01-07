@@ -501,7 +501,7 @@ export class MatterController {
             if (timeoutSeconds === undefined) {
                 const { promise, resolver, rejecter } = createPromise<MessageChannel<MatterController>>();
 
-                reconnectionPollingTimer = Time.getPeriodicTimer(RECONNECTION_POLLING_INTERVAL, async () => {
+                reconnectionPollingTimer = Time.getPeriodicTimer("Controller reconnect", RECONNECTION_POLLING_INTERVAL, async () => {
                     try {
                         logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
                         const result = await this.reconnectLastKnownAddress(peerNodeId, operationalAddress);

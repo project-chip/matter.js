@@ -25,6 +25,7 @@ import { PaseClient } from "../../../session/pase/PaseClient.js";
 import { Ble } from "../../../ble/Ble.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { FORBIDDEN_PASSCODES } from "../../../CommissioningServer.js";
+import { Diagnostic } from "../../../log/Diagnostic.js";
 
 const logger = Logger.get("Commissioning");
 
@@ -82,16 +83,20 @@ export class CommissioningBehavior extends Behavior {
     initiateCommissioning() {
         const { passcode, discriminator } = this.state;
 
-        logger.notice(`Node is uncommissioned`);
-        logger.info("Passcode is", Logger.em(passcode), "discriminator is", Logger.em(discriminator));
-
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
-        logger.info(QrCode.get(qrPairingCode).replace(/\n/g, "\n\t"));
-        logger.info(
-            `QR code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}`,
+        logger.notice(
+            `Node is uncommissioned`,
+            Diagnostic.dict({
+                passcode,
+                discriminator,
+                "manual pairing code": manualPairingCode,
+            }),
+            Diagnostic.list([
+                QrCode.get(qrPairingCode).replace(/\n/g, "\n\t"),
+                `QR code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}\n`,
+            ]),
         );
-        logger.info(`Manual pairing code: ${manualPairingCode}`);
     }
 
     /**

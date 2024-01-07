@@ -8,6 +8,7 @@ import { ImplementationError, NotImplementedError } from "../../common/MatterErr
 import { Agent } from "../../endpoint/Agent.js";
 import { Part } from "../../endpoint/Part.js";
 import type { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Node } from "../Node.js";
 
 export class NodeClient implements Node {
@@ -28,6 +29,10 @@ export class NodeClient implements Node {
     }
 
     async [Symbol.asyncDispose](): Promise<void> {
+    }
+
+    get [Diagnostic.value]() {
+        return "(no diagnostics yet)";
     }
 
     adoptChild(part: Part) {
