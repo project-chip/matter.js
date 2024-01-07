@@ -55,8 +55,6 @@ export async function main(argv = process.argv) {
     const dependencies = await Graph.forProject(dir);
     await dependencies.build(builder, false);
 
-    //await project.buildSource(format);
-
     script = project.pkg.resolve(
         project.pkg
             .relative(script)
