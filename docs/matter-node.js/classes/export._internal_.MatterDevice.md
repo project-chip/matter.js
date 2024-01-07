@@ -253,7 +253,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:79
+packages/matter.js/dist/esm/MatterDevice.d.ts:90
 
 ___
 
@@ -393,7 +393,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:71
+packages/matter.js/dist/esm/MatterDevice.d.ts:82
 
 ___
 
@@ -473,7 +473,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:87
+packages/matter.js/dist/esm/MatterDevice.d.ts:98
 
 ___
 
@@ -495,7 +495,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:86
+packages/matter.js/dist/esm/MatterDevice.d.ts:97
 
 ___
 
@@ -538,7 +538,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:80
+packages/matter.js/dist/esm/MatterDevice.d.ts:91
 
 ___
 
@@ -558,7 +558,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:78
+packages/matter.js/dist/esm/MatterDevice.d.ts:89
 
 ___
 
@@ -572,28 +572,29 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:84
+packages/matter.js/dist/esm/MatterDevice.d.ts:95
 
 ___
 
 ### createSecureSession
 
-▸ **createSecureSession**(`sessionId`, `fabric`, `peerNodeId`, `peerSessionId`, `sharedSecret`, `salt`, `isInitiator`, `isResumption`, `idleRetransmissionTimeoutMs?`, `activeRetransmissionTimeoutMs?`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>\>
+▸ **createSecureSession**(`args`): `Promise`\<[`SecureSession`](exports_session.SecureSession.md)\<[`MatterDevice`](export._internal_.MatterDevice.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sessionId` | `number` |
-| `fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
-| `peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
-| `peerSessionId` | `number` |
-| `sharedSecret` | `Uint8Array` |
-| `salt` | `Uint8Array` |
-| `isInitiator` | `boolean` |
-| `isResumption` | `boolean` |
-| `idleRetransmissionTimeoutMs?` | `number` |
-| `activeRetransmissionTimeoutMs?` | `number` |
+| `args` | `Object` |
+| `args.activeRetransmissionTimeoutMs?` | `number` |
+| `args.fabric` | `undefined` \| [`Fabric`](exports_fabric.Fabric.md) |
+| `args.idleRetransmissionTimeoutMs?` | `number` |
+| `args.isInitiator` | `boolean` |
+| `args.isResumption` | `boolean` |
+| `args.peerNodeId` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+| `args.peerSessionId` | `number` |
+| `args.salt` | `Uint8Array` |
+| `args.sessionId` | `number` |
+| `args.sharedSecret` | `Uint8Array` |
 
 #### Returns
 
@@ -615,7 +616,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:88
+packages/matter.js/dist/esm/MatterDevice.d.ts:99
 
 ___
 
@@ -629,7 +630,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:89
+packages/matter.js/dist/esm/MatterDevice.d.ts:100
 
 ___
 
@@ -651,7 +652,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:90
+packages/matter.js/dist/esm/MatterDevice.d.ts:101
 
 ___
 
@@ -672,7 +673,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:68
+packages/matter.js/dist/esm/MatterDevice.d.ts:79
 
 ___
 
@@ -692,21 +693,21 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:75
+packages/matter.js/dist/esm/MatterDevice.d.ts:86
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:95
+packages/matter.js/dist/esm/MatterDevice.d.ts:106
 
 ___
 
@@ -726,7 +727,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:73
+packages/matter.js/dist/esm/MatterDevice.d.ts:84
 
 ___
 
@@ -740,7 +741,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:83
+packages/matter.js/dist/esm/MatterDevice.d.ts:94
 
 ___
 
@@ -754,17 +755,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:82
+packages/matter.js/dist/esm/MatterDevice.d.ts:93
 
 ___
 
 ### getNextAvailableSessionId
 
-▸ **getNextAvailableSessionId**(): `number`
+▸ **getNextAvailableSessionId**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
@@ -782,7 +783,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:70
+packages/matter.js/dist/esm/MatterDevice.d.ts:81
 
 ___
 
@@ -844,7 +845,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:74
+packages/matter.js/dist/esm/MatterDevice.d.ts:85
 
 ___
 
@@ -858,7 +859,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:85
+packages/matter.js/dist/esm/MatterDevice.d.ts:96
 
 ___
 
@@ -872,7 +873,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:81
+packages/matter.js/dist/esm/MatterDevice.d.ts:92
 
 ___
 
@@ -886,7 +887,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:77
+packages/matter.js/dist/esm/MatterDevice.d.ts:88
 
 ___
 
@@ -906,7 +907,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:76
+packages/matter.js/dist/esm/MatterDevice.d.ts:87
 
 ___
 
@@ -948,7 +949,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:72
+packages/matter.js/dist/esm/MatterDevice.d.ts:83
 
 ___
 
@@ -990,7 +991,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:94
+packages/matter.js/dist/esm/MatterDevice.d.ts:105
 
 ___
 
@@ -1010,4 +1011,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/MatterDevice.d.ts:69
+packages/matter.js/dist/esm/MatterDevice.d.ts:80

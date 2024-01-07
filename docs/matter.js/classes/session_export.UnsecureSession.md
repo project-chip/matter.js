@@ -22,9 +22,12 @@
 
 ### Properties
 
+- [closeCallback](session_export.UnsecureSession.md#closecallback)
 - [closingAfterExchangeFinished](session_export.UnsecureSession.md#closingafterexchangefinished)
 - [context](session_export.UnsecureSession.md#context)
 - [initiatorNodeId](session_export.UnsecureSession.md#initiatornodeid)
+- [messageCounter](session_export.UnsecureSession.md#messagecounter)
+- [messageReceptionState](session_export.UnsecureSession.md#messagereceptionstate)
 
 ### Accessors
 
@@ -40,6 +43,7 @@
 - [getAttestationChallengeKey](session_export.UnsecureSession.md#getattestationchallengekey)
 - [getContext](session_export.UnsecureSession.md#getcontext)
 - [getId](session_export.UnsecureSession.md#getid)
+- [getIncrementedMessageCounter](session_export.UnsecureSession.md#getincrementedmessagecounter)
 - [getMrpParameters](session_export.UnsecureSession.md#getmrpparameters)
 - [getNodeId](session_export.UnsecureSession.md#getnodeid)
 - [getPeerNodeId](session_export.UnsecureSession.md#getpeernodeid)
@@ -49,12 +53,13 @@
 - [isSecure](session_export.UnsecureSession.md#issecure)
 - [notifyActivity](session_export.UnsecureSession.md#notifyactivity)
 - [setFabric](session_export.UnsecureSession.md#setfabric)
+- [updateMessageCounter](session_export.UnsecureSession.md#updatemessagecounter)
 
 ## Constructors
 
 ### constructor
 
-• **new UnsecureSession**\<`T`\>(`context`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`T`\>
+• **new UnsecureSession**\<`T`\>(`context`, `messageCounter`, `closeCallback`, `initiatorNodeId?`): [`UnsecureSession`](session_export.UnsecureSession.md)\<`T`\>
 
 #### Type parameters
 
@@ -67,6 +72,9 @@
 | Name | Type |
 | :------ | :------ |
 | `context` | `T` |
+| `messageCounter` | [`MessageCounter`](protocol_export.MessageCounter.md) |
+| `closeCallback` | () => `void` |
+| `initiatorNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
 
 #### Returns
 
@@ -74,9 +82,27 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L25)
+[packages/matter.js/src/session/UnsecureSession.ts:28](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L28)
 
 ## Properties
+
+### closeCallback
+
+• `Private` `Readonly` **closeCallback**: () => `void`
+
+#### Type declaration
+
+▸ (): `void`
+
+##### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/session/UnsecureSession.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L31)
+
+___
 
 ### closingAfterExchangeFinished
 
@@ -88,7 +114,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:23](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L23)
+[packages/matter.js/src/session/UnsecureSession.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L25)
 
 ___
 
@@ -98,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L25)
+[packages/matter.js/src/session/UnsecureSession.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L29)
 
 ___
 
@@ -108,7 +134,27 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L22)
+[packages/matter.js/src/session/UnsecureSession.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L24)
+
+___
+
+### messageCounter
+
+• `Private` `Readonly` **messageCounter**: [`MessageCounter`](protocol_export.MessageCounter.md)
+
+#### Defined in
+
+[packages/matter.js/src/session/UnsecureSession.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L30)
+
+___
+
+### messageReceptionState
+
+• `Private` `Readonly` **messageReceptionState**: [`MessageReceptionStateUnencryptedWithRollover`](protocol_export.MessageReceptionStateUnencryptedWithRollover.md)
+
+#### Defined in
+
+[packages/matter.js/src/session/UnsecureSession.ts:26](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L26)
 
 ## Accessors
 
@@ -126,7 +172,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:59](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L59)
+[packages/matter.js/src/session/UnsecureSession.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L70)
 
 ## Methods
 
@@ -150,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L43)
+[packages/matter.js/src/session/UnsecureSession.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L54)
 
 ___
 
@@ -168,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L91)
+[packages/matter.js/src/session/UnsecureSession.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L102)
 
 ___
 
@@ -192,19 +238,13 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L47)
+[packages/matter.js/src/session/UnsecureSession.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L58)
 
 ___
 
 ### end
 
-▸ **end**(`_sendClose`): `Promise`\<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `_sendClose` | `boolean` |
+▸ **end**(): `Promise`\<`void`\>
 
 #### Returns
 
@@ -216,7 +256,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L95)
+[packages/matter.js/src/session/UnsecureSession.ts:106](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L106)
 
 ___
 
@@ -234,7 +274,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L99)
+[packages/matter.js/src/session/UnsecureSession.ts:110](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L110)
 
 ___
 
@@ -248,7 +288,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L51)
+[packages/matter.js/src/session/UnsecureSession.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L62)
 
 ___
 
@@ -266,7 +306,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:71](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L71)
+[packages/matter.js/src/session/UnsecureSession.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L82)
 
 ___
 
@@ -284,7 +324,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:75](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L75)
+[packages/matter.js/src/session/UnsecureSession.ts:86](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L86)
+
+___
+
+### getIncrementedMessageCounter
+
+▸ **getIncrementedMessageCounter**(): `number`
+
+#### Returns
+
+`number`
+
+#### Implementation of
+
+[Session](../interfaces/session_export.Session.md).[getIncrementedMessageCounter](../interfaces/session_export.Session.md#getincrementedmessagecounter)
+
+#### Defined in
+
+[packages/matter.js/src/session/UnsecureSession.ts:114](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L114)
 
 ___
 
@@ -308,7 +366,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:63](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L63)
+[packages/matter.js/src/session/UnsecureSession.ts:74](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L74)
 
 ___
 
@@ -326,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:83](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L83)
+[packages/matter.js/src/session/UnsecureSession.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L94)
 
 ___
 
@@ -344,7 +402,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:87](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L87)
+[packages/matter.js/src/session/UnsecureSession.ts:98](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L98)
 
 ___
 
@@ -362,7 +420,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L79)
+[packages/matter.js/src/session/UnsecureSession.ts:90](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L90)
 
 ___
 
@@ -380,7 +438,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L31)
+[packages/matter.js/src/session/UnsecureSession.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L42)
 
 ___
 
@@ -398,7 +456,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L39)
+[packages/matter.js/src/session/UnsecureSession.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L50)
 
 ___
 
@@ -416,7 +474,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:27](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L27)
+[packages/matter.js/src/session/UnsecureSession.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L38)
 
 ___
 
@@ -440,7 +498,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L35)
+[packages/matter.js/src/session/UnsecureSession.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L46)
 
 ___
 
@@ -460,4 +518,28 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/UnsecureSession.ts:55](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/UnsecureSession.ts#L55)
+[packages/matter.js/src/session/UnsecureSession.ts:66](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L66)
+
+___
+
+### updateMessageCounter
+
+▸ **updateMessageCounter**(`messageCounter`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messageCounter` | `number` |
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[Session](../interfaces/session_export.Session.md).[updateMessageCounter](../interfaces/session_export.Session.md#updatemessagecounter)
+
+#### Defined in
+
+[packages/matter.js/src/session/UnsecureSession.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/UnsecureSession.ts#L118)

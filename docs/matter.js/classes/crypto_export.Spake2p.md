@@ -49,7 +49,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L45)
+[packages/matter.js/src/crypto/Spake2p.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L45)
 
 ## Properties
 
@@ -59,7 +59,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L46)
+[packages/matter.js/src/crypto/Spake2p.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L46)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L47)
+[packages/matter.js/src/crypto/Spake2p.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L47)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L48)
+[packages/matter.js/src/crypto/Spake2p.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L48)
 
 ## Methods
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:109](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L109)
+[packages/matter.js/src/crypto/Spake2p.ts:109](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L109)
 
 ___
 
@@ -123,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:79](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L79)
+[packages/matter.js/src/crypto/Spake2p.ts:79](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L79)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L70)
+[packages/matter.js/src/crypto/Spake2p.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L70)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:61](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L61)
+[packages/matter.js/src/crypto/Spake2p.ts:61](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L61)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:94](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L94)
+[packages/matter.js/src/crypto/Spake2p.ts:94](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L94)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:51](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L51)
+[packages/matter.js/src/crypto/Spake2p.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L51)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:56](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L56)
+[packages/matter.js/src/crypto/Spake2p.ts:56](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L56)
 
 ___
 
@@ -239,7 +239,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L34)
+[packages/matter.js/src/crypto/Spake2p.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L34)
 
 ___
 
@@ -260,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L25)
+[packages/matter.js/src/crypto/Spake2p.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L25)
 
 ___
 
@@ -281,4 +281,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/crypto/Spake2p.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/crypto/Spake2p.ts#L40)
+[packages/matter.js/src/crypto/Spake2p.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/crypto/Spake2p.ts#L40)

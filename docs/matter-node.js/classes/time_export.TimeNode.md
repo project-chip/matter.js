@@ -223,7 +223,7 @@ Returns a timer that will periodically call callback at intervalMs intervals.
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:58](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/time/TimeNode.ts#L58)
+[packages/matter-node.js/src/time/TimeNode.ts:58](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/time/TimeNode.ts#L58)
 
 ___
 
@@ -250,7 +250,7 @@ Returns a timer that will call callback after durationMs has passed.
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/time/TimeNode.ts#L54)
+[packages/matter-node.js/src/time/TimeNode.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/time/TimeNode.ts#L54)
 
 ___
 
@@ -268,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/time/TimeNode.ts#L46)
+[packages/matter-node.js/src/time/TimeNode.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/time/TimeNode.ts#L46)
 
 ___
 
@@ -286,4 +286,4 @@ ___
 
 #### Defined in
 
-[packages/matter-node.js/src/time/TimeNode.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter-node.js/src/time/TimeNode.ts#L50)
+[packages/matter-node.js/src/time/TimeNode.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter-node.js/src/time/TimeNode.ts#L50)

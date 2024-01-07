@@ -55,7 +55,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:135](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L135)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
 
 ## Properties
 
@@ -65,7 +65,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:129](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L129)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:130](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L130)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L131)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:132](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L132)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:133](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L133)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:134](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L134)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:130](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L130)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L131)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:138](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L138)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:136](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L136)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:137](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L137)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:132](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L132)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:133](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L133)
 
 ## Methods
 
@@ -143,7 +143,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:862](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L862)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:917](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L917)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:140](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L140)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:141](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L141)
 
 ___
 
@@ -183,7 +183,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:685](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L685)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:728](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L728)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:172](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L172)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:173](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L173)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:536](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L536)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:579](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L579)
 
 ___
 
@@ -247,7 +247,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:850](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L850)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:905](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L905)
 
 ___
 
@@ -269,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:323](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L323)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:357](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L357)
 
 ___
 
@@ -293,7 +293,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:161](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L161)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:162](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L162)
 
 ___
 
@@ -313,4 +313,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/InteractionServer.ts:144](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L144)
+[packages/matter.js/src/protocol/interaction/InteractionServer.ts:145](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/InteractionServer.ts#L145)

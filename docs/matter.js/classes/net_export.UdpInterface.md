@@ -45,7 +45,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Properties
 
@@ -55,7 +55,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L22)
+[packages/matter.js/src/net/UdpInterface.ts:22](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L22)
 
 ## Methods
 
@@ -73,7 +73,7 @@ A Network interface enhances a TransportInterface with the ability to open a cha
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L37)
+[packages/matter.js/src/net/UdpInterface.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L37)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L32)
+[packages/matter.js/src/net/UdpInterface.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L32)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L24)
+[packages/matter.js/src/net/UdpInterface.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L24)
 
 ___
 
@@ -144,4 +144,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L16)
+[packages/matter.js/src/net/UdpInterface.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L16)

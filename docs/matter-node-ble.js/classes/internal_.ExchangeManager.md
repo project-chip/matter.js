@@ -22,7 +22,6 @@
 - [closingSessions](internal_.ExchangeManager.md#closingsessions)
 - [exchangeCounter](internal_.ExchangeManager.md#exchangecounter)
 - [exchanges](internal_.ExchangeManager.md#exchanges)
-- [messageCounter](internal_.ExchangeManager.md#messagecounter)
 - [onMessage](internal_.ExchangeManager.md#onmessage)
 - [protocols](internal_.ExchangeManager.md#protocols)
 - [sessionManager](internal_.ExchangeManager.md#sessionmanager)
@@ -65,7 +64,7 @@
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:38
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:37
 
 ## Properties
 
@@ -85,7 +84,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:37
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
 
 ___
 
@@ -105,16 +104,6 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:34
-
-___
-
-### messageCounter
-
-• `Private` `Readonly` **messageCounter**: `any`
-
-#### Defined in
-
 matter.js/dist/esm/protocol/ExchangeManager.d.ts:33
 
 ___
@@ -125,7 +114,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:46
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:45
 
 ___
 
@@ -135,7 +124,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:35
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:34
 
 ___
 
@@ -155,7 +144,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:35
 
 ## Methods
 
@@ -175,7 +164,7 @@ matter.js/dist/esm/protocol/ExchangeManager.d.ts:36
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:42
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:41
 
 ___
 
@@ -195,7 +184,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:39
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:38
 
 ___
 
@@ -209,7 +198,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:45
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:44
 
 ___
 
@@ -229,7 +218,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:48
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:47
 
 ___
 
@@ -249,7 +238,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:47
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:46
 
 ___
 
@@ -269,7 +258,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:41
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:40
 
 ___
 
@@ -289,7 +278,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:40
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:39
 
 ___
 
@@ -311,7 +300,7 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:43
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:42
 
 ___
 
@@ -332,4 +321,4 @@ ___
 
 #### Defined in
 
-matter.js/dist/esm/protocol/ExchangeManager.d.ts:44
+matter.js/dist/esm/protocol/ExchangeManager.d.ts:43

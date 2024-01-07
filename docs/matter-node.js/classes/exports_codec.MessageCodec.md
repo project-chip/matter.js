@@ -169,13 +169,14 @@ ___
 
 ### messageDiagnostics
 
-▸ **messageDiagnostics**(`«destructured»`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
+▸ **messageDiagnostics**(`«destructured»`, `isDuplicate?`): [`DiagnosticDictionary`](exports_log.DiagnosticDictionary.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `«destructured»` | [`Message`](../interfaces/exports_codec.Message.md) |
+| `isDuplicate?` | `boolean` |
 
 #### Returns
 

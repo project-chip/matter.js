@@ -2,11 +2,40 @@
 
 [![license](https://img.shields.io/badge/license-Apache2-green.svg)](https://raw.githubusercontent.com/project-chip/matter.js/master/LICENSE)
 
-Implementation of Matter protocol in Typescript.
+## What is Matter?
 
-Matter is a new secure / reliable / local / standard protocol for smart devices launched at the end of 2022.
+[Matter](https://csa-iot.org/all-solutions/matter/) is a new secure, reliable and local standard protocol for smart/IoT devices launched at the end of 2022 by the [Connectivity Standards Alliance](https://csa-iot.org/). 
 
-To learn more about Matter you can learn more here: [https://csa-iot.org/all-solutions/matter/](https://csa-iot.org/all-solutions/matter/)
+To learn more about Matter visit [https://csa-iot.org/all-solutions/matter/](https://csa-iot.org/all-solutions/matter/)
+
+## What is matter.js?
+
+matter.js is a TypeScript/JavaScript implementation of the complete Matter protocol.
+
+Our main goal is to create a robust and compliant library that enables the seamless implementation of Matter-compatible devices, bridges, controllers, and a shell application. This effort is dedicated to improving Matter's accessibility for testers, smart home enthusiasts, and developers of OS-based IoT products. Fostering a second implementation of the Matter standard, aligned with the same specifications, not only expands the ecosystem but also contributes to the validation and increased robustness of the standard itself.
+
+matter.js consists of a [pure JavaScript base package](./packages/matter.js) without any native dependencies, implementing the Matter protocol and required interfaces in JavaScript, along with extensive typings for The Matter standard and the matter.js APIs.
+Further [packages with Node.js based native dependencies](./packages/matter-node.js) utilize the base package to implement platform-specific parts using Node.js for networking and other necessary native features or add [BLE support](./packages/matter-node-ble.js). [Node.js example scripts](./packages/matter-node.js-examples) implement example CLI scripts for Devices, Bridges or Controllers. A [Matter Shell](./packages/matter-node-shell.js) allow to interact with Matter devices as controller via a CLI interface.
+
+To use matter.js in your own Non-Node.js based projects you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details. If you do this please contact us to add your platform to the list of supported platforms.
+
+matter.js employs [code generation approaches](./codegen) to ensure a comprehensive model of all Matter Clusters and (soon) device types. This includes typing and documentation, readily available within developers' IDEs, facilitating easy accessibility and adherence to conformance information during coding. This approach allows for easy addition of new clusters and device types, ensuring synchronization with the Matter standard.
+
+## What matter.js can be used for?
+
+matter.js serves various purposes and can be employed for:
+
+- **Developing Production-Ready Matter Devices or Bridges:**<br>Use JavaScript/TypeScript to create Matter devices or bridges for OS-based IoT products. The extensive typing information and documentation facilitate the easy implementation of required functionality while ensuring synchronization with the Matter specification.
+
+- **Developing Matter Controllers:**<br>Develop Matter controllers with JavaScript/TypeScript for OS-based IoT products. Post-commissioning (including BLE support), controllers can access all data from devices and control them. The API supports development with known typings of all clusters when endpoints and device types are known during development. It also allows generic programmatic access to all clusters and attributes. Typing information of custom clusters can be added to the controller or accessed generically with generic data parsing support.
+
+- **Rapid Prototyping for Testing and Development:**<br>Enable rapid development of device or controller prototypes for testing and development purposes. JavaScript's nature and the convenient matter.js API make it easy to create prototypes. Testing different feature combinations or endpoint structures can be done quickly using JavaScript testing frameworks.
+
+- **Developing Bridges Between Matter and Other Ecosystems:**<br>Implement bridges between Matter and other ecosystems using JavaScript. Utilize the many available JavaScript libraries to easily bridge between ecosystems.
+
+- **Using the Matter Shell Application as a Controller:**<br>Employ the Matter Shell application as a controller to interact with Matter devices via a CLI interface. Ideal for manual testing and development purposes.
+
+Explore the versatile capabilities of matter.js and adapt it to your specific use cases!
 
 ## Compatibility
 
@@ -16,50 +45,58 @@ Devices created with matter.js/matter-node.js have been tested with:
 - **Google Home Ecosystem (Android or Google Nest smart speakers/display) - "Google Home" app**: Fully working
 - **Amazon Alexa (Amazon Echo smart speakers/displays)** : Fully working
 - **Tuya Smart (SmartLife) app**: Fully working
-- **Samsung SmartThings (Station or Hub v2 and later)**: Pairing works, but for controlling seems like SmartThings implementation itself has issues
-- **LG ThinQ**: Fully working
+- **Samsung SmartThings (Station or Hub v2 and later)**: Fully working
+- **LG ThinQ**: Fully working, beside glitches in LG software sometimes
 - **Home Assistant - Matter integration**: Fully working
 
-We also collected a [list of tested device types on ecosystem](#device-types-tested-on-various-ecosystems).This is a compilation of published information and own community tests.
+We also collected a [list of tested device types on ecosystem](#device-types-tested-on-various-ecosystems).This is a compilation of published information by the ecosystems and own community tests.
 
 Each ecosystem have their own specialities, see [Pairing and Usage Information](#pairing-and-usage-information) for more details.
 
 A list ok known issues with some ecosystems can be found in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
 
-matter.js/matter-node.js as Controller was successfully tested with Chip example apps and several official production devices (see [here](https://github.com/project-chip/matter.js/discussions/316) ).
+matter.js/matter-node.js as Controller was successfully tested with Chip example apps and several production devices (see [here](https://github.com/project-chip/matter.js/discussions/316) ).
 
-## Monorepo Overview
+Please report any outdated or newly discovered information on compatible ecosystems, devices, and device types or issues.
+
+## Monorepo Code structure Overview
 
 This repository contains multiple packages (and because of this it is a monorepo). The packages are contained in the `packages` directory and are all published separately to NPM.
 
-- **matter.js**: the core Matter implementation in typescript which is JavaScript only and has no native dependencies.
-- **matter-node.js**: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency
-- **matter-node-ble.js**: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller)
-- **matter-node-shell.js**: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
-- **matter-node.js-examples**: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js and matter-node-ble.js
+- **[matter.js](./packages/matter.js)**: the core Matter implementation in typescript which is JavaScript only and has no native dependencies. It is build and published as CommonJS and ES6 variants in one package.
+- **[matter-node.js](./packages/matter-node.js)**: a node.js implementation of a Matter DeviceNode and ControllerNode which also re-exports all matter.js exports and so can be used as only dependency. It is build and published as CommonJS and ES6 variants in one package.
+- **[matter-node-ble.js](./packages/matter-node-ble.js)**: a node.js based implementation of BLE features for matter-node.js to allow commissioning via BLE (Device and Controller). It is build and published as CommonJS and ES6 variants in one package.
+- **[matter-node-shell.js](./packages/matter-node-shell.js)**: a node.js based Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+- **[matter-node.js-examples](./packages/matter-node.js-examples)**: Reference implementations of Matter devices and controller as CLI scripts using matter-node.js and matter-node-ble.js
+- **[matter.js-tools](./packages/matter.js-tools)**: Tools used internally to build, test and run the project which incorporates on-the-fly Typescript building. You most likely do not need these tools for your projects but are free to use them.
 
-For each package the [API Documentation](./docs/README.md) is updated on each release, but can be built locally using `npm run build-doc`.
+For each package the [API Documentation](./docs/README.md) is updated on each official release, but can also be built locally using `npm run build-doc`.
 
-This repository uses the workspaces feature on npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
+Beside these packages that are published to npm there are also some packages that are not published to npm and exist as folders in the root directory:
+- **[chip-testing](./chip-testing)**: A set of scripts to allow to run the Chip-Tool-Certification tests against a matter-node.js based devices. These tests are executed on GitHub CI automatically.
+- **[codegen](./codegen)**: A set of scripts to generate code for the Matter code model, clusters and device types.
+- **[model](./models)**: Contains all pre-parsed information for the Matter models used to generate code for the code model, clusters and device types. It also allows to define [local overrides](./models/src/local) to adjust incomplete or wrong information in the Matter models.
+
+This repository uses the workspaces feature from npm to manage the dependencies between the packages. Because of this please only use `npm install` on the root of the repository. This will install all the dependencies for all the packages and also take care to create relevant symlinks between the packages.
 
 Additionally, it uses typescript project references to allow IDE support for the dependencies. These dependencies need to be added to the tsconfig.json files if needed.
 
 You can build and test the packages separately or all by using `npm run build` or `npm run test` on root package level. With `npm run build-clean` you can build all packages from scratch.
 
-## Releases
+## Release tags
 
-To allow a simple use of the matter.js Monorepo based project in other projects, we publish all packages separately to NPM. There are two available releases on NPM:
+To allow a simple use of the matter.js Monorepo based project in other projects, we publish all packages separately to NPM. There are two available release tags on NPM:
 
 - **latest**: This is the default NPM tag and contains official released versions of the packages. This is the recommended tag to use in your projects. Whenever we build a new official release also the docs are updated and available in the repository.
 - **dev**: This tag contains a nightly build of the project and is updated every night if there were changes in the repository. This is only for testing and development purposes and should not be used for real production use cases. Use e.g. `npm install @project-chip/matter-node.js@dev` to install the latest nightly build of matter-node.js.
 
 ## Community communication
 
-If you have issues please use the GitHub "Issues" feature of this repository. For questions or idea discussions please use the "Discussions" feature in GitHub.
+If you have issues please use the GitHub "[Issues](https://github.com/project-chip/matter.js/issues)" of this repository. For questions or idea discussions please use the "[Discussions](https://github.com/project-chip/matter.js/discussions)" in this GitHub repository.
 
 Additionally, we started a Discord server for Matter-Integrators to allow to communicate about the protocol and how to implement Matter in various environments (not only just JavaScript/Typescript). You can join it here: https://discord.gg/ujmRNrhDuW .
 
-## How to use it
+## How to use matter.js
 
 ### To develop matter.js
 
@@ -73,27 +110,34 @@ npm install
 
 This will install all dependencies and create symlinks between the packages, so that it can be used locally. It also builds all packages.
 
-On Windows in order to succesfully build all the packages (tested on Windows 11 Pro) make sure that to have installed node, the windows-build-tools and node-gyp version 10.
+On Windows in order to successfully build all the packages (tested on Windows 11 Pro) make sure that to have installed Node.js 16+, the windows-build-tools and node-gyp version 10.
+On Non-Windows platforms and having Python 3.12+ installed please also make sure to use npm 10.2.3+.
 
-### Matter.js
+### To use matter(-node).js in own projects
 
-Matter.js is the core implementation of the Matter protocol in typescript. It is a JavaScript only implementation and has no native dependencies. It is build and published as CommonJS and ES6 variants in one package.
-For an overview of the exported functionality please refer to the [README.md](packages/matter.js/README.md#exported-functionality)
+To use matter.js in own projects you simply use matter-node.js as dependency in your project. This package also re-exports all interfaces from matter.js, so it is not needed to use matter.js directly. If you need BLE support you can use matter-node-ble.js as additional dependency.
 
-Because Matter required UDP/MDNS technologies, other implementations are needed to implement this core functionality platform specific.
+```bash
+npm install @project-chip/matter-node.js --save
+```
 
-For more Details see the [README.md](packages/matter.js/README.md) in the package.
+If your project is not based on Node.js you need to implement the platform specific parts. See [How to use matter.js in own projects](#how-to-use-matterjs-in-own-projects) for more details.
 
-### Matter-node.js
+### To try out the Node.js based Examples
 
-Matter-node.js uses Node.js to implement the platform specific parts using Node.js for networking and other needed native features. Additionally, it also implements a Matter DeviceNode and ControllerNode as a example implementation and allows to use this directly as CLI script.
-For an overview of the exported functionality please refer to the [README.md](packages/matter.js/README.md#exported-functionality)
+if you just want to try out the Node.js based examples you can use the following commands:
 
-For more Details see the [README.md](packages/matter-node.js/README.md) in the package.
+```bash
+npm install @project-chip/matter-node.js-examples
+```
+
+Please refer to the Examples Readme on how to use the examples: [matter-node.js-examples](packages/matter-node.js-examples/README.md)
 
 ## Code style
 
-The project contains eslint as linter and typescript-formatter as formatter. The configuration files are located in the root directory and are valid for all packages.
+matter.js relies very much on TypeScript and tries to be as type safe as possible. Please prevent using ts-ignore or other "hacks" as best as possible and try to find and fix the real typing issue if you encounter cases where you need to use them. YOu can also alwayys join discord or as in GitHub discussions if you need help.
+
+The project contains eslint as linter and prettier as formatter. The configuration files are located in the root directory and are valid for all packages.
 
 The following commands are available:
 
@@ -101,6 +145,8 @@ The following commands are available:
 - `npm run lint-fix`: runs eslint on all packages and tries to fix the errors
 - `npm run format`: runs typescript-formatter on all packages and formats the code. Files will be changed in place.
 - `npm run format-verify`: runs typescript-formatter on all packages and checks if the code is formatted correctly. If not it will output the files that need to be formatted.
+
+If you want to contribute to the project please make sure to check linting and formatting before creating a PR. The GitHub CI also verifies this and will fail if the code is not formatted correctly.
 
 ## Building
 
@@ -120,7 +166,7 @@ You can use `npm run build-doc` on the root level to generate the API documentat
 
 ## Current status
 
-We are about to complete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be build, but not with pre-defined cluster logic.
+We are about to complete the basic certifiable feature set. Right now in the low level APIs all clusters are supported and all kind of devices can be built, but not with pre-defined cluster logic.
 See the [Roadmap](https://github.com/orgs/project-chip/projects/11/views/1) for status and next planned steps.
 
 ## How to use matter.js in own projects
@@ -143,15 +189,16 @@ The following reference implementation and code references are available as basi
 
 If you implement a specific platform we would be happy about aa PR with the code, so that also other community members can benefit from it.
 
-## Node.js usage
+## matter.js based projects
 
 If you use a platform where Node.js 16.x+ is available then you can easily and directly use the following project that base on matter.js
 
 matter.js is used at the core of those two projects currently:
 
-- [matternode](https://github.com/project-chip/matternode): a light-weight node.js implementation of a Matter Node
 - [matter-node.js](packages/matter-node.js/README.md): a Matter client / server running on node.js compatible with HA (Android / iOs support in progress)
 - [matter-node-shell.js](packages/matter-node-shell.js/README.md): a Matter Shell script to allow to interact with Matter devices as controllers via a CLI interface
+- [node-red-matter](https://github.com/FezVrasta/node-red-matter): a Node-Red Node for devices and controllers
+- [zigbee-matter-bridge](https://github.com/antonio-gabriele/zigbee-matter-bridge): a Zigbee to Matter Bridge
 
 ## Device types tested on various Ecosystems
 
@@ -269,11 +316,11 @@ Alexa currently has a few non-standard requirements:
 
 - Matter devices need to use port 5540 only, else they will not be discovered by Alexa at all
 - The device needs to have an Endpoint 1 beside the root endpoint. This needs to either be the main device endpoint 
-- (composed devices not yet supported) or an aggregator.
+- composed devices not yet supported
 
 ### Tuya Smart (SmartLife) Ecosystem
 
-Should work but no more detatailed information here as of yet.
+Should work but no more detailed information here as of yet. The device types are limited and bridges are not supported based on the latest information.
 
 ### Samsung SmartThings Ecosystem
 
@@ -332,16 +379,3 @@ You can find a compiled apk in /matter-test-apk in this repository.
 **Provisioning the device**: click "provision with WiFi" > "Input DeviceNode address" > type IP address of the machine running matter.js
 
 **Controlling the device**: click "Light on/of" and you can control the light
-
-## FAQ
-
-### How can I have support for more clusters?
-
-Adding more clusters should be pretty easy now the core protocol is working.
-Have a look at the implementation of the OnOff cluster: pretty simple, right?
-
-We are planning on adding more clusters, so stay tuned, or please file issues about the ones that are higher priority.
-
-### Contact the developers
-
-For other questions, you can post a message on the github forum, open an issue, or join our Discord [https://discord.gg/ujmRNrhDuW](https://discord.gg/ujmRNrhDuW).

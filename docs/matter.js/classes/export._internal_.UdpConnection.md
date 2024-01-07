@@ -54,7 +54,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L43)
+[packages/matter.js/src/net/UdpInterface.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L43)
 
 ## Properties
 
@@ -64,7 +64,7 @@ SPDX-License-Identifier: Apache-2.0
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L45)
+[packages/matter.js/src/net/UdpInterface.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L45)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L46)
+[packages/matter.js/src/net/UdpInterface.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L46)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L44)
+[packages/matter.js/src/net/UdpInterface.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L44)
 
 ## Accessors
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L53)
+[packages/matter.js/src/net/UdpInterface.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L53)
 
 ## Methods
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:57](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L57)
+[packages/matter.js/src/net/UdpInterface.ts:57](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L57)
 
 ___
 
@@ -144,4 +144,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/net/UdpInterface.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/UdpInterface.ts#L49)
+[packages/matter.js/src/net/UdpInterface.ts:49](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/UdpInterface.ts#L49)

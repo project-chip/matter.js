@@ -54,6 +54,8 @@ Error base class for all errors thrown by this library.
 
   ↳↳ [`UnexpectedMessageError`](protocol_export.UnexpectedMessageError.md)
 
+  ↳↳ [`DuplicateMessageError`](protocol_export.DuplicateMessageError.md)
+
   ↳↳ [`StatusResponseError`](protocol_interaction_export.StatusResponseError.md)
 
   ↳↳ [`ChannelStatusResponseError`](protocol_securechannel_export.ChannelStatusResponseError.md)

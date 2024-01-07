@@ -149,7 +149,7 @@ Re-exports [ElementSelector](export._internal_.ModelTraversal.md#elementselector
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L16)
+[packages/matter.js/src/schema/BitmapSchema.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L16)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L14)
+[packages/matter.js/src/schema/BitmapSchema.ts:14](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L14)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L15)
+[packages/matter.js/src/schema/BitmapSchema.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L15)
 
 ## Type Aliases
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvArray.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvArray.ts#L19)
+[packages/matter.js/src/tlv/TlvArray.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvArray.ts#L19)
 
 ___
 
@@ -198,7 +198,7 @@ Type for TlvAttributeReportData where the real data are represented with the sch
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L37)
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L37)
 
 ___
 
@@ -214,7 +214,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:91](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L91)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:91](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L91)
 
 ___
 
@@ -232,7 +232,7 @@ Handlers to process cluster commands
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:131](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L131)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:131](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L131)
 
 ___
 
@@ -248,7 +248,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:99](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L99)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:99](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L99)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:105](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L105)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:105](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L105)
 
 ___
 
@@ -290,9 +290,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L19)
+[packages/matter.js/src/schema/BitmapSchema.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L19)
 
-[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L25)
+[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L25)
 
 ___
 
@@ -310,7 +310,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/Array.ts:11](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/Array.ts#L11)
+[packages/matter.js/src/util/Array.ts:11](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/Array.ts#L11)
 
 ___
 
@@ -328,7 +328,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:198](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L198)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:198](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L198)
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:73](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L73)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:73](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L73)
 
 ___
 
@@ -360,7 +360,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:104](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L104)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:104](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L104)
 
 ___
 
@@ -376,7 +376,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:90](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L90)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:90](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L90)
 
 ___
 
@@ -392,7 +392,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:95](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L95)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:95](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L95)
 
 ___
 
@@ -408,7 +408,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:112](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L112)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:112](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L112)
 
 ___
 
@@ -424,7 +424,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:128](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L128)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:128](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L128)
 
 ___
 
@@ -440,7 +440,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:118](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L118)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:118](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L118)
 
 ___
 
@@ -456,7 +456,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:82](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L82)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:82](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L82)
 
 ___
 
@@ -485,9 +485,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:922](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L922)
+[packages/matter.js/src/cluster/Cluster.ts:922](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L922)
 
-[packages/matter.js/src/cluster/Cluster.ts:935](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L935)
+[packages/matter.js/src/cluster/Cluster.ts:935](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L935)
 
 ___
 
@@ -505,7 +505,7 @@ This type manages state that changes when we enter a cluster.
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:314](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L314)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:314](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L314)
 
 ___
 
@@ -532,7 +532,7 @@ Data that are collected initially or through the commissioning process and can b
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:100](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L100)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:100](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L100)
 
 ___
 
@@ -550,7 +550,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:125](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L125)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:125](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L125)
 
 ___
 
@@ -566,7 +566,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:110](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L110)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:110](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L110)
 
 ___
 
@@ -576,7 +576,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsScanner.ts#L49)
+[packages/matter.js/src/mdns/MdnsScanner.ts:49](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L49)
 
 ___
 
@@ -592,7 +592,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterController.ts:64](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterController.ts#L64)
+[packages/matter.js/src/MatterController.ts:64](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterController.ts#L64)
 
 ___
 
@@ -610,7 +610,7 @@ Commands exposed by the CommissioningServer
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:201](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningServer.ts#L201)
+[packages/matter.js/src/CommissioningServer.ts:201](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L201)
 
 ___
 
@@ -632,7 +632,7 @@ All steps are for execution sorted by stepNumber and subStepNumber
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L85)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:85](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L85)
 
 ___
 
@@ -652,7 +652,7 @@ Breadcrump value is stored for each step for transparency
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L76)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:76](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L76)
 
 ___
 
@@ -671,7 +671,7 @@ Types representation of a general commissioning response.
 
 #### Defined in
 
-[packages/matter.js/src/protocol/ControllerCommissioner.ts:60](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/ControllerCommissioner.ts#L60)
+[packages/matter.js/src/protocol/ControllerCommissioner.ts:60](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/ControllerCommissioner.ts#L60)
 
 ___
 
@@ -694,7 +694,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/DimmableDevices.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/DimmableDevices.ts#L15)
+[packages/matter.js/src/device/DimmableDevices.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/DimmableDevices.ts#L15)
 
 ___
 
@@ -725,7 +725,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/common/TryCatchHandler.ts:8](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/common/TryCatchHandler.ts#L8)
+[packages/matter.js/src/common/TryCatchHandler.ts:8](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/common/TryCatchHandler.ts#L8)
 
 ___
 
@@ -737,7 +737,7 @@ Type for TlvEventData where the real data are represented with the schema and th
 
 #### Defined in
 
-[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L48)
+[packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/protocol/interaction/AttributeDataEncoder.ts#L48)
 
 ___
 
@@ -754,7 +754,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/util/NamedHandler.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/util/NamedHandler.ts#L35)
+[packages/matter.js/src/util/NamedHandler.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/util/NamedHandler.ts#L35)
 
 ___
 
@@ -770,7 +770,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:70](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L70)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:70](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L70)
 
 ___
 
@@ -786,7 +786,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:217](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L217)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:217](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L217)
 
 ___
 
@@ -804,7 +804,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvString.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvString.ts#L15)
+[packages/matter.js/src/tlv/TlvString.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvString.ts#L15)
 
 ___
 
@@ -820,7 +820,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:156](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L156)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:156](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L156)
 
 ___
 
@@ -837,9 +837,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:166](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L166)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:166](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L166)
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
 
 ___
 
@@ -857,7 +857,7 @@ Cluster attributes accessible on the cluster server
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L54)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L54)
 
 ___
 
@@ -873,7 +873,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L85)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:85](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L85)
 
 ___
 
@@ -889,7 +889,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L41)
+[packages/matter.js/src/tlv/TlvObject.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L41)
 
 ___
 
@@ -905,7 +905,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:53](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L53)
+[packages/matter.js/src/schema/BitmapSchema.ts:53](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L53)
 
 ___
 
@@ -921,7 +921,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:54](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L54)
+[packages/matter.js/src/schema/BitmapSchema.ts:54](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L54)
 
 ___
 
@@ -931,7 +931,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/mdns/MdnsScanner.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/mdns/MdnsScanner.ts#L45)
+[packages/matter.js/src/mdns/MdnsScanner.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/mdns/MdnsScanner.ts#L45)
 
 ___
 
@@ -943,7 +943,7 @@ Map of Model -> name
 
 #### Defined in
 
-[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:309](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L309)
+[packages/matter.js/src/model/logic/ModelVariantTraversal.ts:309](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/model/logic/ModelVariantTraversal.ts#L309)
 
 ___
 
@@ -960,7 +960,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/device/OnOffDevices.ts:24](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/device/OnOffDevices.ts#L24)
+[packages/matter.js/src/device/OnOffDevices.ts:24](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/device/OnOffDevices.ts#L24)
 
 ___
 
@@ -976,7 +976,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:155](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L155)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:155](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L155)
 
 ___
 
@@ -992,7 +992,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:66](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L66)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:66](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L66)
 
 ___
 
@@ -1008,7 +1008,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:88](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L88)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:88](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L88)
 
 ___
 
@@ -1024,7 +1024,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L44)
+[packages/matter.js/src/tlv/TlvObject.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L44)
 
 ___
 
@@ -1040,7 +1040,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:220](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L220)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:220](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L220)
 
 ___
 
@@ -1056,7 +1056,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:227](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L227)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:227](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L227)
 
 ___
 
@@ -1072,7 +1072,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:235](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L235)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:235](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L235)
 
 ___
 
@@ -1088,7 +1088,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:250](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L250)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:250](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L250)
 
 ___
 
@@ -1100,7 +1100,7 @@ Supported combined types to stringify the data for the storage that can be used 
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StringifyTools.ts#L39)
+[packages/matter.js/src/storage/StringifyTools.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/storage/StringifyTools.ts#L39)
 
 ___
 
@@ -1112,7 +1112,7 @@ Supported base types to stringify the data for the storage that can be used as k
 
 #### Defined in
 
-[packages/matter.js/src/storage/StringifyTools.ts:21](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/storage/StringifyTools.ts#L21)
+[packages/matter.js/src/storage/StringifyTools.ts:21](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/storage/StringifyTools.ts#L21)
 
 ___
 
@@ -1129,7 +1129,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L48)
+[packages/matter.js/src/tlv/TlvObject.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L48)
 
 ___
 
@@ -1146,7 +1146,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L49)
+[packages/matter.js/src/tlv/TlvObject.ts:49](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L49)
 
 ___
 
@@ -1162,7 +1162,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/tlv/TlvObject.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/tlv/TlvObject.ts#L47)
+[packages/matter.js/src/tlv/TlvObject.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/tlv/TlvObject.ts#L47)
 
 ___
 
@@ -1178,7 +1178,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/certificate/CertificateManager.ts:346](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/certificate/CertificateManager.ts#L346)
+[packages/matter.js/src/certificate/CertificateManager.ts:346](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/certificate/CertificateManager.ts#L346)
 
 ___
 
@@ -1195,9 +1195,9 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:180](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L180)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:180](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L180)
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
 
 ___
 
@@ -1213,7 +1213,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:87](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L87)
+[packages/matter.js/src/cluster/client/ClusterClientTypes.ts:87](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/client/ClusterClientTypes.ts#L87)
 
 ## Variables
 
@@ -1225,7 +1225,7 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 #### Defined in
 
-[packages/matter.js/src/schema/PairingCodeSchema.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/PairingCodeSchema.ts#L48)
+[packages/matter.js/src/schema/PairingCodeSchema.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/PairingCodeSchema.ts#L48)
 
 ## Functions
 
@@ -1254,7 +1254,7 @@ See [MatterCoreSpecificationV1_0](../interfaces/spec_export.MatterCoreSpecificat
 
 #### Defined in
 
-[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/schema/BitmapSchema.ts#L25)
+[packages/matter.js/src/schema/BitmapSchema.ts:25](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/schema/BitmapSchema.ts#L25)
 
 ___
 
@@ -1289,7 +1289,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/Cluster.ts:935](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/Cluster.ts#L935)
+[packages/matter.js/src/cluster/Cluster.ts:935](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/Cluster.ts#L935)
 
 ___
 
@@ -1317,7 +1317,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:170](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L170)
 
 ___
 
@@ -1347,4 +1347,4 @@ Forces the presence of the specified optional attributes, so they can be used in
 
 #### Defined in
 
-[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)
+[packages/matter.js/src/cluster/server/ClusterServerTypes.ts:192](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/server/ClusterServerTypes.ts#L192)

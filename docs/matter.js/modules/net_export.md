@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L12)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L12)
 
 ## Variables
 
@@ -68,7 +68,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/net/fake/SimulatedNetwork.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L16)
+[packages/matter.js/src/net/fake/SimulatedNetwork.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/fake/SimulatedNetwork.ts#L16)
 
 ## Functions
 
@@ -88,4 +88,4 @@ obj is NetInterface
 
 #### Defined in
 
-[packages/matter.js/src/net/NetInterface.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/net/NetInterface.ts#L19)
+[packages/matter.js/src/net/NetInterface.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/net/NetInterface.ts#L19)

@@ -361,7 +361,7 @@ packages/matter.js/dist/esm/protocol/interaction/InteractionMessenger.d.ts:36
 
 ### INTERACTION\_MODEL\_REVISION
 
-• `Const` **INTERACTION\_MODEL\_REVISION**: ``10``
+• `Const` **INTERACTION\_MODEL\_REVISION**: ``11``
 
 #### Defined in
 

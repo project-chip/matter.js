@@ -107,7 +107,7 @@ Constructor options for the CommissioningController class
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningController.ts#L37)
+[packages/matter.js/src/CommissioningController.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L37)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterServer.ts#L31)
+[packages/matter.js/src/MatterServer.ts:31](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterServer.ts#L31)
 
 ___
 
@@ -137,7 +137,7 @@ Options needed to commission a new node
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningController.ts:80](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningController.ts#L80)
+[packages/matter.js/src/CommissioningController.ts:80](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningController.ts#L80)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/MatterServer.ts#L19)
+[packages/matter.js/src/MatterServer.ts:19](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/MatterServer.ts#L19)
 
 ## Variables
 
@@ -164,4 +164,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/CommissioningServer.ts:76](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/CommissioningServer.ts#L76)
+[packages/matter.js/src/CommissioningServer.ts:76](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/CommissioningServer.ts#L76)

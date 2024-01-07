@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:12](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L12)
+[packages/matter.js/src/log/Logger.ts:12](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L12)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:15](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L15)
+[packages/matter.js/src/log/Logger.ts:15](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L15)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L16)
+[packages/matter.js/src/log/Logger.ts:16](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L16)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:13](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L13)
+[packages/matter.js/src/log/Logger.ts:13](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L13)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/log/Logger.ts:14](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/log/Logger.ts#L14)
+[packages/matter.js/src/log/Logger.ts:14](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/log/Logger.ts#L14)

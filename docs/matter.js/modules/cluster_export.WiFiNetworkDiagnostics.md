@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:449](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L449)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:449](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L449)
 
 ## Variables
 
@@ -55,7 +55,7 @@ These elements and properties are present in all WiFiNetworkDiagnostics clusters
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:215](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L215)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:215](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L215)
 
 ___
 
@@ -78,7 +78,7 @@ WiFiNetworkDiagnosticsCluster.with() factory method.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:426](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L426)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:426](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L426)
 
 ___
 
@@ -93,7 +93,7 @@ features is legal per the Matter specification.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:463](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L463)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:463](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L463)
 
 ___
 
@@ -105,7 +105,7 @@ A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature E
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:321](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L321)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:321](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L321)
 
 ___
 
@@ -117,7 +117,7 @@ A WiFiNetworkDiagnosticsCluster supports these elements if it supports feature P
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:369](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L369)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:369](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L369)
 
 ___
 
@@ -133,7 +133,7 @@ Body of the WiFiNetworkDiagnostics associationFailure event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:142](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L142)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:142](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L142)
 
 ___
 
@@ -149,7 +149,7 @@ Body of the WiFiNetworkDiagnostics connectionStatus event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:188](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L188)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:188](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L188)
 
 ___
 
@@ -165,4 +165,4 @@ Body of the WiFiNetworkDiagnostics disconnection event
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L102)
+[packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts:102](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/WiFiNetworkDiagnosticsCluster.ts#L102)

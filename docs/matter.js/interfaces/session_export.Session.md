@@ -31,6 +31,7 @@
 - [getAssociatedFabric](session_export.Session.md#getassociatedfabric)
 - [getContext](session_export.Session.md#getcontext)
 - [getId](session_export.Session.md#getid)
+- [getIncrementedMessageCounter](session_export.Session.md#getincrementedmessagecounter)
 - [getMrpParameters](session_export.Session.md#getmrpparameters)
 - [getNodeId](session_export.Session.md#getnodeid)
 - [getPeerNodeId](session_export.Session.md#getpeernodeid)
@@ -39,6 +40,7 @@
 - [isPeerActive](session_export.Session.md#ispeeractive)
 - [isSecure](session_export.Session.md#issecure)
 - [notifyActivity](session_export.Session.md#notifyactivity)
+- [updateMessageCounter](session_export.Session.md#updatemessagecounter)
 
 ## Properties
 
@@ -48,7 +50,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:33](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L33)
+[packages/matter.js/src/session/Session.ts:33](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L33)
 
 ___
 
@@ -58,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:32](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L32)
+[packages/matter.js/src/session/Session.ts:32](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L32)
 
 ## Methods
 
@@ -79,19 +81,19 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:37](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L37)
+[packages/matter.js/src/session/Session.ts:37](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L37)
 
 ___
 
 ### destroy
 
-▸ **destroy**(`sendClose`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
+▸ **destroy**(`sendClose?`, `closeAfterExchangeFinished?`): `Promise`\<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sendClose` | `boolean` |
+| `sendClose?` | `boolean` |
 | `closeAfterExchangeFinished?` | `boolean` |
 
 #### Returns
@@ -100,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L46)
+[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L47)
 
 ___
 
@@ -120,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:38](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L38)
+[packages/matter.js/src/session/Session.ts:38](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L38)
 
 ___
 
@@ -140,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L45)
+[packages/matter.js/src/session/Session.ts:46](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L46)
 
 ___
 
@@ -154,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:49](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L49)
+[packages/matter.js/src/session/Session.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L50)
 
 ___
 
@@ -168,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:40](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L40)
+[packages/matter.js/src/session/Session.ts:40](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L40)
 
 ___
 
@@ -182,7 +184,21 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L41)
+[packages/matter.js/src/session/Session.ts:41](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L41)
+
+___
+
+### getIncrementedMessageCounter
+
+▸ **getIncrementedMessageCounter**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L45)
 
 ___
 
@@ -196,7 +212,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:39](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L39)
+[packages/matter.js/src/session/Session.ts:39](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L39)
 
 ___
 
@@ -210,7 +226,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L43)
+[packages/matter.js/src/session/Session.ts:43](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L43)
 
 ___
 
@@ -224,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L44)
+[packages/matter.js/src/session/Session.ts:44](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L44)
 
 ___
 
@@ -238,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L42)
+[packages/matter.js/src/session/Session.ts:42](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L42)
 
 ___
 
@@ -252,7 +268,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L36)
+[packages/matter.js/src/session/Session.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L36)
 
 ___
 
@@ -266,7 +282,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L48)
+[packages/matter.js/src/session/Session.ts:49](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L49)
 
 ___
 
@@ -280,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:35](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L35)
+[packages/matter.js/src/session/Session.ts:35](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L35)
 
 ___
 
@@ -300,4 +316,25 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/session/Session.ts:47](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/session/Session.ts#L47)
+[packages/matter.js/src/session/Session.ts:48](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L48)
+
+___
+
+### updateMessageCounter
+
+▸ **updateMessageCounter**(`messageCounter`, `sourceNodeId?`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `messageCounter` | `number` |
+| `sourceNodeId?` | [`NodeId`](../modules/datatype_export.md#nodeid) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/matter.js/src/session/Session.ts:51](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/session/Session.ts#L51)

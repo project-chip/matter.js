@@ -19,16 +19,20 @@
 ### Properties
 
 - [context](exports_session.SessionManager.md#context)
+- [globalUnencryptedMessageCounter](exports_session.SessionManager.md#globalunencryptedmessagecounter)
 - [nextSessionId](exports_session.SessionManager.md#nextsessionid)
 - [resumptionRecords](exports_session.SessionManager.md#resumptionrecords)
 - [sessionStorage](exports_session.SessionManager.md#sessionstorage)
 - [sessions](exports_session.SessionManager.md#sessions)
-- [unsecureSession](exports_session.SessionManager.md#unsecuresession)
+- [unsecureSessions](exports_session.SessionManager.md#unsecuresessions)
 
 ### Methods
 
 - [close](exports_session.SessionManager.md#close)
 - [createSecureSession](exports_session.SessionManager.md#createsecuresession)
+- [createUnsecureSession](exports_session.SessionManager.md#createunsecuresession)
+- [findGroupSession](exports_session.SessionManager.md#findgroupsession)
+- [findOldestInactiveSession](exports_session.SessionManager.md#findoldestinactivesession)
 - [findResumptionRecordById](exports_session.SessionManager.md#findresumptionrecordbyid)
 - [findResumptionRecordByNodeId](exports_session.SessionManager.md#findresumptionrecordbynodeid)
 - [getActiveSessionInformation](exports_session.SessionManager.md#getactivesessioninformation)
@@ -70,7 +74,7 @@
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:29
+packages/matter.js/dist/esm/session/SessionManager.d.ts:28
 
 ## Properties
 
@@ -80,7 +84,17 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:29
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:23
+packages/matter.js/dist/esm/session/SessionManager.d.ts:21
+
+___
+
+### globalUnencryptedMessageCounter
+
+• `Private` `Readonly` **globalUnencryptedMessageCounter**: `any`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SessionManager.d.ts:27
 
 ___
 
@@ -90,7 +104,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:26
+packages/matter.js/dist/esm/session/SessionManager.d.ts:24
 
 ___
 
@@ -100,7 +114,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:27
+packages/matter.js/dist/esm/session/SessionManager.d.ts:25
 
 ___
 
@@ -110,7 +124,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:28
+packages/matter.js/dist/esm/session/SessionManager.d.ts:26
 
 ___
 
@@ -120,17 +134,17 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:25
+packages/matter.js/dist/esm/session/SessionManager.d.ts:23
 
 ___
 
-### unsecureSession
+### unsecureSessions
 
-• `Private` `Readonly` **unsecureSession**: `any`
+• `Private` `Readonly` **unsecureSessions**: `any`
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:24
+packages/matter.js/dist/esm/session/SessionManager.d.ts:22
 
 ## Methods
 
@@ -144,7 +158,7 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:24
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:76
+packages/matter.js/dist/esm/session/SessionManager.d.ts:78
 
 ___
 
@@ -180,6 +194,61 @@ packages/matter.js/dist/esm/session/SessionManager.d.ts:30
 
 ___
 
+### createUnsecureSession
+
+▸ **createUnsecureSession**(`initiatorNodeId?`): [`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `initiatorNodeId?` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
+
+#### Returns
+
+[`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SessionManager.d.ts:29
+
+___
+
+### findGroupSession
+
+▸ **findGroupSession**(`groupId`, `groupSessionId`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `groupId` | `number` |
+| `groupSessionId` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SessionManager.d.ts:53
+
+___
+
+### findOldestInactiveSession
+
+▸ **findOldestInactiveSession**(): `number`
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+packages/matter.js/dist/esm/session/SessionManager.d.ts:46
+
+___
+
 ### findResumptionRecordById
 
 ▸ **findResumptionRecordById**(`resumptionId`): `undefined` \| [`ResumptionRecord`](../interfaces/exports_session.ResumptionRecord.md)
@@ -196,7 +265,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:52
+packages/matter.js/dist/esm/session/SessionManager.d.ts:54
 
 ___
 
@@ -216,35 +285,35 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:53
+packages/matter.js/dist/esm/session/SessionManager.d.ts:55
 
 ___
 
 ### getActiveSessionInformation
 
-▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+▸ **getActiveSessionInformation**(): \{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Returns
 
-\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: `undefined` \| [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
+\{ `fabric`: `undefined` \| \{ `fabricId`: [`FabricId`](../modules/exports_datatype.md#fabricid) ; `fabricIndex`: [`FabricIndex`](../modules/exports_datatype.md#fabricindex) ; `label`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `rootVendorId`: [`VendorId`](../modules/exports_datatype.md#vendorid)  } ; `isPeerActive`: `boolean` ; `lastActiveTimestamp`: `undefined` \| `number` ; `lastInteractionTimestamp`: `undefined` \| `number` ; `name`: `string` ; `nodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `numberOfActiveSubscriptions`: `number` ; `peerNodeId`: [`NodeId`](../modules/exports_datatype.md#nodeid) ; `secure`: `boolean`  }[]
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:58
+packages/matter.js/dist/esm/session/SessionManager.d.ts:60
 
 ___
 
 ### getNextAvailableSessionId
 
-▸ **getNextAvailableSessionId**(): `number`
+▸ **getNextAvailableSessionId**(): `Promise`\<`number`\>
 
 #### Returns
 
-`number`
+`Promise`\<`number`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:46
+packages/matter.js/dist/esm/session/SessionManager.d.ts:47
 
 ___
 
@@ -258,13 +327,13 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:48
+packages/matter.js/dist/esm/session/SessionManager.d.ts:49
 
 ___
 
 ### getSession
 
-▸ **getSession**(`sessionId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
+▸ **getSession**(`sessionId`): `undefined` \| [`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -274,17 +343,17 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
+`undefined` \| [`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:47
+packages/matter.js/dist/esm/session/SessionManager.d.ts:48
 
 ___
 
 ### getSessionForNode
 
-▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
+▸ **getSessionForNode**(`fabric`, `nodeId`): `undefined` \| [`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Parameters
 
@@ -295,25 +364,31 @@ ___
 
 #### Returns
 
-`undefined` \| [`Session`](../interfaces/exports_session.Session.md)\<`ContextT`\>
+`undefined` \| [`SecureSession`](exports_session.SecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:49
+packages/matter.js/dist/esm/session/SessionManager.d.ts:50
 
 ___
 
 ### getUnsecureSession
 
-▸ **getUnsecureSession**(): [`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
+▸ **getUnsecureSession**(`sourceNodeId?`): `undefined` \| [`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `sourceNodeId?` | [`NodeId`](../modules/exports_datatype.md#nodeid) |
 
 #### Returns
 
-[`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
+`undefined` \| [`UnsecureSession`](exports_session.UnsecureSession.md)\<`ContextT`\>
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:51
+packages/matter.js/dist/esm/session/SessionManager.d.ts:52
 
 ___
 
@@ -333,7 +408,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:57
+packages/matter.js/dist/esm/session/SessionManager.d.ts:59
 
 ___
 
@@ -354,7 +429,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:50
+packages/matter.js/dist/esm/session/SessionManager.d.ts:51
 
 ___
 
@@ -414,7 +489,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:54
+packages/matter.js/dist/esm/session/SessionManager.d.ts:56
 
 ___
 
@@ -428,7 +503,7 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:56
+packages/matter.js/dist/esm/session/SessionManager.d.ts:58
 
 ___
 
@@ -448,4 +523,4 @@ ___
 
 #### Defined in
 
-packages/matter.js/dist/esm/session/SessionManager.d.ts:55
+packages/matter.js/dist/esm/session/SessionManager.d.ts:57

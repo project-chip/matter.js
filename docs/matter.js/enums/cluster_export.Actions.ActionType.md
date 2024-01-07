@@ -39,7 +39,7 @@ Example: flash all lights in the house when CO sensor triggers.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:108](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L108)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:108](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L108)
 
 ___
 
@@ -58,7 +58,7 @@ started, stopped, paused, resumed. Example: see example 3.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:72](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L72)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:72](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L72)
 
 ___
 
@@ -80,7 +80,7 @@ Example: lock the doors when the server’s system has detected no one is at hom
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:85](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L85)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:85](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L85)
 
 ___
 
@@ -100,7 +100,7 @@ Example: play a pattern on the lights in the living room if there is someone in 
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:96](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L96)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:96](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L96)
 
 ___
 
@@ -112,7 +112,7 @@ Use this only when none of the other values applies
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:34](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L34)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:34](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L34)
 
 ___
 
@@ -137,7 +137,7 @@ Example: see examples 1 and 2.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:50](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L50)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:50](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L50)
 
 ___
 
@@ -158,4 +158,4 @@ Example: see example 4.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:62](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L62)
+[packages/matter.js/src/cluster/definitions/ActionsCluster.ts:62](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/ActionsCluster.ts#L62)

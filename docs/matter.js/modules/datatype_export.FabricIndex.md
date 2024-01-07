@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricIndex.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/datatype/FabricIndex.ts#L29)
+[packages/matter.js/src/datatype/FabricIndex.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L29)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[packages/matter.js/src/datatype/FabricIndex.ts:30](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/datatype/FabricIndex.ts#L30)
+[packages/matter.js/src/datatype/FabricIndex.ts:30](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/datatype/FabricIndex.ts#L30)

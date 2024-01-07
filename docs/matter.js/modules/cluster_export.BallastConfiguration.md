@@ -33,7 +33,7 @@ The value of the BallastConfiguration ballastStatus attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L29)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:29](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L29)
 
 ___
 
@@ -51,7 +51,7 @@ Attributes and commands for configuring a lighting ballast.
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:45](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L45)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:45](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L45)
 
 ___
 
@@ -73,4 +73,4 @@ The value of the BallastConfiguration lampAlarmMode attribute
 
 #### Defined in
 
-[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:36](https://github.com/project-chip/matter.js/blob/dfd1dc35/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L36)
+[packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts:36](https://github.com/project-chip/matter.js/blob/e87b236f/packages/matter.js/src/cluster/definitions/BallastConfigurationCluster.ts#L36)
