@@ -5,7 +5,8 @@
  */
 
 import { ImplementationError, NotInitializedError } from "../common/MatterError.js";
-import { MaybePromise } from "./Promises.js";
+import { LifecycleStatus } from "../log/LifecycleStatus.js";
+import { Tracker, MaybePromise } from "./Promises.js";
 
 /**
  * Create an instance of a class implementing the {@link AsyncConstructable}
@@ -68,6 +69,11 @@ export interface AsyncConstruction<T> extends Promise<T> {
     readonly error?: Error;
 
     /**
+     * Status of the constructed object.
+     */
+    readonly status: LifecycleStatus;
+
+    /**
      * If you omit the initializer parameter to {@link AsyncConstruction}
      * execution is deferred until you invoke this method.
      */
@@ -97,6 +103,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let canceled = false;
     let placeholderResolve: undefined | (() => void);
     let placeholderReject: undefined | ((error: any) => void)
+    let status = LifecycleStatus.Initializing;
 
     const self: AsyncConstruction<any> = {
         get ready() {
@@ -105,6 +112,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         get error() {
             return error;
+        },
+
+        get status() {
+            return status;
         },
 
         start(initializer: () => MaybePromise<void>) {
@@ -120,17 +131,22 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 if (promise) {
                     initialization.then(placeholderResolve, placeholderReject);
                 } else {
-                    promise = initialization;
+                    promise = Tracker.global.track(initialization, `${target.constructor.name} construction`);
                 }
                 initialization.then(
-                    () => ready = true,
+                    () => {
+                        ready = true;
+                        status = LifecycleStatus.Active;
+                    },
                     e => {
                         error = e;
-                        ready = true
+                        ready = true;
+                        status = LifecycleStatus.Incapacitated;
                     }
                 );
             } else {
                 ready = true;
+                status = LifecycleStatus.Active;
             }
         },
 
@@ -140,6 +156,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
             if (cancel) {
                 canceled = true;
+                status = LifecycleStatus.Destroyed;
                 cancel?.();
             }
         },
@@ -163,10 +180,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             if (!started) {
                 // Initialization has not started so we need to create a
                 // placeholder promise
-                promise = new Promise((resolve, reject) => {
+                promise = Tracker.global.track(new Promise((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
-                });
+                }), `${target.constructor.name} construction`);
             }
             if (promise) {
                 return promise.then(() => target).then(onfulfilled, onrejected);

@@ -13,11 +13,16 @@ import { Part } from "../../endpoint/Part.js";
  */
 export class IdentityConflictError extends ImplementationError {};
 
+/**
+ * Provides NodeServer and Part identification.
+ */
 export class IdentityService {
+    #nodeDescription: string;
     #port?: number;
     #index?: IndexBehavior;
 
-    constructor(root: Part, port?: number) {
+    constructor(root: Part, nodeDescription: string, port?: number) {
+        this.#nodeDescription = nodeDescription;
         this.#port = port;
 
         const acquireIndex = () => {
@@ -35,7 +40,14 @@ export class IdentityService {
     }
 
     /**
-     * This is the best we currently have in terms of a well-known node identifier.
+     * Textual description of the node.
+     */
+    get nodeDescription() {
+        return this.#nodeDescription;
+    }
+
+    /**
+     * The network port the node is listening on.
      */
     get port() {
         return this.#port;

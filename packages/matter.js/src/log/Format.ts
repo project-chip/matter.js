@@ -8,6 +8,7 @@ import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
+import { LifecycleStatus } from "./LifecycleStatus.js";
 
 /**
  * Get a formatter for the specified format.
@@ -61,6 +62,16 @@ interface Formatter {
     key(text: string): string;
     value(producer: Producer): string;
     emphasize(producer: Producer): string;
+    status(status: LifecycleStatus, producer: Producer): string;
+}
+
+const LifecycleIcons = {
+    [LifecycleStatus.Unknown]: "?",
+    [LifecycleStatus.Inactive]: "💤",
+    [LifecycleStatus.Initializing]: "⌛",
+    [LifecycleStatus.Active]: "✔",
+    [LifecycleStatus.Incapacitated]: "✘",
+    [LifecycleStatus.Destroyed]: "☠︎",
 }
 
 /**
@@ -89,20 +100,23 @@ function plaintextCreator() {
             const result = producer();
             indents--;
             return result;
-        },
+        }
     }
+}
+
+function statusIcon(status: LifecycleStatus) {
+    return LifecycleIcons[status] ?? LifecycleIcons[LifecycleStatus.Unknown]
 }
 
 function plainLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
     const creator = plaintextCreator();
 
     const formattedValues = renderDiagnostic(values, {
-        text: text => creator.text(text),
-        indent: producer => creator.indent(producer),
-        break: () => creator.break(),
+        ...creator,
         key: text => creator.text(`${text}: `),
         value: producer => producer(),
         emphasize: producer => creator.text(`*${producer()}*`),
+        status: (status, producer) => `${statusIcon(status)}${producer()}`,
     });
 
     return `${formatTime(now)} ${Level[level]} ${facility} ${prefix}${formattedValues}`;
@@ -149,9 +163,9 @@ interface Style {
 
 const Styles = {
     default: { color: "default" },
-    prefix: { color: "gray" },
+    prefix: { color: "default", dim: true },
     facility: { color: "gray", bold: true },
-    debug: { color: "default", dim: true },
+    debug: { color: "gray" },
     info: { color: "default" },
     notice: { color: "green" },
     warn: { color: "yellow" },
@@ -162,6 +176,12 @@ const Styles = {
     emphasized: { bold: true },
     ballotCheck: { color: "green" },
     ballotCross: { color: "red" },
+    unknown: { color: "gray" },
+    inactive: { color: "gray" },
+    initializing: { color: "yellow" },
+    active: { color: "green" },
+    incapacitated: { color: "red" },
+    destroyed: { color: "gray" },
 } as const satisfies Record<string, Style>;
 
 type StyleName = keyof typeof Styles;
@@ -223,6 +243,13 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
                 styles.pop();
                 return result;
             },
+
+            status: (status, producer) => {
+                styles.push(status);
+                const result = `${style(status, statusIcon(status))}${producer()}`;
+                styles.pop();
+                return result;
+            }
         }
     );
 
@@ -332,6 +359,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
             key: text => htmlSpan("key", `${escape(text)}:`) + " ",
             value: producer => htmlSpan("value", producer()),
             emphasize: producer => `<em>${producer()}</em>`,
+            status: (status, producer) => htmlSpan(`status-${status}`, producer()),
         },
     );
 
@@ -465,6 +493,14 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
                 throw new ImplementationError("Diagnostic dictionary is not an object");
             }
             return renderDictionary(value as object, formatter);
+
+        case LifecycleStatus.Unknown:
+        case LifecycleStatus.Inactive:
+        case LifecycleStatus.Initializing:
+        case LifecycleStatus.Active:
+        case LifecycleStatus.Incapacitated:
+        case LifecycleStatus.Destroyed:
+            return formatter.status(presentation, () => renderDiagnostic(value, formatter));
 
         default:
             throw new ImplementationError(`Unsupported diagnostic presentation "${presentation}"`);

@@ -19,6 +19,8 @@ import type { Part } from "../Part.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { BehaviorInitializer } from "./BehaviorInitializer.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
+import { LifecycleStatus } from "../../log/LifecycleStatus.js";
 
 const logger = Logger.get("Behaviors");
 
@@ -39,22 +41,16 @@ export class Behaviors {
         return this.#supported;
     }
 
-    /**
-     * The IDs of active {@link Behavior}s. 
-     */
-    get active() {
-        return Object.keys(this.#backings);
+    get status() {
+        const status = {} as Record<string, LifecycleStatus>;
+        for (const key in this.#supported) {
+            status[key] = this.#backings[key]?.status ?? LifecycleStatus.Inactive;
+        }
+        return status;
     }
 
-    /**
-     * The IDs of inactive {@link Behavior}s.
-     */
-    get inactive() {
-        const inactive = new Set(Object.keys(this.#supported));
-        for (const key of Object.keys(this.#backings)) {
-            inactive.delete(key);
-        }
-        return [ ...inactive ];
+    get [Diagnostic.value]() {
+        return Diagnostic.lifecycleList(this.status);
     }
 
     constructor(part: Part, supported: SupportedBehaviors, options: Record<string, object | undefined>) {
@@ -73,6 +69,20 @@ export class Behaviors {
         this.#part = part;
         this.#supported = supported;
         this.#options = options;
+    }
+
+    /**
+     * Obtain the initial state for a particular behavior if supported.  This
+     * is state values as present when the behavior is first initialized for a
+     * new part.
+     */
+    initialStateFor<const T extends Behavior.Type>(type: T) {
+        if (this.#supported[type.id]?.supports(type)) {
+            return {
+                ...type.defaults,
+                ...this.#options[type.id],
+            } as Behavior.StateOf<T>;
+        }
     }
 
     /**

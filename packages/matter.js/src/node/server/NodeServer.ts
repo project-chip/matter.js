@@ -21,7 +21,6 @@ import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
 import { ServerStore } from "./storage/ServerStore.js";
-import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { AsyncConstruction, asyncNew } from "../../util/AsyncConstruction.js";
 import { Lifecycle } from "../../endpoint/part/Lifecycle.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
@@ -31,9 +30,11 @@ import { PartStoreService } from "./storage/PartStoreService.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { IdentityService } from "./IdentityService.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
+import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
+import { BasicInformationBehavior } from "../../behavior/definitions/basic-information/BasicInformationBehavior.js";
 
 const logger = Logger.get("NodeServer");
-
+ 
 /**
  * Implementation of a Matter Node server.
  *
@@ -54,6 +55,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     #behaviorInitializer?: BehaviorInitializer;
     #identityService?: IdentityService;
     #uptime?: Diagnostic.Elapsed;
+    #interactionServer?: TransactionalInteractionServer;
 
     get owner() {
         return undefined;
@@ -216,6 +218,7 @@ export class NodeServer extends BaseNodeServer implements Node {
      * no longer needed.
      */
     async [Symbol.asyncDispose]() {
+        await this.#interactionServer?.[Symbol.asyncDispose]();
         await this.#rootServer?.[Symbol.asyncDispose]();
         await this.#store?.[Symbol.asyncDispose]();
     }
@@ -261,7 +264,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
             case IdentityService:
                 if (!this.#identityService) {
-                    this.#identityService = new IdentityService(this.#root, this.port);
+                    this.#identityService = new IdentityService(this.#root, this.description, this.port);
                 }
                 return this.#identityService as T;
         }
@@ -273,7 +276,8 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Textual description of the node used in diagnostic messages.
      */
     get description() {
-        return this.commissioningConfig.productDescription.name;
+        return this.#root.behaviors.initialStateFor(BasicInformationBehavior)?.productName
+            ?? `(unknown on port ${this.port})`;
     }
 
     get [Diagnostic.value]() {
@@ -317,24 +321,12 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     protected override emitActiveSessionsChanged(_fabric: FabricIndex): void {}
 
-    protected override createInteractionServer() {
-        return new TransactionalInteractionServer(
-            this.rootPart,
-            this.store,
-            this.#configuration.subscription
-        );
-    }
-
     protected override get sessionStorage(): StorageContext {
         return this.store.sessionStorage;
     }
 
     protected override get fabricStorage(): StorageContext {
         return this.store.fabricStorage;
-    }
-
-    protected override initializeEndpoints(): void {
-        // Nothing to do
     }
 
     protected override clearStorage(): Promise<void> {
@@ -353,5 +345,16 @@ export class NodeServer extends BaseNodeServer implements Node {
         if (transaction.status === Transaction.Status.Exclusive) {
             await transaction.commit();
         }
+    }
+
+    protected override async createMatterDevice() {
+        this.#interactionServer = new TransactionalInteractionServer(
+            this.rootPart,
+            this.store,
+            this.#configuration.subscription
+        );
+
+        return (await super.createMatterDevice())
+            .addProtocolHandler(this.#interactionServer);
     }
 }

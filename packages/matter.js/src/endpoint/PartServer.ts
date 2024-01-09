@@ -236,15 +236,12 @@ export class PartServer implements EndpointInterface {
             .serviceFor(IdentityService)
             .port;
 
-        const { active, inactive } = this.#part.behaviors;
-
-        return             Diagnostic.dict({
+        return Diagnostic.dict({
             "endpoint#": this.#part.number,
             type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
             port,
             "known": !isNew,
-            "active": active.length ? this.#part.behaviors.active.join(", ") : "(none)",
-            "inactive": inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
+            "behaviors": this.#part.behaviors,
         })
     }
 }

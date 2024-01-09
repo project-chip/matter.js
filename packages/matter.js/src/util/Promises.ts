@@ -101,7 +101,7 @@ export namespace MaybePromise {
  * Stores unfulfilled promises with metadata useful for diagnosing process
  * state.
  */
-class Tracker implements Environment.Task {
+export class Tracker implements Environment.Task {
     #parent: Tracker | undefined;
     #tracked = new Map<Promise<unknown>, Tracker.Descriptor>;
     

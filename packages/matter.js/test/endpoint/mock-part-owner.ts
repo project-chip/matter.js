@@ -62,7 +62,7 @@ export class MockOwner implements PartOwner {
             throw new InternalError("Multiple roots disallowed");
         }
         this.#root = part;
-        this.#identityService = new IdentityService(part);
+        this.#identityService = new IdentityService(part, "Test node");
         part.lifecycle.change(Lifecycle.Change.Installed);
     }
 
@@ -84,7 +84,7 @@ export class MockOwner implements PartOwner {
                     throw new ImplementationError(`No root so can't provice IndexBehavior`);
                 }
                 if (!this.#identityService) {
-                    this.#identityService = new IdentityService(this.#root);
+                    this.#identityService = new IdentityService(this.#root, "Test node");
                 }
                 return this.#identityService as T;
 

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { LifecycleStatus } from "./LifecycleStatus.js";
+
 /**
  * Logged values may implement this interface to customize presentation.
  * 
@@ -11,14 +13,14 @@
  * Diagnostics from common value types.
  */
 export interface Diagnostic {
-    readonly [Diagnostic.presentation]?: Diagnostic.Presentation,
+    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | LifecycleStatus,
     readonly [Diagnostic.value]?: unknown;
 }
 
 /**
  * Create a diagnostic giving a value a specific presentation.
  */
-export function Diagnostic(presentation: Diagnostic.Presentation, value: unknown): Diagnostic {
+export function Diagnostic(presentation: Diagnostic.Presentation | LifecycleStatus, value: unknown): Diagnostic {
     return {
         [Diagnostic.presentation]: presentation,
         [Diagnostic.value]: value,
@@ -47,13 +49,10 @@ export namespace Diagnostic {
     export const value = Symbol("value");
 
     /**
-     * Create a value that is emphasized in output.
+     * Create a value presented emphatically.
      */
     export function em(value: unknown) {
-        return Diagnostic(
-            Diagnostic.Presentation.Emphasized,
-            value,
-        )
+        return Diagnostic(Diagnostic.Presentation.Emphasized, value);
     }
 
     /**
@@ -133,6 +132,20 @@ export namespace Diagnostic {
                 ...stack,
             ]
         )
+    }
+
+    /**
+     * Create a diagnostic with a specific {@link LifecycleStatus}.
+     */
+    export function lifecycle(status: LifecycleStatus, value: unknown) {
+        return Diagnostic(status, value);
+    }
+
+    /**
+     * Create a diagnostic for a {@link LifecycleStatus.Map}.
+     */
+    export function lifecycleList(map: LifecycleStatus.Map<any>) {
+        return Object.entries(map).map(([label, status]) => Diagnostic(status, label));
     }
 
     export interface Elapsed {
