@@ -4,14 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger, Diagnostic } from "@project-chip/matter.js/log";
 import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
 import { Identifier, Integer, LowerIdentifier, Str } from "./html-translators.js";
 import { DeviceReference } from "./spec-types.js";
 import { Alias, Constant, Optional, translateRecordsToMatter, translateTable } from "./translate-table.js";
-import { Diagnostic } from "../../../../packages/matter.js/src/log/Diagnostic.js";
 
 const logger = Logger.get("translate-devices");
 

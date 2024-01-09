@@ -302,7 +302,7 @@ describe("Logger", () => {
             const result = logTestLine({ format: Format.HTML });
 
             expect(result?.message).equal(
-                '<span class="matter-log-matter-log-line"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> <span class="matter-log-level0">test</span></span>',
+                '<span class="matter-log-line debug"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> test</span>',
             );
         });
 
@@ -310,7 +310,7 @@ describe("Logger", () => {
             const result = logTestDict({ format: Format.HTML });
 
             expect(result?.message).equal(
-                '<span class="matter-log-matter-log-line"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> <span class="matter-log-level0">dict test <span class="matter-log-key">foo:</span> <span class="matter-log-value">bar</span> <span class="matter-log-key">biz:</span> <span class="matter-log-value">1</span></span></span>',
+                '<span class="matter-log-line debug"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">DEBUG</span> <span class="matter-log-facility">UnitTest</span> dict test <span class="matter-log-key">foo:</span> <span class="matter-log-value">bar</span> <span class="matter-log-key">biz:</span> <span class="matter-log-value">1</span></span>',
             );
         });
 
@@ -319,7 +319,7 @@ describe("Logger", () => {
                 Logger.format = Format.HTML;
                 logger.fatal("THIS IS", Diagnostic.em("VERY"), "IMPORTANT");
             });
-            expect(result?.message).equals('<span class="matter-log-matter-log-line"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> <span class="matter-log-level5">THIS IS <em>VERY</em> IMPORTANT</span></span>');
+            expect(result?.message).equals('<span class="matter-log-line fatal"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> THIS IS <em>VERY</em> IMPORTANT</span>');
         })
     });
 

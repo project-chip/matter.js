@@ -338,7 +338,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
     const np = prefix.replace(/ /g, "&nbsp;");
 
     return htmlSpan(
-        "matter-log-line",
+        `line ${Level[level].toLowerCase()}`,
         `${htmlSpan("time", formatTime(now))} ${htmlSpan("level", Level[level])} ${htmlSpan(
             "facility",
             facility,
@@ -417,7 +417,7 @@ function renderDictionary(value: object, formatter: Formatter) {
 }
 
 function valueFor(value: unknown) {
-    if (typeof value !== "object") {
+    if (typeof value !== "object" || value === null) {
         return value;
     }
     const proxied = (value as Diagnostic)[Diagnostic.value];
@@ -428,7 +428,7 @@ function valueFor(value: unknown) {
 }
 
 function presentationFor(value: unknown) {
-    if (typeof value !== "object") {
+    if (typeof value !== "object" || value === null) {
         return;
     }
     if (Diagnostic.presentation in (value as Diagnostic)) {
