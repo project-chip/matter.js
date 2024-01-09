@@ -40,6 +40,7 @@ import { NetworkOptions } from "./node/options/NetworkOptions.js";
 import { SubscriptionOptions } from "./node/options/SubscriptionOptions.js";
 import { BaseNodeServer, DevicePairingInformation } from "./node/server/BaseNodeServer.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
+import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import { CommissioningFlowType, DiscoveryCapabilitiesBitmap, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "./schema/PairingCodeSchema.js";
@@ -178,6 +179,8 @@ export class CommissioningServer extends BaseNodeServer {
     #endpointStructureStorage?: StorageContext;
     #subscriptionOptions: SubscriptionOptions;
     #eventHandler?: EventHandler;
+    #interactionServer?: InteractionServer;
+    #endpointStructure = new InteractionEndpointStructure;
 
     protected override networkConfig: NetworkOptions.Configuration;
     protected override commissioningConfig: CommissioningOptions.Configuration;
@@ -428,8 +431,8 @@ export class CommissioningServer extends BaseNodeServer {
         // We must register this event before creating an InteractionServer so
         // we initialize endpoint datasources before the InteractionServer
         // processes events
-        this.endpointStructure.change.on(() => {
-            for (const endpoint of this.endpointStructure.endpoints.values()) {
+        this.#endpointStructure.change.on(() => {
+            for (const endpoint of this.#endpointStructure.endpoints.values()) {
                 for (const cluster of endpoint.getAllClusterServers()) {
                     new CommissioningServerClusterDatasource(
                         endpoint,
@@ -532,7 +535,7 @@ export class CommissioningServer extends BaseNodeServer {
         logger.debug("Endpoint structure got updated ...");
         this.assignEndpointIds(); // Make sure to have unique endpoint ids
         this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
-        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
+        this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
     }
 
     getNextEndpointId(increase = true) {
@@ -547,6 +550,61 @@ export class CommissioningServer extends BaseNodeServer {
         this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
         this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
         this.#endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    }
+
+    override async close() {
+        if (this.#interactionServer) {
+            await this.#interactionServer.close();
+            this.#interactionServer = undefined;
+        }
+        this.#endpointStructure.destroy();
+
+        super.close();
+    }
+
+    protected override async createMatterDevice() {
+        if (
+            this.#storage === undefined ||
+            this.#endpointStructureStorage === undefined
+        ) {
+            throw new ImplementationError("Storage not initialized");
+        }
+
+        this.#interactionServer = new InteractionServer({
+            subscriptionOptions: this.#subscriptionOptions,
+            eventHandler: this.eventHandler,
+            endpointStructure: this.#endpointStructure,
+        });
+
+        this.nextEndpointId = this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+
+        this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint)
+
+        return (await super.createMatterDevice())
+            .addProtocolHandler(this.#interactionServer);
+    }
+
+    protected override emitCommissioningChanged(fabric: FabricIndex): void {
+        this.#commissioningChangedCallback?.(fabric);
+    }
+
+    protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
+        this.#activeSessionsChangedCallback?.(fabric);
+    }
+
+    protected override async clearStorage() {
+        this.storage.clear();
+    }
+
+    protected get eventHandler() {
+        if (!this.#eventHandler) {
+            this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
+        }
+        return this.#eventHandler;
     }
 
     private initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {
@@ -608,48 +666,6 @@ export class CommissioningServer extends BaseNodeServer {
             }
             this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
         }
-    }
-
-    protected initializeEndpoints() {
-        if (
-            this.#storage === undefined ||
-            this.#endpointStructureStorage === undefined
-        ) {
-            throw new ImplementationError("Storage not initialized");
-        }
-
-        this.nextEndpointId = this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
-
-        this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
-        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
-    }
-
-    protected override emitCommissioningChanged(fabric: FabricIndex): void {
-        this.#commissioningChangedCallback?.(fabric);
-    }
-
-    protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
-        this.#activeSessionsChangedCallback?.(fabric);
-    }
-
-    protected override async clearStorage() {
-        this.storage.clear();
-    }
-
-    protected override createInteractionServer() {
-        return new InteractionServer({
-            subscriptionOptions: this.#subscriptionOptions,
-            eventHandler: this.eventHandler,
-            endpointStructure: this.endpointStructure,
-        })
-    }
-
-    protected get eventHandler() {
-        if (!this.#eventHandler) {
-            this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
-        }
-        return this.#eventHandler;
     }
 }
 

@@ -5,7 +5,7 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { Agent } from "../endpoint/Agent.js";
+import type { Agent } from "../endpoint/Agent.js";
 import type { Part } from "../endpoint/Part.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { EventEmitter } from "../util/Observable.js";
@@ -145,5 +145,12 @@ export abstract class BehaviorBacking {
             this.#events = new this.#type.Events();
         }
         return this.#events;
+    }
+
+    /**
+     * The status of the behavior.
+     */
+    get status() {
+        return this.construction.status;
     }
 }

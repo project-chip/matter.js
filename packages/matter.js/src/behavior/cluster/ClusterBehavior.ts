@@ -43,6 +43,16 @@ export class ClusterBehavior extends Behavior {
     #cluster: ClusterType;
 
     /**
+     * TODO - this disables lazy loading of behaviors.  This is desirable for
+     * small-scale nodes but for large nodes lazy init may be useful.  However
+     * this requires refactor of InteractionEndpointStructure which eagerly
+     * caches the entire node structure.  Refactoring there is desirable anyway
+     * so maintenance of that cache is less expensive; revisit this when that
+     * refactoring is complete.
+     */
+    static override readonly immediate = true;
+
+    /**
      * The ID of ClusterBehavior implementations is the uncapitalized cluster
      * name.
      */
