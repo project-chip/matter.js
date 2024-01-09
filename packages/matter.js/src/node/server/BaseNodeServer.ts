@@ -25,8 +25,6 @@ import { MdnsBroadcaster } from "../../mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "../../mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "../../mdns/MdnsScanner.js";
 import { UdpInterface } from "../../net/UdpInterface.js";
-import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
-import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
 import {
     DiscoveryCapabilitiesBitmap,
@@ -66,9 +64,6 @@ export abstract class BaseNodeServer implements MatterNode {
     #mdnsBroadcaster?: MdnsInstanceBroadcaster;
 
     #deviceInstance?: MatterDevice;
-    #interactionServer?: InteractionServer;
-
-    protected endpointStructure = new InteractionEndpointStructure;
 
     protected readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
@@ -186,7 +181,7 @@ export abstract class BaseNodeServer implements MatterNode {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
 
-        if (this.#interactionServer !== undefined && this.#deviceInstance !== undefined) {
+        if (this.#deviceInstance !== undefined) {
             logger.debug("Device already initialized, just advertise the instance again ...");
             await this.#deviceInstance.announce();
             return;
@@ -197,45 +192,9 @@ export abstract class BaseNodeServer implements MatterNode {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
 
-        this.#interactionServer = this.createInteractionServer();
+        this.#deviceInstance = await this.createMatterDevice();
+        this.#deviceInstance.addScanner(this.#mdnsScanner);
 
-        this.initializeEndpoints();
-
-        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
-
-        // TODO adjust later and refactor MatterDevice
-        this.#deviceInstance = new MatterDevice(
-            this.commissioningConfig,
-            this.sessionStorage,
-            this.fabricStorage,
-            (fabricIndex: FabricIndex) => {
-                const fabricsCount = this.#deviceInstance?.getFabrics().length ?? 0;
-                if (fabricsCount === 1) {
-                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
-                    // TODO Refactor this out when we remove MatterDevice class
-                    if (
-                        this.#mdnsBroadcaster !== undefined &&
-                        !this.#deviceInstance?.hasBroadcaster(this.#mdnsBroadcaster)
-                    ) {
-                        this.#deviceInstance?.addBroadcaster(this.#mdnsBroadcaster);
-                    }
-                }
-                if (fabricsCount === 0) {
-                    // When last fabric gets deleted we do a factory reset
-                    this.factoryReset()
-                        .then(() => this.emitCommissioningChanged(fabricIndex))
-                        .catch(error => logger.error("Error while doing factory reset of the device", error));
-                } else {
-                    this.emitCommissioningChanged(fabricIndex);
-                }
-            },
-            (fabricIndex: FabricIndex) => this.emitActiveSessionsChanged(fabricIndex),
-        )
-            .addTransportInterface(
-                await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6),
-            )
-            .addScanner(this.#mdnsScanner)
-            .addProtocolHandler(this.#interactionServer);
         if (!this.networkConfig.disableIpv4) {
             this.#deviceInstance.addTransportInterface(
                 await UdpInterface.create("udp4", this.networkConfig.port, this.networkConfig.listeningAddressIpv4),
@@ -283,10 +242,6 @@ export abstract class BaseNodeServer implements MatterNode {
             });
         }
     }
-
-    protected abstract initializeEndpoints(): void;
-
-    protected abstract createInteractionServer(): InteractionServer;
 
     /**
      * Is the device commissioned?
@@ -348,15 +303,12 @@ export abstract class BaseNodeServer implements MatterNode {
      */
     async close() {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
-        await this.#interactionServer?.close();
-        this.#interactionServer = undefined;
         await this.#deviceInstance?.stop();
         this.#deviceInstance = undefined;
-        this.endpointStructure.destroy();
     }
  
     async factoryReset() {
-        const wasStarted = this.#interactionServer !== undefined || this.#deviceInstance !== undefined;
+        const wasStarted = this.#deviceInstance !== undefined;
         let fabrics = new Array<Fabric>();
         if (wasStarted) {
             fabrics = this.commissioned ? this.#deviceInstance?.getFabrics() ?? [] : [];
@@ -457,5 +409,39 @@ export abstract class BaseNodeServer implements MatterNode {
         if (!this.commissioned) return [];
         const allSessions = this.#deviceInstance?.getActiveSessionInformation() ?? [];
         return allSessions.filter(({ fabric }) => fabricIndex === undefined || fabric?.fabricIndex === fabricIndex);
+    }
+
+    // TODO adjust later and refactor MatterDevice
+    protected async createMatterDevice() {
+        return new MatterDevice(
+            this.commissioningConfig,
+            this.sessionStorage,
+            this.fabricStorage,
+            (fabricIndex: FabricIndex) => {
+                const fabricsCount = this.#deviceInstance?.getFabrics().length ?? 0;
+                if (fabricsCount === 1) {
+                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
+                    // TODO Refactor this out when we remove MatterDevice class
+                    if (
+                        this.#mdnsBroadcaster !== undefined &&
+                        !this.#deviceInstance?.hasBroadcaster(this.#mdnsBroadcaster)
+                    ) {
+                        this.#deviceInstance?.addBroadcaster(this.#mdnsBroadcaster);
+                    }
+                }
+                if (fabricsCount === 0) {
+                    // When last fabric gets deleted we do a factory reset
+                    this.factoryReset()
+                        .then(() => this.emitCommissioningChanged(fabricIndex))
+                        .catch(error => logger.error("Error while doing factory reset of the device", error));
+                } else {
+                    this.emitCommissioningChanged(fabricIndex);
+                }
+            },
+            (fabricIndex: FabricIndex) => this.emitActiveSessionsChanged(fabricIndex),
+        )
+            .addTransportInterface(
+                await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6),
+            );
     }
 }

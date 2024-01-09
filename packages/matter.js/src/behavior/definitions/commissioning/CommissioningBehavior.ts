@@ -26,6 +26,7 @@ import { Ble } from "../../../ble/Ble.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { FORBIDDEN_PASSCODES } from "../../../CommissioningServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
+import { IdentityService } from "../../../node/server/IdentityService.js";
 
 const logger = Logger.get("Commissioning");
 
@@ -86,7 +87,7 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            `Node is uncommissioned`,
+            "Node", Diagnostic.em(this.part.serviceFor(IdentityService).nodeDescription), "is uncommissioned",
             Diagnostic.dict({
                 passcode,
                 discriminator,

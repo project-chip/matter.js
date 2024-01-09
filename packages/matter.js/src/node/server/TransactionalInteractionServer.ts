@@ -49,6 +49,8 @@ interface InternalSession extends Session<MatterDevice> {
  * light for now.
  */
 export class TransactionalInteractionServer extends InteractionServer {
+    #endpointStructure: InteractionEndpointStructure;
+
     constructor(root: Part, store: ServerStore, subscriptionOptions: SubscriptionOptions) {
         const structure = new InteractionEndpointStructure;
         root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
@@ -57,6 +59,12 @@ export class TransactionalInteractionServer extends InteractionServer {
             endpointStructure: structure,
             subscriptionOptions: subscriptionOptions,
         })
+        this.#endpointStructure = structure;
+    }
+
+    async [Symbol.asyncDispose]() {
+        await this.close();
+        this.#endpointStructure.destroy();
     }
 
     /**

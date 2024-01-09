@@ -140,7 +140,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             for (const subscription of this.#subscriptionMap.values()) {
                 subscription.updateSubscription();
             }
-        })
+        });
     }
 
     getId() {
