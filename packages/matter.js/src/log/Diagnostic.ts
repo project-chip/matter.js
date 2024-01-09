@@ -90,8 +90,15 @@ export namespace Diagnostic {
                 message = error.toString();
             }
         }
-        if (message === undefined) {
-            message = "(unknown error)";
+        if (message === undefined || message === null || message === "") {
+            if (error instanceof Error) {
+                message = error.constructor.name;
+                if (message === "Error") {
+                    message = "(unknown error)";
+                }
+            } else {
+                message = "(unknown error)";
+            }
         }
         if (!stack) {
             return message;
@@ -113,6 +120,11 @@ export namespace Diagnostic {
         }
 
         stack = stack.trim().split("\n").map((frame: string) => frame.trim());
+
+        // Node helpfully gives us this if there's no message
+        if (stack[0] === "Error") {
+            stack.shift();
+        }
 
         return Diagnostic(
             Presentation.List,
