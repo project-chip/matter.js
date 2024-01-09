@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger, Diagnostic } from "@project-chip/matter.js/log";
 import { Specification } from "@project-chip/matter.js/model";
 import { loadHtml } from "./spec-input.js";
 import { HtmlReference } from "./spec-types.js";
-import { Diagnostic } from "../../../../packages/matter.js/src/log/Diagnostic.js";
 
 const logger = Logger.get("scan-index");
 

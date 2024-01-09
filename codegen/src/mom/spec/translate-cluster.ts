@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger, Diagnostic } from "@project-chip/matter.js/log";
 import {
     AttributeElement,
     ClusterElement,
@@ -27,7 +27,7 @@ import {
     translateRecordsToMatter,
     translateTable,
 } from "./translate-table.js";
-import { Diagnostic } from "../../../../packages/matter.js/src/log/Diagnostic.js";
+
 
 const logger = Logger.get("translate-cluster");
 
