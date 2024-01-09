@@ -137,7 +137,7 @@ export class BlenoBleServer implements Channel<ByteArray> {
     private writeConformationResolver: ((value: void) => void) | undefined;
 
     private clientAddress: string | undefined;
-    private btpHandshakeTimeout = Time.getTimer(BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
+    private btpHandshakeTimeout = Time.getTimer("BTP handshake timeout", BTP_CONN_RSP_TIMEOUT_MS, () => this.btpHandshakeTimeoutTriggered());
 
     private readonly matterBleService;
 

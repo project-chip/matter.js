@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger, Diagnostic } from "@project-chip/matter.js/log";
 import { DeviceTypeElement, FieldElement, RequirementElement } from "@project-chip/matter.js/model";
 import { camelize } from "../../util/string.js";
 import { addDocumentation } from "./add-documentation.js";
@@ -115,7 +115,7 @@ function createDevice(deviceRef: DeviceReference) {
         }),
     ];
 
-    logger.debug("metadata", Logger.dict({ ...definition, revision, type: metadata.superset }));
+    logger.debug("metadata", Diagnostic.dict({ ...definition, revision, type: metadata.superset }));
 
     return device;
 }

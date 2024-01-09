@@ -118,6 +118,7 @@ export class AdministratorCommissioningServer extends Base {
             `Commissioning window timer started for ${commissioningTimeout} seconds for ${this.context.session?.name}.`,
         );
         this.internal.commissioningWindowTimeout = Time.getTimer(
+            "Commissioning timeout",
             commissioningTimeout * 1000,
             async () => await this.#closeCommissioningWindow(),
         ).start();

@@ -6,7 +6,10 @@
 
 import { CommissioningController } from "../CommissioningController.js";
 import { MatterServer } from "../MatterServer.js";
+import { Environment } from "../common/Environment.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { StorageManager } from "../storage/StorageManager.js";
 import { Node } from "./Node.js";
 import { ServerOptions } from "./options/ServerOptions.js";
@@ -21,7 +24,7 @@ enum Status {
 /**
  * Host exposes one or more {@link Node} instances to a Matter network.
  */
-export class Host {
+export class Host implements Environment.Task {
     // We share configuration with the server
     #configuration: ServerOptions.Configuration;
 
@@ -36,13 +39,6 @@ export class Host {
     // until it completes to check the abort flag and this property is
     // undefined
     #abort?: () => void;
-
-    // The task registered with the environment.  On Node SIGINT triggers task
-    // abort
-    task = {
-        name: "Node execution",
-        abort: () => this.abort(),
-    };
 
     constructor(options?: ServerOptions) {
         this.#configuration = ServerOptions.configurationFor(options);
@@ -70,7 +66,7 @@ export class Host {
 
         let storage: StorageManager | undefined;
 
-        await environment.tasks.add(this.task);
+        await environment.tasks.add(this);
 
         try {
             try {
@@ -122,7 +118,8 @@ export class Host {
             // Can't abort this
             await storage?.close();
 
-            await environment.tasks.delete(this.task);
+            await environment.tasks.delete(this);
+            DiagnosticSource.delete(this);
         }
         this.#status = Status.INACTIVE;
     }
@@ -140,6 +137,18 @@ export class Host {
         }
         this.#status = Status.ABORTED;
         this.#abort?.();
+    }
+
+    get name() {
+        return "Active nodes";
+    }
+
+    get [Diagnostic.presentation]() {
+        return Diagnostic.Presentation.List;
+    }
+
+    get [Diagnostic.value]() {
+        return this.#nodes;
     }
 
     private get running() {

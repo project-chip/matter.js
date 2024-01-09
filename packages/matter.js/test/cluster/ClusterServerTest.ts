@@ -23,7 +23,7 @@ import { VendorId } from "../../src/datatype/VendorId.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
 import { Endpoint } from "../../src/device/Endpoint.js";
 import { Fabric } from "../../src/fabric/Fabric.js";
-import { Level } from "../../src/log/Logger.js";
+import { Level } from "../../src/log/Level.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { captureLogs } from "../support/logging.js";

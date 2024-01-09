@@ -15,6 +15,7 @@ import {
     asClusterServerInternal,
 } from "../../cluster/server/ClusterServerTypes.js";
 import type { Part } from "../../endpoint/Part.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
 import { SecureSession } from "../../session/SecureSession.js";
@@ -147,7 +148,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
     return ({ request, session, message }) => {
         logger.debug(
             `Invoke <part ${backing.part.id}>.${backing.type.id}.${name}`,
-            typeof request === "object" ? Logger.dict(request as object) : request,
+            request && typeof request === "object" ? Diagnostic.dict(request) : request,
         );
         return withBehavior(backing, session, { message }, behavior =>
             (behavior as unknown as Record<string, (arg: any) => any>)[name](request),

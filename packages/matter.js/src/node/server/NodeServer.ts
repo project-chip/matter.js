@@ -30,6 +30,7 @@ import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { PartStoreService } from "./storage/PartStoreService.js";
 import { ServerStore } from "./storage/ServerStore.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 
 const logger = Logger.get("NodeServer");
 
@@ -52,6 +53,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     #construction: AsyncConstruction<NodeServer>;
     #behaviorInitializer?: BehaviorInitializer;
     #identityService?: IdentityService;
+    #uptime?: Diagnostic.Elapsed;
 
     get owner() {
         return undefined;
@@ -133,6 +135,11 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Bring the device online.
      */
     override async start() {
+        if (this.#uptime) {
+            throw new ImplementationError("Already started");
+        }
+        this.#uptime = Diagnostic.elapsed();
+
         await this.construction;
 
         const agent = this.root;
@@ -146,7 +153,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         await super.start();
 
-        logger.notice(`Node "${this.description}" is online`);
+        logger.notice("Node", Diagnostic.em(this.description), "is online");
     }
 
     /**
@@ -264,6 +271,16 @@ export class NodeServer extends BaseNodeServer implements Node {
      */
     get description() {
         return this.commissioningConfig.productDescription.name;
+    }
+
+    get [Diagnostic.value]() {
+        return [
+            this.description,
+            Diagnostic.dict({ port: this.port, uptime: this.#uptime }),
+            Diagnostic.list([
+                this.rootEndpoint[Diagnostic.value],
+            ])
+        ]
     }
 
     protected override get commissioningConfig() {

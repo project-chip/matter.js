@@ -48,8 +48,8 @@ export class FailSafeManager {
         private readonly expiryCallback: () => Promise<void>,
         readonly rootEndpoint: EndpointInterface,
     ) {
-        this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire());
-        this.maxCumulativeFailsafeTimer = Time.getTimer(maxCumulativeFailsafeSeconds * 1000, () => this.expire());
+        this.failSafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire());
+        this.maxCumulativeFailsafeTimer = Time.getTimer("Max cumulative failsafe", maxCumulativeFailsafeSeconds * 1000, () => this.expire());
 
         this.#construction = AsyncConstruction(this, async () => {
             await this.storeEndpointState();
@@ -141,7 +141,7 @@ export class FailSafeManager {
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
             // matches the fail-safe context’s associated Fabric, then the fail-safe timer SHALL be re- armed to expire
             // in ExpiryLengthSeconds.
-            this.failSafeTimer = Time.getTimer(expiryLengthSeconds * 1000, () => this.expire()).start();
+            this.failSafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () => this.expire()).start();
         }
     }
 

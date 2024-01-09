@@ -134,10 +134,12 @@ export class PairedNode {
     private readonly endpoints = new Map<EndpointNumber, Endpoint>();
     private interactionClient?: InteractionClient;
     private readonly reconnectDelayTimer = Time.getTimer(
+        "Reconnect delay",
         STRUCTURE_UPDATE_TIMEOUT_MS,
         async () => await this.reconnect(),
     );
     private readonly updateEndpointStructureTimer = Time.getTimer(
+        "Endpoint structure update",
         5_000,
         async () => await this.updateEndpointStructure(),
     );

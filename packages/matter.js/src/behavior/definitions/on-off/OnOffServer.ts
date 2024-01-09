@@ -103,7 +103,7 @@ export class OnOffServer extends Base {
     protected get timedOnTimer() {
         let timer = this.internal.timedOnTimer;
         if (timer === undefined) {
-            timer = this.internal.timedOnTimer = Time.getPeriodicTimer(100, () => {
+            timer = this.internal.timedOnTimer = Time.getPeriodicTimer("Timed on", 100, () => {
                 let time = (this.state.onTime ?? 0) - 1;
                 if (time <= 0) {
                     time = 0;
@@ -121,7 +121,7 @@ export class OnOffServer extends Base {
     protected get delayedOffTimer() {
         let timer = this.internal.delayedOffTimer;
         if (timer === undefined) {
-            timer = this.internal.delayedOffTimer = Time.getTimer(100, () => {
+            timer = this.internal.delayedOffTimer = Time.getTimer("Delayed off", 100, () => {
                 let time = (this.state.offWaitTime ?? 0) - 1;
                 if (time <= 0) {
                     time = 0;

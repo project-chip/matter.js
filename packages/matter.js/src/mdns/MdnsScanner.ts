@@ -100,7 +100,7 @@ export class MdnsScanner implements Scanner {
         multicastServer.onMessage((message, remoteIp, netInterface) =>
             this.handleDnsMessage(message, remoteIp, netInterface),
         );
-        this.periodicTimer = Time.getPeriodicTimer(60 * 1000 /* 1 mn */, () => this.expire()).start();
+        this.periodicTimer = Time.getPeriodicTimer("Discovered node expiration", 60 * 1000 /* 1 mn */, () => this.expire()).start();
     }
 
     /**
@@ -116,7 +116,11 @@ export class MdnsScanner implements Scanner {
         const queries = allQueries.flatMap(({ queries }) => queries);
         const answers = allQueries.flatMap(({ answers }) => answers);
 
-        this.queryTimer = Time.getTimer(this.nextAnnounceIntervalSeconds * 1000, () => this.sendQueries()).start();
+        this.queryTimer = Time.getTimer(
+            "MDNS discovery",
+            this.nextAnnounceIntervalSeconds * 1000,
+            () => this.sendQueries()
+        ).start();
 
         logger.debug(
             `Sending ${queries.length} query records for ${this.activeAnnounceQueries.size} queries with ${answers.length} known answers. Re-Announce in ${this.nextAnnounceIntervalSeconds} seconds`,
@@ -190,7 +194,11 @@ export class MdnsScanner implements Scanner {
         logger.debug(`Set ${queries.length} query records for query ${queryId}: ${JSON.stringify(queries)}`);
         this.queryTimer?.stop();
         this.nextAnnounceIntervalSeconds = START_ANNOUNCE_INTERVAL_SECONDS; // Reset query interval
-        this.queryTimer = Time.getTimer(0, () => this.sendQueries()).start();
+        this.queryTimer = Time.getTimer(
+            "MDNS discovery",
+            0,
+            () => this.sendQueries(),
+        ).start();
     }
 
     private getActiveQueryEarlierAnswers() {
@@ -264,7 +272,7 @@ export class MdnsScanner implements Scanner {
         const { promise, resolver } = createPromise<void>();
         const timer =
             timeoutSeconds !== undefined
-                ? Time.getTimer(timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start()
+                ? Time.getTimer("MDNS timeout", timeoutSeconds * 1000, () => this.finishWaiter(queryId, true)).start()
                 : undefined;
         this.recordWaiters.set(queryId, { resolver, timer, resolveOnUpdatedRecords });
         logger.debug(

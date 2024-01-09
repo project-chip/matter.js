@@ -4,11 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "../log/Diagnostic.js";
+import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import type { Storage } from "../storage/Storage.js";
 import { StorageManager } from "../storage/StorageManager.js";
+import { Time } from "../time/Time.js";
 import { BasicSet } from "../util/Set.js";
 import { NoProviderError } from "./MatterError.js";
+
+const logger = Logger.get("Environment");
 
 /**
  * Access to general platform-dependent features.
@@ -52,7 +57,9 @@ export class Environment {
      */
     get tasks() {
         if (!this.#tasks) {
-            this.#tasks = this.loadTasks();
+            this.#tasks = new BasicSet;
+            this.#tasks.added.on(task => DiagnosticSource.add(task));
+            this.#tasks.deleted.on(task => DiagnosticSource.delete(task));
         }
         return this.#tasks;
     }
@@ -68,12 +75,36 @@ export class Environment {
         return manager;
     }
 
-    protected loadVariables(): Record<string, any> {
-        return {};
+    /**
+     * Abort tasks that are abortable.
+     */
+    interrupt() {
+        if (this.#tasks) {
+            for (const task of this.#tasks) {
+                try {
+                    task.abort?.();
+                } catch (e) {
+                    logger.error(`Unhandled error aborting "${task.name}":`, e);
+                }
+            }
+        }
     }
 
-    protected loadTasks(): BasicSet<Environment.Task> {
-        return new BasicSet<Environment.Task>();
+    /**
+     * Display tasks that supply diagnostics.
+     */
+    diagnose() {
+        Time.getTimer("Diagnostics", 0, () => {
+            try {
+                logger.notice("Diagnostics follow", DiagnosticSource);
+            } catch (e) {
+                logger.error(`Unhandled error gathering diagnostics:`, e);
+            }
+        }).start();
+    }
+
+    protected loadVariables(): Record<string, any> {
+        return {};
     }
 
     protected loadStorage(): Storage {
@@ -84,7 +115,8 @@ export class Environment {
 export namespace Environment {
     export interface Task {
         name: string;
-        abort(): void;
+        abort?: () => void;
+        [Diagnostic.value]: {};
     }
 }
 
