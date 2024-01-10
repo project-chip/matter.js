@@ -87,11 +87,33 @@ export namespace MaybePromise {
      * {@link MaybePromise} is not a {@link Promise}, otherwise the same as a
      * normal {@link Promise.then}.
      */
-    export function then<I, O>(value: MaybePromise<I>, resolve: (input: I) => O): MaybePromise<O> {
-        if (is(value)) {
-            return value.then(resolve);
+    export function then<I, O1 = never, O2 = never>(
+        producer: MaybePromise<I> | (() => MaybePromise<I>),
+        resolve?: (input: I) => O1,
+        reject?: (error: any) => O2
+    ): MaybePromise<O1 | O2> {
+        try {
+            let value;
+            if (producer instanceof Function) {
+                value = producer();
+            } else {
+                value = producer;
+            }
+            if (is(value)) {
+                return value.then(resolve, reject);
+            }
+            if (resolve) {
+                return resolve(value);
+            }
+        } catch (e) {
+            if (reject) {
+                return reject(e);
+            }
+            throw e;
         }
-        return resolve(value);
+
+        // Make TypeScript happy
+        return undefined as MaybePromise<O1 | O2>;
     }
 }
 

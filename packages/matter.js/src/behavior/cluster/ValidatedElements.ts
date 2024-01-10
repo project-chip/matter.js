@@ -12,7 +12,7 @@ import { Logger } from "../../log/Logger.js";
 import { Behavior } from "../Behavior.js";
 import { ClusterBehavior } from "./ClusterBehavior.js";
 
-const logger = Logger.get("ElementSupport");
+const logger = Logger.get("ValidatedElements");
 
 const GlobalAttributeNames = new Set(Object.keys(GlobalAttributes({})));
 

@@ -29,6 +29,11 @@ const logger = Logger.get("OperationalCredentials");
  * TODO - currently "source of truth" for fabric data is persisted by
  * FabricManager.  I'd probably convert so we just load fabrics from persisted
  * OperationalCredentials state but right now we just sync the state
+ * 
+ * TODO - we either need to change source of truth as mentioned above or sync
+ * state.  Perhaps just at startup but most complete solution would be to hook
+ * fabric for all changes.  Right now this code assumes it's the only source of
+ * fabric mutation
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
     declare internal: OperationalCredentialsServer.Internal;
@@ -192,7 +197,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         // Update attributes
-        this.elevate(() => {
+        this.asAdmin(() => {
             this.state.fabrics[fabric.fabricIndex] = {
                 fabricId: fabric.fabricId,
                 label: fabric.label,

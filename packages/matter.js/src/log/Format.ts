@@ -8,7 +8,7 @@ import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
-import { LifecycleStatus } from "./LifecycleStatus.js";
+import { LifecycleStatus } from "../common/Lifecycle.js";
 
 /**
  * Get a formatter for the specified format.
@@ -61,7 +61,8 @@ interface Formatter {
     break(): string;
     key(text: string): string;
     value(producer: Producer): string;
-    emphasize(producer: Producer): string;
+    strong(producer: Producer): string;
+    weak(producer: Producer): string;
     status(status: LifecycleStatus, producer: Producer): string;
 }
 
@@ -114,8 +115,9 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
     const formattedValues = renderDiagnostic(values, {
         ...creator,
         key: text => creator.text(`${text}: `),
-        value: producer => producer(),
-        emphasize: producer => creator.text(`*${producer()}*`),
+        value: producer => creator.text(producer()),
+        strong: producer => creator.text(`*${producer()}*`),
+        weak: producer => creator.text(producer()),
         status: (status, producer) => `${statusIcon(status)}${producer()}`,
     });
 
@@ -173,7 +175,8 @@ const Styles = {
     fatal: { color: "red", bold: true },
     key: { color: "blue" },
     value: { color: "default", dim: true },
-    emphasized: { bold: true },
+    strong: { bold: true },
+    weak: { dim: true },
     ballotCheck: { color: "green" },
     ballotCross: { color: "red" },
     unknown: { color: "gray" },
@@ -237,8 +240,15 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
                 return result;
             },
 
-            emphasize: producer => {
-                styles.push("emphasized");
+            strong: producer => {
+                styles.push("strong");
+                const result = producer();
+                styles.pop();
+                return result;
+            },
+
+            weak: producer => {
+                styles.push("weak");
                 const result = producer();
                 styles.pop();
                 return result;
@@ -358,7 +368,8 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
             indent: producer => htmlSpan("indent", producer()),
             key: text => htmlSpan("key", `${escape(text)}:`) + " ",
             value: producer => htmlSpan("value", producer()),
-            emphasize: producer => `<em>${producer()}</em>`,
+            strong: producer => `<em>${producer()}</em>`,
+            weak: producer => htmlSpan(`weak`, producer()),
             status: (status, producer) => htmlSpan(`status-${status}`, producer()),
         },
     );
@@ -380,6 +391,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
 function renderValue(
     value: unknown,
     formatter: Formatter,
+    squash: boolean,
 ): string {
     if (value === undefined) {
         return "undefined";
@@ -401,10 +413,15 @@ function renderValue(
         if (list.length > 1) {
             return renderList(list, formatter);
         }
-        return list[0].map(e => renderDiagnostic(e, formatter)).join(" ");
+        return list[0].map(e => {
+            if (typeof e === "string" && !squash) {
+                e = e.trim();
+            }
+            return renderDiagnostic(e, formatter);
+        }).join(squash ? "" : " ");
     }
 
-    const text = value.toString().trim();
+    const text = typeof value === "string" ? value : value.toString().trim();
     if (text.indexOf("\n") === -1) {
         return formatter.text(text);
     }
@@ -477,7 +494,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
     switch (presentation) {
         case undefined:
-            return renderValue(value, formatter);
+            return renderValue(value, formatter, false);
 
         case Diagnostic.Presentation.List:
             if (typeof (value as Iterable<unknown>)?.[Symbol.iterator] !== "function") {
@@ -485,9 +502,15 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
             }
             return renderIndentedList(value as Iterable<unknown>, formatter);
 
-        case Diagnostic.Presentation.Emphasized:
-            return formatter.emphasize(() => renderDiagnostic(value, formatter));
+        case Diagnostic.Presentation.Squash:
+            return renderValue(value, formatter, true);
 
+        case Diagnostic.Presentation.Strong:
+            return formatter.strong(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Weak:
+            return formatter.weak(() => renderDiagnostic(value, formatter));
+    
         case Diagnostic.Presentation.Dictionary:
             if (typeof value !== "object") {
                 throw new ImplementationError("Diagnostic dictionary is not an object");

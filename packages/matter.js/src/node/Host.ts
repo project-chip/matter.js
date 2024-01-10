@@ -10,10 +10,13 @@ import { Environment } from "../common/Environment.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
+import { Logger } from "../log/Logger.js";
 import { StorageManager } from "../storage/StorageManager.js";
 import { Node } from "./Node.js";
 import { ServerOptions } from "./options/ServerOptions.js";
 import { BaseNodeServer } from "./server/BaseNodeServer.js";
+
+const logger = Logger.get("Host");
 
 enum Status {
     INACTIVE,
@@ -114,6 +117,8 @@ export class Host implements Environment.Task {
                     this.#abort = undefined;
                 }
             });
+        } catch (e) {
+            logger.error("Nodes terminated by unhandled error:", e);
         } finally {
             // Can't abort this
             await storage?.close();

@@ -87,7 +87,7 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            "Node", Diagnostic.em(this.part.serviceFor(IdentityService).nodeDescription), "is uncommissioned",
+            "Node", Diagnostic.strong(this.part.serviceFor(IdentityService).nodeDescription), "is uncommissioned",
             Diagnostic.dict({
                 passcode,
                 discriminator,

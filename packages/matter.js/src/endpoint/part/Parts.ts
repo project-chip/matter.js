@@ -6,7 +6,7 @@
 
 import { Agent } from "../Agent.js";
 import { Part } from "../Part.js";
-import { Lifecycle } from "./Lifecycle.js";
+import { PartLifecycle } from "./PartLifecycle.js";
 import { EndpointType } from "../type/EndpointType.js";
 import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
@@ -21,7 +21,7 @@ import { IdentityConflictError, IdentityService } from "../../node/server/Identi
  * {@link Part.lifecycle.changed}.
  */
 export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part> {
-    #bubbleChange: (type: Lifecycle.Change, part: Part) => void;
+    #bubbleChange: (type: PartLifecycle.Change, part: Part) => void;
     #children = new BasicSet<Part>;
     #part: Part;
 
@@ -36,7 +36,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         // Inform children they're installed once my part is fully initialized
         this.#part.lifecycle.ready.once(() => {
             for (const part of this.#children) {
-                part.lifecycle.change(Lifecycle.Change.Installed);
+                part.lifecycle.change(PartLifecycle.Change.Installed);
             }
         });
     }
@@ -107,7 +107,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         child.lifecycle.destroyed.once(() => this.#disownPart(child));
 
         if (this.#part.lifecycle.isReady) {
-            child.lifecycle.change(Lifecycle.Change.Installed);
+            child.lifecycle.change(PartLifecycle.Change.Installed);
         }
     }
 

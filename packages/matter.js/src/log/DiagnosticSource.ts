@@ -33,6 +33,6 @@ export const DiagnosticSource = {
     },
 
     get [Diagnostic.value]() {
-        return [ ...sources ].map(source => [ Diagnostic.em(source.name), source ]);
+        return [ ...sources ].map(source => [ Diagnostic.strong(source.name), source ]);
     }
 }
