@@ -57,7 +57,8 @@ export class Host implements Environment.Task {
     /**
      * Bring the server online.
      *
-     * This method only returns on abort at which point nodes are destroyed.
+     * This method only returns if startup fails or the host is aborted.
+     * After return nodes are destroyed.
      */
     async run() {
         if (this.#status !== Status.INACTIVE) {
@@ -89,6 +90,8 @@ export class Host implements Environment.Task {
             });
 
             for (const node of this.#nodes) {
+                await node.construction;
+
                 if (node instanceof CommissioningController) {
                     await server.addCommissioningController(node);
                 } else if (node instanceof BaseNodeServer) {

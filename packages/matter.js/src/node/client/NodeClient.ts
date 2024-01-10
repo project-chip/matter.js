@@ -9,9 +9,20 @@ import { Agent } from "../../endpoint/Agent.js";
 import { Part } from "../../endpoint/Part.js";
 import type { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
+import { AsyncConstruction } from "../../util/AsyncConstruction.js";
 import { Node } from "../Node.js";
 
 export class NodeClient implements Node {
+    #construction: AsyncConstruction<NodeClient>;
+
+    get id(): string {
+        throw new NotImplementedError();
+    }
+
+    get description() {
+        return `${this.constructor.name}<${this.id}>`;
+    }
+
     get owner() {
         return undefined;
     }
@@ -24,8 +35,14 @@ export class NodeClient implements Node {
         throw new NotImplementedError();
     }
 
+    get construction() {
+        return this.#construction;
+    }
+
     constructor() {
-        throw new NotImplementedError("Client nodes are TODO");
+        this.#construction = AsyncConstruction(this, () => {
+            throw new NotImplementedError("Client nodes are TODO");
+        });
     }
 
     async [Symbol.asyncDispose](): Promise<void> {

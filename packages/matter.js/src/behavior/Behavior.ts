@@ -199,6 +199,13 @@ export abstract class Behavior {
     destroy(): MaybePromise<void> {}
 
     /**
+     * Description used in diagnostic messages.
+     */
+    get description() {
+        return this.part.descriptionOf(this.constructor as Behavior.Type);
+    }
+
+    /**
      * Does this behavior support functionality of a specific implementation?
      */
     static supports(other: Behavior.Type) {

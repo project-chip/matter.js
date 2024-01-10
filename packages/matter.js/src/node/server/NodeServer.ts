@@ -31,11 +31,10 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { IdentityService } from "./IdentityService.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
-import { BasicInformationBehavior } from "../../behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { UninitializedDependencyError } from "../../common/Lifecycle.js";
 
 const logger = Logger.get("NodeServer");
- 
+
 /**
  * Implementation of a Matter Node server.
  *
@@ -46,6 +45,7 @@ const logger = Logger.get("NodeServer");
  * confusing with the conventions of matter-node.js.
  */
 export class NodeServer extends BaseNodeServer implements Node {
+    #id: string;
     #configuration: ServerOptions.Configuration;
     #root: Part<RootEndpoint>;
     #rootServer?: PartServer;
@@ -57,6 +57,10 @@ export class NodeServer extends BaseNodeServer implements Node {
     #identityService?: IdentityService;
     #uptime?: Diagnostic.Elapsed;
     #interactionServer?: TransactionalInteractionServer;
+
+    get id() {
+        return this.#id;
+    }
 
     get owner() {
         return undefined;
@@ -104,6 +108,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         super();
 
         this.#configuration = ServerOptions.configurationFor(options);
+        this.#id = this.#configuration.id;
 
         const root = this.#root = Part.partFor(this.#configuration.root);
 
@@ -135,12 +140,17 @@ export class NodeServer extends BaseNodeServer implements Node {
         );
     }
 
+    /**
+     * Create a new NodeServer and wait for initialization to complete.
+     */
     static async create(options?: ServerOptions.Configuration) {
         return asyncNew(NodeServer, options);
     }
 
     /**
      * Bring the device online.
+     * 
+     * TODO - should acquire some type of OS- or FS-level while running
      */
     override async start() {
         if (this.#uptime) {
@@ -153,8 +163,15 @@ export class NodeServer extends BaseNodeServer implements Node {
         const agent = this.root;
 
         if (!this.commissioned) {
-            const commissioning = await agent.waitFor(CommissioningBehavior);
-            commissioning.initiateCommissioning();
+            try {
+                const commissioning = await agent.waitFor(CommissioningBehavior);
+                commissioning.initiateCommissioning();
+            } catch (e) {
+                if (e instanceof Error) {
+                    e.message = `Cannot initiate commissioning: ${e.message}`;
+                }
+                throw e;
+            }
         }
 
         await this.#saveInitialValues();
@@ -175,7 +192,12 @@ export class NodeServer extends BaseNodeServer implements Node {
         }
         const runner = new Host(this.#configuration);
         runner.add(this);
-        await runner.run();
+
+        try {
+            await runner.run();
+        } catch (e) {
+            logger.error("Node server terminated due to error:", e);
+        }
     }
 
     /**
@@ -246,7 +268,7 @@ export class NodeServer extends BaseNodeServer implements Node {
                 index++;
             }
         }
-        throw new ImplementationError(`${part.description}: Cannot determine ID`);
+        throw new ImplementationError(`Cannot determine ID for ${part.description}`);
     }
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
@@ -279,8 +301,7 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Textual description of the node used in diagnostic messages.
      */
     get description() {
-        return this.#root.behaviors.initialStateFor(BasicInformationBehavior)?.productName
-            ?? `(unknown on port ${this.port})`;
+        return `${this.constructor.name}<${this.id}>`
     }
 
     get [Diagnostic.value]() {

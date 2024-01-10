@@ -16,6 +16,14 @@ import { Schema } from "../supervision/Schema.js";
 import type { ClusterBehavior } from "./ClusterBehavior.js";
 
 /**
+ * Create a non-functional instance of a {@link Behavior} for introspection
+ * purposes.
+ */
+export function introspectionInstanceOf(type: Behavior.Type) {
+    return new (type as unknown as new () => Record<string, Function>);
+}
+
+/**
  * This is the actual implementation of ClusterBehavior.for().  The result
  * must match {@link ClusterBehavior.Type}<C>.
  */
@@ -61,15 +69,7 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
             },
         },
 
-        instanceDescriptors: Object.fromEntries(
-            Object.keys(cluster.commands).map(k => [
-                k,
-                {
-                    value: Behavior.unimplemented,
-                    enumerable: true,
-                },
-            ]),
-        ),
+        instanceDescriptors: createDefaultCommandDescriptors(cluster, base),
     });
 }
 
@@ -219,4 +219,19 @@ function schemaForCluster(cluster: ClusterType) {
     }
 
     return schema;
+}
+
+function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Type) {
+    const result = {} as Record<string, PropertyDescriptor>;
+    const instance = introspectionInstanceOf(base);
+
+    for (const name in cluster.commands) {
+        if (!instance[name]) {
+            result[name] = {
+                value: Behavior.unimplemented,
+            }
+        }
+    }
+
+    return result;
 }

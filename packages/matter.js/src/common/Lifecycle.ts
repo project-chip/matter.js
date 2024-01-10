@@ -23,6 +23,44 @@ export namespace LifecycleStatus {
      * Lifecycle status for multiple items.
      */
     export type Map<T extends keyof any> = Record<T, LifecycleStatus>;
+
+    /**
+     * Assert subject is active.
+     */
+    export function assertActive(status: LifecycleStatus, description?: string) {
+        if (!description) {
+            description = "dependency";
+        }
+
+        switch (status) {
+            case LifecycleStatus.Active:
+                return;
+
+            case LifecycleStatus.Inactive:
+                throw new UninitializedDependencyError(
+                    `${description} is not initialized`
+                );
+    
+            case LifecycleStatus.Initializing:
+                throw new UninitializedDependencyError(
+                    `${description} is still initializing`
+                );
+
+            case LifecycleStatus.Incapacitated:
+                 throw new IncapacitatedDependencyError(
+                    `${description} initialization failed`
+                );
+
+            case LifecycleStatus.Destroyed:
+                throw new DestroyedDependencyError(
+                    `${description} was destroyed`
+                );
+        }
+
+        throw new ImplementationError(
+            `Unsupported status "${status}" of ${description}`
+        )
+    }
 }
 
 /**

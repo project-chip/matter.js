@@ -256,10 +256,13 @@ export class MatterServer {
             try {
                 await this.prepareNode(node);
             } catch (error) {
-                // TODO: Find a better way how to report back such issues and which nodes errored
-                logger.error(`Failed to start node with storageKey ${key}: ${error}`);
+                this.startupError(key, node, error);
             }
         }
+    }
+
+    protected startupError(key: string, _node: MatterNode, error: any) {
+        logger.error(`Failed to start node with storageKey ${key}: ${error}`);
     }
 
     private async prepareNode(node: MatterNode) {

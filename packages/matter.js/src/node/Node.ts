@@ -9,6 +9,7 @@ import { Part } from "../endpoint/Part.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartOwner } from "../endpoint/part/PartOwner.js";
 import { Diagnostic } from "../log/Diagnostic.js";
+import { AsyncConstruction } from "../util/AsyncConstruction.js";
 
 /**
  * A "node" is a top-level resource that is addressable directly on a network.
@@ -16,6 +17,16 @@ import { Diagnostic } from "../log/Diagnostic.js";
  * NodeInterface offers interaction with a node.
  */
 export interface Node extends PartOwner {
+    /**
+     * The unique identifier of the node.
+     */
+    id: string;
+
+    /**
+     * Textual description of the node used in diagnostic messages.
+     */
+    description: string;
+
     /**
      * Access the root endpoint.
      */
@@ -38,6 +49,11 @@ export interface Node extends PartOwner {
      * Provide diagnostic information.
      */
     readonly [Diagnostic.value]: unknown;
+
+    /**
+     * Node initialization status.
+     */
+    readonly construction: AsyncConstruction<Node>;
 
     // The batch interface that follows would be an efficiency win but most
     // features are marked as provisional as of Matter 1.2 implying they are

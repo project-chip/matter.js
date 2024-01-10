@@ -27,7 +27,11 @@ const AUTHORIZE_READ = Symbol("authorize-read");
  * For structs we generate a class with accessors for each property in the
  * schema.
  */
-export function StructManager(owner: RootSupervisor, schema: Schema, base?: new () => Val): ValueSupervisor.Manage {
+export function StructManager(
+    owner: RootSupervisor,
+    schema: Schema,
+    _managed?: new () => Val
+): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
     const propertyAccessControls = {} as Record<string, AccessControl>;
     let hasFabricIndex = false;
@@ -49,7 +53,10 @@ export function StructManager(owner: RootSupervisor, schema: Schema, base?: new 
 
     let Wrapper = GeneratedClass({
         name: `${schema.name}$Managed`,
-        base,
+
+        // Inheriting from managed class increases complexity with little
+        // benefit
+        //base: managed,
 
         initialize(
             this: Wrapper,
@@ -158,7 +165,10 @@ interface Wrapper extends Val.Struct {
     [AUTHORIZE_READ]: (index: string) => void;
 }
 
-function configureProperty(manager: RootSupervisor, schema: ValueModel) {
+function configureProperty(
+    manager: RootSupervisor,
+    schema: ValueModel,
+) {
     const name = camelize(schema.name);
     let { access, manage, validate } = manager.get(schema);
 

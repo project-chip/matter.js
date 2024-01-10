@@ -46,8 +46,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #construction: AsyncConstruction<Part<T>>;
 
     /**
-     * A string that uniquely identifies a part.  This ID must be unique across
-     * the Matter node.
+     * A string that uniquely identifies a part.  This ID must be unique in the
+     * namespace of the owner.
      */
     get id() {
         if (this.#id === undefined) {
@@ -138,7 +138,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
                 // Immediate initialization
                 return this.#initialize();
             }
-
+ 
             // Deferred initialization -- wait for installation
             return new Promise<void>((fulfilled, rejected) => {
                 this.#lifecycle.installed.once(() => {
@@ -158,11 +158,11 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
-        this.owner.serviceFor(BehaviorInitializer).initializeDescendent(this);
-
-        const promise = this.behaviors.initialize();
         return MaybePromise.then(
-            promise,
+            () => {
+                this.owner.serviceFor(BehaviorInitializer).initializeDescendent(this);
+                return this.behaviors.initialize();
+            },
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
         )
     }
@@ -172,7 +172,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#id !== undefined) {
-            throw new ImplementationError(`Part ${this.description} ID is already assigned, cannot reassign`);
+            throw new ImplementationError(`${this.description} ID is already assigned, cannot reassign`);
         }
         if (typeof id !== "string") {
             throw new ImplementationError(`Illegal endpoint ID type "${typeof id}"`);
@@ -197,7 +197,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#number !== undefined) {
-            throw new ImplementationError(`Part ${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`)
+            throw new ImplementationError(`${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`)
         }
         if (typeof number !== "number") {
             throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
@@ -278,41 +278,33 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Returns a human-readable name for the part.
+     * A human-readable name for the part.
      */
     get description() {
-        let desc: string | undefined;
-        let detail: string | undefined;
-
-        if (this.#lifecycle.hasId) {
-            desc = this.id;
-        }
-
-        if (this.#lifecycle.hasNumber) {
-            const number = `#${this.#number}`;
-            if (desc) {
-                detail = number;
-            } else {
-                desc = number;
-            }
-        }
-
-        if (!desc) {
-            desc = "<unknown>";
-        }
-
-        const type = `type ${this.type.name}`;
-        if (detail) {
-            detail = `${detail}, ${type}`;
+        let owner;
+        if (this.lifecycle.isInstalled) {
+            owner = this.owner.serviceFor(IdentityService).nodeDescription;
         } else {
-            detail = type;
+            owner = "?";
         }
 
-        if (detail) {
-            desc = `${desc} (${detail})`;
+        let id;
+        if (this.#lifecycle.hasId) {
+            id = this.id;
+        } else if (this.#lifecycle.hasNumber) {
+            id = `#${this.number}`;
+        } else {
+            id = "?";
         }
 
-        return detail;
+        return `${owner}.${this.#type.name}<${id}>`;
+    }
+
+    /**
+     * Generate a description for a specific behavior.
+     */
+    descriptionOf(type: Behavior.Type) {
+        return `${this.description}.${type.id}`;
     }
 
     /**
@@ -347,20 +339,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
                 part.visit(visitor);
             }
         }
-    }
-
-    toString() {
-        const ident = Array<string>();
-        if (this.id) {
-            ident.push(this.id);
-        }
-        if (this.number) {
-            ident.push(`#${this.number}`);
-        }
-        if (!ident.length) {
-            ident.push("anon");
-        }
-        return `${this.type.name}<${ident.join("; ")}>`;
     }
 
     get #agent() {

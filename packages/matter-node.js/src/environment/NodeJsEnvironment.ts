@@ -91,7 +91,7 @@ function loadEnvAndArgs() {
     // Quick & dirty environment variable ingestion
     for (const key in process.env) {
         if (key.startsWith("MATTER_")) {
-            addVariable(variables, key.toLowerCase().split("_"), process.env[key]);
+            addVariable(variables, key.slice(7).toLowerCase().split("_"), process.env[key]);
         }
     }
 

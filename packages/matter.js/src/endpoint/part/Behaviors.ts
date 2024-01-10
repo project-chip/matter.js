@@ -10,7 +10,6 @@ import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js"
 import { PartLifecycle } from "./PartLifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { Logger } from "../../log/Logger.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import { MaybePromise } from "../../util/Promises.js";
@@ -20,10 +19,8 @@ import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { BehaviorInitializer } from "./BehaviorInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
-import { DestroyedDependencyError, IncapacitatedDependencyError, LifecycleStatus, UnsupportedDependencyStatusError } from "../../common/Lifecycle.js";
+import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
-
-const logger = Logger.get("Behaviors");
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -60,10 +57,10 @@ export class Behaviors {
         }
         for (const id in supported) {
             if (!(supported[id].prototype instanceof Behavior)) {
-                throw new ImplementationError(`Part behavior "${id}" is not a Behavior.Type`);
+                throw new ImplementationError(`${part.description} behavior "${id}" is not a Behavior.Type`);
             }
             if (typeof supported[id].id !== "string") {
-                throw new ImplementationError(`Part behavior "${id}" has no ID`);
+                throw new ImplementationError(`${part.description} behavior "${id}" has no ID`);
             }
         }
 
@@ -139,7 +136,7 @@ export class Behaviors {
         if (this.#supported[type.id]) {
             if (!this.has(type)) {
                 throw new ImplementationError(
-                    `Cannot require behavior "${type.id}" because incompatible implementation already exists`,
+                    `Cannot require ${this.#part.descriptionOf(type)} because incompatible implementation already exists`,
                 );
             }
             return;
@@ -162,7 +159,7 @@ export class Behaviors {
         const behavior = this.createMaybeAsync(type, agent);
         if (MaybePromise.is(behavior)) {
             throw new ImplementationError(
-                `Synchronous access to behavior "${type.id}" is impossible because it is still initializing`
+                `Synchronous access to ${this.#part.descriptionOf(type)} is impossible because it is still initializing`
             );
         }
         return behavior;
@@ -173,11 +170,20 @@ export class Behaviors {
      * initialization.
      */
     async createAsync(type: Behavior.Type, agent: Agent) {
-        try {
-            return this.createMaybeAsync(type, agent);
-        } catch (e) {
-            return Promise.reject(e);
-        }
+        return MaybePromise.then(
+            () => this.createMaybeAsync(type, agent),
+            undefined,
+            e => {
+                // We log the actual error produced by the backing.  Here we
+                // want the error to present as incapacitated access with a
+                // proper stack trace
+                const backing = this.#backings[type.id];
+                if (!backing) {
+                    throw e;
+                }
+                backing.construction.assert(backing.description);
+            }
+        )
     }
 
     /**
@@ -191,31 +197,24 @@ export class Behaviors {
         let backing = this.#backings[type.id];
 
         if (!backing.construction.ready) {
-            return backing.construction.then(() => backing.createBehavior(agent, type));
+            return backing.construction
+                .then(() => backing.createBehavior(agent, type))
+                .catch(() => {
+                    // The backing logs the actual error so here the error
+                    // should just throw "unavailable due to initialization
+                    // error"
+                    backing.construction.assert(backing.description);
+
+                    // Shouldn't get here but catch result type needs to be a
+                    // behavior
+                    return backing.createBehavior(agent, type);
+                });
         }
+        
+        backing.construction.assert(backing.description);
 
-        switch (backing.construction.status) {
-            case LifecycleStatus.Active:
-                return backing.createBehavior(agent, type);
-
-            case LifecycleStatus.Initializing:
-                throw backing.construction.then(() => backing.createBehavior(agent, type));
-
-            case LifecycleStatus.Incapacitated:
-                throw new IncapacitatedDependencyError(
-                    `Cannot access behavior ${type} because it has been incapacitated`
-                );
-
-            case LifecycleStatus.Destroyed:
-                throw new DestroyedDependencyError(
-                    `Cannot access behavior ${type} because it has been destroyed`
-                );
-        }
-
-        throw new UnsupportedDependencyStatusError(
-            `Behavior ${type} initialization left behavior in ${backing.construction.status} state`
-        );
-}
+        return backing.createBehavior(agent, type);
+    }
 
     /**
      * Activate a behavior.
@@ -280,7 +279,7 @@ export class Behaviors {
 
         if (missing.length) {
             throw new ImplementationError(
-                `Part ${this.#part.description} is missing required behaviors: ${describeList("and", ...missing)}`,
+                `${this.#part.description} is missing required behaviors: ${describeList("and", ...missing)}`,
             );
         }
     }
@@ -319,16 +318,17 @@ export class Behaviors {
         // extension
         const myType = this.#getBehaviorType(type);
         if (!myType) {
-            throw new ImplementationError(`Request for unsupported behavior "${type.id}"`);
+            throw new ImplementationError(`Request for unsupported behavior ${this.#part.descriptionOf(type)}`);
         }
 
         // Ask the owner to create the backing.  This is specialized for the
         // owner (e.g. client or server)
         if (!this.#part.owner) {
-            throw new ImplementationError(`Attempted initialization of behavior "${type.id}" of uninstalled part`);
+            throw new ImplementationError(`Attempted initialization of ${this.#part.descriptionOf(type)} of uninstalled part`);
         }
         const backing = this.#part.serviceFor(BehaviorInitializer).createBacking(this.#part, myType);
         this.#backings[type.id] = backing;
+
         backing.initialize();
 
         // Initialize backing state
@@ -339,10 +339,6 @@ export class Behaviors {
             this.#initializing.add(backing);
 
             backing.construction
-                .catch(e => {
-                    logger.error(`Error initializing part ${this.#part.description} behavior "${myType.id}"`, e);
-                    throw e;
-                })
                 .finally(() => {
                     this.#initializing?.delete(backing);
                 });
