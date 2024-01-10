@@ -12,7 +12,7 @@ import { ImplementationError } from "../../common/MatterError.js";
 /**
  * State related to a {@link Part}'s lifecycle.
  */
-export class Lifecycle {
+export class PartLifecycle {
     #part: Part;
     #isInstalled = false;
     #isReady = false;
@@ -21,8 +21,8 @@ export class Lifecycle {
     #installed = new Observable<[]>();
     #ready = new Observable<[]>();
     #destroyed = new Observable<[]>();
-    #changed = new Observable<[type: Lifecycle.Change, part: Part]>();
-    #queuedUpdates?: Array<Lifecycle.Change>;
+    #changed = new Observable<[type: PartLifecycle.Change, part: Part]>();
+    #queuedUpdates?: Array<PartLifecycle.Change>;
 
     /**
      * Emitted when a part is installed into an initialized owner.
@@ -48,7 +48,7 @@ export class Lifecycle {
     /**
      * Bubbling event indicating changes to part structure.
      * 
-     * All {@link Lifecycle.Change}s bubble here except for Installed,
+     * All {@link PartLifecycle.Change}s bubble here except for Installed,
      * Destroyed and Ready.
      */
     get changed() {
@@ -90,10 +90,10 @@ export class Lifecycle {
     /**
      * Inform the Lifecycle of a change in lifecycle.
      */
-    change(type: Lifecycle.Change) {
+    change(type: PartLifecycle.Change) {
         // Update state
         switch (type) {
-            case Lifecycle.Change.Installed:
+            case PartLifecycle.Change.Installed:
                 // Sanity checks
                 if (!this.#part.owner) {
                     throw new ImplementationError("Part reports as installed but has no owner assigned");
@@ -102,7 +102,7 @@ export class Lifecycle {
                 this.#isInstalled = true;
                 break;
 
-            case Lifecycle.Change.Ready:
+            case PartLifecycle.Change.Ready:
                 // Sanity checks
                 if (!this.#part.owner) {
                     throw new ImplementationError("Part reports as ready but has no owner assigned");
@@ -116,11 +116,11 @@ export class Lifecycle {
                 this.#isReady = true;
                 break;
 
-            case Lifecycle.Change.IdAssigned:
+            case PartLifecycle.Change.IdAssigned:
                 this.#hasId = true;
                 break;
 
-            case Lifecycle.Change.NumberAssigned:
+            case PartLifecycle.Change.NumberAssigned:
                 this.#hasNumber = true;
                 break;
         }
@@ -156,7 +156,7 @@ export class Lifecycle {
     }
 }
 
-export namespace Lifecycle {
+export namespace PartLifecycle {
     export enum Change {
         Installed = "installed",
         Ready = "ready",

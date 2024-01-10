@@ -53,7 +53,7 @@ export abstract class BehaviorBacking {
 
             // Perform actual initialization
             return this.invokeInitializer(behavior, this.#options);
-        });
+        })
     }
 
     /**

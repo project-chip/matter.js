@@ -33,8 +33,3 @@ export class UnexpectedDataError extends MatterError {}
  * provided data. if you are sure your code is correct please report the issue.
  */
 export class ImplementationError extends MatterError {}
-
-/**
- * Thrown for actions that cannot be performed until further initialization occurs.
- */
-export class NotInitializedError extends MatterError {}

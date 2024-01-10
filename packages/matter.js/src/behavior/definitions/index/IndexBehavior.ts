@@ -5,7 +5,7 @@
  */
 
 import type { Part } from "../../../endpoint/Part.js";
-import { Lifecycle } from "../../../endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
 import { Behavior } from "../../Behavior.js";
 
@@ -28,13 +28,13 @@ export class IndexBehavior extends Behavior {
 
         this.part.lifecycle.changed.on((type, part) => {
             switch (type) {
-                case Lifecycle.Change.IdAssigned:
-                case Lifecycle.Change.NumberAssigned:
-                case Lifecycle.Change.Ready:
+                case PartLifecycle.Change.IdAssigned:
+                case PartLifecycle.Change.NumberAssigned:
+                case PartLifecycle.Change.Ready:
                     this.#add(part);
                     break;
 
-                case Lifecycle.Change.Destroyed:
+                case PartLifecycle.Change.Destroyed:
                     this.#remove(part);
                     break;
             }

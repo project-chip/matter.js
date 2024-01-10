@@ -16,7 +16,7 @@ import { PartStoreService } from "../../src/node/server/storage/PartStoreService
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { EventHandler } from "../../src/protocol/interaction/EventHandler.js";
-import { Lifecycle } from "../../src/endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
 
 export class MockBehaviorInitializer extends BehaviorInitializer {
@@ -63,7 +63,7 @@ export class MockOwner implements PartOwner {
         }
         this.#root = part;
         this.#identityService = new IdentityService(part, "Test node");
-        part.lifecycle.change(Lifecycle.Change.Installed);
+        part.lifecycle.change(PartLifecycle.Change.Installed);
     }
 
     storeFor(part: Part) {
