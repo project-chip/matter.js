@@ -37,7 +37,7 @@ import { NetworkOptions } from "../options/NetworkOptions.js";
 const logger = Logger.get("CommissioningServer");
 
 /**
- * Represents device pairing information.
+ * Information required to complete pairing.
  */
 export interface DevicePairingInformation {
     manualPairingCode: string;

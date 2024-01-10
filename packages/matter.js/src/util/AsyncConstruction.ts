@@ -5,7 +5,7 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { IncapacitatedDependencyError, LifecycleStatus, UninitializedDependencyError } from "../common/Lifecycle.js";
+import { LifecycleStatus } from "../common/Lifecycle.js";
 import { Tracker, MaybePromise } from "./Promises.js";
 
 /**
@@ -44,7 +44,7 @@ export async function asyncNew<
  * {@link AsyncConstruction.ready} and throw a more specific error.
  * 
  * Setup optionally supports cancellation of initialization.  To implement,
- * provide a "cancel" function to {@link AsyncConstruction}.  Then
+ * provide a "cancel" function option to {@link AsyncConstruction}.  Then
  * initialization can be canceled via {@link AsyncConstruction.cancel}.
  * 
  * To determine if initialization is complete synchronously you can check
@@ -88,13 +88,21 @@ export interface AsyncConstruction<T> extends Promise<T> {
     /**
      * Throws an error if construction is ongoing or incomplete.
      */
-    assert(): void;
+    assert(description?: string): void;
+
+    /**
+     * Manually force construction into a specific status.
+     * 
+     * AsyncConstruction maintains status automatically.  If construction
+     * throws an error subsequent to this call it will overwrite the status..
+     */
+    setStatus(status: LifecycleStatus, error?: any): void;
 }
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
     target: T,
     initializer?: () => MaybePromise<void>,
-    cancel?: () => void
+    cancel?: () => void,
 ): AsyncConstruction<T> {
     let promise: MaybePromise;
     let error: any;
@@ -131,20 +139,20 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 error = e;
                 ready = true;
                 status = LifecycleStatus.Incapacitated;
+                if (placeholderReject) {
+                    placeholderReject(e);
+                }
                 throw e;
             }
 
             if (MaybePromise.is(initialization)) {
                 ready = false;
-                if (promise) {
-                    initialization.then(placeholderResolve, placeholderReject);
-                } else {
-                    promise = Tracker.global.track(initialization, `${target.constructor.name} construction`);
-                }
-                initialization.then(
+                initialization = initialization.then(
                     () => {
                         ready = true;
-                        status = LifecycleStatus.Active;
+                        if (status === LifecycleStatus.Initializing) {
+                            status = LifecycleStatus.Active;
+                        }
                     },
                     e => {
                         error = e;
@@ -152,9 +160,19 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                         status = LifecycleStatus.Incapacitated;
                     }
                 );
+                if (promise) {
+                    initialization.then(placeholderResolve, placeholderReject);
+                } else {
+                    promise = Tracker.global.track(initialization, `${target.constructor.name} construction`);
+                }
             } else {
                 ready = true;
-                status = LifecycleStatus.Active;
+                if (status === LifecycleStatus.Initializing) {
+                    status = LifecycleStatus.Active;
+                }
+                if (placeholderResolve) {
+                    placeholderResolve();
+                }
             }
 
             return this;
@@ -166,21 +184,15 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
             if (cancel) {
                 canceled = true;
-                status = LifecycleStatus.Destroyed;
+                if (status === LifecycleStatus.Initializing) {
+                    status = LifecycleStatus.Destroyed;
+                }
                 cancel?.();
             }
         },
 
-        assert() {
-            if (error) {
-                throw new IncapacitatedDependencyError(`Resource unavailable because of initialization failure: ${error}`);
-            }
-            if (!ready) {
-                throw new UninitializedDependencyError("Resource unavailable because initialization is ongoing");
-            }
-            if (canceled) {
-                throw new UninitializedDependencyError("Resource unavailable because initialization was canceled");
-            }
+        assert(description) {
+            LifecycleStatus.assertActive(status, description)
         },
         
         then<TResult1 = T, TResult2 = never>(
@@ -199,7 +211,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 return promise.then(() => target).then(onfulfilled, onrejected);
             }
 
-            return Promise.resolve(target).then(onfulfilled, onrejected);
+            if (error) {
+                onrejected?.(error);
+            } else {
+                onfulfilled?.(target);
+            }
+            
+            return this;
         },
 
         catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult> {
@@ -208,6 +226,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         finally(onfinally) {
             return this.then().finally(onfinally);
+        },
+
+        setStatus(...args: any[]) {
+            status = args[0];
+            if (args.length > 1) {
+                error = args[1];
+            }
         },
 
         get [Symbol.toStringTag]() {

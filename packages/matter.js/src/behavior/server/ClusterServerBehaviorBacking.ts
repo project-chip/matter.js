@@ -8,8 +8,8 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
-import type { ClusterServerObj, CommandHandler, SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
-import type { Part } from "../../endpoint/Part.js";
+import { asClusterServerInternal, ClusterServerObj, type CommandHandler, type SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
+import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
@@ -32,10 +32,28 @@ const logger = Logger.get("Behavior");
  * Backing for cluster behaviors on servers.
  */
 export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
-    #clusterServer: ClusterServerObj<Attributes, Events>;
+    #server: PartServer;
+    #clusterServer?: ClusterServerObj<Attributes, Events>;
 
-    constructor(part: Part, type: ClusterBehavior.Type) {
-        super(part, type);
+    get clusterServer() {
+        return this.#clusterServer;
+    }
+
+    constructor(server: PartServer, type: ClusterBehavior.Type) {
+        super(server.part, type);
+        this.#server = server;
+    }
+
+    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+        return MaybePromise.then(
+            () => super.invokeInitializer(behavior, options),
+
+            () => this.#createClusterServer(),
+        );
+    }
+
+    #createClusterServer() {
+        const type = this.type as ClusterBehavior.Type;
 
         const elements = new ValidatedElements(type);
         elements.report();
@@ -60,47 +78,39 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         // Create the cluster server
-        this.#clusterServer = ClusterServer(type.cluster, type.defaults, handlers, supportedEvents);
+        const clusterServer = ClusterServer(type.cluster, type.defaults, handlers, supportedEvents);
 
         // Monitor change events so we can notify the cluster server of data
         // changes
         for (const name in elements.attributes) {
             createChangeHandler(this, name);
         }
-    }
+        
+        // Assign the cluster server to the PartServer
+        asClusterServerInternal(clusterServer)._assignToEndpoint(this.#server);
 
-    get clusterServer() {
-        return this.#clusterServer;
-    }
+        // This must occur after cluster server is assigned to endpoint
+        const datasource = this.datasource;
+        const eventHandler = this.eventHandler;
+        clusterServer.datasource = {
+            get version() {
+                return datasource.version
+            },
 
-    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        MaybePromise.then(
-            super.invokeInitializer(behavior, options),
+            get eventHandler() {
+                return eventHandler;
+            },
 
-            () => {
-                // After initialization our datasource is available so we may configure the
-                // cluster server's datasource
-                const datasource = this.datasource;
-                const eventHandler = this.eventHandler;
-                this.#clusterServer.datasource = {
-                    get version() {
-                        return datasource.version
-                    },
+            // We handle change management ourselves
+            changed() {},
 
-                    get eventHandler() {
-                        return eventHandler;
-                    },
+            // We handle version management ourselves
+            increaseVersion() {
+                return datasource.version;
+            },
+        }
 
-                    // We handle change management ourselves
-                    changed() {},
-
-                    // We handle version management ourselves
-                    increaseVersion() {
-                        return datasource.version;
-                    },
-                }
-            }
-        );
+        this.#clusterServer = clusterServer;
     }
 }
 
@@ -183,12 +193,14 @@ function createAttributeAccessors(
 }
 
 function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string) {
+    // Change handler requires an event source
     const observable = (backing.events as any)[`${name}$Change`] as ClusterEvents.AttributeObservable;
     if (!observable) {
         return;
     }
 
-    const attributeServer = backing.clusterServer.attributes[name];
+    // Also requires an attribute server
+    const attributeServer = backing.clusterServer?.attributes[name];
     if (!attributeServer) {
         return;
     }

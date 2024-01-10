@@ -39,6 +39,10 @@ export class Environment {
 
         Logger.level = global.variables.log?.level;
         Logger.format = global.variables.log?.format;
+
+        if (global.variables.log?.stack?.limit) {
+            Error.stackTraceLimit = Number.parseInt(global.variables?.log?.stack?.limit);
+        }
     }
 
     /**
