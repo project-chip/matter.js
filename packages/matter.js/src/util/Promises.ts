@@ -79,7 +79,7 @@ export namespace MaybePromise {
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
     export function is<T>(value: MaybePromiseLike<T>): value is PromiseLike<T> {
-        return typeof value === "object" && typeof (value as { then?: any; }).then === "function";
+        return typeof value === "object" && typeof (value as { then?: unknown; }).then === "function";
     }
 
     /**

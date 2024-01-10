@@ -40,9 +40,9 @@ export class RootSupervisor implements ValueSupervisor {
      * Create a new supervisor.
      *
      * @param schema the {@link Schema} for the supervised data
-     * @param managedBase the base class for managed value instances
+     * @param managed a class for the managed value
      */
-    constructor(schema: Schema, managedBase?: new () => Val) {
+    constructor(schema: Schema, managed?: new () => Val) {
         if (schema instanceof ClusterModel) {
             this.#featureMap = schema.featureMap;
             this.#supportedFeatures = schema.supportedFeatures ?? new FeatureSet();
@@ -52,7 +52,7 @@ export class RootSupervisor implements ValueSupervisor {
         }
         this.#members = new Set(schema.members);
 
-        this.#root = this.#createValueSupervisor(schema, managedBase);
+        this.#root = this.#createValueSupervisor(schema, managed);
 
         for (const member of this.#members) {
             if (member.effectiveQuality.nonvolatile) {
@@ -132,7 +132,7 @@ export class RootSupervisor implements ValueSupervisor {
         return supervisor;
     }
 
-    #createValueSupervisor(schema: Schema, managedBase?: new () => Val) {
+    #createValueSupervisor(schema: Schema, managed?: new () => Val) {
         // Implements deferred generation (see comments below).  Proxies to
         // the real generator, installs the generated function, then invokes.
         // Since I/O functions are properties and not methods, we then continue
@@ -150,7 +150,7 @@ export class RootSupervisor implements ValueSupervisor {
                         throw new InternalError("Deferred I/O generation invoked impossibly early");
                     }
 
-                    (manager as any)[name] = generator(schema, this, managedBase) as any;
+                    (manager as any)[name] = generator(schema, this, managed) as any;
 
                     generated = true;
                 }
@@ -176,10 +176,7 @@ export class RootSupervisor implements ValueSupervisor {
                     schema,
                     access: AccessControl(schema),
                     validate: ValueValidator(schema, this),
-
-                    // I think we don't want managed values to extend
-                    // managedBase
-                    manage: ValueManager(schema, this /*, managedBase*/),
+                    manage: ValueManager(schema, this, managed),
                 };
             } finally {
                 this.#generating.delete(schema);

@@ -7,11 +7,15 @@
 import { ImplementationError } from "../common/MatterError.js";
 import type { Agent } from "../endpoint/Agent.js";
 import type { Part } from "../endpoint/Part.js";
+import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { EventEmitter } from "../util/Observable.js";
+import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
 import { Datasource } from "./state/managed/Datasource.js";
 import { Transaction } from "./state/transaction/Transaction.js";
+
+const logger = Logger.get("BehaviorBacking");
 
 /**
  * The "backing" for a behavior manages those portions of behavior that endure
@@ -30,6 +34,10 @@ export abstract class BehaviorBacking {
         return this.#construction;
     }
 
+    get description() {
+        return this.#part.descriptionOf(this.type);
+    }
+
     constructor(part: Part, type: Behavior.Type, options?: Behavior.Options) {
         this.#part = part;
         this.#type = type;
@@ -45,15 +53,26 @@ export abstract class BehaviorBacking {
      * Called by Behaviors once the backing is installed.
      */
     initialize() {
-        this.construction.start(() => {
-            // We use this behavior for initialization.  Do not use agent.get()
-            // to access the behavior because it will throw if the behavior
-            // isn't initialized
-            const behavior = this.createBehavior(this.part.agent, this.#type);
+        MaybePromise.then(
+            () => this.construction.start(() => {
+                // We use this behavior for initialization.  Do not use agent.get()
+                // to access the behavior because it will throw if the behavior
+                // isn't initialized
+                const behavior = this.createBehavior(this.part.agent, this.#type);
 
-            // Perform actual initialization
-            return this.invokeInitializer(behavior, this.#options);
-        })
+                // Perform actual initialization
+                return this.invokeInitializer(behavior, this.#options);
+            }),
+            undefined,
+            e => {
+                logger.error(
+                    `Error initializing ${
+                        this.#part.descriptionOf(this.type)
+                    }:`,
+                    e,
+                );
+            }
+        );
     }
 
     /**
@@ -90,7 +109,7 @@ export abstract class BehaviorBacking {
         }
 
         throw new ImplementationError(
-            `Cannot create behavior ${type.id} because installed implementation is incompatible`,
+            `Cannot create ${this.#part.descriptionOf(type)} because installed implementation is incompatible`,
         );
     }
 

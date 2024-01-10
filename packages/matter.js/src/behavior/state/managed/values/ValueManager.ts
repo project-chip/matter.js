@@ -18,10 +18,14 @@ import { StructManager } from "./StructManager.js";
  *
  * Used by {@link RootSupervisor} which acts as a cache.
  */
-export function ValueManager(schema: Schema, owner: RootSupervisor, base?: new () => Val): ValueSupervisor.Manage {
+export function ValueManager(
+    schema: Schema,
+    owner: RootSupervisor,
+    managed?: new () => Val
+): ValueSupervisor.Manage {
     switch (schema.effectiveMetatype) {
         case Metatype.object:
-            return StructManager(owner, schema, base);
+            return StructManager(owner, schema, managed);
 
         case Metatype.array:
             return ListManager(owner, schema);

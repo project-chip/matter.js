@@ -92,10 +92,10 @@ export namespace Diagnostic {
      * Create a value presenting as segments of the same string without
      * intervening spaces.
      */
-    export function squash(value: Iterable<unknown>) {
+    export function squash(...values: unknown[]) {
         return Diagnostic(
             Diagnostic.Presentation.Squash,
-            value,
+            values,
         )
     }
 
@@ -159,19 +159,19 @@ export namespace Diagnostic {
             if (line === "") {
                 continue;
             }
-            const match = line.match(/^at\s+(\S+) \(([^)]+\))$/);
+            const match = line.match(/^at\s+(.+)\s+\(([^)]+)\)$/);
             if (!match) {
                 lines.push(line);
                 continue;
             }
             lines.push(
-                Diagnostic.squash([
+                Diagnostic.squash(
                     Diagnostic.weak("at "),
                     match[1],
                     Diagnostic.weak(" ("),
-                    Diagnostic.strong(match[2]),
+                    Diagnostic.weak(match[2]),
                     Diagnostic.weak(")"),
-                ])
+                )
             );
         }
 

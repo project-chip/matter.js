@@ -393,5 +393,7 @@ export namespace OperationalCredentialsServer {
         override get currentFabricIndex() {
             return StructManager.sessionOf(this).associatedFabric ?? FabricIndex.NO_FABRIC;
         }
+
+        set currentFabricIndex(_index) {}
     }
 }
