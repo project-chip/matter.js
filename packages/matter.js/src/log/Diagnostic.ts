@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { LifecycleStatus } from "./LifecycleStatus.js";
+import type { LifecycleStatus } from "../common/Lifecycle.js";
 
 /**
  * Logged values may implement this interface to customize presentation.
@@ -30,14 +30,30 @@ export function Diagnostic(presentation: Diagnostic.Presentation | LifecycleStat
 export namespace Diagnostic {
     export enum Presentation {
         /**
-         * A sequence of diagnostics rendered sequentially.
+         * By default iterables render as a single line with spaces separating.
+         * The "list" presentation treats elements instead as separate entities
+         * which typically means presentation on different lines.
+         * 
+         * Within an iterable, a list also serves to present contained items as
+         * subordinate to the previous item.
          */
         List = "list",
 
         /**
+         * Render iterables without intervening spaces.
+         */
+        Squash = "squash",
+
+        /**
          * An emphasized diagnostic.  Rendered to draw attention.
          */
-        Emphasized = "emphasized",
+        Strong = "strong",
+
+        /**
+         * A deemphasized diagnostic.  Rendered to draw less attention than
+         * default rendering.
+         */
+        Weak = "weak",
 
         /**
          * A key/value diagnostic.  Rendered as a group of key/value pairs.
@@ -51,8 +67,15 @@ export namespace Diagnostic {
     /**
      * Create a value presented emphatically.
      */
-    export function em(value: unknown) {
-        return Diagnostic(Diagnostic.Presentation.Emphasized, value);
+    export function strong(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Strong, value);
+    }
+
+    /**
+     * Create a value presented less emphatically than the default.
+     */
+    export function weak(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Weak, value);
     }
 
     /**
@@ -61,6 +84,17 @@ export namespace Diagnostic {
     export function list(value: Iterable<unknown>) {
         return Diagnostic(
             Diagnostic.Presentation.List,
+            value,
+        )
+    }
+
+    /**
+     * Create a value presenting as segments of the same string without
+     * intervening spaces.
+     */
+    export function squash(value: Iterable<unknown>) {
+        return Diagnostic(
+            Diagnostic.Presentation.Squash,
             value,
         )
     }
@@ -79,13 +113,13 @@ export namespace Diagnostic {
      * Create a Diagnostic for an error.
      */
     export function error(error: any) {
-        let message;
-        let stack;
+        let message: string | undefined;
+        let stack: string | undefined;
         if (error !== undefined && error !== null) {
             if (error instanceof Error) {
                 message = error.message;
                 stack = error.stack;
-            } else {
+            } else if (error.message) {
                 message = error.toString();
             }
         }
@@ -103,7 +137,7 @@ export namespace Diagnostic {
             return message;
         }
 
-        stack = error.stack;
+        stack = stack.toString();
 
         // Strip extra node garbage off stack from node asserts
         stack = stack.replace(/^.*?\n\nError: /gs, "Error: ");
@@ -115,21 +149,43 @@ export namespace Diagnostic {
 
         // Strip off redundant message from v8
         if (stack.startsWith(message)) {
-            stack = stack.slice(message.length);
+            stack = stack.slice(message.length).trim();
         }
 
-        stack = stack.trim().split("\n").map((frame: string) => frame.trim());
+        // Spiff up lines a bit
+        const lines = Array<unknown>();
+        for (let line of stack.split("\n")) {
+            line = line.trim();
+            if (line === "") {
+                continue;
+            }
+            const match = line.match(/^at\s+(\S+) \(([^)]+\))$/);
+            if (!match) {
+                lines.push(line);
+                continue;
+            }
+            lines.push(
+                Diagnostic.squash([
+                    Diagnostic.weak("at "),
+                    match[1],
+                    Diagnostic.weak(" ("),
+                    Diagnostic.strong(match[2]),
+                    Diagnostic.weak(")"),
+                ])
+            );
+        }
 
-        // Node helpfully gives us this if there's no message
-        if (stack[0] === "Error") {
-            stack.shift();
+        // Node helpfully gives us this if there's no message.  It's not even
+        // the name of the error class, just "Error"
+        if (lines[0] === "Error") {
+            lines.shift();
         }
 
         return Diagnostic(
             Presentation.List,
             [
                 message,
-                ...stack,
+                ...lines,
             ]
         )
     }

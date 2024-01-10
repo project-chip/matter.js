@@ -9,7 +9,6 @@ import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommis
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { PartServer } from "../../../endpoint/PartServer.js";
 import { Logger } from "../../../log/Logger.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
@@ -75,13 +74,6 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     }
 
     override async setRegulatoryConfig({ breadcrumb, newRegulatoryConfig, countryCode }: SetRegulatoryConfigRequest) {
-        if (countryCode.length !== 2) {
-            throw new StatusResponseError(
-                "The country code need to have a fixed length of 2 characters.",
-                StatusCode.ConstraintError,
-            );
-        }
-
         const locationCapabilityValue = this.state.locationCapability;
 
         // Check and handle country code
@@ -146,7 +138,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
         // Regulatory config is not fabric-writable so requires elevated
         // privileges
-        this.elevate(() => {
+        this.asAdmin(() => {
             this.state.regulatoryConfig = newRegulatoryConfig;
         });
 

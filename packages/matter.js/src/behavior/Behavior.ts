@@ -127,7 +127,7 @@ export abstract class Behavior {
      *
      * @param fn the elevated logic
      */
-    elevate(fn: () => void) {
+    asAdmin(fn: () => void) {
         const context = this.context;
 
         const offline = context.offline;

@@ -204,7 +204,7 @@ export class PartServer implements EndpointInterface {
      * Hierarchical diagnostics of part and children.
      */
     get [Diagnostic.value]() {
-        const diagnostics = [ "Part", Diagnostic.em(this.#part.id), this.#diagnosticDict ];
+        const diagnostics = [ "Part", Diagnostic.strong(this.#part.id), this.#diagnosticDict ];
         if (this.#part.parts.size) {
             diagnostics.push(Diagnostic.list(
                 [ ...this.#part.parts ].map(part => PartServer.forPart(part)[Diagnostic.value])
@@ -220,7 +220,7 @@ export class PartServer implements EndpointInterface {
         logger.info(
             // Temporary easter egg for Ingo
             "🎉 Part",
-            Diagnostic.em(this.#part.id),
+            Diagnostic.strong(this.#part.id),
             "ready",
             this.#diagnosticDict,
         );

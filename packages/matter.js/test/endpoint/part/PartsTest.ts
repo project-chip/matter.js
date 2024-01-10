@@ -5,7 +5,7 @@
  */
 
 import { Part } from "../../../src/endpoint/Part.js";
-import { Lifecycle } from "../../../src/endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../../src/endpoint/part/PartLifecycle.js";
 import { MockPart } from "../mock-part.js";
 import { MockEndpoint } from "../../behavior/mock-behavior.js";
 
@@ -54,7 +54,7 @@ describe("Parts", () => {
 
         parent.part.parts.add(child);
 
-        let bubbled = Array<Lifecycle.Change>();
+        let bubbled = Array<PartLifecycle.Change>();
         parent.part.lifecycle.changed.on((type, part) => {
             expect(part).equals(grandchild);
             bubbled.push(type);
@@ -63,8 +63,8 @@ describe("Parts", () => {
         child.parts.add(grandchild);
 
         expect(bubbled).deep.equals([
-            Lifecycle.Change.Installed,
-            Lifecycle.Change.Ready
+            PartLifecycle.Change.Installed,
+            PartLifecycle.Change.Ready
         ]);
     });
 
@@ -78,7 +78,7 @@ describe("Parts", () => {
 
         let bubbled: Part | undefined;
         parent.part.lifecycle.changed.on((type, part) => {
-            expect(type).equals(Lifecycle.Change.Destroyed);
+            expect(type).equals(PartLifecycle.Change.Destroyed);
             (bubbled = part)
         });
 

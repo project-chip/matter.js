@@ -5,7 +5,7 @@
  */
 
 import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
-import { ImplementationError, NotImplementedError, NotInitializedError } from "../../common/MatterError.js";
+import { ImplementationError, NotImplementedError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
@@ -22,7 +22,7 @@ import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
 import { ServerStore } from "./storage/ServerStore.js";
 import { AsyncConstruction, asyncNew } from "../../util/AsyncConstruction.js";
-import { Lifecycle } from "../../endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
 import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
@@ -32,6 +32,7 @@ import { IdentityService } from "./IdentityService.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { BasicInformationBehavior } from "../../behavior/definitions/basic-information/BasicInformationBehavior.js";
+import { UninitializedDependencyError } from "../../common/Lifecycle.js";
 
 const logger = Logger.get("NodeServer");
  
@@ -67,7 +68,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     get rootPart() {
         if (!this.#root) {
-            throw new NotInitializedError(
+            throw new UninitializedDependencyError(
                 "Root part is unavailable because initialization is incomplete; await the NodeServer to avoid this error"
             );
         }
@@ -127,7 +128,9 @@ export class NodeServer extends BaseNodeServer implements Node {
             async () => {
                 this.#store = await ServerStore.create(this.#configuration);
                 
-                root.lifecycle.change(Lifecycle.Change.Installed);
+                root.lifecycle.change(PartLifecycle.Change.Installed);
+
+                await this.#root.construction;
             }
         );
     }
@@ -158,7 +161,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         await super.start();
 
-        logger.notice("Node", Diagnostic.em(this.description), "is online");
+        logger.notice("Node", Diagnostic.strong(this.description), "is online");
     }
 
     /**

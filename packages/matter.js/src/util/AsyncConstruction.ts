@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, NotInitializedError } from "../common/MatterError.js";
-import { LifecycleStatus } from "../log/LifecycleStatus.js";
+import { ImplementationError } from "../common/MatterError.js";
+import { IncapacitatedDependencyError, LifecycleStatus, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { Tracker, MaybePromise } from "./Promises.js";
 
 /**
@@ -77,7 +77,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * If you omit the initializer parameter to {@link AsyncConstruction}
      * execution is deferred until you invoke this method.
      */
-    start(initializer: () => MaybePromise<void>): void;
+    start(initializer: () => MaybePromise<void>): this;
 
     /**
      * AsyncConstruction may be cancellable.  If not this method does nothing.
@@ -124,7 +124,15 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
             started = true;
 
-            const initialization = initializer();
+            let initialization;
+            try {
+                initialization = initializer();
+            } catch (e) {
+                error = e;
+                ready = true;
+                status = LifecycleStatus.Incapacitated;
+                throw e;
+            }
 
             if (MaybePromise.is(initialization)) {
                 ready = false;
@@ -148,6 +156,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 ready = true;
                 status = LifecycleStatus.Active;
             }
+
+            return this;
         },
 
         cancel: () => {
@@ -163,13 +173,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         assert() {
             if (error) {
-                throw new NotInitializedError(`Resource unavailable because of initialization failure: ${error}`);
+                throw new IncapacitatedDependencyError(`Resource unavailable because of initialization failure: ${error}`);
             }
             if (!ready) {
-                throw new NotInitializedError("Resource unavailable because initialization is ongoing");
+                throw new UninitializedDependencyError("Resource unavailable because initialization is ongoing");
             }
             if (canceled) {
-                throw new NotInitializedError("Resource unavailable because initialization was canceled");
+                throw new UninitializedDependencyError("Resource unavailable because initialization was canceled");
             }
         },
         

@@ -7,7 +7,8 @@
 import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
 import type { InvocationContext } from "../behavior/InvocationContext.js";
-import { ImplementationError, InternalError, NotInitializedError } from "../common/MatterError.js";
+import { UninitializedDependencyError } from "../common/Lifecycle.js";
+import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
@@ -16,7 +17,7 @@ import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
 import { BehaviorInitializer } from "./part/BehaviorInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
-import { Lifecycle } from "./part/Lifecycle.js";
+import { PartLifecycle } from "./part/PartLifecycle.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
@@ -40,7 +41,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #agentType?: Agent.Type<T["behaviors"]>;
     #offlineAgent?: Agent.Instance<T["behaviors"]>;
     #behaviors?: Behaviors;
-    #lifecycle: Lifecycle;
+    #lifecycle: PartLifecycle;
     #parts?: Parts;
     #construction: AsyncConstruction<Part<T>>;
 
@@ -50,7 +51,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get id() {
         if (this.#id === undefined) {
-            throw new NotInitializedError(
+            throw new UninitializedDependencyError(
                 "Part ID is not yet assigned; set ID or await part.construction to avoid this error"
             );
         }
@@ -63,7 +64,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get number(): EndpointNumber {
         if (this.#number === undefined) {
-            throw new NotInitializedError(
+            throw new UninitializedDependencyError(
                 "Part number is not yet assigned; set number or await part.construction to avoid this error"
             );
         }
@@ -87,7 +88,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get behaviors() {
         if (this.#behaviors === undefined) {
-            throw new NotInitializedError(
+            throw new UninitializedDependencyError(
                 "Part behaviors not yet initialized; await part.construction to avoid this error"
             );
         }
@@ -112,7 +113,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         const behaviors = this.#type.behaviors ?? [];
         this.#behaviors = new Behaviors(this, behaviors, { ...options?.config });
 
-        this.#lifecycle = new Lifecycle(this);
+        this.#lifecycle = new PartLifecycle(this);
 
         if (options?.id !== undefined) {
             this.id = options?.id;
@@ -139,11 +140,12 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             }
 
             // Deferred initialization -- wait for installation
-            return new Promise<void>(fulfilled => {
+            return new Promise<void>((fulfilled, rejected) => {
                 this.#lifecycle.installed.once(() => {
                     MaybePromise.then(
-                        this.#initialize(),
-                        fulfilled
+                        () => this.#initialize(),
+                        fulfilled,
+                        rejected,
                     );
                 });
             });
@@ -161,7 +163,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         const promise = this.behaviors.initialize();
         return MaybePromise.then(
             promise,
-            () => this.lifecycle.change(Lifecycle.Change.Ready),
+            () => this.lifecycle.change(PartLifecycle.Change.Ready),
         )
     }
 
@@ -187,7 +189,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
         
         this.#id = id;
-        this.lifecycle.change(Lifecycle.Change.IdAssigned);
+        this.lifecycle.change(PartLifecycle.Change.IdAssigned);
     }
 
     set number(number: number) {
@@ -220,7 +222,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
         this.#number = EndpointNumber(number);
 
-        this.lifecycle.change(Lifecycle.Change.NumberAssigned);
+        this.lifecycle.change(PartLifecycle.Change.NumberAssigned);
     }
 
     set owner(owner: PartOwner | undefined) {
@@ -374,7 +376,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
     async [Symbol.asyncDispose]() {
         await this.behaviors[Symbol.asyncDispose]();
-        this.lifecycle.change(Lifecycle.Change.Destroyed);
+        this.lifecycle.change(PartLifecycle.Change.Destroyed);
         this.#owner = undefined;
     }
 

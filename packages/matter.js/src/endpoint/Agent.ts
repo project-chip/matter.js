@@ -70,7 +70,7 @@ export class Agent {
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
         if (!behavior) {
-            behavior = this.#part.behaviors.create(type, this);
+            behavior = this.#part.behaviors.createSync(type, this);
             this.#behaviors[type.id] = behavior;
         }
         return behavior as InstanceType<T>;
@@ -87,7 +87,7 @@ export class Agent {
             return behavior as InstanceType<T>;
         }
 
-        return this.#part.behaviors.createAsync(type, this) as MaybePromise<InstanceType<T>>;
+        return this.#part.behaviors.createMaybeAsync(type, this) as MaybePromise<InstanceType<T>>;
     }
 
     /**
@@ -95,7 +95,7 @@ export class Agent {
      * 
      * Functionally identical to {@link waitFor} but has no return value.
      */
-    activate(type: Behavior.Type): void {
+    activate(type: Behavior.Type) {
         this.#part.behaviors.activate(type);
     }
 

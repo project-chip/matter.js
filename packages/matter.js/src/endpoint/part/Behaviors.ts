@@ -7,7 +7,7 @@
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
-import { Lifecycle } from "./Lifecycle.js";
+import { PartLifecycle } from "./PartLifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Logger } from "../../log/Logger.js";
@@ -20,7 +20,8 @@ import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { BehaviorInitializer } from "./BehaviorInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
-import { LifecycleStatus } from "../../log/LifecycleStatus.js";
+import { DestroyedDependencyError, IncapacitatedDependencyError, LifecycleStatus, UnsupportedDependencyStatusError } from "../../common/Lifecycle.js";
+import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 
 const logger = Logger.get("Behaviors");
 
@@ -69,6 +70,11 @@ export class Behaviors {
         this.#part = part;
         this.#supported = supported;
         this.#options = options;
+
+        // DescriptorBehavior is mandatory for all parts
+        if (!this.#supported.descriptor) {
+            this.#supported.descriptor = DescriptorServer;
+        }
     }
 
     /**
@@ -141,7 +147,7 @@ export class Behaviors {
 
         this.#supported[type.id] = type;
 
-        this.#part.lifecycle.change(Lifecycle.Change.ServersChanged);
+        this.#part.lifecycle.change(PartLifecycle.Change.ServersChanged);
             
         if (type.immediate && this.#part.lifecycle.isInstalled) {
             this.#part.agent.activate(type);
@@ -149,23 +155,38 @@ export class Behaviors {
     }
 
     /**
-     * Create a behavior.  {@link Agent} obtains behaviors via this method.
+     * Create a behavior synchronously.  Fails if the behavior is not fully
+     * initialized.
      */
-    create(type: Behavior.Type, agent: Agent) {
-        const behavior = this.createAsync(type, agent);
+    createSync(type: Behavior.Type, agent: Agent) {
+        const behavior = this.createMaybeAsync(type, agent);
         if (MaybePromise.is(behavior)) {
-            throw new ImplementationError(`Cannot access behavior "${type.id}" because it is still initializing`);
+            throw new ImplementationError(
+                `Synchronous access to behavior "${type.id}" is impossible because it is still initializing`
+            );
         }
         return behavior;
     }
 
     /**
-     * Create a behavior, waiting for the behavior to initialize if necessary.
+     * Create a behavior asynchronously.  Waits for the behavior to complete
+     * initialization.
+     */
+    async createAsync(type: Behavior.Type, agent: Agent) {
+        try {
+            return this.createMaybeAsync(type, agent);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    }
+
+    /**
+     * Create a behavior, possibly asynchronously.
      *
      * This method returns a {@link Promise} only if await is necessary so the
      * behavior can be used immediately if possible.
      */
-    createAsync(type: Behavior.Type, agent: Agent): MaybePromise<Behavior> {
+    createMaybeAsync(type: Behavior.Type, agent: Agent): MaybePromise<Behavior> {
         this.activate(type);
         let backing = this.#backings[type.id];
 
@@ -173,11 +194,37 @@ export class Behaviors {
             return backing.construction.then(() => backing.createBehavior(agent, type));
         }
 
-        return backing.createBehavior(agent, type);
-    }
+        switch (backing.construction.status) {
+            case LifecycleStatus.Active:
+                return backing.createBehavior(agent, type);
+
+            case LifecycleStatus.Initializing:
+                throw backing.construction.then(() => backing.createBehavior(agent, type));
+
+            case LifecycleStatus.Incapacitated:
+                throw new IncapacitatedDependencyError(
+                    `Cannot access behavior ${type} because it has been incapacitated`
+                );
+
+            case LifecycleStatus.Destroyed:
+                throw new DestroyedDependencyError(
+                    `Cannot access behavior ${type} because it has been destroyed`
+                );
+        }
+
+        throw new UnsupportedDependencyStatusError(
+            `Behavior ${type} initialization left behavior in ${backing.construction.status} state`
+        );
+}
 
     /**
      * Activate a behavior.
+     * 
+     * Semantically identical to createAsync() but does not return a
+     * {@link Promise} or throw an error.
+     * 
+     * Behaviors that fail initialization will be marked as incapacitated in
+     * {@link status}.
      */
     activate(type: Behavior.Type) {
         let backing = this.#backings[type.id];
@@ -185,6 +232,8 @@ export class Behaviors {
         if (!backing) {
             backing = this.#createBacking(type);
         }
+        
+        return backing.construction;
     }
 
     /**
