@@ -107,5 +107,37 @@ LocalMatter.children.push({
                 },
             ],
         },
+
+        {
+            tag: "command",
+            name: "GoToLiftPercentage",
+            id: 0x5,
+
+            children: [
+                {
+                    tag: "datatype",
+                    name: "LiftPercent100thsValue",
+                    id: 0x0,
+                    type: "percent100ths",
+                    conformance: "M",
+                    constraint: "desc",
+                },
+            ],
+        },
+        {
+            tag: "command",
+            name: "GoToTiltPercentage",
+            id: 0x8,
+            children: [
+                {
+                    tag: "datatype",
+                    name: "TiltPercent100thsValue",
+                    id: 0x0,
+                    type: "percent100ths",
+                    conformance: "M",
+                    constraint: "desc",
+                },
+            ],
+        },
     ],
 });

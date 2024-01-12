@@ -9,6 +9,11 @@ The main work (all changes without a GitHub username in brackets in the below li
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Matter-Core functionality:
+  * Fix: Adjust commands GoToLiftPercentage and GoToTiltPercentage to match with Matter SDK and work around specification issue
+
+
 ## 0.7.4 (2023-12-31)
 * Matter-Core functionality:
   * Enhancement: Refactor Core Session management to match specification

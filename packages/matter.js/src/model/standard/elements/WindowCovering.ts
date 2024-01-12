@@ -538,17 +538,10 @@ Matter.children.push({
                 "status SHOULD be returned.",
 
             xref: { document: "cluster", section: "5.3.6.5" },
-
-            children: [
-                {
-                    tag: "datatype", name: "LiftPercentageValue", id: 0x0, type: "percent", conformance: "O.a",
-                    constraint: "desc"
-                },
-                {
-                    tag: "datatype", name: "LiftPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
-                    constraint: "desc"
-                }
-            ]
+            children: [{
+                tag: "datatype", name: "LiftPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
+                constraint: "desc"
+            }]
         },
 
         {
@@ -590,17 +583,10 @@ Matter.children.push({
                 "status SHOULD be returned.",
 
             xref: { document: "cluster", section: "5.3.6.7" },
-
-            children: [
-                {
-                    tag: "datatype", name: "TiltPercentageValue", id: 0x0, type: "percent", conformance: "O.a",
-                    constraint: "desc"
-                },
-                {
-                    tag: "datatype", name: "TiltPercent100thsValue", id: 0x1, type: "percent100ths", conformance: "O.a",
-                    constraint: "desc"
-                }
-            ]
+            children: [{
+                tag: "datatype", name: "TiltPercent100thsValue", id: 0x0, type: "percent100ths", conformance: "M",
+                constraint: "desc"
+            }]
         },
 
         {
