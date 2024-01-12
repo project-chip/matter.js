@@ -64,6 +64,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
         }
     });
 }
+
 /**
  * Return type for functions that are optionally asynchronous.
  */
@@ -89,8 +90,8 @@ export namespace MaybePromise {
      */
     export function then<I, O1 = never, O2 = never>(
         producer: MaybePromise<I> | (() => MaybePromise<I>),
-        resolve?: (input: I) => O1,
-        reject?: (error: any) => O2
+        resolve?: (input: I) => MaybePromise<O1>,
+        reject?: (error: any) => MaybePromise<O2>
     ): MaybePromise<O1 | O2> {
         try {
             let value;

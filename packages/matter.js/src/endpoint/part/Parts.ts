@@ -41,6 +41,14 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         });
     }
 
+    get(id: string) {
+        for (const part of this) {
+            if (part.lifecycle.hasId && part.id === id) {
+                return part;
+            }
+        }
+    }
+
     add(child: Part.Definition | Agent) {
         this.#children.add(this.#partFor(child));
     }
@@ -88,9 +96,23 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     }
 
     /**
+     * Confirm availability of an ID amongst the part's children.
+     */
+    assertIdAvailable(id: string) {
+        const other = this.get(id);
+        if (other) {
+            throw new IdentityConflictError(`${other} is already defined; part IDs must be unique within parent`);
+        }
+    }
+
+    /**
      * Take ownership of a part.  Invoked when a part is added.
      */
     #adoptPart(child: Part) {
+        if (child.lifecycle.hasId) {
+            this.assertIdAvailable(child.id);
+        }
+
         // Insertion validation is only possible in a fully configured node.
         // If we are not yet installed then an ancestor will handle validation
         // when we are installed
@@ -122,21 +144,12 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         this.#children.delete(child);
     }
     
-    #validateInsertion(forefather: Part, part: Part, usedIds?: Set<string>, usedNumbers?: Set<number>) {
-        if (part.lifecycle.hasId) {
-            this.#part.serviceFor(IdentityService).assertIdAvailable(part.id, part);
-            if (usedIds?.has(part.id)) {
-                throw new IdentityConflictError(
-                    `Cannot add part ${forefather.description} because descendents have conflicting definitions for ID ${part.id}`
-                );
-            }
-        }
-
+    #validateInsertion(forefather: Part, part: Part, usedNumbers?: Set<number>) {
         if (part.lifecycle.hasNumber) {
             this.#part.serviceFor(IdentityService).assertNumberAvailable(part.number, part);
             if (usedNumbers?.has(part.number)) {
                 throw new IdentityConflictError(
-                    `Cannot add part ${forefather.description} because descendents have conflicting definitions for endpoint number ${part.number}`
+                    `Cannot add part ${forefather} because descendents have conflicting definitions for endpoint number ${part.number}`
                 );
             }
         }
@@ -152,12 +165,6 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
 
         // We cannot rely on index to track identity of incoming part hierarchy
         // because the entries are not yet present in the index
-        if (!usedIds) {
-            usedIds = new Set;
-        }
-        if (part.id) {
-            usedIds.add(part.id);
-        }
         if (!usedNumbers) {
             usedNumbers = new Set;
         }
@@ -166,7 +173,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         }
 
         for (const child of children) {
-            this.#validateInsertion(forefather, child, usedIds, usedNumbers);
+            this.#validateInsertion(forefather, child, usedNumbers);
         }
     }
 

@@ -19,10 +19,6 @@ export class NodeClient implements Node {
         throw new NotImplementedError();
     }
 
-    get description() {
-        return `${this.constructor.name}<${this.id}>`;
-    }
-
     get owner() {
         return undefined;
     }
@@ -43,6 +39,10 @@ export class NodeClient implements Node {
         this.#construction = AsyncConstruction(this, () => {
             throw new NotImplementedError("Client nodes are TODO");
         });
+    }
+
+    toString() {
+        return `${this.constructor.name}<${this.id}>`;
     }
 
     async [Symbol.asyncDispose](): Promise<void> {

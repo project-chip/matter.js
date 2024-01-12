@@ -55,7 +55,7 @@ export class ServerStore {
                 this.#partStores = await asyncNew(
                     PartStoreService,
                     {
-                        storage: this.#storage.createContext("endpoints"),
+                        storage: this.#storage.createContext("root"),
                         nextNumber,
                     }
                 );

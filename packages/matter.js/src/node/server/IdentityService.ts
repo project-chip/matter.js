@@ -54,16 +54,6 @@ export class IdentityService {
     }
 
     /**
-     * Ensure that an ID is available for assignment to a {@link Part}.
-     */
-    assertIdAvailable(id: string, part: Part) {
-        const other = this.#index?.forId(id);
-        if (other && other !== part) {
-            throw new IdentityConflictError(`Another part already exists with ID ${id}`)
-        }
-    }
-
-    /**
      * Ensure that a number is available for assignment to a {@link Part}.
      */
     assertNumberAvailable(number: number, part: Part) {

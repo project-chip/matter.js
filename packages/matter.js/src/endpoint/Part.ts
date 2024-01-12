@@ -15,7 +15,7 @@ import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
-import { BehaviorInitializer } from "./part/BehaviorInitializer.js";
+import { PartInitializer } from "./part/PartInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
 import { PartLifecycle } from "./part/PartLifecycle.js";
 import type { PartOwner } from "./part/PartOwner.js";
@@ -46,8 +46,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #construction: AsyncConstruction<Part<T>>;
 
     /**
-     * A string that uniquely identifies a part.  This ID must be unique in the
-     * namespace of the owner.
+     * A string that uniquely identifies a Part.
+     * 
+     * This ID must be unique amongst all Parts with the same owner.
      */
     get id() {
         if (this.#id === undefined) {
@@ -158,13 +159,25 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
-        return MaybePromise.then(
+        let promise = MaybePromise.then(
             () => {
-                this.owner.serviceFor(BehaviorInitializer).initializeDescendent(this);
+                this.owner.serviceFor(PartInitializer).preInitialize(this);
                 return this.behaviors.initialize();
             },
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
+        );
+
+        promise = MaybePromise.then(
+            promise,
+            () => this.owner.serviceFor(PartInitializer).postInitialize(this)
+        );
+
+        promise = MaybePromise.then(
+            promise,
+            () => this.lifecycle.change(PartLifecycle.Change.Ready)
         )
+
+        return promise;
     }
 
     set id(id: string) {
@@ -172,7 +185,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#id !== undefined) {
-            throw new ImplementationError(`${this.description} ID is already assigned, cannot reassign`);
+            throw new ImplementationError(`${this} ID is already assigned, cannot reassign`);
         }
         if (typeof id !== "string") {
             throw new ImplementationError(`Illegal endpoint ID type "${typeof id}"`);
@@ -184,8 +197,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new ImplementationError('Endpoint ID may not include "."');
         }
 
-        if (this.lifecycle.isInstalled) {
-            this.owner.serviceFor(IdentityService).assertIdAvailable(id, this);
+        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
+            this.owner.parts.assertIdAvailable(id);
         }
         
         this.#id = id;
@@ -197,7 +210,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#number !== undefined) {
-            throw new ImplementationError(`${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`)
+            throw new ImplementationError(`${this} endpoint number ${this.#number} is already assigned, cannot reassign`)
         }
         if (typeof number !== "number") {
             throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
@@ -278,36 +291,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * A human-readable name for the part.
-     */
-    get description() {
-        let owner;
-        if (this.lifecycle.isInstalled) {
-            owner = this.owner.serviceFor(IdentityService).nodeDescription;
-        } else {
-            owner = "?";
-        }
-
-        let id;
-        if (this.#lifecycle.hasId) {
-            id = this.id;
-        } else if (this.#lifecycle.hasNumber) {
-            id = `#${this.number}`;
-        } else {
-            id = "?";
-        }
-
-        return `${owner}.${this.#type.name}<${id}>`;
-    }
-
-    /**
-     * Generate a description for a specific behavior.
-     */
-    descriptionOf(type: Behavior.Type) {
-        return `${this.description}.${type.id}`;
-    }
-
-    /**
      * Create an {@link Agent}.  This is the primary means of
      * interacting with an endpoint.
      *
@@ -367,6 +350,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new ImplementationError("Cannot access services because owner is not installed");
         }
         return this.#owner.serviceFor(type);
+    }
+
+    toString() {
+        let owner;
+        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
+            owner = `${this.owner}.`;
+        } else {
+            owner = "";
+        }
+
+        let id;
+        if (this.#lifecycle.hasId) {
+            id = this.id;
+        } else if (this.#lifecycle.hasNumber) {
+            id = `#${this.number}`;
+        } else {
+            id = "?";
+        }
+
+        return `${owner}${this.#type.name}<${id}>`;
     }
 
     get #resolvedAgentType() {
