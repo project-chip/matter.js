@@ -23,8 +23,7 @@ import { BaseNodeServer } from "./BaseNodeServer.js";
 import { ServerStore } from "./storage/ServerStore.js";
 import { AsyncConstruction, asyncNew } from "../../util/AsyncConstruction.js";
 import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
-import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
+import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
 import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
 import { PartStoreService } from "./storage/PartStoreService.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -45,7 +44,6 @@ const logger = Logger.get("NodeServer");
  * confusing with the conventions of matter-node.js.
  */
 export class NodeServer extends BaseNodeServer implements Node {
-    #id: string;
     #configuration: ServerOptions.Configuration;
     #root: Part<RootEndpoint>;
     #rootServer?: PartServer;
@@ -53,13 +51,13 @@ export class NodeServer extends BaseNodeServer implements Node {
     #host?: Host;
     #store?: ServerStore;
     #construction: AsyncConstruction<NodeServer>;
-    #behaviorInitializer?: BehaviorInitializer;
+    #behaviorInitializer?: PartInitializer;
     #identityService?: IdentityService;
     #uptime?: Diagnostic.Elapsed;
     #interactionServer?: TransactionalInteractionServer;
 
     get id() {
-        return this.#id;
+        return this.#root.id;
     }
 
     get owner() {
@@ -81,7 +79,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     get store() {
         if (this.#store === undefined) {
-            throw new ImplementationError(`${this.description}: Storage accessed prior to initialization`);
+            throw new ImplementationError(`Storage for ${this} accessed prior to initialization`);
         }
         return this.#store;
     }
@@ -108,7 +106,6 @@ export class NodeServer extends BaseNodeServer implements Node {
         super();
 
         this.#configuration = ServerOptions.configurationFor(options);
-        this.#id = this.#configuration.id;
 
         const root = this.#root = Part.partFor(this.#configuration.root);
 
@@ -122,6 +119,10 @@ export class NodeServer extends BaseNodeServer implements Node {
             root.number = EndpointNumber(0);
         } else if (root.number !== 0) {
             throw new ImplementationError(`Root node ID must be 0`);
+        }
+
+        if (!root.lifecycle.hasId) {
+            root.id = "default";
         }
     
         root.behaviors.require(CommissioningBehavior);
@@ -174,11 +175,9 @@ export class NodeServer extends BaseNodeServer implements Node {
             }
         }
 
-        await this.#saveInitialValues();
-
         await super.start();
 
-        logger.notice("Node", Diagnostic.strong(this.description), "is online");
+        logger.notice("Node", Diagnostic.strong(this), "is online");
     }
 
     /**
@@ -261,21 +260,22 @@ export class NodeServer extends BaseNodeServer implements Node {
             let index = 0;
             for (const part2 of part.owner.parts) {
                 if (part2 === part) {
-                    const id = `${part.owner.id}#${index}`;
-                    logger.warn(`Using fallback ID ${id} for unidentified part; set part ID to remove this warning`);
+                    const id = `part${index}`;
+                    const desc = part.owner instanceof Part ? `${part.owner}.${id}` : id;
+                    logger.warn(`Using fallback for ${desc}; set part ID to remove this warning`);
                     return id;
                 }
                 index++;
             }
         }
-        throw new ImplementationError(`Cannot determine ID for ${part.description}`);
+        throw new ImplementationError(`Cannot determine ID for ${part}`);
     }
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
         // Not sure why the cast to unknown is necessary here, TS complains
         // that type may not instantiate to T without it which seems incorrect
         switch (type as unknown) {
-            case BehaviorInitializer:
+            case PartInitializer:
                 if (!this.#behaviorInitializer) {
                     this.#behaviorInitializer = new ServerBehaviorInitializer(this);
                 }
@@ -289,7 +289,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
             case IdentityService:
                 if (!this.#identityService) {
-                    this.#identityService = new IdentityService(this.#root, this.description, this.port);
+                    this.#identityService = new IdentityService(this.#root, this.toString(), this.port);
                 }
                 return this.#identityService as T;
         }
@@ -300,13 +300,13 @@ export class NodeServer extends BaseNodeServer implements Node {
     /**
      * Textual description of the node used in diagnostic messages.
      */
-    get description() {
+    override toString() {
         return `${this.constructor.name}<${this.id}>`
     }
 
     get [Diagnostic.value]() {
         return [
-            this.description,
+            this,
             Diagnostic.dict({ port: this.port, uptime: this.#uptime }),
             Diagnostic.list([
                 this.rootEndpoint[Diagnostic.value],
@@ -356,19 +356,6 @@ export class NodeServer extends BaseNodeServer implements Node {
     protected override clearStorage(): Promise<void> {
         // TODO
         throw new NotImplementedError();
-    }
-
-    /**
-     * We don't run behavior initializers transactionally.
-     * 
-     * Instead we save dirty values at server startup.
-     */
-    async #saveInitialValues() {
-        const transaction = new Transaction();
-        this.rootPart.visit(part => part.behaviors.save(transaction));
-        if (transaction.status === Transaction.Status.Exclusive) {
-            await transaction.commit();
-        }
     }
 
     protected override async createMatterDevice() {

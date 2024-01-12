@@ -54,7 +54,6 @@ export namespace ServerOptions {
         }
 
         return {
-            id: options?.id ?? `node${nextNodeId++}`,
             environment: options?.environment ?? Environment.default,
             root: options?.root ?? RootEndpoint,
             network: NetworkOptions.configurationFor(options.network),
@@ -65,8 +64,3 @@ export namespace ServerOptions {
 
     export interface Configuration extends ReturnType<typeof configurationFor> {}
 }
-
-/**
- * If a node ID is not supplied, Matter.js generates one using construction order tracked here.
- */
-let nextNodeId = 0;

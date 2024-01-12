@@ -6,6 +6,8 @@ import { logger } from "./ServerStore.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { Part } from "../../../endpoint/Part.js";
+import { ImplementationError } from "../../../common/MatterError.js";
 
 const NUMBER_KEY = "__number__";
 const KNOWN_KEY = "__known__";
@@ -22,7 +24,14 @@ export class ServerPartStore implements PartStore {
     #construction: AsyncConstruction<PartStore>;
     #isNew: boolean;
 
-    // TODO - see corresponding comment in ServicePartStoreService
+    #substorage: StorageContext;
+    #substores = {} as Record<string, ServerPartStore>;
+
+    // TODO - this is a temporary kludge, don't think it's possible right now to query for sub-contexts?  Instead we
+    // maintain this persistent list of all parts
+    #knownParts = new Set<string>();
+
+    // TODO - same issue here
     #knownBehaviors = new Set<string>();
 
     get construction() {
@@ -42,7 +51,9 @@ export class ServerPartStore implements PartStore {
     set number(number: number | undefined) {
         this.#construction.assert();
 
-        this.#number = number;
+        if (this.#number !== number) {
+            this.#number = number;
+        }
     }
 
     get isNew() {
@@ -50,7 +61,8 @@ export class ServerPartStore implements PartStore {
     }
 
     constructor(partId: string, storage: StorageContext, isNew: boolean) {
-        this.#storage = storage.createContext(partId);
+        this.#storage = storage;
+        this.#substorage = storage.createContext("parts");
         this.#isNew = isNew;
 
         this.#construction = AsyncConstruction(
@@ -82,12 +94,41 @@ export class ServerPartStore implements PartStore {
         } else {
             logger.warn(`Part ${partId} has persisted state but no endpoint number, will reassign`);
         }
+
+        this.#loadSubparts();
     }
 
     storeForBehavior(behaviorId: string): Datasource.Store {
         this.#construction.assert();
 
         return DatasourceStore(this, behaviorId);
+    }
+
+    substoreFor(part: Part): ServerPartStore {
+        if (!part.lifecycle.hasId) {
+            throw new ImplementationError("Cannot access part storage because part has no assigned ID");
+        }
+        return this.#storeForPartId(part.id);
+    }
+
+    #storeForPartId(partId: string) {
+        this.#construction.assert();
+
+        let store = this.#substores[partId];
+        if (store === undefined) {
+            store = this.#substores[partId] = new ServerPartStore(
+                partId,
+                this.#substorage.createContext(partId),
+                true
+            );
+
+            if (!this.#knownParts.has(partId)) {
+                this.#knownParts.add(partId);
+                this.#substorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
+            }
+        }
+
+        return store;
     }
 
     async saveNumber() {
@@ -138,5 +179,23 @@ export class ServerPartStore implements PartStore {
         await this.#construction;
 
         this.#storage.clearAll();
+    }
+
+    async #loadSubparts() {
+        this.#knownParts = new Set(this.#substorage.get(KNOWN_KEY, Array<string>()));
+
+        for (const partId of this.#knownParts) {
+            await this.#loadKnownSubstore(partId);
+        }
+    }
+
+    async #loadKnownSubstore(partId: string) {
+        const partStore = new ServerPartStore(
+            partId,
+            this.#substorage.createContext(partId),
+            false,
+        );
+        this.#substores[partId] = partStore;
+        await partStore.construction;
     }
 }

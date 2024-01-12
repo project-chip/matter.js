@@ -6,19 +6,17 @@
 
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { Part } from "../Part.js";
 
 /**
- * Pure-abstract base class for behavior initialization services.
- * 
- * Not an interface because PartOwner service uses the class to differentiate
- * component types.
+ * Base class for {@link Part} initialization services.
  */
-export abstract class BehaviorInitializer {
+export abstract class PartInitializer {
     /**
      * Initialize a {@link Part}.
      */
-    abstract initializeDescendent(part: Part): void;
+    preInitialize(_part: Part) {};
 
     /**
      * Create backing for a behavior of a descendent.
@@ -29,4 +27,9 @@ export abstract class BehaviorInitializer {
      * @returns a new {@link BehaviorBacking}
      */
     abstract createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking;
+
+    /**
+     * Finalize initialization after behaviors report as initialized.
+     */
+    postInitialize(_part: Part): MaybePromise<void> {}
 }

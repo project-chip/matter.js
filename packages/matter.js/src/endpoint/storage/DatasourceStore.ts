@@ -18,8 +18,7 @@ interface StorageParticipant extends Participant {
 /**
  * Factory function for the default implementation of {@link Datasource.Store}.
  * 
- * Performs read & write for non-volatile values for a single behavior via
- * the {@link PartStore} interface.
+ * Performs read & write for non-volatile values for a single behavior via the {@link PartStore} interface.
  */
 export function DatasourceStore(
     partStore: PartStore,
@@ -42,9 +41,10 @@ export function DatasourceStore(
         },
     };
 }
+
 /**
- * We create a single participant per storage/transaction pair.  This function
- * handles setup and retrieval of this participant.
+ * We create a single participant per storage/transaction pair.  This function handles setup and retrieval of this
+ * participant.
  */
 function participantFor(transaction: Transaction, partStore: PartStore) {
     let participant = transaction.getParticipant(partStore) as StorageParticipant | undefined;

@@ -15,16 +15,14 @@ import type { Datasource } from "../../behavior/state/managed/Datasource.js";
  */
 export interface PartStore {
     /**
-     * Currently persisted values, keyed by {@link Behavior.id} then
-     * property name.
+     * Currently persisted values, keyed by {@link Behavior.id} then property name.
      */
     initialValues: Record<string, Val.Struct>;
 
     /**
      * Patch values.  Keyed by {@link Behavior.id} then property name.
      * 
-     * See {@link Datasource.Store.set} for the patch semantics the individual
-     * structs use.
+     * See {@link Datasource.Store.set} for the patch semantics the individual structs use.
      */
     set(values: Record<string, Val.Struct | undefined>): Promise<void>;
 

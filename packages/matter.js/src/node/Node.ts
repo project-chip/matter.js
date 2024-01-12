@@ -18,16 +18,6 @@ import { AsyncConstruction } from "../util/AsyncConstruction.js";
  */
 export interface Node extends PartOwner {
     /**
-     * The unique identifier of the node.
-     */
-    id: string;
-
-    /**
-     * Textual description of the node used in diagnostic messages.
-     */
-    description: string;
-
-    /**
      * Access the root endpoint.
      */
     readonly root: Agent.Instance<RootEndpoint["behaviors"]>;

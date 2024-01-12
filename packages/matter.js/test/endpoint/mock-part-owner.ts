@@ -10,7 +10,7 @@ import { Part } from "../../src/endpoint/Part.js";
 import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { ImplementationError, InternalError } from "../../src/common/MatterError.js";
-import { BehaviorInitializer } from "../../src/endpoint/part/BehaviorInitializer.js";
+import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
 import { MockPartStore } from "../behavior/mock-behavior.js";
 import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
@@ -19,7 +19,7 @@ import { EventHandler } from "../../src/protocol/interaction/EventHandler.js";
 import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
 
-export class MockBehaviorInitializer extends BehaviorInitializer {
+export class MockBehaviorInitializer extends PartInitializer {
     #nextId = 1;
     initializeDescendent(part: Part) {
         if (!part.lifecycle.hasNumber) {
@@ -47,8 +47,7 @@ export class MockOwner implements PartOwner {
     constructor() {
         (this.#storage as any).initialized = true;
         this.#partStores = new PartStoreService({
-            storage: this.#storage.createContext("endpoint"),
-            loadKnown: false,
+            storage: this.#storage.createContext("endpoints"),
         });
         this.#eventHandler = new EventHandler(this.#storage.createContext("events"));
     }
@@ -76,7 +75,7 @@ export class MockOwner implements PartOwner {
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
         switch (type as unknown) {
-            case BehaviorInitializer:
+            case PartInitializer:
                 return this.#behaviorInitializer as T;
 
             case IdentityService:

@@ -51,6 +51,11 @@ export class Host implements Environment.Task {
      * Add a node to execute.
      */
     add(node: Node) {
+        for (const other of this.#nodes) {
+            if (other.root.id === node.root.id) {
+                throw new ImplementationError(`An installed node already has ID "${node.root.id}"; root parts must have unique IDs`);
+            }
+        }
         this.#nodes.add(node);
     }
 
