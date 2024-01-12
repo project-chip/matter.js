@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
 import { Ble } from "./ble/Ble.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
@@ -176,7 +177,7 @@ export interface CommissioningServerOptions {
  *
  * @deprecated use NodeServer
  */
-export class CommissioningServer extends BaseNodeServer {
+export class CommissioningServer extends BaseNodeServer implements MatterNode {
     #commissioningChangedCallback: CommissioningServerOptions["commissioningChangedCallback"];
     #activeSessionsChangedCallback: CommissioningServerOptions["activeSessionsChangedCallback"];
     #storage?: StorageContext;
@@ -185,6 +186,8 @@ export class CommissioningServer extends BaseNodeServer {
     #eventHandler?: EventHandler;
     #interactionServer?: InteractionServer;
     #endpointStructure = new InteractionEndpointStructure;
+    #mdnsBroadcaster?: MdnsBroadcaster;
+    #mdnsScanner?: MdnsScanner;
 
     protected override networkConfig: NetworkOptions.Configuration;
     protected override commissioningConfig: CommissioningOptions.Configuration;
@@ -477,14 +480,28 @@ export class CommissioningServer extends BaseNodeServer {
      * @deprecated use {@link BaseNodeServer.mdnsScanner}
      */
     setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.mdnsScanner = mdnsScanner;
+        this.#mdnsScanner = mdnsScanner;
     }
 
     /**
      * @deprecated use {@link BaseNodeServer.mdnsBroadcaster}
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.mdnsBroadcaster = mdnsBroadcaster;
+        this.#mdnsBroadcaster = mdnsBroadcaster;
+    }
+
+    async getMdnsScanner() {
+        if (!this.#mdnsScanner) {
+            throw new ImplementationError("Add the node to the Matter instance before!");
+        }
+        return this.#mdnsScanner;
+    }
+
+    async getMdnsBroadcaster() {
+        if (!this.#mdnsBroadcaster) {
+            throw new ImplementationError("Add the node to the Matter instance before!");
+        }
+        return this.#mdnsBroadcaster;
     }
 
     /**
@@ -626,6 +643,15 @@ export class CommissioningServer extends BaseNodeServer {
             this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
         }
         return this.#eventHandler;
+    }
+
+    /** Set the port the device is listening on. Can only be called before the device is initialized. */
+    override set port(port: number) {
+        if (port === this.networkConfig.port) return;
+        if (this.#mdnsBroadcaster !== undefined) {
+            throw new ImplementationError("Port cannot be changed after device is initialized!");
+        }
+        this.networkConfig.port = port;
     }
 
     private initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {

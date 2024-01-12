@@ -48,7 +48,9 @@
     "dependencies": {
         "@project-chip/matter-node-ble.js": "0.7.5-alpha.0-20240102-59cac7d2",
         "@project-chip/matter-node.js": "0.7.5-alpha.0-20240102-59cac7d2",
-        "@project-chip/matter.js-tools": "0.7.5-alpha.0-20240102-59cac7d2"
+        "@project-chip/matter.js-tools": "0.7.5-alpha.0-20240102-59cac7d2",
+        "@types/wtfnode": "^0.7.3",
+        "wtfnode": "^0.9.1"
     },
     "engines": {
         "_comment": "For Crypto.hkdf support",

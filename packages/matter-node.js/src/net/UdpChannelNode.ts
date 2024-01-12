@@ -130,4 +130,8 @@ export class UdpChannelNode implements UdpChannel {
     async close() {
         this.socket.close();
     }
+
+    get port() {
+        return this.socket.address().port;
+    }
 }

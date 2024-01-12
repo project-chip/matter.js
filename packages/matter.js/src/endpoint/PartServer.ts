@@ -10,7 +10,6 @@ import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
 import { DescriptorServer } from "../behavior/definitions/descriptor/DescriptorServer.js";
 import { ClusterServerBehaviorBacking } from "../behavior/server/ClusterServerBehaviorBacking.js";
 import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.js";
-import { Transaction } from "../behavior/state/transaction/Transaction.js";
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -84,15 +83,6 @@ export class PartServer implements EndpointInterface {
             backing = new ServerBehaviorBacking(this.#part, type);
         }
         return backing;
-    }
-
-    finalize() {
-        // We don't run initialization transactionally but instead save any dirty state once initialization completes
-        const transaction = new Transaction();
-        this.#part.behaviors.save(transaction);
-        if (transaction.status === Transaction.Status.Exclusive) {
-            return transaction.commit();
-        }
     }
 
     get number() {

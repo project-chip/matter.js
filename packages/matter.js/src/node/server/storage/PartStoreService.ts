@@ -56,7 +56,7 @@ export class PartStoreService {
                 }
 
                 // Preload stores so we can access synchronously going forward
-                this.#root = await asyncNew(ServerPartStore, "root", this.#storage, true);
+                this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
             }
         );
     }

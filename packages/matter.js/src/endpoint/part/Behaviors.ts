@@ -16,11 +16,13 @@ import { MaybePromise } from "../../util/Promises.js";
 import type { Agent } from "../Agent.js";
 import type { Part } from "../Part.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { PartInitializer } from "./PartInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
+import { Logger } from "../../log/Logger.js";
+
+const logger = Logger.get("Behaviors");
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -248,8 +250,18 @@ export class Behaviors {
      */
     async [Symbol.asyncDispose]() {
         for (const id in this.#backings) {
-            const behavior = (this.#part.agent as unknown as Record<string, Behavior>)[id];
-            await behavior?.destroy();
+            const backing = this.#backings[id]
+
+            if (backing.status !== LifecycleStatus.Initializing && backing.status !== LifecycleStatus.Active) {
+                continue;
+            }
+
+            try {
+                const behavior = (this.#part.agent as unknown as Record<string, Behavior>)[id];
+                await behavior?.destroy();
+            } catch (e) {
+                logger.error(`Error destroying ${backing}:`, e);
+            }
         }
         this.#backings = {};
     }
@@ -303,15 +315,6 @@ export class Behaviors {
         return defaults;
     }
 
-    /**
-     * If there are dirty values, join a transaction to save them.
-     */
-    save(transaction: Transaction) {
-        for (const index in this.#backings) {
-            this.#backings[index].save(transaction);
-        }
-    }
-
     #createBacking(type: Behavior.Type) {
         // Ensure the type is supported.  If it is, we instantiate with our
         // type rather than the specified type because our type might be an
@@ -326,6 +329,7 @@ export class Behaviors {
         if (!this.#part.owner) {
             throw new ImplementationError(`Attempted initialization of ${this.#part}${type.id} of uninstalled part`);
         }
+
         const backing = this.#part.serviceFor(PartInitializer).createBacking(this.#part, myType);
         this.#backings[type.id] = backing;
 
@@ -344,7 +348,6 @@ export class Behaviors {
                 });
         }
 
-        // Our shiny new backing is ready
         return backing;
     }
 
