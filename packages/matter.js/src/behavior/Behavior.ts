@@ -201,8 +201,8 @@ export abstract class Behavior {
     /**
      * Description used in diagnostic messages.
      */
-    get description() {
-        return this.part.descriptionOf(this.constructor as Behavior.Type);
+    toString() {
+        return `${this.part}.${(this.constructor as Behavior.Type).id}`;
     }
 
     /**

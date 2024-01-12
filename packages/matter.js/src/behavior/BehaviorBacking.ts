@@ -34,16 +34,16 @@ export abstract class BehaviorBacking {
         return this.#construction;
     }
 
-    get description() {
-        return this.#part.descriptionOf(this.type);
-    }
-
     constructor(part: Part, type: Behavior.Type, options?: Behavior.Options) {
         this.#part = part;
         this.#type = type;
         this.#options = options;
 
         this.#construction = AsyncConstruction(this);
+    }
+
+    toString() {
+        return `${this.part}.${this.type.id}`;
     }
 
     /**
@@ -65,12 +65,7 @@ export abstract class BehaviorBacking {
             }),
             undefined,
             e => {
-                logger.error(
-                    `Error initializing ${
-                        this.#part.descriptionOf(this.type)
-                    }:`,
-                    e,
-                );
+                logger.error(`Error initializing ${this.#part}.${this.type.id}:`, e);
             }
         );
     }
@@ -109,7 +104,7 @@ export abstract class BehaviorBacking {
         }
 
         throw new ImplementationError(
-            `Cannot create ${this.#part.descriptionOf(type)} because installed implementation is incompatible`,
+            `Cannot create ${this.#part}.${type.id} because installed implementation is incompatible`,
         );
     }
 

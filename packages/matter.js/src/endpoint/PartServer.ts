@@ -10,6 +10,7 @@ import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
 import { DescriptorServer } from "../behavior/definitions/descriptor/DescriptorServer.js";
 import { ClusterServerBehaviorBacking } from "../behavior/server/ClusterServerBehaviorBacking.js";
 import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.js";
+import { Transaction } from "../behavior/state/transaction/Transaction.js";
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -32,8 +33,7 @@ interface ServerPart extends Part {
 }
 
 /**
- * PartServer makes a {@link Part} available for remote access as an Endpoint
- * on a Matter network.
+ * PartServer makes a {@link Part} available for remote access as an Endpoint on a Matter network.
  */
 export class PartServer implements EndpointInterface {
     #part: Part;
@@ -68,7 +68,7 @@ export class PartServer implements EndpointInterface {
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
                 throw new InternalError(
-                    `${this.#part.descriptionOf(type)} cluster ${cluster.id} initialized multiple times`,
+                    `${this.#part}.${cluster.id} cluster ${cluster.id} initialized multiple times`,
                 );
             }
 
@@ -84,6 +84,15 @@ export class PartServer implements EndpointInterface {
             backing = new ServerBehaviorBacking(this.#part, type);
         }
         return backing;
+    }
+
+    finalize() {
+        // We don't run initialization transactionally but instead save any dirty state once initialization completes
+        const transaction = new Transaction();
+        this.#part.behaviors.save(transaction);
+        if (transaction.status === Transaction.Status.Exclusive) {
+            return transaction.commit();
+        }
     }
 
     get number() {
@@ -133,8 +142,7 @@ export class PartServer implements EndpointInterface {
     }
 
     destroy(): void {
-        // This is in EndpointInterface but we handle destruction
-        // asynchronously so just ignore
+        // This is in EndpointInterface but we handle destruction asynchronously so just ignore
     }
 
     async [Symbol.asyncDispose]() {
@@ -231,8 +239,7 @@ export class PartServer implements EndpointInterface {
      */
     #logPart() {
         logger.info(
-            // Temporary easter egg for Ingo
-            Diagnostic.strong(this.#part.description),
+            Diagnostic.strong(this.#part),
             "ready",
             this.#diagnosticDict,
         );
