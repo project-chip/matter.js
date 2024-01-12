@@ -138,4 +138,8 @@ export class UdpChannelNode implements UdpChannel {
             logger.debug("Error on closing socket", error);
         }
     }
+
+    get port() {
+        return this.socket.address().port;
+    }
 }

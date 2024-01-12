@@ -425,11 +425,11 @@ export class CommissioningController implements MatterNode {
         this.#storage = storage;
     }
 
-    set mdnsScanner(mdnsScanner: MdnsScanner) {
+    setMdnsScanner(mdnsScanner: MdnsScanner) {
         this.#mdnsScanner = mdnsScanner;
     }
 
-    set mdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
+    setMdnsBroadcaster(_mdnsBroadcaster: MdnsBroadcaster) {
         // Controller does not use a broadcaster
     }
 

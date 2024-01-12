@@ -4,17 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CommissioningController } from "../CommissioningController.js";
-import { MatterServer } from "../MatterServer.js";
 import { Environment } from "../common/Environment.js";
-import { ImplementationError } from "../common/MatterError.js";
+import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
-import { StorageManager } from "../storage/StorageManager.js";
+import { MdnsBroadcaster } from "../mdns/MdnsBroadcaster.js";
+import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { Node } from "./Node.js";
 import { ServerOptions } from "./options/ServerOptions.js";
-import { BaseNodeServer } from "./server/BaseNodeServer.js";
 
 const logger = Logger.get("Host");
 
@@ -31,7 +29,7 @@ export class Host implements Environment.Task {
     // We share configuration with the server
     #configuration: ServerOptions.Configuration;
 
-    // One or more NodeClient and NodeServer instances we will host
+    // The nodes we are hosting
     #nodes = new Set<Node>();
 
     // We track state outside of run() so it is available to abort()
@@ -42,6 +40,10 @@ export class Host implements Environment.Task {
     // until it completes to check the abort flag and this property is
     // undefined
     #abort?: () => void;
+
+    // MDNS support
+    #mdnsBroadcaster?: MdnsBroadcaster;
+    #mdnsScanner?: MdnsScanner;
 
     constructor(options?: ServerOptions) {
         this.#configuration = ServerOptions.configurationFor(options);
@@ -56,6 +58,9 @@ export class Host implements Environment.Task {
                 throw new ImplementationError(`An installed node already has ID "${node.root.id}"; root parts must have unique IDs`);
             }
         }
+
+        node.host = this;
+
         this.#nodes.add(node);
     }
 
@@ -64,6 +69,8 @@ export class Host implements Environment.Task {
      *
      * This method only returns if startup fails or the host is aborted.
      * After return nodes are destroyed.
+     * 
+     * TODO - wire abort logic into lower levels where applicable
      */
     async run() {
         if (this.#status !== Status.INACTIVE) {
@@ -73,64 +80,54 @@ export class Host implements Environment.Task {
 
         const environment = this.#configuration.environment;
 
-        let storage: StorageManager | undefined;
-
         environment.tasks.add(this);
 
+        this.#mdnsBroadcaster = await MdnsBroadcaster.create({
+            enableIpv4: !this.#configuration.network.disableIpv4,
+            multicastInterface: this.#configuration.network.announceInterface,
+        });
+        this.#mdnsScanner = await MdnsScanner.create({
+            enableIpv4: !this.#configuration.network.disableIpv4,
+            netInterface: this.#configuration.network.discoverInterface,
+        });
+
         try {
-            try {
-                // Can't abort this
-                storage = await environment.createStorage();
-                if (this.aborted) {
+            for (const node of this.#nodes) {
+                if (this.#aborted) {
                     return;
                 }
-            } finally {
-                this.#abort = undefined;
-            }
-
-            const server = new MatterServer(storage, {
-                mdnsAnnounceInterface: this.#configuration.network.announceInterface,
-                mdnsInterface: this.#configuration.network.discoverInterface,
-                disableIpv4: this.#configuration.network.disableIpv4,
-            });
-
-            for (const node of this.#nodes) {
-                await node.construction;
-
-                if (node instanceof CommissioningController) {
-                    await server.addCommissioningController(node);
-                } else if (node instanceof BaseNodeServer) {
-                    await server.addCommissioningServer(node);
-                } else {
-                    throw new ImplementationError(
-                        "Cannot run node that is neither a CommissioningController nor a CommissioningServer",
-                    );
-                }
-            }
-
-            // Can't abort this
-            await server.start();
-            if (this.aborted) {
-                return;
-            }
-
-            await new Promise<void>((resolve, reject) => {
                 try {
-                    this.#abort = () => {
-                        server.close().then(resolve).catch(reject);
-                    };
+                    await node.start();
                 } catch (e) {
-                    reject(e);
-                } finally {
-                    this.#abort = undefined;
+                    logger.error(e);
+                    logger.error(`Startup aborted by failure of ${node}`);
+                    this.#status = Status.ABORTED;
                 }
-            });
+            }
+
+            if (!this.#aborted) {
+                await new Promise<void>(resolve => {
+                    this.#abort = resolve;
+                });
+            }
         } catch (e) {
             logger.error("Nodes terminated by unhandled error:", e);
         } finally {
-            // Can't abort this
-            await storage?.close();
+            for (const node of this.#nodes) {
+                try {
+                    await node[Symbol.asyncDispose]();
+                } catch (e) {
+                    logger.error(`Error aborting ${node}:`, e);
+                }
+                this.#nodes.delete(node);
+            }
 
+            await this.#mdnsBroadcaster?.close();
+            this.#mdnsBroadcaster = undefined;
+
+            await this.#mdnsScanner?.close();
+            this.#mdnsScanner = undefined;
+    
             environment.tasks.delete(this);
             DiagnosticSource.delete(this);
         }
@@ -142,18 +139,33 @@ export class Host implements Environment.Task {
      * while the server is running.
      */
     abort() {
-        if (!this.running) {
+        if (!this.#running) {
             throw new ImplementationError("Server is not running");
         }
-        if (this.aborted) {
+        if (this.#aborted) {
             throw new ImplementationError("Server is already aborted");
         }
         this.#status = Status.ABORTED;
+
         this.#abort?.();
     }
 
     get name() {
         return "Active nodes";
+    }
+
+    get mdnsBroadcaster() {
+        if (!this.#mdnsBroadcaster) {
+            throw new InternalError("MDNS broadcaster accessed while offline");
+        }
+        return this.#mdnsBroadcaster;
+    }
+
+    get mdnsScanner() {
+        if (!this.#mdnsScanner) {
+            throw new InternalError("MDNS scanner accessed while offline");
+        }
+        return this.#mdnsScanner;
     }
 
     get [Diagnostic.presentation]() {
@@ -164,11 +176,11 @@ export class Host implements Environment.Task {
         return this.#nodes;
     }
 
-    private get running() {
+    get #running() {
         return this.#status === Status.ACTIVE;
     }
 
-    private get aborted() {
+    get #aborted() {
         return this.#status === Status.ABORTED;
     }
 }

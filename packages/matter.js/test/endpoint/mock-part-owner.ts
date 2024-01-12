@@ -21,7 +21,7 @@ import { IdentityService } from "../../src/node/server/IdentityService.js";
 
 export class MockBehaviorInitializer extends PartInitializer {
     #nextId = 1;
-    initializeDescendent(part: Part) {
+    override initializeDescendent(part: Part) {
         if (!part.lifecycle.hasNumber) {
             part.number = EndpointNumber(this.#nextId++);
         }

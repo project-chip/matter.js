@@ -10,7 +10,6 @@ import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { NetworkError } from "./net/Network.js";
-import { BaseNodeServer } from "./node/server/BaseNodeServer.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
@@ -130,23 +129,13 @@ export class MatterServer {
      * @param server node server to add
      * @param nodeOptions Optional options for the node (e.g. unique node id)
      */
-    async addCommissioningServer(server: BaseNodeServer, nodeOptions?: NodeOptions) {
+    async addCommissioningServer(server: CommissioningServer, nodeOptions?: NodeOptions) {
         const storageKey = nodeOptions?.uniqueStorageKey ?? nodeOptions?.uniqueNodeId ?? this.nodes.size.toString();
         if (this.nodes.has(storageKey)) {
             throw new Error(`Node with storage key "${storageKey}" already exists.`);
         }        server.port = this.getNextMatterPort(server.port);
 
-        // CommissioningServer is designed for lazy initialization of storage.
-        // Not changing that to keep API consistent.
-        //
-        // NodeServer is initialized with storage from the get-go so this call
-        // is not necessary.
-        //
-        // Keeping storage out of BaseNodeServer keeps concerns separated so
-        // just check for the CommissioningServer case explicitly
-        if (server instanceof CommissioningServer) {
-            server.storage = this.storageManager.createContext(storageKey);
-        }
+        server.storage = this.storageManager.createContext(storageKey);
 
         logger.debug(`Adding CommissioningServer using storage key "${storageKey}".`);
         await this.prepareNode(server);
@@ -160,7 +149,7 @@ export class MatterServer {
      * @param server node server to remove
      * @param destroyStorage If true the storage context will be destroyed
      */
-    async removeCommissioningServer(server: BaseNodeServer, destroyStorage = false) {
+    async removeCommissioningServer(server: CommissioningServer, destroyStorage = false) {
         // Find instance from list
         for (const [key, value] of this.nodes.entries()) {
             if (value === server) {
@@ -256,23 +245,20 @@ export class MatterServer {
             try {
                 await this.prepareNode(node);
             } catch (error) {
-                this.startupError(key, node, error);
+                // TODO: Find a better way how to report back such issues and which nodes errored
+                logger.error(`Failed to start node with storageKey ${key}: ${error}`);
             }
         }
     }
 
-    protected startupError(key: string, _node: MatterNode, error: any) {
-        logger.error(`Failed to start node with storageKey ${key}: ${error}`);
-    }
-
-    private async prepareNode(node: MatterNode) {
+    private async prepareNode(node: CommissioningServer | MatterNode) {
         node.initialize(this.ipv4Disabled);
         if (this.mdnsBroadcaster === undefined || this.mdnsScanner === undefined) {
             logger.debug("Mdns instances not yet created, delaying node preparation.");
             return;
         }
-        node.mdnsBroadcaster = this.mdnsBroadcaster;
-        node.mdnsScanner = this.mdnsScanner;
+        node.setMdnsBroadcaster(this.mdnsBroadcaster);
+        node.setMdnsScanner(this.mdnsScanner);
         if (this.started) {
             await node.start();
         }
