@@ -175,9 +175,9 @@ export class NodeServer extends BaseNodeServer implements Node {
             }
         }
 
-        await super.start();
+        await this.advertise();
 
-        logger.notice("Node", Diagnostic.strong(this), "is online");
+        logger.notice("Node", Diagnostic.strong(this.toString()), "is online");
     }
 
     /**
@@ -189,11 +189,11 @@ export class NodeServer extends BaseNodeServer implements Node {
         if (this.#host) {
             throw new ImplementationError("Already running");
         }
-        const runner = new Host(this.#configuration);
-        runner.add(this);
+        const host = new Host(this.#configuration);
+        host.add(this);
 
         try {
-            await runner.run();
+            await host.run();
         } catch (e) {
             logger.error("Node server terminated due to error:", e);
         }
@@ -211,16 +211,6 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     add(endpoint: Part.Definition) {
         this.rootPart.parts.add(endpoint);
-    }
-
-    /**
-     * Terminate after starting with run().
-     */
-    abort() {
-        if (!this.#host) {
-            throw new ImplementationError("Not running");
-        }
-        this.#host.abort();
     }
 
     /**
@@ -242,6 +232,13 @@ export class NodeServer extends BaseNodeServer implements Node {
      * no longer needed.
      */
     async [Symbol.asyncDispose]() {
+        logger.notice("Node", Diagnostic.strong(this.toString()), "going offline");
+
+        await this.close();
+    }
+
+    override async close() {
+        await super.close();
         await this.#interactionServer?.[Symbol.asyncDispose]();
         await this.#rootServer?.[Symbol.asyncDispose]();
         await this.#store?.[Symbol.asyncDispose]();
@@ -295,6 +292,27 @@ export class NodeServer extends BaseNodeServer implements Node {
         }
 
         throw new ImplementationError(`Unsupported service ${type.name}`);
+    }
+
+    set host(host: Host) {
+        if (this.#host) {
+            throw new ImplementationError(`Node ${this} already installed in host`);
+        }
+        this.#host = host;
+    }
+
+    async getMdnsBroadcaster() {
+        if (this.#host === undefined) {
+            throw new ImplementationError("Cannot start NodeServer without installed host");
+        }
+        return this.#host.mdnsBroadcaster;
+    }
+
+    async getMdnsScanner() {
+        if (this.#host === undefined) {
+            throw new ImplementationError("Cannot start NodeServer without installed host");
+        }
+        return this.#host.mdnsScanner;
     }
 
     /**

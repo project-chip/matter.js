@@ -19,7 +19,7 @@ export interface MatterNode {
 
     port: number | undefined;
 
-    mdnsBroadcaster: MdnsBroadcaster;
+    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster): void;
 
-    mdnsScanner: MdnsScanner;
+    setMdnsScanner(mdnsBroadcaster: MdnsScanner): void;
 }

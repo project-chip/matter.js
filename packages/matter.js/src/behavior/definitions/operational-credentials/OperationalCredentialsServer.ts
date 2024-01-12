@@ -39,17 +39,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     declare internal: OperationalCredentialsServer.Internal;
     declare state: OperationalCredentialsServer.State;
 
-    override async initialize() {
-        const commissioning = await this.agent.waitFor(CommissioningBehavior);
-
-        this.internal.certification = new DeviceCertification(
-            this.state.certification,
-            commissioning.state.productDescription
-        );
-    }
-
     get #certification() {
         const certification = this.internal.certification;
+        if (!certification) {
+            const commissioning = this.agent.get(CommissioningBehavior);
+
+            this.internal.certification = new DeviceCertification(
+                this.state.certification,
+                commissioning.productDescription
+            );
+            }
         if (certification === undefined) {
             throw new InternalError("Operational credentials certification accessed before initialization");
         }

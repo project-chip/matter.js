@@ -161,15 +161,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
         let promise = MaybePromise.then(
             () => {
-                this.owner.serviceFor(PartInitializer).preInitialize(this);
+                this.owner.serviceFor(PartInitializer).initializeDescendent(this);
                 return this.behaviors.initialize();
             },
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
-        );
-
-        promise = MaybePromise.then(
-            promise,
-            () => this.owner.serviceFor(PartInitializer).postInitialize(this)
         );
 
         promise = MaybePromise.then(

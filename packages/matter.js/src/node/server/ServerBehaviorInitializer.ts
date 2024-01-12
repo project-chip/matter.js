@@ -7,7 +7,6 @@
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
 import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
@@ -25,7 +24,7 @@ export class ServerBehaviorInitializer extends PartInitializer {
         this.#server = server;
     }
 
-    override preInitialize(part: Part) {
+    override initializeDescendent(part: Part) {
         if (!part.lifecycle.hasId) {
             part.id = this.#identifyPart(part);
         }
@@ -44,20 +43,6 @@ export class ServerBehaviorInitializer extends PartInitializer {
      */
     createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking {
         return PartServer.forPart(part).createBacking(behavior);
-    }
-
-    /**
-     * We don't initialize behaviors transactionally, but instead persist
-     * dirty state after initialization.
-     */
-    override postInitialize(part: Part) {
-        // We don't run initialization transactionally but instead save any
-        // dirty state once initialization completes
-        const transaction = new Transaction();
-        part.behaviors.save(transaction);
-        if (transaction.status === Transaction.Status.Exclusive) {
-            return transaction.commit();
-        }
     }
 
     /**

@@ -54,8 +54,15 @@ export class CommissioningBehavior extends Behavior {
         if (this.state.ble === undefined) {
             this.state.ble = Ble.enabled;
         }
+    }
 
-        if (!this.state.productDescription) {
+    /**
+     * The {@link ProductDescription} advertised by the node.
+     */
+    get productDescription() {
+        let pd = this.state.productDescription;
+
+        if (!pd) {
             const bi = this.agent.get(BasicInformationBehavior).state;
 
             const deviceType = inferDeviceType(this.part);
@@ -66,13 +73,15 @@ export class CommissioningBehavior extends Behavior {
                 );
             }
 
-            this.state.productDescription = {
+            pd = this.state.productDescription = {
                 name: bi.productName,
                 deviceType,
                 vendorId: bi.vendorId,
                 productId: bi.productId,
             }
         }
+
+        return pd;
     }
 
     /**
@@ -94,7 +103,7 @@ export class CommissioningBehavior extends Behavior {
                 "manual pairing code": manualPairingCode,
             }),
             Diagnostic.list([
-                QrCode.get(qrPairingCode).replace(/\n/g, "\n\t"),
+                QrCode.get(qrPairingCode).trim(),
                 `QR code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}\n`,
             ]),
         );

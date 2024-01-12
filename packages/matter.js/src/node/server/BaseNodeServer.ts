@@ -5,7 +5,6 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { MatterNode } from "../../MatterNode.js";
 import { Ble } from "../../ble/Ble.js";
 import { Attributes, Cluster, Commands, Events } from "../../cluster/Cluster.js";
 import { ClusterClientObj } from "../../cluster/client/ClusterClientTypes.js";
@@ -59,11 +58,10 @@ type CommissioningServerCommands = {
  * BaseNodeServer implements NodeServer functionality using the lower-level
  * ClusterServer API.
  */
-export abstract class BaseNodeServer implements MatterNode {
-    #mdnsScanner?: MdnsScanner;
-    #mdnsBroadcaster?: MdnsInstanceBroadcaster;
-
+export abstract class BaseNodeServer {
     #deviceInstance?: MatterDevice;
+    #mdnsBroadcaster?: MdnsInstanceBroadcaster;
+    #primaryNetInterface?: UdpInterface;
 
     protected readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
@@ -77,6 +75,9 @@ export abstract class BaseNodeServer implements MatterNode {
 
     protected abstract emitCommissioningChanged(fabric: FabricIndex): void;
     protected abstract emitActiveSessionsChanged(fabric: FabricIndex): void;
+
+    protected abstract getMdnsBroadcaster(): Promise<MdnsBroadcaster>;
+    protected abstract getMdnsScanner(): Promise<MdnsScanner>;
 
     /**
      * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
@@ -174,12 +175,11 @@ export abstract class BaseNodeServer implements MatterNode {
      *                and BLE if configured
      */
     async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
-        if (
-            this.#mdnsBroadcaster === undefined ||
-            this.#mdnsScanner === undefined
-        ) {
-            throw new ImplementationError("Add the node to the Matter instance before!");
-        }
+        const port = (await this.#getPrimaryNetInterface()).port;
+
+        this.#mdnsBroadcaster = new MdnsInstanceBroadcaster(port, await this.getMdnsBroadcaster());
+
+        const mdnsScanner = await this.getMdnsScanner();
 
         if (this.#deviceInstance !== undefined) {
             logger.debug("Device already initialized, just advertise the instance again ...");
@@ -193,7 +193,7 @@ export abstract class BaseNodeServer implements MatterNode {
         }
 
         this.#deviceInstance = await this.createMatterDevice();
-        this.#deviceInstance.addScanner(this.#mdnsScanner);
+        this.#deviceInstance.addScanner(mdnsScanner);
 
         if (!this.networkConfig.disableIpv4) {
             this.#deviceInstance.addTransportInterface(
@@ -253,24 +253,11 @@ export abstract class BaseNodeServer implements MatterNode {
     }
 
     /**
-     * Set the MDNS Scanner instance. Should be only used internally
-     *
-     * @param mdnsScanner MdnsScanner instance
+     * Get the port the server is configured for (before startup) or listening
+     * on (after startup).
      */
-    set mdnsScanner(mdnsScanner: MdnsScanner) {
-        this.#mdnsScanner = mdnsScanner;
-    }
-
-    /**
-     * Set the MDNS Broadcaster instance. Should be only used internally
-     *
-     * @param mdnsBroadcaster MdnsBroadcaster instance
-     */
-    set mdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        if (this.networkConfig.port === undefined) {
-            throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
-        }
-        this.#mdnsBroadcaster = new MdnsInstanceBroadcaster(this.networkConfig.port, mdnsBroadcaster);
+    get port() {
+        return this.#primaryNetInterface ? this.#primaryNetInterface.port : this.networkConfig.port;
     }
 
     /**
@@ -280,22 +267,6 @@ export abstract class BaseNodeServer implements MatterNode {
      */
     addDevice(device: Device | Aggregator) {
         this.addEndpoint(device);
-    }
-
-    /**
-     * Return the port the device is listening on
-     */
-    get port(): number | undefined {
-        return this.networkConfig.port;
-    }
-
-    /** Set the port the device is listening on. Can only be called before the device is initialized. */
-    set port(port: number) {
-        if (port === this.networkConfig.port) return;
-        if (this.#deviceInstance !== undefined || this.#mdnsBroadcaster !== undefined) {
-            throw new ImplementationError("Port cannot be changed after device is initialized!");
-        }
-        this.networkConfig.port = port;
     }
 
     /**
@@ -441,7 +412,14 @@ export abstract class BaseNodeServer implements MatterNode {
             (fabricIndex: FabricIndex) => this.emitActiveSessionsChanged(fabricIndex),
         )
             .addTransportInterface(
-                await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6),
+                await this.#getPrimaryNetInterface()
             );
+    }
+
+    async #getPrimaryNetInterface() {
+        if (this.#primaryNetInterface === undefined) {
+            this.#primaryNetInterface = await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6);
+        }
+        return this.#primaryNetInterface;
     }
 }

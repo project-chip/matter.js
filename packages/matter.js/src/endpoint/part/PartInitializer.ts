@@ -6,7 +6,6 @@
 
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { Part } from "../Part.js";
 
 /**
@@ -16,7 +15,7 @@ export abstract class PartInitializer {
     /**
      * Initialize a {@link Part}.
      */
-    preInitialize(_part: Part) {};
+    initializeDescendent(_part: Part) {};
 
     /**
      * Create backing for a behavior of a descendent.
@@ -27,9 +26,4 @@ export abstract class PartInitializer {
      * @returns a new {@link BehaviorBacking}
      */
     abstract createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking;
-
-    /**
-     * Finalize initialization after behaviors report as initialized.
-     */
-    postInitialize(_part: Part): MaybePromise<void> {}
 }
