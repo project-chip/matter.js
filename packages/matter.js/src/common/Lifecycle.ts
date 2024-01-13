@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Diagnostic } from "../log/Diagnostic.js";
 import { ImplementationError } from "./MatterError.js";
 
 /**
@@ -37,36 +38,41 @@ export namespace LifecycleStatus {
                 return;
 
             case LifecycleStatus.Inactive:
-                throw new UninitializedDependencyError(
-                    `${description} is not initialized`
-                );
+                throw new UninitializedDependencyError(description, "is not initialized");
     
             case LifecycleStatus.Initializing:
-                throw new UninitializedDependencyError(
-                    `${description} is still initializing`
-                );
+                throw new UninitializedDependencyError(description, "is still initializing");
 
             case LifecycleStatus.Incapacitated:
-                 throw new IncapacitatedDependencyError(
-                    `${description} initialization failed`
-                );
+                 throw new IncapacitatedDependencyError(description, "initialization failed");
 
             case LifecycleStatus.Destroyed:
-                throw new DestroyedDependencyError(
-                    `${description} was destroyed`
-                );
+                throw new DestroyedDependencyError(description, "was destroyed");
         }
 
-        throw new ImplementationError(
-            `Unsupported status "${status}" of ${description}`
-        )
+        throw new DependencyLifecycleError(description, `status "${status}" is unknown`);
     }
 }
 
 /**
  * Base class for errors related to the lifecycle of a dependency.
  */
-export class DependencyLifecycleError extends ImplementationError {}
+export class DependencyLifecycleError extends ImplementationError {
+    constructor(what: string, why: string) {
+        super(`${what} ${why}`);
+        this.message = Diagnostic.upgrade(
+            this.message,
+            () => {
+                Diagnostic.squash(
+                    Diagnostic.strong(what),
+                    " ",
+                    why,
+                )
+            }
+        ) as string;
+
+    }
+}
 
 /**
  * Thrown when a dependency is in an unsupported state.

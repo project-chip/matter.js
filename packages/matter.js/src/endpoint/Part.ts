@@ -6,7 +6,7 @@
 
 import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
-import type { InvocationContext } from "../behavior/InvocationContext.js";
+import type { ActionContext } from "../behavior/ActionContext.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -53,7 +53,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get id() {
         if (this.#id === undefined) {
             throw new UninitializedDependencyError(
-                "Part ID is not yet assigned; set ID or await part.construction to avoid this error"
+                this.toString(),
+                "part ID is not yet assigned; set ID or await part.construction to avoid this error"
             );
         }
         return this.#id;
@@ -66,7 +67,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get number(): EndpointNumber {
         if (this.#number === undefined) {
             throw new UninitializedDependencyError(
-                "Part number is not yet assigned; set number or await part.construction to avoid this error"
+                this.toString(),
+                "part number is not yet assigned; set number or await part.construction to avoid this error"
             );
         }
         return this.#number;
@@ -90,7 +92,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get behaviors() {
         if (this.#behaviors === undefined) {
             throw new UninitializedDependencyError(
-                "Part behaviors not yet initialized; await part.construction to avoid this error"
+                this.toString(),
+                "behaviors are not yet initialized; await part.construction to avoid this error"
             );
         }
         return this.#behaviors;
@@ -289,10 +292,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * Create an {@link Agent}.  This is the primary means of
      * interacting with an endpoint.
      *
-     * If {@link InvocationContext.fabric} is not present the operation will
+     * If {@link ActionContext.fabric} is not present the operation will
      * fail.
      */
-    getAgent(context: InvocationContext): Agent.Instance<T["behaviors"]> {
+    getAgent(context: ActionContext): Agent.Instance<T["behaviors"]> {
         return new this.#resolvedAgentType(this, context);
     }
 
@@ -364,7 +367,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             id = "?";
         }
 
-        return `${owner}${this.#type.name}<${id}>`;
+        return `${owner}${this.#type.name}#${id}`;
     }
 
     get #resolvedAgentType() {

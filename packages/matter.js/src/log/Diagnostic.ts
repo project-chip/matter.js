@@ -30,12 +30,10 @@ export function Diagnostic(presentation: Diagnostic.Presentation | LifecycleStat
 export namespace Diagnostic {
     export enum Presentation {
         /**
-         * By default iterables render as a single line with spaces separating.
-         * The "list" presentation treats elements instead as separate entities
-         * which typically means presentation on different lines.
-         * 
-         * Within an iterable, a list also serves to present contained items as
-         * subordinate to the previous item.
+         * By default iterables render as a single line with spaces separating.  The "list" presentation treats elements
+         * instead as separate entities which typically means presentation on different lines.
+         *
+         * Within an iterable, a list also serves to present contained items as subordinate to the previous item.
          */
         List = "list",
 
@@ -50,8 +48,7 @@ export namespace Diagnostic {
         Strong = "strong",
 
         /**
-         * A deemphasized diagnostic.  Rendered to draw less attention than
-         * default rendering.
+         * A deemphasized diagnostic.  Rendered to draw less attention than default rendering.
          */
         Weak = "weak",
 
@@ -89,8 +86,7 @@ export namespace Diagnostic {
     }
 
     /**
-     * Create a value presenting as segments of the same string without
-     * intervening spaces.
+     * Create a value presenting as segments of the same string without intervening spaces.
      */
     export function squash(...values: unknown[]) {
         return Diagnostic(
@@ -120,7 +116,7 @@ export namespace Diagnostic {
                 message = error.message;
                 stack = error.stack;
             } else if (error.message) {
-                message = error.toString();
+                message = typeof error.message === "string" ? message : error.toString();
             }
         }
         if (message === undefined || message === null || message === "") {
@@ -148,8 +144,9 @@ export namespace Diagnostic {
         }
 
         // Strip off redundant message from v8
-        if (stack.startsWith(message)) {
-            stack = stack.slice(message.length).trim();
+        const pos = stack.indexOf(message);
+        if (pos !== -1) {
+            stack = stack.slice(pos + message.length).trim();
         }
 
         // Spiff up lines a bit
@@ -175,8 +172,7 @@ export namespace Diagnostic {
             );
         }
 
-        // Node helpfully gives us this if there's no message.  It's not even
-        // the name of the error class, just "Error"
+        // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
         if (lines[0] === "Error") {
             lines.shift();
         }
@@ -188,6 +184,19 @@ export namespace Diagnostic {
                 ...lines,
             ]
         )
+    }
+
+    export function prefixError(prefix: string, cause: any) {
+        if (cause instanceof Error) {
+            cause.message = upgrade(
+                `${prefix}: ${cause.message}`,
+                Diagnostic.squash(
+                    prefix,
+                    " ",
+                    cause.message,
+                )
+            );
+        }
     }
 
     /**
@@ -253,5 +262,32 @@ export namespace Diagnostic {
                 return interval(this.time);
             }
         }
+    }
+
+    /**
+     * Upgrade a value to support specialized diagnostic rendering.
+     */
+    export function upgrade<T>(value: boolean | number | string | object, diagnostic: unknown): T {
+        switch (typeof value) {
+            case "boolean":
+                value = new Boolean(value);
+                break;
+
+            case "number":
+                value = new Number(value);
+                break;
+
+            case "string":
+                value = new String(value);
+                break;
+        }
+
+        if (typeof diagnostic === "function") {
+            Object.defineProperty(value, Diagnostic.value, { get: diagnostic as () => unknown });
+        } else {
+            Object.defineProperty(value, Diagnostic.value, { value: diagnostic });
+        }
+
+        return value as T;
     }
 }

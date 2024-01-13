@@ -8,7 +8,7 @@ import type { ClusterType } from "../../cluster/ClusterType.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import type { Observable } from "../../util/Observable.js";
 import type { Behavior } from "../Behavior.js";
-import type { InvocationContext } from "../InvocationContext.js";
+import type { ActionContext } from "../ActionContext.js";
 import type { ClusterOf, Named } from "./ClusterBehaviorUtil.js";
 
 /**
@@ -39,7 +39,7 @@ export namespace ClusterEvents {
     >;
 
     export type AttributeObservable<A extends ClusterType.Attribute = ClusterType.Attribute> = Observable<
-        [value: TypeFromSchema<A["schema"]>, oldValue: TypeFromSchema<A["schema"]>, context: InvocationContext]
+        [value: TypeFromSchema<A["schema"]>, oldValue: TypeFromSchema<A["schema"]>, context: ActionContext]
     >;
 
     export type EventObservables<E extends Record<string, ClusterType.Event>> = ClusterType.SomeOptional<
@@ -50,6 +50,6 @@ export namespace ClusterEvents {
     >;
 
     export type EventObservable<E extends ClusterType.Event> = Observable<
-        [payload: TypeFromSchema<E["schema"]>, context: InvocationContext]
+        [payload: TypeFromSchema<E["schema"]>, context: ActionContext]
     >;
 }

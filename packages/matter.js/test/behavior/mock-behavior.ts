@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InvocationContext } from "../../src/behavior/InvocationContext.js";
+import { ActionContext } from "../../src/behavior/ActionContext.js";
 import { DescriptorServer } from "../../src/behavior/definitions/descriptor/DescriptorServer.js";
 import { AccessLevel } from "../../src/cluster/Cluster.js";
 import { FabricIndex } from "../../src/datatype/FabricIndex.js";
@@ -52,11 +52,11 @@ export const MockEndpoint = MutableEndpoint({
     deviceRevision: 1,
 }).with(DescriptorServer);
 
-export class MockContext implements InvocationContext {
+export class MockContext implements ActionContext {
     accessLevel = AccessLevel.Operate;
     declare associatedFabric?: FabricIndex;
 
-    constructor(options?: InvocationContext) {
+    constructor(options?: ActionContext) {
         Object.assign(this, options);
 
         if (!this.associatedFabric) {
