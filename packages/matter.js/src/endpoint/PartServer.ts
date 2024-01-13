@@ -38,7 +38,7 @@ export class PartServer implements EndpointInterface {
     #part: Part;
     #name = "";
     #structureChangedCallback?: () => void;
-    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
+    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>;
 
     get part() {
         return this.#part;
@@ -62,7 +62,6 @@ export class PartServer implements EndpointInterface {
         let backing: BehaviorBacking;
         if (type.prototype instanceof ClusterBehavior) {
             const cluster = (type as ClusterBehavior.Type).cluster;
-            backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
 
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
@@ -71,14 +70,7 @@ export class PartServer implements EndpointInterface {
                 );
             }
 
-            backing.construction.then(() => {
-                // If the backing completes construction then it should have a
-                // cluster server
-                const clusterServer = (backing as ClusterServerBehaviorBacking).clusterServer;
-                if (clusterServer) {
-                    this.#clusterServers.set(cluster.id, clusterServer);
-                }
-            });
+            backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
         } else {
             backing = new ServerBehaviorBacking(this.#part, type);
         }
@@ -143,8 +135,8 @@ export class PartServer implements EndpointInterface {
         this.#structureChangedCallback = callback;
     }
 
-    addClusterServer(): void {
-        throw new ImplementationError("PartServer requires you to implement clusters by adding behaviors");
+    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void {
+        this.#clusterServers.set(server.id, server);
     }
 
     hasClusterServer(cluster: ClusterType): boolean {

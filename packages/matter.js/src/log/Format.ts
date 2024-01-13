@@ -405,7 +405,7 @@ function renderValue(
     if (value instanceof Error) {
         return renderDiagnostic(Diagnostic.error(value), formatter);
     }
-    if (typeof value === "object" && Symbol.iterator in value) {
+    if (typeof value === "object" && Symbol.iterator in value && !(value instanceof String)) {
         const list = sequenceToList(value as Iterable<unknown>);
         if (!list.length) {
             return "";
@@ -421,9 +421,9 @@ function renderValue(
         }).join(squash ? "" : " ");
     }
 
-    const text = typeof value === "string" ? value : value.toString().trim();
+    const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
     if (text.indexOf("\n") === -1) {
-        return formatter.text(text);
+        return formatter.text(text as string);
     }
     
     return renderList(text.split("\n"), formatter);
@@ -467,6 +467,9 @@ function valueFor(value: unknown) {
     }
     const proxied = (value as Diagnostic)[Diagnostic.value];
     if (proxied) {
+        if (proxied === value) {
+            throw new InternalError("Diagnostic value proxies to itself");
+        }
         return valueFor(proxied);
     }
     return value;
@@ -480,7 +483,10 @@ function presentationFor(value: unknown) {
         return (value as Diagnostic)[Diagnostic.presentation];
     }
     const proxied = (value as Diagnostic)[Diagnostic.value];
-    if (proxied) {
+    if (proxied && proxied !== value) {
+        if (proxied === value) {
+            throw new InternalError("Diagnostic value proxies to itself");
+        }
         return presentationFor(proxied);
     }
 }

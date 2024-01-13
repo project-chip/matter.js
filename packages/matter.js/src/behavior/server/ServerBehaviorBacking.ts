@@ -32,15 +32,19 @@ export class ServerBehaviorBacking extends BehaviorBacking {
     }
 
     protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        // For initializers we do not invoke with a transaction, instead
-        // persisting dirty values after initialization.
-        //
-        // TODO - this gets the commit under the umbrella of "initialization"
-        // for error handling but we need should also add a general utility for
-        // lazy persistence of dirty state
         return MaybePromise.then(
-            super.invokeInitializer(behavior, options),
+            () => super.invokeInitializer(behavior, options),
+
             () => {
+                // After initialization state must conform to the schema
+                this.datasource.validate();
+
+                // For initializers we do not invoke with a transaction, instead
+                // persisting dirty values after initialization.
+                //
+                // TODO - this gets the commit under the umbrella of "initialization"
+                // for error handling but we need should also add a general utility for
+                // lazy persistence of dirty state
                 const transaction = new Transaction();
                 this.save(transaction);
                 if (transaction.status === Transaction.Status.Exclusive) {

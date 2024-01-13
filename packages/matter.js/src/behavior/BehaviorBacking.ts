@@ -7,11 +7,13 @@
 import { ImplementationError } from "../common/MatterError.js";
 import type { Agent } from "../endpoint/Agent.js";
 import type { Part } from "../endpoint/Part.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { EventEmitter } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Behavior } from "./Behavior.js";
+import { SchemaViolationError } from "./errors.js";
 import { Datasource } from "./state/managed/Datasource.js";
 import { Transaction } from "./state/transaction/Transaction.js";
 
@@ -65,7 +67,7 @@ export abstract class BehaviorBacking {
             }),
             undefined,
             e => {
-                logger.error(`Error initializing ${this.#part}.${this.type.id}:`, e);
+                logger.error(this.injectErrorSource(e));
             }
         );
     }
@@ -166,5 +168,32 @@ export abstract class BehaviorBacking {
      */
     get status() {
         return this.construction.status;
+    }
+
+    /**
+     * Inject behavior location into an error.
+     */
+    injectErrorSource(cause: any) {
+        if (cause instanceof SchemaViolationError) {
+            const match = cause.message.match(/(\w+) ([\w\.\$]+): (.*)/);
+            if (!match) {
+                return cause;
+            }
+
+            const where = match[2].split(".");
+            where[0] = this.toString();
+
+            cause.message = Diagnostic.upgrade(
+                cause.message,
+                () => Diagnostic.squash(
+                    match[1],
+                    " ",
+                    Diagnostic.strong(where.join(".")),
+                    ": ",
+                    match[3]
+                )
+            )
+        }
+        return cause;
     }
 }

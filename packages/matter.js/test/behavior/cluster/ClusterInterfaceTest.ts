@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InvocationContext } from "../../../src/behavior/InvocationContext.js";
+import { ActionContext } from "../../../src/behavior/ActionContext.js";
 import { ClusterInterface } from "../../../src/behavior/cluster/ClusterInterface.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { BitFlag } from "../../../src/schema/BitmapSchema.js";
@@ -96,7 +96,7 @@ describe("ClusterInterface", () => {
 
         it("requires mandatory", () => {
             ({}) as Mmo satisfies {
-                reqCmd(request: string, state: any, context?: InvocationContext): MaybePromise<string>;
+                reqCmd(request: string, state: any, context?: ActionContext): MaybePromise<string>;
             };
         });
 
