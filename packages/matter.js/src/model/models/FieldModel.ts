@@ -13,6 +13,7 @@ import { ValueModel } from "./ValueModel.js";
 export class FieldModel extends PropertyModel implements FieldElement {
     override tag: FieldElement.Tag = FieldElement.Tag;
     override id?: Mei;
+    override isGlobalAttribute = false;
 
     constructor(definition: FieldElement.Properties) {
         super(definition);

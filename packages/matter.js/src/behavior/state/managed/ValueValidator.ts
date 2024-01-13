@@ -175,8 +175,8 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
     const validators = {} as Record<string, ValueSupervisor.Validate>;
 
     for (const field of schema.members) {
-        // Global fields currently handled internally
-        if (field.global) {
+        // Global fields currently handled in lower levels
+        if (field.isGlobalAttribute) {
             continue;
         }
 
