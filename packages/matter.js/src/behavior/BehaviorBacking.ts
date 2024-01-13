@@ -12,6 +12,7 @@ import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { EventEmitter } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
+import { camelize } from "../util/String.js";
 import type { Behavior } from "./Behavior.js";
 import { SchemaViolationError } from "./errors.js";
 import { Datasource } from "./state/managed/Datasource.js";
@@ -180,7 +181,7 @@ export abstract class BehaviorBacking {
                 return cause;
             }
 
-            const where = match[2].split(".");
+            const where = match[2].split(".").map(n => camelize(n));
             where[0] = this.toString();
 
             cause.message = Diagnostic.upgrade(

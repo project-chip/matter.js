@@ -125,7 +125,12 @@ function withBehavior<T>(
 
     let agent = backing.part.getAgent(context);
 
-    return fn(agent.get(backing.type));
+    try {
+        return fn(agent.get(backing.type));
+    } catch (e) {
+        backing.injectErrorSource(e);
+        throw e;
+    }
 }
 
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {

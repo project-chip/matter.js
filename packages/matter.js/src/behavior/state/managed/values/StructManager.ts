@@ -39,6 +39,10 @@ export function StructManager(
     // Scan the schema and configure each member (field or attribute) as a
     // property
     for (const member of schema.members) {
+        if (member.isGlobalAttribute) {
+            continue;
+        }
+
         const name = camelize(member.name);
 
         const { access, descriptor } = configureProperty(owner, member);

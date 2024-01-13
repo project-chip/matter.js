@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Attribute } from "../../cluster/Cluster.js";
 import { ClusterType } from "../../cluster/ClusterType.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import { ClusterModel, ElementTag, FeatureSet, Matter } from "../../model/index.js";
+import { AttributeModel, ClusterModel, ElementTag, FeatureSet, Matter, Metatype } from "../../model/index.js";
 import { GeneratedClass } from "../../util/GeneratedClass.js";
 import { EventEmitter, Observable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
@@ -48,7 +49,7 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         // we instead override as static properties then we lose the automatic
         // interface type.  So just publish as static properties.
         staticProperties: {
-            State: createDerivedState(cluster, base, namesUsed),
+            State: createDerivedState(cluster, schema, base, namesUsed),
 
             Events: createBaseEvents(cluster, namesUsed),
         },
@@ -95,7 +96,7 @@ export type ClusterOf<B extends Behavior.Type> = InstanceType<B> extends { clust
  * Create a new state subclass that inherits relevant default values from a
  * base Behavior.Type and adds new default values from cluster attributes.
  */
-function createDerivedState(cluster: ClusterType, base: Behavior.Type, namesUsed: Set<string>) {
+function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior.Type, namesUsed: Set<string>) {
     const BaseState = base["State"];
     if (BaseState === undefined) {
         throw new ImplementationError(`No state class defined for behavior class ${base.name}`);
@@ -135,11 +136,13 @@ function createDerivedState(cluster: ClusterType, base: Behavior.Type, namesUsed
     // For each new attribute, inject the attribute's default if we don't have
     // an override, then inject a descriptor
     for (const name in newAttributes) {
-        const attribute = cluster.attributes[name];
-
-        if (!(name in defaults)) {
-            defaults[name] = attribute.default;
+        if (name in defaults) {
+            continue;
         }
+        defaults[name] = selectDefaultValue(
+            cluster.attributes[name],
+            schema.get(AttributeModel, camelize(name, true))
+        );
     }
 
     for (const name in defaults) {
@@ -234,4 +237,23 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
     }
 
     return result;
+}
+
+function selectDefaultValue(clusterAttr: Attribute<any, any>, schemaAttr?: AttributeModel) {
+    if (clusterAttr.default) {
+        return clusterAttr.default;
+    }
+    if (!schemaAttr?.conformance.mandatory) {
+        return;
+    }
+    switch (schemaAttr.effectiveMetatype) {
+        case Metatype.bitmap:
+        case Metatype.object:
+            // This is not a very good default but it is better than undefined
+            return {};
+
+        case Metatype.array:
+            // Same
+            return [];
+    }
 }
