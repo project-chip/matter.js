@@ -71,7 +71,8 @@ export class NodeServer extends BaseNodeServer implements Node {
     get rootPart() {
         if (!this.#root) {
             throw new UninitializedDependencyError(
-                "Root part is unavailable because initialization is incomplete; await the NodeServer to avoid this error"
+                this.constructor.name,
+                "is unavailable because initialization is incomplete; await the NodeServer to avoid this error"
             );
         }
         return this.#root;
@@ -169,7 +170,7 @@ export class NodeServer extends BaseNodeServer implements Node {
                 commissioning.initiateCommissioning();
             } catch (e) {
                 if (e instanceof Error) {
-                    e.message = `Cannot initiate commissioning: ${e.message}`;
+                    Diagnostic.prefixError("Cannot initiate commissioning", e);
                 }
                 throw e;
             }
@@ -319,7 +320,7 @@ export class NodeServer extends BaseNodeServer implements Node {
      * Textual description of the node used in diagnostic messages.
      */
     override toString() {
-        return `${this.constructor.name}<${this.id}>`
+        return `${this.constructor.name}#${this.id}`
     }
 
     get [Diagnostic.value]() {

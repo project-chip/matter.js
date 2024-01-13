@@ -5,19 +5,18 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
+import { Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import { asClusterServerInternal, ClusterServerObj, type CommandHandler, type SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
 import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
-import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { Behavior } from "../Behavior.js";
-import { InvocationContext } from "../InvocationContext.js";
+import { ActionContext } from "../ActionContext.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
@@ -25,6 +24,7 @@ import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
+import { ServerActionContext } from "./ServerActionContext.js";
 
 const logger = Logger.get("Behavior");
 
@@ -111,39 +111,19 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         this.#clusterServer = clusterServer;
+        this.#server.addClusterServer(clusterServer);
     }
 }
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
     session: Session<MatterDevice> | undefined,
-    contextFields: Partial<InvocationContext>,
+    contextFields: Partial<ActionContext>,
     fn: (behavior: Behavior) => T,
 ): T {
-    let agent;
+    const context = ServerActionContext(contextFields, session);
 
-    // TODO -ideally there'd be something more explicit here to indicate we're
-    // operating without ACL enforcement but currently lower levels just omit
-    // the session
-    if (!session) {
-        agent = backing.part.agent;
-    } else {
-        const fabric = session.isSecure() ? session.getAssociatedFabric() : undefined;
-        const transaction = TransactionalInteractionServer.transactionFor(session);
-
-        const context: InvocationContext = {
-            ...contextFields,
-            associatedFabric: fabric?.fabricIndex,
-            session,
-            transaction,
-
-            // TODO - this effectively disables access level enforcement because we
-            // don't have privilege management implemented yet
-            accessLevel: AccessLevel.Administer,
-        };
-
-        agent = backing.part.getAgent(context);
-    }
+    let agent = backing.part.getAgent(context);
 
     return fn(agent.get(backing.type));
 }

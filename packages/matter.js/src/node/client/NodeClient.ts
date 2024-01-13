@@ -44,7 +44,7 @@ export class NodeClient implements Node {
     }
 
     toString() {
-        return `${this.constructor.name}<${this.id}>`;
+        return `${this.constructor.name}#${this.id}`;
     }
 
     async start() {

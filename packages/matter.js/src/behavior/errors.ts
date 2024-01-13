@@ -14,7 +14,11 @@ import { Schema } from "./supervision/Schema.js";
  */
 export class SchemaViolationError extends StatusResponseError {
     constructor(prefix: string, schema: Schema, message: string, code: StatusCode) {
-        super(`${prefix} ${schema.path}: ${message}`, code);
+        const text = `${prefix} ${schema.path}: ${message}`;
+        super(text, code);
+
+        // Remove injected status code
+        this.message = text;
     }
 }
 

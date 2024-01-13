@@ -67,7 +67,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
         assertArray(value, schema);
 
         if (!constraint.test(value.length, options?.siblings)) {
-            throw new ConstraintError(schema, `Value ${value} is not within bounds defined by constraint`);
+            throw new ConstraintError(schema, `Array length ${value.length} is not within bounds defined by constraint`);
         }
 
         if (validateEntryConstraint) {

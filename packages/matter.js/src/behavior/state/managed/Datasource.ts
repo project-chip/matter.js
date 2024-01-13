@@ -13,7 +13,8 @@ import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
-import { Val } from "./Val.js";
+import type { ValidationContext } from "../validation/context.js";
+import type { Val } from "./Val.js";
 
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property
@@ -59,6 +60,11 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
      * initialization.
      */
     save(transaction: Transaction): void;
+
+    /**
+     * Validate values against the schema.
+     */
+    validate(context?: ValidationContext): void;
 }
 
 /**
@@ -85,6 +91,10 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         save(transaction: Transaction) {
             save(this, internals, transaction);
         },
+
+        validate(context?: ValidationContext) {
+            internals.supervisor.validate(internals.values, context)
+        }
     };
 }
 

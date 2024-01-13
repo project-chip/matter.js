@@ -9,8 +9,7 @@ import { LifecycleStatus } from "../common/Lifecycle.js";
 import { Tracker, MaybePromise } from "./Promises.js";
 
 /**
- * Create an instance of a class implementing the {@link AsyncConstructable}
- * pattern.
+ * Create an instance of a class implementing the {@link AsyncConstructable} pattern.
  */
 export async function asyncNew<
     const A extends any[],
@@ -19,36 +18,29 @@ export async function asyncNew<
     return await new constructable(...args).construction;
 }
 
-/**
- * AsyncConstructable implements a pattern for asynchronous object
- * initialization.
- * 
- * Async construction happens in the initializer parameter of
- * {@link AsyncConstruction}.  You invoke in your constructor and place in a
- * property called "construction".
- * 
- * If construction is not in fact asynchronous (does not return a Promise)
- * AsyncConstruction will complete synchronously.
- * 
- * To ensure an instance is initialized prior to use you may await
- * construction, so e.g. `await new MyConstructable().construction`.
- * {@link asyncNew} is shorthand for this.
- * 
- * Public APIs should provide a static async create() that performs an
- * asyncNew().  The class will then adhere to Matter.js conventions and
- * library users can ignore the complexities associated with async creation.
- * 
- * Methods that cannot be used prior to construction can use
- * {@link AsyncConstruction.assert} to ensure construction has completed.
- * High-visibility public APIs can instead check
- * {@link AsyncConstruction.ready} and throw a more specific error.
- * 
- * Setup optionally supports cancellation of initialization.  To implement,
- * provide a "cancel" function option to {@link AsyncConstruction}.  Then
- * initialization can be canceled via {@link AsyncConstruction.cancel}.
- * 
- * To determine if initialization is complete synchronously you can check
- * {@link AsyncConstruction.ready}.
+/** 
+ * AsyncConstructable implements a pattern for asynchronous object initialization.
+ *
+ * Async construction happens in the initializer parameter of {@link AsyncConstruction}.  You invoke in your constructor
+ * and place in a property called "construction".
+ *
+ * If construction is not in fact asynchronous (does not return a Promise) AsyncConstruction will complete
+ * synchronously.
+ *
+ * To ensure an instance is initialized prior to use you may await construction, so e.g. `await new
+ * MyConstructable().construction`. {@link asyncNew} is shorthand for this.
+ *
+ * Public APIs should provide a static async create() that performs an asyncNew().  The class will then adhere to
+ * Matter.js conventions and library users can ignore the complexities associated with async creation.
+ *
+ * Methods that cannot be used prior to construction can use {@link AsyncConstruction.assert} to ensure construction has
+ * completed. High-visibility public APIs can instead check {@link AsyncConstruction.ready} and throw a more specific
+ * error.
+ *
+ * Setup optionally supports cancellation of initialization.  To implement, provide a "cancel" function option to
+ * {@link AsyncConstruction}.  Then initialization can be canceled via {@link AsyncConstruction.cancel}.
+ *
+ * To determine if initialization is complete synchronously you can check {@link AsyncConstruction.ready}.
  */
 export interface AsyncConstructable<T> {
     readonly construction: AsyncConstruction<T>;
@@ -74,14 +66,14 @@ export interface AsyncConstruction<T> extends Promise<T> {
     readonly status: LifecycleStatus;
 
     /**
-     * If you omit the initializer parameter to {@link AsyncConstruction}
-     * execution is deferred until you invoke this method.
+     * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
+     * method.
      */
     start(initializer: () => MaybePromise<void>): this;
 
     /**
-     * AsyncConstruction may be cancellable.  If not this method does nothing.
-     * Regardless you must wait for promise resolution even if canceled.
+     * AsyncConstruction may be cancellable.  If not this method does nothing.  Regardless you must wait for promise
+     * resolution even if canceled.
      */
     cancel(): void;
 
@@ -92,9 +84,9 @@ export interface AsyncConstruction<T> extends Promise<T> {
 
     /**
      * Manually force construction into a specific status.
-     * 
-     * AsyncConstruction maintains status automatically.  If construction
-     * throws an error subsequent to this call it will overwrite the status..
+     *
+     * AsyncConstruction maintains status automatically.  If construction throws an error subsequent to this call it
+     * will overwrite the status.
      */
     setStatus(status: LifecycleStatus, error?: any): void;
 }
@@ -201,11 +193,19 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
         ): Promise<TResult1 | TResult2> {
             if (!started) {
                 // Initialization has not started so we need to create a
-                // placeholder promise
-                promise = Tracker.global.track(new Promise((resolve, reject) => {
+                // placeholder promise.  Do not create a real promise becase
+                // we do not want the VM to get confused and think we don't
+                // have an error handler installed
+                
+                promise = new Promise((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
-                }), `${target.constructor.name} construction`);
+                });
+
+                promise = Tracker.global.track(
+                    promise,
+                    `${target.constructor.name} construction`
+                );
             }
             if (promise) {
                 return promise.then(() => target).then(onfulfilled, onrejected);
