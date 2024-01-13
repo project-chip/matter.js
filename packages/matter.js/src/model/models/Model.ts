@@ -5,6 +5,7 @@
  */
 
 import { InternalError } from "../../common/MatterError.js";
+import { camelize } from "../../util/String.js";
 import { DefinitionError, ElementTag, Specification } from "../definitions/index.js";
 import { AnyElement, BaseElement } from "../elements/index.js";
 import { ModelTraversal } from "../logic/ModelTraversal.js";
@@ -61,6 +62,23 @@ export abstract class Model {
      */
     get path(): string {
         if (this.parent && this.parent.tag !== ElementTag.Matter) {
+            if (this.parent.tag === ElementTag.Field) {
+                return `${this.parent.path}.${camelize(this.name)}`;
+            }
+
+            if (this.parent.tag === ElementTag.Cluster) {
+                switch (this.tag) {
+                    case ElementTag.Attribute:
+                        return `${this.parent.path}.state.${camelize(this.name)}`;
+
+                    case ElementTag.Command:
+                        return `${this.parent.path}.${camelize(this.name)}`;
+
+                    case ElementTag.Event:
+                        return `${this.parent.path}.events.${camelize(this.name)}`;
+                }
+            }
+
             return `${this.parent.path}.${this.name}`;
         } else {
             return this.name;
