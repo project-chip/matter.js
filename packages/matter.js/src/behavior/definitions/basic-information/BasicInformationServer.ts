@@ -32,14 +32,15 @@ export class BasicInformationServer extends BasicInformationBehavior {
         setDefault("vendorName", "Matter.js Test Vendor");
         setDefault("productId", 0x8000);
         setDefault("productName", "Matter.js Test Product");
+        setDefault("hardwareVersion", 0);
+        setDefault("softwareVersion", 0);
 
         // Warn if we used development defaults
         if (Object.keys(defaultsSet).length) {
             logger.warn("Using development values for some BasicInformation attributes:", Diagnostic.dict(defaultsSet));
         }
 
-        // These defaults are appropriate for development or production so do
-        // not warn
+        // These defaults are appropriate for development or production so do not warn
         setDefault("productLabel", state.productName);
         setDefault("nodeLabel", state.productName);
         setDefault("dataModelRevision", 1);

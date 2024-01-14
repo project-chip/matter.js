@@ -63,7 +63,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
         }
     }
 
-    return (value, options) => {
+    return (value, session, options) => {
         assertArray(value, schema);
 
         if (!constraint.test(value.length, options?.siblings)) {
@@ -72,7 +72,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
 
         if (validateEntryConstraint) {
             for (const e of value) {
-                validateEntryConstraint(e);
+                validateEntryConstraint(e, session);
             }
         }
     };

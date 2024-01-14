@@ -10,12 +10,10 @@ import { Aspect } from "./Aspect.js";
 /**
  * An operational view of conformance as defined by the Matter Specification.
  *
- * We extend the specification's syntax to add ">", "<", ">=" and "<=".  These
- * are required to encode some portions of the specification that are described
- * in prose.
+ * We extend the specification's syntax to add ">", "<", ">=" and "<=".  These are required to encode some portions of
+ * the specification that are described in prose.
  *
- * "Conformance" controls when a data field or cluster element is allowed or
- * required.
+ * "Conformance" controls when a data field or cluster element is allowed or required.
  */
 export class Conformance extends Aspect<Conformance.Definition> {
     ast: Conformance.Ast;
@@ -29,8 +27,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
     }
 
     /**
-     * Initialize from a Conformance.Definition or the conformance DSL defined
-     * by the Matter Specification.
+     * Initialize from a Conformance.Definition or the conformance DSL defined by the Matter Specification.
      */
     constructor(definition: Conformance.Definition) {
         super(definition);
@@ -68,8 +65,7 @@ export class Conformance extends Aspect<Conformance.Definition> {
     /**
      * Is the associated element mandatory?
      *
-     * This supports a limited subset of conformance and is only appropriate
-     * for field and requirement conformance.
+     * This supports a limited subset of conformance and is only appropriate for field and requirement conformance.
      */
     get mandatory() {
         const conformance = this.ast;
@@ -90,17 +86,19 @@ export class Conformance extends Aspect<Conformance.Definition> {
     }
 
     /**
-     * Perform limited conformance evaluation to determine whether this
-     * conformance is applicable given a feature combination.
+     * Perform limited conformance evaluation to determine whether this conformance is applicable given a feature
+     * combination.
      *
      * Ignores subexpressions that reference field values.
      *
-     * This is useful for filtering elements at compile time.  For complete
-     * accuracy you then need to filter at runtime once field values are known.
+     * This is useful for filtering elements at compile time.  For complete accuracy you then need to filter at runtime
+     * once field values are known.
      */
     isApplicable(features: Iterable<string>, supportedFeatures: Iterable<string>) {
         const fset = features instanceof Set ? (features as Set<string>) : new Set(features);
-        const sfset = supportedFeatures instanceof Set ? (features as Set<string>) : new Set(features);
+        const sfset = supportedFeatures instanceof Set
+            ? (supportedFeatures as Set<string>)
+            : new Set(supportedFeatures);
         return computeApplicability(fset, sfset, this.ast) !== false;
     }
 
@@ -582,8 +580,7 @@ namespace Tokenizer {
     }
 }
 
-// The DSL is *almost* complex enough to warrant a proper parser library.  Not
-// quite though...
+// The DSL is *almost* complex enough to warrant a proper parser library.  Not quite though...
 class Parser {
     public ast: Conformance.Ast;
 
@@ -619,9 +616,8 @@ class Parser {
         }
     }
 
-    // Note that Conformance.Definition effectively serves as our AST.  Its
-    // design is slightly suboptimal for this purpose because it also attempts
-    // to serve as a DSL for manual expression of conformance
+    // Note that Conformance.Definition effectively serves as our AST.  Its design is slightly suboptimal for this
+    // purpose because it also attempts to serve as a DSL for manual expression of conformance
     private parse(): Conformance.Ast {
         return this.parseGroup();
     }

@@ -4,12 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { FieldValue } from "../../model/index.js";
 import { PartStoreService } from "../../node/server/storage/PartStoreService.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Promises.js";
+import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
+import { Val } from "../state/managed/Val.js";
 import { Transaction } from "../state/transaction/Transaction.js";
 
 /**
@@ -36,15 +39,16 @@ export class ServerBehaviorBacking extends BehaviorBacking {
             () => super.invokeInitializer(behavior, options),
 
             () => {
-                // After initialization state must conform to the schema
-                this.datasource.validate();
+                this.#applyTransitiveDefaults(behavior.state);
 
-                // For initializers we do not invoke with a transaction, instead
-                // persisting dirty values after initialization.
+                // State must now conform to the schema
+                this.datasource.validate(behavior.context);
+
+                // For initializers we do not invoke with a transaction, instead persisting dirty values after
+                // initialization.
                 //
-                // TODO - this gets the commit under the umbrella of "initialization"
-                // for error handling but we need should also add a general utility for
-                // lazy persistence of dirty state
+                // TODO - this gets the commit under the umbrella of "initialization" for error handling but we need
+                // should also add a general utility for lazy persistence of dirty state
                 const transaction = new Transaction();
                 this.save(transaction);
                 if (transaction.status === Transaction.Status.Exclusive) {
@@ -52,5 +56,29 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 }
             }
         )
+    }
+
+    /**
+     * Schema may specify that state fields default to the value of another field.  We apply these defaults after
+     * initialization when the other field should be defined.
+     */
+    #applyTransitiveDefaults(state: Val.Struct) {
+        const schema = this.type.schema;
+        if (!schema) {
+            return;
+        }
+
+        for (const member of schema.members) {
+            const name = camelize(member.name);
+            if (state[name] === undefined) {
+                const referenced = FieldValue.referenced(member.default);
+                if (referenced) {
+                    const val = state[camelize(referenced)]
+                    if (val !== undefined) {
+                        state[name] = val;
+                    }
+                }
+            }
+        }        
     }
 }
