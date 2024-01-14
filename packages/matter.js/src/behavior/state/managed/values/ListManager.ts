@@ -6,7 +6,7 @@
 
 import { Access, ValueModel } from "../../../../model/index.js";
 import { AccessControl } from "../../../AccessControl.js";
-import { SchemaError, WriteError } from "../../../errors.js";
+import { ReadError, SchemaError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
@@ -96,7 +96,7 @@ function createProxy(
             authorizeRead(session, context);
 
             if (index < 0 || index > reference.value.length) {
-                throw new WriteError(config.schema, `Index ${index} is out of bounds`);
+                throw new ReadError(config.schema, `Index ${index} is out of bounds`);
             }
 
             let subref = reference.subreferences?.[index];
@@ -214,7 +214,7 @@ function createProxy(
         // On write we enter a transaction
         set(_target, property, newValue, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                validateEntry(newValue);
+                validateEntry(newValue, session);
                 writeEntry(Number.parseInt(property), newValue);
                 return true;
             }

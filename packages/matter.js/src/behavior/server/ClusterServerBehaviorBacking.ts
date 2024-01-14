@@ -5,7 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { Attributes, Events } from "../../cluster/Cluster.js";
+import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import { asClusterServerInternal, ClusterServerObj, type CommandHandler, type SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
@@ -77,8 +77,17 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             supportedEvents[name] = true;
         }
 
+        // TODO - We don't need the ClusterServer to deal with our state but its API requires valid initial values. This
+        // can be cleaned up as we factor out legacy code but for now just pass our validated state and use
+        // ClusterServer's TLV validation as backup
+        const datasource = this.datasource;
+        const initialValues = datasource.reference({
+            accessLevel: AccessLevel.View,
+            offline: true,
+        });
+
         // Create the cluster server
-        const clusterServer = ClusterServer(type.cluster, type.defaults, handlers, supportedEvents);
+        const clusterServer = ClusterServer(type.cluster, initialValues, handlers, supportedEvents);
 
         // Monitor change events so we can notify the cluster server of data
         // changes
@@ -90,7 +99,6 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         asClusterServerInternal(clusterServer)._assignToEndpoint(this.#server);
 
         // This must occur after cluster server is assigned to endpoint
-        const datasource = this.datasource;
         const eventHandler = this.eventHandler;
         clusterServer.datasource = {
             get version() {

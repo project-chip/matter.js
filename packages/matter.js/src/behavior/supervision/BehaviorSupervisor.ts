@@ -52,7 +52,7 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
     // Filter children based on feature conformance
     const children = logical.children.filter(child =>
         child.effectiveConformance.isApplicable(features, supportedFeatures),
-    );
+    ).map(child => child.clone());
 
     // Add fields for programmatic extensions
     addExtensionFields(logical, new options.State(), children);

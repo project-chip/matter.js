@@ -178,7 +178,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         await this.advertise();
 
-        logger.notice("Node", Diagnostic.strong(this.toString()), "is online");
+        logger.notice(Diagnostic.strong(this.toString()), "is online");
     }
 
     /**

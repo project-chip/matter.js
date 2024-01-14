@@ -4,14 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { camelize } from "../../util/String.js";
+import type { ValueModel } from "../models/index.js";
+
 /**
- * A "feature set" is a set of features for a cluster.  The names of features
- * present appear in this set.
+ * A "feature set" is a set of features for a cluster.  The names of features present appear in this set.
+ *
+ * TODO - Feature metadata is a bit messy and needs a refactor to consolidate available/supported and names/codes
  */
 export class FeatureSet extends Set<FeatureSet.Flag> {
     /**
-     * Create a new feature set from an iterable that returns active names or
-     * from an object of the form { [featureName: string]: true }
+     * Create a new feature set from an iterable that returns active names or from an object of the form { [featureName:
+     * string]: true }
      */
     constructor(definition?: FeatureSet.Definition) {
         if (definition && typeof (definition as any)[Symbol.iterator] !== "function") {
@@ -45,4 +49,25 @@ export namespace FeatureSet {
     export type Flag = string;
     export type Flags = Iterable<FeatureSet.Flag>;
     export type Definition = Flags | { [name: string]: boolean | undefined };
+
+    /**
+     * Normalize the feature map and list of supported feature names into sets of "all" and "supported" features by
+     * abbreviation.
+     */
+    export function normalize(featureMap: ValueModel, supportedFeatures?: FeatureSet) {
+        const featuresAvailable = new FeatureSet();
+        const featuresSupported = new FeatureSet();
+
+        for (const feature of featureMap.children) {
+            featuresAvailable.add(feature.name);
+            if (feature.description && supportedFeatures?.has(camelize(feature.description))) {
+                featuresSupported.add(feature.name);
+            }
+        }
+
+        return {
+            featuresAvailable,
+            featuresSupported,
+        };
+    }
 }
