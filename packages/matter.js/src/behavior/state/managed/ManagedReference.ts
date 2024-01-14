@@ -46,7 +46,7 @@ export function ManagedReference(
     const original = (parent.value as Container)[index];
     let value = original;
 
-    const reference = {
+    const reference: Val.Reference = {
         owner: parent,
 
         get value() {
@@ -92,7 +92,14 @@ export function ManagedReference(
         refresh() {
             replaceValue((parent.value as Container)[index]);
         },
-    } as Val.Reference;
+
+        notify() {
+            if (original === value) {
+                return;
+            }
+            parent.notify(typeof index === "string" ? index : undefined, original, value);
+        }
+    };
 
     return reference;
 

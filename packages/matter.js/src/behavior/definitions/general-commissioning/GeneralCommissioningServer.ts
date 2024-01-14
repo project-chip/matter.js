@@ -25,6 +25,16 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     declare state: GeneralCommissioningServer.State;
 
     override initialize() {
+        const bci = this.state.basicCommissioningInfo;
+        if (bci.failSafeExpiryLengthSeconds === undefined) {
+            // One minute
+            bci.failSafeExpiryLengthSeconds = 60;
+        }
+        if (bci.maxCumulativeFailsafeSeconds === undefined) {
+            // 5 minutes, recommended by spec
+            bci.maxCumulativeFailsafeSeconds = 900;
+        }
+
         this.state.breadcrumb = 0;
     }
 

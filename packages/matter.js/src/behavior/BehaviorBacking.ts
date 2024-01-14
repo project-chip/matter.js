@@ -21,8 +21,7 @@ import { Transaction } from "./state/transaction/Transaction.js";
 const logger = Logger.get("BehaviorBacking");
 
 /**
- * The "backing" for a behavior manages those portions of behavior that endure
- * for the lifetime of an endpoint.
+ * The "backing" for a behavior manages those portions of behavior that endure for the lifetime of an endpoint.
  */
 export abstract class BehaviorBacking {
     #part: Part;
@@ -50,17 +49,15 @@ export abstract class BehaviorBacking {
     }
 
     /**
-     * Initialize state by applying values from options and invoking the
-     * behavior's initialize() function.
-     * 
+     * Initialize state by applying values from options and invoking the behavior's initialize() function.
+     *
      * Called by Behaviors once the backing is installed.
      */
     initialize() {
         MaybePromise.then(
             () => this.construction.start(() => {
-                // We use this behavior for initialization.  Do not use agent.get()
-                // to access the behavior because it will throw if the behavior
-                // isn't initialized
+                // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+                // will throw if the behavior isn't initialized
                 const behavior = this.createBehavior(this.part.agent, this.#type);
 
                 // Perform actual initialization
@@ -97,8 +94,7 @@ export abstract class BehaviorBacking {
     /**
      * Create an instance of the backed {@link Behavior}.
      *
-     * Derivatives may override to perform additional setup beyond simple
-     * instantiation.
+     * Derivatives may override to perform additional setup beyond simple instantiation.
      */
     createBehavior(agent: Agent, type: Behavior.Type) {
         const behavior = new this.#type(agent, this);
@@ -154,8 +150,7 @@ export abstract class BehaviorBacking {
     }
 
     /**
-     * Access the event object.  Unlike state, the events object does not vary
-     * by instance.
+     * Access the event object.  Unlike state, the events object does not vary by instance.
      */
     get events() {
         if (!this.#events) {

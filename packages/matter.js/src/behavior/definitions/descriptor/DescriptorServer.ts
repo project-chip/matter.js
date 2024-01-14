@@ -32,7 +32,7 @@ export class DescriptorServer extends DescriptorBehavior {
             this.state.partsList = this.#partsList;
         }
 
-        if (!this.state.deviceTypeList?.length) {
+        if (!this.state.deviceTypeList.length) {
             const partType = this.part.type;
             this.state.deviceTypeList = [
                 {
