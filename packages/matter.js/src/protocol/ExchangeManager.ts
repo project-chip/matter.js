@@ -149,9 +149,12 @@ export class ExchangeManager<ContextT> {
         let session: Session<ContextT> | undefined;
         if (packet.header.sessionType === SessionType.Unicast) {
             if (packet.header.sessionId === UNICAST_UNSECURE_SESSION_ID) {
-                const nodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
+                const initiatorNodeId = packet.header.sourceNodeId ?? NodeId.UNSPECIFIED_NODE_ID;
                 session =
-                    this.sessionManager.getUnsecureSession(nodeId) ?? this.sessionManager.createUnsecureSession(nodeId);
+                    this.sessionManager.getUnsecureSession(initiatorNodeId) ??
+                    this.sessionManager.createUnsecureSession({
+                        initiatorNodeId,
+                    });
             } else {
                 session = this.sessionManager.getSession(packet.header.sessionId);
             }
