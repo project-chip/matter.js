@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../common/MatterError.js";
+import { LifecycleStatus } from "../common/Lifecycle.js";
+import { ImplementationError, InternalError } from "../common/MatterError.js";
 import type { Agent } from "../endpoint/Agent.js";
 import type { Part } from "../endpoint/Part.js";
 import { Diagnostic } from "../log/Diagnostic.js";
@@ -54,28 +55,52 @@ export abstract class BehaviorBacking {
      * Called by Behaviors once the backing is installed.
      */
     initialize() {
-        MaybePromise.then(
-            () => this.construction.start(() => {
-                // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
-                // will throw if the behavior isn't initialized
-                const behavior = this.createBehavior(this.part.agent, this.#type);
+        this.#initialize();
+    }
 
-                // Perform actual initialization
-                return this.invokeInitializer(behavior, this.#options);
-            }),
-            undefined,
-            e => {
-                logger.error(this.injectErrorSource(e));
-            }
-        );
+    /**
+     * Reset state to uninstalled (and thus uninitialized).
+     * 
+     * @param nonvolatile resets nonvolatile state as well
+     */
+    reset() {
+        this.#initialize(async () => {
+            // Allow application logic to clean up
+            await this.#invokeDestroy();
+
+            // Revert to uninstalled state
+            this.construction.setStatus(LifecycleStatus.Inactive);
+
+            // Reset state
+            await this.resetState();
+        });
+    }
+
+    /**
+     * Perform final teardown.  We might invoke {@link Behavior.destroy} multiple times but this method is final.
+     */
+    async [Symbol.asyncDispose]() {
+        await this.#invokeDestroy();
+        this.#internal = this.#events = this.#options = this.#datasource = undefined;
+        this.construction.setStatus(LifecycleStatus.Destroyed);
     }
 
     /**
      * Set state from options and invoke {@link Behavior.initialize}.
+     *
+     * This is an optional extension point for derivatives.  Errors thrown here are recorded and place the behavior into
+     * incapacitated state.
      */
     protected invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
         return behavior.initialize(options);
     }
+
+    /**
+     * Reset state during a reset.
+     * 
+     * This is an optional extension point for derivatives.
+     */
+    protected async resetState() {}
 
     /**
      * The {@link Part} that owns the behavior.
@@ -113,6 +138,7 @@ export abstract class BehaviorBacking {
     get datasource() {
         if (!this.#datasource) {
             this.#datasource = Datasource({
+                name: `${this.part}.${this.type.id}.state`,
                 supervisor: this.type.supervisor,
                 type: this.type.State,
                 events: this.events as unknown as Datasource.Events,
@@ -191,5 +217,67 @@ export abstract class BehaviorBacking {
             )
         }
         return cause;
+    }
+
+    /**
+     * Internal initialization logic.  Broken out from {@link initialize} for the convenience of moving
+     * de-initialization logic into {@link AsyncConstruction} during factory reset.
+     * 
+     * @param before used for factory reset to revert the backing's state
+     */
+    #initialize(before?: () => MaybePromise<void>) {
+        const init = () => {
+            // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+            // will throw if the behavior isn't initialized
+            const behavior = this.createBehavior(this.part.agent, this.#type);
+
+            // Perform actual initialization
+            return this.invokeInitializer(behavior, this.#options);
+        };
+
+        MaybePromise.then(
+            () => this.construction.start(() => {
+                if (before) {
+                    return MaybePromise.then(before, init);
+                }
+                return init();
+            }),
+            undefined,
+            e => {
+                logger.error(this.injectErrorSource(e));
+            }
+        );
+    }
+
+    /**
+     * Invoke {@link Behavior.destroy} to clean up application logic.
+     */
+    async #invokeDestroy() {
+        switch (this.#construction.status) {
+            case LifecycleStatus.Active:
+                break;
+
+            case LifecycleStatus.Initializing:
+                // If the behavior is still initializing it's probably stuck.  So may want to take this out and take our
+                // chances, but will leave in for now as the correct behavior is definitely not to destroy while still
+                // initializing
+                await this.#construction;
+                break;
+
+            case LifecycleStatus.Destroyed:
+                // Destroyed state is permanent; we can't recover
+                throw new InternalError(`Behavior ${this} already destroyed`);
+
+            default:
+                // A little sketchy if incapacitated (previous initialization error) but we'll take our chances
+                return;
+        }
+
+        try {
+            const behavior = (this.#part.agent as unknown as Record<string, Behavior>)[this.type.id];
+            await behavior?.[Symbol.asyncDispose]();
+        } catch (e) {
+            logger.error(`Destroying ${this}:`, this.injectErrorSource(e));
+        }
     }
 }

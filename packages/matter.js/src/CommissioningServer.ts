@@ -7,6 +7,7 @@
 import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
 import { Ble } from "./ble/Ble.js";
+import { Attributes, Events } from "./cluster/Cluster.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
@@ -31,7 +32,8 @@ import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { VendorId } from "./datatype/VendorId.js";
-import { RootEndpoint } from "./device/Device.js";
+import { Aggregator } from "./device/Aggregator.js";
+import { Device, RootEndpoint } from "./device/Device.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
@@ -546,6 +548,53 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
             }),
             qrPairingCode,
         };
+    }
+
+    /**
+     * Get the root endpoint of the node.
+     */
+    getRootEndpoint() {
+        return this.rootEndpoint;
+    }
+
+    /**
+     * Add a child endpoint to the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param endpoint Endpoint to add
+     * @protected
+     */
+    protected addEndpoint(endpoint: EndpointInterface) {
+        this.rootEndpoint.addChildEndpoint(endpoint);
+    }
+
+    /**
+     * Add a new device to the node
+     *
+     * @param device Device or Aggregator instance to add
+     */
+    addDevice(device: Device | Aggregator) {
+        this.addEndpoint(device);
+    }
+
+    /**
+     * Add a new cluster server to the root endpoint
+     * BasicInformationCluster and OperationalCredentialsCluster can not be added via this method because they are
+     * added in the constructor
+     *
+     * @param cluster
+     */
+    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+        if (cluster.id === BasicInformationCluster.id) {
+            throw new ImplementationError(
+                "BasicInformationCluster can not be modified, provide all details in constructor options!",
+            );
+        }
+        if (cluster.id === OperationalCredentialsCluster.id) {
+            throw new ImplementationError(
+                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
+            );
+        }
+        this.rootEndpoint.addClusterServer(cluster);
     }
 
     updateStructure() {

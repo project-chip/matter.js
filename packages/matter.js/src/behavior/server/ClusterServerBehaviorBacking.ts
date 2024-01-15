@@ -25,6 +25,7 @@ import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 import { ServerActionContext } from "./ServerActionContext.js";
+import { Message } from "../../codec/MessageCodec.js";
 
 const logger = Logger.get("Behavior");
 
@@ -143,9 +144,11 @@ function withBehavior<T>(
 
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
     return ({ request, session, message }) => {
-        logger.debug(
-            `Invoke <part ${backing.part.id}>.${backing.type.id}.${name}`,
-            request && typeof request === "object" ? Diagnostic.dict(request) : request
+        logger.info(
+            "Invoke",
+            Diagnostic.strong(`${backing}.${name}`),
+            ActionContext.via({ message }),
+            request && typeof request === "object" ? Diagnostic.dict(request) : request,
         );
         return withBehavior(backing, session, { message }, behavior =>
             (behavior as unknown as Record<string, (arg: any) => any>)[name](request),
@@ -157,12 +160,18 @@ function createAttributeAccessors(
     backing: ClusterServerBehaviorBacking,
     name: string,
 ): {
-    get: (params: { session?: Session<MatterDevice>, isFabricFiltered?: boolean }) => any;
-    set: (value: any, params: { session?: Session<MatterDevice> }) => boolean;
+    get: (params: { session?: Session<MatterDevice>, isFabricFiltered?: boolean, message?: Message }) => any;
+    set: (value: any, params: { session?: Session<MatterDevice>, message?: Message }) => boolean;
 } {
     return {
-        get({ session, isFabricFiltered }) {
-            return withBehavior(backing, session, { fabricFiltered: isFabricFiltered }, behavior => {
+        get({ session, isFabricFiltered, message }) {
+            logger.debug(
+                "Read",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                ActionContext.via({ message })
+            );
+
+            return withBehavior(backing, session, { message, fabricFiltered: isFabricFiltered }, behavior => {
                 const state = behavior.state as Val.Struct;
 
                 StructManager.assertDirectReadAuthorized(state, name);
@@ -171,8 +180,14 @@ function createAttributeAccessors(
             });
         },
 
-        set(value, { session }) {
-            return withBehavior(backing, session, {}, behavior => {
+        set(value, { session, message }) {
+            logger.info(
+                "Write",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                ActionContext.via({ message }),
+            )
+
+            return withBehavior(backing, session, { message }, behavior => {
                 const state = behavior.state as Record<string, any>;
 
                 state[name] = value;

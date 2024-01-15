@@ -76,9 +76,12 @@ export class Host implements Environment.Task {
         if (this.#status !== Status.INACTIVE) {
             throw new ImplementationError("Server is already running");
         }
+
         this.#status = Status.ACTIVE;
 
         const environment = this.#configuration.environment;
+
+        this.announce(environment);
 
         environment.tasks.add(this);
 
@@ -166,6 +169,10 @@ export class Host implements Environment.Task {
             throw new InternalError("MDNS scanner accessed while offline");
         }
         return this.#mdnsScanner;
+    }
+
+    protected announce(environment: Environment) {
+        logger.notice(environment.announcement)
     }
 
     get [Diagnostic.presentation]() {

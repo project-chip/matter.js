@@ -5,6 +5,7 @@
  */
 
 import { AccessControl } from "../../../../src/behavior/AccessControl.js";
+import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { Observable } from "../../../../src/util/Observable.js";
@@ -13,19 +14,28 @@ class MyState {
     foo = "bar";
 }
 
-const schema = BehaviorSupervisor({ id: "myState", State: MyState });
+const supervisor = BehaviorSupervisor({ id: "myState", State: MyState });
+
+function ds<const T extends StateType = typeof MyState>(options: Partial<Datasource.Options<T>> = {}): Datasource<T> {
+    return Datasource({
+        name: "test.state",
+        type: MyState,
+        supervisor,
+        ...options,
+    })
+}
 
 describe("Datasource", () => {
     it("reference is a MyState", () => {
-        const datasource = Datasource({ type: MyState, supervisor: schema });
+        const datasource = ds();
         const state = datasource.reference(AccessControl.OfflineSession);
         state satisfies MyState;
         expect(state.foo).equals("bar");
     });
 
     it("caches state implementations", () => {
-        const ds1 = Datasource({ type: MyState, supervisor: schema });
-        const ds2 = Datasource({ type: MyState, supervisor: schema });
+        const ds1 = ds();
+        const ds2 = ds();
 
         const constructor1 = ds1.reference(AccessControl.OfflineSession).constructor;
         const constructor2 = ds2.reference(AccessControl.OfflineSession).constructor;
@@ -34,7 +44,7 @@ describe("Datasource", () => {
     });
 
     it("sets and gets immediately without transaction", () => {
-        const datasource = Datasource({ type: MyState, supervisor: schema });
+        const datasource = ds();
         const state = datasource.reference(AccessControl.OfflineSession);
 
         state.foo = "BAR";
@@ -51,7 +61,7 @@ describe("Datasource", () => {
 
         const result = new Promise(resolve => events.foo$Change.on((...args: any[]) => resolve(args)));
 
-        const datasource = Datasource({ type: MyState, supervisor: schema, events });
+        const datasource = ds({ events });
         const state = datasource.reference(AccessControl.OfflineSession);
 
         state.foo = "BAR";
@@ -71,12 +81,9 @@ describe("Datasource", () => {
             }
         }
 
-        const schema = BehaviorSupervisor({ id: "test", State });
+        const supervisor = BehaviorSupervisor({ id: "test", State });
 
-        const datasource = Datasource({
-            supervisor: schema,
-            type: State,
-        });
+        const datasource = ds({ supervisor });
 
         const state = datasource.reference(AccessControl.OfflineSession);
 

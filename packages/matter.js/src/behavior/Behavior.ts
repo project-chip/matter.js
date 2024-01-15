@@ -17,8 +17,8 @@ import { BehaviorSupervisor } from "./supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "./supervision/RootSupervisor.js";
 import { Schema } from "./supervision/Schema.js";
 
-// We store state and events using this symbol because TS prevents us from
-// defining the corresponding getters as part of the class
+// We store state and events using this symbol because TS prevents us from defining the corresponding getters as part of
+// the class
 const BACKING = Symbol("endpoint-owner");
 const STATE = Symbol("state");
 const INTERNAL = Symbol("internal");
@@ -38,44 +38,37 @@ interface StaticInternal {
 }
 
 /**
- * Behavior implements functionality for an Endpoint.  Endpoint agents are
- * implemented as a composition of behaviors.
+ * Behavior implements functionality for an Endpoint.  Endpoint agents are implemented as a composition of behaviors.
  *
- * Most behaviors associated 1:1 with a Matter cluster type as implemented by
- * ClusterBehavior.  But you can also extend Behavior directly to add other
- * types of composable logic to an endpoint.
+ * Most behaviors associated 1:1 with a Matter cluster type as implemented by ClusterBehavior.  But you can also extend
+ * Behavior directly to add other types of composable logic to an endpoint.
  *
- * You probably want to build your behavior using one of the standard
- * implementations offered by Matter.js.
+ * You probably want to build your behavior using one of the standard implementations offered by Matter.js.
  */
 export abstract class Behavior {
     #agent: Agent;
 
     /**
-     * Each behavior implementation has an ID that uniquely identifies the
-     * type of behavior.  An Endpoint may only have one behavior with the
-     * specified ID.
+     * Each behavior implementation has an ID that uniquely identifies the type of behavior.  An Endpoint may only have
+     * one behavior with the specified ID.
      *
-     * Endpoint instances store each behavior in a property with the same name
-     * as the behavior's ID.
+     * Endpoint instances store each behavior in a property with the same name as the behavior's ID.
      *
-     * EndpointBuilder also uses the ID when replacing behaviors using the
-     * with() builder method.
+     * EndpointBuilder also uses the ID when replacing behaviors using the with() builder method.
      */
     static readonly id: string;
 
     /**
      * A behavior's schema controls access to data, commands and events.
-     * 
-     * Schema is inferred from the methods and properties of the behavior
-     * but you can specify explicitly for additional control.
+     *
+     * Schema is inferred from the methods and properties of the behavior but you can specify explicitly for additional
+     * control.
      */
     static readonly schema?: Schema;
 
     /**
-     * By default behaviors load lazily as they are accessed.  You can set
-     * this flag to true to force behaviors to load immediately when the part
-     * is initialized.
+     * By default behaviors load lazily as they are accessed.  You can set this flag to true to force behaviors to load
+     * immediately when the part is initialized.
      */
     static readonly immediate?: boolean;
 
@@ -116,14 +109,16 @@ export abstract class Behavior {
     }
 
     /**
-     * Execute logic against this data model with elevated privileges.
+     * Execute logic with elevated privileges.
      *
-     * The provided function executes against the input struct with privileges
-     * escalated to offline mode.  This is necessary e.g. when a command needs
-     * to modify attribute values the active credentials are not authorized
-     * to write directly.
+     * The provided function executes against the input struct with privileges escalated to offline mode.  This is
+     * necessary e.g. when a command needs to modify attribute values the active credentials are not authorized to write
+     * directly.
      *
      * Elevated logic effectively ignores ACLs so should be used with care.
+     *
+     * Note that interactions with the behavior will remain elevated until the synchronous completion of this call.
+     * You should only elevate privileges for synchronous logic.
      *
      * @param fn the elevated logic
      */
@@ -132,6 +127,7 @@ export abstract class Behavior {
 
         const offline = context.offline;
         try {
+            context.offline = true;
             fn();
         } finally {
             context.offline = offline;
@@ -154,8 +150,7 @@ export abstract class Behavior {
     }
 
     /**
-     * The data supervisor for the behavior.  The supervisor controls
-     * validation and access to behavior data.
+     * The data supervisor for the behavior.  The supervisor controls validation and access to behavior data.
      */
     static get supervisor(): RootSupervisor {
         const internal = this as unknown as StaticInternal;
@@ -167,8 +162,7 @@ export abstract class Behavior {
     }
 
     /**
-     * Implementation of endpoint-scoped state.  Subclasses may override to
-     * extend.
+     * Implementation of endpoint-scoped state.  Subclasses may override to extend.
      */
     static State = EmptyState;
 
@@ -178,25 +172,27 @@ export abstract class Behavior {
     static InternalState = EmptyState;
 
     /**
-     * Implementation of the events property.  Subclasses may override to
-     * extend.
+     * Implementation of the events property.  Subclasses may override to extend.
      */
     static Events = EventEmitter;
 
     /**
-     * Behaviors are ephemeral and should not perform initialization in their
-     * constructor.  They can override this method instead.
+     * Behaviors are ephemeral and should not perform initialization in their constructor.  They can override this
+     * method instead.
      *
-     * This method may be synchronous or asyncronous.  If asynchronous, the
-     * behavior will not be available for external use until initialization
-     * completes.
+     * This method may be synchronous or asyncronous.  If asynchronous, the behavior will not be available for external
+     * use until initialization completes.
      */
     initialize(_options?: {}): MaybePromise<void> {}
 
     /**
-     * Release resources.
+     * Release resources.  This is the public API for releasing application resources held by behaviors in internal
+     * state.
+     * 
+     * We use the somewhat cryptic {@link Symbol.asyncDispose} because "destroy" would be a conflict if Matter ever
+     * adds a command called "destroy".
      */
-    destroy(): MaybePromise<void> {}
+    [Symbol.asyncDispose](): MaybePromise<void> {}
 
     /**
      * Description used in diagnostic messages.
@@ -238,9 +234,8 @@ export abstract class Behavior {
     }
 }
 
-// TS prevents us from declaring an override type if the base field is a
-// getter in the class.  So we just declare in the base class and manually
-// install the getters here.
+// TS prevents us from declaring an override type if the base field is a getter in the class.  So we just declare in the
+// base class and manually install the getters here.
 Object.defineProperties(Behavior.prototype, {
     state: {
         get(this: Internal) {
@@ -298,9 +293,8 @@ export namespace Behavior {
     }
 
     /**
-     * This function simply throws NotImplementedError.  More importantly, its
-     * presence in any command implementation method informs the endpoint that
-     * the command is not implemented.
+     * This function simply throws NotImplementedError.  More importantly, its presence in any command implementation
+     * method informs the endpoint that the command is not implemented.
      */
     export function unimplemented(..._args: any[]): Promise<any> {
         throw new NotImplementedError();
@@ -325,8 +319,7 @@ export namespace Behavior {
             : {}
 
     /**
-     * Configuration options you may set when adding a {@link Behavior} to a
-     * Part.
+     * Configuration options you may set when adding a {@link Behavior} to a Part.
      */
     export type Options<T extends Behavior.Type = Behavior.Type> =
         & Behavior.InputStateOf<T>
