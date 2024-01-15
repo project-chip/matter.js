@@ -235,8 +235,9 @@ export class MatterDevice {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
+        activeThresholdMs?: number;
     }) {
         const { fabric } = args;
         const session = await this.sessionManager.createSecureSession({
