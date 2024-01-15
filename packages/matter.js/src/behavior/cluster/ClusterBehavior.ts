@@ -59,6 +59,13 @@ export class ClusterBehavior extends Behavior {
     }
 
     /**
+     * Supported features as a flag object.
+     */
+    get features() {
+        return this.cluster.supportedFeatures;
+    }
+
+    /**
      * Every cluster behavior has an associated ClusterType defined statically.
      */
     static readonly cluster = ClusterType.Unknown;
@@ -284,6 +291,11 @@ export namespace ClusterBehavior {
              * Observables for cluster events and attribute changes.
              */
             events: ClusterEvents<C, B>;
+
+            /**
+             * Supported features as a flag object.
+             */
+            features: C["supportedFeatures"],
 
             [Symbol.asyncDispose](): MaybePromise<void>;
         };

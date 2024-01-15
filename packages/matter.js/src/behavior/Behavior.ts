@@ -111,9 +111,7 @@ export abstract class Behavior {
     /**
      * Execute logic with elevated privileges.
      *
-     * The provided function executes against the input struct with privileges escalated to offline mode.  This is
-     * necessary e.g. when a command needs to modify attribute values the active credentials are not authorized to write
-     * directly.
+     * The provided function executes with privileges escalated to offline mode.  This is not commonly necessary.
      *
      * Elevated logic effectively ignores ACLs so should be used with care.
      *

@@ -10,7 +10,7 @@ import { Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { AccessControl } from "../../../AccessControl.js";
-import { SchemaError } from "../../../errors.js";
+import { SchemaImplementationError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import type { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
@@ -67,7 +67,7 @@ export function StructManager(
         ) {
             // Only objects are acceptable
             if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
-                throw new SchemaError(schema, `Cannot manage ${typeof ref.value} because it is not a struct`);
+                throw new SchemaImplementationError(schema, `Cannot manage ${typeof ref.value} because it is not a struct`);
             }
 
             // If we have a fabric index, update the context

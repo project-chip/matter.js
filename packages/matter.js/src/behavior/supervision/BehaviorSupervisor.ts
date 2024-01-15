@@ -35,23 +35,21 @@ import { Schema } from "./Schema.js";
  * schema.
  */
 export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSupervisor {
-    let features: Set<string>, supportedFeatures: FeatureSet;
+    let featuresAvailable: Set<string>, featuresSupported: FeatureSet;
 
     const logical = options.schema ?? Schema.empty;
-
+    
     // Extract features and supportedFeatures from the logical schema
     if (logical instanceof ClusterModel) {
-        const featureMap = logical.featureMap?.children ?? [];
-        features = new Set(featureMap.map(f => camelize(f.name)));
-        supportedFeatures = new FeatureSet(Object.keys(logical.supportedFeatures ?? []));
+        ({ featuresAvailable, featuresSupported } = FeatureSet.normalize(logical.featureMap, logical.supportedFeatures));
     } else {
-        features = new Set();
-        supportedFeatures = new FeatureSet([]);
+        featuresAvailable = new Set();
+        featuresSupported = new FeatureSet([]);
     }
-
+    
     // Filter children based on feature conformance
     const children = logical.children.filter(child =>
-        child.effectiveConformance.isApplicable(features, supportedFeatures),
+        child.effectiveConformance.isApplicable(featuresAvailable, featuresSupported),
     ).map(child => child.clone());
 
     // Add fields for programmatic extensions
@@ -64,8 +62,8 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
             ...logical,
             name: `${camelize(options.id, true)}$State`,
             children,
+            supportedFeatures: featuresSupported,
         });
-        schema.supportedFeatures = supportedFeatures;
     } else {
         schema = new DatatypeModel({
             ...logical,

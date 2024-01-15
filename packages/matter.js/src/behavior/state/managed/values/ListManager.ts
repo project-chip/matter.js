@@ -6,7 +6,7 @@
 
 import { Access, ValueModel } from "../../../../model/index.js";
 import { AccessControl } from "../../../AccessControl.js";
-import { ReadError, SchemaError, WriteError } from "../../../errors.js";
+import { ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
@@ -32,7 +32,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
     return (list, session, context) => {
         // Sanity check
         if (!Array.isArray(list.value)) {
-            throw new SchemaError(schema, `Cannot manage ${typeof list.value} because it is not an array`);
+            throw new SchemaImplementationError(schema, `Cannot manage ${typeof list.value} because it is not an array`);
         }
 
         return createProxy(config, list as Val.Reference<Val.List>, session, context);
@@ -42,7 +42,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
 function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
     const entry = schema instanceof ValueModel ? schema.listEntry : undefined;
     if (entry === undefined) {
-        throw new SchemaError(schema, `List schema has no entry definition`);
+        throw new SchemaImplementationError(schema, `List schema has no entry definition`);
     }
 
     const entryManager = owner.get(entry);
