@@ -1214,10 +1214,53 @@ describe("Integration Test", () => {
             const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
             assert.ok(nodeData);
             assert.equal(nodeData.length, 1);
+
+            // Remove variable fields before compare
+            expect(nodeData[0][1].discoveryData.expires).to.be.an("number");
+            delete nodeData[0][1].discoveryData.expires;
+            expect(nodeData[0][1].discoveryData.deviceIdentifier).to.be.an("string");
+            delete nodeData[0][1].discoveryData.deviceIdentifier;
+            expect(nodeData[0][1].basicInformationData.serialNumber).to.be.an("string");
+            delete nodeData[0][1].basicInformationData.serialNumber;
+
             assert.deepEqual(nodeData[0][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "DE",
+                    nodeLabel: "345678",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: true,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
-                    ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
-                    port: 5540,
+                    ip: SERVER_IPv6,
+                    port: matterPort,
                     type: "udp",
                 },
             });
@@ -1351,14 +1394,92 @@ describe("Integration Test", () => {
             const nodeData = fakeControllerStorage.get<[NodeId, any][]>(["0", "MatterController"], "commissionedNodes");
             assert.ok(nodeData);
             assert.equal(nodeData.length, 2);
+
             assert.deepEqual(nodeData[0][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "DE",
+                    nodeLabel: "345678",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: true,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
                     ip: SERVER_IPv6,
                     port: matterPort,
                     type: "udp",
                 },
             });
+
+            // Remove variable fields before compare
+            expect(nodeData[1][1].discoveryData.expires).to.be.an("number");
+            delete nodeData[1][1].discoveryData.expires;
+            expect(nodeData[1][1].discoveryData.deviceIdentifier).to.be.an("string");
+            delete nodeData[1][1].discoveryData.deviceIdentifier;
+            expect(nodeData[1][1].basicInformationData.serialNumber).to.be.an("string");
+            delete nodeData[1][1].basicInformationData.serialNumber;
+
             assert.deepEqual(nodeData[1][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "US",
+                    nodeLabel: "",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: true,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort2,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
                     ip: SERVER_IPv6,
                     port: matterPort2,
@@ -1556,6 +1677,40 @@ describe("Integration Test", () => {
             assert.ok(nodeData);
             assert.equal(nodeData.length, 2);
             assert.deepEqual(nodeData[0][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "DE",
+                    nodeLabel: "345678",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: true,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
                     port: matterPort,
@@ -1563,6 +1718,40 @@ describe("Integration Test", () => {
                 },
             });
             assert.deepEqual(nodeData[1][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "US",
+                    nodeLabel: "",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: true,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    ICD: 0,
+                    SAI: 300,
+                    SAT: 4000,
+                    SII: 500,
+                    T: 0,
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort2,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
                     port: matterPort2,
@@ -1576,7 +1765,45 @@ describe("Integration Test", () => {
             );
             assert.ok(nodeData2);
             assert.equal(nodeData2.length, 1);
+
+            // Remove variable fields before compare
+            expect(nodeData2[0][1].discoveryData.expires).to.be.an("number");
+            delete nodeData2[0][1].discoveryData.expires;
+            expect(nodeData2[0][1].discoveryData.deviceIdentifier).to.be.an("string");
+            delete nodeData2[0][1].discoveryData.deviceIdentifier;
+            expect(nodeData2[0][1].basicInformationData.serialNumber).to.be.an("string");
+            delete nodeData2[0][1].basicInformationData.serialNumber;
+
             assert.deepEqual(nodeData2[0][1], {
+                basicInformationData: {
+                    capabilityMinima: {
+                        caseSessionsPerFabric: 3,
+                        subscriptionsPerFabric: 3,
+                    },
+                    dataModelRevision: 16,
+                    hardwareVersion: 0,
+                    hardwareVersionString: "0",
+                    localConfigDisabled: false,
+                    location: "DE",
+                    nodeLabel: "testLabel4",
+                    partNumber: "123456",
+                    productId: 32769,
+                    productName: "Matter end-to-end device",
+                    reachable: false,
+                    softwareVersion: 1,
+                    softwareVersionString: "v1",
+                    vendorId: 65521,
+                    vendorName: "matter-node.js",
+                },
+                discoveryData: {
+                    addresses: [
+                        {
+                            ip: SERVER_IPv6,
+                            port: matterPort,
+                            type: "udp",
+                        },
+                    ],
+                },
                 operationalServerAddress: {
                     ip: "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe",
                     port: matterPort,

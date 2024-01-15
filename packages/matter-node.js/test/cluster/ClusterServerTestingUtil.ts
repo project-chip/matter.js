@@ -69,7 +69,7 @@ export async function createTestSessionWithFabric() {
         closeCallback: async () => {
             /* */
         },
-        idleRetransmissionTimeoutMs: 1,
-        activeRetransmissionTimeoutMs: 2,
+        idleIntervalMs: 1,
+        activeIntervalMs: 2,
     });
 }

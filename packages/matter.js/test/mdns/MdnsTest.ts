@@ -130,8 +130,8 @@ const NODE_ID = NodeId(BigInt(1));
                 );
 
                 await broadcaster.setFabrics(PORT, [{ operationalId: OPERATIONAL_ID, nodeId: NODE_ID } as Fabric], {
-                    sleepIdleInterval: 100,
-                    sleepActiveInterval: 200,
+                    sessionIdleInterval: 100,
+                    sessionActiveInterval: 200,
                 });
                 await broadcaster.announce(PORT);
 
@@ -191,7 +191,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordType: 16,
                             recordClass: 1,
                             ttl: 120,
-                            value: ["SII=100", "SAI=200", "T=0"],
+                            value: ["SII=100", "SAI=200", "SAT=4000", "T=0", "ICD=0"],
                         },
                         ...IPDnsRecords,
                     ],
@@ -263,7 +263,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordType: 16,
                             recordClass: 1,
                             ttl: 0,
-                            value: ["SII=100", "SAI=200", "T=0"],
+                            value: ["SII=100", "SAI=200", "SAT=4000", "T=0", "ICD=0"],
                         },
                         ...IPDnsRecords.map(record => ({ ...record, ttl: 0 })),
                     ],
@@ -308,13 +308,15 @@ const NODE_ID = NodeId(BigInt(1));
                                 "VP=1+32768",
                                 "DT=1",
                                 "DN=Test Device",
-                                "SII=5000",
+                                "SII=500",
                                 "SAI=300",
+                                "SAT=4000",
                                 "T=0",
                                 "D=1234",
                                 "CM=1",
                                 "PH=33",
                                 "PI=",
+                                "ICD=0",
                             ],
                         },
                         ...IPDnsRecords,
@@ -461,7 +463,16 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
-                            value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"],
+                            value: [
+                                "VP=1+32768",
+                                "DT=1",
+                                "DN=Test Commissioner",
+                                "SII=500",
+                                "SAI=300",
+                                "SAT=4000",
+                                "T=0",
+                                "ICD=0",
+                            ],
                         },
                         ...IPDnsRecords,
                     ],
@@ -602,7 +613,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordType: 16,
                             recordClass: 1,
                             ttl: 120,
-                            value: ["SII=5000", "SAI=300", "T=0"],
+                            value: ["SII=500", "SAI=300", "SAT=4000", "T=0", "ICD=0"],
                         },
                         ...IPDnsRecords,
                     ],
@@ -629,13 +640,15 @@ const NODE_ID = NodeId(BigInt(1));
                                 "VP=1+32768",
                                 "DT=1",
                                 "DN=Test Device",
-                                "SII=5000",
+                                "SII=500",
                                 "SAI=300",
+                                "SAT=4000",
                                 "T=0",
                                 "D=1234",
                                 "CM=1",
                                 "PH=33",
                                 "PI=",
+                                "ICD=0",
                             ],
                         },
                         ...IPDnsRecords,
@@ -761,7 +774,16 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
-                            value: ["VP=1+32768", "DT=1", "DN=Test Commissioner", "SII=5000", "SAI=300", "T=0"],
+                            value: [
+                                "VP=1+32768",
+                                "DT=1",
+                                "DN=Test Commissioner",
+                                "SII=500",
+                                "SAI=300",
+                                "SAT=4000",
+                                "T=0",
+                                "ICD=0",
+                            ],
                         },
                         ...IPDnsRecords,
                     ],
@@ -846,12 +868,13 @@ const NODE_ID = NodeId(BigInt(1));
 
                 expect(dataWereSent).equal(true);
                 expect(queryReceived).equal(false);
-                expect(result).deep.equal(IPIntegrationResultsPort1);
+                expect(result?.addresses).deep.equal(IPIntegrationResultsPort1);
                 await listener.close();
 
                 // Same result when we just get the records
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
                 ).deep.equal(IPIntegrationResultsPort1);
 
                 // And expire the announcement
@@ -859,8 +882,8 @@ const NODE_ID = NodeId(BigInt(1));
 
                 // And empty result after expiry
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
-                ).deep.equal([]);
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
             });
 
             it("the client queries the server record if it has not been announced before", async () => {
@@ -895,12 +918,13 @@ const NODE_ID = NodeId(BigInt(1));
 
                 const result = await findPromise;
 
-                expect(result).deep.equal(IPIntegrationResultsPort1);
+                expect(result?.addresses).deep.equal(IPIntegrationResultsPort1);
                 await listener.close();
 
                 // Same result when we just get the records
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
                 ).deep.equal(IPIntegrationResultsPort1);
 
                 // And expire the announcement
@@ -908,8 +932,8 @@ const NODE_ID = NodeId(BigInt(1));
 
                 // And empty result after expiry
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
-                ).deep.equal([]);
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
             });
 
             it("the client queries the server record and get correct response also with multiple announced instances", async () => {
@@ -960,7 +984,7 @@ const NODE_ID = NodeId(BigInt(1));
                             recordClass: 1,
                             recordType: 16,
                             ttl: 120,
-                            value: ["SII=5000", "SAI=300", "T=0"],
+                            value: ["SII=500", "SAI=300", "SAT=4000", "T=0", "ICD=0"],
                         },
                         ...IPDnsRecords,
                     ],
@@ -982,13 +1006,14 @@ const NODE_ID = NodeId(BigInt(1));
 
                 const result = await findPromise;
 
-                expect(result).deep.equal(IPIntegrationResultsPort2);
+                expect(result?.addresses).deep.equal(IPIntegrationResultsPort2);
 
                 await listener.close();
 
                 // Same result when we just get the records
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
                 ).deep.equal(IPIntegrationResultsPort2);
 
                 // No commissionable devices because never queried
@@ -1000,8 +1025,8 @@ const NODE_ID = NodeId(BigInt(1));
 
                 // And empty result after expiry
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
-                ).deep.equal([]);
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
             });
 
             it("the client queries the server record and get correct response when announced before", async () => {
@@ -1037,13 +1062,14 @@ const NODE_ID = NodeId(BigInt(1));
 
                 expect(dataWereSent).equal(true);
                 expect(queryReceived).equal(false);
-                expect(result).deep.equal(IPIntegrationResultsPort2);
+                expect(result?.addresses).deep.equal(IPIntegrationResultsPort2);
 
                 await listener.close();
 
                 // Same result when we just get the records
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID)
+                        ?.addresses,
                 ).deep.equal(IPIntegrationResultsPort2);
 
                 // Also commissionable devices known now
@@ -1058,8 +1084,10 @@ const NODE_ID = NodeId(BigInt(1));
                         PI: "",
                         SAI: 300,
                         SD: 4,
-                        SII: 5000,
+                        SII: 500,
+                        SAT: 4000,
                         T: 0,
+                        ICD: 0,
                         V: 1,
                         VP: "1+32768",
                         addresses: IPIntegrationResultsPort1,
@@ -1075,8 +1103,8 @@ const NODE_ID = NodeId(BigInt(1));
 
                 // And removed after expiry
                 expect(
-                    scanner.getDiscoveredOperationalDevices({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
-                ).deep.equal([]);
+                    scanner.getDiscoveredOperationalDevice({ operationalId: OPERATIONAL_ID } as Fabric, NODE_ID),
+                ).deep.equal(undefined);
 
                 expect(scanner.getDiscoveredCommissionableDevices({ longDiscriminator: 1234 })).deep.equal([]);
             });

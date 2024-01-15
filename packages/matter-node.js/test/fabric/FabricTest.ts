@@ -133,6 +133,7 @@ describe("Fabric", () => {
                 closeCallback: async () => {
                     session1Destroyed = true;
                 },
+                isInitiator: true,
             });
             fabric.addSession(secureSession1);
             const secureSession2 = new SecureSession({
@@ -147,6 +148,7 @@ describe("Fabric", () => {
                 closeCallback: async () => {
                     session2Destroyed = true;
                 },
+                isInitiator: true,
             });
             fabric.addSession(secureSession2);
 
@@ -186,6 +188,7 @@ describe("Fabric", () => {
                 closeCallback: async () => {
                     session1Destroyed = true;
                 },
+                isInitiator: true,
             });
             fabric.addSession(secureSession1);
             const secureSession2 = new SecureSession({
@@ -200,6 +203,7 @@ describe("Fabric", () => {
                 closeCallback: async () => {
                     session2Destroyed = true;
                 },
+                isInitiator: true,
             });
             fabric.addSession(secureSession2);
             fabric.removeSession(secureSession1);
