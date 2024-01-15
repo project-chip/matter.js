@@ -70,7 +70,6 @@ export class DependencyLifecycleError extends ImplementationError {
                 )
             }
         ) as string;
-
     }
 }
 

@@ -56,6 +56,11 @@ export namespace Diagnostic {
          * A key/value diagnostic.  Rendered as a group of key/value pairs.
          */
         Dictionary = "dictionary",
+
+        /**
+         * Path, resource or session identifier.
+         */
+        Via = "via",
     }
 
     export const presentation = Symbol("presentation");
@@ -73,6 +78,18 @@ export namespace Diagnostic {
      */
     export function weak(value: unknown) {
         return Diagnostic(Diagnostic.Presentation.Weak, value);
+    }
+
+    /**
+     * Create a value identifying the source of a diagnostic event.
+     */
+    export function via(value: string) {
+        if ((value as Diagnostic)[presentation]) {
+            return value;
+        }
+        const via = new String(value);
+        Object.defineProperty(via, presentation, { value: Presentation.Via });
+        return via as string;
     }
 
     /**

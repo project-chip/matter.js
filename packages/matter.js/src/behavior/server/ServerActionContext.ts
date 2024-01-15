@@ -22,7 +22,7 @@ export function ServerActionContext(
     // operating without ACL enforcement but currently lower levels just omit
     // the session.
     //
-    // I think read access
+    // I think read access is correct here
     if (!session) {
         return { session, accessLevel: AccessLevel.View }
     }
@@ -34,7 +34,9 @@ export function ServerActionContext(
     // something
     const fabric = session.getFabric();
 
-    const transaction = TransactionalInteractionServer.transactionFor(session);
+    const transaction = fields.message
+        ? TransactionalInteractionServer.transactionFor(fields.message)
+        : undefined;
 
     return {
         ...fields,

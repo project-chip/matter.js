@@ -20,9 +20,6 @@ import { PartInitializer } from "./PartInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
-import { Logger } from "../../log/Logger.js";
-
-const logger = Logger.get("Behaviors");
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -74,6 +71,15 @@ export class Behaviors {
         if (!this.#supported.descriptor) {
             this.#supported.descriptor = DescriptorServer;
         }
+
+        // On reset we reset backings
+        part.construction.change.on(status => {
+            if (status === LifecycleStatus.Inactive) {
+                for (const backing of Object.values(this.#backings)) {
+                    backing.reset();
+                }
+            }
+        });
     }
 
     /**
@@ -250,18 +256,7 @@ export class Behaviors {
      */
     async [Symbol.asyncDispose]() {
         for (const id in this.#backings) {
-            const backing = this.#backings[id]
-
-            if (backing.status !== LifecycleStatus.Initializing && backing.status !== LifecycleStatus.Active) {
-                continue;
-            }
-
-            try {
-                const behavior = (this.#part.agent as unknown as Record<string, Behavior>)[id];
-                await behavior?.destroy();
-            } catch (e) {
-                logger.error(`Error destroying ${backing}:`, e);
-            }
+            await this.#backings[id][Symbol.asyncDispose]();
         }
         this.#backings = {};
     }
@@ -333,6 +328,12 @@ export class Behaviors {
         const backing = this.#part.serviceFor(PartInitializer).createBacking(this.#part, myType);
         this.#backings[type.id] = backing;
 
+        this.#initializeBacking(backing);
+
+        return backing;
+    }
+
+    #initializeBacking(backing: BehaviorBacking) {
         backing.initialize();
 
         // Initialize backing state

@@ -24,8 +24,8 @@ export class ServerPartStore implements PartStore {
     #construction: AsyncConstruction<PartStore>;
     #isNew: boolean;
 
-    #substorage: StorageContext;
-    #substores = {} as Record<string, ServerPartStore>;
+    #childStorage: StorageContext;
+    #childStores = {} as Record<string, ServerPartStore>;
 
     // TODO - this is a temporary kludge, don't think it's possible right now to query for sub-contexts?  Instead we
     // maintain this persistent list of all parts
@@ -33,6 +33,10 @@ export class ServerPartStore implements PartStore {
 
     // TODO - same issue here
     #knownBehaviors = new Set<string>();
+
+    toString() {
+        return `storage:${this.#storage.contexts.join(".")}`;
+    }
 
     get construction() {
         return this.#construction;
@@ -62,7 +66,7 @@ export class ServerPartStore implements PartStore {
 
     constructor(partId: string, storage: StorageContext, isNew: boolean) {
         this.#storage = storage;
-        this.#substorage = storage.createContext("parts");
+        this.#childStorage = storage.createContext("parts");
         this.#isNew = isNew;
 
         this.#construction = AsyncConstruction(
@@ -104,7 +108,7 @@ export class ServerPartStore implements PartStore {
         return DatasourceStore(this, behaviorId);
     }
 
-    substoreFor(part: Part): ServerPartStore {
+    childStoreFor(part: Part): ServerPartStore {
         if (!part.lifecycle.hasId) {
             throw new ImplementationError("Cannot access part storage because part has no assigned ID");
         }
@@ -114,17 +118,17 @@ export class ServerPartStore implements PartStore {
     #storeForPartId(partId: string) {
         this.#construction.assert();
 
-        let store = this.#substores[partId];
+        let store = this.#childStores[partId];
         if (store === undefined) {
-            store = this.#substores[partId] = new ServerPartStore(
+            store = this.#childStores[partId] = new ServerPartStore(
                 partId,
-                this.#substorage.createContext(partId),
+                this.#childStorage.createContext(partId),
                 true
             );
 
             if (!this.#knownParts.has(partId)) {
                 this.#knownParts.add(partId);
-                this.#substorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
+                this.#childStorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
             }
         }
 
@@ -181,21 +185,62 @@ export class ServerPartStore implements PartStore {
         this.#storage.clearAll();
     }
 
-    async #loadSubparts() {
-        this.#knownParts = new Set(this.#substorage.get(KNOWN_KEY, Array<string>()));
+    /**
+     * Clear non-volatile values.  We erase values discriminately so we preserve metadata.
+     */
+    async clear() {
+        await this.#construction;
 
-        for (const partId of this.#knownParts) {
-            await this.#loadKnownSubstore(partId);
+        let clearPart: undefined | Record<string, Val.Struct>;
+
+        for (const behaviorId of this.#knownBehaviors) {
+            const storage = this.#storage.createContext(behaviorId);
+
+            let clearBehavior: undefined | Val.Struct;
+
+            for (const propertyName in storage.keys()) {
+                if (propertyName === NUMBER_KEY) {
+                    continue;
+                }
+
+                if (clearBehavior === undefined) {
+                    clearBehavior = {};
+
+                    if (clearPart === undefined) {
+                        clearPart = {};
+                    }
+
+                    clearPart[behaviorId] = clearBehavior;
+                }
+
+                clearBehavior[propertyName] = undefined;
+            }
+        }
+
+        if (clearPart) {
+            await this.set(clearPart);
+        }
+
+        for (const id of this.#knownParts) {
+            await this.#storeForPartId(id).clear();
         }
     }
 
-    async #loadKnownSubstore(partId: string) {
+    async #loadSubparts() {
+        this.#knownParts = new Set(this.#childStorage.get(KNOWN_KEY, Array<string>()));
+
+        for (const partId of this.#knownParts) {
+            await this.#loadKnownChildStores(partId);
+        }
+    }
+
+    async #loadKnownChildStores(partId: string) {
         const partStore = new ServerPartStore(
             partId,
-            this.#substorage.createContext(partId),
+            this.#childStorage.createContext(partId),
             false,
         );
-        this.#substores[partId] = partStore;
+        this.#childStores[partId] = partStore;
         await partStore.construction;
     }
 }

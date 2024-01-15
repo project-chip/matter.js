@@ -15,6 +15,11 @@ import type { Datasource } from "../../behavior/state/managed/Datasource.js";
  */
 export interface PartStore {
     /**
+     * Description used in diagnostic messages.
+     */
+    toString(): string;
+
+    /**
      * Currently persisted values, keyed by {@link Behavior.id} then property name.
      */
     initialValues: Record<string, Val.Struct>;
@@ -27,7 +32,7 @@ export interface PartStore {
     set(values: Record<string, Val.Struct | undefined>): Promise<void>;
 
     /**
-     * Remove persisted values for the {@link Part}
+     * Remove all persisted information for the {@link Part}
      */
     delete(): Promise<void>;
 

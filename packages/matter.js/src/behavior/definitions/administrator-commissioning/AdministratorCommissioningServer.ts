@@ -180,7 +180,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }
 
     /** Cleanup resources and stop the timer when the behavior is destroyed. */
-    override destroy() {
+    override [Symbol.asyncDispose]() {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             this.internal.commissioningWindowTimeout.stop();
             this.internal.commissioningWindowTimeout = undefined;

@@ -38,7 +38,7 @@ export function DatasourceStore(
             } else {
                 participant.mutations[behaviorId] = { ...values };
             }
-        },
+        }
     };
 }
 
@@ -53,11 +53,13 @@ function participantFor(transaction: Transaction, partStore: PartStore) {
     }
 
     participant = {
-        description: "Storage",
-
         role: partStore,
 
         mutations: undefined,
+
+        toString() {
+            return partStore.toString();
+        },
 
         commit1(): MaybePromise<void> {
             // Persistence serves phase one commit; values are added directly to

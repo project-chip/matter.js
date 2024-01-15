@@ -36,7 +36,7 @@ export class PartStoreService {
         return this.#construction;
     }
 
-    constructor({storage, nextNumber }: PartStoreService.Options) {
+    constructor({ storage, nextNumber }: PartStoreService.Options) {
         this.#storage = storage;
 
         if (typeof nextNumber !== "number") {
@@ -142,7 +142,7 @@ export class PartStoreService {
             throw new InternalError("Part storage access without assigned ID");
         }
         if (part.owner instanceof Part) {
-            return this.storeForPart(part.owner).substoreFor(part);
+            return this.storeForPart(part.owner).childStoreFor(part);
         }
         if (part.number !== 0) {
             throw new InternalError("Part storage inaccessible because part is not root and is not owned by part");
@@ -151,6 +151,16 @@ export class PartStoreService {
             throw new InternalError("Part storage accessed prior to initialization");
         }
         return this.#root;
+    }
+
+    /**
+     * Erase store contents.
+     */
+    clear() {
+        if (!this.#root) {
+            throw new InternalError("Part storage accessed prior to initialization");
+        }
+        this.#root.clear();
     }
 
     /**

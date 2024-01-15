@@ -179,10 +179,7 @@ export class Tracker implements Environment.Task {
                 if (label === undefined) {
                     label = labelFor(this.promise);
                     if (label === undefined) {
-                        label = this.detail?.toString();
-                        if (label === undefined || label === null || label === "") {
-                            label = "(anon)";
-                        }
+                        label = "(anon)";
                     }
                 }
                 return [ label, Diagnostic.dict({ uptime: this.elapsed }) ];
@@ -193,9 +190,12 @@ export class Tracker implements Environment.Task {
     }
 }
 
-function labelFor(value: unknown): string | undefined {
+function labelFor(value: unknown) {
     if (value === undefined || value === null || value === "") {
         return undefined;
+    }
+    if ((value as Diagnostic)[Diagnostic.value]) {
+        return (value as Diagnostic)[Diagnostic.value];
     }
     if (typeof value !== "object") {
         return value.toString();
@@ -230,8 +230,8 @@ export namespace Tracker {
  * 
  * Registers the promise with the default {@link Tracker}.
  */
-export function track(promise: Promise<unknown>, what?: {}) {
-    Tracker.global.track(promise, what);
+export function track<const T extends Promise<unknown>>(promise: T, what?: {}): T {
+    return Tracker.global.track(promise, what) as T;
 }
 
 DiagnosticSource.add(Tracker.global);

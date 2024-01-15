@@ -6,7 +6,7 @@
 
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailSafeManager.js";
-import { InternalError, MatterFlowError } from "../../../common/MatterError.js";
+import { MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../../fabric/FabricManager.js";
@@ -43,25 +43,22 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         if (this.state.supportedFabrics === undefined) {
             this.state.supportedFabrics = 254;
         }
-        if (this.state.commissionedFabrics === undefined) {
-            this.state.commissionedFabrics = 0;
-        }
+        
+        this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
     get #certification() {
         const certification = this.internal.certification;
-        if (!certification) {
-            const commissioning = this.agent.get(CommissioningBehavior);
-
-            this.internal.certification = new DeviceCertification(
-                this.state.certification,
-                commissioning.productDescription
-            );
-            }
-        if (certification === undefined) {
-            throw new InternalError("Operational credentials certification accessed before initialization");
+        if (certification) {
+            return certification;
         }
-        return certification;
+
+        const commissioning = this.agent.get(CommissioningBehavior);
+
+        return this.internal.certification = new DeviceCertification(
+            this.state.certification,
+            commissioning.productDescription
+        );
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {

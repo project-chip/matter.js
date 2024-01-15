@@ -5,7 +5,7 @@
  */
 
 import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
-import { ImplementationError, NotImplementedError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
@@ -31,6 +31,7 @@ import { IdentityService } from "./IdentityService.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { UninitializedDependencyError } from "../../common/Lifecycle.js";
+import { ServerResetService } from "./ServerResetService.js";
 
 const logger = Logger.get("NodeServer");
 
@@ -49,6 +50,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     #rootServer?: PartServer;
     #nextEndpointId: EndpointNumber;
     #host?: Host;
+    #resetService?: ServerResetService;
     #store?: ServerStore;
     #construction: AsyncConstruction<NodeServer>;
     #behaviorInitializer?: PartInitializer;
@@ -110,6 +112,10 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         const root = this.#root = Part.partFor(this.#configuration.root);
 
+        if (!root.lifecycle.hasId) {
+            root.id = this.#configuration.environment.allocateFallbackNodeId();
+        }
+
         if (root.type.deviceType !== RootEndpoint.deviceType) {
             throw new ImplementationError(`Root node device type must be a ${RootEndpoint.deviceType}`);
         }
@@ -123,7 +129,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         }
 
         if (!root.lifecycle.hasId) {
-            root.id = "default";
+            root.id = this.#configuration.environment.allocateFallbackNodeId();
         }
     
         root.behaviors.require(CommissioningBehavior);
@@ -133,7 +139,11 @@ export class NodeServer extends BaseNodeServer implements Node {
         this.#construction = AsyncConstruction(
             this,
             async () => {
-                this.#store = await ServerStore.create(this.#configuration);
+                this.#store = await ServerStore.create(
+                    this.#configuration.environment,
+                    root.id,
+                    this.#configuration.nextEndpointNumber,
+                );
                 
                 root.lifecycle.change(PartLifecycle.Change.Installed);
 
@@ -253,7 +263,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     fallbackIdFor(part: Part) {
         if (part === this.#root) {
-            return "root";
+            throw new InternalError("Root has no ID");
         } else if (part.owner instanceof Part) {
             let index = 0;
             for (const part2 of part.owner.parts) {
@@ -270,8 +280,6 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
-        // Not sure why the cast to unknown is necessary here, TS complains
-        // that type may not instantiate to T without it which seems incorrect
         switch (type as unknown) {
             case PartInitializer:
                 if (!this.#behaviorInitializer) {
@@ -290,6 +298,14 @@ export class NodeServer extends BaseNodeServer implements Node {
                     this.#identityService = new IdentityService(this.#root, this.toString(), this.port);
                 }
                 return this.#identityService as T;
+
+            case ServerResetService:
+                if (this.#store && this.#host) {
+                    if (!this.#resetService) {
+                        this.#resetService = new ServerResetService(this, this.#store, this.#host);
+                    }
+                    return this.#resetService as T;
+                }
         }
 
         throw new ImplementationError(`Unsupported service ${type.name}`);
@@ -325,7 +341,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     get [Diagnostic.value]() {
         return [
-            this,
+            this.toString(),
             Diagnostic.dict({ port: this.port, uptime: this.#uptime }),
             Diagnostic.list([
                 this.rootEndpoint[Diagnostic.value],
@@ -372,9 +388,8 @@ export class NodeServer extends BaseNodeServer implements Node {
         return this.store.fabricStorage;
     }
 
-    protected override clearStorage(): Promise<void> {
-        // TODO
-        throw new NotImplementedError();
+    protected override async clearStorage() {
+        await this.serviceFor(ServerResetService).factoryReset();
     }
 
     protected override async createMatterDevice() {
