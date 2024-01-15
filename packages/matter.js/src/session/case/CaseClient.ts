@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterController } from "../../MatterController.js";
 import { TlvOperationalCertificate } from "../../certificate/CertificateManager.js";
 import { UnexpectedDataError } from "../../common/MatterError.js";
 import { Crypto } from "../../crypto/Crypto.js";
@@ -11,9 +12,10 @@ import { PublicKey } from "../../crypto/Key.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterController } from "../../MatterController.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
+import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
+import { TlvSessionParameters } from "../pase/PaseMessages.js";
 import {
     KDFSR1_KEY_INFO,
     KDFSR2_INFO,
@@ -37,6 +39,7 @@ export class CaseClient {
         exchange: MessageExchange<MatterController>,
         fabric: Fabric,
         peerNodeId: NodeId,
+        discoverySessionParams?: TypeFromBitmapSchema<typeof TlvSessionParameters>,
     ) {
         const messenger = new CaseClientMessenger(exchange);
 
@@ -75,8 +78,10 @@ export class CaseClient {
         if (sigma2Resume !== undefined) {
             // Process sigma2 resume
             if (resumptionRecord === undefined) throw new UnexpectedDataError("Received an unexpected sigma2Resume.");
-            const { sharedSecret, fabric } = resumptionRecord;
+            const { sharedSecret, fabric, sessionParams: resumptionSessionParams } = resumptionRecord;
             const { sessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
+
+            const sessionParams = resumptionSessionParams ?? discoverySessionParams;
 
             const resumeSalt = ByteArray.concat(random, resumptionId);
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
@@ -92,11 +97,16 @@ export class CaseClient {
                 salt: secureSessionSalt,
                 isInitiator: true,
                 isResumption: true,
+                idleIntervalMs: sessionParams?.idleIntervalMs,
+                activeIntervalMs: sessionParams?.activeIntervalMs,
             });
             await messenger.sendSuccess();
             logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
+            if (sessionParams !== undefined) {
+                resumptionRecord.sessionParams = sessionParams; /* update mrpParams */
+            }
         } else {
             // Process sigma2
             const {
@@ -104,7 +114,9 @@ export class CaseClient {
                 encrypted: peerEncrypted,
                 random: peerRandom,
                 sessionId: peerSessionId,
+                sessionParams: sigma2SessionParams,
             } = sigma2;
+            const sessionParams = sigma2SessionParams ?? discoverySessionParams;
             const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
             const sigma2Salt = ByteArray.concat(
                 operationalIdentityProtectionKey,
@@ -181,6 +193,9 @@ export class CaseClient {
                 salt: secureSessionSalt,
                 isInitiator: true,
                 isResumption: false,
+                idleIntervalMs: sessionParams?.idleIntervalMs,
+                activeIntervalMs: sessionParams?.activeIntervalMs,
+                activeThresholdMs: sessionParams?.activeThresholdMs,
             });
             logger.info(`Case client: Paired successfully with ${messenger.getChannelName()}`);
             resumptionRecord = {
@@ -188,6 +203,7 @@ export class CaseClient {
                 peerNodeId,
                 sharedSecret,
                 resumptionId: peerResumptionId,
+                sessionParams,
             };
         }
 

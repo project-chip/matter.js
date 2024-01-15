@@ -11,10 +11,12 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
+import { TypeFromBitmapSchema } from "../schema/BitmapSchema.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { SecureSession } from "./SecureSession.js";
 import { UnsecureSession } from "./UnsecureSession.js";
+import { TlvSessionParameters } from "./pase/PaseMessages.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -25,6 +27,7 @@ export interface ResumptionRecord {
     resumptionId: ByteArray;
     fabric: Fabric;
     peerNodeId: NodeId;
+    sessionParams?: TypeFromBitmapSchema<typeof TlvSessionParameters>;
 }
 
 type ResumptionStorageRecord = {
