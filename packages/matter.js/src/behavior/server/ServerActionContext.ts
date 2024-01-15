@@ -16,36 +16,45 @@ import { ActionContext } from "../ActionContext.js";
  */
 export function ServerActionContext(
     fields: Partial<ActionContext>,
+    invoke: boolean,
     session?: Session<MatterDevice>
 ): ActionContext {
-    // TODO -ideally there'd be something more explicit here to indicate we're
-    // operating without ACL enforcement but currently lower levels just omit
-    // the session.
-    //
-    // I think read access is correct here
+    let context: Omit<ActionContext, "command"> & { command?: boolean};
+
     if (!session) {
-        return { session, accessLevel: AccessLevel.View }
+        // TODO -ideally there'd be something more explicit here to indicate we're
+        // operating without ACL enforcement but currently lower levels just omit
+        // the session.
+        //
+        // I think read access is correct here
+        context = { session, accessLevel: AccessLevel.View };
+    } else {
+        assertSecureSession(session);
+
+        // TODO - here too would be good to explicitly designate session as PASE
+        // or something so we know fabric wasn't simply omitted by a bug or
+        // something
+        const fabric = session.getFabric();
+
+        const transaction = fields.message
+            ? TransactionalInteractionServer.transactionFor(fields.message)
+            : undefined;
+
+        context = {
+            ...fields,
+            associatedFabric: fabric?.fabricIndex,
+            session,
+            transaction,
+
+            // TODO - this effectively disables access level enforcement because we
+            // don't have privilege management implemented yet
+            accessLevel: AccessLevel.Administer,
+        };
     }
 
-    assertSecureSession(session);
+    if (invoke) {
+        context.command = true;
+    }
 
-    // TODO - here too would be good to explicitly designate session as PASE
-    // or something so we know fabric wasn't simply omitted by a bug or
-    // something
-    const fabric = session.getFabric();
-
-    const transaction = fields.message
-        ? TransactionalInteractionServer.transactionFor(fields.message)
-        : undefined;
-
-    return {
-        ...fields,
-        associatedFabric: fabric?.fabricIndex,
-        session,
-        transaction,
-
-        // TODO - this effectively disables access level enforcement because we
-        // don't have privilege management implemented yet
-        accessLevel: AccessLevel.Administer,
-    };
+    return context;
 }

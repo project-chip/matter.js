@@ -26,6 +26,10 @@ import { Status } from "../state/transaction/Status.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 import { ServerActionContext } from "./ServerActionContext.js";
 import { Message } from "../../codec/MessageCodec.js";
+import { AccessControl } from "../AccessControl.js";
+import { CommandModel } from "../../model/index.js";
+import { camelize } from "../../util/String.js";
+import { ImplementationError } from "../../common/MatterError.js";
 
 const logger = Logger.get("Behavior");
 
@@ -128,9 +132,10 @@ function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
     session: Session<MatterDevice> | undefined,
     contextFields: Partial<ActionContext>,
+    invoke: boolean,
     fn: (behavior: Behavior) => T,
 ): T {
-    const context = ServerActionContext(contextFields, session);
+    const context = ServerActionContext(contextFields, invoke, session);
 
     let agent = backing.part.getAgent(context);
 
@@ -143,16 +148,34 @@ function withBehavior<T>(
 }
 
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
+    const schema = backing.type.schema?.get(CommandModel, camelize(name, true));
+    if (schema === undefined) {
+        throw new ImplementationError(`There is no metadata for command ${name}`)
+    }
+    const access = AccessControl(schema);
+
     return ({ request, session, message }) => {
+        let requestDiagnostic;
+        if (request && typeof request === "object") {
+            requestDiagnostic = Diagnostic.dict(request);
+        } else if (request !== undefined) {
+            requestDiagnostic = request;
+        } else {
+            requestDiagnostic = Diagnostic.weak("(no payload)");
+        }
+
         logger.info(
             "Invoke",
             Diagnostic.strong(`${backing}.${name}`),
             ActionContext.via({ message }),
-            request && typeof request === "object" ? Diagnostic.dict(request) : request,
+            requestDiagnostic,
         );
-        return withBehavior(backing, session, { message }, behavior =>
-            (behavior as unknown as Record<string, (arg: any) => any>)[name](request),
-        );
+
+        return withBehavior(backing, session, { message }, true, behavior => {
+            access.authorizeInvoke(behavior.context);
+
+            return (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
+        });
     };
 }
 
@@ -171,7 +194,7 @@ function createAttributeAccessors(
                 ActionContext.via({ message })
             );
 
-            return withBehavior(backing, session, { message, fabricFiltered: isFabricFiltered }, behavior => {
+            return withBehavior(backing, session, { message, fabricFiltered: isFabricFiltered }, false, behavior => {
                 const state = behavior.state as Val.Struct;
 
                 StructManager.assertDirectReadAuthorized(state, name);
@@ -187,7 +210,7 @@ function createAttributeAccessors(
                 ActionContext.via({ message }),
             )
 
-            return withBehavior(backing, session, { message }, behavior => {
+            return withBehavior(backing, session, { message }, false, behavior => {
                 const state = behavior.state as Record<string, any>;
 
                 state[name] = value;

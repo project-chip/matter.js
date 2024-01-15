@@ -7,9 +7,10 @@
 import { AccessLevel } from "../cluster/Cluster.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { Access } from "../model/aspects/index.js";
+import { ElementTag } from "../model/index.js";
 import { Model, ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
-import { ReadError, WriteError } from "./errors.js";
+import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";
 
 const cache = new WeakMap<Schema, AccessControl>();
@@ -42,13 +43,23 @@ export interface AccessControl {
      * Determine if write is authorized.
      */
     mayWrite: AccessControl.Verification;
+
+    /**
+     * Assert invoke is authorized.
+     */
+    authorizeInvoke: AccessControl.Assertion;
+
+    /**
+     * Determine if invoke is authorized.
+     */
+    mayInvoke: AccessControl.Verification;
 }
 
 /**
  * Obtain an enforcer for specific schema.
  *
- * This is central to security.  Implementation is explicit, all objects are
- * involved are frozen and cache is stored as module-private.
+ * This is central to security.  Implementation is explicit, all objects are involved are frozen and cache is stored as
+ * module-private.
  *
  * Pure function; returned value is cached.
  */
@@ -113,11 +124,16 @@ export namespace AccessControl {
         readonly timed?: boolean;
 
         /**
-         * If this is true then access levels are not enforced and all values
-         * are read/write.  Datatypes are still enforced.
+         * If this is true then data access levels are not enforced.  Datatypes and command-related access controls are
+         * active.
+         */
+        readonly command?: boolean;
+
+        /**
+         * If this is true then access levels are not enforced and all values are read/write.  Datatypes are still
+         * enforced.
          *
-         * Tracks "offline" rather than "online" because this makes the safer
-         * mode (full enforcement) the default.
+         * Tracks "offline" rather than "online" because this makes the safer mode (full enforcement) the default.
          */
         offline?: boolean;
     };
@@ -126,8 +142,8 @@ export namespace AccessControl {
      * An offline session that disables access controls.
      */
     export const OfflineSession: Session = {
-        // Set access level as low as possible.  It should be ignored
-        // due to offline status but make faulty logic fail early
+        // Set access level as low as possible.  It should be ignored due to offline status but make faulty logic fail
+        // early
         accessLevel: AccessLevel.View,
 
         // Disable access level enforcement
@@ -139,8 +155,8 @@ export namespace AccessControl {
      */
     export interface Context {
         /**
-         * The fabric that owns the data subtree.  Undefined or
-         * {@link FabricIndex.NO_FABRIC} disable fabric enforcement.
+         * The fabric that owns the data subtree.  Undefined or {@link FabricIndex.NO_FABRIC} disable fabric
+         * enforcement.
          */
         owningFabric?: FabricIndex;
     }
@@ -150,11 +166,17 @@ Object.freeze(AccessControl);
 Object.freeze(AccessControl.OfflineSession);
 
 function enforcerFor(schema: Schema): AccessControl {
-    if (schema.name === "OnOff") debugger;
+    if (schema.tag === ElementTag.Command) {
+        return commandEnforcerFor(schema);
+    }
+    return dataEnforcerFor(schema);
+}
+
+function dataEnforcerFor(schema: Schema): AccessControl {
     const limits = limitsFor(schema);
 
     let mayRead: AccessControl.Verification = session => {
-        if (session.offline) {
+        if (session.offline || session.command) {
             return true;
         }
 
@@ -166,7 +188,7 @@ function enforcerFor(schema: Schema): AccessControl {
     };
 
     let mayWrite: AccessControl.Verification = session => {
-        if (session.offline) {
+        if (session.offline || session.command) {
             return true;
         }
 
@@ -178,7 +200,7 @@ function enforcerFor(schema: Schema): AccessControl {
     };
 
     let authorizeRead: AccessControl.Assertion = session => {
-        if (session.offline) {
+        if (session.offline || session.command) {
             return;
         }
 
@@ -186,11 +208,11 @@ function enforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        throw new ReadError(schema, "Permission denied");
+        throw new ReadError(schema, "Permission denied", StatusCode.UnsupportedAccess);
     };
 
     let authorizeWrite: AccessControl.Assertion = session => {
-        if (session.offline) {
+        if (session.offline || session.command) {
             return;
         }
 
@@ -198,7 +220,7 @@ function enforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        throw new WriteError(schema, "Permission denied");
+        throw new WriteError(schema, "Permission denied", StatusCode.UnsupportedAccess);
     };
 
     if (limits.timed) {
@@ -232,23 +254,23 @@ function enforcerFor(schema: Schema): AccessControl {
         const wrappedMayWrite = mayWrite;
 
         authorizeRead = (session, context) => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return;
             }
 
             if (session.associatedFabric === undefined) {
-                throw new ReadError(schema, "Permission denied: No accessing fabric");
+                throw new ReadError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
             if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
-                throw new WriteError(schema, "Permission denied: Owning/accessing fabric mismatch");
+                throw new WriteError(schema, "Permission denied: Owning/accessing fabric mismatch", StatusCode.UnsupportedAccess);
             }
 
             wrappedAuthorizeRead(session, context);
         };
 
         mayRead = (session, context) => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return true;
             }
 
@@ -264,12 +286,12 @@ function enforcerFor(schema: Schema): AccessControl {
         };
 
         authorizeWrite = (session, context) => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return;
             }
 
             if (session.associatedFabric === undefined) {
-                throw new WriteError(schema, "Permission denied: No accessing fabric");
+                throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
             if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
@@ -280,7 +302,7 @@ function enforcerFor(schema: Schema): AccessControl {
         };
 
         mayWrite = (session, context) => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return true;
             }
 
@@ -298,7 +320,7 @@ function enforcerFor(schema: Schema): AccessControl {
 
     if (!limits.readable) {
         authorizeRead = session => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return;
             }
 
@@ -306,20 +328,20 @@ function enforcerFor(schema: Schema): AccessControl {
         };
 
         mayRead = session => {
-            return !!session.offline;
+            return !!session.offline || !!session.command;
         };
     }
 
     if (!limits.writable) {
         authorizeWrite = session => {
-            if (session.offline) {
+            if (session.offline || session.command) {
                 return;
             }
             throw new WriteError(schema, "Permission denied: Value is read-only");
         };
 
         mayWrite = session => {
-            return !!session.offline;
+            return !!session.offline || !!session.command;
         };
     }
 
@@ -329,15 +351,96 @@ function enforcerFor(schema: Schema): AccessControl {
         mayRead,
         authorizeWrite,
         mayWrite,
+
+        authorizeInvoke() {
+            throw new SchemaImplementationError(schema, "Permission denied: Invoke request but non-command schema");
+        },
+
+        mayInvoke() {
+            return false;
+        }
     });
+}
+
+function commandEnforcerFor(schema: Schema): AccessControl {
+    const limits = limitsFor(schema);
+    const timed = schema.effectiveAccess.timed;
+    const fabric = schema.effectiveAccess.fabric;
+
+    return {
+        limits,
+
+        authorizeRead() {
+            throw new SchemaImplementationError(schema, "Permission denied: Read request but command schema");
+        },
+
+        mayRead() {
+            return false;
+        },
+
+        authorizeWrite() {
+            throw new SchemaImplementationError(schema, "Permission denied: Write request but command schema");
+        },
+
+        mayWrite() {
+            return false;
+        },
+
+        authorizeInvoke(session) {
+            if (session.offline) {
+                return;
+            }
+
+            if (!session.command) {
+                throw new InvokeError(schema, "Invoke attempt without command context");
+            }
+
+            if (timed && !session.timed) {
+                throw new InvokeError(schema, "Invoke attempt without required timed context", StatusCode.TimedRequestMismatch);
+            }
+
+            if (fabric && session.associatedFabric === undefined) {
+                throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+            }
+
+            if (session.accessLevel >= limits.writeLevel) {
+                return;
+            }
+    
+            throw new InvokeError(schema, "Permission denied", StatusCode.UnsupportedAccess);
+        },
+
+        mayInvoke(session) {
+            if (session.offline) {
+                return true;
+            }
+
+            if (!session.command) {
+                return false;
+            }
+
+            if (timed && !session.timed) {
+                return false;
+            }
+
+            if (fabric && session.associatedFabric === undefined) {
+                return false;
+            }
+
+            if (session.accessLevel >= limits.writeLevel) {
+                return true;
+            }
+
+            return false;
+        }
+    }
 }
 
 function limitsFor(schema: Schema) {
     const access = schema.effectiveAccess;
     const quality = schema instanceof ValueModel ? schema.effectiveQuality : undefined;
 
-    // Special handling for fixed values - we treat any property owned by a
-    // fixed value as also read-only
+    // Special handling for fixed values - we treat any property owned by a fixed value as also read-only
     let fixed = quality?.fixed;
     for (let s: Model | undefined = schema.parent; !fixed && s instanceof ValueModel; s = s.parent) {
         if (s.effectiveQuality.fixed) {
@@ -352,10 +455,8 @@ function limitsFor(schema: Schema) {
         fabricSensitive: access.fabric === Access.Fabric.Sensitive,
         timed: access.timed === true,
 
-        // Official Matter defaults are View for read and Operate for write.
-        // However, the schema's effective access should already have these
-        // defaults.  Here we just adopt administer as a safe fallback access
-        // level.
+        // Official Matter defaults are View for read and Operate for write. However, the schema's effective access
+        // should already have these defaults.  Here we just adopt administer as a safe fallback access level.
         readLevel: access.readPriv === undefined ? AccessLevel.Administer : Access.PrivilegeLevel[access.readPriv],
         writeLevel: access.writePriv === undefined ? AccessLevel.Administer : Access.PrivilegeLevel[access.writePriv],
     });

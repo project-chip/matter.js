@@ -5,7 +5,7 @@
  */
 
 import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
-import { ConformanceError, SchemaError } from "../../errors.js";
+import { ConformanceError, SchemaImplementationError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../managed/Val.js";
 import {
@@ -95,7 +95,7 @@ export function astToFunction(
                         break;
 
                     default:
-                        throw new SchemaError(
+                        throw new SchemaImplementationError(
                             schema,
                             `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
                         );
@@ -103,7 +103,7 @@ export function astToFunction(
             };
 
         default:
-            throw new SchemaError(
+            throw new SchemaImplementationError(
                 schema,
                 `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
             );
@@ -173,7 +173,7 @@ export function astToFunction(
                 ast satisfies never;
 
                 // Throw at runtime
-                throw new SchemaError(schema, `Unsupported conformance AST node type ${(ast as any).type}`);
+                throw new SchemaImplementationError(schema, `Unsupported conformance AST node type ${(ast as any).type}`);
         }
     }
 
@@ -231,7 +231,7 @@ export function astToFunction(
      */
     function createGroup(param: Conformance.Ast.Group): DynamicNode {
         if (!Array.isArray(param)) {
-            throw new SchemaError(schema, "Conformance AST group parameter is not an array");
+            throw new SchemaImplementationError(schema, "Conformance AST group parameter is not an array");
         }
 
         // A "group" is a list of conformances; any success passes the entire
@@ -475,7 +475,7 @@ export function astToFunction(
                 return createLogicalBinaryEvaluator(compiledLhs, compiledRhs, (lhs, rhs) => (lhs ? !rhs : rhs));
 
             default:
-                throw new SchemaError(schema, `Unknown logical binary operator ${operator}`);
+                throw new SchemaImplementationError(schema, `Unknown logical binary operator ${operator}`);
         }
     }
 
