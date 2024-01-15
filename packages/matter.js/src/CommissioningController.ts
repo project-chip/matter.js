@@ -5,10 +5,14 @@
  */
 import { MatterController } from "./MatterController.js";
 import { MatterNode } from "./MatterNode.js";
+import { GlobalAttributes } from "./cluster/Cluster.js";
+import { SupportedAttributeClient } from "./cluster/client/AttributeClient.js";
+import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { ImplementationError } from "./common/MatterError.js";
 import { CommissionableDevice, CommissionableDeviceIdentifiers } from "./common/Scanner.js";
 import { ServerAddress } from "./common/ServerAddress.js";
 import { CaseAuthenticatedTag } from "./datatype/CaseAuthenticatedTag.js";
+import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricId } from "./datatype/FabricId.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
@@ -24,6 +28,7 @@ import { InteractionClient } from "./protocol/interaction/InteractionClient.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 
 const logger = new Logger("CommissioningController");
 
@@ -279,7 +284,58 @@ export class CommissioningController extends MatterNode {
             handler => this.sessionDisconnectedHandler.set(nodeId, handler),
         );
         this.connectedNodes.set(nodeId, pairedNode);
+
+        await this.enhanceDeviceDetails(nodeId, pairedNode, connectOptions?.autoSubscribe !== false);
+
         return pairedNode;
+    }
+
+    private async enhanceDeviceDetails(nodeId: NodeId, pairedNode: PairedNode, dataAvailableLocally: boolean) {
+        const controller = this.assertControllerIsStarted();
+
+        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
+        if (dataAvailableLocally) {
+            const basicInformationClient = pairedNode.getRootClusterClient(BasicInformation.Cluster);
+            if (basicInformationClient !== undefined) {
+                const basicInformationData = {} as Record<string, SupportedStorageTypes>;
+                for (const attributeName of Object.keys(basicInformationClient.attributes)) {
+                    if (!globalAttributeKeys.includes(attributeName)) {
+                        const attribute = (basicInformationClient.attributes as any)[attributeName];
+                        if (attribute instanceof SupportedAttributeClient) {
+                            try {
+                                basicInformationData[attributeName] = await attribute.get();
+                            } catch (error) {
+                                logger.info(
+                                    `Error while getting attribute ${attributeName} for node ${nodeId}: ${error}`,
+                                );
+                            }
+                        }
+                    }
+                }
+                controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+            } else {
+                logger.info(`No basic information cluster found for node ${nodeId}`);
+            }
+        } else {
+            try {
+                const interactionClient = await pairedNode.getInteractionClient();
+                const basicInformationAttributes = await interactionClient.getMultipleAttributes({
+                    attributes: [{ endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }],
+                });
+                const basicInformationData = {} as Record<string, SupportedStorageTypes>;
+                for (const {
+                    path: { attributeName },
+                    value,
+                } of basicInformationAttributes) {
+                    if (!globalAttributeKeys.includes(attributeName)) {
+                        basicInformationData[attributeName] = value;
+                    }
+                }
+                controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+            } catch (error) {
+                logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
+            }
+        }
     }
 
     /**
@@ -354,6 +410,12 @@ export class CommissioningController extends MatterNode {
         const controller = this.assertControllerIsStarted();
 
         return controller.getCommissionedNodes() ?? [];
+    }
+
+    getCommissionedNodesDetails() {
+        const controller = this.assertControllerIsStarted();
+
+        return controller.getCommissionedNodesDetails() ?? [];
     }
 
     /** Disconnects all connected nodes and Closes the network connections and other resources of the controller. */
