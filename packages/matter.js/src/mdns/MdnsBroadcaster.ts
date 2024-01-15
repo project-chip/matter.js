@@ -20,6 +20,11 @@ import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { Network } from "../net/Network.js";
 import { TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import {
+    SESSION_ACTIVE_INTERVAL_MS,
+    SESSION_ACTIVE_THRESHOLD_MS,
+    SESSION_IDLE_INTERVAL_MS,
+} from "../session/Session.js";
 import { isIPv4, isIPv6 } from "../util/Ip.js";
 import {
     MATTER_COMMISSIONER_SERVICE_QNAME,
@@ -39,9 +44,8 @@ import { AnnouncementType, MdnsServer } from "./MdnsServer.js";
 
 const logger = Logger.get("MdnsBroadcaster");
 
-const DEFAULT_SLEEP_IDLE_INTERVAL = 5000;
-const DEFAULT_SLEEP_ACTIVE_INTERVAL = 300;
 const TCP_SUPPORTED = 0;
+const ICD_SUPPORTED = 0; // TODO: Implement ICD later
 const DEFAULT_PAIRING_HINT = {
     powerCycle: true,
     deviceManual: true,
@@ -118,8 +122,9 @@ export class MdnsBroadcaster {
             vendorId,
             productId,
             discriminator,
-            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
-            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
             pairingHint = DEFAULT_PAIRING_HINT,
             pairingInstructions = "",
         }: CommissioningModeInstanceData,
@@ -177,13 +182,15 @@ export class MdnsBroadcaster {
                     `VP=${vendorId}+${productId}` /* Vendor / Product */,
                     `DT=${deviceType}` /* Device Type */,
                     `DN=${deviceName}` /* Device Name */,
-                    `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
-                    `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                    `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                    `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                    `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
                     `T=${TCP_SUPPORTED}` /* TCP not supported */,
                     `D=${discriminator}` /* Discriminator */,
                     `CM=${mode}` /* Commission Mode */,
                     `PH=${PairingHintBitmapSchema.encode(pairingHint)}` /* Pairing Hint */,
                     `PI=${pairingInstructions}` /* Pairing Instruction */,
+                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
             records.push(...this.getIpRecords(hostname, ips));
@@ -196,8 +203,9 @@ export class MdnsBroadcaster {
         announcedNetPort: number,
         fabrics: Fabric[],
         {
-            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
-            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: OperationalInstanceData = {},
     ) {
         const currentOperationalFabrics = this.activeOperationalAnnouncements.get(announcedNetPort);
@@ -243,9 +251,11 @@ export class MdnsBroadcaster {
                     PtrRecord(fabricQname, deviceMatterQname),
                     SrvRecord(deviceMatterQname, { priority: 0, weight: 0, port: announcedNetPort, target: hostname }),
                     TxtRecord(deviceMatterQname, [
-                        `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
-                        `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                        `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                        `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                        `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
                         `T=${TCP_SUPPORTED}` /* TCP not supported */,
+                        `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                     ]),
                 ];
                 records.push(...fabricRecords);
@@ -263,8 +273,9 @@ export class MdnsBroadcaster {
             deviceType,
             vendorId,
             productId,
-            sleepIdleInterval = DEFAULT_SLEEP_IDLE_INTERVAL,
-            sleepActiveInterval = DEFAULT_SLEEP_ACTIVE_INTERVAL,
+            sessionIdleInterval = SESSION_ACTIVE_INTERVAL_MS,
+            sessionActiveInterval = SESSION_IDLE_INTERVAL_MS,
+            sessionActiveThreshold = SESSION_ACTIVE_THRESHOLD_MS,
         }: CommissionerInstanceData,
     ) {
         logger.debug(
@@ -296,9 +307,11 @@ export class MdnsBroadcaster {
                     `VP=${vendorId}+${productId}` /* Vendor / Product */,
                     `DT=${deviceType}` /* Device Type */,
                     `DN=${deviceName}` /* Device Name */,
-                    `SII=${sleepIdleInterval}` /* Sleepy Idle Interval */,
-                    `SAI=${sleepActiveInterval}` /* Sleepy Active Interval */,
+                    `SII=${sessionIdleInterval}` /* Session Idle Interval */,
+                    `SAI=${sessionActiveInterval}` /* Session Active Interval */,
+                    `SAT=${sessionActiveThreshold}` /* Session Active Threshold */,
                     `T=${TCP_SUPPORTED}` /* TCP not supported */,
+                    `ICD=${ICD_SUPPORTED}` /* ICD not supported */,
                 ]),
             ];
             if (deviceType !== undefined) {
