@@ -150,6 +150,7 @@ Object.freeze(AccessControl);
 Object.freeze(AccessControl.OfflineSession);
 
 function enforcerFor(schema: Schema): AccessControl {
+    if (schema.name === "OnOff") debugger;
     const limits = limitsFor(schema);
 
     let mayRead: AccessControl.Verification = session => {
@@ -314,7 +315,7 @@ function enforcerFor(schema: Schema): AccessControl {
             if (session.offline) {
                 return;
             }
-            throw new WriteError(schema, "Permission defined: Value is read-only");
+            throw new WriteError(schema, "Permission denied: Value is read-only");
         };
 
         mayWrite = session => {

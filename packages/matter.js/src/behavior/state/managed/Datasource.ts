@@ -16,6 +16,8 @@ import { Transaction } from "../transaction/Transaction.js";
 import type { ValidationContext } from "../validation/context.js";
 import type { Val } from "./Val.js";
 
+const VERSION_KEY = "__VERSION__";
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
@@ -194,9 +196,16 @@ function configure(options: Datasource.Options): Internals {
         values[key] = initialValues[key];
     }
 
+    let version: number;
+    if (typeof initialValues[VERSION_KEY] === "number") {
+        version = initialValues[VERSION_KEY] % 0xffff_ffff;
+    } else {
+        version = options.version ?? Crypto.getRandomUInt32();
+    }
+
     return {
         ...options,
-        version: options.version ?? Crypto.getRandomUInt32(),
+        version,
         values: values,
     };
 }
@@ -374,7 +383,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 
-            changes.persistent._version = internals.version;
+            changes.persistent[VERSION_KEY] = internals.version;
         }
     }
 
