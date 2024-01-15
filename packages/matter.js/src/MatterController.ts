@@ -43,6 +43,7 @@ import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
@@ -63,6 +64,8 @@ export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommi
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
+    discoveryData?: DiscoveryData;
+    basicInformationData?: Record<string, SupportedStorageTypes>;
 };
 
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
@@ -170,7 +173,7 @@ export class MatterController {
         } else if (this.controllerStorage.has("operationalServerAddress")) {
             // Migrate legacy storages, TODO: Remove later
             const operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
-            this.setOperationalServerAddress(this.fabric.nodeId, operationalServerAddress);
+            this.setOperationalDeviceData(this.fabric.nodeId, operationalServerAddress);
             this.controllerStorage.delete("operationalServerAddress");
         } else if (this.controllerStorage.has("fabricCommissioned")) {
             // Migrate legacy storages, TODO: Remove later
@@ -332,7 +335,7 @@ export class MatterController {
         this.sessionManager.removeResumptionRecord(nodeId);
         await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
-        this.storeCommisionedNodes();
+        this.storeCommissionedNodes();
     }
 
     /**
@@ -624,18 +627,56 @@ export class MatterController {
         return Array.from(this.commissionedNodes.keys());
     }
 
-    private setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
-        const nodeDetails = this.commissionedNodes.get(nodeId) ?? { operationalServerAddress };
+    getCommissionedNodesDetails() {
+        return Array.from(this.commissionedNodes.entries()).map(
+            ([nodeId, { operationalServerAddress, discoveryData, basicInformationData }]) => ({
+                nodeId,
+                operationalAddress: operationalServerAddress
+                    ? serverAddressToString(operationalServerAddress)
+                    : undefined,
+                advertisedName: discoveryData?.DN,
+                discoveryData,
+                basicInformationData,
+            }),
+        );
+    }
+
+    private setOperationalDeviceData(
+        nodeId: NodeId,
+        operationalServerAddress: ServerAddressIp,
+        discoveryData?: DiscoveryData,
+    ) {
+        const nodeDetails = this.commissionedNodes.get(nodeId) ?? {};
         nodeDetails.operationalServerAddress = operationalServerAddress;
+        if (discoveryData !== undefined) {
+            nodeDetails.discoveryData = {
+                ...nodeDetails.discoveryData,
+                ...discoveryData,
+            };
+        }
         this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommisionedNodes();
+        this.storeCommissionedNodes();
+    }
+
+    enhanceCommissionedNodeDetails(
+        nodeId: NodeId,
+        data: { basicInformationData: Record<string, SupportedStorageTypes> },
+    ) {
+        const nodeDetails = this.commissionedNodes.get(nodeId);
+        if (nodeDetails === undefined) {
+            throw new Error(`Node ${nodeId} is not commissioned.`);
+        }
+        const { basicInformationData } = data;
+        nodeDetails.basicInformationData = basicInformationData;
+        this.commissionedNodes.set(nodeId, nodeDetails);
+        this.storeCommissionedNodes();
     }
 
     private getLastOperationalAddress(nodeId: NodeId) {
         return this.commissionedNodes.get(nodeId)?.operationalServerAddress;
     }
 
-    private storeCommisionedNodes() {
+    private storeCommissionedNodes() {
         this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 

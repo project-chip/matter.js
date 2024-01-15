@@ -77,8 +77,13 @@ export default function commands(theNode: MatterNode) {
                         }
                         switch (status) {
                             case "commissioned": {
-                                const nodeIds = theNode.commissioningController.getCommissionedNodes();
-                                console.log(nodeIds.map(nodeId => nodeId.toString()));
+                                const details = theNode.commissioningController.getCommissionedNodesDetails();
+                                console.log(
+                                    details.map(detail => ({
+                                        ...detail,
+                                        nodeId: detail.nodeId.toString(),
+                                    })),
+                                );
                                 break;
                             }
                             case "connected": {
