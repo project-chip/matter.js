@@ -13,7 +13,7 @@ export interface Participant {
     /**
      * Description used in error messages.
      */
-    description: string;
+    toString(): string;
 
     /**
      * The "role" of a participant is an optional key you may use to retrieve

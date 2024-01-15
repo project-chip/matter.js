@@ -7,6 +7,7 @@
 import { ImplementationError } from "../common/MatterError.js";
 import { LifecycleStatus } from "../common/Lifecycle.js";
 import { Tracker, MaybePromise } from "./Promises.js";
+import { Observable } from "./Observable.js";
 
 /**
  * Create an instance of a class implementing the {@link AsyncConstructable} pattern.
@@ -66,6 +67,11 @@ export interface AsyncConstruction<T> extends Promise<T> {
     readonly status: LifecycleStatus;
 
     /**
+     * Notifications of state change.  Normally you just await construction but this offers more granular events.
+     */
+    readonly change: Observable<[ status: LifecycleStatus, subject: T ]>;
+
+    /**
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
      * method.
      */
@@ -83,16 +89,18 @@ export interface AsyncConstruction<T> extends Promise<T> {
     assert(description?: string): void;
 
     /**
-     * Manually force construction into a specific status.
+     * Manually force a specific {@link status}.
+     * 
+     * This offers flexibility in component lifecycle management including resetting component to inactive state and
+     * broadcasting lifecycle changes.
      *
-     * AsyncConstruction maintains status automatically.  If construction throws an error subsequent to this call it
-     * will overwrite the status.
+     * This method fails if initialization is ongoing; await completion first.
      */
     setStatus(status: LifecycleStatus, error?: any): void;
 }
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
-    target: T,
+    subject: T,
     initializer?: () => MaybePromise<void>,
     cancel?: () => void,
 ): AsyncConstruction<T> {
@@ -104,6 +112,14 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let placeholderResolve: undefined | (() => void);
     let placeholderReject: undefined | ((error: any) => void)
     let status = LifecycleStatus.Initializing;
+    let change: Observable<[status: LifecycleStatus, subject: T]> | undefined;
+
+    function setStatus(newStatus: LifecycleStatus) {
+        status = newStatus;
+        if (change) {
+            change.emit(status, subject);
+        }
+    }
 
     const self: AsyncConstruction<any> = {
         get ready() {
@@ -118,6 +134,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return status;
         },
 
+        get change() {
+            if (change === undefined) {
+                change = new Observable;
+            }
+            return change;
+        },
+
         start(initializer: () => MaybePromise<void>) {
             if (started) {
                 throw new ImplementationError("Initialization has already started");
@@ -130,9 +153,11 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             } catch (e) {
                 error = e;
                 ready = true;
-                status = LifecycleStatus.Incapacitated;
+                setStatus(LifecycleStatus.Incapacitated);
                 if (placeholderReject) {
-                    placeholderReject(e);
+                    const reject = placeholderReject;
+                    placeholderResolve = placeholderReject = undefined;
+                    reject(e);
                 }
                 throw e;
             }
@@ -143,27 +168,30 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     () => {
                         ready = true;
                         if (status === LifecycleStatus.Initializing) {
-                            status = LifecycleStatus.Active;
+                            setStatus(LifecycleStatus.Active);
                         }
                     },
                     e => {
                         error = e;
                         ready = true;
-                        status = LifecycleStatus.Incapacitated;
+                        setStatus(LifecycleStatus.Incapacitated);
                     }
                 );
                 if (promise) {
                     initialization.then(placeholderResolve, placeholderReject);
                 } else {
-                    promise = Tracker.global.track(initialization, `${target.constructor.name} construction`);
+                    promise = Tracker.global.track(initialization, `${subject.constructor.name} construction`);
                 }
             } else {
                 ready = true;
                 if (status === LifecycleStatus.Initializing) {
-                    status = LifecycleStatus.Active;
+                    setStatus(LifecycleStatus.Active);
                 }
                 if (placeholderResolve) {
-                    placeholderResolve();
+                    const resolve = placeholderResolve;
+                    placeholderResolve = placeholderReject = undefined;
+                    promise = undefined;
+                    resolve();
                 }
             }
 
@@ -177,7 +205,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             if (cancel) {
                 canceled = true;
                 if (status === LifecycleStatus.Initializing) {
-                    status = LifecycleStatus.Destroyed;
+                    setStatus(LifecycleStatus.Destroyed);
                 }
                 cancel?.();
             }
@@ -204,17 +232,17 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
                 promise = Tracker.global.track(
                     promise,
-                    `${target.constructor.name} construction`
+                    `${subject.constructor.name} construction`
                 );
             }
             if (promise) {
-                return promise.then(() => target).then(onfulfilled, onrejected);
+                return promise.then(() => subject).then(onfulfilled, onrejected);
             }
 
             if (error) {
                 onrejected?.(error);
             } else {
-                onfulfilled?.(target);
+                onfulfilled?.(subject);
             }
             
             return this;
@@ -228,11 +256,38 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return this.then().finally(onfinally);
         },
 
-        setStatus(...args: any[]) {
-            status = args[0];
-            if (args.length > 1) {
-                error = args[1];
+        setStatus(newStatus: LifecycleStatus, newError?: any) {
+            if (this.status === newStatus) {
+                return;
             }
+
+            if (arguments.length > 1) {
+                error = newError;
+            }
+
+            switch (newStatus) {
+                case LifecycleStatus.Inactive:
+                    promise = undefined;
+                    started = ready = canceled = false;
+                    error = undefined;
+                    break;
+
+                case LifecycleStatus.Initializing:
+                    throw new ImplementationError("Cannot change status because initialization is ongoing");
+                
+                case LifecycleStatus.Active:
+                    promise = undefined;
+                    started = ready = true;
+                    canceled = false;
+                    error = undefined;
+                    break;
+
+                default:
+                    started = ready = true;
+                    break;
+            }
+
+            setStatus(status);
         },
 
         get [Symbol.toStringTag]() {

@@ -10,13 +10,10 @@ import { Attributes, Cluster, Commands, Events } from "../../cluster/Cluster.js"
 import { ClusterClientObj } from "../../cluster/client/ClusterClientTypes.js";
 import { BasicInformationCluster } from "../../cluster/definitions/BasicInformationCluster.js";
 import { GeneralDiagnostics, GeneralDiagnosticsCluster } from "../../cluster/definitions/GeneralDiagnosticsCluster.js";
-import { OperationalCredentialsCluster } from "../../cluster/definitions/OperationalCredentialsCluster.js";
 import { ClusterServerHandlers, ClusterServerObj } from "../../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, NoProviderError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
-import { Aggregator } from "../../device/Aggregator.js";
-import { Device } from "../../device/Device.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
@@ -121,54 +118,6 @@ export abstract class BaseNodeServer {
     }
 
     /**
-     * Get the root endpoint of the node.
-     */
-    getRootEndpoint() {
-        return this.rootEndpoint;
-    }
-
-    /**
-     * Add a child endpoint to the root endpoint. This is mainly used internally and not needed to be called by the user.
-     *
-     * @param endpoint Endpoint to add
-     * @protected
-     */
-    protected addEndpoint(endpoint: EndpointInterface) {
-        this.rootEndpoint.addChildEndpoint(endpoint);
-    }
-
-    /**
-     * Get a child endpoint from the root endpoint. This is mainly used internally and not needed to be called by the user.
-     *
-     * @param endpointId Endpoint ID of the child endpoint to get
-     * @protected
-     */
-    protected getChildEndpoint(endpointId: EndpointNumber): EndpointInterface | undefined {
-        return this.rootEndpoint.getChildEndpoint(endpointId);
-    }
-
-    /**
-     * Add a new cluster server to the root endpoint
-     * BasicInformationCluster and OperationalCredentialsCluster can not be added via this method because they are
-     * added in the constructor
-     *
-     * @param cluster
-     */
-    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
-        if (cluster.id === BasicInformationCluster.id) {
-            throw new ImplementationError(
-                "BasicInformationCluster can not be modified, provide all details in constructor options!",
-            );
-        }
-        if (cluster.id === OperationalCredentialsCluster.id) {
-            throw new ImplementationError(
-                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
-            );
-        }
-        this.rootEndpoint.addClusterServer(cluster);
-    }
-
-    /**
      * Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and start the commissioning process
      *
      * @param limitTo Limit the advertisement to the given discovery capabilities. Default is to advertise on ethernet
@@ -258,15 +207,6 @@ export abstract class BaseNodeServer {
      */
     get port() {
         return this.#primaryNetInterface ? this.#primaryNetInterface.port : this.networkConfig.port;
-    }
-
-    /**
-     * Add a new device to the node
-     *
-     * @param device Device or Aggregator instance to add
-     */
-    addDevice(device: Device | Aggregator) {
-        this.addEndpoint(device);
     }
 
     /**

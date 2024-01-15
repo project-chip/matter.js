@@ -9,6 +9,7 @@ import type { Message } from "../codec/MessageCodec.js";
 import { SecureSession } from "../session/SecureSession.js";
 import { ValueSupervisor } from "./supervision/ValueSupervisor.js";
 import type { MatterCoreSpecificationV1_2 } from "../spec/Specifications.js";
+import { Diagnostic } from "../log/Diagnostic.js";
 
 /**
  * Provides contextual information for Matter actions such as accessing attributes or invoking commands.
@@ -36,3 +37,21 @@ export interface ActionContext extends ValueSupervisor.Session {
      */
     message?: Message;
 }
+
+export namespace ActionContext {
+    export function via(context?: Partial<ActionContext>) {
+        let identity;
+
+        if (context?.message) {
+            identity = `message#${context?.message.packetHeader.messageId.toString(16)}`;
+        } else {
+            const id = nextInternalId;
+            nextInternalId = (nextInternalId + 1) % 0xffff;
+            identity = `internal#${id.toString(16)}`;
+        }
+
+        return Diagnostic.via(identity);
+    }
+}
+
+let nextInternalId = 1;

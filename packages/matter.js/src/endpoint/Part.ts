@@ -108,6 +108,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     constructor(type: T, options: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
+        // Create construction early so parts and behaviors can hook events
+        this.#construction = AsyncConstruction(this);
+
         if (Part.isConfiguration(definition)) {
             options = definition;
             definition = definition.type
@@ -137,7 +140,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             }
         }
 
-        this.#construction = AsyncConstruction(this, () => {
+        this.#construction.start(() => {
             if (this.#lifecycle.isInstalled) {
                 // Immediate initialization
                 return this.#initialize();
@@ -169,11 +172,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             },
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
         );
-
-        promise = MaybePromise.then(
-            promise,
-            () => this.lifecycle.change(PartLifecycle.Change.Ready)
-        )
 
         return promise;
     }

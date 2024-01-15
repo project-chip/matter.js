@@ -64,6 +64,7 @@ interface Formatter {
     strong(producer: Producer): string;
     weak(producer: Producer): string;
     status(status: LifecycleStatus, producer: Producer): string;
+    via(text: string): string;
 }
 
 const LifecycleIcons = {
@@ -119,6 +120,7 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
         strong: producer => creator.text(`*${producer()}*`),
         weak: producer => creator.text(producer()),
         status: (status, producer) => `${statusIcon(status)}${producer()}`,
+        via: text => creator.text(`via ${text}`),
     });
 
     return `${formatTime(now)} ${Level[level]} ${facility} ${prefix}${formattedValues}`;
@@ -131,9 +133,11 @@ const ANSI_CODES = {
     red: 31,
     green: 32,
     yellow: 33,
+    blue: 34,
+    magenta: 35,
+    cyan: 36,
     white: 37,
     default: 39,
-    blue: 34,
     gray: 90,
 }
 
@@ -185,6 +189,7 @@ const Styles = {
     active: { color: "green" },
     incapacitated: { color: "red" },
     destroyed: { color: "gray" },
+    via: { color: "magenta" },
 } as const satisfies Record<string, Style>;
 
 type StyleName = keyof typeof Styles;
@@ -259,7 +264,9 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
                 const result = `${style(status, statusIcon(status))}${producer()}`;
                 styles.pop();
                 return result;
-            }
+            },
+
+            via: text => creator.text(style("via", `via ${text}`)),
         }
     );
 
@@ -371,6 +378,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
             strong: producer => `<em>${producer()}</em>`,
             weak: producer => htmlSpan(`weak`, producer()),
             status: (status, producer) => htmlSpan(`status-${status}`, producer()),
+            via: text => htmlSpan("via", `via ${escape(text)}`),
         },
     );
 
@@ -516,6 +524,9 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
         case Diagnostic.Presentation.Weak:
             return formatter.weak(() => renderDiagnostic(value, formatter));
+
+        case Diagnostic.Presentation.Via:
+            return formatter.via(`${value}`);
     
         case Diagnostic.Presentation.Dictionary:
             if (typeof value !== "object") {

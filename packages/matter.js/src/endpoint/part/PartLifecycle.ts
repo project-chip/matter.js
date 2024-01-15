@@ -8,6 +8,7 @@ import type { Part } from "../Part.js";
 import { Observable } from "../../util/Observable.js";
 import type { Node } from "../../node/Node.js";
 import { ImplementationError } from "../../common/MatterError.js";
+import { LifecycleStatus } from "../../common/Lifecycle.js";
 
 /**
  * State related to a {@link Part}'s lifecycle.
@@ -47,9 +48,6 @@ export class PartLifecycle {
 
     /**
      * Bubbling event indicating changes to part structure.
-     * 
-     * All {@link PartLifecycle.Change}s bubble here except for Installed,
-     * Destroyed and Ready.
      */
     get changed() {
         return this.#changed;
@@ -85,6 +83,14 @@ export class PartLifecycle {
 
     constructor(part: Part) {
         this.#part = part;
+    }
+
+    /**
+     * Reset the {@link Part}.  After reset the part is reverted to uninstalled state.
+     */
+    async reset() {
+        this.#isReady = this.#isInstalled = false;
+        this.#part.construction.setStatus(LifecycleStatus.Inactive);
     }
 
     /**
@@ -139,7 +145,7 @@ export class PartLifecycle {
                 const type = this.#queuedUpdates[0];
                 this.#queuedUpdates.shift();
 
-                // Emit bubbling event
+                // Emit change event
                 this.changed.emit(type, this.#part);
 
                 // Emit part-specific events

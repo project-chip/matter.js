@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
-
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { GeneralDiagnosticsBehavior } from "./GeneralDiagnosticsBehavior.js";
 import { TestEventTriggerRequest } from "./GeneralDiagnosticsInterface.js";

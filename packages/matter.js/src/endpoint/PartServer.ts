@@ -49,10 +49,11 @@ export class PartServer implements EndpointInterface {
 
         this.#part = part;
 
+        // We listen to ready continuously because it will recur after factory reset
+        part.lifecycle.ready.on(() => this.#logPart());
+
         if (part.lifecycle.isReady) {
             this.#logPart();
-        } else {
-            part.lifecycle.ready.once(() => this.#logPart());
         }
 
         part.lifecycle.changed.on(() => this.#structureChangedCallback?.());

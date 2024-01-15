@@ -27,8 +27,8 @@ export class NodeJsEnvironment extends Environment {
     readonly #interrupt = (): void => this.interrupt();
     readonly #diagnose = (): void => { process.on("SIGUSR2", this.#diagnose); this.diagnose(); };
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
 
         this.tasks.added.on(() => this.setInstalled());
         this.tasks.deleted.on(() => this.setInstalled());
@@ -42,14 +42,21 @@ export class NodeJsEnvironment extends Environment {
         return variables;
     }
 
-    protected override loadStorage() {
+    protected override loadStorage(name: string) {
+        return new StorageBackendDisk(
+            resolve(this.location, name),
+            this.variables.storage?.clear === "true"
+        );
+    }
+
+    protected override get location() {
         let path = this.variables.storage?.path;
         if (path === undefined || path === "") {
             path = this.variables.path.root;
         } else {
             path = resolve(this.variables.path.root, path);
         }
-        return new StorageBackendDisk(path, this.variables.storage?.clear === "true");
+        return path;
     }
 
     protected setInstalled() {
@@ -127,7 +134,11 @@ function getDefaultRoot(envName: string) {
         matterDir = resolve(process.env.HOME ?? ".", ".matter");
     }
 
-    return resolve(matterDir, envName);
+    if (envName !== "default") {
+        matterDir = `${matterDir}-${envName}`;
+    }
+
+    return matterDir;
 }
 
 export function merge(a: Record<string, any>, b: Record<string, any>) {

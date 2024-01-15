@@ -71,7 +71,9 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
     const internals = configure(options);
 
     return {
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name;
+        },
 
         reference(session: ValueSupervisor.Session) {
             return options.supervisor.manage(createRootReference(this, internals, session), session) as InstanceType<T>;
@@ -109,6 +111,11 @@ export namespace Datasource {
          * The JS class for the root value.
          */
         type: T;
+
+        /**
+         * Name used in diagnostic messages.
+         */
+        name: string,
 
         /**
          * The manager used to manage and validate values.
@@ -162,6 +169,7 @@ export namespace Datasource {
 }
 
 interface Internals extends Datasource.Options {
+    name: string,
     values: Val.Struct;
     version: number;
     dirty?: Val.Struct;
@@ -203,7 +211,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     let changes: Changes | undefined;
 
     const participant = {
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name; 
+        },
         commit1,
         commit2,
         rollback,
@@ -437,7 +447,9 @@ function save(resource: Resource, internals: Internals, transaction: Transaction
 
     transaction.addResourcesSync(resource);
     transaction.addParticipants({
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name;
+        },
 
         async commit1() {
             await internals.store?.set(transaction, dirty);

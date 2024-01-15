@@ -10,6 +10,7 @@ import { PartLifecycle } from "./PartLifecycle.js";
 import { EndpointType } from "../type/EndpointType.js";
 import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
+import { LifecycleStatus } from "../../common/Lifecycle.js";
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -34,9 +35,20 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         this.#children.added.on(child => this.#adoptPart(child));
 
         // Inform children they're installed once my part is fully initialized
-        this.#part.lifecycle.ready.once(() => {
+        this.#part.lifecycle.ready.on(() => {
             for (const part of this.#children) {
-                part.lifecycle.change(PartLifecycle.Change.Installed);
+                if (!part.lifecycle.isInstalled) {
+                    part.lifecycle.change(PartLifecycle.Change.Installed);
+                }
+            }
+        });
+
+        // Propagate reset to children
+        this.#part.construction.change.on(status => {
+            if (status === LifecycleStatus.Inactive) {
+                for (const child of this.#children) {
+                    child.lifecycle.reset();
+                }
             }
         });
     }
