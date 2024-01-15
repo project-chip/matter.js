@@ -72,6 +72,11 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
 
         if (validateEntryConstraint) {
             for (const e of value) {
+                if (e === undefined || e === null) {
+                    // Accept nullish
+                    continue;
+                }
+
                 validateEntryConstraint(e, session);
             }
         }

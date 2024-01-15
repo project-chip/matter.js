@@ -220,10 +220,14 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         nestPrefix = style("prefix", nestPrefix);
     }
 
+    function normal(text: string) {
+        return style(styles[styles.length - 1], text);
+    }
+
     let message = renderDiagnostic(
         values,
         {
-            text: text => creator.text(style(styles[styles.length - 1], text)),
+            text: text => creator.text(normal(text)),
 
             indent: producer => creator.indent(producer),
 
@@ -266,7 +270,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
                 return result;
             },
 
-            via: text => creator.text(style("via", `via ${text}`)),
+            via: text => creator.text(`${normal("via")} ${style("via", text)}`),
         }
     );
 

@@ -44,7 +44,28 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
                 ast = definition;
         }
 
-        Object.assign(this, ast);
+        if (!ast) {
+            return;
+        }
+
+        if (ast.desc !== undefined) {
+            this.desc = ast.desc;
+        }
+        if (ast.value !== undefined) {
+            this.value = ast.value;
+        }
+        if (ast.min !== undefined) {
+            this.min = ast.min;
+        }
+        if (ast.max !== undefined) {
+            this.max = ast.max;
+        }
+        if (ast.entry !== undefined) {
+            this.entry = new Constraint(ast.entry);
+        }
+        if (ast.parts !== undefined) {
+            this.parts = ast.parts.map(p => new Constraint(p));
+        }
     }
 
     /**
