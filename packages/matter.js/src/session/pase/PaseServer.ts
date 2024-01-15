@@ -98,7 +98,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
         // Read pbkdfRequest and send pbkdfResponse
         const {
             requestPayload,
-            request: { random: peerRandom, mrpParameters, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
+            request: { random: peerRandom, sessionParams, passcodeId, hasPbkdfParameters, sessionId: peerSessionId },
         } = await messenger.readPbkdfParamRequest();
         if (passcodeId !== DEFAULT_PASSCODE_ID) {
             throw new UnexpectedDataError(`Unsupported passcode ID ${passcodeId}.`);
@@ -111,7 +111,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             peerRandom,
             random,
             sessionId,
-            mrpParameters,
+            sessionParams,
             pbkdfParameters: hasPbkdfParameters ? undefined : this.pbkdfParameters,
         });
 
@@ -138,8 +138,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             salt: new ByteArray(0),
             isInitiator: false,
             isResumption: false,
-            idleRetransmissionTimeoutMs: mrpParameters?.idleRetransTimeoutMs,
-            activeRetransmissionTimeoutMs: mrpParameters?.activeRetransTimeoutMs,
+            idleIntervalMs: sessionParams?.idleIntervalMs,
+            activeIntervalMs: sessionParams?.activeIntervalMs,
+            activeThresholdMs: sessionParams?.activeThresholdMs,
         });
         logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
 

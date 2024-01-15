@@ -11,13 +11,16 @@ import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
 import { TlvByteString } from "../../tlv/TlvString.js";
 
-/** @see {@link MatterCoreSpecificationV1_0} § 2.12.5 */
-const TlvSedParameters = TlvObject({
+/** @see {@link MatterCoreSpecificationV1_2} § 4.11.8 */
+export const TlvSessionParameters = TlvObject({
     /** Maximum sleep interval of node when in idle mode. */
-    idleRetransTimeoutMs: TlvOptionalField(1, TlvUInt32) /* default: 300ms */,
+    idleIntervalMs: TlvOptionalField(1, TlvUInt32) /* default: 500ms */,
 
     /** Maximum sleep interval of node when in active mode. */
-    activeRetransTimeoutMs: TlvOptionalField(2, TlvUInt32) /* default: 300ms */,
+    activeIntervalMs: TlvOptionalField(2, TlvUInt32) /* default: 300ms */,
+
+    /** Minimum amount of time the node SHOULD stay active after network activity. */
+    activeThresholdMs: TlvOptionalField(3, TlvUInt16) /* default: 4000ms */,
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
@@ -26,7 +29,7 @@ export const TlvPbkdfParamRequest = TlvObject({
     sessionId: TlvField(2, TlvUInt16), // Specs: range: 16bits
     passcodeId: TlvField(3, TlvUInt16), // Specs: length: 16bits so min is 0x8000?
     hasPbkdfParameters: TlvField(4, TlvBoolean),
-    mrpParameters: TlvOptionalField(5, TlvSedParameters),
+    sessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
@@ -41,7 +44,7 @@ export const TlvPbkdfParamResponse = TlvObject({
             salt: TlvField(2, TlvByteString.bound({ minLength: 16, maxLength: 32 })),
         }),
     ),
-    mrpParameters: TlvOptionalField(5, TlvSedParameters),
+    sessionParams: TlvOptionalField(5, TlvSessionParameters),
 });
 
 /** @see {@link MatterCoreSpecificationV1_0} § 4.13.1.2 */
