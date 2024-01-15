@@ -16,7 +16,7 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
     static override readonly id = "parts";
 
     async add(child: Part.Definition | Agent) {
-        this.part.parts.add(child);
+        await this.part.parts.add(child);
     }
 
     async delete(child: Part | Agent) {

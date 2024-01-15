@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Behavior } from "../behavior/Behavior.js";
 import { ActionContext } from "../behavior/ActionContext.js";
+import { Behavior } from "../behavior/Behavior.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Part } from "./Part.js";
@@ -92,11 +92,11 @@ export class Agent {
 
     /**
      * Trigger initialization of a supported {@link Behavior.Type}.
-     * 
+     *
      * Functionally identical to {@link waitFor} but has no return value.
      */
-    activate(type: Behavior.Type) {
-        this.#part.behaviors.activate(type);
+    async activate(type: Behavior.Type) {
+        await this.#part.behaviors.activate(type);
     }
 
     /**

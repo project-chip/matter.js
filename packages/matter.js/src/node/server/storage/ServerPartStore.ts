@@ -1,12 +1,12 @@
 import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { Val } from "../../../behavior/state/managed/Val.js";
+import { ImplementationError } from "../../../common/MatterError.js";
+import { Part } from "../../../endpoint/Part.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
-import { Part } from "../../../endpoint/Part.js";
-import { ImplementationError } from "../../../common/MatterError.js";
 import { logger } from "./ServerStore.js";
 
 const NUMBER_KEY = "__number__";
@@ -96,7 +96,7 @@ export class ServerPartStore implements PartStore {
             logger.warn(`Part ${partId} has persisted state but no endpoint number, will reassign`);
         }
 
-        this.#loadSubparts();
+        await this.#loadSubparts();
     }
 
     storeForBehavior(behaviorId: string): Datasource.Store {
@@ -120,12 +120,12 @@ export class ServerPartStore implements PartStore {
             store = this.#childStores[partId] = new ServerPartStore(
                 partId,
                 this.#childStorage.createContext(partId),
-                true
+                true,
             );
 
             if (!this.#knownParts.has(partId)) {
                 this.#knownParts.add(partId);
-                this.#childStorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
+                this.#childStorage.set(KNOWN_KEY, [...this.#knownParts]);
             }
         }
 
@@ -219,12 +219,12 @@ export class ServerPartStore implements PartStore {
         }
 
         for (const id of this.#knownParts) {
-            await this.#storeForPartId(id).clear();
+            await (await this.#storeForPartId(id)).clear();
         }
     }
 
     async #loadSubparts() {
-        this.#knownParts = new Set(this.#childStorage.get(KNOWN_KEY, Array<string>()));
+        this.#knownParts = new Set(await this.#childStorage.get(KNOWN_KEY, Array<string>()));
 
         for (const partId of this.#knownParts) {
             await this.#loadKnownChildStores(partId);
@@ -232,11 +232,7 @@ export class ServerPartStore implements PartStore {
     }
 
     async #loadKnownChildStores(partId: string) {
-        const partStore = new ServerPartStore(
-            partId,
-            this.#childStorage.createContext(partId),
-            false,
-        );
+        const partStore = new ServerPartStore(partId, this.#childStorage.createContext(partId), false);
         this.#childStores[partId] = partStore;
         await partStore.construction;
     }

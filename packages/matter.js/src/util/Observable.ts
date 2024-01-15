@@ -29,7 +29,7 @@ export type Observer<T extends any[] = any[], R = void> = (...payload: T) => R |
  *
  * @param T arguments, should be a named tuple
  */
-export interface Observable<T extends any[] = any[], R = void> extends AsyncIterable<T> {
+export interface Observable<T extends any[] = any[], R = MaybePromise<void>> extends AsyncIterable<T> {
     /**
      * Notify observers.
      */
@@ -94,7 +94,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             return;
         }
 
-        let iterator = this.#observers[Symbol.iterator]();
+        const iterator = this.#observers[Symbol.iterator]();
 
         const emitOne = (observer: Observer<T, R>) => {
             let result;
@@ -114,7 +114,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             }
 
             return result;
-        }
+        };
 
         function emitNext(): R | undefined {
             for (let iteration = iterator.next(); !iteration.done; iteration = iterator.next()) {
@@ -184,7 +184,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
         let iteratorCount = 1;
 
         function newPromise() {
-            return new Promise<Next<T>>(r => resolve = r);
+            return new Promise<Next<T>>(r => (resolve = r));
         }
 
         let promise = newPromise();
@@ -200,24 +200,24 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
         this.#joinIteration = () => {
             iteratorCount++;
             return promise;
-        }
+        };
 
         this.#removeIterator = () => {
             if (!iteratorCount--) {
                 this.#stopIteration?.();
             }
-        }
+        };
 
         this.#stopIteration = () => {
             this.off(observer);
             resolve(undefined);
             this.#stopIteration = undefined;
             this.#removeIterator = undefined;
-        }
+        };
     }
 }
 
-type Next<T> = undefined | { value: T, promise: Promise<Next<T>> };
+type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
 
 function constructObservable(errorHandler?: ObserverErrorHandler) {
     return new Emitter(errorHandler);
@@ -227,8 +227,8 @@ function constructObservable(errorHandler?: ObserverErrorHandler) {
  * A general implementation of {@link Observable}.
  */
 export const Observable = constructObservable as unknown as {
-    new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
-    <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
+    new <T extends any[], R = MaybePromise<void>>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
+    <T extends any[], R = MaybePromise<void>>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
 };
 
 function event<E, N extends string>(emitter: E, name: N) {

@@ -10,14 +10,15 @@ import { ImplementationError, InternalError } from "../../src/common/MatterError
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
-import { Lifecycle } from "../../src/endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
 import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
 import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
 import { EventHandler } from "../../src/protocol/interaction/EventHandler.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
-import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
+import { AsyncConstruction } from "../../src/util/AsyncConstruction.js";
+import { MockPartStore } from "../behavior/mock-behavior.js";
 
 export class MockBehaviorInitializer extends PartInitializer {
     #nextId = 1;

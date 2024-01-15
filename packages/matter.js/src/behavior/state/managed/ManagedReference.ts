@@ -93,12 +93,12 @@ export function ManagedReference(
             replaceValue((parent.value as Container)[index]);
         },
 
-        notify() {
+        async notify() {
             if (original === value) {
                 return;
             }
-            parent.notify(typeof index === "string" ? index : undefined, original, value);
-        }
+            await parent.notify(typeof index === "string" ? index : undefined, original, value);
+        },
     };
 
     return reference;

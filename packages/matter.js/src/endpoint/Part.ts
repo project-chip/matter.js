@@ -5,8 +5,8 @@
  */
 
 import { AccessControl } from "../behavior/AccessControl.js";
-import { Behavior } from "../behavior/Behavior.js";
 import type { ActionContext } from "../behavior/ActionContext.js";
+import { Behavior } from "../behavior/Behavior.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -15,8 +15,8 @@ import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
-import { PartInitializer } from "./part/PartInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
+import { PartInitializer } from "./part/PartInitializer.js";
 import { PartLifecycle } from "./part/PartLifecycle.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
@@ -132,12 +132,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             this.owner = options.owner;
         }
 
-        if (options?.parts) {
-            for (const part of options.parts) {
-                this.parts.add(part);
-            }
-        }
-
         this._construction.start(() => {
             if (this.#lifecycle.isInstalled) {
                 // Immediate initialization
@@ -148,7 +142,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return new Promise<void>((fulfilled, rejected) => {
                 this.#lifecycle.installed.once(() => {
                     MaybePromise.then(
-                        () => this.#initialize(),
+                        async () => {
+                            if (options?.parts) {
+                                for (const part of options.parts) {
+                                    this.parts.add(part);
+                                }
+                            }
+
+                            this.#initialize();
+                        },
                         fulfilled,
                         rejected,
                     );
@@ -163,7 +165,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
-        let promise = MaybePromise.then(
+        const promise = MaybePromise.then(
             () => {
                 this.owner.serviceFor(PartInitializer).initializeDescendent(this);
                 return this.behaviors.initialize();

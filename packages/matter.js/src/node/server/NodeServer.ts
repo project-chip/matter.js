@@ -6,16 +6,17 @@
 
 import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
 import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
+import { UninitializedDependencyError } from "../../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
 import { PartServer } from "../../endpoint/PartServer.js";
 import { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
-import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
-import { Lifecycle } from "../../endpoint/part/Lifecycle.js";
+import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
+import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
 import { EndpointType } from "../../endpoint/type/EndpointType.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../storage/StorageContext.js";
@@ -25,15 +26,12 @@ import { Node } from "../Node.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
-import { ServerStore } from "./storage/ServerStore.js";
-import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
-import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
+import { IdentityService } from "./IdentityService.js";
 import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
+import { ServerResetService } from "./ServerResetService.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { PartStoreService } from "./storage/PartStoreService.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { UninitializedDependencyError } from "../../common/Lifecycle.js";
-import { ServerResetService } from "./ServerResetService.js";
+import { ServerStore } from "./storage/ServerStore.js";
 
 const logger = Logger.get("NodeServer");
 
@@ -129,7 +127,7 @@ export class NodeServer extends BaseNodeServer implements Node {
         } else if (root.number !== 0) {
             throw new ImplementationError(`Root node ID must be 0`);
         }
-if (!root.lifecycle.hasId) {
+        if (!root.lifecycle.hasId) {
             root.id = this.#configuration.environment.allocateFallbackNodeId();
         }
 
@@ -138,13 +136,15 @@ if (!root.lifecycle.hasId) {
         this.#nextEndpointId = this.#configuration.nextEndpointNumber;
 
         this.#construction = AsyncConstruction(this, async () => {
-            this.#store = await ServerStore.create(this.#configuration.environment,
-                    root.id,
-                    this.#configuration.nextEndpointNumber,);
+            this.#store = await ServerStore.create(
+                this.#configuration.environment,
+                root.id,
+                this.#configuration.nextEndpointNumber,
+            );
 
             root.lifecycle.change(PartLifecycle.Change.Installed);
-        await this.#root.construction;
-            });
+            await this.#root.construction;
+        });
     }
 
     /**
@@ -331,17 +331,15 @@ if (!root.lifecycle.hasId) {
      * Textual description of the node used in diagnostic messages.
      */
     override toString() {
-        return `${this.constructor.name}#${this.id}`
+        return `${this.constructor.name}#${this.id}`;
     }
 
     get [Diagnostic.value]() {
         return [
             this.toString(),
             Diagnostic.dict({ port: this.port, uptime: this.#uptime }),
-            Diagnostic.list([
-                this.rootEndpoint[Diagnostic.value],
-            ])
-        ]
+            Diagnostic.list([this.rootEndpoint[Diagnostic.value]]),
+        ];
     }
 
     protected override get commissioningConfig() {
@@ -391,10 +389,9 @@ if (!root.lifecycle.hasId) {
         this.#interactionServer = new TransactionalInteractionServer(
             this.rootPart,
             this.store,
-            this.#configuration.subscription
+            this.#configuration.subscription,
         );
 
-        return (await super.createMatterDevice())
-            .addProtocolHandler(this.#interactionServer);
+        return (await super.createMatterDevice()).addProtocolHandler(this.#interactionServer);
     }
 }

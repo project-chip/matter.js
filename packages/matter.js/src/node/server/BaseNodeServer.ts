@@ -141,7 +141,7 @@ export abstract class BaseNodeServer {
         }
 
         this.#deviceInstance = await this.createMatterDevice();
-        await this.#deviceInstance.addScanner(mdnsScanner);
+        this.#deviceInstance.addScanner(mdnsScanner);
 
         if (!this.networkConfig.disableIpv4) {
             this.#deviceInstance.addTransportInterface(
@@ -351,15 +351,16 @@ export abstract class BaseNodeServer {
                 }
             },
             (fabricIndex: FabricIndex) => this.emitActiveSessionsChanged(fabricIndex),
-        )
-            .addTransportInterface(
-                await this.#getPrimaryNetInterface()
-            );
+        ).addTransportInterface(await this.#getPrimaryNetInterface());
     }
 
     async #getPrimaryNetInterface() {
         if (this.#primaryNetInterface === undefined) {
-            this.#primaryNetInterface = await UdpInterface.create("udp6", this.networkConfig.port, this.networkConfig.listeningAddressIpv6);
+            this.#primaryNetInterface = await UdpInterface.create(
+                "udp6",
+                this.networkConfig.port,
+                this.networkConfig.listeningAddressIpv6,
+            );
         }
         return this.#primaryNetInterface;
     }

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LifecycleStatus } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
-import { LifecycleStatus } from "../common/Lifecycle.js";
 
 /**
  * Get a formatter for the specified format.
@@ -27,7 +27,7 @@ export function Format(format: string) {
 
         case Format.HTML:
             return htmlLogFormatter;
-            
+
         default:
             throw new ImplementationError(`Unsupported log format "${format}"`);
     }
@@ -74,7 +74,7 @@ const LifecycleIcons = {
     [LifecycleStatus.Active]: "✔",
     [LifecycleStatus.Incapacitated]: "✘",
     [LifecycleStatus.Destroyed]: "☠︎",
-}
+};
 
 /**
  * Create a small utility shared by plain and ansi formats.
@@ -87,7 +87,7 @@ function plaintextCreator() {
         text(value: string) {
             if (broke) {
                 broke = false;
-                return `\n${''.padStart(indents * 4)}${value}`;
+                return `\n${"".padStart(indents * 4)}${value}`;
             }
             return value;
         },
@@ -102,12 +102,12 @@ function plaintextCreator() {
             const result = producer();
             indents--;
             return result;
-        }
-    }
+        },
+    };
 }
 
 function statusIcon(status: LifecycleStatus) {
-    return LifecycleIcons[status] ?? LifecycleIcons[LifecycleStatus.Unknown]
+    return LifecycleIcons[status] ?? LifecycleIcons[LifecycleStatus.Unknown];
 }
 
 function plainLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
@@ -139,7 +139,7 @@ const ANSI_CODES = {
     white: 37,
     default: 39,
     gray: 90,
-}
+};
 
 type AnsiCode = "normal" | keyof typeof ANSI_CODES;
 
@@ -202,18 +202,13 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         dim: false,
         bold: false,
     };
-    let styles: (StyleName)[] = [ primary ];
+    const styles: StyleName[] = [primary];
 
-    const prefix = style(
-        "prefix",
-        `${formatTime(now)} ${Level[level].padEnd(6)}`,
-    );
+    const prefix = style("prefix", `${formatTime(now)} ${Level[level].padEnd(6)}`);
 
     facility = style(
         "facility",
-        facility.length > 20
-            ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}`
-            : facility.padEnd(20),
+        facility.length > 20 ? `${facility.slice(0, 10)}~${facility.slice(facility.length - 9)}` : facility.padEnd(20),
     );
 
     if (nestPrefix) {
@@ -224,55 +219,52 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         return style(styles[styles.length - 1], text);
     }
 
-    let message = renderDiagnostic(
-        values,
-        {
-            text: text => creator.text(normal(text)),
+    const message = renderDiagnostic(values, {
+        text: text => creator.text(normal(text)),
 
-            indent: producer => creator.indent(producer),
+        indent: producer => creator.indent(producer),
 
-            break: () => {
-                // After the first line revert to default styling
-                if (styles[0] === primary) {
-                    styles[0] = "default";
-                }
+        break: () => {
+            // After the first line revert to default styling
+            if (styles[0] === primary) {
+                styles[0] = "default";
+            }
 
-                return creator.break();
-            },
+            return creator.break();
+        },
 
-            key: text => creator.text(style("key", `${text}: `)),
+        key: text => creator.text(style("key", `${text}: `)),
 
-            value: producer => {
-                styles.push("value");
-                const result = producer();
-                styles.pop();
-                return result;
-            },
+        value: producer => {
+            styles.push("value");
+            const result = producer();
+            styles.pop();
+            return result;
+        },
 
-            strong: producer => {
-                styles.push("strong");
-                const result = producer();
-                styles.pop();
-                return result;
-            },
+        strong: producer => {
+            styles.push("strong");
+            const result = producer();
+            styles.pop();
+            return result;
+        },
 
-            weak: producer => {
-                styles.push("weak");
-                const result = producer();
-                styles.pop();
-                return result;
-            },
+        weak: producer => {
+            styles.push("weak");
+            const result = producer();
+            styles.pop();
+            return result;
+        },
 
-            status: (status, producer) => {
-                styles.push(status);
-                const result = `${style(status, statusIcon(status))}${producer()}`;
-                styles.pop();
-                return result;
-            },
+        status: (status, producer) => {
+            styles.push(status);
+            const result = `${style(status, statusIcon(status))}${producer()}`;
+            styles.pop();
+            return result;
+        },
 
-            via: text => creator.text(`${normal("via")} ${style("via", text)}`),
-        }
-    );
+        via: text => creator.text(`${normal("via")} ${style("via", text)}`),
+    });
 
     return `${prefix} ${facility} ${nestPrefix}${message}${ansiEscape("reset")}`;
 
@@ -298,7 +290,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
             }
         }
 
-        let codes = Array<AnsiCode>();
+        const codes = Array<AnsiCode>();
 
         if ((!targetDim && currentStyle.dim) || (!targetBold && currentStyle.bold)) {
             // Don't think we can reset dim/bold without full reset
@@ -334,27 +326,29 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
         }
         const segments = text.match(/([^✓✔✗✘]+|[✓✔✗✘])/g);
         if (segments === null) {
-            throw new InternalError("ANSI text processing regex failure")
+            throw new InternalError("ANSI text processing regex failure");
         }
-        return segments.map(segment => {
-            let esc;
-            switch (segment) {
-                case "✓":
-                case "✔":
-                    esc = escapes("ballotCheck");
-                    break;
+        return segments
+            .map(segment => {
+                let esc;
+                switch (segment) {
+                    case "✓":
+                    case "✔":
+                        esc = escapes("ballotCheck");
+                        break;
 
-                case "✗":
-                case "✘":
-                    esc = escapes("ballotCross");
-                    break;
+                    case "✗":
+                    case "✘":
+                        esc = escapes("ballotCross");
+                        break;
 
-                default:
-                    esc = escapes(style);
-                    break;
-            }
-            return `${esc}${segment}`
-        }).join("");
+                    default:
+                        esc = escapes(style);
+                        break;
+                }
+                return `${esc}${segment}`;
+            })
+            .join("");
     }
 }
 
@@ -364,27 +358,20 @@ function htmlSpan(type: string, inner: string) {
 
 function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
     function escape(text: string) {
-        return text
-            .toString()
-            .replace(/</g, "&amp")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;");
+        return text.toString().replace(/</g, "&amp").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    const formattedValues = renderDiagnostic(
-        values,
-        {
-            text: escape,
-            break: () => "<br/>",
-            indent: producer => htmlSpan("indent", producer()),
-            key: text => htmlSpan("key", `${escape(text)}:`) + " ",
-            value: producer => htmlSpan("value", producer()),
-            strong: producer => `<em>${producer()}</em>`,
-            weak: producer => htmlSpan(`weak`, producer()),
-            status: (status, producer) => htmlSpan(`status-${status}`, producer()),
-            via: text => htmlSpan("via", `via ${escape(text)}`),
-        },
-    );
+    const formattedValues = renderDiagnostic(values, {
+        text: escape,
+        break: () => "<br/>",
+        indent: producer => htmlSpan("indent", producer()),
+        key: text => htmlSpan("key", `${escape(text)}:`) + " ",
+        value: producer => htmlSpan("value", producer()),
+        strong: producer => `<em>${producer()}</em>`,
+        weak: producer => htmlSpan(`weak`, producer()),
+        status: (status, producer) => htmlSpan(`status-${status}`, producer()),
+        via: text => htmlSpan("via", `via ${escape(text)}`),
+    });
 
     const np = prefix.replace(/ /g, "&nbsp;");
 
@@ -400,11 +387,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
 /**
  * Render a value based on its JS type.
  */
-function renderValue(
-    value: unknown,
-    formatter: Formatter,
-    squash: boolean,
-): string {
+function renderValue(value: unknown, formatter: Formatter, squash: boolean): string {
     if (value === undefined) {
         return "undefined";
     }
@@ -425,19 +408,21 @@ function renderValue(
         if (list.length > 1) {
             return renderList(list, formatter);
         }
-        return list[0].map(e => {
-            if (typeof e === "string" && !squash) {
-                e = e.trim();
-            }
-            return renderDiagnostic(e, formatter);
-        }).join(squash ? "" : " ");
+        return list[0]
+            .map(e => {
+                if (typeof e === "string" && !squash) {
+                    e = e.trim();
+                }
+                return renderDiagnostic(e, formatter);
+            })
+            .join(squash ? "" : " ");
     }
 
     const text = typeof value === "string" || value instanceof String ? value : value.toString().trim();
     if (text.indexOf("\n") === -1) {
         return formatter.text(text as string);
     }
-    
+
     return renderList(text.split("\n"), formatter);
 }
 
@@ -531,7 +516,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
         case Diagnostic.Presentation.Via:
             return formatter.via(`${value}`);
-    
+
         case Diagnostic.Presentation.Dictionary:
             if (typeof value !== "object") {
                 throw new ImplementationError("Diagnostic dictionary is not an object");
@@ -553,7 +538,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
 
 /**
  * Group items in an iterable based on their presentation.  The result is then
- * appropriate for rendering as a list. 
+ * appropriate for rendering as a list.
  */
 function sequenceToList(sequence: Iterable<unknown>) {
     let group: unknown[] | undefined;
@@ -565,7 +550,7 @@ function sequenceToList(sequence: Iterable<unknown>) {
             continue;
         }
         if (!group) {
-            list.push(group = [ value ]);
+            list.push((group = [value]));
         } else {
             group.push(value);
         }

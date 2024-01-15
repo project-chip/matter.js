@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { Agent } from "../Agent.js";
 import { Part } from "../Part.js";
-import { PartLifecycle } from "./PartLifecycle.js";
 import { EndpointType } from "../type/EndpointType.js";
-import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { PartLifecycle } from "./PartLifecycle.js";
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -22,7 +23,7 @@ import { LifecycleStatus } from "../../common/Lifecycle.js";
  * {@link Part.lifecycle.changed}.
  */
 export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part> {
-    #bubbleChange: (type: PartLifecycle.Change, part: Part) => void;
+    #bubbleChange: (type: PartLifecycle.Change, part: Part) => MaybePromise<void>;
     #children = new BasicSet<Part>();
     #part: Part;
 
@@ -44,10 +45,10 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         });
 
         // Propagate reset to children
-        this.#part.construction.change.on(status => {
+        this.#part.construction.change.on(async status => {
             if (status === LifecycleStatus.Inactive) {
                 for (const child of this.#children) {
-                    child.lifecycle.reset();
+                    await child.lifecycle.reset();
                 }
             }
         });
@@ -149,11 +150,11 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
      * Terminate ownership of a part.  Invoked when a part is destroyed or
      * removed from state.parts.
      */
-    #disownPart(child: Part) {
+    async #disownPart(child: Part) {
         const childLifeCycle = child.lifecycle;
         childLifeCycle.changed.off(this.#bubbleChange);
 
-        this.#children.delete(child);
+        await this.#children.delete(child);
     }
 
     #validateInsertion(forefather: Part, part: Part, usedNumbers?: Set<number>) {

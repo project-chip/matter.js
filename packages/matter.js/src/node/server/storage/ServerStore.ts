@@ -10,9 +10,7 @@ import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
-import { Environment } from "../../../common/Environment.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
-import { ServerOptions } from "../../options/ServerOptions.js";
 import type { NodeServer } from "../NodeServer.js";
 import { PartStoreService } from "./PartStoreService.js";
 
@@ -66,7 +64,7 @@ export class ServerStore {
 
     async [Symbol.asyncDispose]() {
         await this.#construction;
-        this.#storageManager?.close();
+        await this.#storageManager?.close();
     }
 
     get eventStorage() {

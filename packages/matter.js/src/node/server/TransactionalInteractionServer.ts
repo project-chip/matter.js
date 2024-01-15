@@ -54,7 +54,7 @@ export class TransactionalInteractionServer extends InteractionServer {
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         structure.initializeFromEndpoint(PartServer.forPart(root));
-        root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
+        root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)));
 
         super({
             eventHandler: store.eventHandler,
@@ -66,7 +66,7 @@ export class TransactionalInteractionServer extends InteractionServer {
 
     async [Symbol.asyncDispose]() {
         await this.close();
-        this.#endpointStructure.destroy();
+        await this.#endpointStructure.destroy();
     }
 
     /**
@@ -87,7 +87,9 @@ export class TransactionalInteractionServer extends InteractionServer {
         isFabricFiltered: boolean,
         message?: Message,
     ) {
-        return this.#transact("Read", message, () => super.readAttribute(attribute, session, isFabricFiltered, message));
+        return this.#transact("Read", message, () =>
+            super.readAttribute(attribute, session, isFabricFiltered, message),
+        );
     }
 
     protected override async writeAttribute(
@@ -106,7 +108,9 @@ export class TransactionalInteractionServer extends InteractionServer {
         message: Message,
         endpoint: EndpointInterface,
     ) {
-        return this.#transact("Invoke", message, () => super.invokeCommand(command, session, commandFields, message, endpoint));
+        return this.#transact("Invoke", message, () =>
+            super.invokeCommand(command, session, commandFields, message, endpoint),
+        );
     }
 
     /**
@@ -123,7 +127,7 @@ export class TransactionalInteractionServer extends InteractionServer {
             ? TransactionalInteractionServer.transactionFor(message)
             : new Transaction(ActionContext.via());
         try {
-            return await track(fn(), [ why, transaction.via ]);
+            return await track(fn(), [why, transaction.via]);
         } catch (e) {
             try {
                 await this.#endTransaction(transaction, message, "rollback");

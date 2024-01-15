@@ -39,12 +39,12 @@ export namespace LifecycleStatus {
 
             case LifecycleStatus.Inactive:
                 throw new UninitializedDependencyError(description, "is not initialized");
-    
+
             case LifecycleStatus.Initializing:
                 throw new UninitializedDependencyError(description, "is still initializing");
 
             case LifecycleStatus.Incapacitated:
-                 throw new IncapacitatedDependencyError(description, "initialization failed");
+                throw new IncapacitatedDependencyError(description, "initialization failed");
 
             case LifecycleStatus.Destroyed:
                 throw new DestroyedDependencyError(description, "was destroyed");
@@ -60,16 +60,9 @@ export namespace LifecycleStatus {
 export class DependencyLifecycleError extends ImplementationError {
     constructor(what: string, why: string) {
         super(`${what} ${why}`);
-        this.message = Diagnostic.upgrade(
-            this.message,
-            () => {
-                Diagnostic.squash(
-                    Diagnostic.strong(what),
-                    " ",
-                    why,
-                )
-            }
-        ) as string;
+        this.message = Diagnostic.upgrade(this.message, () => {
+            Diagnostic.squash(Diagnostic.strong(what), " ", why);
+        });
     }
 }
 

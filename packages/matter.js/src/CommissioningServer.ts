@@ -200,7 +200,7 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
     #subscriptionOptions: SubscriptionOptions;
     #eventHandler?: EventHandler;
     #interactionServer?: InteractionServer;
-    #endpointStructure = new InteractionEndpointStructure;
+    #endpointStructure = new InteractionEndpointStructure();
     #mdnsBroadcaster?: MdnsBroadcaster;
     #mdnsScanner?: MdnsScanner;
     #basicInformationCluster?: ClusterServerObjForCluster<typeof BasicInformationCluster>;
@@ -608,8 +608,8 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
      * @param endpoint Endpoint to add
      * @protected
      */
-    protected addEndpoint(endpoint: EndpointInterface) {
-        this.rootEndpoint.addChildEndpoint(endpoint);
+    protected async addEndpoint(endpoint: EndpointInterface) {
+        await this.rootEndpoint.addChildEndpoint(endpoint);
     }
 
     /**
@@ -617,8 +617,8 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
      *
      * @param device Device or Aggregator instance to add
      */
-    addDevice(device: Device | Aggregator) {
-        this.addEndpoint(device);
+    async addDevice(device: Device | Aggregator) {
+        await this.addEndpoint(device);
     }
 
     /**
@@ -628,7 +628,7 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
      *
      * @param cluster
      */
-    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+    async addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
         if (cluster.id === BasicInformationCluster.id) {
             throw new ImplementationError(
                 "BasicInformationCluster can not be modified, provide all details in constructor options!",
@@ -639,7 +639,7 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
                 "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
             );
         }
-        this.rootEndpoint.addClusterServer(cluster);
+        await this.rootEndpoint.addClusterServer(cluster);
     }
 
     async updateStructure() {
@@ -668,16 +668,13 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
             await this.#interactionServer.close();
             this.#interactionServer = undefined;
         }
-        this.#endpointStructure.destroy();
+        await this.#endpointStructure.destroy();
 
-        super.close();
+        await super.close();
     }
 
     protected override async createMatterDevice() {
-        if (
-            this.#storage === undefined ||
-            this.#endpointStructureStorage === undefined
-        ) {
+        if (this.#storage === undefined || this.#endpointStructureStorage === undefined) {
             throw new ImplementationError("Storage not initialized");
         }
 
@@ -687,16 +684,15 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
             endpointStructure: this.#endpointStructure,
         });
 
-        this.nextEndpointId = this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+        this.nextEndpointId = await this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
-        this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        await this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        await this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
         this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
 
-        this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint)
+        await this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
-        return (await super.createMatterDevice())
-            .addProtocolHandler(this.#interactionServer);
+        return (await super.createMatterDevice()).addProtocolHandler(this.#interactionServer);
     }
 
     protected override emitCommissioningChanged(fabric: FabricIndex): void {
@@ -708,7 +704,7 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
     }
 
     protected override async clearStorage() {
-        this.storage.clear();
+        await this.storage.clear();
     }
 
     protected get eventHandler() {

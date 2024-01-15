@@ -43,22 +43,19 @@ export class PartStoreService {
             nextNumber = 1;
         }
 
-        this.#construction = AsyncConstruction(
-            this,
-            async () => {
-                // Load next number with excessive validation for the off-chance it somehow gets corrupted
-                this.#nextNumber = (await storage.get(NEXT_NUMBER_KEY, nextNumber)) % 0xffff;
+        this.#construction = AsyncConstruction(this, async () => {
+            // Load next number with excessive validation for the off-chance it somehow gets corrupted
+            this.#nextNumber = (await storage.get(NEXT_NUMBER_KEY, nextNumber)) % 0xffff;
 
-                if (!this.#nextNumber) {
-                    this.#nextNumber = 1;
-                } else {
-                    this.#persistedNextNumber = this.#nextNumber;
-                }
-
-                // Preload stores so we can access synchronously going forward
-                this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
+            if (!this.#nextNumber) {
+                this.#nextNumber = 1;
+            } else {
+                this.#persistedNextNumber = this.#nextNumber;
             }
-        );
+
+            // Preload stores so we can access synchronously going forward
+            this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
+        });
     }
 
     async [Symbol.asyncDispose]() {
@@ -151,7 +148,7 @@ export class PartStoreService {
         }
         if (part.number !== 0) {
             throw new InternalError("Part storage inaccessible because part is not root and is not owned by part");
-}
+        }
         if (!this.#root) {
             throw new InternalError("Part storage accessed prior to initialization");
         }
@@ -161,11 +158,11 @@ export class PartStoreService {
     /**
      * Erase store contents.
      */
-    clear() {
+    async clear() {
         if (!this.#root) {
             throw new InternalError("Part storage accessed prior to initialization");
         }
-        this.#root.clear();
+        await this.#root.clear();
     }
 
     /**
@@ -179,7 +176,7 @@ export class PartStoreService {
             return;
         }
 
-        this.#numbersToPersist = [ part ];
+        this.#numbersToPersist = [part];
 
         const numberPersister = async () => {
             await this.#construction;

@@ -26,9 +26,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
     override get store() {
         if (!this.#store) {
-            this.#store = this.part.serviceFor(PartStoreService)
-                .storeForPart(this.part)
-                .storeForBehavior(this.type.id);
+            this.#store = this.part.serviceFor(PartStoreService).storeForPart(this.part).storeForBehavior(this.type.id);
         }
         return this.#store;
     }
@@ -57,8 +55,8 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 if (transaction.status === Transaction.Status.Exclusive) {
                     return transaction.commit();
                 }
-            }
-        )
+            },
+        );
     }
 
     protected override async resetState() {
@@ -73,9 +71,13 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         const defaults = this.part.behaviors.defaultsFor(this.type) ?? {};
 
         const transaction = new Transaction("node reset");
-        const state = this.datasource.reference({ transaction, accessLevel: AccessLevel.View, offline: true }) as Val.Struct;
+        const state = this.datasource.reference({
+            transaction,
+            accessLevel: AccessLevel.View,
+            offline: true,
+        }) as Val.Struct;
 
-        for (const member of this.type.schema?.members) {
+        for (const member of this.type.schema?.members ?? []) {
             // Minor optimization
             const name = camelize(member.name);
             if (state[name] === defaults[name]) {
@@ -88,7 +90,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                     continue;
                 }
                 if (transaction.status !== Transaction.Status.Exclusive) {
-                    transaction.addResources(this.datasource);
+                    await transaction.addResources(this.datasource);
                     await transaction.begin();
                 }
             }
@@ -117,12 +119,12 @@ export class ServerBehaviorBacking extends BehaviorBacking {
             if (state[name] === undefined) {
                 const referenced = FieldValue.referenced(member.default);
                 if (referenced) {
-                    const val = state[camelize(referenced)]
+                    const val = state[camelize(referenced)];
                     if (val !== undefined) {
                         state[name] = val;
                     }
                 }
             }
-        }        
+        }
     }
 }

@@ -4,20 +4,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ServerStore } from "./storage/ServerStore.js";
-import type { NodeServer } from "./NodeServer.js";
 import type { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import { InternalError } from "../../common/MatterError.js";
+import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
 import { Host } from "../Host.js";
-import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
-import { InternalError } from "../../common/MatterError.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
+import type { NodeServer } from "./NodeServer.js";
+import { ServerStore } from "./storage/ServerStore.js";
 
 const logger = Logger.get("ServerResetService");
 
 /**
  * Performs soft- or factory-reset of a {@link NodeServer}.
- * 
+ *
  * Reset is largely handled yb {@link BehaviorBacking}.  We expose reset logic as a service so backings can query to
  * determine whether non-volatile values should reset.
  */
@@ -40,7 +40,7 @@ export class ServerResetService {
 
     /**
      * Restart all parts.
-     * 
+     *
      * We don't use this for anything currently, just including for completeness.
      */
     async softReset() {
@@ -74,11 +74,11 @@ export class ServerResetService {
 
             // Clear data that's not managed by behaviors (TODO - this should shrink over time)
             if (this.#isFactoryReset) {
-                this.#store.sessionStorage.clear();
-                this.#store.fabricStorage.clear();
-                this.#store.eventStorage.clear();
+                await this.#store.sessionStorage.clear();
+                await this.#store.fabricStorage.clear();
+                await this.#store.eventStorage.clear();
             }
-    
+
             // Reinitialize
             this.#server.rootPart.lifecycle.change(PartLifecycle.Change.Installed);
             await this.#server.rootPart.construction;

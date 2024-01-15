@@ -78,10 +78,10 @@ export class MessageCounter {
 
 /** Enhanced Message counter that can be persisted and will be initialized from the persisted value (if existing). */
 export class PersistedMessageCounter extends MessageCounter {
-    #contruction: AsyncConstruction<PersistedMessageCounter>;
+    #construction: AsyncConstruction<PersistedMessageCounter>;
 
     get construction() {
-        return this.#contruction;
+        return this.#construction;
     }
 
     constructor(
@@ -91,7 +91,7 @@ export class PersistedMessageCounter extends MessageCounter {
         rolloverInfoDifference = ROLLOVER_INFO_DIFFERENCE,
     ) {
         super(aboutToRolloverCallback, rolloverInfoDifference);
-        this.#contruction = AsyncConstruction(this, async () => {
+        this.#construction = AsyncConstruction(this, async () => {
             if (await storageContext.has(storageKey)) {
                 this.messageCounter = await storageContext.get<number>(storageKey);
                 if (this.messageCounter < 0 || this.messageCounter > MAX_COUNTER_VALUE_32BIT) {

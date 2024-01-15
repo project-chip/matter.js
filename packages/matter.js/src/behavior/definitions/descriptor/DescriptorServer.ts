@@ -19,13 +19,11 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
  */
 export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
-        this.part.lifecycle.changed.on(
-            (type, part) => this.#applyChange(type, part)
-        );
+        this.part.lifecycle.changed.on((type, part) => this.#applyChange(type, part));
 
         this.state.serverList = this.#serverList;
 
-        if (this.part.hasParts) { 
+        if (this.part.hasParts) {
             for (const part of this.part.parts) {
                 this.#monitorDestruction(part);
             }
@@ -107,7 +105,7 @@ export class DescriptorServer extends DescriptorBehavior {
         // If IndexBehavior is not present then just list direct
         // descendants
         if (part.hasParts) {
-            return [ ...part.parts ].map(part => part.number) as EndpointNumber[];
+            return [...part.parts].map(part => part.number);
         }
 
         return [];
@@ -117,9 +115,9 @@ export class DescriptorServer extends DescriptorBehavior {
      * Computed current server list.
      */
     get #serverList() {
-        const list = new Array<ClusterId>;
+        const list = new Array<ClusterId>();
         for (const type of Object.values(this.part.behaviors.supported)) {
-            const clusterId = (type as { cluster?: { id?: ClusterId }}).cluster?.id;
+            const clusterId = (type as { cluster?: { id?: ClusterId } }).cluster?.id;
             if (clusterId) {
                 list.push(clusterId);
             }

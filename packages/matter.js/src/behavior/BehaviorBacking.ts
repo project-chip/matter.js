@@ -60,7 +60,7 @@ export abstract class BehaviorBacking {
 
     /**
      * Reset state to uninstalled (and thus uninitialized).
-     * 
+     *
      * @param nonvolatile resets nonvolatile state as well
      */
     reset() {
@@ -97,7 +97,7 @@ export abstract class BehaviorBacking {
 
     /**
      * Reset state during a reset.
-     * 
+     *
      * This is an optional extension point for derivatives.
      */
     protected async resetState() {}
@@ -197,7 +197,7 @@ export abstract class BehaviorBacking {
      */
     injectErrorSource(cause: any) {
         if (cause instanceof SchemaViolationError) {
-            const match = cause.message.match(/(\w+) ([\w\.\$]+): (.*)/);
+            const match = cause.message.match(/(\w+) ([\w.$]+): (.*)/);
             if (!match) {
                 return cause;
             }
@@ -205,16 +205,9 @@ export abstract class BehaviorBacking {
             const where = match[2].split(".").map(n => camelize(n));
             where[0] = this.toString();
 
-            cause.message = Diagnostic.upgrade(
-                cause.message,
-                () => Diagnostic.squash(
-                    match[1],
-                    " ",
-                    Diagnostic.strong(where.join(".")),
-                    ": ",
-                    match[3]
-                )
-            )
+            cause.message = Diagnostic.upgrade(cause.message, () =>
+                Diagnostic.squash(match[1], " ", Diagnostic.strong(where.join(".")), ": ", match[3]),
+            );
         }
         return cause;
     }
@@ -222,7 +215,7 @@ export abstract class BehaviorBacking {
     /**
      * Internal initialization logic.  Broken out from {@link initialize} for the convenience of moving
      * de-initialization logic into {@link AsyncConstruction} during factory reset.
-     * 
+     *
      * @param before used for factory reset to revert the backing's state
      */
     #initialize(before?: () => MaybePromise<void>) {
@@ -236,16 +229,17 @@ export abstract class BehaviorBacking {
         };
 
         MaybePromise.then(
-            () => this.construction.start(() => {
-                if (before) {
-                    return MaybePromise.then(before, init);
-                }
-                return init();
-            }),
+            () =>
+                this.construction.start(() => {
+                    if (before) {
+                        return MaybePromise.then(before, init);
+                    }
+                    return init();
+                }),
             undefined,
             e => {
                 logger.error(this.injectErrorSource(e));
-            }
+            },
         );
     }
 

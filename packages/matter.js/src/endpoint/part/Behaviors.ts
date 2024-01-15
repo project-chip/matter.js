@@ -7,19 +7,19 @@
 import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
-import { PartLifecycle } from "./PartLifecycle.js";
+import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { Val } from "../../behavior/state/managed/Val.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
+import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
+import { Diagnostic } from "../../log/Diagnostic.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import type { Agent } from "../Agent.js";
 import type { Part } from "../Part.js";
-import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 import { PartInitializer } from "./PartInitializer.js";
-import { Diagnostic } from "../../log/Diagnostic.js";
-import { LifecycleStatus } from "../../common/Lifecycle.js";
-import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
+import { PartLifecycle } from "./PartLifecycle.js";
+import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -100,7 +100,7 @@ export class Behaviors {
      * Activate any behaviors designated for immediate activation.  Returns a
      * promise iff any behaviors have ongoing initialization.
      */
-    initialize(): MaybePromise {
+    initialize(): MaybePromise<void> {
         for (const type of Object.values(this.supported)) {
             if (type.immediate) {
                 this.#part.agent.activate(type);
@@ -166,7 +166,7 @@ export class Behaviors {
         const behavior = this.createMaybeAsync(type, agent);
         if (MaybePromise.is(behavior)) {
             throw new ImplementationError(
-                `Synchronous access to ${this.#part}${type.id} is impossible because it is still initializing`
+                `Synchronous access to ${this.#part}${type.id} is impossible because it is still initializing`,
             );
         }
         return behavior;
@@ -189,8 +189,8 @@ export class Behaviors {
                     throw e;
                 }
                 backing.construction.assert(backing.toString());
-            }
-        )
+            },
+        );
     }
 
     /**
@@ -342,10 +342,9 @@ export class Behaviors {
             }
             this.#initializing.add(backing);
 
-            backing.construction
-                .finally(() => {
-                    this.#initializing?.delete(backing);
-                });
+            backing.construction.finally(() => {
+                this.#initializing?.delete(backing);
+            });
         }
 
         return backing;

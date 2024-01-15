@@ -26,11 +26,7 @@ const AUTHORIZE_READ = Symbol("authorize-read");
 /**
  * For structs we generate a class with accessors for each property in the schema.
  */
-export function StructManager(
-    owner: RootSupervisor,
-    schema: Schema,
-    _managed?: new () => Val
-): ValueSupervisor.Manage {
+export function StructManager(owner: RootSupervisor, schema: Schema, _managed?: new () => Val): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
     const propertyAccessControls = {} as Record<string, AccessControl>;
     let hasFabricIndex = false;
@@ -155,10 +151,7 @@ interface Wrapper extends Val.Struct {
     [AUTHORIZE_READ]: (index: string) => void;
 }
 
-function configureProperty(
-    manager: RootSupervisor,
-    schema: ValueModel,
-) {
+function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
     const { access, manage, validate } = manager.get(schema);
 
@@ -222,7 +215,7 @@ function configureProperty(
         // For collections we create a managed value
         let cloneContainer: (container: Val) => Val;
         if (schema.effectiveMetatype === Metatype.array) {
-            cloneContainer = (container: Val) => [ ...(container as Val.List) ];
+            cloneContainer = (container: Val) => [...(container as Val.List)];
         } else {
             cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
         }
@@ -258,7 +251,7 @@ function configureProperty(
                 return value;
             }
 
-            let managed = this[REF].subreferences?.[name];
+            const managed = this[REF].subreferences?.[name];
             if (managed) {
                 return managed.owner;
             }
