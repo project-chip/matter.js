@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { ValueModel } from "../../../../model/index.js";
+import { Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { AccessControl } from "../../../AccessControl.js";
@@ -24,17 +24,23 @@ const CONTEXT = Symbol("context");
 const AUTHORIZE_READ = Symbol("authorize-read");
 
 /**
- * For structs we generate a class with accessors for each property in the
- * schema.
+ * For structs we generate a class with accessors for each property in the schema.
  */
-export function StructManager(owner: RootSupervisor, schema: Schema, base?: new () => Val): ValueSupervisor.Manage {
+export function StructManager(
+    owner: RootSupervisor,
+    schema: Schema,
+    _managed?: new () => Val
+): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
     const propertyAccessControls = {} as Record<string, AccessControl>;
     let hasFabricIndex = false;
 
-    // Scan the schema and configure each member (field or attribute) as a
-    // property
+    // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
+        if (member.isGlobalAttribute) {
+            continue;
+        }
+
         const name = camelize(member.name);
 
         const { access, descriptor } = configureProperty(owner, member);
@@ -49,7 +55,9 @@ export function StructManager(owner: RootSupervisor, schema: Schema, base?: new 
 
     const Wrapper = GeneratedClass({
         name: `${schema.name}$Managed`,
-        base,
+
+        // Inheriting from managed class increases complexity with little benefit
+        // base: managed,
 
         initialize(
             this: Wrapper,
@@ -80,16 +88,14 @@ export function StructManager(owner: RootSupervisor, schema: Schema, base?: new 
                 },
             });
 
-            // Sadly we can't place instance descriptors on our prototype
-            // because then simple JS patterns that rely on enumerating own
-            // properties (e.g. spread) won't work.  At least we can reuse the
-            // accessors so they should get JITed
+            // Sadly we can't place instance descriptors on our prototype because then simple JS patterns that rely on
+            // enumerating own properties (e.g. spread) won't work.  At least we can reuse the accessors so they should
+            // get JITed
             Object.defineProperties(this, instanceDescriptors);
         },
 
         instanceDescriptors: {
-            // AUTHORIZE_READ is effectively a protected method, see
-            // StructManager.assertDirectReadAuthorized below
+            // AUTHORIZE_READ is effectively a protected method, see StructManager.assertDirectReadAuthorized below
             [AUTHORIZE_READ]: {
                 value(this: Wrapper, index: string) {
                     const access = propertyAccessControls[index];
@@ -112,11 +118,9 @@ export function StructManager(owner: RootSupervisor, schema: Schema, base?: new 
 
 export namespace StructManager {
     /**
-     * If a struct is referenced as a whole, fields for which the session are
-     * unauthorized are simply omitted.
+     * If a struct is referenced as a whole, fields for which the session are unauthorized are simply omitted.
      *
-     * This function instead throws an error for unauthorized access.  It must
-     * be invoked before direct property reads.
+     * This function instead throws an error for unauthorized access.  It must be invoked before direct property reads.
      *
      * @param struct a managed struct
      * @param index the field to read
@@ -126,13 +130,6 @@ export namespace StructManager {
             throw new ImplementationError("Cannot authorize read of unmanaged value");
         }
         return (struct as Wrapper)[AUTHORIZE_READ](index);
-    }
-
-    /**
-     * Retrieve the session for a managed struct.
-     */
-    export function sessionOf(struct: {}) {
-        return (struct as Wrapper)[SESSION];
     }
 }
 
@@ -158,7 +155,10 @@ interface Wrapper extends Val.Struct {
     [AUTHORIZE_READ]: (index: string) => void;
 }
 
-function configureProperty(manager: RootSupervisor, schema: ValueModel) {
+function configureProperty(
+    manager: RootSupervisor,
+    schema: ValueModel,
+) {
     const name = camelize(schema.name);
     const { access, manage, validate } = manager.get(schema);
 
@@ -174,26 +174,32 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 const struct = this[REF].value;
 
                 // Change the value
-                this[REF].change(() => (struct[name] = value));
+                let target;
+                if ((struct as Val.Dynamic)[Val.properties]) {
+                    const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
+                    if (name in properties) {
+                        target = properties;
+                    } else {
+                        target = struct;
+                    }
+                } else {
+                    target = struct;
+                }
+                target[name] = value;
 
-                // Note: We validate fully for nested structs but *not* for the
-                // current struct.  This is because choice conformance may be
-                // violated temporarily as individual fields change.
+                // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
+                // conformance may be violated temporarily as individual fields change.
                 //
-                // Also, validating fully would require us to validate across all
-                // properties for every property write.
+                // Also, validating fully would require us to validate across all properties for every property write.
                 //
-                // I think this is OK for now.  If it becomes an issue we'll
-                // probably want to wire in a separate validation step that is
-                // performed on commit when choice conformance is in play.
+                // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
+                // validation step that is performed on commit when choice conformance is in play.
                 try {
-                    validate(value, { siblings: struct });
+                    validate(value, this[SESSION], { siblings: struct });
                 } catch (e) {
-                    // Undo our change on error.  Rollback will take care of
-                    // this when transactional but this handles the cases of
-                    // 1.) no transaction, and 2.) error is caught within
-                    // transaction
-                    struct[name] = oldValue;
+                    // Undo our change on error.  Rollback will take care of this when transactional but this handles
+                    // the cases of 1.) no transaction, and 2.) error is caught within transaction
+                    target[name] = oldValue;
 
                     throw e;
                 }
@@ -214,22 +220,45 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
         };
     } else {
         // For collections we create a managed value
+        let cloneContainer: (container: Val) => Val;
+        if (schema.effectiveMetatype === Metatype.array) {
+            cloneContainer = (container: Val) => [ ...(container as Val.List) ];
+        } else {
+            cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
+        }
+
         descriptor.get = function (this: Wrapper) {
-            const value = this[REF].value[name];
-            if (value === undefined || value === null) {
+            let value;
+
+            // Obtain the value.  Normally just struct[name] except in the case of Val.Dynamic
+            const struct = this[REF].value;
+            if ((struct as Val.Dynamic)[Val.properties]) {
+                const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
+                if (name in properties) {
+                    value = properties[name];
+                } else {
+                    value = struct[name];
+                }
+            } else {
+                value = struct[name];
+            }
+
+            if (value === undefined) {
                 return;
             }
 
-            // Note that we only mask values that are unreadable.  This is
-            // appropriate when the parent object is visible.  For direct
-            // access to a property we should throw an error but that must
-            // be implemented at a higher level because we cannot differentiate
-            // here
+            // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
+            // visible.  For direct access to a property we should throw an error but that must be implemented at a
+            // higher level because we cannot differentiate here
             if (!access.mayRead(this[SESSION], this[CONTEXT])) {
                 return undefined;
             }
 
-            const managed = this[REF].subreferences?.[name];
+            if (value === null) {
+                return value;
+            }
+
+            let managed = this[REF].subreferences?.[name];
             if (managed) {
                 return managed.owner;
             }
@@ -237,20 +266,17 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
             const assertWriteOk = (value: Val) => {
                 // Note - this needs to mirror behavior in the setter above
                 access.authorizeWrite(this[SESSION], this[CONTEXT]);
-                validate(value, { siblings: this[REF].value });
+                validate(value, this[SESSION], { siblings: this[REF].value });
             };
 
             // If we have a transaction we will clone the container before
             // write.  Otherwise we update the property directly
-            const cloneContainer = this[SESSION].transaction
-                ? (container: Val) => {
-                      return {
-                          ...(container as Val.Struct),
-                      };
-                  }
-                : undefined;
-
-            const ref = ManagedReference(this[REF], name, assertWriteOk, cloneContainer);
+            const ref = ManagedReference(
+                this[REF],
+                name,
+                assertWriteOk,
+                this[SESSION].transaction ? cloneContainer : undefined,
+            );
 
             ref.owner = manage(ref, this[SESSION], this[CONTEXT]);
 

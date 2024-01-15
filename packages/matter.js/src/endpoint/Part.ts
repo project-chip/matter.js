@@ -6,17 +6,18 @@
 
 import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
-import type { InvocationContext } from "../behavior/InvocationContext.js";
-import { ImplementationError, InternalError, NotInitializedError } from "../common/MatterError.js";
+import type { ActionContext } from "../behavior/ActionContext.js";
+import { UninitializedDependencyError } from "../common/Lifecycle.js";
+import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
-import { BehaviorInitializer } from "./part/BehaviorInitializer.js";
+import { PartInitializer } from "./part/PartInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
-import { Lifecycle } from "./part/Lifecycle.js";
+import { PartLifecycle } from "./part/PartLifecycle.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
@@ -40,18 +41,20 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #agentType?: Agent.Type<T["behaviors"]>;
     #offlineAgent?: Agent.Instance<T["behaviors"]>;
     #behaviors?: Behaviors;
-    #lifecycle: Lifecycle;
+    #lifecycle: PartLifecycle;
     #parts?: Parts;
     protected _construction: AsyncConstruction<Part<T>>;
 
     /**
-     * A string that uniquely identifies a part.  This ID must be unique across
-     * the Matter node.
+     * A string that uniquely identifies a Part.
+     *
+     * This ID must be unique amongst all Parts with the same owner.
      */
     get id() {
         if (this.#id === undefined) {
-            throw new NotInitializedError(
-                "Part ID is not yet assigned; set ID or await part.construction to avoid this error",
+            throw new UninitializedDependencyError(
+                this.toString(),
+                "part ID is not yet assigned; set ID or await part.construction to avoid this error",
             );
         }
         return this.#id;
@@ -63,8 +66,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get number(): EndpointNumber {
         if (this.#number === undefined) {
-            throw new NotInitializedError(
-                "Part number is not yet assigned; set number or await part.construction to avoid this error",
+            throw new UninitializedDependencyError(
+                this.toString(),
+                "part number is not yet assigned; set number or await part.construction to avoid this error",
             );
         }
         return this.#number;
@@ -85,8 +89,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      */
     get behaviors() {
         if (this.#behaviors === undefined) {
-            throw new NotInitializedError(
-                "Part behaviors not yet initialized; await part.construction to avoid this error",
+            throw new UninitializedDependencyError(
+                this.toString(),
+                "behaviors are not yet initialized; await part.construction to avoid this error",
             );
         }
         return this.#behaviors;
@@ -101,6 +106,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     constructor(type: T, options: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
+        // Create construction early so parts and behaviors can hook events
+        this._construction = AsyncConstruction(this);
+
         if (Part.isConfiguration(definition)) {
             options = definition;
             definition = definition.type;
@@ -110,7 +118,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         const behaviors = this.#type.behaviors ?? [];
         this.#behaviors = new Behaviors(this, behaviors, { ...options?.config });
 
-        this.#lifecycle = new Lifecycle(this);
+        this.#lifecycle = new PartLifecycle(this);
 
         if (options?.id !== undefined) {
             this.id = options?.id;
@@ -124,22 +132,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             this.owner = options.owner;
         }
 
-        this._construction = AsyncConstruction(this, async () => {
-            if (options?.parts) {
-                for (const part of options.parts) {
-                    await this.parts.add(part);
-                }
+        if (options?.parts) {
+            for (const part of options.parts) {
+                this.parts.add(part);
             }
+        }
 
+        this._construction.start(() => {
             if (this.#lifecycle.isInstalled) {
                 // Immediate initialization
                 return this.#initialize();
             }
 
             // Deferred initialization -- wait for installation
-            return new Promise<void>(fulfilled => {
+            return new Promise<void>((fulfilled, rejected) => {
                 this.#lifecycle.installed.once(() => {
-                    MaybePromise.then(this.#initialize(), fulfilled);
+                    MaybePromise.then(
+                        () => this.#initialize(),
+                        fulfilled,
+                        rejected,
+                    );
                 });
             });
         });
@@ -151,10 +163,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
-        this.owner.serviceFor(BehaviorInitializer).initializeDescendent(this);
+        let promise = MaybePromise.then(
+            () => {
+                this.owner.serviceFor(PartInitializer).initializeDescendent(this);
+                return this.behaviors.initialize();
+            },
+            () => this.lifecycle.change(PartLifecycle.Change.Ready),
+        );
 
-        const promise = this.behaviors.initialize();
-        return MaybePromise.then(promise, () => this.lifecycle.change(Lifecycle.Change.Ready));
+        return promise;
     }
 
     set id(id: string) {
@@ -162,7 +179,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             return;
         }
         if (this.#id !== undefined) {
-            throw new ImplementationError(`Part ${this.description} ID is already assigned, cannot reassign`);
+            throw new ImplementationError(`${this} ID is already assigned, cannot reassign`);
         }
         if (typeof id !== "string") {
             throw new ImplementationError(`Illegal endpoint ID type "${typeof id}"`);
@@ -174,12 +191,12 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new ImplementationError('Endpoint ID may not include "."');
         }
 
-        if (this.lifecycle.isInstalled) {
-            this.owner.serviceFor(IdentityService).assertIdAvailable(id, this);
+        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
+            this.owner.parts.assertIdAvailable(id);
         }
 
         this.#id = id;
-        this.lifecycle.change(Lifecycle.Change.IdAssigned);
+        this.lifecycle.change(PartLifecycle.Change.IdAssigned);
     }
 
     set number(number: number) {
@@ -188,7 +205,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
         if (this.#number !== undefined) {
             throw new ImplementationError(
-                `Part ${this.description} endpoint number ${this.#number} is already assigned, cannot reassign`,
+                `${this} endpoint number ${this.#number} is already assigned, cannot reassign`,
             );
         }
         if (typeof number !== "number") {
@@ -214,7 +231,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
         this.#number = EndpointNumber(number);
 
-        this.lifecycle.change(Lifecycle.Change.NumberAssigned);
+        this.lifecycle.change(PartLifecycle.Change.NumberAssigned);
     }
 
     set owner(owner: PartOwner | undefined) {
@@ -270,51 +287,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Returns a human-readable name for the part.
-     */
-    get description() {
-        let desc: string | undefined;
-        let detail: string | undefined;
-
-        if (this.#lifecycle.hasId) {
-            desc = this.id;
-        }
-
-        if (this.#lifecycle.hasNumber) {
-            const number = `#${this.#number}`;
-            if (desc) {
-                detail = number;
-            } else {
-                desc = number;
-            }
-        }
-
-        if (!desc) {
-            desc = "<unknown>";
-        }
-
-        const type = `type ${this.type.name}`;
-        if (detail) {
-            detail = `${detail}, ${type}`;
-        } else {
-            detail = type;
-        }
-
-        if (detail) {
-            desc = `${desc} (${detail})`;
-        }
-
-        return detail;
-    }
-
-    /**
      * Create an {@link Agent}.  This is the primary means of
      * interacting with an endpoint.
      *
-     * If {@link InvocationContext.fabric} is not present the operation will
+     * If {@link ActionContext.fabric} is not present the operation will
      * fail.
      */
-    getAgent(context: InvocationContext): Agent.Instance<T["behaviors"]> {
+    getAgent(context: ActionContext): Agent.Instance<T["behaviors"]> {
         return new this.#resolvedAgentType(this, context);
     }
 
@@ -341,20 +320,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
     }
 
-    toString() {
-        const ident = Array<string>();
-        if (this.id) {
-            ident.push(this.id);
-        }
-        if (this.number) {
-            ident.push(`#${this.number}`);
-        }
-        if (!ident.length) {
-            ident.push("anon");
-        }
-        return `${this.type.name}<${ident.join("; ")}>`;
-    }
-
     get #agent() {
         if (!this.#offlineAgent) {
             this.#offlineAgent = new this.#resolvedAgentType(this, AccessControl.OfflineSession);
@@ -368,7 +333,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
     async [Symbol.asyncDispose]() {
         await this.behaviors[Symbol.asyncDispose]();
-        this.lifecycle.change(Lifecycle.Change.Destroyed);
+        this.lifecycle.change(PartLifecycle.Change.Destroyed);
         this.#owner = undefined;
     }
 
@@ -381,6 +346,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new ImplementationError("Cannot access services because owner is not installed");
         }
         return this.#owner.serviceFor(type);
+    }
+
+    toString() {
+        let owner;
+        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
+            owner = `${this.owner}.`;
+        } else {
+            owner = "";
+        }
+
+        let id;
+        if (this.#lifecycle.hasId) {
+            id = this.id;
+        } else if (this.#lifecycle.hasNumber) {
+            id = `#${this.number}`;
+        } else {
+            id = "?";
+        }
+
+        return `${owner}${this.#type.name}#${id}`;
     }
 
     get #resolvedAgentType() {

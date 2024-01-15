@@ -15,7 +15,7 @@ export interface Resource {
     /**
      * Textual description of the resource used in error messages.
      */
-    readonly description: string;
+    toString(): string;
 
     /**
      * Locking transaction, maintained by {@link Transaction}.

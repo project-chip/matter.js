@@ -299,20 +299,22 @@ export function ClusterServer<
                 (attributesInitialValues as any)[attributeName],
                 datasourceProxy,
                 getter
-                    ? (session, endpoint, isFabricFiltered) =>
+                    ? (session, endpoint, isFabricFiltered, message) =>
                           getter({
                               attributes,
                               endpoint,
                               session,
                               isFabricFiltered,
+                              message,
                           })
                     : undefined,
                 setter
-                    ? (value, session, endpoint) =>
+                    ? (value, session, endpoint, message) =>
                           setter(value, {
                               attributes,
                               endpoint,
                               session,
+                              message,
                           })
                     : undefined,
                 validator

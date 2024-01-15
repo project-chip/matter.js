@@ -9,14 +9,14 @@ import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
-import { BehaviorInitializer } from "../../endpoint/part/BehaviorInitializer.js";
+import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
 import { PartServer } from "../../endpoint/PartServer.js";
 import { Logger } from "../../log/Logger.js";
 import type { NodeServer } from "./NodeServer.js";
 
 const logger = Logger.get("BehaviorInit");
 
-export class ServerBehaviorInitializer extends BehaviorInitializer {
+export class ServerBehaviorInitializer extends PartInitializer {
     #server: NodeServer;
 
     constructor(server: NodeServer) {
@@ -24,7 +24,7 @@ export class ServerBehaviorInitializer extends BehaviorInitializer {
         this.#server = server;
     }
 
-    initializeDescendent(part: Part) {
+    override initializeDescendent(part: Part) {
         if (!part.lifecycle.hasId) {
             part.id = this.#identifyPart(part);
         }
@@ -83,9 +83,8 @@ export class ServerBehaviorInitializer extends BehaviorInitializer {
             throw new InternalError("Cannot determine ID for part because parent does not list as child");
         }
 
-        // Should we throw here instead?
-        const id = `${part.owner.id}#${index}`;
-        logger.warn(`Using fallback ID of ${id} for anonymous part based on index within parent; assign ID to remove this warning`);
+        const id = `part${index}`;
+        logger.warn(`Using fallback ID of ${id} for child of ${part.owner}; assign ID to remove this warning`);
 
         return id;
     }

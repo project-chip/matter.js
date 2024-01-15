@@ -23,15 +23,13 @@ const logger = Logger.get("AdministratorCommissioningServer");
 export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
 export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
 
-const Base = AdministratorCommissioningBehavior.with(AdministratorCommissioning.Feature.Basic);
-
 /**
  * This is the default server implementation of AdministratorCommissioningBehavior.
  *
  * This implementation includes all features of AdministratorCommissioning.Cluster. You should use
  * AdministratorCommissioningServer.with to specialize the class for the features your implementation supports.
  */
-export class AdministratorCommissioningServer extends Base {
+export class AdministratorCommissioningServer extends AdministratorCommissioningBehavior {
     declare internal: AdministratorCommissioningServer.Internal;
     declare state: AdministratorCommissioningServer.State;
 
@@ -69,9 +67,9 @@ export class AdministratorCommissioningServer extends Base {
     }
 
     /** This method opens a Basic Commissioning Window. The default passcode is used. */
-    // TODO - investigate why this method doesn't allow normal override
-    override async openBasicCommissioningWindow(
-        this: AdministratorCommissioningServer,
+    // TODO - fix ClusterBehavior.for so this is hidden as it only applies when basic feature is enabled
+     async openBasicCommissioningWindow(
+
         { commissioningTimeout }: OpenBasicCommissioningWindowRequest,
     ) {
         const device = this.session.getContext();
@@ -123,7 +121,7 @@ export class AdministratorCommissioningServer extends Base {
             async () => await this.#closeCommissioningWindow(),
         ).start();
 
-        this.elevate(() => {
+        this.asAdmin(() => {
             this.state.windowStatus = windowStatus;
             this.state.adminFabricIndex = this.session.getAssociatedFabric().fabricIndex;
             this.state.adminVendorId = this.session.getAssociatedFabric().rootVendorId;
@@ -176,7 +174,7 @@ export class AdministratorCommissioningServer extends Base {
             this.internal.commissioningWindowTimeout = undefined;
         }
 
-        this.elevate(() => {
+        this.asAdmin(() => {
             this.state.windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
             this.state.adminFabricIndex = null;
             this.state.adminVendorId = null;
@@ -190,7 +188,7 @@ export class AdministratorCommissioningServer extends Base {
     }
 
     /** Cleanup resources and stop the timer when the behavior is destroyed. */
-    override destroy() {
+    override [Symbol.asyncDispose]() {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             this.internal.commissioningWindowTimeout.stop();
             this.internal.commissioningWindowTimeout = undefined;

@@ -13,9 +13,8 @@ import { Aspect } from "./Aspect.js";
  *
  * A "constraint" limits possible data values.
  *
- * Formally a constraint is not considered a quality by the specification.
- * It is handled similarly to qualities, though, so we keep it in the same
- * section.
+ * Formally a constraint is not considered a quality by the specification. It is handled similarly to qualities, though,
+ * so we keep it in the same section.
  */
 export class Constraint extends Aspect<Constraint.Definition> implements Constraint.Ast {
     desc?: boolean;
@@ -26,8 +25,7 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
     parts?: Constraint[];
 
     /**
-     * Initialize from a Constraint.Definition or the constraint DSL defined
-     * by the Matter Specification.
+     * Initialize from a Constraint.Definition or the constraint DSL defined by the Matter Specification.
      */
     constructor(definition: Constraint.Definition) {
         super(definition);
@@ -46,20 +44,42 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
                 ast = definition;
         }
 
-        Object.assign(this, ast);
-    }
-    /**
+        if (!ast) {
+            return;
+        }
 
-     * Test a value against a constraint.  Only tests primitive values; does
-     * not perform recursion into arrays.
+        if (ast.desc !== undefined) {
+            this.desc = ast.desc;
+        }
+        if (ast.value !== undefined) {
+            this.value = ast.value;
+        }
+        if (ast.min !== undefined) {
+            this.min = ast.min;
+        }
+        if (ast.max !== undefined) {
+            this.max = ast.max;
+        }
+        if (ast.entry !== undefined) {
+            this.entry = new Constraint(ast.entry);
+        }
+        if (ast.parts !== undefined) {
+            this.parts = ast.parts.map(p => new Constraint(p));
+        }
+    }
+
+    /**
+     * Test a value against a constraint.  Does not recurse into arrays.
      */
     test(value: FieldValue, properties?: Record<string, any>) {
-        // Helper that looks up "reference" field values in properties.  This
-        // is for constraints such as "min FieldName"
+        // Helper that looks up "reference" field values in properties.  This is for constraints such as "min FieldName"
         function valueOf(value: any) {
+            if (typeof value === "string" || Array.isArray(value)) {
+                return value.length;
+            }
             if (typeof value === "object") {
                 if (value.type === FieldValue.reference) {
-                    value = properties?.[camelize(value.name)];
+                    value = valueOf(properties?.[camelize(value.name)]);
                 }
             }
 
@@ -81,14 +101,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         if (this.min !== undefined && this.min !== null) {
             const min = valueOf(this.min);
-            if (typeof min !== typeof value || min > value) {
+            if (min !== undefined && typeof min !== typeof value || min > value) {
                 return false;
             }
         }
 
         if (this.max !== undefined && this.max !== null) {
             const max = valueOf(this.max);
-            if (typeof max !== typeof value || max <= value) {
+            if (max !== undefined && typeof max !== typeof value || max < value) {
                 return false;
             }
         }
@@ -109,8 +129,7 @@ export namespace Constraint {
      */
     export type Ast = {
         /**
-         * Indicates constraint is defined in prose and cannot be enforced
-         * automatically.
+         * Indicates constraint is defined in prose and cannot be enforced automatically.
          */
         desc?: boolean;
 

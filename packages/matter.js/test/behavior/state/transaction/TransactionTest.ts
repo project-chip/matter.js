@@ -27,7 +27,9 @@ interface TestParticipant extends Participant {
 
 function TestParticipant(options?: Partial<Participant>): TestParticipant {
     return {
-        description: options?.description ?? "TestParticipant",
+        toString() {
+            return "TestParticipant";
+        },
 
         invoked: Array<string>(),
 
@@ -52,7 +54,7 @@ class TestTransaction extends Transaction {
     participant: Participant;
 
     constructor(participant?: Participant) {
-        super();
+        super("TestTransaction");
         this.participant = participant ?? TestParticipant();
     }
 

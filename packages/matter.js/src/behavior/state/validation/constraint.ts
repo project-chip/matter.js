@@ -63,16 +63,21 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
         }
     }
 
-    return (value, options) => {
+    return (value, session, options) => {
         assertArray(value, schema);
 
         if (!constraint.test(value.length, options?.siblings)) {
-            throw new ConstraintError(schema, `Value ${value} is not within bounds defined by constraint`);
+            throw new ConstraintError(schema, `Array length ${value.length} is not within bounds defined by constraint`);
         }
 
         if (validateEntryConstraint) {
             for (const e of value) {
-                validateEntryConstraint(e);
+                if (e === undefined || e === null) {
+                    // Accept nullish
+                    continue;
+                }
+
+                validateEntryConstraint(e, session);
             }
         }
     };

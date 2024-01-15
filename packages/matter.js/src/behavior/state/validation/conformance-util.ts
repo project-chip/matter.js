@@ -4,33 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Conformance, FeatureSet, ValueModel } from "../../../model/index.js";
-import { camelize } from "../../../util/String.js";
+import { Conformance } from "../../../model/index.js";
 import { SchemaError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
 import { Val } from "../managed/Val.js";
 import { ValidationContext } from "./context.js";
-
-/**
- * Normalize the feature map and list of supported feature names into sets of
- * "all" and "supported" features by abbreviation.
- */
-export function normalizeFeatures(featureMap: ValueModel, supportedFeatures: FeatureSet) {
-    const featuresAvailable = new FeatureSet();
-    const featuresSupported = new FeatureSet();
-
-    for (const feature of featureMap.children) {
-        featuresAvailable.add(feature.name);
-        if (feature.description && supportedFeatures.has(camelize(feature.description))) {
-            featuresSupported.add(feature.name);
-        }
-    }
-
-    return {
-        featuresAvailable,
-        featuresSupported,
-    };
-}
 
 export enum Code {
     // Ignored in logical disjunctions (groups and "|" operator); equivalent to

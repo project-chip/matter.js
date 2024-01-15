@@ -11,7 +11,7 @@ import { SupportedStorageTypes } from "./StringifyTools.js";
 export class StorageContext {
     constructor(
         private readonly storage: Storage,
-        private readonly contexts: string[],
+        readonly contexts: string[],
     ) {}
 
     get<T extends SupportedStorageTypes>(key: string, defaultValue?: T): MaybePromise<T> {

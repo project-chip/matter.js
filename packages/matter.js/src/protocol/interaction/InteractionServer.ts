@@ -155,7 +155,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
     async onNewExchange(exchange: MessageExchange<MatterDevice>) {
         if (this.#isClosing) return; // We are closing, ignore anything newly incoming
         await new InteractionServerMessenger(exchange).handleRequest(
-            readRequest => this.handleReadRequest(exchange, readRequest),
+            (readRequest, message) => this.handleReadRequest(exchange, readRequest, message),
             (writeRequest, message) => this.handleWriteRequest(exchange, writeRequest, message),
             (subscribeRequest, messenger) => this.handleSubscribeRequest(exchange, subscribeRequest, messenger),
             (invokeRequest, message) => this.handleInvokeRequest(exchange, invokeRequest, message),
@@ -173,6 +173,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             isFabricFiltered,
             interactionModelRevision,
         }: ReadRequest,
+        message?: Message,
     ): Promise<DataReportPayload> {
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
@@ -250,7 +251,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             }
 
             for (const { path, attribute } of attributes) {
-                const { value, version } = await this.readAttribute(attribute, exchange.session, isFabricFiltered);
+                const { value, version } = await this.readAttribute(attribute, exchange.session, isFabricFiltered, message);
                 const { nodeId, endpointId, clusterId } = path;
 
                 const versionFilterValue =
@@ -369,15 +370,17 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         attribute: AnyAttributeServer<any>,
         session: Session<MatterDevice>,
         isFabricFiltered: boolean,
+        message?: Message,
     ) {
-        return attribute.getWithVersion(session, isFabricFiltered);
+        return attribute.getWithVersion(session, isFabricFiltered, message);
     }
 
     async handleWriteRequest(
         exchange: MessageExchange<MatterDevice>,
         { suppressResponse, timedRequest, writeRequests, interactionModelRevision }: WriteRequest,
-        { packetHeader: { sessionType } }: Message,
+        message: Message,
     ): Promise<WriteResponse> {
+        const sessionType = message.packetHeader.sessionType;
         logger.debug(
             `Received write request from ${exchange.channel.name}: ${writeRequests
                 .map(req => this.#endpointStructure.resolveAttributeName(req.path))
@@ -565,7 +568,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         );
                     }
 
-                    await this.writeAttribute(attribute, value, exchange.session);
+                    await this.writeAttribute(attribute, value, exchange.session, message);
                 } catch (error: any) {
                     if (attributes.length === 1) {
                         // For Multi-Attribute-Writes we ignore errors
@@ -634,8 +637,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         };
     }
 
-    protected async writeAttribute(attribute: AttributeServer<any>, value: any, session: Session<MatterDevice>) {
-        await attribute.set(value, session);
+    protected async writeAttribute(
+        attribute: AttributeServer<any>,
+        value: any,
+        session: Session<MatterDevice>,
+        message: Message,
+    ) {
+        await attribute.set(value, session, message);
     }
 
     async handleSubscribeRequest(

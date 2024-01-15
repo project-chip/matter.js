@@ -17,6 +17,11 @@ import { SubscriptionOptions } from "./SubscriptionOptions.js";
  */
 export type ServerOptions = {
     /**
+     * A unique identifier for the server.
+     */
+    id?: string;
+
+    /**
      * Execution environment.
      */
     readonly environment?: Environment;

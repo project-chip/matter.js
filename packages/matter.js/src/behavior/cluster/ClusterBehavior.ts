@@ -9,6 +9,7 @@ import { ClusterComposer } from "../../cluster/mutation/ClusterComposer.js";
 import { ElementModifier } from "../../cluster/mutation/ElementModifier.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
+import { MaybePromise } from "../../util/Promises.js";
 import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
@@ -21,30 +22,32 @@ import type { ClusterState } from "./ClusterState.js";
 /**
  * A {@link Behavior} with specialization for a specific cluster.
  *
- * To implement cluster functionality you should use a subclass provided by
- * {@link ClusterBehavior.for} with the {@link ClusterType} you are
- * implementing.  Most commonly you would use one of the predefined
- * implementations matter.js includes.
+ * To implement cluster functionality you should use a subclass provided by {@link ClusterBehavior.for} with the
+ * {@link ClusterType} you are implementing.  Most commonly you would use one of the predefined implementations
+ * matter.js includes.
  *
- * Subclasses can be modified using the static builder methods or extended like
- * a normal class.
+ * Subclasses can be modified using the static builder methods or extended like a normal class.
  *
- * Behaviors should store all mutable state in their {@link Behavior.state}
- * property.  Other fields will be transient and may not be retained across
- * invocations.
+ * Behaviors should store all mutable state in their {@link Behavior.state} property.  Other fields will be transient
+ * and may not be retained across invocations.
  *
- * TODO - currently ClusterBehaviors may be instantiated with unsupported
- * mandatory commands and attributes.  Currently this is a runtime error but
- * not a build-time error.  Should we generate abstract methods etc. for this,
- * make the edits by hand as we implement "standard" behaviors, or just leave
- * as a runtime error?
+ * TODO - currently ClusterBehaviors may be instantiated with unsupported mandatory commands and attributes.  Currently
+ * this is a runtime error but not a build-time error.  Should we generate abstract methods etc. for this, make the
+ * edits by hand as we implement "standard" behaviors, or just leave as a runtime error?
  */
 export class ClusterBehavior extends Behavior {
     #cluster: ClusterType;
 
     /**
-     * The ID of ClusterBehavior implementations is the uncapitalized cluster
-     * name.
+     * TODO - this disables lazy loading of behaviors.  This is desirable for small-scale nodes but for large nodes lazy
+     * init may be useful.  However this requires refactor of InteractionEndpointStructure which eagerly caches the
+     * entire node structure.  Refactoring there is desirable anyway so maintenance of that cache is less expensive;
+     * revisit this when that refactoring is complete.
+     */
+    static override readonly immediate = true;
+
+    /**
+     * The ID of ClusterBehavior implementations is the uncapitalized cluster name.
      */
     static override id: Uncapitalize<string>;
 
@@ -78,12 +81,11 @@ export class ClusterBehavior extends Behavior {
     /**
      * Create a new behavior for a specific {@link ClusterType}.
      *
-     * If you invoke directly on {@link ClusterBehavior} you will receive a
-     * new implementation that reports all commands as unimplemented.
+     * If you invoke directly on {@link ClusterBehavior} you will receive a new implementation that reports all commands
+     * as unimplemented.
      *
-     * If you invoke on an existing subclass, you will receive a new
-     * implementation with the cluster in the subclass replaced.  You should
-     * generally only do this with a {@link ClusterType} with the same ID.
+     * If you invoke on an existing subclass, you will receive a new implementation with the cluster in the subclass
+     * replaced.  You should generally only do this with a {@link ClusterType} with the same ID.
      */
     static for<This extends ClusterBehavior.Type, const ClusterT extends ClusterType>(
         this: This,
@@ -115,8 +117,7 @@ export class ClusterBehavior extends Behavior {
     }
 
     /**
-     * Create a new behavior with additional cluster features marked
-     * "mandatory".
+     * Create a new behavior with additional cluster features marked "mandatory".
      *
      * This informs matter.js that an application supports these elements.
      */
@@ -128,11 +129,10 @@ export class ClusterBehavior extends Behavior {
     }
 
     /**
-     * Create a ClusterBehavior like this one with different interface
-     * methods.
+     * Create a ClusterBehavior like this one with different interface methods.
      *
-     * The Interface "property" is type-only.  We define a method however to
-     * keep the API consistent.  At runtime the method is a no-op.
+     * The Interface "property" is type-only.  We define a method however to keep the API consistent.  At runtime the
+     * method is a no-op.
      */
     static withInterface<const I extends ClusterInterface>() {
         return this as unknown as ClusterBehavior.Type<typeof ClusterType.Unknown, typeof ClusterBehavior, I>;
@@ -179,8 +179,7 @@ export namespace ClusterBehavior {
         readonly id: Uncapitalize<C["name"]>;
 
         /**
-         * Base cluster state include all attribute values but may be extended
-         * by subclasses.
+         * Base cluster state include all attribute values but may be extended by subclasses.
          */
         readonly cluster: C;
 
@@ -202,19 +201,17 @@ export namespace ClusterBehavior {
 
         supports: typeof ClusterBehavior.supports;
 
-        // Prior to TS 5.4 could do this.  Sadly typing no longer carries
-        // through on these...  This["cluster"] reverts to ClusterType).  So we
-        // have to define the long way.
+        // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts
+        // to ClusterType).  So we have to define the long way.
         //
-        // This also means intellisense doesn't work unless we copy comments
-        // here (or move here and cast ClusterBehavior to
-        // ClusterBehavior.Type).
+        // This also means intellisense doesn't work unless we copy comments here (or move here and cast ClusterBehavior
+        // to ClusterBehavior.Type).
         //
-        // for: typeof ClusterBehavior.for;
-        // with: typeof ClusterBehavior.with;
-        // alter: typeof ClusterBehavior.alter;
-        // set: typeof ClusterBehavior.set;
-        // enable: typeof ClusterBehavior.enable;
+        // - for: typeof ClusterBehavior.for;
+        // - with: typeof ClusterBehavior.with;
+        // - alter: typeof ClusterBehavior.alter;
+        // - set: typeof ClusterBehavior.set;
+        // - enable: typeof ClusterBehavior.enable;
 
         for<
             This extends ClusterBehavior.Type,
@@ -245,40 +242,49 @@ export namespace ClusterBehavior {
     }
 
     /**
-     * A fully-typed ClusterBehavior.  This type is derived by combining
-     * properties of the base type with properties contributed by the cluster.
+     * A fully-typed ClusterBehavior.  This type is derived by combining properties of the base type with properties
+     * contributed by the cluster.
      */
     export type Instance<C extends ClusterType, B extends Behavior.Type, I extends ClusterInterface> =
         // Base class
-        ClusterBehavior &
-            // Bring extensions of old class forward
-            Omit<
-                InstanceType<B>,
-                | "cluster"
-                | "state"
-                | "events"
-                | "initialize"
-                | "destroy"
+        & ClusterBehavior
 
-                // Omit command methods of old cluster
-                | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
-            > &
-            // Add command methods
-            ClusterInterface.MethodsOf<I, C> & {
-                // Add other properties
-                /**
-                 * The implemented cluster.
-                 */
-                cluster: C;
+        // Bring extensions of old class forward
+        & Omit<
+            InstanceType<B>,
+            | "cluster"
+            | "state"
+            | "events"
+            | "initialize"
 
-                /**
-                 * State values for the behavior.
-                 */
-                state: ClusterState<C, B>;
+            // Typescript 5.3 gets confused and thinks this is an instance property if we don't omit and then add (as
+            // we do below)
+            | typeof Symbol.asyncDispose
 
-                /**
-                 * Observables for cluster events and attribute changes.
-                 */
-                events: ClusterEvents<C, B>;
-            };
+            // Omit command methods of old cluster
+            | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
+        >
+
+        // Add command methods
+        & ClusterInterface.MethodsOf<I, C>
+        
+        // Cluster-specific members
+        & {
+            /**
+             * The implemented cluster.
+             */
+            cluster: C;
+
+            /**
+             * State values for the behavior.
+             */
+            state: ClusterState<C, B>;
+
+            /**
+             * Observables for cluster events and attribute changes.
+             */
+            events: ClusterEvents<C, B>;
+
+            [Symbol.asyncDispose](): MaybePromise<void>;
+        };
 }

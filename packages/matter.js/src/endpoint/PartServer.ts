@@ -13,7 +13,7 @@ import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
-import { ClusterServerObj, asClusterServerInternal } from "../cluster/server/ClusterServerTypes.js";
+import { ClusterServerObj } from "../cluster/server/ClusterServerTypes.js";
 import { ImplementationError, InternalError, NotImplementedError } from "../common/MatterError.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -33,24 +33,28 @@ interface ServerPart extends Part {
 }
 
 /**
- * PartServer makes a {@link Part} available for remote access as an Endpoint
- * on a Matter network.
+ * PartServer makes a {@link Part} available for remote access as an Endpoint on a Matter network.
  */
 export class PartServer implements EndpointInterface {
     #part: Part;
     #name = "";
     #structureChangedCallback?: () => void;
-    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
+    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>;
+
+    get part() {
+        return this.#part;
+    }
 
     constructor(part: Part) {
         (part as ServerPart)[SERVER] = this;
 
         this.#part = part;
 
+        // We listen to ready continuously because it will recur after factory reset
+        part.lifecycle.ready.on(() => this.#logPart());
+
         if (part.lifecycle.isReady) {
             this.#logPart();
-        } else {
-            part.lifecycle.ready.once(() => this.#logPart());
         }
 
         part.lifecycle.changed.on(() => this.#structureChangedCallback?.());
@@ -62,20 +66,21 @@ export class PartServer implements EndpointInterface {
         });
     }
 
-    createBacking(behavior: Behavior.Type): BehaviorBacking {
-        let backing;
-        if (behavior.prototype instanceof ClusterBehavior) {
-            const cluster = (behavior as ClusterBehavior.Type).cluster;
+    createBacking(type: Behavior.Type): BehaviorBacking {
+        let backing: BehaviorBacking;
+        if (type.prototype instanceof ClusterBehavior) {
+            const cluster = (type as ClusterBehavior.Type).cluster;
+
+            // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
                 throw new InternalError(
-                    `Part ${this.#part.description} behavior ${behavior.name} cluster ${cluster.id} initialized multiple times`,
+                    `${this.#part}.${cluster.id} cluster ${cluster.id} initialized multiple times`,
                 );
             }
-            backing = new ClusterServerBehaviorBacking(this.#part, behavior as ClusterBehavior.Type);
-            asClusterServerInternal(backing.clusterServer)._assignToEndpoint(this);
-            this.#clusterServers.set(cluster.id, backing.clusterServer);
+
+            backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
         } else {
-            backing = new ServerBehaviorBacking(this.#part, behavior);
+            backing = new ServerBehaviorBacking(this.#part, type);
         }
         return backing;
     }
@@ -127,8 +132,7 @@ export class PartServer implements EndpointInterface {
     }
 
     destroy(): void {
-        // This is in EndpointInterface but we handle destruction
-        // asynchronously so just ignore
+        // This is in EndpointInterface but we handle destruction asynchronously so just ignore
     }
 
     async [Symbol.asyncDispose]() {
@@ -139,8 +143,8 @@ export class PartServer implements EndpointInterface {
         this.#structureChangedCallback = callback;
     }
 
-    addClusterServer(): void {
-        throw new ImplementationError("PartServer requires you to implement clusters by adding behaviors");
+    addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void {
+        this.#clusterServers.set(server.id, server);
     }
 
     hasClusterServer(cluster: ClusterType): boolean {
@@ -215,7 +219,7 @@ export class PartServer implements EndpointInterface {
      * Hierarchical diagnostics of part and children.
      */
     get [Diagnostic.value]() {
-        const diagnostics = [ "Part", Diagnostic.em(this.#part.id), this.#diagnosticDict ];
+        const diagnostics = [ "Part", Diagnostic.strong(this.#part.id), this.#diagnosticDict ];
         if (this.#part.parts.size) {
             diagnostics.push(Diagnostic.list(
                 [ ...this.#part.parts ].map(part => PartServer.forPart(part)[Diagnostic.value])
@@ -229,9 +233,7 @@ export class PartServer implements EndpointInterface {
      */
     #logPart() {
         logger.info(
-            // Temporary easter egg for Ingo
-            "🎉 Part",
-            Diagnostic.em(this.#part.id),
+            Diagnostic.strong(this.#part),
             "ready",
             this.#diagnosticDict,
         );
@@ -242,15 +244,12 @@ export class PartServer implements EndpointInterface {
 
         const port = this.#part.owner.serviceFor(IdentityService).port;
 
-        const { active, inactive } = this.#part.behaviors;
-
-        return             Diagnostic.dict({
+        return Diagnostic.dict({
             "endpoint#": this.#part.number,
             type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
             port,
             "known": !isNew,
-            "active": active.length ? this.#part.behaviors.active.join(", ") : "(none)",
-            "inactive": inactive.length ? this.#part.behaviors.inactive.join(", ") : "(none)",
+            "behaviors": this.#part.behaviors,
         })
     }
 }

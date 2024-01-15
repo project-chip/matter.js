@@ -15,21 +15,24 @@ import type { Datasource } from "../../behavior/state/managed/Datasource.js";
  */
 export interface PartStore {
     /**
-     * Currently persisted values, keyed by {@link Behavior.id} then
-     * property name.
+     * Description used in diagnostic messages.
+     */
+    toString(): string;
+
+    /**
+     * Currently persisted values, keyed by {@link Behavior.id} then property name.
      */
     initialValues: Record<string, Val.Struct>;
 
     /**
      * Patch values.  Keyed by {@link Behavior.id} then property name.
      * 
-     * See {@link Datasource.Store.set} for the patch semantics the individual
-     * structs use.
+     * See {@link Datasource.Store.set} for the patch semantics the individual structs use.
      */
     set(values: Record<string, Val.Struct | undefined>): Promise<void>;
 
     /**
-     * Remove persisted values for the {@link Part}
+     * Remove all persisted information for the {@link Part}
      */
     delete(): Promise<void>;
 

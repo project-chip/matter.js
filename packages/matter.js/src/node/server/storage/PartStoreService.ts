@@ -4,16 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../common/MatterError.js";
-import type { Part } from "../../../endpoint/Part.js";
+import { ImplementationError, InternalError } from "../../../common/MatterError.js";
+import { Part } from "../../../endpoint/Part.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
-import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { IdentityConflictError } from "../IdentityService.js";
 import type { NodeServer } from "../NodeServer.js";
 import { ServerPartStore } from "./ServerPartStore.js";
 
 const NEXT_NUMBER_KEY = "__nextNumber__";
-const KNOWN_KEY = "__known__";
 
 /**
  * Manages all {@link ServerPartStore}s for a {@link NodeServer}.
@@ -25,41 +24,41 @@ const KNOWN_KEY = "__known__";
  */
 export class PartStoreService {
     #storage: StorageContext;
-    #stores = {} as Record<string, ServerPartStore>;
     #allocatedNumbers = new Set<number>();
     #construction: AsyncConstruction<PartStoreService>;
-    #nextNumber?: number;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
-    #numbersToPersist?: Record<string, number>;
-
-    // TODO - this is a temporary kludge, don't think it's possible right now to query for sub-contexts?  Instead we
-    // maintain this persistent list of all parts
-    #knownParts = new Set<string>();
+    #numbersToPersist?: Array<Part>;
+    #nextNumber?: number;
+    #root?: ServerPartStore;
 
     get construction() {
         return this.#construction;
     }
 
-    constructor({ storage, nextNumber, loadKnown }: PartStoreService.Options) {
+    constructor({ storage, nextNumber }: PartStoreService.Options) {
         this.#storage = storage;
 
-        this.#construction = AsyncConstruction(this, async () => {
-            // Load next number with excessive validation for the off-chance it somehow gets corrupted
-            if (typeof nextNumber !== "number") {
-                nextNumber = 1;
-            }
-            this.#nextNumber = (await storage.get(NEXT_NUMBER_KEY, nextNumber)) % 0xffff;
-            if (!this.#nextNumber) {
-                this.#nextNumber = 1;
-            } else {
-                this.#persistedNextNumber = this.#nextNumber;
-            }
+        if (typeof nextNumber !== "number") {
+            nextNumber = 1;
+        }
 
-            if (loadKnown !== false) {
-                return this.#loadKnown();
+        this.#construction = AsyncConstruction(
+            this,
+            async () => {
+                // Load next number with excessive validation for the off-chance it somehow gets corrupted
+                this.#nextNumber = (await storage.get(NEXT_NUMBER_KEY, nextNumber)) % 0xffff;
+
+                if (!this.#nextNumber) {
+                    this.#nextNumber = 1;
+                } else {
+                    this.#persistedNextNumber = this.#nextNumber;
+                }
+
+                // Preload stores so we can access synchronously going forward
+                this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
             }
-        });
+        );
     }
 
     async [Symbol.asyncDispose]() {
@@ -67,20 +66,6 @@ export class PartStoreService {
         if (this.#numbersPersisted) {
             await this.#numbersPersisted;
         }
-    }
-
-    async #loadKnown() {
-        this.#knownParts = new Set(await this.storage.get(KNOWN_KEY, Array<string>()));
-
-        for (const partId of this.#knownParts) {
-            await this.#loadKnownStore(partId);
-        }
-    }
-
-    async #loadKnownStore(partId: string) {
-        const partStore = new ServerPartStore(partId, this.#storage, false);
-        this.#stores[partId] = partStore;
-        await partStore.construction;
     }
 
     get storage() {
@@ -97,6 +82,10 @@ export class PartStoreService {
      * persistence fails so we persist lazily and return synchronously.
      */
     assignNumber(part: Part) {
+        if (this.#nextNumber === undefined) {
+            throw new InternalError("Part number assigned prior to store initialization");
+        }
+
         this.#construction.assert();
 
         const store = this.storeForPart(part);
@@ -152,26 +141,31 @@ export class PartStoreService {
      * somesuch
      */
     storeForPart(part: Part): ServerPartStore {
-        if (!part.lifecycle.hasId) {
-            throw new ImplementationError("Cannot access part storage because part has no assigned ID");
-        }
-        return this.#storeForPartId(part.id);
-    }
-
-    #storeForPartId(partId: string) {
         this.#construction.assert();
 
-        let store = this.#stores[partId];
-        if (store === undefined) {
-            store = this.#stores[partId] = new ServerPartStore(partId, this.#storage, true);
-
-            if (!this.#knownParts.has(partId)) {
-                this.#knownParts.add(partId);
-                this.#storage.set(KNOWN_KEY, [...this.#knownParts]);
-            }
+        if (!part.lifecycle.hasId) {
+            throw new InternalError("Part storage access without assigned ID");
         }
+        if (part.owner instanceof Part) {
+            return this.storeForPart(part.owner).childStoreFor(part);
+        }
+        if (part.number !== 0) {
+            throw new InternalError("Part storage inaccessible because part is not root and is not owned by part");
+}
+        if (!this.#root) {
+            throw new InternalError("Part storage accessed prior to initialization");
+        }
+        return this.#root;
+    }
 
-        return store;
+    /**
+     * Erase store contents.
+     */
+    clear() {
+        if (!this.#root) {
+            throw new InternalError("Part storage accessed prior to initialization");
+        }
+        this.#root.clear();
     }
 
     /**
@@ -181,26 +175,31 @@ export class PartStoreService {
         // If there's already a set of numbers to persist there will be an outstanding promise that will do the work
         // for us
         if (this.#numbersToPersist) {
-            this.#numbersToPersist[part.id] = part.number;
+            this.#numbersToPersist.push(part);
             return;
         }
+
+        this.#numbersToPersist = [ part ];
 
         const numberPersister = async () => {
             await this.#construction;
 
             const numbersToPersist = this.#numbersToPersist;
+            if (!numbersToPersist) {
+                return;
+            }
+
             this.#numbersToPersist = undefined;
-            for (const partId in numbersToPersist) {
-                const store = this.#storeForPartId(partId);
+            for (const part of numbersToPersist) {
+                const store = this.storeForPart(part);
                 await store.saveNumber();
             }
+
             if (this.#nextNumber !== this.#persistedNextNumber) {
                 this.#storage.set(NEXT_NUMBER_KEY, this.#nextNumber);
                 this.#persistedNextNumber = this.#nextNumber;
             }
         };
-
-        this.#numbersToPersist = { [part.id]: part.number };
 
         // There is a very small chance that there is an outstanding worker that is persisting numbers but hasn't yet
         // completed.  If this is the case then wait our turn.  Otherwise there's an even smaller chance that
@@ -217,6 +216,6 @@ export namespace PartStoreService {
     export interface Options {
         storage: StorageContext;
         nextNumber?: number;
-        loadKnown?: boolean;
+        load?: boolean;
     }
 }

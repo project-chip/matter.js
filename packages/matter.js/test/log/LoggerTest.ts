@@ -230,7 +230,7 @@ describe("Logger", () => {
 
         it("emphasizes", () => {
             const result = captureLog(() => {
-                logger.error("THIS IS", Diagnostic.em("VERY"), "IMPORTANT");
+                logger.error("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
             expect(result?.message).equals("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest THIS IS *VERY* IMPORTANT");
         })
@@ -267,7 +267,7 @@ describe("Logger", () => {
         it("emphasizes", () => {
             const result = captureLog(() => {
                 Logger.format = Format.ANSI;
-                logger.notice("THIS IS", Diagnostic.em("VERY"), "IMPORTANT");
+                logger.notice("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
             expect(result?.message).equals('\u001b[90mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[1mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m');
         })
@@ -317,7 +317,7 @@ describe("Logger", () => {
         it("emphasizes", () => {
             const result = captureLog(() => {
                 Logger.format = Format.HTML;
-                logger.fatal("THIS IS", Diagnostic.em("VERY"), "IMPORTANT");
+                logger.fatal("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
             expect(result?.message).equals('<span class="matter-log-line fatal"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> THIS IS <em>VERY</em> IMPORTANT</span>');
         })

@@ -26,6 +26,7 @@ import { Ble } from "../../../ble/Ble.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { FORBIDDEN_PASSCODES } from "../../../CommissioningServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
+import { IdentityService } from "../../../node/server/IdentityService.js";
 
 const logger = Logger.get("Commissioning");
 
@@ -53,8 +54,15 @@ export class CommissioningBehavior extends Behavior {
         if (this.state.ble === undefined) {
             this.state.ble = Ble.enabled;
         }
+    }
 
-        if (!this.state.productDescription) {
+    /**
+     * The {@link ProductDescription} advertised by the node.
+     */
+    get productDescription() {
+        let pd = this.state.productDescription;
+
+        if (!pd) {
             const bi = this.agent.get(BasicInformationBehavior).state;
 
             const deviceType = inferDeviceType(this.part);
@@ -65,13 +73,15 @@ export class CommissioningBehavior extends Behavior {
                 );
             }
 
-            this.state.productDescription = {
+            pd = this.state.productDescription = {
                 name: bi.productName,
                 deviceType,
                 vendorId: bi.vendorId,
                 productId: bi.productId,
             }
         }
+
+        return pd;
     }
 
     /**
@@ -86,14 +96,14 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            `Node is uncommissioned`,
+            "Node", Diagnostic.strong(this.part.serviceFor(IdentityService).nodeDescription), "is uncommissioned",
             Diagnostic.dict({
                 passcode,
                 discriminator,
                 "manual pairing code": manualPairingCode,
             }),
             Diagnostic.list([
-                QrCode.get(qrPairingCode).replace(/\n/g, "\n\t"),
+                QrCode.get(qrPairingCode).trim(),
                 `QR code URL: https://project-chip.github.io/connectedhomeip/qrcode.html?data=${qrPairingCode}\n`,
             ]),
         );

@@ -5,6 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { ActionContext } from "../../behavior/ActionContext.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -16,6 +17,7 @@ import { Logger } from "../../log/Logger.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { Session } from "../../session/Session.js";
+import { track } from "../../util/Promises.js";
 import { SubscriptionOptions } from "../options/SubscriptionOptions.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
@@ -24,49 +26,57 @@ const TRANSACTION = Symbol("transaction");
 const logger = Logger.get("TransactionalInteractionServer");
 
 /**
- * We graft an InvocationContext onto the session in
- * {@link TransactionalInteractionServer}.
+ * We graft a transaction onto the message as it the contextual object that exists for the life of a request.
  *
- * This could become part of the public session API but it may make sense
- * to merge InvocationContext into session fully so leaving as private for now.
+ * Perhaps instead makes sense to wire ActionContext into lower levels of the server but this works for now.
  */
-interface InternalSession extends Session<MatterDevice> {
+interface InternalMessage extends Message {
     [TRANSACTION]?: Transaction;
 }
 
 /**
- * Wire up an InteractionServer that initializes an InvocationContext earlier
- * than the cluster API supports.
+ * Wire up an InteractionServer that initializes an InvocationContext earlier than the cluster API supports.
  *
- * This is necessary for attributes because the ClusterServer attribute
- * APIs are synchronous while transaction management is asynchronous.
+ * This is necessary for attributes because the ClusterServer attribute APIs are synchronous while transaction
+ * management is asynchronous.
  *
- * It's not necessary for command handling because that API is entirely async.
- * We do it here, however, just for the sake of consistency.
+ * It's not necessary for command handling because that API is entirely async.  We do it here, however, just for the
+ * sake of consistency.
  *
- * This could be integrated directly into InteractionServer but this further
- * refactoring is probably warranted there regardless.  This keeps the touch
- * light for now.
+ * This could be integrated directly into InteractionServer but this further refactoring is probably warranted there
+ * regardless.  This keeps the touch light for now.
  */
 export class TransactionalInteractionServer extends InteractionServer {
+    #endpointStructure: InteractionEndpointStructure;
+
     constructor(root: Part, store: ServerStore, subscriptionOptions: SubscriptionOptions) {
         const structure = new InteractionEndpointStructure();
-        root.lifecycle.changed.on(async () => structure.initializeFromEndpoint(PartServer.forPart(root)));
+
+        // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
+        structure.initializeFromEndpoint(PartServer.forPart(root));
+        root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
+
         super({
             eventHandler: store.eventHandler,
             endpointStructure: structure,
             subscriptionOptions: subscriptionOptions,
         });
+        this.#endpointStructure = structure;
+    }
+
+    async [Symbol.asyncDispose]() {
+        await this.close();
+        this.#endpointStructure.destroy();
     }
 
     /**
      * Obtain the transaction for a session.
      */
-    static transactionFor(session: Session<MatterDevice>) {
-        let transaction = (session as InternalSession)[TRANSACTION];
+    static transactionFor(message: Message) {
+        let transaction = (message as InternalMessage)[TRANSACTION];
         if (transaction === undefined) {
-            transaction = new Transaction();
-            (session as InternalSession)[TRANSACTION] = transaction;
+            transaction = new Transaction(ActionContext.via({ message }));
+            (message as InternalMessage)[TRANSACTION] = transaction;
         }
         return transaction;
     }
@@ -75,16 +85,18 @@ export class TransactionalInteractionServer extends InteractionServer {
         attribute: AnyAttributeServer<any>,
         session: Session<MatterDevice>,
         isFabricFiltered: boolean,
+        message?: Message,
     ) {
-        return this.#transact(session, () => super.readAttribute(attribute, session, isFabricFiltered));
+        return this.#transact("Read", message, () => super.readAttribute(attribute, session, isFabricFiltered, message));
     }
 
     protected override async writeAttribute(
         attribute: AttributeServer<any>,
         value: any,
         session: Session<MatterDevice>,
+        message: Message,
     ) {
-        return this.#transact(session, () => super.writeAttribute(attribute, value, session));
+        return this.#transact("Write", message, () => super.writeAttribute(attribute, value, session, message));
     }
 
     protected override async invokeCommand(
@@ -94,45 +106,46 @@ export class TransactionalInteractionServer extends InteractionServer {
         message: Message,
         endpoint: EndpointInterface,
     ) {
-        return this.#transact(session, () => super.invokeCommand(command, session, commandFields, message, endpoint));
+        return this.#transact("Invoke", message, () => super.invokeCommand(command, session, commandFields, message, endpoint));
     }
 
     /**
      * Perform an action with transaction support.
      *
-     * If a transaction is present in the session after the action, commit or
-     * rollback depending on whether the action succeeded.
+     * If a transaction is present in the session after the action, commit or rollback depending on whether the action succeeded.
      *
-     * Note that we currently wrap individual reads/writes/invokes in
-     * transactions with no support for cross-action transactionality.  Matter
-     * does not address this so semantics are going to be highly implementation
-     * dependent if they make sense at all.
+     * Note that we currently wrap individual reads/writes/invokes in transactions with no support for cross-action
+     * transactionality.  Matter does not address this so semantics are going to be highly implementation dependent if
+     * they make sense at all.
      */
-    async #transact<T>(session: Session<MatterDevice>, fn: () => T) {
+    async #transact<T extends Promise<unknown>>(why: string, message: Message | undefined, fn: () => T) {
+        const transaction = message
+            ? TransactionalInteractionServer.transactionFor(message)
+            : new Transaction(ActionContext.via());
         try {
-            return fn();
+            return await track(fn(), [ why, transaction.via ]);
         } catch (e) {
             try {
-                await this.#endTransaction(session, "rollback");
+                await this.#endTransaction(transaction, message, "rollback");
             } catch (e) {
                 logger.error("Unhandled error in transaction rollback", e);
             }
             throw e;
         } finally {
-            await this.#endTransaction(session, "commit");
+            await this.#endTransaction(transaction, message, "commit");
         }
     }
 
-    async #endTransaction(session: Session<MatterDevice>, method: "commit" | "rollback") {
-        const transaction = (session as InternalSession)[TRANSACTION];
-
+    async #endTransaction(transaction: Transaction, message: Message | undefined, method: "commit" | "rollback") {
         if (transaction === undefined) {
             return;
         }
 
-        delete (session as InternalSession)[TRANSACTION];
+        if (message) {
+            delete (message as InternalMessage)[TRANSACTION];
+        }
 
-        if (transaction.status === Transaction.Status.Shared) {
+        if (transaction.status === Transaction.Status.Exclusive) {
             await transaction[method]();
         }
     }

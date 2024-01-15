@@ -13,23 +13,25 @@ import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
-import { Val } from "./Val.js";
+import type { ValidationContext } from "../validation/context.js";
+import type { Val } from "./Val.js";
+
+const VERSION_KEY = "__VERSION__";
 
 /**
- * Datasource manages the canonical root of a state tree.  The "state" property
- * of a Behavior is a reference to a Datasource.
+ * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
+ * Datasource.
  *
  * Datasource behavior differs if there is a transaction present:
  *
- *   - Outside a transaction, properties update immediately when set.
- *     Non-volatile values become dirty but do not persist automatically.
+ *   - Outside a transaction, properties update immediately when set. Non-volatile values become dirty but do not
+ *     persist automatically.
  *
- *   - Inside a transaction the root reference is isolated.  Changes are queued
- *     until commit.  On commit changes are persisted and change events emit.
+ *   - Inside a transaction the root reference is isolated.  Changes are queued until commit.  On commit changes are
+ *     persisted and change events emit.
  *
- * Datasources maintain a version number and trigger change events.  If
- * modified in a transaction they compute changes and persist values as
- * necessary.
+ * Datasources maintain a version number and trigger change events.  If modified in a transaction they compute changes
+ * and persist values as necessary.
  */
 export interface Datasource<T extends StateType = StateType> extends Resource {
     /**
@@ -43,22 +45,25 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
     readonly version: number;
 
     /**
-     * If non-volatile values change without a transaction, the store is marked
-     * dirty and you must use {@link save} to persist the values.
+     * If non-volatile values change without a transaction, the store is marked dirty and you must use {@link save} to
+     * persist the values.
      */
     readonly dirty: boolean;
 
     /**
      * Persist non-volatile values modified without a transaction.
      *
-     * Currently will throw an error if resources cannot be locked.  And
-     * transaction isolation means values may be overwritten in a shared
-     * environment.
+     * Currently will throw an error if resources cannot be locked.  And transaction isolation means values may be
+     * overwritten in a shared environment.
      *
-     * So this is intended for use in non-shared contexts like behavior
-     * initialization.
+     * So this is intended for use in non-shared contexts like behavior initialization.
      */
     save(transaction: Transaction): void;
+
+    /**
+     * Validate values against the schema.
+     */
+    validate(session: ValueSupervisor.Session, context?: ValidationContext): void;
 }
 
 /**
@@ -68,7 +73,9 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
     const internals = configure(options);
 
     return {
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name;
+        },
 
         reference(session: ValueSupervisor.Session) {
             return options.supervisor.manage(createRootReference(this, internals, session), session) as InstanceType<T>;
@@ -85,6 +92,10 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         save(transaction: Transaction) {
             save(this, internals, transaction);
         },
+
+        validate(session: ValueSupervisor.Session, context?: ValidationContext) {
+            internals.supervisor.validate(internals.values, session, context)
+        }
     };
 }
 
@@ -104,6 +115,11 @@ export namespace Datasource {
         type: T;
 
         /**
+         * Name used in diagnostic messages.
+         */
+        name: string,
+
+        /**
          * The manager used to manage and validate values.
          */
         supervisor: ValueSupervisor;
@@ -114,14 +130,13 @@ export namespace Datasource {
         version?: number;
 
         /**
-         * Events of the form "fieldName$Change", if present, emit after
-         * field changes commit.
+         * Events of the form "fieldName$Change", if present, emit after field changes commit.
          */
         events?: Events;
 
         /**
-         * Default values.  These defaults override default properties in the
-         * state class but not values persisted in the store.
+         * Default values.  These defaults override default properties in the state class but not values persisted in
+         * the store.
          */
         defaults?: Val.Struct;
 
@@ -137,16 +152,15 @@ export namespace Datasource {
      */
     export interface Store {
         /**
-         * Initial values must be loaded beforehand.  That allows the behavior
-         * to initialize synchronously.
+         * Initial values must be loaded beforehand.  That allows the behavior to initialize synchronously.
          */
         initialValues?: Val.Struct;
 
         /**
          * Updates the values.
          *
-         * This is a patch operation.  Only properties present are modified.
-         * Properties that are present but set to undefined are deleted.
+         * This is a patch operation.  Only properties present are modified. Properties that are present but set to
+         * undefined are deleted.
          */
         set(transaction: Transaction, values: Val.Struct): Promise<void>;
     }
@@ -157,6 +171,7 @@ export namespace Datasource {
 }
 
 interface Internals extends Datasource.Options {
+    name: string,
     values: Val.Struct;
     version: number;
     dirty?: Val.Struct;
@@ -181,26 +196,33 @@ function configure(options: Datasource.Options): Internals {
         values[key] = initialValues[key];
     }
 
+    let version: number;
+    if (typeof initialValues[VERSION_KEY] === "number") {
+        version = initialValues[VERSION_KEY] % 0xffff_ffff;
+    } else {
+        version = options.version ?? Crypto.getRandomUInt32();
+    }
+
     return {
         ...options,
-        version: options.version ?? Crypto.getRandomUInt32(),
+        version,
         values: values,
     };
 }
 
 /**
- * The bulk of {@link Datasource} logic resides with a specific
- * {@link Val.Reference} created by this function.
+ * The bulk of {@link Datasource} logic resides with a specific {@link Val.Reference} created by this function.
  *
- * This reference provides external access to the {@link Val.Struct} in the
- * context of a specific session.
+ * This reference provides external access to the {@link Val.Struct} in the context of a specific session.
  */
 function createRootReference(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
     let values = internals.values;
     let changes: Changes | undefined;
 
     const participant = {
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name;
+        },
         commit1,
         commit2,
         rollback,
@@ -236,8 +258,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         },
 
         change(mutator) {
-            // If we are transactional ensure transaction is exclusive and we
-            // are participating
+            // If we are transactional ensure transaction is exclusive and we are participating
             if (transaction) {
                 // Join the transaction
                 transaction.addResourcesSync(resource);
@@ -264,12 +285,16 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         },
 
         /**
-         * Post-processing for non-transactional changes, which take immediate
-         * effect.
+         * Post-processing for non-transactional changes, which take immediate effect.
          */
         async notify(index?: string, oldValue?: Val, newValue?: Val) {
             // Index should be set because we only parent a struct reference
             if (!index) {
+                return;
+            }
+
+            // Ignore no-op changes
+            if (isDeepEqual(oldValue, newValue)) {
                 return;
             }
 
@@ -283,7 +308,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
             incrementVersion();
 
-            const event = internals.events?.[index];
+            refreshSubrefs();
+
+            const event = internals.events?.[`${index}$Change`];
             if (event) {
                 await event.emit(newValue, oldValue, session);
             }
@@ -315,8 +342,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
     }
 
-    // In "changed" state, values !== data.values, but here we identify
-    // logical changes on a per-property basis
+    // In "changed" state, values !== data.values, but here we identify logical changes on a per-property basis
     function computeChanges() {
         changes = undefined;
 
@@ -357,7 +383,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 
-            changes.persistent._version = internals.version;
+            changes.persistent[VERSION_KEY] = internals.version;
         }
     }
 
@@ -381,8 +407,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     }
 
     /**
-     * For commit phase two we make the working values canonical and notify
-     * listeners.
+     * For commit phase two we make the working values canonical and notify listeners.
      */
     async function commit2() {
         internals.values = values;
@@ -402,8 +427,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     }
 
     /**
-     * On rollback with just replace values and version with the canonical
-     * versions.
+     * On rollback with just replace values and version with the canonical versions.
      */
     function rollback() {
         ({ values } = internals);
@@ -411,11 +435,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     }
 
     /**
-     * Whenever the transaction commits or rolls back we refresh to newest
-     * values.
+     * Whenever the transaction commits or rolls back we refresh to newest values.
      *
-     * There should be no changes in this state so the rollback below is only
-     * to update to the latest value.
+     * There should be no changes in this state so the rollback below is only to update to the latest value.
      */
     function reset() {
         if (values !== internals.values) {
@@ -434,7 +456,9 @@ function save(resource: Resource, internals: Internals, transaction: Transaction
 
     transaction.addResourcesSync(resource);
     transaction.addParticipants({
-        description: internals.supervisor.schema.name,
+        toString() {
+            return internals.name;
+        },
 
         async commit1() {
             await internals.store?.set(transaction, dirty);

@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Agent } from "../endpoint/Agent.js";
-import { Part } from "../endpoint/Part.js";
-import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
-import { PartOwner } from "../endpoint/part/PartOwner.js";
-import { Diagnostic } from "../log/Diagnostic.js";
+import type { Agent } from "../endpoint/Agent.js";
+import type { Part } from "../endpoint/Part.js";
+import type { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
+import type { PartOwner } from "../endpoint/part/PartOwner.js";
+import type { Diagnostic } from "../log/Diagnostic.js";
+import type { AsyncConstruction } from "../util/AsyncConstruction.js";
+import type { Host } from "./Host.js";
 
 /**
  * A "node" is a top-level resource that is addressable directly on a network.
@@ -30,14 +32,31 @@ export interface Node extends PartOwner {
     readonly rootPart: Part;
 
     /**
-     * Clean up node resources.
+     * Provide diagnostic information.
+     */
+    readonly [Diagnostic.value]: unknown;
+
+    /**
+     * Node initialization status.
+     */
+    readonly construction: AsyncConstruction<Node>;
+
+    /**
+     * Bring the node online.
+     */
+    start(): Promise<void>;
+
+    /**
+     * Terminate and release resources.
      */
     [Symbol.asyncDispose](): Promise<void>;
 
     /**
-     * Provide diagnostic information.
+     * Set the installed host for the node.
+     * 
+     * TODO - Remove after further refactoring
      */
-    readonly [Diagnostic.value]: unknown;
+    set host(host: Host);
 
     // The batch interface that follows would be an efficiency win but most
     // features are marked as provisional as of Matter 1.2 implying they are

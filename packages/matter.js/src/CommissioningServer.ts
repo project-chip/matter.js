@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
 import { Ble } from "./ble/Ble.js";
+import { Attributes, Events } from "./cluster/Cluster.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
@@ -40,7 +42,8 @@ import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { VendorId } from "./datatype/VendorId.js";
-import { RootEndpoint } from "./device/Device.js";
+import { Aggregator } from "./device/Aggregator.js";
+import { Device, RootEndpoint } from "./device/Device.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
@@ -50,6 +53,7 @@ import { NetworkOptions } from "./node/options/NetworkOptions.js";
 import { SubscriptionOptions } from "./node/options/SubscriptionOptions.js";
 import { BaseNodeServer, DevicePairingInformation } from "./node/server/BaseNodeServer.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
+import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
 import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
 import {
@@ -188,13 +192,17 @@ export interface CommissioningServerOptions {
  *
  * @deprecated use NodeServer
  */
-export class CommissioningServer extends BaseNodeServer {
+export class CommissioningServer extends BaseNodeServer implements MatterNode {
     #commissioningChangedCallback: CommissioningServerOptions["commissioningChangedCallback"];
     #activeSessionsChangedCallback: CommissioningServerOptions["activeSessionsChangedCallback"];
     #storage?: StorageContext;
     #endpointStructureStorage?: StorageContext;
     #subscriptionOptions: SubscriptionOptions;
     #eventHandler?: EventHandler;
+    #interactionServer?: InteractionServer;
+    #endpointStructure = new InteractionEndpointStructure;
+    #mdnsBroadcaster?: MdnsBroadcaster;
+    #mdnsScanner?: MdnsScanner;
     #basicInformationCluster?: ClusterServerObjForCluster<typeof BasicInformationCluster>;
     #construction: AsyncConstruction<CommissioningServer>;
 
@@ -466,8 +474,8 @@ export class CommissioningServer extends BaseNodeServer {
             // We must register this event before creating an InteractionServer so
             // we initialize endpoint datasources before the InteractionServer
             // processes events
-            this.endpointStructure.change.on(async () => {
-                for (const endpoint of this.endpointStructure.endpoints.values()) {
+            this.#endpointStructure.change.on(async () => {
+                for (const endpoint of this.#endpointStructure.endpoints.values()) {
                     for (const cluster of endpoint.getAllClusterServers()) {
                         await asClusterServerInternal(cluster)._setDatasource(
                             await CommissioningServerClusterDatasource.create(
@@ -498,14 +506,28 @@ export class CommissioningServer extends BaseNodeServer {
      * @deprecated use {@link BaseNodeServer.mdnsScanner}
      */
     setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.mdnsScanner = mdnsScanner;
+        this.#mdnsScanner = mdnsScanner;
     }
 
     /**
      * @deprecated use {@link BaseNodeServer.mdnsBroadcaster}
      */
     setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.mdnsBroadcaster = mdnsBroadcaster;
+        this.#mdnsBroadcaster = mdnsBroadcaster;
+    }
+
+    async getMdnsScanner() {
+        if (!this.#mdnsScanner) {
+            throw new ImplementationError("Add the node to the Matter instance before!");
+        }
+        return this.#mdnsScanner;
+    }
+
+    async getMdnsBroadcaster() {
+        if (!this.#mdnsBroadcaster) {
+            throw new ImplementationError("Add the node to the Matter instance before!");
+        }
+        return this.#mdnsBroadcaster;
     }
 
     async setStorage(storage: StorageContext) {
@@ -573,11 +595,58 @@ export class CommissioningServer extends BaseNodeServer {
         };
     }
 
+    /**
+     * Get the root endpoint of the node.
+     */
+    getRootEndpoint() {
+        return this.rootEndpoint;
+    }
+
+    /**
+     * Add a child endpoint to the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param endpoint Endpoint to add
+     * @protected
+     */
+    protected addEndpoint(endpoint: EndpointInterface) {
+        this.rootEndpoint.addChildEndpoint(endpoint);
+    }
+
+    /**
+     * Add a new device to the node
+     *
+     * @param device Device or Aggregator instance to add
+     */
+    addDevice(device: Device | Aggregator) {
+        this.addEndpoint(device);
+    }
+
+    /**
+     * Add a new cluster server to the root endpoint
+     * BasicInformationCluster and OperationalCredentialsCluster can not be added via this method because they are
+     * added in the constructor
+     *
+     * @param cluster
+     */
+    addRootClusterServer<A extends Attributes, E extends Events>(cluster: ClusterServerObj<A, E>) {
+        if (cluster.id === BasicInformationCluster.id) {
+            throw new ImplementationError(
+                "BasicInformationCluster can not be modified, provide all details in constructor options!",
+            );
+        }
+        if (cluster.id === OperationalCredentialsCluster.id) {
+            throw new ImplementationError(
+                "OperationalCredentialsCluster can not be modified, provide the certificates in constructor options!",
+            );
+        }
+        this.rootEndpoint.addClusterServer(cluster);
+    }
+
     async updateStructure() {
         logger.debug("Endpoint structure got updated ...");
         await this.assignEndpointIds(); // Make sure to have unique endpoint ids
         await this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
-        await this.endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
+        await this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
     }
 
     getNextEndpointId(increase = true) {
@@ -592,6 +661,70 @@ export class CommissioningServer extends BaseNodeServer {
         await this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
         await this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
         await this.#endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    }
+
+    override async close() {
+        if (this.#interactionServer) {
+            await this.#interactionServer.close();
+            this.#interactionServer = undefined;
+        }
+        this.#endpointStructure.destroy();
+
+        super.close();
+    }
+
+    protected override async createMatterDevice() {
+        if (
+            this.#storage === undefined ||
+            this.#endpointStructureStorage === undefined
+        ) {
+            throw new ImplementationError("Storage not initialized");
+        }
+
+        this.#interactionServer = new InteractionServer({
+            subscriptionOptions: this.#subscriptionOptions,
+            eventHandler: this.eventHandler,
+            endpointStructure: this.#endpointStructure,
+        });
+
+        this.nextEndpointId = this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+
+        this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint)
+
+        return (await super.createMatterDevice())
+            .addProtocolHandler(this.#interactionServer);
+    }
+
+    protected override emitCommissioningChanged(fabric: FabricIndex): void {
+        this.#commissioningChangedCallback?.(fabric);
+    }
+
+    protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
+        this.#activeSessionsChangedCallback?.(fabric);
+    }
+
+    protected override async clearStorage() {
+        this.storage.clear();
+    }
+
+    protected get eventHandler() {
+        if (!this.#eventHandler) {
+            this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
+        }
+        return this.#eventHandler;
+    }
+
+    /** Set the port the device is listening on. Can only be called before the device is initialized. */
+    override set port(port: number) {
+        if (port === this.networkConfig.port) return;
+        if (this.#mdnsBroadcaster !== undefined) {
+            throw new ImplementationError("Port cannot be changed after device is initialized!");
+        }
+        this.networkConfig.port = port;
     }
 
     private async initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {
@@ -653,45 +786,6 @@ export class CommissioningServer extends BaseNodeServer {
             }
             await this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
         }
-    }
-
-    protected async initializeEndpoints() {
-        if (this.#storage === undefined || this.#endpointStructureStorage === undefined) {
-            throw new ImplementationError("Storage not initialized");
-        }
-
-        this.nextEndpointId = await this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
-
-        await this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        await this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
-        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
-    }
-
-    protected override emitCommissioningChanged(fabric: FabricIndex): void {
-        this.#commissioningChangedCallback?.(fabric);
-    }
-
-    protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
-        this.#activeSessionsChangedCallback?.(fabric);
-    }
-
-    protected override async clearStorage() {
-        await this.storage.clear();
-    }
-
-    protected override createInteractionServer() {
-        return new InteractionServer({
-            subscriptionOptions: this.#subscriptionOptions,
-            eventHandler: this.eventHandler,
-            endpointStructure: this.endpointStructure,
-        });
-    }
-
-    protected get eventHandler() {
-        if (!this.#eventHandler) {
-            throw new ImplementationError("EventHandler not initialized");
-        }
-        return this.#eventHandler;
     }
 }
 

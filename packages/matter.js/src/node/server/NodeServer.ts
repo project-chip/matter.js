@@ -7,7 +7,7 @@
 import { CommissioningBehavior } from "../../behavior/definitions/commissioning/CommissioningBehavior.js";
 import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
-import { ImplementationError, NotImplementedError, NotInitializedError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { Part } from "../../endpoint/Part.js";
@@ -25,12 +25,15 @@ import { Node } from "../Node.js";
 import { CommissioningOptions } from "../options/CommissioningOptions.js";
 import { ServerOptions } from "../options/ServerOptions.js";
 import { BaseNodeServer } from "./BaseNodeServer.js";
-import { IdentityService } from "./IdentityService.js";
+import { ServerStore } from "./storage/ServerStore.js";
+import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
+import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
 import { ServerBehaviorInitializer } from "./ServerBehaviorInitializer.js";
 import { TransactionalInteractionServer } from "./TransactionalInteractionServer.js";
 import { PartStoreService } from "./storage/PartStoreService.js";
-import { ServerStore } from "./storage/ServerStore.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
+import { UninitializedDependencyError } from "../../common/Lifecycle.js";
+import { ServerResetService } from "./ServerResetService.js";
 
 const logger = Logger.get("NodeServer");
 
@@ -49,11 +52,17 @@ export class NodeServer extends BaseNodeServer implements Node {
     #rootServer?: PartServer;
     #nextEndpointId: EndpointNumber;
     #host?: Host;
+    #resetService?: ServerResetService;
     #store?: ServerStore;
     #construction: AsyncConstruction<NodeServer>;
-    #behaviorInitializer?: BehaviorInitializer;
+    #behaviorInitializer?: PartInitializer;
     #identityService?: IdentityService;
     #uptime?: Diagnostic.Elapsed;
+    #interactionServer?: TransactionalInteractionServer;
+
+    get id() {
+        return this.#root.id;
+    }
 
     get owner() {
         return undefined;
@@ -65,8 +74,9 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     get rootPart() {
         if (!this.#root) {
-            throw new NotInitializedError(
-                "Root part is unavailable because initialization is incomplete; await the NodeServer to avoid this error",
+            throw new UninitializedDependencyError(
+                this.constructor.name,
+                "is unavailable because initialization is incomplete; await the NodeServer to avoid this error",
             );
         }
         return this.#root;
@@ -74,7 +84,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     get store() {
         if (this.#store === undefined) {
-            throw new ImplementationError(`${this.description}: Storage accessed prior to initialization`);
+            throw new ImplementationError(`Storage for ${this} accessed prior to initialization`);
         }
         return this.#store;
     }
@@ -104,6 +114,10 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         const root = (this.#root = Part.partFor(this.#configuration.root));
 
+        if (!root.lifecycle.hasId) {
+            root.id = this.#configuration.environment.allocateFallbackNodeId();
+        }
+
         if (root.type.deviceType !== RootEndpoint.deviceType) {
             throw new ImplementationError(`Root node device type must be a ${RootEndpoint.deviceType}`);
         }
@@ -115,24 +129,35 @@ export class NodeServer extends BaseNodeServer implements Node {
         } else if (root.number !== 0) {
             throw new ImplementationError(`Root node ID must be 0`);
         }
+if (!root.lifecycle.hasId) {
+            root.id = this.#configuration.environment.allocateFallbackNodeId();
+        }
 
         root.behaviors.require(CommissioningBehavior);
         root.behaviors.require(IndexBehavior);
         this.#nextEndpointId = this.#configuration.nextEndpointNumber;
 
         this.#construction = AsyncConstruction(this, async () => {
-            this.#store = await ServerStore.create(this.#configuration);
+            this.#store = await ServerStore.create(this.#configuration.environment,
+                    root.id,
+                    this.#configuration.nextEndpointNumber,);
 
-            root.lifecycle.change(Lifecycle.Change.Installed);
-        });
+            root.lifecycle.change(PartLifecycle.Change.Installed);
+        await this.#root.construction;
+            });
     }
 
+    /**
+     * Create a new NodeServer and wait for initialization to complete.
+     */
     static async create(options?: ServerOptions.Configuration): Promise<NodeServer> {
         return asyncNew(this, options);
     }
 
     /**
      * Bring the device online.
+     *
+     * TODO - should acquire some type of OS- or FS-level while running
      */
     override async start() {
         if (this.#uptime) {
@@ -144,16 +169,21 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         const agent = this.root;
 
+        await this.advertise();
+
         if (!this.commissioned) {
-            const commissioning = await agent.waitFor(CommissioningBehavior);
-            commissioning.initiateCommissioning();
+            try {
+                const commissioning = await agent.waitFor(CommissioningBehavior);
+                commissioning.initiateCommissioning();
+            } catch (e) {
+                if (e instanceof Error) {
+                    Diagnostic.prefixError("Cannot initiate commissioning", e);
+                }
+                throw e;
+            }
         }
 
-        await this.#saveInitialValues();
-
-        await super.start();
-
-        logger.notice("Node", Diagnostic.em(this.description), "is online");
+        logger.notice(Diagnostic.strong(this.toString()), "is online");
     }
 
     /**
@@ -165,9 +195,14 @@ export class NodeServer extends BaseNodeServer implements Node {
         if (this.#host) {
             throw new ImplementationError("Already running");
         }
-        const runner = new Host(this.#configuration);
-        runner.add(this);
-        await runner.run();
+        const host = new Host(this.#configuration);
+        host.add(this);
+
+        try {
+            await host.run();
+        } catch (e) {
+            logger.error("Node server terminated due to error:", e);
+        }
     }
 
     /**
@@ -182,16 +217,6 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     async add(endpoint: Part.Definition) {
         return this.rootPart.parts.add(endpoint);
-    }
-
-    /**
-     * Terminate after starting with run().
-     */
-    abort() {
-        if (!this.#host) {
-            throw new ImplementationError("Not running");
-        }
-        this.#host.abort();
     }
 
     /**
@@ -213,6 +238,14 @@ export class NodeServer extends BaseNodeServer implements Node {
      * no longer needed.
      */
     async [Symbol.asyncDispose]() {
+        logger.notice("Node", Diagnostic.strong(this.toString()), "going offline");
+
+        await this.close();
+    }
+
+    override async close() {
+        await super.close();
+        await this.#interactionServer?.[Symbol.asyncDispose]();
         await this.#rootServer?.[Symbol.asyncDispose]();
         await this.#store?.[Symbol.asyncDispose]();
     }
@@ -225,26 +258,25 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     fallbackIdFor(part: Part) {
         if (part === this.#root) {
-            return "root";
+            throw new InternalError("Root has no ID");
         } else if (part.owner instanceof Part) {
             let index = 0;
             for (const part2 of part.owner.parts) {
                 if (part2 === part) {
-                    const id = `${part.owner.id}#${index}`;
-                    logger.warn(`Using fallback ID ${id} for unidentified part; set part ID to remove this warning`);
+                    const id = `part${index}`;
+                    const desc = part.owner instanceof Part ? `${part.owner}.${id}` : id;
+                    logger.warn(`Using fallback for ${desc}; set part ID to remove this warning`);
                     return id;
                 }
                 index++;
             }
         }
-        throw new ImplementationError(`${part.description}: Cannot determine ID`);
+        throw new ImplementationError(`Cannot determine ID for ${part}`);
     }
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
-        // Not sure why the cast to unknown is necessary here, TS complains
-        // that type may not instantiate to T without it which seems incorrect
         switch (type as unknown) {
-            case BehaviorInitializer:
+            case PartInitializer:
                 if (!this.#behaviorInitializer) {
                     this.#behaviorInitializer = new ServerBehaviorInitializer(this);
                 }
@@ -258,24 +290,53 @@ export class NodeServer extends BaseNodeServer implements Node {
 
             case IdentityService:
                 if (!this.#identityService) {
-                    this.#identityService = new IdentityService(this.#root, this.port);
+                    this.#identityService = new IdentityService(this.#root, this.toString(), this.port);
                 }
                 return this.#identityService as T;
+
+            case ServerResetService:
+                if (this.#store && this.#host) {
+                    if (!this.#resetService) {
+                        this.#resetService = new ServerResetService(this, this.#store, this.#host);
+                    }
+                    return this.#resetService as T;
+                }
         }
 
         throw new ImplementationError(`Unsupported service ${type.name}`);
     }
 
+    set host(host: Host) {
+        if (this.#host) {
+            throw new ImplementationError(`Node ${this} already installed in host`);
+        }
+        this.#host = host;
+    }
+
+    async getMdnsBroadcaster() {
+        if (this.#host === undefined) {
+            throw new ImplementationError("Cannot start NodeServer without installed host");
+        }
+        return this.#host.mdnsBroadcaster;
+    }
+
+    async getMdnsScanner() {
+        if (this.#host === undefined) {
+            throw new ImplementationError("Cannot start NodeServer without installed host");
+        }
+        return this.#host.mdnsScanner;
+    }
+
     /**
      * Textual description of the node used in diagnostic messages.
      */
-    get description() {
-        return this.commissioningConfig.productDescription.name;
+    override toString() {
+        return `${this.constructor.name}#${this.id}`
     }
 
     get [Diagnostic.value]() {
         return [
-            this.description,
+            this.toString(),
             Diagnostic.dict({ port: this.port, uptime: this.#uptime }),
             Diagnostic.list([
                 this.rootEndpoint[Diagnostic.value],
@@ -314,10 +375,6 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     protected override emitActiveSessionsChanged(_fabric: FabricIndex): void {}
 
-    protected override createInteractionServer() {
-        return new TransactionalInteractionServer(this.rootPart, this.store, this.#configuration.subscription);
-    }
-
     protected override get sessionStorage(): StorageContext {
         return this.store.sessionStorage;
     }
@@ -326,25 +383,18 @@ export class NodeServer extends BaseNodeServer implements Node {
         return this.store.fabricStorage;
     }
 
-    protected override async initializeEndpoints(): Promise<void> {
-        // Nothing to do
+    protected override async clearStorage() {
+        await this.serviceFor(ServerResetService).factoryReset();
     }
 
-    protected override clearStorage(): Promise<void> {
-        // TODO
-        throw new NotImplementedError();
-    }
+    protected override async createMatterDevice() {
+        this.#interactionServer = new TransactionalInteractionServer(
+            this.rootPart,
+            this.store,
+            this.#configuration.subscription
+        );
 
-    /**
-     * We don't run behavior initializers transactionally.
-     *
-     * Instead we save dirty values at server startup.
-     */
-    async #saveInitialValues() {
-        const transaction = new Transaction();
-        this.rootPart.visit(part => part.behaviors.save(transaction));
-        if (transaction.status === Transaction.Status.Exclusive) {
-            await transaction.commit();
-        }
+        return (await super.createMatterDevice())
+            .addProtocolHandler(this.#interactionServer);
     }
 }

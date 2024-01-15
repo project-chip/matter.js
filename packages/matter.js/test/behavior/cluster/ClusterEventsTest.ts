@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../../src/behavior/Behavior.js";
-import { InvocationContext } from "../../../src/behavior/InvocationContext.js";
+import { ActionContext } from "../../../src/behavior/ActionContext.js";
 import { ClusterEvents } from "../../../src/behavior/cluster/ClusterEvents.js";
 import { Observable } from "../../../src/util/Observable.js";
 import { MyCluster } from "./cluster-behavior-test-util.js";
@@ -16,17 +16,17 @@ describe("ClusterEvents", () => {
 
         it("includes required", () => {
             ({}) as Ep satisfies {
-                reqAttr$Change: Observable<[value: string, oldValue: string, context?: InvocationContext]>;
+                reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
 
-                reqEv: Observable<[payload: string, context?: InvocationContext]>;
+                reqEv: Observable<[payload: string, context?: ActionContext]>;
             };
         });
 
         it("allows optional", () => {
             undefined satisfies Ep["optAttr$Change"];
-            ({}) as Observable<[boolean, boolean, context: InvocationContext]> satisfies Ep["optAttr$Change"];
+            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ep["optAttr$Change"];
             undefined satisfies Ep["optEv"];
-            ({}) as Observable<[string, context: InvocationContext]> satisfies Ep["optEv"];
+            ({}) as Observable<[string, context: ActionContext]> satisfies Ep["optEv"];
         });
     });
 
@@ -35,17 +35,17 @@ describe("ClusterEvents", () => {
 
         it("requires mandatory", () => {
             ({}) as Ei satisfies {
-                reqAttr$Change: Observable<[value: string, oldValue: string, context: InvocationContext]>;
+                reqAttr$Change: Observable<[value: string, oldValue: string, context: ActionContext]>;
 
-                reqEv: Observable<[payload: string, context: InvocationContext]>;
+                reqEv: Observable<[payload: string, context: ActionContext]>;
             };
         });
 
         it("allows optional", () => {
             undefined satisfies Ei["optAttr$Change"];
-            ({}) as Observable<[boolean, boolean, context: InvocationContext]> satisfies Ei["optAttr$Change"];
+            ({}) as Observable<[boolean, boolean, context: ActionContext]> satisfies Ei["optAttr$Change"];
             undefined satisfies Ei["optEv"];
-            ({}) as Observable<[string, context: InvocationContext]> satisfies Ei["optEv"];
+            ({}) as Observable<[string, context: ActionContext]> satisfies Ei["optEv"];
         });
     });
 });

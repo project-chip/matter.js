@@ -5,6 +5,8 @@ import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { Part } from "../../../endpoint/Part.js";
+import { ImplementationError } from "../../../common/MatterError.js";
 import { logger } from "./ServerStore.js";
 
 const NUMBER_KEY = "__number__";
@@ -22,8 +24,19 @@ export class ServerPartStore implements PartStore {
     #construction: AsyncConstruction<PartStore>;
     #isNew: boolean;
 
-    // TODO - see corresponding comment in ServicePartStoreService
+    #childStorage: StorageContext;
+    #childStores = {} as Record<string, ServerPartStore>;
+
+    // TODO - this is a temporary kludge, don't think it's possible right now to query for sub-contexts?  Instead we
+    // maintain this persistent list of all parts
+    #knownParts = new Set<string>();
+
+    // TODO - same issue here
     #knownBehaviors = new Set<string>();
+
+    toString() {
+        return `storage:${this.#storage.contexts.join(".")}`;
+    }
 
     get construction() {
         return this.#construction;
@@ -42,7 +55,9 @@ export class ServerPartStore implements PartStore {
     set number(number: number | undefined) {
         this.#construction.assert();
 
-        this.#number = number;
+        if (this.#number !== number) {
+            this.#number = number;
+        }
     }
 
     get isNew() {
@@ -50,7 +65,8 @@ export class ServerPartStore implements PartStore {
     }
 
     constructor(partId: string, storage: StorageContext, isNew: boolean) {
-        this.#storage = storage.createContext(partId);
+        this.#storage = storage;
+        this.#childStorage = storage.createContext("parts");
         this.#isNew = isNew;
 
         this.#construction = AsyncConstruction(this, () => {
@@ -79,12 +95,41 @@ export class ServerPartStore implements PartStore {
         } else {
             logger.warn(`Part ${partId} has persisted state but no endpoint number, will reassign`);
         }
+
+        this.#loadSubparts();
     }
 
     storeForBehavior(behaviorId: string): Datasource.Store {
         this.#construction.assert();
 
         return DatasourceStore(this, behaviorId);
+    }
+
+    childStoreFor(part: Part): ServerPartStore {
+        if (!part.lifecycle.hasId) {
+            throw new ImplementationError("Cannot access part storage because part has no assigned ID");
+        }
+        return this.#storeForPartId(part.id);
+    }
+
+    #storeForPartId(partId: string) {
+        this.#construction.assert();
+
+        let store = this.#childStores[partId];
+        if (store === undefined) {
+            store = this.#childStores[partId] = new ServerPartStore(
+                partId,
+                this.#childStorage.createContext(partId),
+                true
+            );
+
+            if (!this.#knownParts.has(partId)) {
+                this.#knownParts.add(partId);
+                this.#childStorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
+            }
+        }
+
+        return store;
     }
 
     async saveNumber() {
@@ -135,5 +180,64 @@ export class ServerPartStore implements PartStore {
         await this.#construction;
 
         await this.#storage.clearAll();
+    }
+
+    /**
+     * Clear non-volatile values.  We erase values discriminately so we preserve metadata.
+     */
+    async clear() {
+        await this.#construction;
+
+        let clearPart: undefined | Record<string, Val.Struct>;
+
+        for (const behaviorId of this.#knownBehaviors) {
+            const storage = this.#storage.createContext(behaviorId);
+
+            let clearBehavior: undefined | Val.Struct;
+
+            for (const propertyName in storage.keys()) {
+                if (propertyName === NUMBER_KEY) {
+                    continue;
+                }
+
+                if (clearBehavior === undefined) {
+                    clearBehavior = {};
+
+                    if (clearPart === undefined) {
+                        clearPart = {};
+                    }
+
+                    clearPart[behaviorId] = clearBehavior;
+                }
+
+                clearBehavior[propertyName] = undefined;
+            }
+        }
+
+        if (clearPart) {
+            await this.set(clearPart);
+        }
+
+        for (const id of this.#knownParts) {
+            await this.#storeForPartId(id).clear();
+        }
+    }
+
+    async #loadSubparts() {
+        this.#knownParts = new Set(this.#childStorage.get(KNOWN_KEY, Array<string>()));
+
+        for (const partId of this.#knownParts) {
+            await this.#loadKnownChildStores(partId);
+        }
+    }
+
+    async #loadKnownChildStores(partId: string) {
+        const partStore = new ServerPartStore(
+            partId,
+            this.#childStorage.createContext(partId),
+            false,
+        );
+        this.#childStores[partId] = partStore;
+        await partStore.construction;
     }
 }

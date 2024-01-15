@@ -13,11 +13,16 @@ import { Part } from "../../endpoint/Part.js";
  */
 export class IdentityConflictError extends ImplementationError {}
 
+/**
+ * Provides NodeServer and Part identification.
+ */
 export class IdentityService {
+    #nodeDescription: string;
     #port?: number;
     #index?: IndexBehavior;
 
-    constructor(root: Part, port?: number) {
+    constructor(root: Part, nodeDescription: string, port?: number) {
+        this.#nodeDescription = nodeDescription;
         this.#port = port;
 
         const acquireIndex = () => {
@@ -35,20 +40,17 @@ export class IdentityService {
     }
 
     /**
-     * This is the best we currently have in terms of a well-known node identifier.
+     * Textual description of the node.
      */
-    get port() {
-        return this.#port;
+    get nodeDescription() {
+        return this.#nodeDescription;
     }
 
     /**
-     * Ensure that an ID is available for assignment to a {@link Part}.
+     * The network port the node is listening on.
      */
-    assertIdAvailable(id: string, part: Part) {
-        const other = this.#index?.forId(id);
-        if (other && other !== part) {
-            throw new IdentityConflictError(`Another part already exists with ID ${id}`);
-        }
+    get port() {
+        return this.#port;
     }
 
     /**

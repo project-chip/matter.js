@@ -5,6 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError, MatterError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { ValidationError } from "../../common/ValidationError.js";
@@ -46,8 +47,8 @@ export function createAttributeServer<
     attributeName: string,
     defaultValue: T,
     datasource: ClusterDatasource,
-    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>,
+    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => Promise<boolean>,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
     const { id, schema, writable, fabricScoped, fixed, omitChanges, timed } = attributeDef;
@@ -153,6 +154,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         session?: Session<MatterDevice>,
         endpoint?: EndpointInterface,
         isFabricFiltered?: boolean,
+        message?: Message,
     ) => T;
 
     constructor(
@@ -168,11 +170,12 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         /**
          * Optional getter function to handle special requirements or the data are stored in different places.
          *
-         * @param session the session that is requesting the value (if any).
-         * @param endpoint the endpoint the cluster server of this attribute is assigned to.
+         * @param session the session that is requesting the value (if any)
+         * @param endpoint the endpoint the cluster server of this attribute is assigned to
          * @param isFabricFiltered whether the read request is fabric scoped or not
+         * @param message the wire message that initiated the request (if any)
          */
-        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
+        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
     ) {
         super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue); // Fixed attributes do not change, so are not subscribable
 
@@ -192,22 +195,24 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     /**
      * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
+     *
      * If a getter is defined the value is determined by that getter method.
      */
-    get(session: Session<MatterDevice>, isFabricFiltered: boolean): T {
+    get(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message): T {
         // TODO: check ACL
 
-        return this.getter(session, this.endpoint, isFabricFiltered);
+        return this.getter(session, this.endpoint, isFabricFiltered, message);
     }
 
     /**
      * Get the value of the attribute including the version number. This method is used by the Interaction model to read
      * the value of the attribute and includes the ACL check. It should not be used locally in the code!
+     *
      * If a getter is defined the value is determined by that getter method. The version number is always 0 for fixed
      * attributes.
      */
-    getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean) {
-        return { version: this.datasource.version, value: this.get(session, isFabricFiltered) };
+    getWithVersion(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message) {
+        return { version: this.datasource.version, value: this.get(session, isFabricFiltered, message) };
     }
 
     /**
@@ -278,11 +283,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
     protected readonly valueChangeListeners = new Array<(value: T, version: number) => MaybePromise<void>>();
     protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => MaybePromise<void>>();
-    protected readonly setter: (
-        value: T,
-        session?: Session<MatterDevice>,
-        endpoint?: EndpointInterface,
-    ) => Promise<boolean>;
+    protected readonly setter: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => Promise<boolean>;
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 
     constructor(
@@ -294,24 +295,25 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         requiresTimedInteraction: boolean,
         defaultValue: T,
         datasource: ClusterDatasource,
-        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
+        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
 
         /**
-         * Optional setter function to handle special requirements or the data are stored in different places.
-         * If a setter method is used for a writable attribute, the getter method must be implemented as well.
-         * The method needs to return if the stored value has changed or not.
+         * Optional setter function to handle special requirements or the data are stored in different places. If a
+         * setter method is used for a writable attribute, the getter method must be implemented as well. The method
+         * needs to return if the stored value has changed or not.
          *
          * @param value the value to be set.
          * @param session the session that is requesting the value (if any).
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          * @returns true if the value has changed, false otherwise.
          */
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => Promise<boolean>,
+        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => Promise<boolean>,
 
         /**
-         * Optional Validator function to handle special requirements for verification of stored data.
-         * The method should throw an error if the value is not valid. If a StatusResponseError is thrown this one is
-         * also returned to the client.
+         * Optional Validator function to handle special requirements for verification of stored data. The method should
+         * throw an error if the value is not valid. If a StatusResponseError is thrown this one is also returned to the
+         * client.
+         *
          * If a setter is used then no validator should be used as the setter should handle the validation itself!
          *
          * @param value the value to be set.
@@ -368,31 +370,36 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Set the value of the attribute. This method is used by the Interaction model to write the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
+     *
      * If a setter is defined this setter method is called to store the value.
+     *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
-    async set(value: T, session: Session<MatterDevice>) {
+    async set(value: T, session: Session<MatterDevice>, message?: Message) {
         if (!this.isWritable) {
             throw new StatusResponseError(`Attribute "${this.name}" is not writable.`, StatusCode.UnsupportedWrite);
         }
         // TODO: check ACL
 
-        await this.setRemote(value, session);
+        await this.setRemote(value, session, message);
     }
 
     /**
      * Method that contains the logic to set a value "from remote" (e.g. from a client).
      */
-    protected async setRemote(value: T, session: Session<MatterDevice>) {
-        await this.processSet(value, session);
+    protected async setRemote(value: T, session: Session<MatterDevice>, message?: Message) {
+        await this.processSet(value, session, message);
         this.value = value;
     }
 
     /**
      * Set the value of the attribute locally. This method should be used locally in the code and does not include the
      * ACL check.
+     *
      * If a setter is defined this setter method is called to validate and store the value.
+     *
      * Else if a validator is defined the value is validated before it is stored.
+     *
      * Listeners are called when the value changes (internal listeners) or in any case (external listeners).
      */
     async setLocal(value: T) {
@@ -403,10 +410,10 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     /**
      * Helper Method to process the set of a value in a generic way. This method is used internally.
      */
-    protected async processSet(value: T, session?: Session<MatterDevice>) {
+    protected async processSet(value: T, session?: Session<MatterDevice>, message?: Message) {
         this.validator(value, session, this.endpoint);
-        const oldValue = this.getter(session, this.endpoint);
-        const valueChanged = await this.setter(value, session, this.endpoint);
+        const oldValue = this.getter(session, this.endpoint, undefined, message);
+        const valueChanged = await this.setter(value, session, this.endpoint, message);
         await this.handleVersionAndTriggerListeners(value, oldValue, valueChanged);
     }
 
@@ -436,6 +443,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * When the value is handled by getter or setter methods and is changed by other processes this method can be used
      * to notify the attribute server that the value has changed. This will increase the version number and trigger the
      * listeners.
+     *
      * ACL checks needs to be performed before calling this method.
      */
     async updated(session: SecureSession<MatterDevice>) {
@@ -452,6 +460,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
      * When the value is handled by getter or setter methods and is changed by other processes and no session from the
      * originating process is known this method can be used to notify the attribute server that the value has changed.
      * This will increase the version number and trigger the listeners.
+     *
      * ACL checks needs to be performed before calling this method.
      */
     async updatedLocal() {
@@ -617,7 +626,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
      * Method that contains the logic to set a value "from remote" (e.g. from a client). For Fabric scoped attributes
      * we need to inject the fabric index into the value.
      */
-    protected override async setRemote(value: T, session: Session<MatterDevice>) {
+    protected override async setRemote(value: T, session: Session<MatterDevice>, message: Message) {
         // Inject fabric index into structures in general if undefined, if set it will be used
         value = this.schema.injectField(
             value,
@@ -626,7 +635,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             existingFieldIndex => existingFieldIndex === undefined,
         );
 
-        await super.setRemote(value, session);
+        await super.setRemote(value, session, message);
     }
 
     /**

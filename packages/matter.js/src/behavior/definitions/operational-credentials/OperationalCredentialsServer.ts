@@ -6,14 +6,15 @@
 
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailSafeManager.js";
-import { InternalError, MatterFlowError } from "../../../common/MatterError.js";
+import { MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
-import { StructManager } from "../../state/managed/values/StructManager.js";
+import { Val } from "../../state/managed/Val.js";
+import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
@@ -35,29 +36,38 @@ const logger = Logger.get("OperationalCredentials");
 /**
  * This is the default server implementation of OperationalCredentialsBehavior.
  *
- * TODO - currently "source of truth" for fabric data is persisted by
- * FabricManager.  I'd probably convert so we just load fabrics from persisted
- * OperationalCredentials state but right now we just sync the state
+ * TODO - currently "source of truth" for fabric data is persisted by FabricManager.  I'd probably convert so we just
+ * load fabrics from persisted OperationalCredentials state but right now we just sync the state
+ *
+ * TODO - we either need to change source of truth as mentioned above or sync state.  Perhaps just at startup but most
+ * complete solution would be to hook fabric for all changes.  Right now this code assumes it's the only source of
+ * fabric mutation
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
     declare internal: OperationalCredentialsServer.Internal;
     declare state: OperationalCredentialsServer.State;
 
-    override async initialize() {
-        const commissioning = await this.agent.waitFor(CommissioningBehavior);
+    override initialize() {
+        // maximum number of fabrics. Also FabricBuilder uses 254 as max!
+        if (this.state.supportedFabrics === undefined) {
+            this.state.supportedFabrics = 254;
+        }
 
-        this.internal.certification = new DeviceCertification(
-            this.state.certification,
-            commissioning.state.productDescription,
-        );
+        this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
     get #certification() {
         const certification = this.internal.certification;
-        if (certification === undefined) {
-            throw new InternalError("Operational credentials certification accessed before initialization");
+        if (certification) {
+            return certification;
         }
-        return certification;
+
+        const commissioning = this.agent.get(CommissioningBehavior);
+
+        return this.internal.certification = new DeviceCertification(
+            this.state.certification,
+            commissioning.productDescription
+        );
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
@@ -196,7 +206,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         // Update attributes
-        this.elevate(() => {
+        this.asAdmin(() => {
             this.state.fabrics[fabric.fabricIndex] = {
                 fabricId: fabric.fabricId,
                 label: fabric.label,
@@ -225,9 +235,9 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         // TODO The incoming IPKValue SHALL be stored in the Fabric-scoped slot within the Group Key Management cluster
         //  (see KeySetWrite), for subsequent use during CASE.
 
-        // TODO If the current secure session was established with PASE, the receiver SHALL:
-        //  a. Augment the secure session context with the FabricIndex generated above, such that subsequent interactions
-        //     have the proper accessing fabric.
+        // TODO If the current secure session was established with PASE, the receiver SHALL: a. Augment the secure
+        //  session context with the FabricIndex generated above, such that subsequent interactions have the proper
+        //  accessing fabric.
 
         logger.info(`addNoc success, adminVendorId ${adminVendorId}, caseAdminSubject ${caseAdminSubject}`);
 
@@ -379,18 +389,20 @@ export namespace OperationalCredentialsServer {
         /**
          * Device certification information.
          *
-         * Device certification provides a cryptographic certificate that asserts
-         * the official status of a device.  Production consumer-facing devices are
-         * certified by the CSA.
+         * Device certification provides a cryptographic certificate that asserts the official status of a device.
+         * Production consumer-facing devices are certified by the CSA.
          *
-         * Development devices and those intended for personal use may use a
-         * development certificate.  This is the default if you do not provide
-         * an official certification in {@link ServerOptions.certification}.
+         * Development devices and those intended for personal use may use a development certificate.  This is the
+         * default if you do not provide an official certification in {@link ServerOptions.certification}.
          */
         certification?: DeviceCertification.Configuration;
 
-        override get currentFabricIndex() {
-            return StructManager.sessionOf(this).associatedFabric ?? FabricIndex.NO_FABRIC;
+        [Val.properties](session: ValueSupervisor.Session) {
+            return {
+                get currentFabricIndex() {
+                    return session.associatedFabric ?? FabricIndex.NO_FABRIC;
+                }
+            }
         }
     }
 }

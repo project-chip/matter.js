@@ -10,8 +10,7 @@ import type { Resource } from "./Resource.js";
 import type { Transaction } from "./Transaction.js";
 
 /**
- * An internal set of resources supporting bulk operations for
- * {@link Transaction}.
+ * An internal set of resources supporting bulk operations for {@link Transaction}.
  */
 export class ResourceSet {
     #transaction: Transaction;
@@ -48,7 +47,7 @@ export class ResourceSet {
             await this.#transaction.waitFor(blockedBy);
         }
 
-        this.acquireLocksSync();
+        return this.acquireLocksSync();
     }
 
     /**
@@ -57,14 +56,19 @@ export class ResourceSet {
      * Throws an error if resources aren't lockable.
      */
     acquireLocksSync() {
+        const toLock = new Set<Resource>();
         const blocked = new Set<Resource>();
         for (const resource of this.#resources) {
-            if (resource.lockedBy && resource.lockedBy !== this.#transaction) {
+            if (resource.lockedBy) {
+                if (resource.lockedBy === this.#transaction) {
+                    continue;
+                }
                 blocked.add(resource);
             }
+            toLock.add(resource);
         }
         if (blocked.size) {
-            const names = [...blocked].map(s => s.description);
+            const names = [...blocked].map(s => s.toString());
             throw new SynchronousTransactionConflictError(
                 `Cannot acquire transaction lock for ${describeList(
                     "and",
@@ -75,22 +79,27 @@ export class ResourceSet {
         }
 
         // Update resource status
-        for (const resource of this.#resources) {
-            if (!resource.lockedBy) {
-                resource.lockedBy = this.#transaction;
-            }
+        for (const resource of toLock) {
+            resource.lockedBy = this.#transaction;
         }
+
+        return toLock;
     }
 
     /**
      * Release locks.
      */
     releaseLocks() {
+        const unlocked = new Set<Resource>;
+
         for (const resource of this.#resources) {
             if (resource.lockedBy === this.#transaction) {
                 delete resource.lockedBy;
+                unlocked.add(resource);
             }
         }
+
+        return unlocked;
     }
 
     /**
@@ -145,5 +154,9 @@ export class ResourceSet {
         for (const transaction of blockedBy) {
             examineBlocker(transaction);
         }
+    }
+
+    [Symbol.iterator]() {
+        return this.#resources[Symbol.iterator]();
     }
 }

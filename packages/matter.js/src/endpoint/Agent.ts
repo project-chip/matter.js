@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { InvocationContext } from "../behavior/InvocationContext.js";
+import { ActionContext } from "../behavior/ActionContext.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Part } from "./Part.js";
@@ -28,10 +28,10 @@ import type { SupportedBehaviors } from "./part/SupportedBehaviors.js";
  */
 export class Agent {
     #part: Part;
-    #context: InvocationContext;
+    #context: ActionContext;
     #behaviors = {} as Record<string, Behavior>;
 
-    constructor(part: Part, context: InvocationContext) {
+    constructor(part: Part, context: ActionContext) {
         this.#part = part;
         this.#context = context;
     }
@@ -44,7 +44,7 @@ export class Agent {
     }
 
     /**
-     * Access the agent's {@link InvocationContext}.
+     * Access the agent's {@link ActionContext}.
      */
     get context() {
         return this.#context;
@@ -70,7 +70,7 @@ export class Agent {
     get<T extends Behavior.Type>(type: T) {
         let behavior = this.#behaviors[type.id];
         if (!behavior) {
-            behavior = this.#part.behaviors.create(type, this);
+            behavior = this.#part.behaviors.createSync(type, this);
             this.#behaviors[type.id] = behavior;
         }
         return behavior as InstanceType<T>;
@@ -87,7 +87,7 @@ export class Agent {
             return behavior as InstanceType<T>;
         }
 
-        return this.#part.behaviors.createAsync(type, this) as MaybePromise<InstanceType<T>>;
+        return this.#part.behaviors.createMaybeAsync(type, this) as MaybePromise<InstanceType<T>>;
     }
 
     /**
@@ -95,7 +95,7 @@ export class Agent {
      * 
      * Functionally identical to {@link waitFor} but has no return value.
      */
-    activate(type: Behavior.Type): void {
+    activate(type: Behavior.Type) {
         this.#part.behaviors.activate(type);
     }
 
@@ -140,7 +140,7 @@ export namespace Agent {
      * {@link Agent.require}.
      */
     export interface Type<B extends SupportedBehaviors = {}> {
-        new (part: Part, context: InvocationContext): Instance<B>;
+        new (part: Part, context: ActionContext): Instance<B>;
     }
 
     export type Instance<B extends SupportedBehaviors = {}> = Agent & {

@@ -19,4 +19,5 @@ export interface UdpChannel {
     onData(listener: (netInterface: string, peerAddress: string, peerPort: number, data: ByteArray) => void): Listener;
     send(host: string, port: number, data: ByteArray): Promise<void>;
     close(): void;
+    get port(): number;
 }

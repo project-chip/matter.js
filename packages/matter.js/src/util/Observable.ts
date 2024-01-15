@@ -5,130 +5,230 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { Logger } from "../log/Logger.js";
 import { MaybePromise } from "./Promises.js";
-
-const logger = Logger.get("Event");
 
 /**
  * A callback function for observables.
+ *
+ * The observer return value effects how an {@link Observable} emits:
+ *
+ *   - If an observer returns undefined the {@link Observable} invokes the next observer immediately.
+ *
+ *   - If an observer returns a {@link Promise}, the {@link Observable} awaits the return value then continues as
+ *     described here.  The emitter must then await the {@link Promise} returned by {@link Observable.emit}.
+ *
+ *   - Any other return value is returned by {@link Observable.emit} and subsequent observers do not see emission.
+ *
+ * @param payload a list of arguments to be emitted
  */
-export type Observer<T extends any[] = any[]> = (...payload: T) => MaybePromise<void>;
+export type Observer<T extends any[] = any[], R = void> = (...payload: T) => R | undefined;
 
 /**
- * A discrete event that may be monitored via callback.  Could call it "event"
- * but that could be confused with Matter cluster events and/or DOM events.
+ * A discrete event that may be monitored via callback.  Could call it "event" but that could be confused with Matter
+ * cluster events and/or DOM events.
  *
  * @param T arguments, should be a named tuple
  */
-export interface Observable<T extends any[] = any[]> {
+export interface Observable<T extends any[] = any[], R = void> extends AsyncIterable<T> {
     /**
      * Notify observers.
      */
-    emit(...args: T): MaybePromise<void>;
+    emit(...args: T): R | undefined;
 
     /**
      * Add an observer.
      */
-    on(observer: Observer<T>): void;
+    on(observer: Observer<T, R>): void;
 
     /**
      * Remove an observer.
      */
-    off(observer: Observer<T>): void;
+    off(observer: Observer<T, R>): void;
 
     /**
      * Add an observer that emits once then is unregistered.
      */
-    once(observer: Observer<T>): void;
+    once(observer: Observer<T, R>): void;
+
+    /**
+     * Observable supports standard "for await (const value of observable").
+     *
+     * Using an observer in this manner limits your listener to the first parameter normally emitted and your observer
+     * cannot return a value.
+     */
+    [Symbol.asyncIterator](): AsyncIterator<T[0]>;
+
+    /**
+     * Release resources associated with the observable.
+     */
+    [Symbol.dispose](): void;
 }
 
 function defaultErrorHandler(error: Error) {
-    logger.error(`Error invoking event observer:`, error);
+    throw error;
 }
 
-export type ObserverErrorHandler = (error: Error, observer: Observer) => void;
+export type ObserverErrorHandler = (error: Error, observer: Observer<any[], any>) => void;
 
-class Event<T extends any[] = any[]> implements Observable<T> {
+class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
     #errorHandler: ObserverErrorHandler;
-    #observers?: Set<Observer<T>>;
-    #once?: Set<Observer<T>>;
+    #observers?: Set<Observer<T, R>>;
+    #once?: Set<Observer<T, R>>;
+
+    #joinIteration?: () => Promise<Next<T>>;
+    #removeIterator?: () => void;
+    #stopIteration?: () => void;
 
     constructor(errorHandler?: ObserverErrorHandler) {
         this.#errorHandler = errorHandler ?? defaultErrorHandler;
     }
 
-    emit(...payload: T) {
-        if (this.#observers) {
-            const promiseArray = new Array<Promise<void>>();
-            for (const observer of this.#observers) {
-                try {
-                    const result = observer(...payload);
-                    if (result !== undefined && MaybePromise.is(result)) {
-                        promiseArray.push(
-                            result
-                                .then(() => {
-                                    if (this.#once?.has(observer)) {
-                                        this.#once.delete(observer);
-                                        this.#observers?.delete(observer);
-                                    }
-                                })
-                                .catch(e => {
-                                    if (!(e instanceof Error)) {
-                                        e = new Error(`${e}`);
-                                    }
-                                    this.#errorHandler(e as Error, observer as Observer);
-                                }),
-                        );
-                        continue;
-                    }
-                } catch (e) {
-                    if (!(e instanceof Error)) {
-                        e = new Error(`${e}`);
-                    }
-                    this.#errorHandler(e as Error, observer as Observer);
-                }
-                if (this.#once?.has(observer)) {
-                    this.#once.delete(observer);
-                    this.#observers.delete(observer);
-                }
-            }
-            if (promiseArray.length > 0) {
-                return Promise.all(promiseArray).then(() => {});
-            }
-        }
+    [Symbol.dispose]() {
+        this.#observers = this.#once = undefined;
+
+        this.#stopIteration?.();
     }
 
-    on(observer: Observer<T>) {
+    emit(...payload: T): R | undefined {
+        if (!this.#observers) {
+            return;
+        }
+
+        let iterator = this.#observers[Symbol.iterator]();
+
+        const emitOne = (observer: Observer<T, R>) => {
+            let result;
+
+            try {
+                result = observer(...payload);
+            } catch (e) {
+                if (!(e instanceof Error)) {
+                    e = new Error(`${e}`);
+                }
+                this.#errorHandler(e as Error, observer);
+            }
+
+            if (this.#once?.has(observer)) {
+                this.#once.delete(observer);
+                this.#observers?.delete(observer);
+            }
+
+            return result;
+        }
+
+        function emitNext(): R | undefined {
+            for (let iteration = iterator.next(); !iteration.done; iteration = iterator.next()) {
+                const result = emitOne(iteration.value);
+
+                if (result === undefined) {
+                    continue;
+                }
+
+                if (MaybePromise.is(result)) {
+                    return result.then(result => {
+                        if (result === undefined) {
+                            return emitNext();
+                        }
+                        return result;
+                    }) as R;
+                }
+
+                return result;
+            }
+        }
+
+        return emitNext();
+    }
+
+    on(observer: Observer<T, R>) {
         if (!this.#observers) {
             this.#observers = new Set();
         }
         this.#observers.add(observer);
     }
 
-    off(observer: Observer<T>) {
+    off(observer: Observer<T, R>) {
         this.#observers?.delete(observer);
     }
 
-    once(observer: Observer<T>) {
+    once(observer: Observer<T, R>) {
         this.on(observer);
         if (!this.#once) {
             this.#once = new Set();
         }
         this.#once.add(observer);
     }
+
+    async *[Symbol.asyncIterator](): AsyncIterator<T[0]> {
+        let promise = this.#addIterator();
+
+        try {
+            while (promise) {
+                const next = await promise;
+                if (next) {
+                    promise = next.promise;
+                    yield next.value;
+                }
+            }
+        } finally {
+            this.#removeIterator?.();
+        }
+    }
+
+    #addIterator() {
+        if (this.#joinIteration) {
+            return this.#joinIteration();
+        }
+
+        let resolve: (next: Next<T>) => void;
+        let iteratorCount = 1;
+
+        function newPromise() {
+            return new Promise<Next<T>>(r => resolve = r);
+        }
+
+        let promise = newPromise();
+
+        function observer(...args: T): undefined {
+            const oldResolve = resolve;
+            promise = newPromise();
+            oldResolve({ value: args[0], promise });
+        }
+
+        this.on(observer);
+
+        this.#joinIteration = () => {
+            iteratorCount++;
+            return promise;
+        }
+
+        this.#removeIterator = () => {
+            if (!iteratorCount--) {
+                this.#stopIteration?.();
+            }
+        }
+
+        this.#stopIteration = () => {
+            this.off(observer);
+            resolve(undefined);
+            this.#stopIteration = undefined;
+            this.#removeIterator = undefined;
+        }
+    }
 }
 
+type Next<T> = undefined | { value: T, promise: Promise<Next<T>> };
+
 function constructObservable(errorHandler?: ObserverErrorHandler) {
-    return new Event(errorHandler);
+    return new Emitter(errorHandler);
 }
 
 /**
  * A general implementation of {@link Observable}.
  */
 export const Observable = constructObservable as unknown as {
-    new <T extends any[]>(errorHandler?: ObserverErrorHandler): Observable<T>;
-    <T extends any[]>(errorHandler?: ObserverErrorHandler): Observable<T>;
+    new <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
+    <T extends any[], R = void>(errorHandler?: ObserverErrorHandler): Observable<T, R>;
 };
 
 function event<E, N extends string>(emitter: E, name: N) {
@@ -140,11 +240,10 @@ function event<E, N extends string>(emitter: E, name: N) {
 }
 
 /**
- * A set of observables.  You can bind events using individual observables or
- * the methods emulating a subset Node's EventEmitter.
+ * A set of observables.  You can bind events using individual observables or the methods emulating a subset Node's
+ * EventEmitter.
  *
- * To maintain type safety, implementers define events as observable child
- * properties.
+ * To maintain type safety, implementers define events as observable child properties.
  */
 export class EventEmitter {
     async emit<This, N extends EventEmitter.NamesOf<This>>(

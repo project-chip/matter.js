@@ -21,7 +21,6 @@ import {
     createLogicalInversion,
     evaluateNode,
     isStatic,
-    normalizeFeatures,
     type RuntimeNode,
 } from "./conformance-util.js";
 import { ValidationContext } from "./context.js";
@@ -53,7 +52,7 @@ export function astToFunction(
     supportedFeatures: FeatureSet,
 ): ValueSupervisor.Validate | undefined {
     const ast = schema.conformance.ast;
-    const { featuresAvailable, featuresSupported } = normalizeFeatures(featureMap, supportedFeatures);
+    const { featuresAvailable, featuresSupported } = FeatureSet.normalize(featureMap, supportedFeatures);
 
     // Compile the AST
     const compiledNode = compile(ast);
@@ -79,7 +78,7 @@ export function astToFunction(
             // field is conformant
             const evaluate = compiledNode.evaluate;
 
-            return (value, options) => {
+            return (value, _session, options) => {
                 const staticNode = evaluate(value, options);
 
                 switch (staticNode.code) {

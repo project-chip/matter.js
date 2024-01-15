@@ -8,7 +8,7 @@ import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { Part } from "../../../endpoint/Part.js";
-import { Lifecycle } from "../../../endpoint/part/Lifecycle.js";
+import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { IndexBehavior } from "../index/IndexBehavior.js";
@@ -32,7 +32,7 @@ export class DescriptorServer extends DescriptorBehavior {
             this.state.partsList = this.#partsList;
         }
 
-        if (!this.state.deviceTypeList?.length) {
+        if (!this.state.deviceTypeList.length) {
             const partType = this.part.type;
             this.state.deviceTypeList = [
                 {
@@ -63,9 +63,9 @@ export class DescriptorServer extends DescriptorBehavior {
     /**
      * Process a structure change event and trigger state updates if necessary.
      */
-    #applyChange(type: Lifecycle.Change, part: Part) {
+    #applyChange(type: PartLifecycle.Change, part: Part) {
         switch (type) {
-            case Lifecycle.Change.Ready:
+            case PartLifecycle.Change.Ready:
                 if (!this.part.parts.has(part)) {
                     return;
                 }
@@ -73,7 +73,7 @@ export class DescriptorServer extends DescriptorBehavior {
                 this.#monitorDestruction(part);
                 break;
 
-            case Lifecycle.Change.ServersChanged:
+            case PartLifecycle.Change.ServersChanged:
                 if (part !== this.part) {
                     return;
                 }

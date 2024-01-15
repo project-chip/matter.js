@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { LifecycleStatus } from "../common/Lifecycle.js";
+
 /**
  * Logged values may implement this interface to customize presentation.
  * 
@@ -11,14 +13,14 @@
  * Diagnostics from common value types.
  */
 export interface Diagnostic {
-    readonly [Diagnostic.presentation]?: Diagnostic.Presentation,
+    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | LifecycleStatus,
     readonly [Diagnostic.value]?: unknown;
 }
 
 /**
  * Create a diagnostic giving a value a specific presentation.
  */
-export function Diagnostic(presentation: Diagnostic.Presentation, value: unknown): Diagnostic {
+export function Diagnostic(presentation: Diagnostic.Presentation | LifecycleStatus, value: unknown): Diagnostic {
     return {
         [Diagnostic.presentation]: presentation,
         [Diagnostic.value]: value,
@@ -28,32 +30,66 @@ export function Diagnostic(presentation: Diagnostic.Presentation, value: unknown
 export namespace Diagnostic {
     export enum Presentation {
         /**
-         * A sequence of diagnostics rendered sequentially.
+         * By default iterables render as a single line with spaces separating.  The "list" presentation treats elements
+         * instead as separate entities which typically means presentation on different lines.
+         *
+         * Within an iterable, a list also serves to present contained items as subordinate to the previous item.
          */
         List = "list",
 
         /**
+         * Render iterables without intervening spaces.
+         */
+        Squash = "squash",
+
+        /**
          * An emphasized diagnostic.  Rendered to draw attention.
          */
-        Emphasized = "emphasized",
+        Strong = "strong",
+
+        /**
+         * A deemphasized diagnostic.  Rendered to draw less attention than default rendering.
+         */
+        Weak = "weak",
 
         /**
          * A key/value diagnostic.  Rendered as a group of key/value pairs.
          */
         Dictionary = "dictionary",
+
+        /**
+         * Path, resource or session identifier.
+         */
+        Via = "via",
     }
 
     export const presentation = Symbol("presentation");
     export const value = Symbol("value");
 
     /**
-     * Create a value that is emphasized in output.
+     * Create a value presented emphatically.
      */
-    export function em(value: unknown) {
-        return Diagnostic(
-            Diagnostic.Presentation.Emphasized,
-            value,
-        )
+    export function strong(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Strong, value);
+    }
+
+    /**
+     * Create a value presented less emphatically than the default.
+     */
+    export function weak(value: unknown) {
+        return Diagnostic(Diagnostic.Presentation.Weak, value);
+    }
+
+    /**
+     * Create a value identifying the source of a diagnostic event.
+     */
+    export function via(value: string) {
+        if ((value as Diagnostic)[presentation]) {
+            return value;
+        }
+        const via = new String(value);
+        Object.defineProperty(via, presentation, { value: Presentation.Via });
+        return via as string;
     }
 
     /**
@@ -63,6 +99,16 @@ export namespace Diagnostic {
         return Diagnostic(
             Diagnostic.Presentation.List,
             value,
+        )
+    }
+
+    /**
+     * Create a value presenting as segments of the same string without intervening spaces.
+     */
+    export function squash(...values: unknown[]) {
+        return Diagnostic(
+            Diagnostic.Presentation.Squash,
+            values,
         )
     }
 
@@ -80,24 +126,31 @@ export namespace Diagnostic {
      * Create a Diagnostic for an error.
      */
     export function error(error: any) {
-        let message;
-        let stack;
+        let message: string | undefined;
+        let stack: string | undefined;
         if (error !== undefined && error !== null) {
             if (error instanceof Error) {
                 message = error.message;
                 stack = error.stack;
-            } else {
-                message = error.toString();
+            } else if (error.message) {
+                message = typeof error.message === "string" ? message : error.toString();
             }
         }
-        if (message === undefined) {
-            message = "(unknown error)";
+        if (message === undefined || message === null || message === "") {
+            if (error instanceof Error) {
+                message = error.constructor.name;
+                if (message === "Error") {
+                    message = "(unknown error)";
+                }
+            } else {
+                message = "(unknown error)";
+            }
         }
         if (!stack) {
             return message;
         }
 
-        stack = error.stack;
+        stack = stack.toString();
 
         // Strip extra node garbage off stack from node asserts
         stack = stack.replace(/^.*?\n\nError: /gs, "Error: ");
@@ -108,19 +161,73 @@ export namespace Diagnostic {
         }
 
         // Strip off redundant message from v8
-        if (stack.startsWith(message)) {
-            stack = stack.slice(message.length);
+        const pos = stack.indexOf(message);
+        if (pos !== -1) {
+            stack = stack.slice(pos + message.length).trim();
         }
 
-        stack = stack.trim().split("\n").map((frame: string) => frame.trim());
+        // Spiff up lines a bit
+        const lines = Array<unknown>();
+        for (let line of stack.split("\n")) {
+            line = line.trim();
+            if (line === "") {
+                continue;
+            }
+            const match = line.match(/^at\s+(.+)\s+\(([^)]+)\)$/);
+            if (!match) {
+                lines.push(line);
+                continue;
+            }
+            lines.push(
+                Diagnostic.squash(
+                    Diagnostic.weak("at "),
+                    match[1],
+                    Diagnostic.weak(" ("),
+                    Diagnostic.weak(match[2]),
+                    Diagnostic.weak(")"),
+                )
+            );
+        }
+
+        // Node helpfully gives us this if there's no message.  It's not even the name of the error class, just "Error"
+        if (lines[0] === "Error") {
+            lines.shift();
+        }
 
         return Diagnostic(
             Presentation.List,
             [
                 message,
-                ...stack,
+                ...lines,
             ]
         )
+    }
+
+    export function prefixError(prefix: string, cause: any) {
+        if (cause instanceof Error) {
+            cause.message = upgrade(
+                `${prefix}: ${cause.message}`,
+                Diagnostic.squash(
+                    prefix,
+                    " ",
+                    cause.message,
+                )
+            );
+        }
+    }
+
+    /**
+     * Create a diagnostic with a specific {@link LifecycleStatus}.
+     */
+    export function lifecycle(status: LifecycleStatus, value: unknown) {
+        return Diagnostic(status, value);
+    }
+
+    /**
+     * Create a diagnostic for a {@link LifecycleStatus.Map}.
+     */
+    export function lifecycleList(map: LifecycleStatus.Map<any>) {
+        return Object.entries(map).map(([label, status]) => Diagnostic(status, label));
     }
 
     export interface Elapsed {
@@ -172,5 +279,32 @@ export namespace Diagnostic {
                 return interval(this.time);
             }
         }
+    }
+
+    /**
+     * Upgrade a value to support specialized diagnostic rendering.
+     */
+    export function upgrade<T>(value: boolean | number | string | object, diagnostic: unknown): T {
+        switch (typeof value) {
+            case "boolean":
+                value = new Boolean(value);
+                break;
+
+            case "number":
+                value = new Number(value);
+                break;
+
+            case "string":
+                value = new String(value);
+                break;
+        }
+
+        if (typeof diagnostic === "function") {
+            Object.defineProperty(value, Diagnostic.value, { get: diagnostic as () => unknown });
+        } else {
+            Object.defineProperty(value, Diagnostic.value, { value: diagnostic });
+        }
+
+        return value as T;
     }
 }

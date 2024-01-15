@@ -34,6 +34,11 @@ export class UdpInterface implements NetInterface {
             listener(new UdpConnection(this.server, peerHost, peerPort), data),
         );
     }
+
+    get port() {
+        return this.server.port;
+    }
+
     async close() {
         this.server.close();
     }

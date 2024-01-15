@@ -10,6 +10,7 @@ import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
+import { Environment } from "../../../common/Environment.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { ServerOptions } from "../../options/ServerOptions.js";
 import type { NodeServer } from "../NodeServer.js";
@@ -25,12 +26,12 @@ export const logger = Logger.get("NodeStore");
  * backed by asynchronous storage.  So the public API is asynchronous.
  */
 export class ServerStore {
-    #environment: Environment;
-    #storage?: StorageManager;
+    #storageManager?: StorageManager;
     #eventHandler?: EventHandler;
     #sessionStorage?: StorageContext;
     #fabricStorage?: StorageContext;
-    #partStores?: PartStoreService;
+    #eventStorage?: StorageContext;
+    #rootStore?: PartStoreService;
     #construction: AsyncConstruction<ServerStore>;
 
     get construction() {
@@ -43,29 +44,36 @@ export class ServerStore {
      * TODO - implement conversion from 0.7 format so people can change API
      * seamlessly
      */
-    constructor(configuration: ServerOptions.Configuration) {
-        this.#environment = configuration.environment;
-        const nextNumber = configuration.nextEndpointNumber;
+    constructor(environment: Environment, nodeId: string, nextEndpointNumber: number) {
+        const nextNumber = nextEndpointNumber;
 
         this.#construction = AsyncConstruction(this, async () => {
-            this.#storage = await this.#environment.createStorage();
+            this.#storageManager = await environment.createStorage(nodeId);
 
-            this.#partStores = await asyncNew(PartStoreService, {
-                storage: this.#storage.createContext("endpoints"),
+            this.#rootStore = await asyncNew(PartStoreService, {
+                storage: this.#storageManager.createContext("root"),
                 nextNumber,
             });
 
-            this.#eventHandler = new EventHandler(this.#initializedStorage.createContext("events"));
+            this.#eventHandler = new EventHandler(this.eventStorage);
             await this.#eventHandler.construction;
         });
     }
 
-    static async create(configuration: ServerOptions.Configuration): Promise<ServerStore> {
-        return asyncNew(this, configuration);
+    static async create(environment: Environment, nodeId: string, nextEndpointNumber: number): Promise<ServerStore> {
+        return asyncNew(this, environment, nodeId, nextEndpointNumber);
     }
 
     async [Symbol.asyncDispose]() {
-        await this.#storage?.close();
+        await this.#construction;
+        this.#storageManager?.close();
+    }
+
+    get eventStorage() {
+        if (!this.#eventStorage) {
+            this.#eventStorage = this.#storage.createContext("events");
+        }
+        return this.#eventStorage;
     }
 
     get eventHandler() {
@@ -77,29 +85,29 @@ export class ServerStore {
 
     get sessionStorage() {
         if (!this.#sessionStorage) {
-            this.#sessionStorage = this.#initializedStorage.createContext("sessions");
+            this.#sessionStorage = this.#storage.createContext("sessions");
         }
         return this.#sessionStorage;
     }
 
     get fabricStorage() {
         if (!this.#fabricStorage) {
-            this.#fabricStorage = this.#initializedStorage.createContext("fabrics");
+            this.#fabricStorage = this.#storage.createContext("fabrics");
         }
         return this.#fabricStorage;
     }
 
     get partStores() {
-        if (this.#partStores === undefined) {
+        if (this.#rootStore === undefined) {
             throw new ImplementationError("Part storage accessed prior to initialization");
         }
-        return this.#partStores;
+        return this.#rootStore;
     }
 
-    get #initializedStorage() {
-        if (this.#storage === undefined) {
+    get #storage() {
+        if (this.#storageManager === undefined) {
             throw new ImplementationError("Node storage accessed prior to initialization");
         }
-        return this.#storage;
+        return this.#storageManager;
     }
 }

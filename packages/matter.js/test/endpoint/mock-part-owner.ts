@@ -9,7 +9,7 @@ import { ServerBehaviorBacking } from "../../src/behavior/server/ServerBehaviorB
 import { ImplementationError, InternalError } from "../../src/common/MatterError.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { Part } from "../../src/endpoint/Part.js";
-import { BehaviorInitializer } from "../../src/endpoint/part/BehaviorInitializer.js";
+import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
 import { Lifecycle } from "../../src/endpoint/part/Lifecycle.js";
 import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
@@ -17,12 +17,11 @@ import { PartStoreService } from "../../src/node/server/storage/PartStoreService
 import { EventHandler } from "../../src/protocol/interaction/EventHandler.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
-import { AsyncConstruction } from "../../src/util/AsyncConstruction.js";
-import { MockPartStore } from "../behavior/mock-behavior.js";
+import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
 
-export class MockBehaviorInitializer extends BehaviorInitializer {
+export class MockBehaviorInitializer extends PartInitializer {
     #nextId = 1;
-    initializeDescendent(part: Part) {
+    override initializeDescendent(part: Part) {
         if (!part.lifecycle.hasNumber) {
             part.number = EndpointNumber(this.#nextId++);
         }
@@ -53,8 +52,7 @@ export class MockOwner implements PartOwner {
     constructor() {
         (this.#storage as any).initialized = true;
         this.#partStores = new PartStoreService({
-            storage: this.#storage.createContext("endpoint"),
-            loadKnown: false,
+            storage: this.#storage.createContext("endpoints"),
         });
         this.#construction = AsyncConstruction(this, async () => {
             this.#eventHandler = new EventHandler(this.#storage.createContext("events"));
@@ -71,8 +69,8 @@ export class MockOwner implements PartOwner {
             throw new InternalError("Multiple roots disallowed");
         }
         this.#root = part;
-        this.#identityService = new IdentityService(part);
-        part.lifecycle.change(Lifecycle.Change.Installed);
+        this.#identityService = new IdentityService(part, "Test node");
+        part.lifecycle.change(PartLifecycle.Change.Installed);
     }
 
     storeFor(part: Part) {
@@ -85,7 +83,7 @@ export class MockOwner implements PartOwner {
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
         switch (type as unknown) {
-            case BehaviorInitializer:
+            case PartInitializer:
                 return this.#behaviorInitializer as T;
 
             case IdentityService:
@@ -93,7 +91,7 @@ export class MockOwner implements PartOwner {
                     throw new ImplementationError(`No root so can't provice IndexBehavior`);
                 }
                 if (!this.#identityService) {
-                    this.#identityService = new IdentityService(this.#root);
+                    this.#identityService = new IdentityService(this.#root, "Test node");
                 }
                 return this.#identityService as T;
 

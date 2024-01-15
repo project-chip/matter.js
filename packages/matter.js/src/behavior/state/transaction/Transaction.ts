@@ -8,10 +8,11 @@ import { Logger } from "../../../log/Logger.js";
 import { createPromise, MaybePromise } from "../../../util/Promises.js";
 import { describeList } from "../../../util/String.js";
 import { FinalizationError, TransactionFlowError } from "./Errors.js";
-import { Participant as ParticipantType } from "./Participant.js";
-import type { Resource as ResourceType } from "./Resource.js";
+import { Participant, Participant as ParticipantType } from "./Participant.js";
+import type { Resource, Resource as ResourceType } from "./Resource.js";
 import { ResourceSet } from "./ResourceSet.js";
 import { Status as StatusType } from "./Status.js";
+import { Diagnostic } from "../../../log/Diagnostic.js";
 
 const logger = Logger.get("Transaction");
 
@@ -41,6 +42,18 @@ export class Transaction {
     #promise?: Promise<void>;
     #resolve?: () => void;
     #waitingOn?: Iterable<Transaction>;
+    #via: string;
+
+    constructor(via: string) {
+        this.#via = Diagnostic.via(via);
+    }
+
+    /**
+     * Diagnostic description of the transaction's source.
+     */
+    get via() {
+        return this.#via;
+    }
 
     /**
      * The status of the transaction.
@@ -97,7 +110,8 @@ export class Transaction {
     async addResources(...resources: ResourceType[]) {
         if (this.#status === StatusType.Exclusive) {
             const set = new ResourceSet(this, resources);
-            await set.acquireLocks();
+            const locked = await set.acquireLocks();
+            this.#locksChanged(locked);
         }
 
         this.addResourcesSync(...resources);
@@ -112,7 +126,8 @@ export class Transaction {
     addResourcesSync(...resources: ResourceType[]) {
         if (this.#status === StatusType.Exclusive) {
             const set = new ResourceSet(this, resources);
-            set.acquireLocksSync();
+            const locked = set.acquireLocksSync();
+            this.#locksChanged(locked);
         } else if (this.#status !== StatusType.Shared) {
             throw new TransactionFlowError(`Cannot add resources to transaction that is ${this.status}`);
         }
@@ -161,7 +176,8 @@ export class Transaction {
         this.#status = StatusType.Waiting;
         try {
             const resources = new ResourceSet(this, this.#resources);
-            await resources.acquireLocks();
+            const locked = await resources.acquireLocks();
+            this.#locksChanged(locked);
             this.#status = StatusType.Exclusive;
         } catch (e) {
             this.#status = StatusType.Shared;
@@ -186,7 +202,8 @@ export class Transaction {
         this.#status = StatusType.Exclusive;
         try {
             const resources = new ResourceSet(this, this.#resources);
-            resources.acquireLocksSync();
+            const locked = resources.acquireLocksSync();
+            this.#locksChanged(locked);
         } catch (e) {
             this.#status = StatusType.Shared;
             throw e;
@@ -234,7 +251,7 @@ export class Transaction {
             return this.rollback();
         } else {
             // Perform the actual commit
-            return this.#finalize(StatusType.CommittingPhaseOne, () => this.#executeCommit());
+            return this.#finalize(StatusType.CommittingPhaseOne, "Committed", () => this.#executeCommit());
         }
     }
 
@@ -248,7 +265,7 @@ export class Transaction {
      * references refresh to the most recent value.
      */
     rollback() {
-        return this.#finalize(StatusType.RollingBack, () => this.#executeRollback());
+        return this.#finalize(StatusType.RollingBack, "Rolled back", () => this.#executeRollback());
     }
 
     /**
@@ -270,7 +287,7 @@ export class Transaction {
     /**
      * Shared implementation for commit and rollback.
      */
-    #finalize(status: StatusType, finalizer: () => MaybePromise<void>) {
+    #finalize(status: StatusType, why: string, finalizer: () => MaybePromise<void>) {
         // Sanity check on status
         if (this.status !== StatusType.Shared && this.status !== StatusType.Exclusive) {
             throw new TransactionFlowError(
@@ -281,11 +298,9 @@ export class Transaction {
         // Post-finalization state reset
         const cleanup = () => {
             // Release locks
-            for (const resource of this.#resources) {
-                if (resource.lockedBy === this) {
-                    delete resource.lockedBy;
-                }
-            }
+            const set = new ResourceSet(this, this.#resources);
+            const unlocked = set.releaseLocks();
+            this.#locksChanged(unlocked, `${why}; released`);
 
             // Release participants
             this.#participants.clear();
@@ -323,6 +338,7 @@ export class Transaction {
      * Commit logic passed to #finish.
      */
     #executeCommit(): MaybePromise<void> {
+        //this.#log("Commit");
         const result = this.#executeCommit1();
         if (MaybePromise.is(result)) {
             return result.then(() => this.#executeCommit2());
@@ -332,7 +348,7 @@ export class Transaction {
 
     #executeCommit1(): MaybePromise<void> {
         // Commit phase 1
-        const phase1Error = (participant: string, error: any) => {
+        const phase1Error = (participant: Participant, error: any) => {
             logger.error(`Error committing ${participant} (phase one), rolling back:`, error);
             this.#status = StatusType.RollingBack;
             return MaybePromise.then(this.#executeRollback(), () => {
@@ -362,12 +378,12 @@ export class Transaction {
                         .then(() => {
                             commitNextParticipant();
                         })
-                        .catch(e => phase1Error(participant.description, e));
+                        .catch(e => phase1Error(participant, e));
                 } else {
                     commitNextParticipant();
                 }
             } catch (e) {
-                return phase1Error(participant.description, e);
+                return phase1Error(participant, e);
             }
         }
 
@@ -376,7 +392,7 @@ export class Transaction {
 
     #executeCommit2() {
         // Commit phase 2
-        const phase2Error = (participant: string, error: any) => {
+        const phase2Error = (participant: Participant, error: any) => {
             logger.error(`Error committing (phase two) ${participant}, state may become inconsistent:`, error);
 
             if (errored) {
@@ -387,14 +403,13 @@ export class Transaction {
         };
 
         this.#status = StatusType.CommittingPhaseTwo;
-        let errored: undefined | Array<string>;
+        let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
             try {
                 let promise = participant.commit2();
                 if (MaybePromise.is(promise)) {
-                    const description = participant.description;
-                    promise = promise.catch(e => phase2Error(description, e));
+                    promise = promise.catch(e => phase2Error(participant, e));
                     if (ongoing) {
                         ongoing.push(promise);
                     } else {
@@ -402,7 +417,7 @@ export class Transaction {
                     }
                 }
             } catch (e) {
-                return phase2Error(participant.description, e);
+                return phase2Error(participant, e);
             }
         }
 
@@ -419,14 +434,14 @@ export class Transaction {
      * Rollback logic passed to #finish.
      */
     #executeRollback() {
-        let errored: undefined | Array<string>;
+        //this.#log("Rollback");
+        let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
             try {
                 let promise = participant.rollback();
                 if (MaybePromise.is(promise)) {
-                    const description = participant.description;
-                    promise = promise.catch(e => error(description, e));
+                    promise = promise.catch(e => error(participant, e));
                     if (ongoing) {
                         ongoing.push(promise);
                     } else {
@@ -434,12 +449,12 @@ export class Transaction {
                     }
                 }
             } catch (e) {
-                error(participant.description, e);
+                error(participant, e);
             }
         }
         throwIfErrored(errored, "rolling back");
 
-        function error(participant: string, error: any) {
+        function error(participant: Participant, error: any) {
             logger.error(`Error rolling back ${participant}, state may become inconsistent:`, error);
 
             if (errored) {
@@ -449,15 +464,31 @@ export class Transaction {
             }
         }
     }
+
+    #log(...message: unknown[]) {
+        logger.debug(message, this.#via);
+    }
+
+    #locksChanged(resources: Set<Resource>, how = "Acquired") {
+        if (!resources.size) {
+            return;
+        }
+
+        this.#log(
+            how,
+            `write lock${resources.size > 1 ? "s" : ""} for`,
+            describeList("and", ...[...resources].map(r => r.toString()))
+        );
+    }
 }
 
-function throwIfErrored(errored: undefined | Array<string>, when: string) {
+function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
     if (!errored?.length) {
         return;
     }
     const suffix = errored.length > 1 ? "s" : "";
     throw new FinalizationError(
-        `Unhandled error${suffix} ${when} participant${suffix}${describeList("and", ...errored)}`,
+        `Unhandled error${suffix} ${when} participant${suffix}${describeList("and", ...errored.map(p => p.toString()))}`,
     );
 }
 

@@ -23,6 +23,33 @@ const logger = Logger.get("Environment");
 export class Environment {
     #variables?: Record<string, any>;
     #tasks?: BasicSet<Environment.Task>;
+    #name: string;
+    #nextNodeNumber = 0;
+
+    constructor(name: string) {
+        this.#name = name;
+    }
+
+    /**
+     * Startup announcement.
+     */
+    get announcement() {
+        return [
+            "Entering",
+            Diagnostic.strong("Matter.js"),
+            "environment",
+            Diagnostic.strong(this.name),
+            "in",
+            this.location
+        ];
+    }
+
+    /**
+     * Name of the environment.
+     */
+    get name() {
+        return this.#name;
+    }
 
     /**
      * The default environment.
@@ -39,6 +66,10 @@ export class Environment {
 
         Logger.level = global.variables.log?.level;
         Logger.format = global.variables.log?.format;
+
+        if (global.variables.log?.stack?.limit) {
+            Error.stackTraceLimit = Number.parseInt(global.variables?.log?.stack?.limit);
+        }
     }
 
     /**
@@ -65,11 +96,12 @@ export class Environment {
     }
 
     /**
-     * Create storage.  The environment initializes the storage but the caller
-     * must take ownership.
+     * Create storage.  The environment initializes the storage but the caller must take ownership.
+     *
+     * @param namespace a unique namespace identifier such as a root node ID
      */
-    async createStorage() {
-        const storage = this.loadStorage();
+    async createStorage(namespace: string) {
+        const storage = this.loadStorage(namespace);
         const manager = new StorageManager(storage);
         await manager.initialize();
         return manager;
@@ -103,12 +135,23 @@ export class Environment {
         }).start();
     }
 
+    /**
+     * If the root part of a node has no ID allocated we use this method to allocate one.
+     */
+    allocateFallbackNodeId() {
+        return `node${this.#nextNodeNumber++}`;
+    }
+
     protected loadVariables(): Record<string, any> {
         return {};
     }
 
-    protected loadStorage(): Storage {
-        throw new NoProviderError("API unavailable because storage is not configured");
+    protected loadStorage(_namespace: string): Storage {
+        throw new NoProviderError("Environment not installed");
+    }
+
+    protected get location(): string {
+        throw new NoProviderError("Environment not installed");
     }
 }
 
@@ -120,4 +163,4 @@ export namespace Environment {
     }
 }
 
-let global: Environment = new Environment();
+let global: Environment = new Environment("default");

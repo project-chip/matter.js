@@ -399,7 +399,7 @@ export abstract class Model {
      * Clone the model.  This deep copies all descendant child models but
      * not other properties.
      */
-    clone() {
+    clone<This extends Model>(this: This): This {
         const clone = Object.create(Object.getPrototypeOf(this));
 
         const descriptors = Object.getOwnPropertyDescriptors(this);

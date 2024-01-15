@@ -6,7 +6,7 @@
 
 import { Access, ValueModel } from "../../../../model/index.js";
 import { AccessControl } from "../../../AccessControl.js";
-import { SchemaError, WriteError } from "../../../errors.js";
+import { ReadError, SchemaError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
@@ -17,17 +17,14 @@ import { PrimitiveManager } from "./PrimitiveManager.js";
 /**
  * We must use a proxy to properly encapsulate array data.
  *
- * This is ideal from a security and data quality perspective but not from a
- * performance perspective.
+ * This is ideal from a security and data quality perspective but not from a performance perspective.
  *
- * This can be worked around by replacing an entire array rather than just a
- * single field.  If that is insufficient we may need some type of batch
- * interface or provide a means for accessing the internal array directly.
+ * This can be worked around by replacing an entire array rather than just a single field.  If that is insufficient we
+ * may need some type of batch interface or provide a means for accessing the internal array directly.
  *
- * Note that there can be access controls both on the list and the list
- * entries.  We do not use the controls on the entry as it doesn't make sense
- * for them to be more conservative than the list and the Matter spec makes no
- * mention of this.
+ * Note that there can be access controls both on the list and the list entries.  We do not use the controls on the
+ * entry as it doesn't make sense for them to be more conservative than the list and the Matter spec makes no mention of
+ * this.
  */
 export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
     const config = createConfig(owner, schema);
@@ -50,8 +47,8 @@ function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
 
     const entryManager = owner.get(entry);
 
-    // The spec doesn't mention fabric-sensitive lists but if we somehow get
-    // one we treat as permanently fabric scoped for reads
+    // The spec doesn't contemplate fabric-sensitive lists but if we somehow get one we treat as permanently fabric
+    // scoped for reads
     const fabricSensitive = schema.effectiveAccess.fabric == Access.Fabric.Scoped;
 
     const access = AccessControl(schema);
@@ -87,8 +84,7 @@ function createProxy(
 ) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
-    // Create the base entry reader.  The reader is different for containers
-    // vs. primitive values
+    // Create the base entry reader.  The reader is different for containers vs. primitive values
     let readEntry: (index: number) => Val;
     if (config.manageEntries) {
         // Base reader produces managed containers
@@ -96,7 +92,18 @@ function createProxy(
             authorizeRead(session, context);
 
             if (index < 0 || index > reference.value.length) {
-                throw new WriteError(config.schema, `Index ${index} is out of bounds`);
+                throw new ReadError(config.schema, `Index ${index} is out of bounds`);
+            }
+
+            if (index > 65535) {
+                throw new ReadError(config.schema, `Index ${index} is greater than allowed maximum of 65535`);
+            }
+
+            // AFAICT spec doesn't contemplate sparse arrays but it's kind of assumed.  If the value is nullish then
+            // treat like a primitive and no management necessary
+            const value = reference.value[index];
+            if (value === undefined || value === null) {
+                return value;
             }
 
             let subref = reference.subreferences?.[index];
@@ -107,8 +114,7 @@ function createProxy(
                     index,
                     () => true,
 
-                    // Provide a clone function if we have a transaction.
-                    // Otherwise we write directly to the field
+                    // Provide a clone function if we have a transaction. Otherwise we write directly to the field
                     session.transaction ? val => [...(val as Val.List)] : undefined,
                 );
 
@@ -135,6 +141,10 @@ function createProxy(
 
         if (index < 0 || index > reference.value.length + 1) {
             throw new WriteError(config.schema, `Index ${index} is out of bounds`);
+        }
+
+        if (index > 65535) {
+            throw new ReadError(config.schema, `Index ${index} is greater than allowed maximum of 65535`);
         }
 
         reference.change(() => (reference.value[index] = value));
@@ -214,7 +224,7 @@ function createProxy(
         // On write we enter a transaction
         set(_target, property, newValue, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                validateEntry(newValue);
+                validateEntry(newValue, session);
                 writeEntry(Number.parseInt(property), newValue);
                 return true;
             }

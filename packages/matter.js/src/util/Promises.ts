@@ -7,7 +7,7 @@
  */
 
 import type { Environment } from "../common/Environment.js";
-import { InternalError } from "../common/MatterError.js";
+import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
 
@@ -64,6 +64,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
         }
     });
 }
+
 /**
  * Return type for functions that are optionally asynchronous.
  */
@@ -79,29 +80,49 @@ export namespace MaybePromise {
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
     export function is<T>(value: MaybePromiseLike<T>): value is PromiseLike<T> {
-        return typeof value === "object" && typeof (value as { then?: any; }).then === "function";
+        return typeof value === "object" && typeof (value as { then?: unknown; }).then === "function";
     }
 
     /**
-     * Chained MaybePromise.  Invokes the resolve function immediately if the
-     * {@link MaybePromise} is not a {@link Promise}, otherwise the same as a
-     * normal {@link Promise.then}.
+     * Chained MaybePromise.  Invokes the resolve function immediately if the {@link MaybePromise} is not a
+     * {@link Promise}, otherwise the same as a normal {@link Promise.then}.
      */
-    export function then<I, O>(value: MaybePromise<I>, resolve: (input: I) => O): MaybePromise<O> {
-        if (is(value)) {
-            return value.then(resolve);
+    export function then<I, O1 = never, O2 = never>(
+        producer: MaybePromise<I> | (() => MaybePromise<I>),
+        resolve?: (input: I) => MaybePromise<O1>,
+        reject?: (error: any) => MaybePromise<O2>
+    ): MaybePromise<O1 | O2> {
+        try {
+            let value;
+            if (producer instanceof Function) {
+                value = producer();
+            } else {
+                value = producer;
+            }
+            if (is(value)) {
+                return value.then(resolve, reject);
+            }
+            if (resolve) {
+                return resolve(value);
+            }
+        } catch (e) {
+            if (reject) {
+                return reject(e);
+            }
+            throw e;
         }
-        return resolve(value);
+
+        // Make TypeScript happy
+        return undefined as MaybePromise<O1 | O2>;
     }
 }
 
 /**
  * A registry for promises.
  * 
- * Stores unfulfilled promises with metadata useful for diagnosing process
- * state.
+ * Stores unfulfilled promises with metadata useful for diagnosing process state.
  */
-class Tracker implements Environment.Task {
+export class Tracker implements Environment.Task {
     #parent: Tracker | undefined;
     #tracked = new Map<Promise<unknown>, Tracker.Descriptor>;
     
@@ -158,10 +179,7 @@ class Tracker implements Environment.Task {
                 if (label === undefined) {
                     label = labelFor(this.promise);
                     if (label === undefined) {
-                        label = this.detail?.toString();
-                        if (label === undefined || label === null || label === "") {
-                            label = "(anon)";
-                        }
+                        label = "(anon)";
                     }
                 }
                 return [ label, Diagnostic.dict({ uptime: this.elapsed }) ];
@@ -172,9 +190,12 @@ class Tracker implements Environment.Task {
     }
 }
 
-function labelFor(value: unknown): string | undefined {
+function labelFor(value: unknown) {
     if (value === undefined || value === null || value === "") {
         return undefined;
+    }
+    if ((value as Diagnostic)[Diagnostic.value]) {
+        return (value as Diagnostic)[Diagnostic.value];
     }
     if (typeof value !== "object") {
         return value.toString();
@@ -209,8 +230,160 @@ export namespace Tracker {
  * 
  * Registers the promise with the default {@link Tracker}.
  */
-export function track(promise: Promise<unknown>, what?: {}) {
-    Tracker.global.track(promise, what);
+export function track<const T extends Promise<unknown>>(promise: T, what?: {}): T {
+    return Tracker.global.track(promise, what) as T;
 }
 
 DiagnosticSource.add(Tracker.global);
+
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+
+/**
+ * A PromiseLike that behaves like a Promise.
+ * 
+ * Supports a few edge cases like immediate execution and support for rejection without the requirement of installing a
+ * rejection handler.
+ * 
+ * TODO - could use for nicer MaybePromise API but haven't implemented yet
+ */
+export function MimicPromise<T>(
+    executor: (
+        resolve: (value: T | PromiseLike<T>) => void,
+        reject: (reason?: any) => void
+    ) => void
+): Promise<T> {
+    let resolves: undefined | Array<(value: T) => void>;
+    let rejects: undefined | Array<(reason: any) => void>;
+
+    let resolved = false;
+    let resolvedValue: undefined | T;
+
+    let rejected = false;
+    let rejectedCause: undefined | any;
+
+    // The promise implementation
+    const result: Promise<T> = {
+        // Standard Promise.then
+        then<TResult1 = T, TResult2 = never>(
+            onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+        ): Promise<TResult1 | TResult2> {
+            // "then" always results in a new promise
+            return MimicPromise((resolve, reject) => {
+                function invoke(param: any, fn: (param: any) => MaybePromise<any>) {
+                    MaybePromise.then(
+                        () => fn(param),
+                        value => resolve(value),
+                        cause => reject(cause),
+                    )
+                }
+
+                // Resolve immediately if promise is resolved
+                if (resolved) {
+                    return invoke(resolvedValue, resolve);
+                }
+                
+                // Reject immediately if promise is rejected
+                if (rejected) {
+                    return invoke(rejectedCause, reject);
+                }
+
+                function res(value: T) {
+                    if (onfulfilled) {
+                        invoke(value, onfulfilled);
+                    } else {
+                        resolve(value as any);
+                    }
+                }
+    
+                if (resolves) {
+                    resolves.push(res);
+                } else {
+                    resolves = [ res ];
+                }
+    
+                function rej(cause: any) {
+                    if (onrejected) {
+                        invoke(cause, onrejected);
+                    } else {
+                        reject(cause);
+                    }
+                }
+    
+                if (rejects) {
+                    rejects.push(rej);
+                } else {
+                    rejects = [ rej ];
+                }
+            });
+        },
+
+        // Standard Promise.catch
+        catch(onrejected) {
+            return this.then(undefined, onrejected);
+        },
+
+        // Standard Promise.finally
+        finally(onfinally) {
+            this.then(onfinally, onfinally);
+            return this;
+        },
+
+        // Exciting newish JS innovation
+        get [Symbol.toStringTag]() {
+            return "Promise";
+        },
+    }
+
+    // Limit to a single callback invocation
+    function assertOngoing() {
+        if (resolved) {
+            throw new ImplementationError("Already resolved");
+        }
+        if (rejected) {
+            throw new ImplementationError("Already rejected");
+        }
+    }
+
+    // Handle resolution
+    function resolve(value: T) {
+        resolved = true;
+        resolvedValue = value;
+
+        if (resolves) {
+            for (const resolve of resolves) {
+                resolve(value)
+            }
+        }
+    }
+
+    // Handle rejection
+    function reject(cause: any) {
+        rejected = true;
+        rejectedCause = cause;
+
+        if (rejects) {
+            for (const reject of rejects) {
+                reject(cause);
+            }
+        }
+    }
+
+    // Pass reject and resolve functions to the executor
+    executor(
+        value => {
+            assertOngoing();
+            if (MaybePromise.is(value)) {
+                value.then(resolve, reject)
+            } else {
+                resolve(value);
+            }
+        },
+        cause => {
+            assertOngoing();
+            reject(cause);
+        }
+    );
+
+    return result;
+}

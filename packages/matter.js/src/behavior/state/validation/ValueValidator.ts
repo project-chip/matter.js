@@ -18,11 +18,11 @@ import {
     assertNumeric,
     assertObject,
     assertString,
-} from "../validation/assertions.js";
-import { createConformanceValidator } from "../validation/conformance.js";
-import { createConstraintValidator } from "../validation/constraint.js";
-import { ValidationContext } from "../validation/context.js";
-import { Val } from "./Val.js";
+} from "./assertions.js";
+import { createConformanceValidator } from "./conformance.js";
+import { createConstraintValidator } from "./constraint.js";
+import { ValidationContext } from "./context.js";
+import { Val } from "../managed/Val.js";
 
 /**
  * Generate a function that performs data validation.
@@ -94,15 +94,15 @@ function createNullValidator(
     schema: ValueModel,
     nextValidator?: ValueSupervisor.Validate,
 ): ValueSupervisor.Validate | undefined {
-    if (schema.effectiveQuality.nullable !== true) {
+    if (schema.effectiveQuality.nullable === true) {
         return (value, options) => {
-            if (value === null) {
-                throw new DatatypeError(schema, "be null", value);
+            if (value !== null) {
+                nextValidator?.(value, options);
             }
-            nextValidator?.(value, options);
         };
     }
 
+    // If the field is not nullable, let the datatype check handle validation
     return nextValidator;
 }
 
@@ -159,7 +159,7 @@ function createSimpleValidator(
 ): ValueSupervisor.Validate {
     const validateConstraint = createConstraintValidator(schema.effectiveConstraint, schema);
 
-    return (value, options) => {
+    return (value, session, options) => {
         // If undefined, only conformance tests apply
         if (value === undefined) {
             return;
@@ -167,7 +167,7 @@ function createSimpleValidator(
 
         validateType(value, schema);
 
-        validateConstraint?.(value, options?.siblings);
+        validateConstraint?.(value, session, options?.siblings);
     };
 }
 
@@ -175,23 +175,36 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
     const validators = {} as Record<string, ValueSupervisor.Validate>;
 
     for (const field of schema.members) {
-        // Global fields currently handled internally
-        if (field.global) {
+        // Global fields currently handled in lower levels
+        if (field.isGlobalAttribute) {
             continue;
         }
 
         validators[camelize(field.name)] = factory.get(field).validate;
     }
 
-    return value => {
-        assertObject(value, schema);
+    return (struct, session) => {
+        assertObject(struct, schema);
         const options: ValidationContext = {
-            siblings: value,
+            siblings: struct,
             choices: {},
         };
 
         for (const name in validators) {
-            validators[name](value[name], options);
+            let value;
+
+            if ((struct as Val.Dynamic)[Val.properties]) {
+                const properties = (struct as Val.Dynamic)[Val.properties](session);
+                if (name in properties) {
+                    value = properties[name];
+                } else {
+                    value = struct[name];
+                }
+            } else {
+                value = struct[name];
+            }
+
+            validators[name](value, session, options);
         }
 
         for (const name in options.choices) {
@@ -216,22 +229,27 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
 function createListValidator(schema: ValueModel, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
     const entry = schema.listEntry;
-    let validateEntries: undefined | ((list: Val.List) => void);
+    let validateEntries: undefined | ((list: Val.List, session: ValueSupervisor.Session) => void);
     if (entry) {
         const entryValidator = factory.get(entry).validate;
 
-        validateEntries = (list: Val.List) => {
+        validateEntries = (list: Val.List, session: ValueSupervisor.Session) => {
             for (const e of list) {
-                entryValidator(e);
+                if (e === undefined || e === null) {
+                    // Accept nullish
+                    continue;
+                }
+
+                entryValidator(e, session);
             }
         };
     }
 
     const validateConstraint = createConstraintValidator(schema.constraint, schema);
 
-    return (value, options) => {
+    return (value, session, context) => {
         assertArray(value, schema);
-        validateConstraint?.(value, options?.siblings);
-        validateEntries?.(value);
+        validateConstraint?.(value, session, context?.siblings);
+        validateEntries?.(value, session);
     };
 }

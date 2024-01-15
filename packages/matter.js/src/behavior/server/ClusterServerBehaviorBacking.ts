@@ -8,21 +8,15 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
-import {
-    ClusterServerObj,
-    CommandHandler,
-    SupportedEventsList,
-    asClusterServerInternal,
-} from "../../cluster/server/ClusterServerTypes.js";
-import type { Part } from "../../endpoint/Part.js";
+import { asClusterServerInternal, ClusterServerObj, type CommandHandler, type SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
+import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
-import { TransactionalInteractionServer } from "../../node/server/TransactionalInteractionServer.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { Behavior } from "../Behavior.js";
-import { InvocationContext } from "../InvocationContext.js";
+import { ActionContext } from "../ActionContext.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
@@ -30,6 +24,8 @@ import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
+import { ServerActionContext } from "./ServerActionContext.js";
+import { Message } from "../../codec/MessageCodec.js";
 
 const logger = Logger.get("Behavior");
 
@@ -37,10 +33,28 @@ const logger = Logger.get("Behavior");
  * Backing for cluster behaviors on servers.
  */
 export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
-    #clusterServer: ClusterServerObj<Attributes, Events>;
+    #server: PartServer;
+    #clusterServer?: ClusterServerObj<Attributes, Events>;
 
-    constructor(part: Part, type: ClusterBehavior.Type) {
-        super(part, type);
+    get clusterServer() {
+        return this.#clusterServer;
+    }
+
+    constructor(server: PartServer, type: ClusterBehavior.Type) {
+        super(server.part, type);
+        this.#server = server;
+    }
+
+    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
+        return MaybePromise.then(
+            () => super.invokeInitializer(behavior, options),
+
+            () => this.#createClusterServer(),
+        );
+    }
+
+    #createClusterServer() {
+        const type = this.type as ClusterBehavior.Type;
 
         const elements = new ValidatedElements(type);
         elements.report();
@@ -64,90 +78,76 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             supportedEvents[name] = true;
         }
 
+        // TODO - We don't need the ClusterServer to deal with our state but its API requires valid initial values. This
+        // can be cleaned up as we factor out legacy code but for now just pass our validated state and use
+        // ClusterServer's TLV validation as backup
+        const datasource = this.datasource;
+        const initialValues = datasource.reference({
+            accessLevel: AccessLevel.View,
+            offline: true,
+        });
+
         // Create the cluster server
-        this.#clusterServer = ClusterServer(type.cluster, type.defaults, handlers, supportedEvents);
+        const clusterServer = ClusterServer(type.cluster, initialValues, handlers, supportedEvents);
 
         // Monitor change events so we can notify the cluster server of data
         // changes
         for (const name in elements.attributes) {
             createChangeHandler(this, name);
         }
-    }
 
-    get clusterServer() {
-        return this.#clusterServer;
-    }
+        // Assign the cluster server to the PartServer
+        asClusterServerInternal(clusterServer)._assignToEndpoint(this.#server);
 
-    protected override invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
-        MaybePromise.then(
-            super.invokeInitializer(behavior, options),
-
-            async () => {
-                // After initialization our datasource is available so we may configure the
-                // cluster server's datasource
-                const datasource = this.datasource;
-                const eventHandler = this.eventHandler;
-                await asClusterServerInternal(this.#clusterServer)._setDatasource({
-                    get version() {
-                        return datasource.version;
-                    },
-
-                    get eventHandler() {
-                        return eventHandler;
-                        return eventHandler;
-                    },
-
-                    // We handle change management ourselves
-                    async changed() {},
-
-                    // We handle version management ourselves
-                    async increaseVersion() {
-                        return datasource.version;
-                    },
-                });
+        // This must occur after cluster server is assigned to endpoint
+        const eventHandler = this.eventHandler;
+        clusterServer.datasource = {
+            get version() {
+                return datasource.version
             },
-        );
+
+            get eventHandler() {
+                return eventHandler;
+            },
+
+            // We handle change management ourselves
+            async changed() {},
+
+            // We handle version management ourselves
+            async increaseVersion() {
+                return datasource.version;
+            },
+        }
+
+        this.#clusterServer = clusterServer;
+        this.#server.addClusterServer(clusterServer);
     }
 }
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
     session: Session<MatterDevice> | undefined,
-    contextFields: Partial<InvocationContext>,
+    contextFields: Partial<ActionContext>,
     fn: (behavior: Behavior) => T,
 ): T {
-    let agent;
+    const context = ServerActionContext(contextFields, session);
 
-    // TODO -ideally there'd be something more explicit here to indicate we're
-    // operating without ACL enforcement but currently lower levels just omit
-    // the session
-    if (!session) {
-        agent = backing.part.agent;
-    } else {
-        const fabric = session.isSecure() ? session.getAssociatedFabric() : undefined;
-        const transaction = TransactionalInteractionServer.transactionFor(session);
+    let agent = backing.part.getAgent(context);
 
-        const context: InvocationContext = {
-            ...contextFields,
-            associatedFabric: fabric?.fabricIndex,
-            session,
-            transaction,
-
-            // TODO - this effectively disables access level enforcement because we
-            // don't have privilege management implemented yet
-            accessLevel: AccessLevel.Administer,
-        };
-
-        agent = backing.part.getAgent(context);
+    try {
+        return fn(agent.get(backing.type));
+    } catch (e) {
+        backing.injectErrorSource(e);
+        throw e;
     }
-
-    return fn(agent.get(backing.type));
 }
 
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
     return ({ request, session, message }) => {
-        logger.debug(
-            `Invoke <part ${backing.part.id}>.${backing.type.id}.${name}`,
+        logger.info(
+            "Invoke",
+            Diagnostic.strong(`${backing}.${name}`),
+            ActionContext.via({ message }),
             request && typeof request === "object" ? Diagnostic.dict(request) : request,
         );
         return withBehavior(backing, session, { message }, behavior =>
@@ -160,12 +160,18 @@ function createAttributeAccessors(
     backing: ClusterServerBehaviorBacking,
     name: string,
 ): {
-    get: (params: { session?: Session<MatterDevice>; isFabricFiltered?: boolean }) => any;
-    set: (value: any, params: { session?: Session<MatterDevice> }) => boolean;
+    get: (params: { session?: Session<MatterDevice>; isFabricFiltered?: boolean, message?: Message }) => any;
+    set: (value: any, params: { session?: Session<MatterDevice>, message?: Message }) => boolean;
 } {
     return {
-        get({ session, isFabricFiltered }) {
-            return withBehavior(backing, session, { fabricFiltered: isFabricFiltered }, behavior => {
+        get({ session, isFabricFiltered, message }) {
+            logger.debug(
+                "Read",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                ActionContext.via({ message })
+            );
+
+            return withBehavior(backing, session, { message, fabricFiltered: isFabricFiltered }, behavior => {
                 const state = behavior.state as Val.Struct;
 
                 StructManager.assertDirectReadAuthorized(state, name);
@@ -174,8 +180,14 @@ function createAttributeAccessors(
             });
         },
 
-        set(value, { session }) {
-            return withBehavior(backing, session, {}, behavior => {
+        set(value, { session, message }) {
+            logger.info(
+                "Write",
+                Diagnostic.strong(`${backing}.state.${name}`),
+                ActionContext.via({ message }),
+            )
+
+            return withBehavior(backing, session, { message }, behavior => {
                 const state = behavior.state as Record<string, any>;
 
                 state[name] = value;
@@ -189,12 +201,14 @@ function createAttributeAccessors(
 }
 
 function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string) {
+    // Change handler requires an event source
     const observable = (backing.events as any)[`${name}$Change`] as ClusterEvents.AttributeObservable;
     if (!observable) {
         return;
     }
 
-    const attributeServer = backing.clusterServer.attributes[name];
+    // Also requires an attribute server
+    const attributeServer = backing.clusterServer?.attributes[name];
     if (!attributeServer) {
         return;
     }

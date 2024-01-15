@@ -130,11 +130,11 @@ class InteractionMessenger<ContextT> {
 
 export class InteractionServerMessenger extends InteractionMessenger<MatterDevice> {
     async handleRequest(
-        handleReadRequest: (request: ReadRequest) => Promise<DataReport>,
+        handleReadRequest: (request: ReadRequest, message: Message) => Promise<DataReport>,
         handleWriteRequest: (request: WriteRequest, message: Message) => Promise<WriteResponse>,
         handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
-        handleTimedRequest: (request: TimedRequest) => void,
+        handleTimedRequest: (request: TimedRequest, message: Message) => void,
     ) {
         let continueExchange = true; // are more messages expected in this "transaction"?
         try {
@@ -145,7 +145,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                 switch (message.payloadHeader.messageType) {
                     case MessageType.ReadRequest: {
                         const readRequest = TlvReadRequest.decode(message.payload);
-                        await this.sendDataReport(await handleReadRequest(readRequest));
+                        await this.sendDataReport(await handleReadRequest(readRequest, message));
                         break;
                     }
                     case MessageType.WriteRequest: {
@@ -178,7 +178,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.TimedRequest: {
                         const timedRequest = TlvTimedRequest.decode(message.payload);
-                        handleTimedRequest(timedRequest);
+                        handleTimedRequest(timedRequest, message);
                         await this.sendStatus(StatusCode.Success);
                         continueExchange = true;
                         break;

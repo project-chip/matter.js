@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../../src/behavior/Behavior.js";
-import { InvocationContext } from "../../../src/behavior/InvocationContext.js";
+import { ActionContext } from "../../../src/behavior/ActionContext.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
@@ -60,13 +60,13 @@ describe("ClusterBehavior", () => {
 
             ({}) as MyBehavior satisfies {
                 events: {
-                    reqAttr$Change: Observable<[value: string, oldValue: string, context?: InvocationContext]>;
+                    reqAttr$Change: Observable<[value: string, oldValue: string, context?: ActionContext]>;
                 };
             };
 
             ({}) as MyBehavior satisfies {
                 events: {
-                    reqEv: Observable<[string, context?: InvocationContext]>;
+                    reqEv: Observable<[string, context?: ActionContext]>;
                 };
             };
         });
@@ -162,7 +162,7 @@ describe("ClusterBehavior", () => {
                 becomeAwesome(value: number): void;
 
                 events: {
-                    becameAwesome: Observable<[number, InvocationContext]>;
+                    becameAwesome: Observable<[number, ActionContext]>;
                 };
             };
         });

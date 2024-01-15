@@ -18,8 +18,7 @@ interface StorageParticipant extends Participant {
 /**
  * Factory function for the default implementation of {@link Datasource.Store}.
  * 
- * Performs read & write for non-volatile values for a single behavior via
- * the {@link PartStore} interface.
+ * Performs read & write for non-volatile values for a single behavior via the {@link PartStore} interface.
  */
 export function DatasourceStore(
     partStore: PartStore,
@@ -39,12 +38,13 @@ export function DatasourceStore(
             } else {
                 participant.mutations[behaviorId] = { ...values };
             }
-        },
+        }
     };
 }
+
 /**
- * We create a single participant per storage/transaction pair.  This function
- * handles setup and retrieval of this participant.
+ * We create a single participant per storage/transaction pair.  This function handles setup and retrieval of this
+ * participant.
  */
 function participantFor(transaction: Transaction, partStore: PartStore) {
     let participant = transaction.getParticipant(partStore) as StorageParticipant | undefined;
@@ -53,11 +53,13 @@ function participantFor(transaction: Transaction, partStore: PartStore) {
     }
 
     participant = {
-        description: "Storage",
-
         role: partStore,
 
         mutations: undefined,
+
+        toString() {
+            return partStore.toString();
+        },
 
         commit1(): MaybePromise<void> {
             // Persistence serves phase one commit; values are added directly to

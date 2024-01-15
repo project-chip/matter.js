@@ -269,7 +269,7 @@ describe("Integration Test", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
             clientMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 });
-            commissioningController.mdnsScanner = clientMdnsScanner;
+            commissioningController.setMdnsScanner(clientMdnsScanner);
 
             // During commissioning too much magic happens, MockTime do not work in this case
             // So use normal Time implementation and Reset for the following tests
@@ -1488,7 +1488,7 @@ describe("Integration Test", () => {
             await matterClient.addCommissioningController(commissioningController2, {
                 uniqueStorageKey: "another-second",
             });
-            commissioningController2.mdnsScanner = clientMdnsScanner;
+            commissioningController2.setMdnsScanner(clientMdnsScanner);
 
             Network.get = () => serverNetwork;
 

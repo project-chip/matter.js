@@ -7,4 +7,4 @@
 import { Environment } from "../exports/common.js";
 import { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 
-Environment.default = new NodeJsEnvironment();
+Environment.default = new NodeJsEnvironment("default");

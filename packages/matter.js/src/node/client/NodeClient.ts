@@ -9,9 +9,18 @@ import { Agent } from "../../endpoint/Agent.js";
 import { Part } from "../../endpoint/Part.js";
 import type { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
+import { AsyncConstruction } from "../../util/AsyncConstruction.js";
+import { Host } from "../Host.js";
 import { Node } from "../Node.js";
 
 export class NodeClient implements Node {
+    #construction: AsyncConstruction<NodeClient>;
+    #host?: Host;
+
+    get id(): string {
+        throw new NotImplementedError();
+    }
+
     get owner() {
         return undefined;
     }
@@ -24,8 +33,22 @@ export class NodeClient implements Node {
         throw new NotImplementedError();
     }
 
+    get construction() {
+        return this.#construction;
+    }
+
     constructor() {
-        throw new NotImplementedError("Client nodes are TODO");
+        this.#construction = AsyncConstruction(this, () => {
+            throw new NotImplementedError("Client nodes are TODO");
+        });
+    }
+
+    toString() {
+        return `${this.constructor.name}#${this.id}`;
+    }
+
+    async start() {
+        throw new NotImplementedError();
     }
 
     async [Symbol.asyncDispose](): Promise<void> {
@@ -33,6 +56,11 @@ export class NodeClient implements Node {
 
     get [Diagnostic.value]() {
         return "(no diagnostics yet)";
+    }
+
+    set host(host: Host) {
+        this.#host = host;
+        this.#host;
     }
 
     adoptChild(part: Part) {

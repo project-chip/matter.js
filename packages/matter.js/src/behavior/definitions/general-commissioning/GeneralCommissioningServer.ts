@@ -9,7 +9,6 @@ import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommis
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { PartServer } from "../../../endpoint/PartServer.js";
 import { Logger } from "../../../log/Logger.js";
-import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
@@ -26,6 +25,18 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     declare state: GeneralCommissioningServer.State;
 
     override initialize() {
+        const bci = this.state.basicCommissioningInfo;
+
+        if (bci.failSafeExpiryLengthSeconds === undefined) {
+            // One minute
+            bci.failSafeExpiryLengthSeconds = 60;
+        }
+        
+        if (bci.maxCumulativeFailsafeSeconds === undefined) {
+            // 5 minutes, recommended by spec
+            bci.maxCumulativeFailsafeSeconds = 900;
+        }
+
         this.state.breadcrumb = 0;
     }
 
@@ -35,10 +46,10 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 
         try {
             // If the fail-safe timer is not currently armed, the commissioning window is open, and the command was
-            // received over a CASE session, the command SHALL leave the current fail-safe state unchanged and immediately
-            // respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This is done to
-            // allow commissioners, which use PASE connections, the opportunity to use the failsafe during the
-            // relatively short commissioning window.
+            // received over a CASE session, the command SHALL leave the current fail-safe state unchanged and
+            // immediately respond with an ArmFailSafeResponse containing an ErrorCode value of BusyWithOtherAdmin. This
+            // is done to allow commissioners, which use PASE connections, the opportunity to use the failsafe during
+            // the relatively short commissioning window.
             if (
                 !device.isFailsafeArmed() &&
                 this.agent.get(AdministratorCommissioningServer).state.windowStatus !==
@@ -75,13 +86,6 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     }
 
     override async setRegulatoryConfig({ breadcrumb, newRegulatoryConfig, countryCode }: SetRegulatoryConfigRequest) {
-        if (countryCode.length !== 2) {
-            throw new StatusResponseError(
-                "The country code need to have a fixed length of 2 characters.",
-                StatusCode.ConstraintError,
-            );
-        }
-
         const locationCapabilityValue = this.state.locationCapability;
 
         // Check and handle country code
@@ -144,9 +148,8 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             };
         }
 
-        // Regulatory config is not fabric-writable so requires elevated
-        // privileges
-        this.elevate(() => {
+        // Regulatory config is not fabric-writable so requires elevated privileges
+        this.asAdmin(() => {
             this.state.regulatoryConfig = newRegulatoryConfig;
         });
 
@@ -177,10 +180,12 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             };
         }
 
-        // On successful execution of the CommissioningComplete command the following actions SHALL be undertaken on the Server:
+        // On successful execution of the CommissioningComplete command the following actions SHALL be undertaken on the
+        // Server:
         // 1. The Fail-Safe timer associated with the current Fail-Safe context SHALL be disarmed.
         // 2. The commissioning window at the Server SHALL be closed.
-        // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
+        // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked
+        //    (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
         await device.completeCommission();
 
@@ -198,19 +203,16 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
 }
 
 export namespace GeneralCommissioningServer {
-    // We place the following configuration options in State rather than
-    // Internal so they can be conveniently configured using
-    // GeneralCommissioningServer.set()
+    // We place the following configuration options in State rather than Internal so they can be conveniently configured
+    // using GeneralCommissioningServer.set()
     export class State extends GeneralCommissioningBehavior.State {
         /**
-         * Set to false to prevent the controller from changing the country
-         * code during commissioning.
+         * Set to false to prevent the controller from changing the country code during commissioning.
          */
         allowCountryCodeChange = true; // Default true if not set
 
         /**
-         * Set to an array of two-letter country codes to limit the countries
-         * the controller may assign.
+         * Set to an array of two-letter country codes to limit the countries the controller may assign.
          */
         countryCodeWhitelist?: string[] = undefined;
     }

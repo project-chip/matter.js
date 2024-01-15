@@ -71,7 +71,7 @@ export namespace ValueSupervisor {
         transaction?: Transaction;
     }
 
-    export type Validate = (value: Val, context?: ValidationContext) => void;
+    export type Validate = (value: Val, session: Session, context?: ValidationContext) => void;
 
     export type Manage = (reference: Val.Reference, session: Session, context?: AccessControl.Context) => Val;
 }
