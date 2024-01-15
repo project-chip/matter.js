@@ -6,14 +6,20 @@
 
 import { PairRetransmissionLimitReachedError } from "../MatterController.js";
 import { MatterError } from "../common/MatterError.js";
-import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "../common/Scanner.js";
-import { ServerAddress, ServerAddressIp, serverAddressToString } from "../common/ServerAddress.js";
+import {
+    AddressTypeFromDevice,
+    CommissionableDevice,
+    CommissionableDeviceIdentifiers,
+    DiscoverableDevice,
+    OperationalDevice,
+    Scanner,
+} from "../common/Scanner.js";
+import { serverAddressToString } from "../common/ServerAddress.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
 import { CommissioningError } from "../protocol/ControllerCommissioner.js";
-import { isDeepEqual } from "../util/DeepEqual.js";
 import { anyPromise } from "../util/Promises.js";
 import { ClassExtends } from "../util/Type.js";
 
@@ -31,7 +37,7 @@ export class ControllerDiscovery {
         scanners: Array<Scanner>,
         identifier: CommissionableDeviceIdentifiers,
         timeoutSeconds = 30,
-    ): Promise<ServerAddress[]> {
+    ): Promise<CommissionableDevice[]> {
         logger.info(`Start Discovering devices using identifier ${Logger.toJSON(identifier)} ...`);
 
         const scanResults = scanners.map(async scanner => {
@@ -45,15 +51,15 @@ export class ControllerDiscovery {
                 );
             }
 
-            const addresses = foundDevices.flatMap(device => device.addresses);
-            if (addresses.length === 0) {
+            const devices = foundDevices.filter(device => device.addresses.length > 0);
+            if (devices.length === 0) {
                 throw new CommissioningError(
                     `Device discovered using identifier ${Logger.toJSON(
                         identifier,
                     )}, but no Network addresses discovered.`,
                 );
             }
-            return addresses;
+            return devices;
         });
 
         return await anyPromise(scanResults);
@@ -108,19 +114,19 @@ export class ControllerDiscovery {
         scanner: MdnsScanner,
         timeoutSeconds?: number,
         ignoreExistingRecords?: boolean,
-    ): Promise<ServerAddressIp[]> {
-        const scanResult = await scanner.findOperationalDevice(
+    ): Promise<OperationalDevice> {
+        const foundDevice = await scanner.findOperationalDevice(
             fabric,
             peerNodeId,
             timeoutSeconds,
             ignoreExistingRecords,
         );
-        if (!scanResult.length) {
+        if (foundDevice === undefined) {
             throw new DiscoveryError(
                 "The operational device cannot be found on the network. Please make sure it is online.",
             );
         }
-        return scanResult;
+        return foundDevice;
     }
 
     static cancelOperationalDeviceDiscovery(fabric: Fabric, peerNodeId: NodeId, scanner: MdnsScanner) {
@@ -137,51 +143,88 @@ export class ControllerDiscovery {
      * discovered addresses or devices) and then next server address is tried.The result of the first successful method
      * call is returned. The logic makes sure to only try each unique address (IP/port) once.
      */
-    static async iterateServerAddresses<SA extends ServerAddress, T, E extends Error>(
-        servers: SA[],
+    static async iterateServerAddresses<DD extends DiscoverableDevice<any>, T, E extends Error>(
+        devices: DD[],
         errorType: ClassExtends<E>,
-        updateNetworkInterfaceFunc: () => Promise<SA[]>,
-        func: (server: SA) => Promise<T>,
-        lastKnownServer?: SA,
-    ): Promise<{ result: T; resultAddress: SA }> {
-        if (lastKnownServer !== undefined) {
-            servers = servers.filter(server => !isDeepEqual(server, lastKnownServer));
-            servers.unshift(lastKnownServer);
-        }
-        const serversSet = new Set(servers);
+        updateDevicesFunc: () => Promise<DD[]>,
+        func: (address: AddressTypeFromDevice<DD>, device?: DD) => Promise<T>,
+        lastKnownAddress?: AddressTypeFromDevice<DD>,
+    ): Promise<{ result: T; resultAddress: AddressTypeFromDevice<DD>; resultDevice?: DD }> {
+        const processOneAddress = async (
+            address: AddressTypeFromDevice<DD>,
+            device?: DD,
+        ): Promise<{ result: T; resultAddress: AddressTypeFromDevice<DD>; resultDevice?: DD } | undefined> => {
+            const serverKey = serverAddressToString(address);
 
-        const triedServers = new Set<string>();
+            logger.debug(`Try to communicate with ${serverKey} ...`);
+            try {
+                return { result: await func(address, device), resultAddress: address, resultDevice: device };
+            } catch (error) {
+                if (error instanceof errorType || (error instanceof Error && error.message.includes("EHOSTUNREACH"))) {
+                    logger.debug(`Failed to communicate with ${serverKey}, try other servers ...`, error);
+                } else {
+                    throw error;
+                }
+            }
+        };
+
+        const addresses = new Map<string, { address: AddressTypeFromDevice<DD>; device?: DD }>();
+
+        devices.forEach(device =>
+            device.addresses.forEach(address => addresses.set(serverAddressToString(address), { address, device })),
+        );
+        const triedAddresses = new Set<string>();
+
+        if (lastKnownAddress !== undefined) {
+            const knownKey = serverAddressToString(lastKnownAddress);
+            const knownDevice = addresses.has(serverAddressToString(lastKnownAddress))
+                ? addresses.get(knownKey)?.device
+                : undefined;
+            addresses.delete(knownKey);
+            const result = await processOneAddress(lastKnownAddress, knownDevice);
+            if (result !== undefined) {
+                return result;
+            }
+            triedAddresses.add(knownKey);
+        }
+
         while (true) {
             logger.debug(
-                `Server addresses to try: ${Array.from(serversSet.values())
-                    .map(server => serverAddressToString(server))
+                `Server addresses to try: ${Array.from(addresses)
+                    .map(([addressString, { device }]) => `${device?.DN}: ${addressString}`)
                     .join(",")}`,
             );
 
             let triedOne = false;
-            for (const server of serversSet) {
-                const serverKey = serverAddressToString(server);
-                if (triedServers.has(serverKey)) continue;
-                triedServers.add(serverKey);
+            for (const { address, device } of addresses.values()) {
+                const serverKey = serverAddressToString(address);
+                if (triedAddresses.has(serverKey)) continue;
+                triedAddresses.add(serverKey);
 
                 try {
                     triedOne = true;
-                    logger.debug(`Try to communicate with ${serverKey} ...`);
-                    return { result: await func(server), resultAddress: server };
+                    const result = await processOneAddress(address, device);
+                    if (result !== undefined) {
+                        return result;
+                    }
                 } catch (error) {
                     if (
                         error instanceof errorType ||
                         (error instanceof Error && error.message.includes("EHOSTUNREACH"))
                     ) {
                         logger.debug(`Failed to communicate with ${serverKey}, try next server ...`, error);
-                        (await updateNetworkInterfaceFunc()).forEach(server => serversSet.add(server)); // Update list and add new
-                        break;
                     } else {
                         throw error;
                     }
                 }
             }
-            if (!triedOne) {
+            if (triedOne) {
+                (await updateDevicesFunc()).forEach(device =>
+                    device.addresses.forEach(address =>
+                        addresses.set(serverAddressToString(address), { address, device }),
+                    ),
+                ); // Update list and add new
+            } else {
                 throw new PairRetransmissionLimitReachedError(`Failed to connect on any discovered server`);
             }
         }
