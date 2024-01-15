@@ -12,27 +12,33 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
-import {
-    DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_RETRANSMISSION_RETRIES,
-    Session,
-} from "./Session.js";
+import { Session } from "./Session.js";
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
-export class UnsecureSession<T> implements Session<T> {
+export class UnsecureSession<T> extends Session<T> {
     private readonly initiatorNodeId: NodeId;
     readonly closingAfterExchangeFinished = false;
-    private readonly messageReceptionState: MessageReceptionStateUnencryptedWithRollover;
+    private readonly context: T;
 
-    constructor(
-        private readonly context: T,
-        private readonly messageCounter: MessageCounter,
-        private readonly closeCallback: () => void,
-        initiatorNodeId?: NodeId,
-    ) {
+    constructor(args: {
+        context: T;
+        messageCounter: MessageCounter;
+        closeCallback: () => Promise<void>;
+        initiatorNodeId?: NodeId;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
+        activeThresholdMs?: number;
+        retransmissionRetries?: number;
+        isInitiator?: boolean;
+    }) {
+        const { context, initiatorNodeId, isInitiator } = args;
+        super({
+            ...args,
+            setActiveTimestamp: !isInitiator, // When we are the initiator we assume the node is in idle mode
+            messageReceptionState: new MessageReceptionStateUnencryptedWithRollover(),
+        });
+        this.context = context;
         this.initiatorNodeId = initiatorNodeId ?? NodeId.getRandomOperationalNodeId();
-        this.messageReceptionState = new MessageReceptionStateUnencryptedWithRollover();
     }
 
     isSecure(): boolean {
@@ -41,14 +47,6 @@ export class UnsecureSession<T> implements Session<T> {
 
     isPase(): boolean {
         return false;
-    }
-
-    notifyActivity(_messageReceived: boolean) {
-        // Do nothing
-    }
-
-    isPeerActive(): boolean {
-        return true;
     }
 
     decode(packet: DecodedPacket): DecodedMessage {
@@ -69,14 +67,6 @@ export class UnsecureSession<T> implements Session<T> {
 
     get name() {
         return `unsecure/${this.initiatorNodeId}`;
-    }
-
-    getMrpParameters() {
-        return {
-            idleRetransmissionTimeoutMs: DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-            activeRetransmissionTimeoutMs: DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-            retransmissionRetries: DEFAULT_RETRANSMISSION_RETRIES,
-        };
     }
 
     getContext() {
@@ -104,18 +94,10 @@ export class UnsecureSession<T> implements Session<T> {
     }
 
     async end() {
-        this.closeCallback?.();
+        await this.closeCallback?.();
     }
 
     getAssociatedFabric(): Fabric {
         throw new NoAssociatedFabricError("Session needs to be a secure session");
-    }
-
-    getIncrementedMessageCounter() {
-        return this.messageCounter.getIncrementedCounter();
-    }
-
-    updateMessageCounter(messageCounter: number) {
-        this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 }

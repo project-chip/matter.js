@@ -9,20 +9,13 @@ import { MatterFlowError } from "../common/MatterError.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { Logger } from "../log/Logger.js";
+import { DiagnosticDictionary, Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
-import { Time } from "../time/Time.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import {
-    DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-    DEFAULT_RETRANSMISSION_RETRIES,
-    SLEEPY_ACTIVE_THRESHOLD_MS,
-    Session,
-} from "./Session.js";
+import { Session } from "./Session.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -31,10 +24,8 @@ const SESSION_RESUMPTION_KEYS_INFO = ByteArray.fromString("SessionResumptionKeys
 
 export class NoAssociatedFabricError extends Error {}
 
-export class SecureSession<T> implements Session<T> {
+export class SecureSession<T> extends Session<T> {
     private readonly subscriptions = new Array<SubscriptionHandler>();
-    timestamp = Time.nowMs();
-    activeTimestamp = this.timestamp;
     private _closingAfterExchangeFinished = false;
     private _sendCloseMessageWhenClosing = true;
     private readonly context: T;
@@ -45,17 +36,7 @@ export class SecureSession<T> implements Session<T> {
     private readonly decryptKey: ByteArray;
     private readonly encryptKey: ByteArray;
     private readonly attestationKey: ByteArray;
-    private readonly closeCallback: () => Promise<void>;
     private readonly subscriptionChangedCallback: () => void;
-    private readonly idleRetransmissionTimeoutMs: number;
-    private readonly activeRetransmissionTimeoutMs: number;
-    private readonly retransmissionRetries: number;
-    private readonly messageCounter = new MessageCounter(() => {
-        // Secure Session Message Counter
-        // Expire/End the session before the counter rolls over
-        this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
-    }); // Can be changed to a PersistedMessageCounter if we implement session storage
-    private readonly messageReceptionState = new MessageReceptionStateEncryptedWithoutRollover();
 
     static async create<T>(args: {
         context: T;
@@ -69,8 +50,9 @@ export class SecureSession<T> implements Session<T> {
         isResumption: boolean;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
+        activeThresholdMs?: number;
     }) {
         const {
             context,
@@ -83,8 +65,9 @@ export class SecureSession<T> implements Session<T> {
             isInitiator,
             isResumption,
             closeCallback,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            idleIntervalMs,
+            activeIntervalMs,
+            activeThresholdMs,
             subscriptionChangedCallback,
         } = args;
         const keys = await Crypto.hkdf(
@@ -107,8 +90,10 @@ export class SecureSession<T> implements Session<T> {
             attestationKey,
             closeCallback,
             subscriptionChangedCallback,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            idleIntervalMs,
+            activeIntervalMs,
+            activeThresholdMs,
+            isInitiator,
         });
     }
 
@@ -123,10 +108,23 @@ export class SecureSession<T> implements Session<T> {
         attestationKey: ByteArray;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
         retransmissionRetries?: number;
+        activeThresholdMs?: number;
+        isInitiator: boolean;
     }) {
+        super({
+            ...args,
+            setActiveTimestamp: true, // We always set the active timestamp for Secure sessions
+            // Can be changed to a PersistedMessageCounter if we implement session storage
+            messageCounter: new MessageCounter(() => {
+                // Secure Session Message Counter
+                // Expire/End the session before the counter rolls over
+                this.end(true, true).catch(error => logger.error(`Error while closing session: ${error}`));
+            }),
+            messageReceptionState: new MessageReceptionStateEncryptedWithoutRollover(),
+        });
         const {
             context,
             id,
@@ -136,11 +134,7 @@ export class SecureSession<T> implements Session<T> {
             decryptKey,
             encryptKey,
             attestationKey,
-            closeCallback,
             subscriptionChangedCallback = () => {},
-            idleRetransmissionTimeoutMs = DEFAULT_IDLE_RETRANSMISSION_TIMEOUT_MS,
-            activeRetransmissionTimeoutMs = DEFAULT_ACTIVE_RETRANSMISSION_TIMEOUT_MS,
-            retransmissionRetries = DEFAULT_RETRANSMISSION_RETRIES,
         } = args;
 
         this.context = context;
@@ -151,17 +145,18 @@ export class SecureSession<T> implements Session<T> {
         this.decryptKey = decryptKey;
         this.encryptKey = encryptKey;
         this.attestationKey = attestationKey;
-        this.closeCallback = closeCallback;
         this.subscriptionChangedCallback = subscriptionChangedCallback;
-        this.idleRetransmissionTimeoutMs = idleRetransmissionTimeoutMs;
-        this.activeRetransmissionTimeoutMs = activeRetransmissionTimeoutMs;
-        this.retransmissionRetries = retransmissionRetries;
 
         fabric?.addSession(this);
 
         logger.debug(
             `Created secure ${this.isPase() ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
             this.name,
+            new DiagnosticDictionary({
+                idleIntervalMs: this.idleIntervalMs,
+                activeIntervalMs: this.activeIntervalMs,
+                activeThresholdMs: this.activeThresholdMs,
+            }),
         );
     }
 
@@ -190,18 +185,6 @@ export class SecureSession<T> implements Session<T> {
             closeAfterExchangeFinished = this.isPeerActive(); // We delay session close if the peer is actively communicating with us
         }
         await this.end(true, closeAfterExchangeFinished);
-    }
-
-    notifyActivity(messageReceived: boolean) {
-        this.timestamp = Time.nowMs();
-        if (messageReceived) {
-            // only update active timestamp if we received a message
-            this.activeTimestamp = this.timestamp;
-        }
-    }
-
-    isPeerActive(): boolean {
-        return Time.nowMs() - this.activeTimestamp < SLEEPY_ACTIVE_THRESHOLD_MS;
     }
 
     decode({ header, applicationPayload, messageExtension }: DecodedPacket, aad: ByteArray): DecodedMessage {
@@ -257,11 +240,6 @@ export class SecureSession<T> implements Session<T> {
 
     get name() {
         return `secure/${this.id}`;
-    }
-
-    getMrpParameters() {
-        const { idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries } = this;
-        return { idleRetransmissionTimeoutMs, activeRetransmissionTimeoutMs, retransmissionRetries };
     }
 
     getContext() {
@@ -338,14 +316,6 @@ export class SecureSession<T> implements Session<T> {
         writer.writeUInt32(messageId);
         writer.writeUInt64(nodeId);
         return writer.toByteArray();
-    }
-
-    getIncrementedMessageCounter() {
-        return this.messageCounter.getIncrementedCounter();
-    }
-
-    updateMessageCounter(messageCounter: number) {
-        this.messageReceptionState.updateMessageCounter(messageCounter);
     }
 }
 

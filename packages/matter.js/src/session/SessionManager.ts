@@ -50,22 +50,33 @@ export class SessionManager<ContextT> {
         this.sessionStorage = storage.createContext("SessionManager");
     }
 
-    createUnsecureSession(initiatorNodeId?: NodeId) {
+    createUnsecureSession(options: {
+        initiatorNodeId?: NodeId;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
+        activeThresholdMs?: number;
+        isInitiator?: boolean;
+    }) {
+        const { initiatorNodeId, idleIntervalMs, activeIntervalMs, activeThresholdMs, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
             if (this.unsecureSessions.has(initiatorNodeId)) {
                 throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
             }
         }
         while (true) {
-            const session = new UnsecureSession(
-                this.context,
-                this.globalUnencryptedMessageCounter,
-                () => {
+            const session = new UnsecureSession({
+                context: this.context,
+                messageCounter: this.globalUnencryptedMessageCounter,
+                closeCallback: async () => {
                     logger.info(`Remove Session ${session.name} from session manager.`);
                     this.unsecureSessions.delete(session.getNodeId());
                 },
                 initiatorNodeId,
-            );
+                idleIntervalMs,
+                activeIntervalMs,
+                activeThresholdMs,
+                isInitiator: isInitiator ?? false,
+            });
 
             const ephermalNodeId = session.getNodeId();
             if (this.unsecureSessions.has(ephermalNodeId)) continue;
@@ -84,8 +95,9 @@ export class SessionManager<ContextT> {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        idleIntervalMs?: number;
+        activeIntervalMs?: number;
+        activeThresholdMs?: number;
         closeCallback?: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
     }) {
@@ -98,8 +110,9 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            idleIntervalMs,
+            activeIntervalMs,
+            activeThresholdMs,
             closeCallback,
             subscriptionChangedCallback,
         } = args;
@@ -118,8 +131,9 @@ export class SessionManager<ContextT> {
                 await closeCallback?.();
                 this.sessions.delete(sessionId);
             },
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            idleIntervalMs,
+            activeIntervalMs,
+            activeThresholdMs,
             subscriptionChangedCallback: () => subscriptionChangedCallback?.(),
         });
         this.sessions.set(sessionId, session);
