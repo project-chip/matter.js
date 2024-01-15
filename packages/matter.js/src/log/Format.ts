@@ -389,10 +389,10 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
  */
 function renderValue(value: unknown, formatter: Formatter, squash: boolean): string {
     if (value === undefined) {
-        return "undefined";
+        return formatter.text("undefined");
     }
     if (value === null) {
-        return "null";
+        return formatter.text("null");
     }
     if (value instanceof ByteArray) {
         return formatter.text(value.toHex());

@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../common/MatterError.js";
 import { ValueModel } from "../model/index.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
@@ -37,6 +36,15 @@ export class ReadError extends SchemaViolationError {
 export class WriteError extends SchemaViolationError {
     constructor(schema: Schema, message: string, code?: StatusCode) {
         super("Writing", schema, message, code ?? StatusCode.UnsupportedWrite);
+    }
+}
+
+/**
+ * Thrown for invalid invokes.
+ */
+export class InvokeError extends SchemaViolationError {
+    constructor(schema: Schema, message: string, code?: StatusCode) {
+        super("Invoking", schema, message, code ?? StatusCode.UnsupportedAccess);
     }
 }
 
@@ -90,8 +98,8 @@ export class ConformanceError extends ValidateError {
  * Thrown for issues with metadata definitions or related data that are
  * a local (vs network client) problem.
  */
-export class SchemaError extends ImplementationError {
-    constructor(schema: Schema, message: string) {
-        super(`Path ${schema.path}: ${message}`);
+export class SchemaImplementationError extends SchemaViolationError {
+    constructor(schema: Schema, message: string, code?: StatusCode) {
+        super("Definition of", schema, message, code ?? StatusCode.Failure);
     }
 }

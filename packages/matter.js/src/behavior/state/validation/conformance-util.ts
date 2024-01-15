@@ -5,7 +5,7 @@
  */
 
 import { Conformance } from "../../../model/index.js";
-import { SchemaError } from "../../errors.js";
+import { SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
 import { Val } from "../managed/Val.js";
 import { ValidationContext } from "./context.js";
@@ -101,7 +101,7 @@ export function asBoolean(node: StaticNode) {
  */
 export function assertValue(schema: Schema, node: DynamicNode, where: string): asserts node is ValueNode {
     if (node.code !== Code.Value) {
-        throw new SchemaError(schema, `Expected a value for ${where} but conformance node is "${node.code}"`);
+        throw new SchemaImplementationError(schema, `Expected a value for ${where} but conformance node is "${node.code}"`);
     }
 }
 
@@ -176,7 +176,7 @@ function performComparison(
 ): StaticNode {
     const operator = ComparisonOperators[operatorName];
     if (operator === undefined) {
-        throw new SchemaError(schema, `Unknown binary operator ${operatorName}`);
+        throw new SchemaImplementationError(schema, `Unknown binary operator ${operatorName}`);
     }
 
     assertValue(schema, lhs, `Left-hand side of "${operatorName}"`);

@@ -39,6 +39,10 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
         }
     }
 
+    if (schema) {
+        schema = syncFeatures(schema, cluster);
+    }
+
     return GeneratedClass({
         name: `${cluster.name}Behavior`,
         base,
@@ -194,7 +198,8 @@ function createBaseEvents(cluster: ClusterType, stateNames: Set<string>) {
  * Obtain schema for a particular cluster.
  *
  * Currently we model TLV and TypeScript types with ClusterType and use ClusterModel for logical operations.  This dual
- * mode is not ideal but necessary for the time being.
+ * mode could probably be improved but we will continue to need a source for type information (ClusterType) and more
+ * exhaustive operational metadata (ClusterModel).
  *
  * This acts as an adapter to load the appropriate {@link ClusterModel} for a {@link ClusterType}.
  */
@@ -212,12 +217,23 @@ function schemaForCluster(cluster: ClusterType) {
         throw new ImplementationError(`Cannot locate schema for cluster ${cluster.id}, please supply manually`);
     }
 
-    const supportedFeatures = new FeatureSet(cluster.supportedFeatures);
-    if (supportedFeatures.size) {
-        schema = schema.clone();
-        schema.supportedFeatures = supportedFeatures;
+    return schema;
+}
+
+/**
+ * Ensure the supported features enumerated by schema align with a cluster definition.
+ */
+function syncFeatures(schema: Schema, cluster: ClusterType) {
+    if (!(schema instanceof ClusterModel)) {
+        return schema;
     }
 
+    const incomingFeatures = new FeatureSet(cluster.supportedFeatures);
+    if (new FeatureSet(cluster.supportedFeatures).is(schema.supportedFeatures)) {
+        return schema;
+    }
+    schema = schema.clone();
+    schema.supportedFeatures = incomingFeatures;
     return schema;
 }
 
