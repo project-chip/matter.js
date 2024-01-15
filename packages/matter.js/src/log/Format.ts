@@ -406,10 +406,10 @@ function renderValue(
     squash: boolean,
 ): string {
     if (value === undefined) {
-        return "undefined";
+        return formatter.text("undefined");
     }
     if (value === null) {
-        return "null";
+        return formatter.text("null");
     }
     if (value instanceof ByteArray) {
         return formatter.text(value.toHex());

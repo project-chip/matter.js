@@ -22,7 +22,7 @@ export class OnOffServer extends Base {
 
     override on() {
         this.state.onOff = true;
-        if (this.cluster.supportedFeatures.levelControlForLighting) {
+        if (this.features.levelControlForLighting) {
             if (!this.timedOnTimer.isRunning) {
                 if (this.delayedOffTimer.isRunning) {
                     this.delayedOffTimer.stop();
@@ -34,7 +34,7 @@ export class OnOffServer extends Base {
 
     override off() {
         this.state.onOff = false;
-        if (this.cluster.supportedFeatures.levelControlForLighting) {
+        if (this.features.levelControlForLighting) {
             if (this.timedOnTimer.isRunning) {
                 this.timedOnTimer.stop();
                 if ((this.state.offWaitTime ?? 0) > 0) {
