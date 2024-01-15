@@ -562,8 +562,8 @@ export class MatterDevice {
         timeOutSeconds = 5,
     ): Promise<undefined | { session: Session<MatterDevice>; channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
-        const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
-        if (matterServer.length === 0) return undefined;
+        const device = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
+        if (device === undefined) return undefined;
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
@@ -571,7 +571,7 @@ export class MatterDevice {
         if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
             throw new NetworkError("No network interface found");
         } // TODO meeehhh
-        return { session, channel: await networkInterface.openChannel(matterServer[0]) };
+        return { session, channel: await networkInterface.openChannel(device.addresses[0]) };
     }
 
     async stop() {
