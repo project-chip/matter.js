@@ -235,6 +235,11 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
 
         validateEntries = (list: Val.List, session: ValueSupervisor.Session) => {
             for (const e of list) {
+                if (e === undefined || e === null) {
+                    // Accept nullish
+                    continue;
+                }
+
                 entryValidator(e, session);
             }
         };

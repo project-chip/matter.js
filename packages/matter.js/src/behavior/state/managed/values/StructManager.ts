@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { ValueModel } from "../../../../model/index.js";
+import { Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { AccessControl } from "../../../AccessControl.js";
@@ -220,6 +220,13 @@ function configureProperty(
         };
     } else {
         // For collections we create a managed value
+        let cloneContainer: (container: Val) => Val;
+        if (schema.effectiveMetatype === Metatype.array) {
+            cloneContainer = (container: Val) => [ ...(container as Val.List) ];
+        } else {
+            cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
+        }
+
         descriptor.get = function (this: Wrapper) {
             let value;
 
@@ -264,15 +271,12 @@ function configureProperty(
 
             // If we have a transaction we will clone the container before
             // write.  Otherwise we update the property directly
-            const cloneContainer = this[SESSION].transaction
-                ? (container: Val) => {
-                      return {
-                          ...(container as Val.Struct),
-                      };
-                  }
-                : undefined;
-
-            const ref = ManagedReference(this[REF], name, assertWriteOk, cloneContainer);
+            const ref = ManagedReference(
+                this[REF],
+                name,
+                assertWriteOk,
+                this[SESSION].transaction ? cloneContainer : undefined,
+            );
 
             ref.owner = manage(ref, this[SESSION], this[CONTEXT]);
 

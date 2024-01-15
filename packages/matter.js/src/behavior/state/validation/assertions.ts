@@ -18,7 +18,7 @@ export function assertNumber(value: Val, schema: Schema): asserts value is numbe
 }
 
 export function assertObject(value: Val, schema: Schema): asserts value is Val.Struct {
-    if (typeof value === "object" && !Array.isArray(value)) {
+    if (typeof value === "object" && value !== null && !Array.isArray(value)) {
         return;
     }
     throw new DatatypeError(schema, "an object", value);

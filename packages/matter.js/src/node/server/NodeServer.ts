@@ -174,6 +174,8 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         const agent = this.root;
 
+        await this.advertise();
+
         if (!this.commissioned) {
             try {
                 const commissioning = await agent.waitFor(CommissioningBehavior);
@@ -185,8 +187,6 @@ export class NodeServer extends BaseNodeServer implements Node {
                 throw e;
             }
         }
-
-        await this.advertise();
 
         logger.notice(Diagnostic.strong(this.toString()), "is online");
     }
