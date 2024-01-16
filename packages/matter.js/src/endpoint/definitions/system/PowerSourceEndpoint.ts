@@ -6,19 +6,28 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PowerSourceServer } from "../../../behavior/definitions/power-source/PowerSourceServer.js";
+import {
+    PowerSourceServer as BasePowerSourceServer
+} from "../../../behavior/definitions/power-source/PowerSourceServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const PowerSourceRequirements = {
+export namespace PowerSourceRequirements {
+    /**
+     * The {@link PowerSource} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const PowerSourceServer = BasePowerSourceServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { PowerSource: PowerSourceServer } }
-};
+    export const server = { mandatory: { PowerSource: PowerSourceServer } };
+}
 
 export const PowerSourceEndpointDefinition = MutableEndpoint({
     name: "PowerSource",

@@ -6,52 +6,130 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { OnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
+import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
 import {
-    PumpConfigurationAndControlServer
+    PumpConfigurationAndControlServer as BasePumpConfigurationAndControlServer
 } from "../../../behavior/definitions/pump-configuration-and-control/PumpConfigurationAndControlServer.js";
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { LevelControlServer } from "../../../behavior/definitions/level-control/LevelControlServer.js";
-import { ScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
-import { GroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import {
-    TemperatureMeasurementBehavior
+    LevelControlServer as BaseLevelControlServer
+} from "../../../behavior/definitions/level-control/LevelControlServer.js";
+import { ScenesServer as BaseScenesServer } from "../../../behavior/definitions/scenes/ScenesServer.js";
+import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import {
+    TemperatureMeasurementBehavior as BaseTemperatureMeasurementBehavior
 } from "../../../behavior/definitions/temperature-measurement/TemperatureMeasurementBehavior.js";
 import {
-    PressureMeasurementBehavior
+    PressureMeasurementBehavior as BasePressureMeasurementBehavior
 } from "../../../behavior/definitions/pressure-measurement/PressureMeasurementBehavior.js";
-import { FlowMeasurementBehavior } from "../../../behavior/definitions/flow-measurement/FlowMeasurementBehavior.js";
-import { OccupancySensingBehavior } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
+import {
+    FlowMeasurementBehavior as BaseFlowMeasurementBehavior
+} from "../../../behavior/definitions/flow-measurement/FlowMeasurementBehavior.js";
+import {
+    OccupancySensingBehavior as BaseOccupancySensingBehavior
+} from "../../../behavior/definitions/occupancy-sensing/OccupancySensingBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const PumpRequirements = {
+export namespace PumpRequirements {
+    /**
+     * The {@link OnOff} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
+     * The {@link PumpConfigurationAndControl} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const PumpConfigurationAndControlServer = BasePumpConfigurationAndControlServer;
+
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link LevelControl} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const LevelControlServer = BaseLevelControlServer;
+
+    /**
+     * The {@link Scenes} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ScenesServer = BaseScenesServer;
+
+    /**
+     * The {@link Groups} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsServer = BaseGroupsServer;
+
+    /**
+     * The {@link TemperatureMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const TemperatureMeasurementBehavior = BaseTemperatureMeasurementBehavior;
+
+    /**
+     * The {@link PressureMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const PressureMeasurementBehavior = BasePressureMeasurementBehavior;
+
+    /**
+     * The {@link FlowMeasurement} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const FlowMeasurementBehavior = BaseFlowMeasurementBehavior;
+
+    /**
+     * The {@link OccupancySensing} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OccupancySensingBehavior = BaseOccupancySensingBehavior;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: {
+    export const server = {
         mandatory: {
             OnOff: OnOffServer,
             PumpConfigurationAndControl: PumpConfigurationAndControlServer,
             Identify: IdentifyServer
         },
         optional: { LevelControl: LevelControlServer, Scenes: ScenesServer, Groups: GroupsServer }
-    },
+    };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: {
+    export const client = {
         optional: {
             TemperatureMeasurement: TemperatureMeasurementBehavior,
             PressureMeasurement: PressureMeasurementBehavior,
             FlowMeasurement: FlowMeasurementBehavior,
             OccupancySensing: OccupancySensingBehavior
-        }
-    }
-};
+        },
+
+        mandatory: {}
+    };
+}
 
 export const PumpDeviceDefinition = MutableEndpoint({
     name: "Pump",

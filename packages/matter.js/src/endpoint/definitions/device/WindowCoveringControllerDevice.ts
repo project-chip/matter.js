@@ -6,24 +6,54 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { WindowCoveringBehavior } from "../../../behavior/definitions/window-covering/WindowCoveringBehavior.js";
-import { IdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
-import { GroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
+import {
+    WindowCoveringBehavior as BaseWindowCoveringBehavior
+} from "../../../behavior/definitions/window-covering/WindowCoveringBehavior.js";
+import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
+import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
+import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const WindowCoveringControllerRequirements = {
+export namespace WindowCoveringControllerRequirements {
+    /**
+     * The {@link WindowCovering} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const WindowCoveringBehavior = BaseWindowCoveringBehavior;
+
+    /**
+     * The {@link Identify} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyBehavior = BaseIdentifyBehavior;
+
+    /**
+     * The {@link Groups} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsBehavior = BaseGroupsBehavior;
+
+    /**
+     * The {@link Scenes} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ScenesBehavior = BaseScenesBehavior;
+
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: {
+    export const client = {
         mandatory: { WindowCovering: WindowCoveringBehavior },
         optional: { Identify: IdentifyBehavior, Groups: GroupsBehavior, Scenes: ScenesBehavior }
-    }
-};
+    };
+}
 
 export const WindowCoveringControllerDeviceDefinition = MutableEndpoint({
     name: "WindowCoveringController",
