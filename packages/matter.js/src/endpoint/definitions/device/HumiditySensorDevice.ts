@@ -6,21 +6,37 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import {
-    RelativeHumidityMeasurementServer
+    RelativeHumidityMeasurementServer as BaseRelativeHumidityMeasurementServer
 } from "../../../behavior/definitions/relative-humidity-measurement/RelativeHumidityMeasurementServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const HumiditySensorRequirements = {
+export namespace HumiditySensorRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link RelativeHumidityMeasurement} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const RelativeHumidityMeasurementServer = BaseRelativeHumidityMeasurementServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, RelativeHumidityMeasurement: RelativeHumidityMeasurementServer } }
-};
+    export const server = {
+        mandatory: { Identify: IdentifyServer, RelativeHumidityMeasurement: RelativeHumidityMeasurementServer }
+    };
+}
 
 export const HumiditySensorDeviceDefinition = MutableEndpoint({
     name: "HumiditySensor",

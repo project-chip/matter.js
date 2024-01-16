@@ -6,19 +6,35 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { OnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
-import { LevelControlServer } from "../../../behavior/definitions/level-control/LevelControlServer.js";
+import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
+import {
+    LevelControlServer as BaseLevelControlServer
+} from "../../../behavior/definitions/level-control/LevelControlServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const SpeakerRequirements = {
+export namespace SpeakerRequirements {
+    /**
+     * The {@link OnOff} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
+     * The {@link LevelControl} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const LevelControlServer = BaseLevelControlServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { OnOff: OnOffServer, LevelControl: LevelControlServer } }
-};
+    export const server = { mandatory: { OnOff: OnOffServer, LevelControl: LevelControlServer } };
+}
 
 export const SpeakerDeviceDefinition = MutableEndpoint({
     name: "Speaker",

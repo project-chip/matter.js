@@ -6,27 +6,48 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import {
-    IlluminanceMeasurementServer
+    IlluminanceMeasurementServer as BaseIlluminanceMeasurementServer
 } from "../../../behavior/definitions/illuminance-measurement/IlluminanceMeasurementServer.js";
-import { GroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
+import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const LightSensorRequirements = {
+export namespace LightSensorRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link IlluminanceMeasurement} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IlluminanceMeasurementServer = BaseIlluminanceMeasurementServer;
+
+    /**
+     * The {@link Groups} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsBehavior = BaseGroupsBehavior;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, IlluminanceMeasurement: IlluminanceMeasurementServer } },
+    export const server = { mandatory: { Identify: IdentifyServer, IlluminanceMeasurement: IlluminanceMeasurementServer } };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: { optional: { Groups: GroupsBehavior } }
-};
+    export const client = { optional: { Groups: GroupsBehavior }, mandatory: {} };
+}
 
 export const LightSensorDeviceDefinition = MutableEndpoint({
     name: "LightSensor",

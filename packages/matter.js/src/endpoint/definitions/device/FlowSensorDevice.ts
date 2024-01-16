@@ -6,19 +6,35 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { FlowMeasurementServer } from "../../../behavior/definitions/flow-measurement/FlowMeasurementServer.js";
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import {
+    FlowMeasurementServer as BaseFlowMeasurementServer
+} from "../../../behavior/definitions/flow-measurement/FlowMeasurementServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const FlowSensorRequirements = {
+export namespace FlowSensorRequirements {
+    /**
+     * The {@link FlowMeasurement} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const FlowMeasurementServer = BaseFlowMeasurementServer;
+
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { FlowMeasurement: FlowMeasurementServer, Identify: IdentifyServer } }
-};
+    export const server = { mandatory: { FlowMeasurement: FlowMeasurementServer, Identify: IdentifyServer } };
+}
 
 export const FlowSensorDeviceDefinition = MutableEndpoint({
     name: "FlowSensor",

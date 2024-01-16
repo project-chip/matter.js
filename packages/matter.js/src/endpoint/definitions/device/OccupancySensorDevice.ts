@@ -6,25 +6,48 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { OccupancySensingServer } from "../../../behavior/definitions/occupancy-sensing/OccupancySensingServer.js";
-import { GroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import {
+    OccupancySensingServer as BaseOccupancySensingServer
+} from "../../../behavior/definitions/occupancy-sensing/OccupancySensingServer.js";
+import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const OccupancySensorRequirements = {
+export namespace OccupancySensorRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link OccupancySensing} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OccupancySensingServer = BaseOccupancySensingServer;
+
+    /**
+     * The {@link Groups} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsBehavior = BaseGroupsBehavior;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, OccupancySensing: OccupancySensingServer } },
+    export const server = { mandatory: { Identify: IdentifyServer, OccupancySensing: OccupancySensingServer } };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: { optional: { Groups: GroupsBehavior } }
-};
+    export const client = { optional: { Groups: GroupsBehavior }, mandatory: {} };
+}
 
 export const OccupancySensorDeviceDefinition = MutableEndpoint({
     name: "OccupancySensor",

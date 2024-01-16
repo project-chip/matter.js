@@ -6,25 +6,62 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
-import { OnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
-import { LevelControlBehavior } from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
-import { GroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
-import { ScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
+import { IdentifyBehavior as BaseIdentifyBehavior } from "../../../behavior/definitions/identify/IdentifyBehavior.js";
+import { OnOffBehavior as BaseOnOffBehavior } from "../../../behavior/definitions/on-off/OnOffBehavior.js";
+import {
+    LevelControlBehavior as BaseLevelControlBehavior
+} from "../../../behavior/definitions/level-control/LevelControlBehavior.js";
+import { GroupsBehavior as BaseGroupsBehavior } from "../../../behavior/definitions/groups/GroupsBehavior.js";
+import { ScenesBehavior as BaseScenesBehavior } from "../../../behavior/definitions/scenes/ScenesBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const DimmerSwitchRequirements = {
+export namespace DimmerSwitchRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyBehavior = BaseIdentifyBehavior;
+
+    /**
+     * The {@link OnOff} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OnOffBehavior = BaseOnOffBehavior;
+
+    /**
+     * The {@link LevelControl} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const LevelControlBehavior = BaseLevelControlBehavior;
+
+    /**
+     * The {@link Groups} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsBehavior = BaseGroupsBehavior;
+
+    /**
+     * The {@link Scenes} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ScenesBehavior = BaseScenesBehavior;
+
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: {
+    export const client = {
         mandatory: { Identify: IdentifyBehavior, OnOff: OnOffBehavior, LevelControl: LevelControlBehavior },
         optional: { Groups: GroupsBehavior, Scenes: ScenesBehavior }
-    }
-};
+    };
+}
 
 export const DimmerSwitchDeviceDefinition = MutableEndpoint({
     name: "DimmerSwitch",
