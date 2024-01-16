@@ -49,9 +49,10 @@ class MockInterval extends MockTimer {
     }
 }
 
-type InterceptResult<T> = T extends Promise<T>
-    ? { resolve: Awaited<T>; reject?: undefined } | { resolve?: undefined; reject: {} }
-    : { resolve: T; reject?: undefined } | { resolve?: void; reject: {} };
+type InterceptResult<T> =
+    T extends Promise<T>
+        ? { resolve: Awaited<T>; reject?: undefined } | { resolve?: undefined; reject: {} }
+        : { resolve: T; reject?: undefined } | { resolve?: void; reject: {} };
 
 function isAsync(fn: (...args: any) => any): fn is (...args: any) => Promise<any> {
     return fn.constructor.name === "AsyncFunction";
