@@ -77,7 +77,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
             throw e;
         }
         expect(e).instanceof(error.type);
-        expect((e as Error).message).equals(error.message);
+        expect((e as Error).message).equals(`${error.message} (128)`);
     }
 }
 

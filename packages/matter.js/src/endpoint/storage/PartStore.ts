@@ -15,6 +15,11 @@ import type { Datasource } from "../../behavior/state/managed/Datasource.js";
  */
 export interface PartStore {
     /**
+     * Was this store previously known to Matter.js?
+     */
+    isNew: boolean;
+
+    /**
      * Description used in diagnostic messages.
      */
     toString(): string;

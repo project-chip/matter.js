@@ -7,7 +7,9 @@
 import { AccessControl } from "../../../../src/behavior/AccessControl.js";
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
+import { Val } from "../../../../src/behavior/state/managed/Val.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
+import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
 import { Observable } from "../../../../src/util/Observable.js";
 
 class MyState {
@@ -83,11 +85,41 @@ describe("Datasource", () => {
 
         const supervisor = BehaviorSupervisor({ id: "test", State });
 
-        const datasource = ds({ supervisor });
+        const datasource = ds({
+            type: State,
+            supervisor
+        });
 
         const state = datasource.reference(AccessControl.OfflineSession);
 
         expect(() => (state.foo = "bar")).throws(`Bad value "bar"`);
         expect(state.foo).equals("foo");
     });
+
+    it("handles dynamic properties", () => {
+        const dynamic = {
+            foo: "hello",
+        }
+        class State {
+            foo = "";
+
+            [Val.properties](_session: ValueSupervisor.Session) {
+                return dynamic;
+            }
+        }
+
+        const supervisor = BehaviorSupervisor({ id: "test", State });
+
+        const datasource = ds({
+            type: State,
+            supervisor
+        });
+
+        const state = datasource.reference(AccessControl.OfflineSession);
+
+        expect(state.foo).equals("hello");
+        state.foo = "goodbye";
+        expect(state.foo).equals("goodbye");
+        expect(dynamic.foo).equals("goodbye");
+    })
 });

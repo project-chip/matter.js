@@ -11,13 +11,17 @@ import { PartOwner } from "../../src/endpoint/part/PartOwner.js";
 import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { ImplementationError, InternalError } from "../../src/common/MatterError.js";
 import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
-import { MockPartStore } from "../behavior/mock-behavior.js";
 import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { EventHandler } from "../../src/protocol/interaction/EventHandler.js";
 import { PartLifecycle } from "../../src/endpoint/part/PartLifecycle.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
+import { PartStore } from "../../src/endpoint/storage/PartStore.js";
+import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { Val } from "../../src/behavior/state/managed/Val.js";
+import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
+import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
 
 export class MockBehaviorInitializer extends PartInitializer {
     #nextId = 1;
@@ -35,20 +39,86 @@ export class MockBehaviorInitializer extends PartInitializer {
     }
 }
 
+class MockPartStore implements PartStore {
+    part: Part;
+    isNew = true;
+    values = {} as Record<string, Val.Struct>;
+    initialValues = {};
+
+    constructor(part: Part) {
+        this.part = part;
+    }
+
+    toString() {
+        return `MockStore#${this.part.number}`;
+    }
+
+    async set(values: Record<string, Val.Struct>) {
+        for (const behaviorId in values) {
+            if (values[behaviorId]) {
+                Object.assign(values[behaviorId]);
+            } else {
+                values[behaviorId] = values[behaviorId];
+            }
+        }
+    }
+
+    async delete() {}
+
+    storeForBehavior(behaviorId: string): Datasource.Store {
+        const values = this.values;
+
+        return {
+            get initialValues() {
+                return values[behaviorId] ?? (values[behaviorId] = {});
+            },
+
+            set: async (transaction: Transaction, newValues: Val.Struct) => {
+                transaction.addParticipants({
+                    commit1() {},
+
+                    commit2() {
+                        if (values[behaviorId]) {
+                            Object.assign(values[behaviorId], newValues);
+                        } else {
+                            values[behaviorId] = newValues;
+                        }
+                    },
+
+                    rollback() {}
+                })
+            }
+        }
+    }
+}
+
+class MockPartStoreService extends PartStoreService {
+    #stores = Array<MockPartStore>();
+    #nextNumber = 1;
+
+    override assignNumber(part: Part<EndpointType.Empty>): void {
+        part.number = this.#nextNumber++;
+    }
+
+    override storeForPart(part: Part<EndpointType.Empty>): PartStore {
+        if (this.#stores[part.number]) {
+            return this.#stores[part.number];
+        }
+
+        return this.#stores[part.number] = new MockPartStore(part);
+    }
+}
+
 export class MockOwner implements PartOwner {
-    #stores = new Map<Part, MockPartStore>();
     #root?: Part;
     #behaviorInitializer = new MockBehaviorInitializer();
     #storage = new StorageManager(new StorageBackendMemory());
-    #partStores: PartStoreService;
+    #partStores = new MockPartStoreService;
     #eventHandler: EventHandler;
     #identityService?: IdentityService;
 
     constructor() {
         (this.#storage as any).initialized = true;
-        this.#partStores = new PartStoreService({
-            storage: this.#storage.createContext("endpoints"),
-        });
         this.#eventHandler = new EventHandler(this.#storage.createContext("events"));
     }
 
@@ -63,14 +133,6 @@ export class MockOwner implements PartOwner {
         this.#root = part;
         this.#identityService = new IdentityService(part, "Test node");
         part.lifecycle.change(PartLifecycle.Change.Installed);
-    }
-
-    storeFor(part: Part) {
-        let store = this.#stores.get(part);
-        if (!store) {
-            this.#stores.set(part, store = new MockPartStore());
-        }
-        return store;
     }
 
     serviceFor<T>(type: abstract new (...args: any[]) => T): T {
