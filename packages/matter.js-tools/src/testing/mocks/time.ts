@@ -75,6 +75,9 @@ export class MockTime {
     reset(time = this.startTimeMs) {
         this.callbacks = [];
         this.timeMs = time;
+
+        // Some tests use "real" time implementation, ensure this can't leak across suites
+        reinstallTime?.();
     }
 
     now(): Date {
@@ -204,7 +207,10 @@ export class MockTime {
     }
 }
 
+let reinstallTime: undefined | (() => void);
+
 export const TheMockTime = new MockTime(0);
 export function timeSetup(Time: { get: () => MockTime }) {
-    Time.get = () => TheMockTime;
+    reinstallTime = () => Time.get = () => TheMockTime;        
+    reinstallTime();
 }
