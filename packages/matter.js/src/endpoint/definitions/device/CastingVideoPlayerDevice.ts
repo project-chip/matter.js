@@ -6,28 +6,126 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { OnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
-import { MediaPlaybackServer } from "../../../behavior/definitions/media-playback/MediaPlaybackServer.js";
-import { KeypadInputServer } from "../../../behavior/definitions/keypad-input/KeypadInputServer.js";
-import { ContentLauncherServer } from "../../../behavior/definitions/content-launcher/ContentLauncherServer.js";
-import { WakeOnLanServer } from "../../../behavior/definitions/wake-on-lan/WakeOnLanServer.js";
-import { ChannelServer } from "../../../behavior/definitions/channel/ChannelServer.js";
-import { TargetNavigatorServer } from "../../../behavior/definitions/target-navigator/TargetNavigatorServer.js";
-import { MediaInputServer } from "../../../behavior/definitions/media-input/MediaInputServer.js";
-import { LowPowerServer } from "../../../behavior/definitions/low-power/LowPowerServer.js";
-import { AudioOutputServer } from "../../../behavior/definitions/audio-output/AudioOutputServer.js";
-import { ApplicationLauncherServer } from "../../../behavior/definitions/application-launcher/ApplicationLauncherServer.js";
-import { AccountLoginServer } from "../../../behavior/definitions/account-login/AccountLoginServer.js";
+import { OnOffServer as BaseOnOffServer } from "../../../behavior/definitions/on-off/OnOffServer.js";
+import {
+    MediaPlaybackServer as BaseMediaPlaybackServer
+} from "../../../behavior/definitions/media-playback/MediaPlaybackServer.js";
+import {
+    KeypadInputServer as BaseKeypadInputServer
+} from "../../../behavior/definitions/keypad-input/KeypadInputServer.js";
+import {
+    ContentLauncherServer as BaseContentLauncherServer
+} from "../../../behavior/definitions/content-launcher/ContentLauncherServer.js";
+import { WakeOnLanServer as BaseWakeOnLanServer } from "../../../behavior/definitions/wake-on-lan/WakeOnLanServer.js";
+import { ChannelServer as BaseChannelServer } from "../../../behavior/definitions/channel/ChannelServer.js";
+import {
+    TargetNavigatorServer as BaseTargetNavigatorServer
+} from "../../../behavior/definitions/target-navigator/TargetNavigatorServer.js";
+import { MediaInputServer as BaseMediaInputServer } from "../../../behavior/definitions/media-input/MediaInputServer.js";
+import { LowPowerServer as BaseLowPowerServer } from "../../../behavior/definitions/low-power/LowPowerServer.js";
+import {
+    AudioOutputServer as BaseAudioOutputServer
+} from "../../../behavior/definitions/audio-output/AudioOutputServer.js";
+import {
+    ApplicationLauncherServer as BaseApplicationLauncherServer
+} from "../../../behavior/definitions/application-launcher/ApplicationLauncherServer.js";
+import {
+    AccountLoginServer as BaseAccountLoginServer
+} from "../../../behavior/definitions/account-login/AccountLoginServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const CastingVideoPlayerRequirements = {
+export namespace CastingVideoPlayerRequirements {
+    /**
+     * The {@link OnOff} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const OnOffServer = BaseOnOffServer;
+
+    /**
+     * The {@link MediaPlayback} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const MediaPlaybackServer = BaseMediaPlaybackServer;
+
+    /**
+     * The {@link KeypadInput} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const KeypadInputServer = BaseKeypadInputServer;
+
+    /**
+     * The {@link ContentLauncher} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ContentLauncherServer = BaseContentLauncherServer;
+
+    /**
+     * The {@link WakeOnLan} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const WakeOnLanServer = BaseWakeOnLanServer;
+
+    /**
+     * The {@link Channel} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ChannelServer = BaseChannelServer;
+
+    /**
+     * The {@link TargetNavigator} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const TargetNavigatorServer = BaseTargetNavigatorServer;
+
+    /**
+     * The {@link MediaInput} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const MediaInputServer = BaseMediaInputServer;
+
+    /**
+     * The {@link LowPower} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const LowPowerServer = BaseLowPowerServer;
+
+    /**
+     * The {@link AudioOutput} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const AudioOutputServer = BaseAudioOutputServer;
+
+    /**
+     * The {@link ApplicationLauncher} cluster is optional per the Matter specification
+     *
+     * This version of {@link ApplicationLauncherServer} is specialized per the specification.
+     */
+    export const ApplicationLauncherServer = BaseApplicationLauncherServer.with("ApplicationPlatform");
+
+    /**
+     * The {@link AccountLogin} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const AccountLoginServer = BaseAccountLoginServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: {
+    export const server = {
         mandatory: {
             OnOff: OnOffServer,
             MediaPlayback: MediaPlaybackServer,
@@ -42,11 +140,11 @@ export const CastingVideoPlayerRequirements = {
             MediaInput: MediaInputServer,
             LowPower: LowPowerServer,
             AudioOutput: AudioOutputServer,
-            ApplicationLauncher: ApplicationLauncherServer.with("ApplicationPlatform"),
+            ApplicationLauncher: ApplicationLauncherServer,
             AccountLogin: AccountLoginServer
         }
-    }
-};
+    };
+}
 
 export const CastingVideoPlayerDeviceDefinition = MutableEndpoint({
     name: "CastingVideoPlayer",

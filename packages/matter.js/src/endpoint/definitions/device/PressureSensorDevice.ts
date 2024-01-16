@@ -6,19 +6,35 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PressureMeasurementServer } from "../../../behavior/definitions/pressure-measurement/PressureMeasurementServer.js";
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import {
+    PressureMeasurementServer as BasePressureMeasurementServer
+} from "../../../behavior/definitions/pressure-measurement/PressureMeasurementServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const PressureSensorRequirements = {
+export namespace PressureSensorRequirements {
+    /**
+     * The {@link PressureMeasurement} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const PressureMeasurementServer = BasePressureMeasurementServer;
+
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { PressureMeasurement: PressureMeasurementServer, Identify: IdentifyServer } }
-};
+    export const server = { mandatory: { PressureMeasurement: PressureMeasurementServer, Identify: IdentifyServer } };
+}
 
 export const PressureSensorDeviceDefinition = MutableEndpoint({
     name: "PressureSensor",

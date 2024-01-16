@@ -6,19 +6,35 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { BooleanStateServer } from "../../../behavior/definitions/boolean-state/BooleanStateServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import {
+    BooleanStateServer as BaseBooleanStateServer
+} from "../../../behavior/definitions/boolean-state/BooleanStateServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const ContactSensorRequirements = {
+export namespace ContactSensorRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link BooleanState} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const BooleanStateServer = BaseBooleanStateServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, BooleanState: BooleanStateServer } }
-};
+    export const server = { mandatory: { Identify: IdentifyServer, BooleanState: BooleanStateServer } };
+}
 
 export const ContactSensorDeviceDefinition = MutableEndpoint({
     name: "ContactSensor",

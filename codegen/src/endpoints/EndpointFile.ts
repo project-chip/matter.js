@@ -19,6 +19,7 @@ export class EndpointFile extends TsFile {
     definitionPath: string;
     requirementsName: string;
     requirements: Block;
+    definitions: Block;
 
     constructor(public model: DeviceTypeModel) {
         let path;
@@ -45,7 +46,8 @@ export class EndpointFile extends TsFile {
         this.definitionPath = path;
         this.requirementsName = `${specName}Requirements`;
 
-        this.requirements = this.expressions(`export const ${this.requirementsName} = {`, "}");
+        this.requirements = this.statements(`export namespace ${this.requirementsName} {`, "}");
+        this.definitions = this.requirements.section();
         this.undefine(this.definitionName);
 
         this.generate();
@@ -107,7 +109,6 @@ export class EndpointFile extends TsFile {
         this.addImport("endpoint/part/SupportedBehaviors.js", "SupportedBehaviors");
         definition.atom(`requirements: ${this.requirementsName}`);
         const behaviors = definition.expressions("behaviors: SupportedBehaviors(", ")");
-        behaviors.atom("");
 
         if (requirements.default.length) {
             for (const behavior of requirements.default) {

@@ -6,20 +6,41 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { GroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
-import { FanControlServer } from "../../../behavior/definitions/fan-control/FanControlServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import { GroupsServer as BaseGroupsServer } from "../../../behavior/definitions/groups/GroupsServer.js";
+import { FanControlServer as BaseFanControlServer } from "../../../behavior/definitions/fan-control/FanControlServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const FanRequirements = {
+export namespace FanRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link Groups} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const GroupsServer = BaseGroupsServer;
+
+    /**
+     * The {@link FanControl} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const FanControlServer = BaseFanControlServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer } }
-};
+    export const server = { mandatory: { Identify: IdentifyServer, Groups: GroupsServer, FanControl: FanControlServer } };
+}
 
 export const FanDeviceDefinition = MutableEndpoint({
     name: "Fan",

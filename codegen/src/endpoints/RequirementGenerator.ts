@@ -27,7 +27,6 @@ export class RequirementGenerator {
     default = Array<string>();
     mandatoryWithExtension?: ClusterModel[];
 
-    #definitionsBlock?: Block;
     #mandatory = Array<ClusterDetail>();
     #optional = Array<ClusterDetail>();
     #mandatoryBlock?: Block;
@@ -103,13 +102,6 @@ export class RequirementGenerator {
         return `${this.file.requirementsName}.${this.type}.${mandatory ? "mandatory" : "optional"}.${name}`;
     }
 
-    get #definitions() {
-        if (this.#definitionsBlock === undefined) {
-            this.#definitionsBlock = this.#requirements.section();
-        }
-        return this.#definitionsBlock;
-    }
-
     private get mandatoryBlock() {
         if (this.#mandatoryBlock === undefined) {
             this.#mandatoryBlock = this.#requirements.expressions("mandatory: {", "}");
@@ -126,7 +118,7 @@ export class RequirementGenerator {
 
     get #requirements() {
         if (!this.#requirementsBlock) {
-            this.#requirementsBlock = this.file.requirements.expressions(`${this.type}: {`, "}");
+            this.#requirementsBlock = this.file.requirements.expressions(`export const ${this.type} = {`, "}");
         }
         return this.#requirementsBlock;
     }
@@ -142,7 +134,7 @@ export class RequirementGenerator {
             this.file.addImport(`${prefix}Behavior.js`, `${name} as Base${name}`);
         }
 
-        const definition = this.#definitions.builder(`const ${name} = Base${name}`);
+        const definition = this.file.definitions.builder(`export const ${name} = Base${name}`);
 
         const requirements = new ClusterRequirements(this.file, detail.definition, detail.requirement);
 
@@ -182,9 +174,9 @@ export class RequirementGenerator {
         if (specialized) {
             documentation += `\nThis version of {@link ${
                 name
-            } is specialized per the specification.`;
+            }} is specialized per the specification.`;
         } else {
-            documentation += "We provide this alias for convenience."
+            documentation += "\nWe provide this alias for convenience."
         }
 
         definition.document(documentation);
