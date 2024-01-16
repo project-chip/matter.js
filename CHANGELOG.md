@@ -12,7 +12,15 @@ The main work (all changes without a GitHub username in brackets in the below li
 ## __WORK IN PROGRESS__
 * Matter-Core functionality:
   * Fix: Adjust commands GoToLiftPercentage and GoToTiltPercentage to match with Matter SDK and work around specification issue
-
+  * Fix: Fixed BLE commissioning for Controller
+  * Fix: Improved Standalone Ack handling for messages to match Matter 1.2 specification
+  * Enhancement: Optimized MDNS Scanner queries to prevent resending of queries that are already in progress
+  * Enhancement: Optimized Commissioning error handling for Controller
+* matter.js API:
+  * Enhancement: Allowed to pass connect options when connecting a node for Controller
+* matter.js shell:
+  * Enhancement: Do not subscribe all attributes when connecting a node for administrative actions (unpair, open commissioning windows)
+  * Enhancement: Allowed to specify the BLE HCI id as shell start parameter and store in settings
 
 ## 0.7.4 (2023-12-31)
 * Matter-Core functionality:
