@@ -213,8 +213,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         if (typeof number !== "number") {
             throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
         }
-        if (number < 0 || number > 0xffff) {
-            throw new ImplementationError(`Endpoint number ${number} is out of bounds`);
+        if (!Number.isInteger(number)) {
+            throw new ImplementationError(`Endpoint number ${number} is not an integer`)
+        }
+        if (number < 0) {
+            throw new ImplementationError(`Endpoint number ${number} is negative`);
+        }
+        if (number > 0xffff) {
+            throw new ImplementationError(`Endpoint number ${number} is greater than the maximum of 65535`);
         }
 
         if (this.type.deviceClass === RootEndpoint.deviceClass) {

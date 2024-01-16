@@ -19,6 +19,11 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
  */
 export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
+        if (this.part.behaviors.has(IndexBehavior)) {
+            this.agent.get(IndexBehavior).events.change.on(() => {
+                this.state.partsList = this.#partsList;
+            });
+        }
         this.part.lifecycle.changed.on((type, part) => this.#applyChange(type, part));
 
         this.state.serverList = this.#serverList;
@@ -42,8 +47,7 @@ export class DescriptorServer extends DescriptorBehavior {
     }
 
     /**
-     * Extend device type metadata.  This is a shortcut for deduped insert
-     * into the deviceTypeList cluster attribute.
+     * Extend device type metadata.  This is a shortcut for deduped insert into the deviceTypeList cluster attribute.
      */
     addDeviceTypes(...deviceTypes: DescriptorServer.DeviceType[]) {
         const list = this.state.deviceTypeList;
@@ -95,15 +99,23 @@ export class DescriptorServer extends DescriptorBehavior {
     get #partsList() {
         const part = this.part;
 
-        // The presence of IndexBehavior indicates a flat namespace as
-        // required by Matter standard for root and aggregator endpoints
+        // The presence of IndexBehavior indicates a flat namespace as required by Matter standard for root and
+        // aggregator endpoints
         if (part.behaviors.has(IndexBehavior)) {
             const index = part.agent.get(IndexBehavior);
-            return Object.keys(index.state.partsByNumber).map(Number.parseInt) as EndpointNumber[];
+            const numbers = Object.keys(index.state.partsByNumber)
+                .map(n => Number.parseInt(n));
+
+            // My part should not appear in its own PartsList
+            const pos = numbers.indexOf(this.part.number);
+            if (pos !== -1) {
+                numbers.splice(pos, 1);
+            }
+
+            return numbers as EndpointNumber[];
         }
 
-        // If IndexBehavior is not present then just list direct
-        // descendants
+        // If IndexBehavior is not present then just list direct descendants
         if (part.hasParts) {
             return [...part.parts].map(part => part.number);
         }

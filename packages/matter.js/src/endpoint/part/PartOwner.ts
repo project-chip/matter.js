@@ -27,6 +27,9 @@ export interface PartOwner {
      * Access a service component supported by the owner.
      * 
      * This simple form of dependency injection acts as a bridge between parts and the hosting node.
+     * 
+     * We use classes as service implementations because they provide both runtime (the constructor) and compile time
+     * (the implied TS interface) information.
      */
     serviceFor<T>(type: abstract new (...args: any) => T): T;
 }

@@ -12,7 +12,7 @@ import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import type { NodeServer } from "../NodeServer.js";
-import { PartStoreService } from "./PartStoreService.js";
+import { PartStoreFactory } from "./PartStoreService.js";
 
 export const logger = Logger.get("NodeStore");
 
@@ -29,7 +29,7 @@ export class ServerStore {
     #sessionStorage?: StorageContext;
     #fabricStorage?: StorageContext;
     #eventStorage?: StorageContext;
-    #rootStore?: PartStoreService;
+    #rootStore?: PartStoreFactory;
     #construction: AsyncConstruction<ServerStore>;
 
     get construction() {
@@ -48,7 +48,7 @@ export class ServerStore {
         this.#construction = AsyncConstruction(this, async () => {
             this.#storageManager = await environment.createStorage(nodeId);
 
-            this.#rootStore = await asyncNew(PartStoreService, {
+            this.#rootStore = await asyncNew(PartStoreFactory, {
                 storage: this.#storageManager.createContext("root"),
                 nextNumber,
             });

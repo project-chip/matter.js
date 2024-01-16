@@ -6,25 +6,46 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { DoorLockServer } from "../../../behavior/definitions/door-lock/DoorLockServer.js";
-import { TimeSyncBehavior } from "../../../behavior/definitions/time-sync/TimeSyncBehavior.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import { DoorLockServer as BaseDoorLockServer } from "../../../behavior/definitions/door-lock/DoorLockServer.js";
+import { TimeSyncBehavior as BaseTimeSyncBehavior } from "../../../behavior/definitions/time-sync/TimeSyncBehavior.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const DoorLockRequirements = {
+export namespace DoorLockRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link DoorLock} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const DoorLockServer = BaseDoorLockServer;
+
+    /**
+     * The {@link TimeSync} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const TimeSyncBehavior = BaseTimeSyncBehavior;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: { Identify: IdentifyServer, DoorLock: DoorLockServer } },
+    export const server = { mandatory: { Identify: IdentifyServer, DoorLock: DoorLockServer } };
 
     /**
      * A definition for each client cluster supported by the endpoint per the Matter specification.
      */
-    client: { optional: { TimeSync: TimeSyncBehavior } }
-};
+    export const client = { optional: { TimeSync: TimeSyncBehavior }, mandatory: {} };
+}
 
 export const DoorLockDeviceDefinition = MutableEndpoint({
     name: "DoorLock",

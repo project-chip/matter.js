@@ -6,23 +6,44 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { IdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
-import { SwitchServer } from "../../../behavior/definitions/switch/SwitchServer.js";
-import { FixedLabelServer } from "../../../behavior/definitions/fixed-label/FixedLabelServer.js";
+import { IdentifyServer as BaseIdentifyServer } from "../../../behavior/definitions/identify/IdentifyServer.js";
+import { SwitchServer as BaseSwitchServer } from "../../../behavior/definitions/switch/SwitchServer.js";
+import { FixedLabelServer as BaseFixedLabelServer } from "../../../behavior/definitions/fixed-label/FixedLabelServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const GenericSwitchRequirements = {
+export namespace GenericSwitchRequirements {
+    /**
+     * The {@link Identify} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const IdentifyServer = BaseIdentifyServer;
+
+    /**
+     * The {@link Switch} cluster is required by the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const SwitchServer = BaseSwitchServer;
+
+    /**
+     * The {@link FixedLabel} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const FixedLabelServer = BaseFixedLabelServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: {
+    export const server = {
         mandatory: { Identify: IdentifyServer, Switch: SwitchServer },
         optional: { FixedLabel: FixedLabelServer }
-    }
-};
+    };
+}
 
 export const GenericSwitchDeviceDefinition = MutableEndpoint({
     name: "GenericSwitch",

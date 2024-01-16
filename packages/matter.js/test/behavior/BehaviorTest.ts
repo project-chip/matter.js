@@ -39,7 +39,7 @@ describe("Behavior", () => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
-        expect(behavior.events.endpointValue$Change.constructor.name).equals("Event");
+        expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
     });
 
     it("unifies state", async () => {

@@ -14,7 +14,7 @@ import "@project-chip/matter-node.js";
 
 // Matter exposes functionality in groups called "clusters".  For this example device we override the matter.js "On/Off"
 // cluster implementation to print status to the console.
-class ReportingOnOffServer extends OnOffLightRequirements.server.mandatory.OnOff {
+class ReportingOnOffServer extends OnOffLightRequirements.OnOffServer {
     // Intercept the "on" command to the Matter On/Off cluster to print a log message.
     override on() {
         console.log("Turning light ON");

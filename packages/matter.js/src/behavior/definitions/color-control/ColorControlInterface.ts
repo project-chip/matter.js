@@ -135,7 +135,7 @@ export namespace ColorControlInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4
          */
-        moveToHue(request: ColorControl.MoveToHueRequest): MaybePromise<void>;
+        moveToHue(request: MoveToHueRequest): MaybePromise<void>;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5

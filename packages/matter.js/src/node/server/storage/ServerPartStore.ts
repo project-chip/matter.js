@@ -182,47 +182,6 @@ export class ServerPartStore implements PartStore {
         await this.#storage.clearAll();
     }
 
-    /**
-     * Clear non-volatile values.  We erase values discriminately so we preserve metadata.
-     */
-    async clear() {
-        await this.#construction;
-
-        let clearPart: undefined | Record<string, Val.Struct>;
-
-        for (const behaviorId of this.#knownBehaviors) {
-            const storage = this.#storage.createContext(behaviorId);
-
-            let clearBehavior: undefined | Val.Struct;
-
-            for (const propertyName in storage.keys()) {
-                if (propertyName === NUMBER_KEY) {
-                    continue;
-                }
-
-                if (clearBehavior === undefined) {
-                    clearBehavior = {};
-
-                    if (clearPart === undefined) {
-                        clearPart = {};
-                    }
-
-                    clearPart[behaviorId] = clearBehavior;
-                }
-
-                clearBehavior[propertyName] = undefined;
-            }
-        }
-
-        if (clearPart) {
-            await this.set(clearPart);
-        }
-
-        for (const id of this.#knownParts) {
-            await (await this.#storeForPartId(id)).clear();
-        }
-    }
-
     async #loadSubparts() {
         this.#knownParts = new Set(await this.#childStorage.get(KNOWN_KEY, Array<string>()));
 

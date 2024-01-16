@@ -197,7 +197,7 @@ export abstract class BehaviorBacking {
      */
     injectErrorSource(cause: any) {
         if (cause instanceof SchemaViolationError) {
-            const match = cause.message.match(/(\w+) ([\w.$]+): (.*)/);
+            const match = cause.message.match(/(\w+) ([\w.$]+): (.*?)(\(\d+\))?^/);
             if (!match) {
                 return cause;
             }
@@ -205,9 +205,17 @@ export abstract class BehaviorBacking {
             const where = match[2].split(".").map(n => camelize(n));
             where[0] = this.toString();
 
-            cause.message = Diagnostic.upgrade(cause.message, () =>
-                Diagnostic.squash(match[1], " ", Diagnostic.strong(where.join(".")), ": ", match[3]),
-            );
+            cause.message = Diagnostic.upgrade(
+                cause.message,
+                () => Diagnostic.squash(
+                    match[1],
+                    " ",
+                    Diagnostic.strong(where.join(".")),
+                    ": ",
+                    match[3],
+                    match[4] ? Diagnostic.weak(match[4]) : "",
+                )
+            )
         }
         return cause;
     }

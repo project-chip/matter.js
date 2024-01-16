@@ -241,15 +241,15 @@ describe("Logger", () => {
             const result = logTestLine({ format: Format.ANSI });
 
             expect(result?.message).equal(
-                '\u001b[90mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[1mUnitTest             \u001b[0;2mtest\u001b[0m',
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[0;1;90mUnitTest             \u001b[0;90mtest\u001b[0m",
             );
         });
 
         it("formats keys correctly", () => {
             const result = logTestDict({ method: "notice", format: Format.ANSI });
-
+            
             expect(result?.message).equal(
-                '\u001b[90mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[1mUnitTest             \u001b[0;32mdict test \u001b[34mfoo: \u001b[2;39mbar \u001b[0;34mbiz: \u001b[2;39m1\u001b[0m',
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mdict test \u001b[34mfoo: \u001b[2;39mbar \u001b[0;34mbiz: \u001b[2;39m1\u001b[0m"
             );
         });
 
@@ -259,8 +259,9 @@ describe("Logger", () => {
                 const logger = Logger.get("ThisIsAFacilityWithAReallyLongName");
                 logger.debug("test");
             });
+
             expect(result?.message).equal(
-                '\u001b[90mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[1mThisIsAFac~yLongName \u001b[0;2mtest\u001b[0m',
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx DEBUG  \u001b[0;1;90mThisIsAFac~yLongName \u001b[0;90mtest\u001b[0m",
             );
         });
 
@@ -269,7 +270,10 @@ describe("Logger", () => {
                 Logger.format = Format.ANSI;
                 logger.notice("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
-            expect(result?.message).equals('\u001b[90mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[1mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m');
+            
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m"
+            );
         })
 
         it("indents properly", () => {
@@ -293,7 +297,9 @@ describe("Logger", () => {
                 )
             });
 
-            expect(result?.message).equals("\u001b[90mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[1mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m");
+            expect(result?.message).equals(
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m"
+            );
         })
     });
 

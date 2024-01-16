@@ -6,19 +6,31 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { ActionsServer } from "../../../behavior/definitions/actions/ActionsServer.js";
+import { PartsBehavior } from "../../../behavior/definitions/parts/PartsBehavior.js";
+import { IndexBehavior } from "../../../behavior/definitions/index/IndexBehavior.js";
+import { ActionsServer as BaseActionsServer } from "../../../behavior/definitions/actions/ActionsServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
 import { SupportedBehaviors } from "../../part/SupportedBehaviors.js";
 import { Identity } from "../../../util/Type.js";
 import { MatterDeviceLibrarySpecificationV1_1 } from "../../../spec/Specifications.js";
 
-export const AggregatorRequirements = {
+export namespace AggregatorRequirements {
+    /**
+     * The {@link Actions} cluster is optional per the Matter specification
+     *
+     * We provide this alias for convenience.
+     */
+    export const ActionsServer = BaseActionsServer;
+
     /**
      * An implementation for each server cluster supported by the endpoint per the Matter specification.
      */
-    server: { mandatory: {}, optional: { Actions: ActionsServer } }
-};
+    export const server = {
+        mandatory: { Parts: PartsBehavior, Index: IndexBehavior },
+        optional: { Actions: ActionsServer }
+    };
+}
 
 export const AggregatorEndpointDefinition = MutableEndpoint({
     name: "Aggregator",
@@ -26,7 +38,10 @@ export const AggregatorEndpointDefinition = MutableEndpoint({
     deviceRevision: 1,
     deviceClass: DeviceClasses.Dynamic,
     requirements: AggregatorRequirements,
-    behaviors: SupportedBehaviors()
+    behaviors: SupportedBehaviors(
+        AggregatorRequirements.server.mandatory.Parts,
+        AggregatorRequirements.server.mandatory.Index
+    )
 });
 
 /**
