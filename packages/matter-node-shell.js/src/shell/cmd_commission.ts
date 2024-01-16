@@ -203,7 +203,7 @@ export default function commands(theNode: MatterNode) {
                     async argv => {
                         const { nodeId, timeout = 900 } = argv;
                         await theNode.start();
-                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
 
                         await node.openBasicCommissioningWindow(timeout);
 
@@ -229,7 +229,7 @@ export default function commands(theNode: MatterNode) {
                     async argv => {
                         await theNode.start();
                         const { nodeId, timeout = 900 } = argv;
-                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
                         const data = await node.openEnhancedCommissioningWindow(timeout);
 
                         console.log(`Enhanced Commissioning Window for node ${nodeId} opened`);
@@ -255,7 +255,7 @@ export default function commands(theNode: MatterNode) {
                     async argv => {
                         await theNode.start();
                         const { nodeId } = argv;
-                        const node = (await theNode.connectAndGetNodes(nodeId))[0];
+                        const node = (await theNode.connectAndGetNodes(nodeId, { autoSubscribe: false }))[0];
                         await node.decommission();
                     },
                 ),
