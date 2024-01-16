@@ -27,11 +27,12 @@ export class RequirementGenerator {
     default = Array<string>();
     mandatoryWithExtension?: ClusterModel[];
 
+    #definitionsBlock?: Block;
     #mandatory = Array<ClusterDetail>();
     #optional = Array<ClusterDetail>();
     #mandatoryBlock?: Block;
     #optionalBlock?: Block;
-    #clusterBlock: Block | undefined;
+    #requirementsBlock: Block | undefined;
     #mandatoryParts = false;
 
     constructor(
@@ -88,71 +89,106 @@ export class RequirementGenerator {
         }
 
         for (const detail of this.#mandatory) {
-            this.generateOne(detail, this.mandatoryBlock);
+            this.#generateOne(detail, this.mandatoryBlock);
         }
 
         for (const detail of this.#optional) {
-            this.generateOne(detail, this.optionalBlock);
+            this.#generateOne(detail, this.optionalBlock);
         }
 
-        return this.#clusterBlock;
+        return this.#requirementsBlock;
     }
 
     reference(name: string, mandatory = true) {
         return `${this.file.requirementsName}.${this.type}.${mandatory ? "mandatory" : "optional"}.${name}`;
     }
 
+    get #definitions() {
+        if (this.#definitionsBlock === undefined) {
+            this.#definitionsBlock = this.#requirements.section();
+        }
+        return this.#definitionsBlock;
+    }
+
     private get mandatoryBlock() {
         if (this.#mandatoryBlock === undefined) {
-            this.#mandatoryBlock = this.clusterBlock.expressions("mandatory: {", "}");
+            this.#mandatoryBlock = this.#requirements.expressions("mandatory: {", "}");
         }
         return this.#mandatoryBlock;
     }
 
     private get optionalBlock() {
         if (this.#optionalBlock === undefined) {
-            this.#optionalBlock = this.clusterBlock.expressions("optional: {", "}");
+            this.#optionalBlock = this.#requirements.expressions("optional: {", "}");
         }
         return this.#optionalBlock;
     }
 
-    private get clusterBlock() {
-        if (!this.#clusterBlock) {
-            this.#clusterBlock = this.file.requirements.expressions(`${this.type}: {`, "}");
+    get #requirements() {
+        if (!this.#requirementsBlock) {
+            this.#requirementsBlock = this.file.requirements.expressions(`${this.type}: {`, "}");
         }
-        return this.#clusterBlock;
+        return this.#requirementsBlock;
     }
 
-    private generateOne(detail: ClusterDetail, target: Block) {
-        let baseName;
+    #generateOne(detail: ClusterDetail, target: Block) {
+        let name;
         const prefix = `behavior/definitions/${decamelize(detail.definition.name)}/${detail.definition.name}`;
         if (this.type === "server") {
-            baseName = `${detail.definition.name}Server`;
-            this.file.addImport(`${prefix}Server.js`, baseName);
+            name = `${detail.definition.name}Server`;
+            this.file.addImport(`${prefix}Server.js`, `${name} as Base${name}`);
         } else {
-            baseName = `${detail.definition.name}Behavior`;
-            this.file.addImport(`${prefix}Behavior.js`, baseName);
+            name = `${detail.definition.name}Behavior`;
+            this.file.addImport(`${prefix}Behavior.js`, `${name} as Base${name}`);
         }
 
-        const cluster = target.builder(`${detail.definition.name}: ${baseName}`);
+        const definition = this.#definitions.builder(`const ${name} = Base${name}`);
 
         const requirements = new ClusterRequirements(this.file, detail.definition, detail.requirement);
 
+        let specialized = false;
+
         if (requirements.mandatoryFeatures.length) {
-            const extended = cluster.expressions("with(", ")");
+            specialized = true;
+            const extended = definition.expressions("with(", ")");
             for (const feature of requirements.mandatoryFeatures) {
                 extended.value(feature);
             }
         }
 
         if (requirements.defaults) {
-            const defaults = cluster.expressions("set(", ")");
+            specialized = true;
+            const defaults = definition.expressions("set(", ")");
             defaults.value(requirements.defaults);
         }
 
         if (requirements.alterations) {
-            const altered = cluster.expressions("alter(", ")");
+            specialized = true;
+            const altered = definition.expressions("alter(", ")");
             altered.value(requirements.alterations);
         }
+
+        const requiredOrMandatory = target === this.mandatoryBlock
+            ? "required by"
+            : "optional per";
+
+        let documentation =
+            `The {@link ${
+                detail.definition.name
+            }} cluster is ${
+                requiredOrMandatory
+            } the Matter specification`;
+
+        if (specialized) {
+            documentation += `\nThis version of {@link ${
+                name
+            } is specialized per the specification.`;
+        } else {
+            documentation += "We provide this alias for convenience."
+        }
+
+        definition.document(documentation);
+
+        target.builder(`${detail.definition.name}: ${name}`);
     }
 }

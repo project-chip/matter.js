@@ -42,6 +42,10 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
             default:
                 ast = definition;
+                if (ast?.definition) {
+                    this.definition = ast.definition;
+                }
+                break;
         }
 
         if (!ast) {

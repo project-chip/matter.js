@@ -7,6 +7,7 @@
 import type { Part } from "../../../endpoint/Part.js";
 import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
+import { EventEmitter, Observable } from "../../../util/Observable.js";
 import { Behavior } from "../../Behavior.js";
 
 /**
@@ -19,6 +20,7 @@ export class IndexBehavior extends Behavior {
     static override id = "index";
 
     declare state: IndexBehavior.State;
+    declare events: IndexBehavior.Events;
 
     override initialize() {
         for (const part of this.part.parts) {
@@ -63,6 +65,8 @@ export class IndexBehavior extends Behavior {
         for (const child of part.parts) {
             this.#add(child);
         }
+
+        this.events.change.emit();
     }
 
     #remove(part: Part) {
@@ -77,6 +81,8 @@ export class IndexBehavior extends Behavior {
         for (const child of part.parts) {
             this.#remove(child);
         }
+
+        this.events.change.emit();
     }
 }
 
@@ -91,5 +97,12 @@ export namespace IndexBehavior {
          * Map of number to {@link Part}.
          */
         partsByNumber = {} as Record<number, Part | undefined>;
+    }
+
+    export class Events extends EventEmitter {
+        /**
+         * Emitted when the index changes.
+         */
+        change = new Observable();
     }
 }

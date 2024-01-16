@@ -215,7 +215,15 @@ function configureProperty(
         // For primitives we don't need a manager so just proxy reads directly
         descriptor.get = function (this: Wrapper) {
             if (access.mayRead(this[SESSION], this[CONTEXT])) {
-                return this[REF].value[name];
+                const struct = this[REF].value as Val.Dynamic;
+                if (struct[Val.properties]) {
+                    const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
+                    if (name in properties) {
+                        return properties[name];
+                    }
+                }
+
+                return struct[name];
             }
         };
     } else {

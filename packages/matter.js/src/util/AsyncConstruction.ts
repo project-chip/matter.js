@@ -212,7 +212,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
         },
 
         assert(description) {
-            LifecycleStatus.assertActive(status, description)
+            LifecycleStatus.assertActive(status, description ?? subject.constructor.name)
         },
         
         then<TResult1 = T, TResult2 = never>(
