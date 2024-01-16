@@ -121,6 +121,7 @@ export class MessageExchange<ContextT> {
         if (this.receivedMessageToAck !== undefined) {
             const messageToAck = this.receivedMessageToAck;
             this.receivedMessageToAck = undefined;
+            // TODO: We need to track this promise later
             this.sendStandaloneAckForMessage(messageToAck).catch(error =>
                 logger.error("An error happened when sending a standalone ack", error),
             );
@@ -248,7 +249,7 @@ export class MessageExchange<ContextT> {
             includeAcknowledgeMessageId,
         } = options ?? {};
         if (messageType === MessageType.StandaloneAck && requiresAck) {
-            throw new MatterFlowError("A standalone ack must not send reliable.");
+            throw new MatterFlowError("A standalone ack may not require acknowledgement.");
         }
         if (this.sentMessageToAck !== undefined && messageType !== MessageType.StandaloneAck)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
