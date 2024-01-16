@@ -11,6 +11,7 @@ import { ServerPartStore } from "./ServerPartStore.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { IdentityConflictError } from "../IdentityService.js";
+import { PartStore } from "../../../endpoint/storage/PartStore.js";
 
 const NEXT_NUMBER_KEY = "__nextNumber__";
 
@@ -22,10 +23,33 @@ const NEXT_NUMBER_KEY = "__nextNumber__";
  * 
  * TODO - cleanup of storage for permanently removed endpoints
  */
-export class PartStoreService {
+export abstract class PartStoreService {
+    /**
+     * Allocate an endpoint number.
+     * 
+     * Either allocates a new number for a {@link Part} or reserves the part's number.  If the {@link Part} already has
+     * a number but it is allocated to a different part it is an error.
+     * 
+     * We must persist the assigned number and next endpoint number.  We are fairly resilient to the small chance that
+     * persistence fails so we persist lazily and return synchronously.
+     */
+    abstract assignNumber(part: Part): void;
+
+    /**
+     * Obtain the store for a single {@link Part}.
+     * 
+     * These stores are cached internally by ID.
+     * 
+     * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
+     * somesuch
+     */
+    abstract storeForPart(part: Part): PartStore;
+}
+
+export class PartStoreFactory extends PartStoreService {
     #storage: StorageContext;
     #allocatedNumbers = new Set<number>;
-    #construction: AsyncConstruction<PartStoreService>;
+    #construction: AsyncConstruction<PartStoreFactory>;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
     #numbersToPersist?: Array<Part>;
@@ -37,6 +61,8 @@ export class PartStoreService {
     }
 
     constructor({ storage, nextNumber }: PartStoreService.Options) {
+        super();
+
         this.#storage = storage;
 
         if (typeof nextNumber !== "number") {
@@ -68,19 +94,6 @@ export class PartStoreService {
         }
     }
 
-    get storage() {
-        return this.#storage;
-    }
-
-    /**
-     * Allocate an endpoint number.
-     * 
-     * Either allocates a new number for a {@link Part} or reserves the part's number.  If the {@link Part} already has
-     * a number but it is allocated to a different part it is an error.
-     * 
-     * We must persist the assigned number and next endpoint number.  We are fairly resilient to the small chance that
-     * persistence fails so we persist lazily and return synchronously.
-     */
     assignNumber(part: Part) {
         if (this.#nextNumber === undefined) {
             throw new InternalError("Part number assigned prior to store initialization");
@@ -127,14 +140,6 @@ export class PartStoreService {
         this.#persistNumber(part);
     }
 
-    /**
-     * Obtain the store for a single {@link Part}.
-     * 
-     * These stores are cached internally by ID.
-     * 
-     * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
-     * somesuch
-     */
     storeForPart(part: Part): ServerPartStore {
         this.#construction.assert();
         
@@ -151,16 +156,6 @@ export class PartStoreService {
             throw new InternalError("Part storage accessed prior to initialization");
         }
         return this.#root;
-    }
-
-    /**
-     * Erase store contents.
-     */
-    clear() {
-        if (!this.#root) {
-            throw new InternalError("Part storage accessed prior to initialization");
-        }
-        this.#root.clear();
     }
 
     /**
