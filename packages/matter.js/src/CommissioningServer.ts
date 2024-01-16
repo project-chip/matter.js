@@ -694,6 +694,11 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
         return this.#eventHandler;
     }
 
+    override get port() {
+        // Need this since we've got a setter
+        return super.port;
+    }
+
     /** Set the port the device is listening on. Can only be called before the device is initialized. */
     override set port(port: number) {
         if (port === this.networkConfig.port) return;
