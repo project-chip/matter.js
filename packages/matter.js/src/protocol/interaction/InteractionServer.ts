@@ -125,7 +125,7 @@ export function clusterPathToId({ nodeId, endpointId, clusterId }: TypeFromSchem
  * Translates interactions from the Matter protocol to Matter.js APIs.
  */
 export class InteractionServer implements ProtocolHandler<MatterDevice> {
-    #endpointStructure = new InteractionEndpointStructure();
+    #endpointStructure;
     #nextSubscriptionId = Crypto.getRandomUInt32();
     readonly #subscriptionMap = new Map<number, SubscriptionHandler>();
     #isClosing = false;

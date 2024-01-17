@@ -72,8 +72,7 @@ export namespace CommissioningOptions {
         readonly automaticAnnouncement: boolean;
 
         /**
-         * If true, enabled Bluetooth LE commissioning.  Default to true if
-         * bluetooth is enabled on the platform.
+         * If true, enabled Bluetooth LE commissioning.  Defaults to true if bluetooth is enabled on the platform.
          */
         readonly ble: boolean;
     }

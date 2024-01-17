@@ -8,6 +8,7 @@
 import type MochaType from "mocha";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
+import { wtf } from "../util/wtf.js";
 
 export function generalSetup(Mocha: typeof MochaType) {
     // White text, 16-bit and 256-bit green background
@@ -99,6 +100,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
                 }
                 const logs = (test as any).logs as string[];
                 reporter.failTest(test.title, translateError(error, logs));
+                wtf.dump();
             });
 
             runner.once(RUNNER.EVENT_RUN_END, () => {
@@ -107,6 +109,7 @@ export function adaptReporter(Mocha: typeof MochaType, title: string, reporter: 
                 }
                 MatterHooks.loggerSink = undefined;
                 reporter.endRun(this.translatedStats);
+                wtf.dump();
             });
         }
 
