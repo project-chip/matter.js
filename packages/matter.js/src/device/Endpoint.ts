@@ -35,7 +35,7 @@ export interface EndpointOptions {
 export class Endpoint implements EndpointInterface {
     private readonly clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
     private readonly clusterClients = new Map<ClusterId, ClusterClientObj<any, Attributes, Commands, Events>>();
-    private readonly childEndpoints: EndpointInterface[] = [];
+    private readonly childEndpoints: Endpoint[] = [];
     number: EndpointNumber | undefined;
     uniqueStorageKey: string | undefined;
     name = "";
@@ -282,6 +282,9 @@ export class Endpoint implements EndpointInterface {
     }
 
     async addChildEndpoint(endpoint: EndpointInterface): Promise<void> {
+        if (!(endpoint instanceof Endpoint)) {
+            throw new Error("Only supported EndpointInterface implementation is Endpoint");
+        }
         if (endpoint.number !== undefined && this.getChildEndpoint(endpoint.number) !== undefined) {
             throw new ImplementationError(
                 `Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`,
@@ -293,11 +296,11 @@ export class Endpoint implements EndpointInterface {
         await this.structureChangedCallback(); // Inform parent about structure change
     }
 
-    getChildEndpoint(id: EndpointNumber): EndpointInterface | undefined {
+    getChildEndpoint(id: EndpointNumber): Endpoint | undefined {
         return this.childEndpoints.find(endpoint => endpoint.number === id);
     }
 
-    getChildEndpoints(): EndpointInterface[] {
+    getChildEndpoints(): Endpoint[] {
         return this.childEndpoints;
     }
 

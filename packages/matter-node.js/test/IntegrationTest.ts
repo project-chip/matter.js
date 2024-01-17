@@ -144,7 +144,6 @@ describe("Integration Test", () => {
 
         commissioningServer = await CommissioningServer.create({
             listeningAddressIpv6: SERVER_IPv6,
-            port: 0,
             deviceName,
             deviceType,
             passcode: setupPin,
@@ -165,7 +164,7 @@ describe("Integration Test", () => {
             activeSessionsChangedCallback: (fabricIndex: FabricIndex) =>
                 sessionChangedCallsServer.push({ fabricIndex, time: MockTime.nowMs() }),
         });
-        assert.equal(commissioningServer.getPort(), 0);
+        assert.equal(commissioningServer.getPort(), undefined);
 
         onOffLightDeviceServer = await OnOffLightDevice.create();
         await commissioningServer.addDevice(onOffLightDeviceServer);

@@ -124,7 +124,7 @@ export class PartStoreFactory extends PartStoreService {
 
             const startNumber = this.#nextNumber;
 
-            while (this.#nextNumber < 2 || this.#allocatedNumbers.has(this.#nextNumber)) {
+            while (this.#nextNumber < 1 || this.#allocatedNumbers.has(this.#nextNumber)) {
                 this.#nextNumber = (this.#nextNumber + 1) % 0xffff;
                 if (this.#nextNumber === startNumber) {
                     throw new ImplementationError("Cannot add additional parts because part numbers are exhausted");

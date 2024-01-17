@@ -57,7 +57,7 @@ export class CommissioningBehavior extends Behavior {
     }
 
     /**
-     * The {@link ProductDescription} advertised by the node.
+     * The {@link CommissioningOptions.ProductDescription} advertised by the node.
      */
     get productDescription() {
         let pd = this.state.productDescription;

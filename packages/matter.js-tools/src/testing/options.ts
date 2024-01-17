@@ -11,6 +11,7 @@ export type TestOptions = {
     fgrep?: string;
     invert?: boolean;
     allLogs?: boolean;
+    wtf?: boolean;
 };
 
 function option<T extends keyof TestOptions>(options: TestOptions, name: T) {

@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "./MatterDevice.js";
 import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
 import { Ble } from "./ble/Ble.js";
-import { Attributes, Events } from "./cluster/Cluster.js";
+import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
+import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
+import { Attributes, Cluster, Commands, Events } from "./cluster/Cluster.js";
+import { ClusterClientObj } from "./cluster/client/ClusterClientTypes.js";
 import { AccessControlCluster } from "./cluster/definitions/AccessControlCluster.js";
 import {
     AdministratorCommissioning,
@@ -36,26 +40,29 @@ import {
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
-import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
-import { ImplementationError } from "./common/MatterError.js";
+import {
+    OperationalCredentialsClusterHandler,
+} from "./cluster/server/OperationalCredentialsServer.js";
+import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { VendorId } from "./datatype/VendorId.js";
 import { Aggregator } from "./device/Aggregator.js";
 import { Device, RootEndpoint } from "./device/Device.js";
+import { Endpoint } from "./device/Endpoint.js";
 import { EndpointInterface } from "./endpoint/EndpointInterface.js";
+import { Fabric } from "./fabric/Fabric.js";
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
+import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./node/options/CommissioningOptions.js";
-import { NetworkOptions } from "./node/options/NetworkOptions.js";
-import { SubscriptionOptions } from "./node/options/SubscriptionOptions.js";
-import { BaseNodeServer, DevicePairingInformation } from "./node/server/BaseNodeServer.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
-import { TypeFromBitSchema } from "./schema/BitmapSchema.js";
+import { BitSchema, TypeFromBitSchema, TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import {
     CommissioningFlowType,
     DiscoveryCapabilitiesBitmap,
@@ -69,6 +76,7 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { AsyncConstruction, asyncNew } from "./util/AsyncConstruction.js";
 import { ByteArray } from "./util/ByteArray.js";
+import { NamedHandler } from "./util/NamedHandler.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -84,6 +92,19 @@ export const FORBIDDEN_PASSCODES = [
  */
 const MATTER_DATAMODEL_VERSION = 16;
 
+/**
+ * Represents device pairing information.
+ */
+export interface DevicePairingInformation {
+    manualPairingCode: string;
+    qrPairingCode: string;
+}
+
+/**
+ * Constructor options for a CommissioningServer device
+ * Beside the general options it also contains the data for the BasicInformation cluster which is added automatically
+ * and allows to override the certificates used for the OperationalCredentials cluster
+ */
 export interface CommissioningServerOptions {
     /** Port of the server, normally automatically managed. */
     port?: number;
@@ -93,6 +114,12 @@ export interface CommissioningServerOptions {
 
     /** IPv6 listener address, defaults to all interfaces.*/
     listeningAddressIpv6?: string;
+
+    /** The device name to be used for the BasicInformation cluster. */
+    deviceName: string;
+
+    /** The device type to be used for the BasicInformation cluster. */
+    deviceType: number;
 
     /** The next endpoint ID to be assigned to a new endpoint. */
     nextEndpointId?: number;
@@ -133,10 +160,37 @@ export interface CommissioningServerOptions {
     subscriptionRandomizationWindowSeconds?: number;
 
     /**
+     * Device details to be used for the BasicInformation cluster. Some of the values are initialized with defaults if
+     * not set here.
+     */
+    basicInformation:
+        | {
+              vendorId: number;
+              vendorName: string;
+              productId: number;
+              productName: string;
+          }
+        | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
+
+    /**
      * Vendor specific certificates to be used for the OperationalCredentials cluster. If not set Test certificates
      * (official Chip tool test Root certificate is used) are generated automatically.
      */
-    certification?: DeviceCertification.Configuration;
+    certificates?: {
+        devicePrivateKey: ByteArray;
+        deviceCertificate: ByteArray;
+        deviceIntermediateCertificate: ByteArray;
+        certificationDeclaration: ByteArray;
+    }
+
+    /**
+     * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
+     * Use these options to limit the allowed countries for regulatory configuration.
+     */
+    generalCommissioning?: Partial<AttributeInitialValues<typeof GeneralCommissioningCluster.attributes>> & {
+        allowCountryCodeChange?: boolean; // Default true if not set
+        countryCodeWhitelist?: string[]; // Default all countries are allowed
+    };
 
     /**
      * This callback is called when the device is commissioned or decommissioned to a fabric/controller. The provided
@@ -151,86 +205,50 @@ export interface CommissioningServerOptions {
      * about the open sessions and their status.
      */
     activeSessionsChangedCallback?: (fabricIndex: FabricIndex) => void;
-
-    /** The device name to be used for the BasicInformation cluster. */
-    deviceName: string;
-
-    /** The device type to be used for the BasicInformation cluster. */
-    deviceType: number;
-
-    /**
-     * Device details to be used for the BasicInformation cluster. Some of the values are initialized with defaults if
-     * not set here.
-     */
-    basicInformation:
-        | {
-              vendorId: number;
-              vendorName: string;
-              productId: number;
-              productName: string;
-          }
-        | AttributeInitialValues<typeof BasicInformationCluster.attributes>;
-
-    /**
-     * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
-     * Use these options to limit the allowed countries for regulatory configuration.
-     */
-    generalCommissioning?: Partial<AttributeInitialValues<typeof GeneralCommissioningCluster.attributes>> & {
-        allowCountryCodeChange?: boolean; // Default true if not set
-        countryCodeWhitelist?: string[]; // Default all countries are allowed
-    };
-
-    /**
-     * The root endpoint is managed by the server.
-     */
-    rootEndpoint?: undefined;
 }
+
+/**
+ * Commands exposed by the CommissioningServer
+ */
+type CommissioningServerCommands = {
+    /** Provide a means for certification tests to trigger some test-plan-specific events. */
+    testEventTrigger: ClusterServerHandlers<typeof GeneralDiagnosticsCluster>["testEventTrigger"];
+};
+
+// TODO decline using set/getRootClusterClient
+// TODO Decline cluster access after announced/paired
 
 /**
  * A CommissioningServer node represent a matter node that can be paired with a controller and runs on a defined port on the
  * host
- *
- * @deprecated use NodeServer
  */
-export class CommissioningServer extends BaseNodeServer implements MatterNode {
-    #commissioningChangedCallback: CommissioningServerOptions["commissioningChangedCallback"];
-    #activeSessionsChangedCallback: CommissioningServerOptions["activeSessionsChangedCallback"];
-    #storage?: StorageContext;
-    #endpointStructureStorage?: StorageContext;
-    #subscriptionOptions: SubscriptionOptions;
-    #eventHandler?: EventHandler;
-    #interactionServer?: InteractionServer;
-    #endpointStructure = new InteractionEndpointStructure();
-    #mdnsBroadcaster?: MdnsBroadcaster;
-    #mdnsScanner?: MdnsScanner;
-    #basicInformationCluster?: ClusterServerObjForCluster<typeof BasicInformationCluster>;
+export class CommissioningServer extends MatterNode {
+    private ipv4Disabled?: boolean;
+    private port?: number;
+    private readonly passcode: number;
+    private readonly discriminator: number;
+    private readonly flowType: CommissioningFlowType;
+    private readonly productDescription: CommissioningOptions.ProductDescription;
+    private readonly certification: DeviceCertification;
+
+    private storage?: StorageContext;
+    private endpointStructureStorage?: StorageContext;
+    private mdnsScanner?: MdnsScanner;
+    private mdnsInstanceBroadcaster?: MdnsInstanceBroadcaster;
+
+    private deviceInstance?: MatterDevice;
+    private eventHandler?: EventHandler;
+    private endpointStructure: InteractionEndpointStructure;
+    private interactionServer?: InteractionServer;
     #construction: AsyncConstruction<CommissioningServer>;
 
-    protected override networkConfig: NetworkOptions.Configuration;
-    protected override commissioningConfig: CommissioningOptions.Configuration;
-    protected override rootEndpoint: EndpointInterface;
-    protected override nextEndpointId: EndpointNumber;
-    protected override advertiseOnStartup: boolean;
+    protected readonly rootEndpoint = new RootEndpoint();
 
-    protected override get sessionStorage() {
-        return this.storage.createContext("SessionManager");
-    }
+    private nextEndpointId: EndpointNumber;
 
-    protected override get fabricStorage() {
-        return this.storage.createContext("FabricManager");
-    }
+    readonly delayedAnnouncement?: boolean;
 
-    /**
-     * Obtain the storage context.
-     */
-    get storage() {
-        if (this.#storage === undefined) {
-            throw new ImplementationError(
-                "Storage not initialized. The instance was not added to a Matter instance yet.",
-            );
-        }
-        return this.#storage;
-    }
+    private readonly commandHandler = new NamedHandler<CommissioningServerCommands>();
 
     get construction() {
         return this.#construction;
@@ -241,53 +259,29 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
      *
      * @param options The options for the CommissioningServer node
      */
-    constructor(readonly options: CommissioningServerOptions) {
+    constructor(private readonly options: CommissioningServerOptions) {
         super();
-
-        this.#commissioningChangedCallback = options.commissioningChangedCallback;
-        this.#activeSessionsChangedCallback = options.activeSessionsChangedCallback;
-
-        this.networkConfig = NetworkOptions.configurationFor({
-            // TODO - For CommissioningServerOptions, undefined port means
-            // "automatic".  For NetworkOptions undefined means default (5540)
-            // and 0 means automatic.  "Auto" is nice to support but not sure
-            // it should be the default.  Need to confirm
-            port: options.port ?? 0,
-            listeningAddressIpv4: options.listeningAddressIpv4,
-            listeningAddressIpv6: options.listeningAddressIpv6,
-        });
-
-        this.#subscriptionOptions = {
-            maxIntervalSeconds: options.subscriptionMaxIntervalSeconds,
-            minIntervalSeconds: options.subscriptionMinIntervalSeconds,
-            randomizationWindowSeconds: options.subscriptionRandomizationWindowSeconds,
-        };
-
-        if (options.passcode !== undefined && FORBIDDEN_PASSCODES.includes(options.passcode)) {
-            throw new ImplementationError(`Passcode ${options.passcode} is not allowed`);
+        const {
+            port,
+            passcode,
+            discriminator,
+            flowType,
+            nextEndpointId,
+            delayedAnnouncement,
+            basicInformation: { vendorId: vendorIdNumber, productId },
+            generalCommissioning,
+        } = options;
+        this.port = port;
+        if (passcode !== undefined && FORBIDDEN_PASSCODES.includes(passcode)) {
+            throw new ImplementationError(`Passcode ${passcode} is not allowed.`);
         }
+        this.passcode = passcode ?? PaseClient.generateRandomPasscode();
+        this.discriminator = discriminator ?? PaseClient.generateRandomDiscriminator();
+        this.flowType = flowType ?? CommissioningFlowType.Standard;
+        this.nextEndpointId = EndpointNumber(nextEndpointId ?? 1);
+        this.delayedAnnouncement = delayedAnnouncement;
 
-        this.commissioningConfig = {
-            productDescription: {
-                name: options.deviceName,
-                deviceType: options.deviceType,
-                vendorId: VendorId(options.basicInformation.vendorId),
-                productId: options.basicInformation.productId,
-            },
-
-            passcode: options.passcode ?? PaseClient.generateRandomPasscode(),
-            discriminator: options.discriminator ?? PaseClient.generateRandomDiscriminator(),
-
-            flowType: options.flowType ?? CommissioningFlowType.Standard,
-            additionalBleAdvertisementData: options.additionalBleAdvertisementData,
-            automaticAnnouncement: !options.delayedAnnouncement,
-            ble: Ble.enabled,
-        };
-
-        this.nextEndpointId = EndpointNumber(options.nextEndpointId ?? 1);
-        this.advertiseOnStartup = !options.delayedAnnouncement;
-
-        this.rootEndpoint = new RootEndpoint();
+        const vendorId = VendorId(vendorIdNumber);
 
         this.#construction = AsyncConstruction(this, async () => {
             await this.rootEndpoint.construction;
@@ -336,9 +330,35 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
             }
 
             // Use provided certificates for OperationalCredentialsCluster or generate own ones
-            const certification = new DeviceCertification(
-                options.certification,
-                this.commissioningConfig.productDescription,
+            let { certificates } = options;
+        if (certificates == undefined) {
+            const paa = new AttestationCertificateManager(vendorId);
+            const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+            const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
+
+            certificates = {
+                devicePrivateKey: dacKeyPair.privateKey,
+                deviceCertificate: dac,
+                deviceIntermediateCertificate: paa.getPAICert(),
+                certificationDeclaration,
+            };
+        }
+
+        this.productDescription = {
+                name: options.deviceName,
+            deviceType: options.deviceType,
+            vendorId: vendorId,
+            productId: productId,
+        };
+
+        this.certification = new DeviceCertification(
+            {
+                certificate: certificates.deviceCertificate,
+                declaration: certificates.certificationDeclaration,
+                intermediateCertificate: certificates.deviceIntermediateCertificate,
+                privateKey: certificates.devicePrivateKey,
+            },
+                this.productDescription,
             );
 
             // Add Operational credentials cluster to root directly because it is not allowed to be changed afterward
@@ -354,7 +374,7 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
                         trustedRootCertificates: [],
                         currentFabricIndex: FabricIndex.NO_FABRIC,
                     },
-                    OperationalCredentialsClusterHandler(certification),
+                    OperationalCredentialsClusterHandler(this.certification),
                 ),
             );
 
@@ -471,11 +491,13 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
                 ),
             );
 
-            // We must register this event before creating an InteractionServer so
+            this.endpointStructure = new InteractionEndpointStructure();// We must register this event before creating an InteractionServer so
             // we initialize endpoint datasources before the InteractionServer
             // processes events
-            this.#endpointStructure.change.on(async () => {
-                for (const endpoint of this.#endpointStructure.endpoints.values()) {
+            this.endpointStructure.change.on(async () => {if (this.storage === undefined || this.eventHandler === undefined) {
+                throw new InternalError("Endpoint structure reports change prior to server initialization");
+            }
+                for (const endpoint of this.endpointStructure.endpoints.values()) {
                     for (const cluster of endpoint.getAllClusterServers()) {
                         await asClusterServerInternal(cluster)._setDatasource(
                             await CommissioningServerClusterDatasource.create(
@@ -496,103 +518,44 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
     }
 
     /**
-     * @deprecated use {@link BaseNodeServer.commissioned}
+     * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterServer to get or undefined if not existing
      */
-    isCommissioned() {
-        return this.commissioned;
+    getRootClusterServer<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+        return this.rootEndpoint.getClusterServer(cluster);
     }
 
     /**
-     * @deprecated use {@link BaseNodeServer.mdnsScanner}
+     * Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterClient object to add
      */
-    setMdnsScanner(mdnsScanner: MdnsScanner) {
-        this.#mdnsScanner = mdnsScanner;
+    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+        cluster: ClusterClientObj<F, A, C, E>,
+    ) {
+        this.rootEndpoint.addClusterClient(cluster);
     }
 
     /**
-     * @deprecated use {@link BaseNodeServer.mdnsBroadcaster}
+     * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     *
+     * @param cluster ClusterClient to get or undefined if not existing
      */
-    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
-        this.#mdnsBroadcaster = mdnsBroadcaster;
-    }
-
-    async getMdnsScanner() {
-        if (!this.#mdnsScanner) {
-            throw new ImplementationError("Add the node to the Matter instance before!");
-        }
-        return this.#mdnsScanner;
-    }
-
-    async getMdnsBroadcaster() {
-        if (!this.#mdnsBroadcaster) {
-            throw new ImplementationError("Add the node to the Matter instance before!");
-        }
-        return this.#mdnsBroadcaster;
-    }
-
-    async setStorage(storage: StorageContext) {
-        this.#storage = storage;
-        this.#endpointStructureStorage = this.#storage.createContext("EndpointStructure");
-        this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
-        await this.#eventHandler.construction;
-    }
-
-    /**
-     * @deprecated use {@link BaseNodeServer.port}
-     */
-    getPort() {
-        return this.port;
-    }
-
-    /**
-     * @deprecated use {@link BaseNodeServer.port}
-     */
-    setPort(port: number) {
-        this.port = port;
-    }
-
-    /**
-     * Return the pairing information for the device
-     */
-    getPairingCode(
-        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
-    ): DevicePairingInformation {
-        this.construction.assert();
-        if (this.#basicInformationCluster == undefined) {
-            throw new ImplementationError("BasicInformationCluster needs to be set!");
-        }
-        if (this.commissioningConfig === undefined) {
-            throw new ImplementationError("Pairing code is unavailable because commissioning is not configured");
-        }
-
-        const vendorId = this.#basicInformationCluster.attributes.vendorId.getLocal();
-        const productId = this.#basicInformationCluster.attributes.productId.getLocal();
-
-        const bleEnabled = Ble.enabled;
-
-        const qrPairingCode = QrPairingCodeCodec.encode({
-            version: 0,
-            vendorId: vendorId,
-            productId,
-            flowType: this.commissioningConfig.flowType,
-            discriminator: this.commissioningConfig.discriminator,
-            passcode: this.commissioningConfig.passcode,
-            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
-                discoveryCapabilities ?? {
-                    ble: bleEnabled,
-                    softAccessPoint: false,
-                    onIpNetwork: true,
-                },
-            ),
-        });
-
-        return {
-            manualPairingCode: ManualPairingCodeCodec.encode({
-                discriminator: this.commissioningConfig.discriminator,
-                passcode: this.commissioningConfig.passcode,
-            }),
-            qrPairingCode,
-        };
+    getRootClusterClient<
+        F extends BitSchema,
+        SF extends TypeFromPartialBitSchema<F>,
+        A extends Attributes,
+        C extends Commands,
+        E extends Events,
+    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+        return this.rootEndpoint.getClusterClient(cluster);
     }
 
     /**
@@ -608,17 +571,18 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
      * @param endpoint Endpoint to add
      * @protected
      */
-    protected async addEndpoint(endpoint: EndpointInterface) {
+    protected async addEndpoint(endpoint: Endpoint) {
         await this.rootEndpoint.addChildEndpoint(endpoint);
     }
 
     /**
-     * Add a new device to the node
+     * Get a child endpoint from the root endpoint. This is mainly used internally and not needed to be called by the user.
      *
-     * @param device Device or Aggregator instance to add
+     * @param endpointId Endpoint ID of the child endpoint to get
+     * @protected
      */
-    async addDevice(device: Device | Aggregator) {
-        await this.addEndpoint(device);
+    protected getChildEndpoint(endpointId: EndpointNumber): Endpoint | undefined {
+        return this.rootEndpoint.getChildEndpoint(endpointId);
     }
 
     /**
@@ -642,11 +606,152 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
         await this.rootEndpoint.addClusterServer(cluster);
     }
 
-    async updateStructure() {
+    /**
+     * Advertise the node via all available interfaces (Ethernet/MDNS, BLE, ...) and start the commissioning process
+     *
+     * @param limitTo Limit the advertisement to the given discovery capabilities. Default is to advertise on ethernet
+     *                and BLE if configured
+     */
+    async advertise(limitTo?: TypeFromPartialBitSchema<typeof DiscoveryCapabilitiesBitmap>) {
+        if (
+            this.mdnsInstanceBroadcaster === undefined ||
+            this.mdnsScanner === undefined ||
+            this.storage === undefined ||
+            this.eventHandler === undefined ||
+            this.endpointStructureStorage === undefined ||
+            this.port === undefined
+        ) {
+            throw new ImplementationError("Add the node to the Matter instance before!");
+        }
+
+        if (this.interactionServer !== undefined && this.deviceInstance !== undefined) {
+            logger.debug("Device already initialized, just advertise the instance again ...");
+            await this.deviceInstance.announce();
+            return;
+        }
+
+        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+        if (basicInformation == undefined) {
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
+        }
+
+        this.interactionServer = new InteractionServer({
+            endpointStructure: this.endpointStructure,
+            eventHandler: this.eventHandler,
+            subscriptionOptions: {
+                maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
+                minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
+                randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
+            }
+        });
+
+        this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+
+        this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
+        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
+
+        // TODO adjust later and refactor MatterDevice
+        this.deviceInstance = new MatterDevice(
+            {
+                productDescription: this.productDescription,
+                passcode: this.passcode,
+                discriminator: this.discriminator,
+                flowType: this.flowType,
+                additionalBleAdvertisementData: this.options.additionalBleAdvertisementData,
+                automaticAnnouncement: !this.options.delayedAnnouncement,
+
+                // We don't use this
+                ble: false,
+            },
+            // this.options.deviceName,
+            // DeviceTypeId(this.options.deviceType),
+            // vendorId,
+            // productId,
+            // this.discriminator,
+            // this.passcode,
+            this.storage.createContext("SessionManager"),
+            this.storage.createContext("FabricManager"),
+            (fabricIndex: FabricIndex) => {
+                const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
+                if (fabricsCount === 1) {
+                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
+                    // TODO Refactor this out when we remove MatterDevice class
+                    if (
+                        this.mdnsInstanceBroadcaster !== undefined &&
+                        !this.deviceInstance?.hasBroadcaster(this.mdnsInstanceBroadcaster)
+                    ) {
+                        this.deviceInstance?.addBroadcaster(this.mdnsInstanceBroadcaster);
+                    }
+                }
+                if (fabricsCount === 0) {
+                    // When last fabric gets deleted we do a factory reset
+                    this.factoryReset()
+                        .then(() => this.options.commissioningChangedCallback?.(fabricIndex))
+                        .catch(error => logger.error("Error while doing factory reset of the device", error));
+                } else {
+                    this.options.commissioningChangedCallback?.(fabricIndex);
+                }
+            },
+            (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
+        )
+            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.options.listeningAddressIpv6))
+            .addScanner(this.mdnsScanner)
+            .addProtocolHandler(this.interactionServer);
+        if (!this.ipv4Disabled) {
+            this.deviceInstance.addTransportInterface(
+                await UdpInterface.create("udp4", this.port, this.options.listeningAddressIpv4),
+            );
+        }
+
+        if (this.isCommissioned()) {
+            limitTo = { onIpNetwork: true }; // If already commissioned the device is on network already
+        } else {
+            // BLE or SoftAP only relevant when not commissioned yet
+            try {
+                const ble = Ble.get();
+                this.deviceInstance.addTransportInterface(ble.getBlePeripheralInterface());
+                if (limitTo === undefined || limitTo.ble) {
+                    this.deviceInstance.addBroadcaster(
+                        ble.getBleBroadcaster(this.options.additionalBleAdvertisementData),
+                    );
+                }
+            } catch (error) {
+                if (error instanceof NoProviderError) {
+                    logger.debug("Ble not enabled");
+                } else {
+                    throw error;
+                }
+            }
+
+            if (limitTo?.softAccessPoint) {
+                logger.error("Advertising as SoftAP not implemented yet. Ignoring ...");
+            }
+        }
+
+        if (limitTo === undefined || limitTo.onIpNetwork) {
+            this.deviceInstance.addBroadcaster(this.mdnsInstanceBroadcaster);
+        }
+
+        await this.deviceInstance.start();
+
+        // Send required events
+        basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
+
+        const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
+        if (generalDiagnostics !== undefined) {
+            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({
+                bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified,
+            });
+        }
+    }
+
+    updateStructure() {
         logger.debug("Endpoint structure got updated ...");
         await this.assignEndpointIds(); // Make sure to have unique endpoint ids
         await this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
-        await this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
+        await this.endpointStructure.initializeFromEndpoint(this.rootEndpoint); // Reinitialize the interaction server structure
     }
 
     getNextEndpointId(increase = true) {
@@ -656,80 +761,15 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
         return this.nextEndpointId;
     }
 
-    async assignEndpointIds() {
-        const rootUniqueIdPrefix = await this.rootEndpoint.determineUniqueID();
-        await this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
-        await this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
-        await this.#endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    assignEndpointIds() {
+        const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
+        this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
+        this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
+        this.endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
     }
 
-    override async close() {
-        if (this.#interactionServer) {
-            await this.#interactionServer.close();
-            this.#interactionServer = undefined;
-        }
-        await this.#endpointStructure.destroy();
-
-        await super.close();
-    }
-
-    protected override async createMatterDevice() {
-        if (this.#storage === undefined || this.#endpointStructureStorage === undefined) {
-            throw new ImplementationError("Storage not initialized");
-        }
-
-        this.#interactionServer = new InteractionServer({
-            subscriptionOptions: this.#subscriptionOptions,
-            eventHandler: this.eventHandler,
-            endpointStructure: this.#endpointStructure,
-        });
-
-        this.nextEndpointId = await this.#endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
-
-        await this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        await this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
-        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
-
-        await this.#endpointStructure.initializeFromEndpoint(this.rootEndpoint);
-
-        return (await super.createMatterDevice()).addProtocolHandler(this.#interactionServer);
-    }
-
-    protected override emitCommissioningChanged(fabric: FabricIndex): void {
-        this.#commissioningChangedCallback?.(fabric);
-    }
-
-    protected override emitActiveSessionsChanged(fabric: FabricIndex): void {
-        this.#activeSessionsChangedCallback?.(fabric);
-    }
-
-    protected override async clearStorage() {
-        await this.storage.clear();
-    }
-
-    protected get eventHandler() {
-        if (!this.#eventHandler) {
-            this.#eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
-        }
-        return this.#eventHandler;
-    }
-
-    override get port() {
-        // Need this since we've got a setter
-        return super.port;
-    }
-
-    /** Set the port the device is listening on. Can only be called before the device is initialized. */
-    override set port(port: number) {
-        if (port === this.networkConfig.port) return;
-        if (this.#mdnsBroadcaster !== undefined) {
-            throw new ImplementationError("Port cannot be changed after device is initialized!");
-        }
-        this.networkConfig.port = port;
-    }
-
-    private async initializeEndpointIdsFromStorage(endpoint: EndpointInterface, parentUniquePrefix = "") {
-        if (this.#endpointStructureStorage === undefined) {
+    private initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
+        if (this.endpointStructureStorage === undefined) {
             throw new ImplementationError("Storage manager must be initialized to enable initialization from storage.");
         }
         const endpoints = endpoint.getChildEndpoints();
@@ -749,8 +789,8 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
             }
 
             if (endpoint.number === undefined) {
-                if (this.#endpointStructureStorage.has(endpointUniquePrefix)) {
-                    endpoint.number = await this.#endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
+                if (this.endpointStructureStorage.has(endpointUniquePrefix)) {
+                    endpoint.number = await this.endpointStructureStorage.get<EndpointNumber>(endpointUniquePrefix);
                     logger.debug(
                         `Restored endpoint id ${endpoint.number} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} from storage`,
                     );
@@ -763,8 +803,8 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
         }
     }
 
-    private async fillAndStoreEndpointIds(endpoint: EndpointInterface, parentUniquePrefix = "") {
-        if (this.#endpointStructureStorage === undefined) {
+    private async fillAndStoreEndpointIds(endpoint: Endpoint, parentUniquePrefix = "") {
+        if (this.endpointStructureStorage === undefined) {
             throw new ImplementationError("endpointStructureStorage not set!");
         }
         const endpoints = endpoint.getChildEndpoints();
@@ -780,13 +820,244 @@ export class CommissioningServer extends BaseNodeServer implements MatterNode {
 
             if (endpoint.number === undefined) {
                 endpoint.number = EndpointNumber(this.nextEndpointId++);
-                await this.#endpointStructureStorage.set(endpointUniquePrefix, endpoint.number);
+                await this.endpointStructureStorage.set(endpointUniquePrefix, endpoint.number);
                 logger.debug(
                     `Assigned endpoint id ${endpoint.number} for endpoint with ${endpointUniquePrefix} / device ${endpoint.name} and stored it`,
                 );
             }
             await this.fillAndStoreEndpointIds(endpoint, endpointUniquePrefix);
         }
+    }
+
+    /**
+     * Return info if the device is paired with at least one controller
+     */
+    isCommissioned(): boolean {
+        return this.deviceInstance?.isCommissioned() ?? false;
+    }
+
+    /**
+     * Return the pairing information for the device
+     */
+    getPairingCode(
+        discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
+    ): DevicePairingInformation {
+        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+        if (basicInformation == undefined) {
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
+        }
+
+        const vendorId = basicInformation.attributes.vendorId.getLocal();
+        const productId = basicInformation.attributes.productId.getLocal();
+
+        let bleEnabled = false;
+        try {
+            bleEnabled = !!Ble.get();
+        } catch (error) {
+            if (!(error instanceof NoProviderError)) {
+                // only ignore NoProviderError cases
+                throw error;
+            }
+        }
+
+        const qrPairingCode = QrPairingCodeCodec.encode({
+            version: 0,
+            vendorId: vendorId,
+            productId,
+            flowType: this.flowType,
+            discriminator: this.discriminator,
+            passcode: this.passcode,
+            discoveryCapabilities: DiscoveryCapabilitiesSchema.encode(
+                discoveryCapabilities ?? {
+                    ble: bleEnabled,
+                    softAccessPoint: false,
+                    onIpNetwork: true,
+                },
+            ),
+        });
+
+        return {
+            manualPairingCode: ManualPairingCodeCodec.encode({
+                discriminator: this.discriminator,
+                passcode: this.passcode,
+            }),
+            qrPairingCode,
+        };
+    }
+
+    /**
+     * Set the MDNS Scanner instance. Should be only used internally
+     *
+     * @param mdnsScanner MdnsScanner instance
+     */
+    setMdnsScanner(mdnsScanner: MdnsScanner) {
+        this.mdnsScanner = mdnsScanner;
+    }
+
+    /**
+     * Set the MDNS Broadcaster instance. Should be only used internally
+     *
+     * @param mdnsBroadcaster MdnsBroadcaster instance
+     */
+    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster) {
+        if (this.port === undefined) {
+            throw new ImplementationError("Port must be set before setting the MDNS broadcaster!");
+        }
+        this.mdnsInstanceBroadcaster = new MdnsInstanceBroadcaster(this.port, mdnsBroadcaster);
+    }
+
+    /**
+     * Set the StorageManager instance. Should be only used internally
+     * @param storage
+     */
+    setStorage(storage: StorageContext) {
+        this.storage = storage;
+        this.endpointStructureStorage = this.storage.createContext("EndpointStructure");
+        this.eventHandler = new EventHandler(this.storage.createContext("EventHandler"));
+    }
+
+    /**
+     * Add a new device to the node
+     *
+     * @param device Device or Aggregator instance to add
+     */
+    addDevice(device: Device | Aggregator) {
+        this.addEndpoint(device);
+    }
+
+    /**
+     * Return the port the device is listening on
+     */
+    getPort(): number | undefined {
+        return this.port;
+    }
+
+    /** Set the port the device is listening on. Can only be called before the device is initialized. */
+    setPort(port: number) {
+        if (port === this.port) return;
+        if (this.deviceInstance !== undefined || this.mdnsInstanceBroadcaster !== undefined) {
+            throw new ImplementationError("Port can not be changed after device is initialized!");
+        }
+        this.port = port;
+    }
+
+    /**
+     * Close network connections of the device and stop responding to requests
+     */
+    async close() {
+        this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
+        await this.interactionServer?.close();
+        this.interactionServer = undefined;
+        this.endpointStructure.destroy();
+        await this.deviceInstance?.stop();
+        this.deviceInstance = undefined;
+    }
+
+    async factoryReset() {
+        if (this.storage === undefined) {
+            throw new ImplementationError(
+                "Storage not initialized. The instance was not added to a Matter instance yet.",
+            );
+        }
+        const wasStarted = this.interactionServer !== undefined || this.deviceInstance !== undefined;
+        let fabrics = new Array<Fabric>();
+        if (wasStarted) {
+            fabrics = this.isCommissioned() ? this.deviceInstance?.getFabrics() ?? [] : [];
+            await this.close();
+        }
+
+        this.storage.clearAll();
+
+        if (wasStarted) {
+            await this.advertise();
+            fabrics.forEach(fabric => this.options.commissioningChangedCallback?.(fabric.fabricIndex));
+        }
+        logger.info(`The device was factory reset${wasStarted ? " and restarted" : ""}.`);
+    }
+
+    /**
+     * Add a new command handler for the given command
+     *
+     * @param command Command to add the handler for
+     * @param handler Handler function to add
+     */
+    addCommandHandler<K extends keyof CommissioningServerCommands>(
+        command: K,
+        handler: CommissioningServerCommands[K],
+    ) {
+        this.commandHandler.addHandler(command, handler);
+    }
+
+    /**
+     * Remove a command handler for the given command
+     *
+     * @param command Command to remove the handler for
+     * @param handler Handler function to remove
+     */
+    removeCommandHandler<K extends keyof CommissioningServerCommands>(
+        command: K,
+        handler: CommissioningServerCommands[K],
+    ) {
+        this.commandHandler.removeHandler(command, handler);
+    }
+
+    /**
+     * Set the reachability of the commissioning server aka "the main matter device". This call only has effect when
+     * the reachability flag was set in the BasicInformationCluster or in the BasicInformation data in the constructor!
+     *
+     * @param reachable true if reachable, false otherwise
+     */
+    setReachability(reachable: boolean) {
+        const basicInformationCluster = this.getRootClusterServer(BasicInformationCluster);
+        if (basicInformationCluster === undefined) {
+            throw new ImplementationError("BasicInformationCluster needs to be set!");
+        }
+        if (basicInformationCluster.attributes.reachable !== undefined) {
+            basicInformationCluster.setReachableAttribute(reachable);
+        }
+    }
+
+    /** used internally by MatterServer to initialize the state of the device. */
+    initialize(ipv4Disabled: boolean) {
+        if (this.ipv4Disabled !== undefined && this.ipv4Disabled !== ipv4Disabled) {
+            throw new ImplementationError(
+                "Changing the IPv4 disabled flag after starting the device is not supported.",
+            );
+        }
+        this.ipv4Disabled = ipv4Disabled;
+    }
+
+    /** Starts the Matter device and advertises it. */
+    async start() {
+        if (this.ipv4Disabled === undefined) {
+            throw new ImplementationError("Add the device to the MatterServer first.");
+        }
+        if (this.delayedAnnouncement !== true) {
+            return this.advertise();
+        }
+    }
+
+    /**
+     * Get some basic details of all Fabrics the server is commissioned to.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all fabrics are returned.
+     */
+    getCommissionedFabricInformation(fabricIndex?: FabricIndex) {
+        if (!this.isCommissioned()) return [];
+        const allFabrics = this.deviceInstance?.getFabrics() ?? [];
+        const fabrics = fabricIndex === undefined ? allFabrics : allFabrics.filter(f => f.fabricIndex === fabricIndex);
+        return fabrics.map(fabric => fabric.getExternalInformation()) ?? [];
+    }
+
+    /**
+     * Get some basic details of all currently active sessions.
+     *
+     * @param fabricIndex Optional fabric index to filter for. If not set all sessions are returned.
+     */
+    getActiveSessionInformation(fabricIndex?: FabricIndex) {
+        if (!this.isCommissioned()) return [];
+        const allSessions = this.deviceInstance?.getActiveSessionInformation() ?? [];
+        return allSessions.filter(({ fabric }) => fabricIndex === undefined || fabric?.fabricIndex === fabricIndex);
     }
 }
 

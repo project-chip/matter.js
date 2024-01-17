@@ -10,16 +10,16 @@ import { MdnsScanner } from "./mdns/MdnsScanner.js";
 /**
  * Abstract base class that represents a node in the matter ecosystem.
  */
-export interface MatterNode {
-    close(): Promise<void>;
+export abstract class MatterNode {
+    abstract close(): Promise<void>;
 
-    initialize(ipv4Disabled: boolean): void;
+    abstract getPort(): number | undefined;
 
-    start(): Promise<void>;
+    abstract initialize(ipv4Disabled: boolean): void;
 
-    port: number | undefined;
+    abstract start(): Promise<void>;
 
-    setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster): void;
+    abstract setMdnsBroadcaster(mdnsBroadcaster: MdnsBroadcaster): void;
 
-    setMdnsScanner(mdnsBroadcaster: MdnsScanner): void;
+    abstract setMdnsScanner(mdnsScanner: MdnsScanner): void;
 }

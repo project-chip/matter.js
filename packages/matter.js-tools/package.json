@@ -63,7 +63,9 @@
         "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.6",
         "@types/npmcli__map-workspaces": "^3.0.4",
-        "@types/yargs": "^17.0.32"
+        "@types/wtfnode": "^0.7.3",
+        "@types/yargs": "^17.0.32",
+        "wtfnode": "^0.9.1"
     },
     "publishConfig": {
         "access": "public"

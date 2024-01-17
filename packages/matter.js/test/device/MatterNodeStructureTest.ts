@@ -45,14 +45,7 @@ import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js"
 import { StorageContext } from "../../src/storage/StorageContext.js";
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
-import { DUMMY_KEY } from "../crypto/test-util.js";
-
-const MockCertification = {
-    privateKey: DUMMY_KEY,
-    certificate: ByteArray.fromHex("00"),
-    intermediateCertificate: ByteArray.fromHex("00"),
-    declaration: ByteArray.fromHex("00"),
-};
+import { DUMMY_KEY, PRIVATE_KEY } from "../crypto/test-util.js";
 
 async function addRequiredRootClusters(
     rootEndpoint: EndpointInterface,
@@ -263,7 +256,12 @@ async function commissioningServer({
             },
             serialNumber: `node-matter-0000`,
         },
-        certification: MockCertification,
+        certificates: {
+            devicePrivateKey: PRIVATE_KEY,
+            deviceCertificate: ByteArray.fromHex("00"),
+            deviceIntermediateCertificate: ByteArray.fromHex("00"),
+            certificationDeclaration: ByteArray.fromHex("00"),
+        },
     });
 
     if (storage) {
