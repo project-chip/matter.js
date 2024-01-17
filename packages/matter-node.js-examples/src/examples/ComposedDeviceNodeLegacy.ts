@@ -213,7 +213,7 @@ class ComposedExampleDevice {
 
         logger.info("Listening");
         if (!commissioningServer.isCommissioned()) {
-            const pairingData = commissioningServer.getPairingCode();
+            const pairingData = await commissioningServer.getPairingCode();
             const { qrPairingCode, manualPairingCode } = pairingData;
 
             console.log(QrCode.get(qrPairingCode));

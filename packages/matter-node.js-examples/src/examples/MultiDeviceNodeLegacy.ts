@@ -224,11 +224,12 @@ class Device {
 
         logger.info("Listening");
         console.log();
-        commissioningServers.forEach((commissioningServer, index) => {
+        for (let index = 0; index < numDevices; index++) {
+            const commissioningServer = commissioningServers[index];
             console.log("----------------------------");
             console.log(`Device ${index + 1}:`);
             if (!commissioningServer.isCommissioned()) {
-                const pairingData = commissioningServer.getPairingCode();
+                const pairingData = await commissioningServer.getPairingCode();
                 const { qrPairingCode, manualPairingCode } = pairingData;
 
                 console.log(QrCode.get(qrPairingCode));
@@ -240,7 +241,7 @@ class Device {
                 console.log("Device is already commissioned. Waiting for controllers to connect ...");
             }
             console.log();
-        });
+        }
     }
 
     async stop() {

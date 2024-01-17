@@ -34,15 +34,13 @@ import { ClusterServer } from "./cluster/server/ClusterServer.js";
 import {
     AttributeInitialValues,
     ClusterDatasource,
+    ClusterServerHandlers,
     ClusterServerObj,
-    ClusterServerObjForCluster,
     asClusterServerInternal,
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
-import {
-    OperationalCredentialsClusterHandler,
-} from "./cluster/server/OperationalCredentialsServer.js";
+import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
 import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -181,7 +179,7 @@ export interface CommissioningServerOptions {
         deviceCertificate: ByteArray;
         deviceIntermediateCertificate: ByteArray;
         certificationDeclaration: ByteArray;
-    }
+    };
 
     /**
      * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
@@ -228,8 +226,8 @@ export class CommissioningServer extends MatterNode {
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissioningFlowType;
-    private readonly productDescription: CommissioningOptions.ProductDescription;
-    private readonly certification: DeviceCertification;
+    private productDescription?: CommissioningOptions.ProductDescription;
+    private certification?: DeviceCertification;
 
     private storage?: StorageContext;
     private endpointStructureStorage?: StorageContext;
@@ -238,7 +236,7 @@ export class CommissioningServer extends MatterNode {
 
     private deviceInstance?: MatterDevice;
     private eventHandler?: EventHandler;
-    private endpointStructure: InteractionEndpointStructure;
+    private endpointStructure?: InteractionEndpointStructure;
     private interactionServer?: InteractionServer;
     #construction: AsyncConstruction<CommissioningServer>;
 
@@ -309,7 +307,7 @@ export class CommissioningServer extends MatterNode {
 
             const reachabilitySupported = basicInformationAttributes.reachable !== undefined;
             // Add basic Information cluster to root directly because it is not allowed to be changed afterward
-            this.#basicInformationCluster = ClusterServer(
+            const basicInformationCluster = ClusterServer(
                 BasicInformationCluster,
                 basicInformationAttributes,
                 {},
@@ -320,44 +318,44 @@ export class CommissioningServer extends MatterNode {
                     leave: true,
                 },
             );
-            await this.rootEndpoint.addClusterServer(this.#basicInformationCluster);
+            await this.rootEndpoint.addClusterServer(basicInformationCluster);
 
             if (reachabilitySupported) {
-                this.#basicInformationCluster.subscribeReachableAttribute(
+                basicInformationCluster.subscribeReachableAttribute(
                     async newValue =>
-                        this.#basicInformationCluster?.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
+                        basicInformationCluster?.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
                 );
             }
 
             // Use provided certificates for OperationalCredentialsCluster or generate own ones
             let { certificates } = options;
-        if (certificates == undefined) {
-            const paa = new AttestationCertificateManager(vendorId);
-            const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
-            const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
+            if (certificates == undefined) {
+                const paa = new AttestationCertificateManager(vendorId);
+                const { keyPair: dacKeyPair, dac } = paa.getDACert(productId);
+                const certificationDeclaration = CertificationDeclarationManager.generate(vendorId, productId);
 
-            certificates = {
-                devicePrivateKey: dacKeyPair.privateKey,
-                deviceCertificate: dac,
-                deviceIntermediateCertificate: paa.getPAICert(),
-                certificationDeclaration,
-            };
-        }
+                certificates = {
+                    devicePrivateKey: dacKeyPair.privateKey,
+                    deviceCertificate: dac,
+                    deviceIntermediateCertificate: paa.getPAICert(),
+                    certificationDeclaration,
+                };
+            }
 
-        this.productDescription = {
+            this.productDescription = {
                 name: options.deviceName,
-            deviceType: options.deviceType,
-            vendorId: vendorId,
-            productId: productId,
-        };
+                deviceType: options.deviceType,
+                vendorId: vendorId,
+                productId: productId,
+            };
 
-        this.certification = new DeviceCertification(
-            {
-                certificate: certificates.deviceCertificate,
-                declaration: certificates.certificationDeclaration,
-                intermediateCertificate: certificates.deviceIntermediateCertificate,
-                privateKey: certificates.devicePrivateKey,
-            },
+            this.certification = new DeviceCertification(
+                {
+                    certificate: certificates.deviceCertificate,
+                    declaration: certificates.certificationDeclaration,
+                    intermediateCertificate: certificates.deviceIntermediateCertificate,
+                    privateKey: certificates.devicePrivateKey,
+                },
                 this.productDescription,
             );
 
@@ -379,7 +377,6 @@ export class CommissioningServer extends MatterNode {
             );
 
             // TODO Get the defaults from the cluster meta details
-            const generalCommissioning = options.generalCommissioning;
             await this.rootEndpoint.addClusterServer(
                 ClusterServer(
                     GeneralCommissioningCluster,
@@ -491,12 +488,17 @@ export class CommissioningServer extends MatterNode {
                 ),
             );
 
-            this.endpointStructure = new InteractionEndpointStructure();// We must register this event before creating an InteractionServer so
+            this.endpointStructure = new InteractionEndpointStructure(); // We must register this event before creating an InteractionServer so
             // we initialize endpoint datasources before the InteractionServer
             // processes events
-            this.endpointStructure.change.on(async () => {if (this.storage === undefined || this.eventHandler === undefined) {
-                throw new InternalError("Endpoint structure reports change prior to server initialization");
-            }
+            this.endpointStructure.change.on(async () => {
+                if (
+                    this.storage === undefined ||
+                    this.eventHandler === undefined ||
+                    this.endpointStructure == undefined
+                ) {
+                    throw new InternalError("Endpoint structure reports change prior to server initialization");
+                }
                 for (const endpoint of this.endpointStructure.endpoints.values()) {
                     for (const cluster of endpoint.getAllClusterServers()) {
                         await asClusterServerInternal(cluster)._setDatasource(
@@ -522,13 +524,13 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
-    getRootClusterServer<
+    async getRootClusterServer<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterServerObj<A, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterServerObj<A, E> | undefined> {
         return this.rootEndpoint.getClusterServer(cluster);
     }
 
@@ -537,10 +539,10 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterClient object to add
      */
-    addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
+    async addRootClusterClient<F extends BitSchema, A extends Attributes, C extends Commands, E extends Events>(
         cluster: ClusterClientObj<F, A, C, E>,
     ) {
-        this.rootEndpoint.addClusterClient(cluster);
+        await this.rootEndpoint.addClusterClient(cluster);
     }
 
     /**
@@ -548,13 +550,13 @@ export class CommissioningServer extends MatterNode {
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
-    getRootClusterClient<
+    async getRootClusterClient<
         F extends BitSchema,
         SF extends TypeFromPartialBitSchema<F>,
         A extends Attributes,
         C extends Commands,
         E extends Events,
-    >(cluster: Cluster<F, SF, A, C, E>): ClusterClientObj<F, A, C, E> | undefined {
+    >(cluster: Cluster<F, SF, A, C, E>): Promise<ClusterClientObj<F, A, C, E> | undefined> {
         return this.rootEndpoint.getClusterClient(cluster);
     }
 
@@ -619,7 +621,9 @@ export class CommissioningServer extends MatterNode {
             this.storage === undefined ||
             this.eventHandler === undefined ||
             this.endpointStructureStorage === undefined ||
-            this.port === undefined
+            this.port === undefined ||
+            this.endpointStructure === undefined ||
+            this.productDescription === undefined
         ) {
             throw new ImplementationError("Add the node to the Matter instance before!");
         }
@@ -630,7 +634,7 @@ export class CommissioningServer extends MatterNode {
             return;
         }
 
-        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+        const basicInformation = await this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
@@ -642,15 +646,15 @@ export class CommissioningServer extends MatterNode {
                 maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
                 minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
                 randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
-            }
+            },
         });
 
-        this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
+        this.nextEndpointId = await this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
 
-        this.assignEndpointIds(); // Make sure to have unique endpoint ids
-        this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
-        this.rootEndpoint.setStructureChangedCallback(() => this.updateStructure()); // Make sure we get structure changes
-        this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
+        await this.assignEndpointIds(); // Make sure to have unique endpoint ids
+        await this.rootEndpoint.updatePartsList(); // initialize parts list of all Endpoint objects with final IDs
+        this.rootEndpoint.setStructureChangedCallback(async () => this.updateStructure()); // Make sure we get structure changes
+        await this.endpointStructure.initializeFromEndpoint(this.rootEndpoint);
 
         // TODO adjust later and refactor MatterDevice
         this.deviceInstance = new MatterDevice(
@@ -737,17 +741,22 @@ export class CommissioningServer extends MatterNode {
         await this.deviceInstance.start();
 
         // Send required events
-        basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
+        await basicInformation.triggerStartUpEvent({ softwareVersion: basicInformation.getSoftwareVersionAttribute() });
 
-        const generalDiagnostics = this.getRootClusterServer(GeneralDiagnosticsCluster);
+        const generalDiagnostics = await this.getRootClusterServer(GeneralDiagnosticsCluster);
         if (generalDiagnostics !== undefined) {
-            this.getRootClusterServer(GeneralDiagnosticsCluster)?.triggerBootReasonEvent({
+            await (
+                await this.getRootClusterServer(GeneralDiagnosticsCluster)
+            )?.triggerBootReasonEvent({
                 bootReason: generalDiagnostics.getBootReasonAttribute?.() ?? GeneralDiagnostics.BootReason.Unspecified,
             });
         }
     }
 
-    updateStructure() {
+    async updateStructure() {
+        if (this.endpointStructure === undefined) {
+            throw new ImplementationError("Endpoint structure not initialized!");
+        }
         logger.debug("Endpoint structure got updated ...");
         await this.assignEndpointIds(); // Make sure to have unique endpoint ids
         await this.rootEndpoint.updatePartsList(); // update parts list of all Endpoint objects with final IDs
@@ -761,14 +770,14 @@ export class CommissioningServer extends MatterNode {
         return this.nextEndpointId;
     }
 
-    assignEndpointIds() {
-        const rootUniqueIdPrefix = this.rootEndpoint.determineUniqueID();
-        this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
-        this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
-        this.endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
+    async assignEndpointIds() {
+        const rootUniqueIdPrefix = await this.rootEndpoint.determineUniqueID();
+        await this.initializeEndpointIdsFromStorage(this.rootEndpoint, rootUniqueIdPrefix);
+        await this.fillAndStoreEndpointIds(this.rootEndpoint, rootUniqueIdPrefix);
+        await this.endpointStructureStorage?.set("nextEndpointId", this.nextEndpointId);
     }
 
-    private initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
+    private async initializeEndpointIdsFromStorage(endpoint: Endpoint, parentUniquePrefix = "") {
         if (this.endpointStructureStorage === undefined) {
             throw new ImplementationError("Storage manager must be initialized to enable initialization from storage.");
         }
@@ -839,10 +848,10 @@ export class CommissioningServer extends MatterNode {
     /**
      * Return the pairing information for the device
      */
-    getPairingCode(
+    async getPairingCode(
         discoveryCapabilities?: TypeFromBitSchema<typeof DiscoveryCapabilitiesBitmap>,
-    ): DevicePairingInformation {
-        const basicInformation = this.getRootClusterServer(BasicInformationCluster);
+    ): Promise<DevicePairingInformation> {
+        const basicInformation = await this.getRootClusterServer(BasicInformationCluster);
         if (basicInformation == undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
@@ -921,8 +930,8 @@ export class CommissioningServer extends MatterNode {
      *
      * @param device Device or Aggregator instance to add
      */
-    addDevice(device: Device | Aggregator) {
-        this.addEndpoint(device);
+    async addDevice(device: Device | Aggregator) {
+        await this.addEndpoint(device);
     }
 
     /**
@@ -945,10 +954,10 @@ export class CommissioningServer extends MatterNode {
      * Close network connections of the device and stop responding to requests
      */
     async close() {
-        this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
+        await (await this.rootEndpoint.getClusterServer(BasicInformationCluster))?.triggerShutDownEvent?.();
         await this.interactionServer?.close();
         this.interactionServer = undefined;
-        this.endpointStructure.destroy();
+        await this.endpointStructure?.destroy();
         await this.deviceInstance?.stop();
         this.deviceInstance = undefined;
     }
@@ -966,7 +975,7 @@ export class CommissioningServer extends MatterNode {
             await this.close();
         }
 
-        this.storage.clearAll();
+        await this.storage.clearAll();
 
         if (wasStarted) {
             await this.advertise();
@@ -1007,13 +1016,13 @@ export class CommissioningServer extends MatterNode {
      *
      * @param reachable true if reachable, false otherwise
      */
-    setReachability(reachable: boolean) {
-        const basicInformationCluster = this.getRootClusterServer(BasicInformationCluster);
+    async setReachability(reachable: boolean) {
+        const basicInformationCluster = await this.getRootClusterServer(BasicInformationCluster);
         if (basicInformationCluster === undefined) {
             throw new ImplementationError("BasicInformationCluster needs to be set!");
         }
         if (basicInformationCluster.attributes.reachable !== undefined) {
-            basicInformationCluster.setReachableAttribute(reachable);
+            await basicInformationCluster.setReachableAttribute(reachable);
         }
     }
 

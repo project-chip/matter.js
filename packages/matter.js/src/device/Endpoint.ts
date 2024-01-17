@@ -86,7 +86,7 @@ export class Endpoint implements EndpointInterface {
         });
     }
 
-    async setStructureChangedCallback(callback: () => Promise<void>) {
+    setStructureChangedCallback(callback: () => Promise<void>) {
         this.structureChangedCallback = callback;
         this.childEndpoints.forEach(endpoint => endpoint.setStructureChangedCallback(callback));
     }

@@ -265,7 +265,7 @@ async function commissioningServer({
     });
 
     if (storage) {
-        await node.setStorage(testStorageContext);
+        node.setStorage(testStorageContext);
     }
 
     if (values) {

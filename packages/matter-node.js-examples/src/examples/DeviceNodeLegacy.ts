@@ -261,7 +261,7 @@ class Device {
 
         logger.info("Listening");
         if (!commissioningServer.isCommissioned()) {
-            const pairingData = commissioningServer.getPairingCode({
+            const pairingData = await commissioningServer.getPairingCode({
                 ble: hasParameter("ble"),
                 softAccessPoint: false,
                 onIpNetwork: false,
