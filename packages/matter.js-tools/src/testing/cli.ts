@@ -48,6 +48,7 @@ export async function main(argv = process.argv) {
         .option("profile", { type: "boolean", describe: "Write profiling data to build/profiles (node only)" })
         .option("all-logs", { type: "boolean", describe: "Emit log messages in real time" })
         .option("force-exit", { type: "boolean", describe: "Force Node to exit after tests complete" })
+        .option("wtf", { type: "boolean", describe: "Enlist wtfnode to detect test leaks" })
         .command("*", "run all supported test types")
         .command("esm", "run tests on node (ES6 modules)", () => testTypes.add(TestType.esm))
         .command("cjs", "run tests on node (CommonJS modules)", () => testTypes.add(TestType.cjs))

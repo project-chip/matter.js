@@ -77,7 +77,8 @@ export abstract class BaseNodeServer {
     protected abstract getMdnsScanner(): Promise<MdnsScanner>;
 
     /**
-     * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     * Get a cluster server from the root endpoint. This is mainly used internally and not needed to be called by the
+     * user.
      *
      * @param cluster ClusterServer to get or undefined if not existing
      */
@@ -92,7 +93,8 @@ export abstract class BaseNodeServer {
     }
 
     /**
-     * Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the user.
+     * Add a cluster client to the root endpoint. This is mainly used internally and not needed to be called by the
+     * user.
      *
      * @param cluster ClusterClient object to add
      */
@@ -103,7 +105,8 @@ export abstract class BaseNodeServer {
     }
 
     /**
-     * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the user.
+     * Get a cluster client from the root endpoint. This is mainly used internally and not needed to be called by the
+     * user.
      *
      * @param cluster ClusterClient to get or undefined if not existing
      */
@@ -202,8 +205,7 @@ export abstract class BaseNodeServer {
     }
 
     /**
-     * Get the port the server is configured for (before startup) or listening
-     * on (after startup).
+     * Get the port the server is configured for (before startup) or listening on (after startup).
      */
     get port() {
         return this.#primaryNetInterface ? this.#primaryNetInterface.port : this.networkConfig.port;
@@ -216,6 +218,7 @@ export abstract class BaseNodeServer {
         this.rootEndpoint.getClusterServer(BasicInformationCluster)?.triggerShutDownEvent?.();
         await this.#deviceInstance?.stop();
         this.#deviceInstance = undefined;
+        this.#primaryNetInterface = undefined;
     }
  
     async factoryReset() {
@@ -331,8 +334,8 @@ export abstract class BaseNodeServer {
             (fabricIndex: FabricIndex) => {
                 const fabricsCount = this.#deviceInstance?.getFabrics().length ?? 0;
                 if (fabricsCount === 1) {
-                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before, add broadcaster now
-                    // TODO Refactor this out when we remove MatterDevice class
+                    // When first Fabric is added (aka initial commissioning) and we did not advertised on MDNS before,
+                    // add broadcaster now TODO Refactor this out when we remove MatterDevice class
                     if (
                         this.#mdnsBroadcaster !== undefined &&
                         !this.#deviceInstance?.hasBroadcaster(this.#mdnsBroadcaster)
