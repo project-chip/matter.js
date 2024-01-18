@@ -132,7 +132,11 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
     async handleRequest(
         handleReadRequest: (request: ReadRequest, message: Message) => Promise<DataReport>,
         handleWriteRequest: (request: WriteRequest, message: Message) => Promise<WriteResponse>,
-        handleSubscribeRequest: (request: SubscribeRequest, messenger: InteractionServerMessenger) => Promise<void>,
+        handleSubscribeRequest: (
+            request: SubscribeRequest,
+            messenger: InteractionServerMessenger,
+            message: Message,
+        ) => Promise<void>,
         handleInvokeRequest: (request: InvokeRequest, message: Message) => Promise<InvokeResponse>,
         handleTimedRequest: (request: TimedRequest, message: Message) => void,
     ) {
@@ -159,7 +163,7 @@ export class InteractionServerMessenger extends InteractionMessenger<MatterDevic
                     }
                     case MessageType.SubscribeRequest: {
                         const subscribeRequest = TlvSubscribeRequest.decode(message.payload);
-                        await handleSubscribeRequest(subscribeRequest, this);
+                        await handleSubscribeRequest(subscribeRequest, this, message);
                         // response is sent by handler
                         break;
                     }
