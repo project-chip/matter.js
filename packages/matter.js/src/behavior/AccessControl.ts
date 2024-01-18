@@ -258,12 +258,18 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return;
             }
 
-            if (session.associatedFabric === undefined) {
-                throw new ReadError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
-            }
+            if (session.fabricFiltered) {
+                if (session.associatedFabric === undefined) {
+                    throw new ReadError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+                }
 
-            if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
-                throw new WriteError(schema, "Permission denied: Owning/accessing fabric mismatch", StatusCode.UnsupportedAccess);
+                if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+                    throw new WriteError(
+                        schema,
+                        "Permission denied: Owning/accessing fabric mismatch",
+                        StatusCode.UnsupportedAccess,
+                    );
+                }
             }
 
             wrappedAuthorizeRead(session, context);
@@ -278,8 +284,8 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
-                throw false;
+            if (session.fabricFiltered && context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+                return false;
             }
 
             return wrappedMayRead(session, context);
@@ -358,7 +364,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
 
         mayInvoke() {
             return false;
-        }
+        },
     });
 }
 
@@ -396,7 +402,11 @@ function commandEnforcerFor(schema: Schema): AccessControl {
             }
 
             if (timed && !session.timed) {
-                throw new InvokeError(schema, "Invoke attempt without required timed context", StatusCode.TimedRequestMismatch);
+                throw new InvokeError(
+                    schema,
+                    "Invoke attempt without required timed context",
+                    StatusCode.TimedRequestMismatch,
+                );
             }
 
             if (fabric && session.associatedFabric === undefined) {
@@ -406,7 +416,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
             if (session.accessLevel >= limits.writeLevel) {
                 return;
             }
-    
+
             throw new InvokeError(schema, "Permission denied", StatusCode.UnsupportedAccess);
         },
 
@@ -432,8 +442,8 @@ function commandEnforcerFor(schema: Schema): AccessControl {
             }
 
             return false;
-        }
-    }
+        },
+    };
 }
 
 function limitsFor(schema: Schema) {
