@@ -19,7 +19,16 @@ import { BasicInformationBehavior } from "../basic-information/BasicInformationB
 import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
-import { AddNocRequest, AddTrustedRootCertificateRequest, AttestationRequest, CertificateChainRequest, CsrRequest, RemoveFabricRequest, UpdateFabricLabelRequest, UpdateNocRequest } from "./OperationalCredentialsInterface.js";
+import {
+    AddNocRequest,
+    AddTrustedRootCertificateRequest,
+    AttestationRequest,
+    CertificateChainRequest,
+    CsrRequest,
+    RemoveFabricRequest,
+    UpdateFabricLabelRequest,
+    UpdateNocRequest,
+} from "./OperationalCredentialsInterface.js";
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
 
 const logger = Logger.get("OperationalCredentials");
@@ -43,7 +52,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         if (this.state.supportedFabrics === undefined) {
             this.state.supportedFabrics = 254;
         }
-        
+
         this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
@@ -55,10 +64,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const commissioning = this.agent.get(CommissioningBehavior);
 
-        return this.internal.certification = new DeviceCertification(
+        return (this.internal.certification = new DeviceCertification(
             this.state.certification,
-            commissioning.productDescription
-        );
+            commissioning.productDescription,
+        ));
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
@@ -69,10 +78,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         });
         return {
             attestationElements: elements,
-            attestationSignature: this.#certification.sign(
-                this.session,
-                elements
-            )
+            attestationSignature: this.#certification.sign(this.session, elements),
         };
     }
 
@@ -113,9 +119,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
     }
 
-    override async addNoc(
-        { nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest
-    ) {
+    override async addNoc({ nocValue, icacValue, ipkValue, caseAdminSubject, adminVendorId }: AddNocRequest) {
         // TODO 1. Verify the NOC using:
         //         a. Crypto_VerifyChain(certificates = [NOCValue, ICACValue, RootCACertificate]) if ICACValue is present,
         //         b. Crypto_VerifyChain(certificates = [NOCValue, RootCACertificate]) if ICACValue is not present. If this
@@ -203,22 +207,30 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         // Update attributes
         this.asAdmin(() => {
-            this.state.fabrics[fabric.fabricIndex] = {
+            const existingFabricIndex = this.state.fabrics.findIndex(f => f.fabricIndex === fabric.fabricIndex);
+            const existingNocIndex = this.state.nocs.findIndex(n => n.fabricIndex === fabric.fabricIndex);
+            if (existingFabricIndex !== -1 || existingNocIndex !== -1) {
+                throw new MatterFlowError(
+                    `FabricIndex ${fabric.fabricIndex} already exists in state. This should not happen.`,
+                );
+            }
+
+            this.state.fabrics.push({
                 fabricId: fabric.fabricId,
                 label: fabric.label,
                 nodeId: fabric.nodeId,
                 rootPublicKey: fabric.rootPublicKey,
                 vendorId: fabric.rootVendorId,
                 fabricIndex: fabric.fabricIndex,
-            };
+            });
 
-            this.state.nocs[fabric.fabricIndex] = {
+            this.state.nocs.push({
                 noc: fabric.operationalCert,
                 icac: fabric.intermediateCACert ?? null,
                 fabricIndex: fabric.fabricIndex,
-            };
+            });
 
-            this.state.trustedRootCertificates[fabric.fabricIndex] = fabric.rootCert;
+            this.state.trustedRootCertificates.push(fabric.rootCert);
 
             this.state.commissionedFabrics = this.state.fabrics.length;
         });
@@ -239,7 +251,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
-            fabricIndex: fabric.fabricIndex
+            fabricIndex: fabric.fabricIndex,
         };
     }
 
@@ -290,8 +302,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         // update FabricManager and Resumption records but leave current session intact
         device.updateFabric(updateFabric);
 
+        const nocIndex = this.state.nocs.findIndex(n => n.fabricIndex === updateFabric.fabricIndex);
+        if (nocIndex === -1) {
+            throw new MatterFlowError(
+                `FabricIndex ${updateFabric.fabricIndex} not found in state. This should not happen.`,
+            );
+        }
         // Update attributes
-        this.state.nocs[updateFabric.fabricIndex] = {
+        this.state.nocs[nocIndex] = {
             noc: updateFabric.operationalCert,
             icac: updateFabric.intermediateCACert ?? null,
             fabricIndex: updateFabric.fabricIndex,
@@ -320,7 +338,12 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         fabric.setLabel(label);
-        this.state.fabrics[fabric.fabricIndex].label = label;
+
+        const fabricEntry = this.state.fabrics.find(f => f.fabricIndex === currentFabricIndex);
+        if (fabricEntry === undefined) {
+            throw new MatterFlowError(`Fabric ${currentFabricIndex} not found in state. This should not happen.`);
+        }
+        fabricEntry.label = label;
 
         return { statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok, fabricIndex: fabric.fabricIndex };
     }
@@ -341,10 +364,14 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         bi.events.leave?.emit({ fabricIndex }, this.context);
 
         await fabric.remove(this.session.getId());
-        for (const array of [ this.state.fabrics, this.state.nocs, this.state.trustedRootCertificates]) {
-            array.splice(fabricIndex, 1);
-            this.state.commissionedFabrics = this.state.fabrics.length;
+        for (const array of [this.state.fabrics, this.state.nocs]) {
+            const index = array.findIndex(f => f.fabricIndex === fabricIndex);
+            if (index !== -1) {
+                array.splice(index, 1);
+            }
         }
+        this.state.trustedRootCertificates = device.getFabrics().map(f => f.rootCert);
+        this.state.commissionedFabrics = this.state.fabrics.length;
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -397,8 +424,8 @@ export namespace OperationalCredentialsServer {
             return {
                 get currentFabricIndex() {
                     return session.associatedFabric ?? FabricIndex.NO_FABRIC;
-                }
-            }
+                },
+            };
         }
     }
 }
