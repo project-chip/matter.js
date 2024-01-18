@@ -8,28 +8,33 @@ import { MatterDevice } from "../../MatterDevice.js";
 import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
-import { asClusterServerInternal, ClusterServerObj, type CommandHandler, type SupportedEventsList } from "../../cluster/server/ClusterServerTypes.js";
+import {
+    ClusterServerObj,
+    asClusterServerInternal,
+    type CommandHandler,
+    type SupportedEventsList,
+} from "../../cluster/server/ClusterServerTypes.js";
+import { Message } from "../../codec/MessageCodec.js";
+import { ImplementationError } from "../../common/MatterError.js";
 import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
+import { CommandModel } from "../../model/index.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
-import { Behavior } from "../Behavior.js";
+import { camelize } from "../../util/String.js";
+import { AccessControl } from "../AccessControl.js";
 import { ActionContext } from "../ActionContext.js";
+import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 import { ServerActionContext } from "./ServerActionContext.js";
-import { Message } from "../../codec/MessageCodec.js";
-import { AccessControl } from "../AccessControl.js";
-import { CommandModel } from "../../model/index.js";
-import { camelize } from "../../util/String.js";
-import { ImplementationError } from "../../common/MatterError.js";
+import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 
 const logger = Logger.get("Behavior");
 
@@ -94,12 +99,6 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         // Create the cluster server
         const clusterServer = ClusterServer(type.cluster, initialValues, handlers, supportedEvents);
 
-        // Monitor change events so we can notify the cluster server of data
-        // changes
-        for (const name in elements.attributes) {
-            createChangeHandler(this, name);
-        }
-        
         // Assign the cluster server to the PartServer
         asClusterServerInternal(clusterServer)._assignToEndpoint(this.#server);
 
@@ -124,6 +123,13 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         this.#clusterServer = clusterServer;
+
+        // Monitor change events so we can notify the cluster server of data
+        // changes
+        for (const name of elements.attributes) {
+            createChangeHandler(this, name);
+        }
+
         this.#server.addClusterServer(clusterServer);
     }
 }
