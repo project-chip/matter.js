@@ -28,8 +28,7 @@ export namespace Val {
     export type Collection = Struct | List;
 
     /**
-     * A Reference offers a simple mechanism for referring to properties
-     * by reference.
+     * A Reference offers a simple mechanism for referring to properties by reference.
      */
     export interface Reference<T extends Val = Val> {
         /**
@@ -48,8 +47,8 @@ export namespace Val {
         subreferences?: Record<number | string, Reference>;
 
         /**
-         * Mutates data.  Clones the container and updates metadata when called
-         * on an unmodified transactional reference.
+         * Mutates data.  Clones the container and updates metadata when called on an unmodified transactional
+         * reference.
          *
          * Then runs the specified mutator to make the actual changes.
          *
@@ -60,8 +59,7 @@ export namespace Val {
         /**
          * Notify owner of change.
          *
-         * Any changes to referenced values outside of transactions should
-         * use this to trigger change events.
+         * Any changes to referenced values outside of transactions should use this to trigger change events.
          *
          * Inside a transaction change events trigger after commit.
          *

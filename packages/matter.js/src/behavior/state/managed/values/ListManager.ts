@@ -5,6 +5,7 @@
  */
 
 import { Access, ValueModel } from "../../../../model/index.js";
+import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
@@ -91,7 +92,7 @@ function createProxy(
         readEntry = index => {
             authorizeRead(session, context);
 
-            if (index < 0 || index > reference.value.length) {
+            if (index < 0 || index >= reference.value.length) {
                 throw new ReadError(config.schema, `Index ${index} is out of bounds`);
             }
 
@@ -156,60 +157,57 @@ function createProxy(
 
     // If the list is fabric-scoped, wrap read and write to map indices
     if (config.fabricScoped) {
-        let readMap: undefined | number[];
-        let writeMap: undefined | number[];
-
-        function mapRead(index: number) {
-            if (readMap && reference.original === reference.value) {
-                return readMap[index];
+        function mapScopedToActual(index: number, reading: boolean) {
+            if (index < 0) {
+                throw new (reading ? ReadError : WriteError)(config.schema, `Negative index ${index} unsupported`);
             }
 
-            readMap = [];
+            let nextPos = 0;
             for (let i = 0; i < reference.value.length; i++) {
-                const entry = reference.value[i];
-
+                // Skip invalid data
+                const entry = reference.value[i] as undefined | { fabricIndex?: number };
                 if (typeof entry !== "object") {
-                    readMap.push(i);
                     continue;
                 }
 
-                const fabricIndex = (entry as Val.Struct).fabricIndex;
-                if (!fabricIndex || fabricIndex === session.associatedFabric) {
-                    readMap.push(i);
+                // If there's no fabric index or it's a match, consider "in scope"
+                if (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric) {
+                    if (nextPos === index) {
+                        // Found our target
+                        return i;
+                    }
+
+                    // Next target will be the one
+                    nextPos++;
                 }
             }
 
-            return readMap[index];
-        }
-
-        function mapWrite(index: number) {
-            if (writeMap && reference.original === reference.value) {
-                return writeMap[index];
+            if (reading) {
+                throw new ReadError(config.schema, `Index ${index} extends beyond available entries`);
             }
 
-            writeMap = [];
-            for (let i = 0; i < reference.value.length; i++) {
-                writeMap[mapRead(i)] = i;
-            }
-
-            if (index > writeMap.length) {
-                if (index !== writeMap.length + 1) {
-                    throw new WriteError(config.schema, `Index ${index} would leave gaps in fabric-filtered list`);
-                }
+            if (nextPos === index) {
+                // Adding to end of list
                 return reference.value.length;
             }
 
-            return writeMap[index];
+            throw new WriteError(config.schema, `Index ${index} would leave gaps in fabric-filtered list`);
         }
 
         if (session.fabricFiltered || config.fabricSensitive) {
             const nextReadEntry = readEntry;
 
-            readEntry = (index: number) => nextReadEntry(mapRead(index));
+            readEntry = (index: number) => nextReadEntry(mapScopedToActual(index, true));
         }
 
         const nextWriteEntry = writeEntry;
-        writeEntry = (index: number, value: Val) => nextWriteEntry(mapWrite(index), value);
+        writeEntry = (index: number, value: Val) => {
+            if (typeof value !== "object") {
+                throw new WriteError(config.schema, `Fabric scoped list value is not an object`, StatusCode.Failure);
+            }
+            (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
+            nextWriteEntry(mapScopedToActual(index, false), value);
+        }
     }
 
     return new Proxy([], {
