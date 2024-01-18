@@ -33,7 +33,10 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
     return (list, session, context) => {
         // Sanity check
         if (!Array.isArray(list.value)) {
-            throw new SchemaImplementationError(schema, `Cannot manage ${typeof list.value} because it is not an array`);
+            throw new SchemaImplementationError(
+                schema,
+                `Cannot manage ${typeof list.value} because it is not an array`,
+            );
         }
 
         return createProxy(config, list as Val.Reference<Val.List>, session, context);
@@ -218,7 +221,6 @@ function createProxy(
             const nextReadEntry = readEntry;
 
             hasEntry = (index: number) => {
-                console.log("hasEntry-fs");
                 try {
                     return nextReadEntry(mapScopedToActual(index, true)) !== undefined;
                 } catch (e) {
@@ -226,26 +228,28 @@ function createProxy(
                 }
             };
             readEntry = (index: number) => {
-                console.log("readEntry-fs");
                 return nextReadEntry(mapScopedToActual(index, true));
             };
 
             const nextWriteEntry = writeEntry;
             writeEntry = (index: number, value: Val) => {
-                console.log("writeEntry-fs");
-                if (typeof value !== "object") {
-                    throw new WriteError(
-                        config.schema,
-                        `Fabric scoped list value is not an object`,
-                        StatusCode.Failure,
-                    );
+                if (value === undefined) {
+                    const valueIndex = mapScopedToActual(index, false);
+                    reference.value.splice(valueIndex, 1);
+                } else {
+                    if (typeof value !== "object") {
+                        throw new WriteError(
+                            config.schema,
+                            `Fabric scoped list value is not an object`,
+                            StatusCode.Failure,
+                        );
+                    }
+                    (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
+                    nextWriteEntry(mapScopedToActual(index, false), value);
                 }
-                (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
-                nextWriteEntry(mapScopedToActual(index, false), value);
             };
 
             getListLength = () => {
-                console.log("getListLength-fs");
                 let length = 0;
                 for (let i = 0; i < reference.value.length; i++) {
                     const entry = reference.value[i] as undefined | { fabricIndex?: number };
@@ -259,7 +263,6 @@ function createProxy(
                 return length;
             };
             setListLength = (length: number) => {
-                console.log("setListLength-fs");
                 const formerLength = getListLength();
 
                 reference.change(() => {
@@ -269,7 +272,7 @@ function createProxy(
                             typeof entry === "object" &&
                             (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric)
                         ) {
-                            reference.value.splice(i, 1);
+                            reference.value.splice(mapScopedToActual(i, false), 1);
                         } else {
                             throw new WriteError(
                                 config.schema,
