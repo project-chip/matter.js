@@ -85,6 +85,19 @@ function createProxy(
 ) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
+    let getListLength = () => reference.value.length;
+    let setListLength = (length: number) => {
+        if (length > 65535) {
+            throw new WriteError(config.schema, `Index ${length} is greater than allowed maximum of 65535`);
+        }
+
+        reference.change(() => (reference.value.length = length));
+
+        if (!session.transaction) {
+            reference.notify();
+        }
+    };
+    let hasEntry = (index: number) => reference.value[index] !== undefined;
     // Create the base entry reader.  The reader is different for containers vs. primitive values
     let readEntry: (index: number) => Val;
     if (config.manageEntries) {
@@ -197,16 +210,73 @@ function createProxy(
         if (session.fabricFiltered || config.fabricSensitive) {
             const nextReadEntry = readEntry;
 
-            readEntry = (index: number) => nextReadEntry(mapScopedToActual(index, true));
-        }
+            hasEntry = (index: number) => {
+                console.log("hasEntry-fs");
+                try {
+                    return nextReadEntry(mapScopedToActual(index, true)) !== undefined;
+                } catch (e) {
+                    return false;
+                }
+            };
+            readEntry = (index: number) => {
+                console.log("readEntry-fs");
+                return nextReadEntry(mapScopedToActual(index, true));
+            };
 
-        const nextWriteEntry = writeEntry;
-        writeEntry = (index: number, value: Val) => {
-            if (typeof value !== "object") {
-                throw new WriteError(config.schema, `Fabric scoped list value is not an object`, StatusCode.Failure);
-            }
-            (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
-            nextWriteEntry(mapScopedToActual(index, false), value);
+            const nextWriteEntry = writeEntry;
+            writeEntry = (index: number, value: Val) => {
+                console.log("writeEntry-fs");
+                if (typeof value !== "object") {
+                    throw new WriteError(
+                        config.schema,
+                        `Fabric scoped list value is not an object`,
+                        StatusCode.Failure,
+                    );
+                }
+                (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
+                nextWriteEntry(mapScopedToActual(index, false), value);
+            };
+
+            getListLength = () => {
+                console.log("getListLength-fs");
+                let length = 0;
+                for (let i = 0; i < reference.value.length; i++) {
+                    const entry = reference.value[i] as undefined | { fabricIndex?: number };
+                    if (
+                        typeof entry === "object" &&
+                        (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric)
+                    ) {
+                        length++;
+                    }
+                }
+                return length;
+            };
+            setListLength = (length: number) => {
+                console.log("setListLength-fs");
+                const formerLength = getListLength();
+
+                reference.change(() => {
+                    for (let i = length; i < formerLength; i++) {
+                        const entry = reference.value[i] as undefined | { fabricIndex?: number };
+                        if (
+                            typeof entry === "object" &&
+                            (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric)
+                        ) {
+                            reference.value.splice(i, 1);
+                        } else {
+                            throw new WriteError(
+                                config.schema,
+                                `Fabric scoped list value is not an object`,
+                                StatusCode.Failure,
+                            );
+                        }
+                    }
+                });
+
+                if (!session.transaction) {
+                    reference.notify();
+                }
+            };
         }
     }
 
@@ -214,6 +284,8 @@ function createProxy(
         get(_target, property, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
                 return readEntry(Number.parseInt(property));
+            } else if (property === "length") {
+                return getListLength();
             }
 
             return Reflect.get(reference.value, property, receiver);
@@ -225,9 +297,29 @@ function createProxy(
                 validateEntry(newValue, session);
                 writeEntry(Number.parseInt(property), newValue);
                 return true;
+            } else if (property === "length") {
+                setListLength(newValue);
+                return true;
             }
 
             return Reflect.set(reference.value, property, newValue, receiver);
+        },
+
+        has(_target, property) {
+            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+                return hasEntry(Number.parseInt(property));
+            }
+
+            return Reflect.has(reference.value, property);
+        },
+
+        deleteProperty: (_target, property) => {
+            if (typeof property === "string" && property.match(/^[0-9]+/)) {
+                writeEntry(Number.parseInt(property), undefined);
+                return true;
+            }
+
+            return Reflect.deleteProperty(reference.value, property);
         },
     });
 }
