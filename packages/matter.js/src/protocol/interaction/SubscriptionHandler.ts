@@ -7,6 +7,7 @@
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
+import { Message } from "../../codec/MessageCodec.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
@@ -379,7 +380,9 @@ export class SubscriptionHandler {
         if (this.outstandingAttributeUpdates.size > 0 || this.outstandingEventUpdates.size > 0) {
             void this.sendUpdate();
         }
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+            this.prepareDataUpdate(),
+        ).start();
     }
 
     /**
@@ -401,14 +404,18 @@ export class SubscriptionHandler {
         const timeSinceLastUpdateMs = now - this.lastUpdateTimeMs;
         if (timeSinceLastUpdateMs < this.minIntervalFloorMs) {
             // Respect minimum delay time between updates
-            this.updateTimer = Time.getTimer("Subscription update", this.minIntervalFloorMs - timeSinceLastUpdateMs, () =>
-                this.prepareDataUpdate(),
+            this.updateTimer = Time.getTimer(
+                "Subscription update",
+                this.minIntervalFloorMs - timeSinceLastUpdateMs,
+                () => this.prepareDataUpdate(),
             ).start();
             return;
         }
 
         this.sendDelayTimer.start();
-        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () => this.prepareDataUpdate()).start();
+        this.updateTimer = Time.getTimer("Subscription update", this.sendInterval, () =>
+            this.prepareDataUpdate(),
+        ).start();
     }
 
     /**
@@ -458,7 +465,7 @@ export class SubscriptionHandler {
         }
     }
 
-    async sendInitialReport(messenger: InteractionServerMessenger) {
+    async sendInitialReport(messenger: InteractionServerMessenger, message: Message) {
         this.updateTimer.stop();
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
@@ -469,7 +476,7 @@ export class SubscriptionHandler {
 
         const attributes = newAttributes.flatMap(({ path, attribute }) => {
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered);
+            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered, message);
             if (value === undefined) return [];
 
             const { nodeId, endpointId, clusterId } = path;
