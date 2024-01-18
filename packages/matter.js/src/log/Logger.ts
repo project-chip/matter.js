@@ -133,6 +133,9 @@ export class Logger {
             if (value instanceof ByteArray) {
                 return value.toHex();
             }
+            if (value === undefined) {
+                return "undefined";
+            }
             return value;
         });
     }
