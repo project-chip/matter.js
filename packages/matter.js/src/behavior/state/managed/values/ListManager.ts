@@ -129,7 +129,14 @@ function createProxy(
                     () => true,
 
                     // Provide a clone function if we have a transaction. Otherwise we write directly to the field
-                    session.transaction ? val => [...(val as Val.List)] : undefined,
+                    session.transaction
+                        ? val =>
+                              Array.isArray(val)
+                                  ? [...(val as Val.List)]
+                                  : typeof val === "object" && val !== null
+                                    ? { ...val }
+                                    : val
+                        : undefined,
                 );
 
                 subref.owner = manageEntry(subref, session, context);
