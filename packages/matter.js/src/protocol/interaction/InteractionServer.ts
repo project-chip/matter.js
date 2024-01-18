@@ -152,7 +152,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         await new InteractionServerMessenger(exchange).handleRequest(
             (readRequest, message) => this.handleReadRequest(exchange, readRequest, message),
             (writeRequest, message) => this.handleWriteRequest(exchange, writeRequest, message),
-            (subscribeRequest, messenger) => this.handleSubscribeRequest(exchange, subscribeRequest, messenger),
+            (subscribeRequest, messenger, message) =>
+                this.handleSubscribeRequest(exchange, subscribeRequest, messenger, message),
             (invokeRequest, message) => this.handleInvokeRequest(exchange, invokeRequest, message),
             timedRequest => this.handleTimedRequest(exchange, timedRequest),
         );
@@ -218,11 +219,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                     // was a concrete path
                     tryCatch(
                         () => {
-                            this.#endpointStructure.validateConcreteAttributePath(
-                                endpointId,
-                                clusterId,
-                                attributeId,
-                            );
+                            this.#endpointStructure.validateConcreteAttributePath(endpointId, clusterId, attributeId);
                             throw new InternalError(
                                 "validateConcreteAttributePath should throw StatusResponseError but did not.",
                             );
@@ -236,17 +233,20 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                     error.code
                                 }`,
                             );
-                            attributeReportsPayload.push(
-                                { attributeStatus: { path, status: { status: error.code } } }
-                            );
+                            attributeReportsPayload.push({ attributeStatus: { path, status: { status: error.code } } });
                         },
-                    );                
+                    );
                 }
                 continue;
             }
 
             for (const { path, attribute } of attributes) {
-                const { value, version } = await this.readAttribute(attribute, exchange.session, isFabricFiltered, message);
+                const { value, version } = await this.readAttribute(
+                    attribute,
+                    exchange.session,
+                    isFabricFiltered,
+                    message,
+                );
                 const { nodeId, endpointId, clusterId } = path;
 
                 const versionFilterValue =
@@ -423,14 +423,14 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             if (path.clusterId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard cluster ID",
-                    StatusCode.InvalidAction
+                    StatusCode.InvalidAction,
                 );
             }
 
             if (path.attributeId === undefined) {
                 throw new StatusResponseError(
                     "Illegal write request with wildcard attribute ID",
-                    StatusCode.InvalidAction
+                    StatusCode.InvalidAction,
                 );
             }
 
@@ -509,7 +509,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
                 if (dataVersion !== undefined) {
                     const datasource = this.#endpointStructure.getClusterServer(endpointId, clusterId)?.datasource;
-                    
+
                     if (datasource !== undefined && dataVersion !== datasource.version) {
                         logger.debug(
                             `This write requires a specific data version (${dataVersion}) which do not match the current cluster data version (${datasource.version}).`,
@@ -645,6 +645,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             interactionModelRevision,
         }: SubscribeRequest,
         messenger: InteractionServerMessenger,
+        message: Message,
     ): Promise<void> {
         logger.debug(
             `Received subscribe request from ${exchange.channel.name} (keepSubscriptions=${keepSubscriptions}, isFabricFiltered=${isFabricFiltered})`,
@@ -739,7 +740,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger);
+            await subscriptionHandler.sendInitialReport(messenger, message);
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,
