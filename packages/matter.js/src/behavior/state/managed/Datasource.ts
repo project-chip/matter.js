@@ -16,7 +16,7 @@ import { Transaction } from "../transaction/Transaction.js";
 import type { ValidationContext } from "../validation/context.js";
 import type { Val } from "./Val.js";
 
-const VERSION_KEY = "__VERSION__";
+const VERSION_KEY = "__version__";
 
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
@@ -196,17 +196,20 @@ function configure(options: Datasource.Options): Internals {
         values[key] = initialValues[key];
     }
 
+    let dirty;
     let version: number;
     if (typeof initialValues[VERSION_KEY] === "number") {
         version = initialValues[VERSION_KEY] % 0xffff_ffff;
     } else {
         version = options.version ?? Crypto.getRandomUInt32();
+        dirty = { [VERSION_KEY]: version };
     }
 
     return {
         ...options,
         version,
         values: values,
+        dirty,
     };
 }
 
@@ -298,15 +301,19 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                 return;
             }
 
+            // State is now dirty
+            if (!internals.dirty) {
+                internals.dirty = {};
+            }
+
             // Persistent values become dirty
             if (persistentFields.has(index)) {
-                if (!internals.dirty) {
-                    internals.dirty = {};
-                }
                 internals.dirty[index] = newValue;
             }
 
+            // Increment version.  Need to store it as dirty as well
             incrementVersion();
+            internals.dirty[VERSION_KEY] = internals.version;
 
             refreshSubrefs();
 
