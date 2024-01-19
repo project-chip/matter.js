@@ -86,8 +86,8 @@ describe("ClusterBehavior", () => {
             ({}) as Match<MyBehavior, { optCmd: (...args: any[]) => any }> satisfies true;
         });
 
-        it("instance exposes values for enabled cluster elements", () => {
-            const behavior = MockPart.createBehavior(MyBehavior);
+        it("instance exposes values for enabled cluster elements", async () => {
+            const behavior = await MockPart.createBehavior(MyBehavior);
 
             expect(behavior.state.reqAttr).equals("hello");
             // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -96,8 +96,8 @@ describe("ClusterBehavior", () => {
             expect(behavior.events.reqEv.constructor.name).equals("Emitter");
         });
 
-        it("instance does not expose values for disabled cluster elements", () => {
-            const behavior = MockPart.createBehavior(MyBehavior);
+        it("instance does not expose values for disabled cluster elements", async () => {
+            const behavior = await MockPart.createBehavior(MyBehavior);
 
             expect((behavior.state as any).optAttr).undefined;
             expect((behavior.events as any).optAttr$Change).undefined;

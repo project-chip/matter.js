@@ -167,7 +167,7 @@ export class Behaviors {
         const behavior = this.createMaybeAsync(type, agent);
         if (MaybePromise.is(behavior)) {
             throw new ImplementationError(
-                `Synchronous access to ${this.#part}${type.id} is impossible because it is still initializing`
+                `Synchronous access to ${this.#part}.${type.id} is impossible because it is still initializing`
             );
         }
         return behavior;

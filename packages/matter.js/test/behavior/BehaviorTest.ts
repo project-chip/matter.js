@@ -34,16 +34,16 @@ namespace TestBehavior {
 describe("Behavior", () => {
     type IsObject<T> = T extends undefined ? false : T extends object ? true : false;
 
-    it("instantiates with correct properties", () => {
-        const behavior = MockPart.createBehavior(TestBehavior);
+    it("instantiates with correct properties", async () => {
+        const behavior = await MockPart.createBehavior(TestBehavior);
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
         expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
     });
 
-    it("unifies state", () => {
-        const behavior = MockPart.createBehavior(TestBehavior);
+    it("unifies state", async () => {
+        const behavior = await MockPart.createBehavior(TestBehavior);
         const state = behavior.state;
 
         ({}) as IsObject<typeof state> satisfies true;
@@ -52,12 +52,12 @@ describe("Behavior", () => {
         expect(state.valueTwo).equals(2);
     });
 
-    it("set creates new type with proper ID and defaults", () => {
+    it("set creates new type with proper ID and defaults", async () => {
         const NewBehavior = TestBehavior.set({ valueOne: 3 });
         TestBehavior.id satisfies "test";
         NewBehavior.id satisfies "test";
 
-        const behavior = MockPart.createBehavior(NewBehavior);
+        const behavior = await MockPart.createBehavior(NewBehavior);
         const state = behavior.state;
 
         ({}) as IsObject<typeof state> satisfies true;

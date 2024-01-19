@@ -39,6 +39,11 @@ export class ClusterBehavior extends Behavior {
     #cluster: ClusterType;
 
     /**
+     * The ID of ClusterBehavior implementations is the uncapitalized cluster name.
+     */
+    static override id: Uncapitalize<string>;
+
+    /**
      * TODO - this disables lazy loading of behaviors.  This is desirable for small-scale nodes but for large nodes lazy
      * init may be useful.  However this requires refactor of InteractionEndpointStructure which eagerly caches the
      * entire node structure.  Refactoring there is desirable anyway so maintenance of that cache is less expensive;
@@ -47,9 +52,9 @@ export class ClusterBehavior extends Behavior {
     static override readonly immediate = true;
 
     /**
-     * The ID of ClusterBehavior implementations is the uncapitalized cluster name.
+     * Cluster data must be versioned.
      */
-    static override id: Uncapitalize<string>;
+    static override readonly versioning = true;
 
     /**
      * The cluster implemented by this behavior.
@@ -191,21 +196,15 @@ export namespace ClusterBehavior {
         readonly cluster: C;
 
         readonly Events: ClusterEvents.Type<C, B>;
-
         readonly State: new () => ClusterState.Type<C, B>;
-
         readonly InternalState: B["InternalState"];
-
         readonly Interface: I;
 
-        readonly defaults: ClusterState.Type<C, B>;
-
-        readonly supervisor: RootSupervisor;
-
-        readonly immediate?: boolean;
-        
         readonly schema?: Schema;
-
+        readonly immediate: boolean;
+        readonly versioning: boolean;
+        readonly defaults: ClusterState.Type<C, B>;
+        readonly supervisor: RootSupervisor;
         supports: typeof ClusterBehavior.supports;
 
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts

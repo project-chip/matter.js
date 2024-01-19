@@ -40,6 +40,8 @@ export class CommissioningBehavior extends Behavior {
 
     declare state: CommissioningBehavior.State;
 
+    static override immediate = true;
+
     override initialize() {
         if (this.state.passcode === undefined) {
             this.state.passcode = PaseClient.generateRandomPasscode();

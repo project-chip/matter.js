@@ -81,7 +81,7 @@ export class Agent {
      * {@link Behavior.Type} isn't supported.  Waits if the behavior is not yet
      * initialized.
      */
-    waitFor<T extends Behavior.Type>(type: T): MaybePromise<InstanceType<T>> {
+    load<T extends Behavior.Type>(type: T): MaybePromise<InstanceType<T>> {
         const behavior = this.#behaviors[type.id];
         if (behavior) {
             return behavior as InstanceType<T>;
@@ -93,7 +93,7 @@ export class Agent {
     /**
      * Trigger initialization of a supported {@link Behavior.Type}.
      * 
-     * Functionally identical to {@link waitFor} but has no return value.
+     * Functionally identical to {@link load} but has no return value.
      */
     activate(type: Behavior.Type) {
         this.#part.behaviors.activate(type);
