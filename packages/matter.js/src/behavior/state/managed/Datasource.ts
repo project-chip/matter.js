@@ -141,6 +141,12 @@ export namespace Datasource {
         defaults?: Val.Struct;
 
         /**
+         * Enable versioning of data.  When enabled the Datasource maintains a version that increments for every state
+         * change.
+         */
+        versioning?: boolean;
+
+        /**
          * Optional storage for non-volatile values.
          */
         store?: Store;
@@ -198,7 +204,10 @@ function configure(options: Datasource.Options): Internals {
 
     let dirty;
     let version: number;
-    if (typeof initialValues[VERSION_KEY] === "number") {
+    if (!options.versioning) {
+        // We still version, we just don't persist
+        version = 1;
+    } else if (typeof initialValues[VERSION_KEY] === "number") {
         version = initialValues[VERSION_KEY] % 0xffff_ffff;
     } else {
         version = options.version ?? Crypto.getRandomUInt32();
@@ -301,19 +310,23 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                 return;
             }
 
-            // State is now dirty
-            if (!internals.dirty) {
-                internals.dirty = {};
-            }
-
             // Persistent values become dirty
             if (persistentFields.has(index)) {
+                if (!internals.dirty) {
+                    internals.dirty = {};
+                }
                 internals.dirty[index] = newValue;
             }
 
             // Increment version.  Need to store it as dirty as well
             incrementVersion();
-            internals.dirty[VERSION_KEY] = internals.version;
+
+            if (internals.versioning) {
+                if (!internals.dirty) {
+                    internals.dirty = {};
+                }
+                internals.dirty[VERSION_KEY] = internals.version;
+            }
 
             refreshSubrefs();
 
@@ -390,7 +403,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 
-            changes.persistent[VERSION_KEY] = internals.version;
+            if (internals.versioning) {
+                changes.persistent[VERSION_KEY] = internals.version;
+            }
         }
     }
 

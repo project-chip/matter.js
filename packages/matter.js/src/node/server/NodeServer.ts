@@ -178,7 +178,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         if (!this.commissioned) {
             try {
-                const commissioning = await agent.waitFor(CommissioningBehavior);
+                const commissioning = await agent.load(CommissioningBehavior);
                 commissioning.initiateCommissioning();
             } catch (e) {
                 if (e instanceof Error) {

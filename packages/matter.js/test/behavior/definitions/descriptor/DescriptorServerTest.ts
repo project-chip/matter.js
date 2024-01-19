@@ -13,15 +13,13 @@ import { MutableEndpoint } from "../../../../src/endpoint/type/MutableEndpoint.j
 import { MockPart } from "../../../endpoint/mock-part.js";
 import { MockEndpoint } from "../../mock-behavior.js";
 
-function createFamily() {
-    const parent = new MockPart({
+async function createFamily() {
+    const parent = await MockPart.create({
         type: MockEndpoint,
         number: 1,
     });
 
-    const child = new MockPart({ type: MockEndpoint, number: 2, owner: undefined });
-
-    parent.parts.add(child);
+    const child = await MockPart.create({ type: MockEndpoint, number: 2, owner: parent.part });
 
     return { parent, child };
 }
@@ -44,8 +42,8 @@ describe("DescriptorServer", () => {
         };
     });
 
-    it("adds device type automatically if necessary", () => {
-        const device = new MockPart(MockEndpoint).agent;
+    it("adds device type automatically if necessary", async () => {
+        const device = await MockPart.create(MockEndpoint);
         expect(device.descriptor.state.deviceTypeList).deep.equals([
             {
                 deviceType: 1,
@@ -54,12 +52,12 @@ describe("DescriptorServer", () => {
         ]);
     });
 
-    it("does not add device type automatically if unnecessary", () => {
+    it("does not add device type automatically if unnecessary", async () => {
         const Device2Endpoint = MockEndpoint.set({
             descriptor: { deviceTypeList: [{ deviceType: 2, revision: 2 }] },
         });
 
-        const device = new MockPart(Device2Endpoint).agent;
+        const device = await MockPart.create(Device2Endpoint);
         expect(device.descriptor.state.deviceTypeList).deep.equals([
             {
                 deviceType: 2,
@@ -68,28 +66,28 @@ describe("DescriptorServer", () => {
         ]);
     });
 
-    it("adds servers automatically", () => {
-        const device = new MockPart(MockEndpoint).agent;
+    it("adds servers automatically", async () => {
+        const device = await MockPart.create(MockEndpoint);
 
         device.require(OnOffServer);
 
         expect(device.descriptor.state.serverList).deep.equals([29, 6]);
     });
 
-    it("adds parts automatically", () => {
-        const { parent } = createFamily();
+    it("adds parts automatically", async () => {
+        const { parent } = await createFamily();
 
-        const partsList = parent.agent.descriptor.state.partsList;
+        const partsList = parent.descriptor.state.partsList;
         expect(partsList).deep.equals([2]);
     });
 
     it("removes parts automatically", async () => {
-        const { parent, child } = createFamily();
+        const { parent, child } = await createFamily();
 
-        const partsState = parent.agent.descriptor.state;
+        const partsState = parent.descriptor.state;
         expect(partsState.partsList).deep.equals([2]);
 
-        await child.destroy();
+        await child.part.destroy();
         expect(partsState.partsList).deep.equals([]);
     });
 });

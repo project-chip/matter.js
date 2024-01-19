@@ -10,7 +10,7 @@ import { MockPart } from "../mock-part.js";
 import { MockEndpoint } from "../../behavior/mock-behavior.js";
 
 function createParent() {
-    return new MockPart(MockEndpoint, { number: 1 }).agent;
+    return new MockPart(MockEndpoint, { number: 1 });
 }
 
 function createParentAndChild() {
@@ -22,23 +22,26 @@ function createChild() {
 }
 
 describe("Parts", () => {
-    it("adopts parts", () => {
+    it("adopts parts", async () => {
         const parent = createParent();
+        await parent.construction;
         const child = createChild();
 
-        const parts = parent.part.parts;
+        const parts = parent.parts;
         parts.add(child);
+        await child.construction;
 
         expect(parts.size).equals(1);
-        expect(child.owner).equals(parent.part);
+        expect(child.owner).equals(parent);
     });
 
     it("disowns destroyed parts", async () => {
         const parent = createParent();
         const child = createChild();
 
-        const parts = parent.part.parts;
+        const parts = parent.parts;
         parts.add(child);
+        await child.construction;
 
         expect(parts.size).equals(1);
 
@@ -47,20 +50,24 @@ describe("Parts", () => {
         expect(parts.size).equals(0);
     });
 
-    it("bubbles initialization", () => {
+    it("bubbles initialization", async () => {
         const parent = createParent();
+        await parent.construction;
+
         const child = createParentAndChild();
         const grandchild = createChild();
 
-        parent.part.parts.add(child);
+        parent.parts.add(child);
+        await child.construction;
 
         let bubbled = Array<PartLifecycle.Change>();
-        parent.part.lifecycle.changed.on((type, part) => {
+        parent.lifecycle.changed.on((type, part) => {
             expect(part).equals(grandchild);
             bubbled.push(type);
         });
 
         child.parts.add(grandchild);
+        await grandchild.construction;
 
         expect(bubbled).deep.equals([
             PartLifecycle.Change.Installed,
@@ -70,14 +77,19 @@ describe("Parts", () => {
 
     it("bubbles destruction", async () => {
         const parent = createParent();
+        await parent.construction;
+
         const child = createParentAndChild();
         const grandchild = createChild();
 
-        parent.part.parts.add(child);
+        parent.parts.add(child);
+        await child.construction;
+
         child.parts.add(grandchild);
+        await grandchild.construction;
 
         let bubbled: Part | undefined;
-        parent.part.lifecycle.changed.on((type, part) => {
+        parent.lifecycle.changed.on((type, part) => {
             expect(type).equals(PartLifecycle.Change.Destroyed);
             (bubbled = part)
         });

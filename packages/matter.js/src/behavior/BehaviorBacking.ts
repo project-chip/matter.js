@@ -144,6 +144,7 @@ export abstract class BehaviorBacking {
                 events: this.events as unknown as Datasource.Events,
                 defaults: this.part.behaviors.defaultsFor(this.type),
                 store: this.store,
+                versioning: this.type.versioning,
             });
         }
 

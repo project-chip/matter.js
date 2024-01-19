@@ -156,7 +156,7 @@ describe("Datasource", () => {
 
     it("commits version after initial load (no transaction)", async () => {
         const store = createStore({ __version__: undefined });
-        const ds = createDatasource({ store });
+        const ds = createDatasource({ store, versioning: true });
 
         const tx = new Transaction("test");
         ds.save(tx);
@@ -169,7 +169,7 @@ describe("Datasource", () => {
 
     it("commits changes after initial load (no transaction)", async () => {
         const store = createStore();
-        const ds = createDatasource({ store, supervisor: persistentSupervisor });
+        const ds = createDatasource({ store, versioning: true, supervisor: persistentSupervisor });
 
         ds.reference(AccessControl.OfflineSession).foo = "rab";
 
@@ -202,7 +202,7 @@ describe("Datasource", () => {
 
     it("commits persistent changes with transaction", async () => {
         const store = createStore({ __version__: 1 });
-        const ds = createDatasource({ store, supervisor: persistentSupervisor });
+        const ds = createDatasource({ store, versioning: true, supervisor: persistentSupervisor });
         const tx = new Transaction("test");
 
         ds.reference({ accessLevel: AccessLevel.Administer, transaction: tx }).foo = "rab";

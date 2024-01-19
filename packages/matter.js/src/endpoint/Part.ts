@@ -131,7 +131,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
 
         if (options?.owner) {
-            this.owner = options.owner;
+            this.owner = options.owner instanceof Agent ? options.owner.part : options.owner;
         }
 
         if (options?.parts) {
@@ -388,7 +388,7 @@ export namespace Part {
      */
     export type Options<T extends EndpointType = EndpointType.Empty> = 
         & {
-            owner?: PartOwner;
+            owner?: PartOwner | Agent;
             id?: string;
             number?: number;
             config?: BehaviorConfigurations<T>;
