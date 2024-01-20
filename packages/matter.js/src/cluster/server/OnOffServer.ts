@@ -8,7 +8,7 @@ import { NotImplementedError } from "../../common/MatterError.js";
 import { WrapCommandHandler } from "../../device/Device.js";
 import { Time, Timer } from "../../time/Time.js";
 import { NamedHandler } from "../../util/NamedHandler.js";
-import { OnOff, OnOffCluster } from "../definitions/OnOffCluster.js";
+import { OnOff } from "../definitions/OnOffCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServer } from "./ClusterServer.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "./ClusterServerTypes.js";
@@ -47,6 +47,18 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
     };
 
     return {
+        initializeClusterServer: ({ attributes: { onOff, startUpOnOff } }) => {
+            const startUpOnOffValue = startUpOnOff?.getLocal() ?? null;
+            if (startUpOnOffValue !== null) {
+                const targetOnOffValue =
+                    startUpOnOffValue === OnOff.StartUpOnOff.Toggle
+                        ? !onOff.getLocal()
+                        : startUpOnOffValue === OnOff.StartUpOnOff.On;
+                if (targetOnOffValue !== onOff.getLocal()) {
+                    onOff.setLocal(targetOnOffValue);
+                }
+            }
+        },
         on: async ({ attributes: { onOff } }) => {
             onOff.setLocal(true);
         },
@@ -97,12 +109,19 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
 
 export const createDefaultOnOffClusterServer = (
     commandHandler?: NamedHandler<any>,
-    attributeInitialValues?: AttributeInitialValues<typeof OnOff.Cluster.attributes>,
-) =>
-    ClusterServer(
-        OnOffCluster,
+    attributeInitialValues?: AttributeInitialValues<typeof OnOff.Complete.attributes>,
+    isLighting = false,
+) => {
+    const cluster = isLighting ? OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting) : OnOff.Cluster;
+    return ClusterServer(
+        cluster,
         attributeInitialValues ?? {
             onOff: false,
+            globalSceneControl: isLighting ? false : undefined,
+            onTime: isLighting ? null : undefined,
+            offWaitTime: isLighting ? null : undefined,
+            startUpOnOff: isLighting ? null : undefined,
         },
         WrapCommandHandler(OnOffClusterDefaultHandler(), commandHandler),
     );
+};
