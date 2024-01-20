@@ -8,7 +8,7 @@ import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervi
 import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
 import { Properties } from "../../../../src/util/Type.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
-import { AccessLevel } from "../../../../src/cluster/Cluster.js";
+import { OfflineContext } from "../../../../src/behavior/server/context/OfflineContext.js";
 
 export function Fields(...definition: { name?: string; type?: string; conformance?: string }[]): Fields {
     return definition.map(
@@ -70,7 +70,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
 
     // Perform validation
     try {
-        manager.validate(record ?? {}, { accessLevel: AccessLevel.View });
+        manager.validate(record ?? {}, OfflineContext());
         expect(error).undefined;
     } catch (e) {
         if (!error || (e as any).constructor.name === "AssertionError") {

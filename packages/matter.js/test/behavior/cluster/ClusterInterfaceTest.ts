@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../../src/behavior/ActionContext.js";
+import { ActionContext } from "../../../src/behavior/server/context/ActionContext.js";
 import { ClusterInterface } from "../../../src/behavior/cluster/ClusterInterface.js";
 import { ClusterType } from "../../../src/cluster/ClusterType.js";
 import { BitFlag } from "../../../src/schema/BitmapSchema.js";

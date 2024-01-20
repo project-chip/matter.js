@@ -5,11 +5,12 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { ActionContext } from "../behavior/ActionContext.js";
+import { ActionContext } from "../behavior/server/context/ActionContext.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Part } from "./Part.js";
 import type { SupportedBehaviors } from "./part/SupportedBehaviors.js";
+import { EndpointType } from "./type/EndpointType.js";
 
 /**
  * An Agent offers interaction with a single endpoint.  This is the operational
@@ -109,7 +110,7 @@ export class Agent {
     /**
      * Create a new {@link Agent} that supports the specified behaviors.
      */
-    static for<B extends SupportedBehaviors>(name: string, behaviors: SupportedBehaviors) {
+    static for<T extends EndpointType>(type: EndpointType, behaviors: SupportedBehaviors) {
         const props = {} as PropertyDescriptorMap;
         Object.values(behaviors).forEach(behavior => {
             props[behavior.id] = {
@@ -122,10 +123,10 @@ export class Agent {
         });
 
         return GeneratedClass({
-            name: `${name}Agent`,
+            name: `${type.name}Agent`,
             base: Agent,
             instanceDescriptors: props,
-        }) as Agent.Type<B>;
+        }) as Agent.Type<T>;
     }
 }
 
@@ -139,11 +140,11 @@ export namespace Agent {
      * {@link Agent.require} to acquire behaviors added via
      * {@link Agent.require}.
      */
-    export interface Type<B extends SupportedBehaviors = {}> {
-        new (part: Part, context: ActionContext): Instance<B>;
+    export interface Type<T extends EndpointType = EndpointType.Empty> {
+        new (part: Part, context: ActionContext): Instance<T>;
     }
 
-    export type Instance<B extends SupportedBehaviors = {}> = Agent & {
-        readonly [K in keyof B & string]: InstanceType<B[K]>;
+    export type Instance<T extends EndpointType = EndpointType.Empty> = Agent & {
+        readonly [K in keyof T["behaviors"] & string]: InstanceType<T["behaviors"][K]>;
     };
 }

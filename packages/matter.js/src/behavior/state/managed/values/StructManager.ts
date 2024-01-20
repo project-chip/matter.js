@@ -20,7 +20,7 @@ import { PrimitiveManager } from "./PrimitiveManager.js";
 
 const REF = Symbol("value");
 const SESSION = Symbol("options");
-const CONTEXT = Symbol("context");
+const LOCATION = Symbol("location");
 const AUTHORIZE_READ = Symbol("authorize-read");
 
 /**
@@ -63,7 +63,7 @@ export function StructManager(
             this: Wrapper,
             ref: Val.Reference,
             session: ValueSupervisor.Session,
-            context?: AccessControl.Context,
+            location: AccessControl.Location,
         ) {
             // Only objects are acceptable
             if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
@@ -73,7 +73,7 @@ export function StructManager(
             // If we have a fabric index, update the context
             if (hasFabricIndex) {
                 const owningFabric = (ref as Val.Reference<Val.Struct>).value.fabricIndex as FabricIndex | undefined;
-                context = { ...context, owningFabric };
+                location = { ...location, owningFabric };
             }
 
             Object.defineProperties(this, {
@@ -83,8 +83,8 @@ export function StructManager(
                 [SESSION]: {
                     value: session,
                 },
-                [CONTEXT]: {
-                    value: context,
+                [LOCATION]: {
+                    value: location,
                 },
             });
 
@@ -104,7 +104,7 @@ export function StructManager(
                         throw new ImplementationError(`Direct read of unknown property ${index}`);
                     }
 
-                    access.authorizeRead(this[SESSION], this[CONTEXT]);
+                    access.authorizeRead(this[SESSION], this[LOCATION]);
                 },
             },
         },
@@ -145,9 +145,9 @@ interface Wrapper extends Val.Struct {
     [SESSION]: ValueSupervisor.Session;
 
     /**
-     * Contextual information about the wrapped value.
+     * Information about the location of the wrapped value.
      */
-    [CONTEXT]?: AccessControl.Context;
+    [LOCATION]: AccessControl.Location;
 
     /**
      * Direct read authorization.
@@ -166,14 +166,14 @@ function configureProperty(
         enumerable: true,
 
         set(this: Wrapper, value: Val) {
-            access.authorizeWrite(this[SESSION], this[CONTEXT]);
+            access.authorizeWrite(this[SESSION], this[LOCATION]);
 
             const oldValue = this[REF].value[name];
 
             this[REF].change(() => {
                 const struct = this[REF].value;
 
-                // Change the value
+                // Identify the target.  Usually just "struct" except when struct supports Val.Dynamic
                 let target;
                 if ((struct as Val.Dynamic)[Val.properties]) {
                     const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
@@ -185,8 +185,10 @@ function configureProperty(
                 } else {
                     target = struct;
                 }
+
+                // Modify the value
                 target[name] = value;
-              
+
                 // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
                 // conformance may be violated temporarily as individual fields change.
                 //
@@ -203,10 +205,6 @@ function configureProperty(
 
                     throw e;
                 }
-
-                if (!this[SESSION].transaction) {
-                    this[REF].notify(name, oldValue, value);
-                }
             });
         },
     };
@@ -214,7 +212,7 @@ function configureProperty(
     if (manage === PrimitiveManager) {
         // For primitives we don't need a manager so just proxy reads directly
         descriptor.get = function (this: Wrapper) {
-            if (access.mayRead(this[SESSION], this[CONTEXT])) {
+            if (access.mayRead(this[SESSION], this[LOCATION])) {
                 const struct = this[REF].value as Val.Dynamic;
                 if (struct[Val.properties]) {
                     const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
@@ -258,7 +256,7 @@ function configureProperty(
             // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
             // visible.  For direct access to a property we should throw an error but that must be implemented at a
             // higher level because we cannot differentiate here
-            if (!access.mayRead(this[SESSION], this[CONTEXT])) {
+            if (!access.mayRead(this[SESSION], this[LOCATION])) {
                 return undefined;
             }
 
@@ -273,7 +271,7 @@ function configureProperty(
 
             const assertWriteOk = (value: Val) => {
                 // Note - this needs to mirror behavior in the setter above
-                access.authorizeWrite(this[SESSION], this[CONTEXT]);
+                access.authorizeWrite(this[SESSION], this[LOCATION]);
                 validate(value, this[SESSION], { siblings: this[REF].value });
             };
 
@@ -283,10 +281,10 @@ function configureProperty(
                 this[REF],
                 name,
                 assertWriteOk,
-                this[SESSION].transaction ? cloneContainer : undefined,
+                cloneContainer,
             );
 
-            ref.owner = manage(ref, this[SESSION], this[CONTEXT]);
+            ref.owner = manage(ref, this[SESSION], this[LOCATION]);
 
             return ref.owner;
         };

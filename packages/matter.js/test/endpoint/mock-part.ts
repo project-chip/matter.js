@@ -2,7 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
-import { MockContext, MockEndpoint } from "../behavior/mock-behavior.js";
+import { MockEndpoint } from "../behavior/mock-behavior.js";
 import { MockOwner } from "./mock-part-owner.js";
 
 export class MockBehavior1 extends Behavior {
@@ -47,9 +47,9 @@ export class MockPart<T extends EndpointType> extends Part<T> {
         super(definition, options);
     }
 
-    static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<Agent.Instance<T["behaviors"]>>;
+    static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<Agent.Instance<T>>;
 
-    static create<const T extends EndpointType>(type: T, options: Part.Options<T>): Promise<Agent.Instance<T["behaviors"]>>;
+    static create<const T extends EndpointType>(type: T, options: Part.Options<T>): Promise<Agent.Instance<T>>;
 
     static async create(definition: EndpointType | Part.Configuration<EndpointType>, options?: Part.Options) {
         const part = new MockPart(definition as any, options as any);
@@ -58,7 +58,7 @@ export class MockPart<T extends EndpointType> extends Part<T> {
     }
 
     static async createBehavior<T extends Behavior.Type>(type: T) {
-        const part = (await MockPart.create(MockEndpoint.with(type))).part.getAgent(new MockContext());
-        return part.get(type);
+        const agent = await MockPart.create(MockEndpoint.with(type));
+        return agent.get(type);
     }
 }

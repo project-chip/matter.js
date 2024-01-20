@@ -41,7 +41,7 @@ export function ManagedReference(
     parent: Val.Reference<Val.Collection>,
     index: string | number,
     assertWriteOk: (value: Val) => void,
-    clone?: (container: Val) => Val,
+    clone: (container: Val) => Val,
 ) {
     const original = (parent.value as Container)[index];
     let value = original;
@@ -92,13 +92,6 @@ export function ManagedReference(
         refresh() {
             replaceValue((parent.value as Container)[index]);
         },
-
-        notify() {
-            if (original === value) {
-                return;
-            }
-            parent.notify(typeof index === "string" ? index : undefined, original, value);
-        }
     };
 
     return reference;

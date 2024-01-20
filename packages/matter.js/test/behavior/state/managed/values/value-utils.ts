@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { OfflineContext } from "../../../../../src/behavior/server/context/OfflineContext.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
-import { AccessLevel } from "../../../../../src/cluster/Cluster.js";
+import { InternalError } from "../../../../../src/common/MatterError.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
 
 /**
@@ -57,10 +58,12 @@ export function listOf(entryType: string | Partial<FieldElement>, listType?: Par
 /**
  * A simplified source for managed structs, similar to Datasource but provides access to the raw underlying values.
  */
-export function TestStruct(fields: Record<string, string | Partial<FieldElement>>) {
+export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
     const supervisor = new RootSupervisor(new DatatypeModel(structOf(fields)));
 
-    const struct = {} as Val.Struct;
+    const struct = { ...defaults } as Val.Struct;
+
+    const notifies: { index: string | undefined, oldValue: Val, newValue: Val }[] = [];
 
     const rootRef: Val.Reference = {
         value: struct,
@@ -70,23 +73,35 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
             mutator();
         },
 
-        notify() {},
-
         refresh() {},
     }
 
     return {
         fields: struct,
+        notifies,
+
+        context: undefined as (undefined | ValueSupervisor.Session),
+
+        async commit() {
+            if (!this.context) {
+                throw new InternalError("Commit without context");
+            }
+            await this.context.transaction.commit();
+        },
 
         expect(expected: Val.Struct) {
             expect(struct).deep.equals(expected);
         },
 
-        reference(session?: Partial<ValueSupervisor.Session>) {
-            return supervisor.manage(
-                rootRef,
-                { accessLevel: AccessLevel.Administer, ...session }
-            ) as Val.Struct;
+        reference(context?: ValueSupervisor.Session) {
+            if (context === undefined) {
+                if (this.context === undefined) {
+                    context = this.context = OfflineContext();
+                } else {
+                    context = this.context;
+                }
+            }
+            return supervisor.manage(rootRef, context) as Val.Struct;
         }
     }
 }

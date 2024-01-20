@@ -5,7 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { AccessLevel, Attributes, Events } from "../../cluster/Cluster.js";
+import { Attributes, Events } from "../../cluster/Cluster.js";
 import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import {
@@ -25,7 +25,7 @@ import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
-import { ActionContext } from "../ActionContext.js";
+import { OfflineContext } from "./context/OfflineContext.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
@@ -33,7 +33,7 @@ import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { ServerActionContext } from "./ServerActionContext.js";
+import { OnlineContext } from "./context/OnlineContext.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 
 const logger = Logger.get("Behavior");
@@ -49,6 +49,10 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         return this.#clusterServer;
     }
 
+    override get type() {
+        return super.type as ClusterBehavior.Type;
+    }
+
     constructor(server: PartServer, type: ClusterBehavior.Type) {
         super(server.part, type);
         this.#server = server;
@@ -62,10 +66,15 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         );
     }
 
-    #createClusterServer() {
-        const type = this.type as ClusterBehavior.Type;
+    protected override get datasourceOptions() {
+        return {
+            ...super.datasourceOptions,
+            cluster: this.type.cluster.id,
+        }
+    }
 
-        const elements = new ValidatedElements(type);
+    #createClusterServer() {
+        const elements = new ValidatedElements(this.type);
         elements.report();
 
         // Install command handlers that map to implementation methods
@@ -91,13 +100,10 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         // can be cleaned up as we factor out legacy code but for now just pass our validated state and use
         // ClusterServer's TLV validation as backup
         const datasource = this.datasource;
-        const initialValues = datasource.reference({
-            accessLevel: AccessLevel.View,
-            offline: true,
-        });
+        const initialValues = datasource.reference(OfflineContext());
 
         // Create the cluster server
-        const clusterServer = ClusterServer(type.cluster, initialValues, handlers, supportedEvents);
+        const clusterServer = ClusterServer(this.type.cluster, initialValues, handlers, supportedEvents);
 
         // Assign the cluster server to the PartServer
         asClusterServerInternal(clusterServer)._assignToEndpoint(this.#server);
@@ -136,14 +142,11 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
-    session: Session<MatterDevice> | undefined,
-    contextFields: Partial<ActionContext>,
-    invoke: boolean,
-    fn: (behavior: Behavior) => T,
+    message: Message | undefined,
+    fn: (behavior: ClusterBehavior) => T,
 ): T {
-    const context = ServerActionContext(contextFields, invoke, session);
-
-    let agent = backing.part.getAgent(context);
+    const context = message ? OnlineContext.retrieve(message) : OfflineContext();
+    const agent = context.agentFor(backing.part);
 
     try {
         return fn(agent.get(backing.type));
@@ -160,8 +163,8 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
     }
     const access = AccessControl(schema);
 
-    return ({ request, session, message }) => {
-        let requestDiagnostic;
+    return ({ request, message }) => {
+        let requestDiagnostic: unknown;
         if (request && typeof request === "object") {
             requestDiagnostic = Diagnostic.dict(request);
         } else if (request !== undefined) {
@@ -170,15 +173,15 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
             requestDiagnostic = Diagnostic.weak("(no payload)");
         }
 
-        logger.info(
-            "Invoke",
-            Diagnostic.strong(`${backing}.${name}`),
-            ActionContext.via({ message }),
-            requestDiagnostic,
-        );
-
-        return withBehavior(backing, session, { message }, true, behavior => {
-            access.authorizeInvoke(behavior.context);
+        return withBehavior(backing, message, behavior => {
+                logger.info(
+                    "Invoke",
+                    Diagnostic.strong(`${backing}.${name}`),
+                    behavior.context.transaction.via,
+                    requestDiagnostic,
+                );
+        
+                access.authorizeInvoke(behavior.context, { cluster: behavior.cluster.id });
 
             return (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
         });
@@ -193,14 +196,14 @@ function createAttributeAccessors(
     set: (value: any, params: { session?: Session<MatterDevice>, message?: Message }) => boolean;
 } {
     return {
-        get({ session, isFabricFiltered, message }) {
-            logger.debug(
-                "Read",
-                Diagnostic.strong(`${backing}.state.${name}`),
-                ActionContext.via({ message })
-            );
+        get({ message }) {
+            return withBehavior(backing, message, behavior => {
+                logger.debug(
+                    "Read",
+                    Diagnostic.strong(`${backing}.state.${name}`),
+                    behavior.context.transaction.via,
+                );
 
-            return withBehavior(backing, session, { message, fabricFiltered: isFabricFiltered }, false, behavior => {
                 const state = behavior.state as Val.Struct;
 
                 StructManager.assertDirectReadAuthorized(state, name);
@@ -209,14 +212,15 @@ function createAttributeAccessors(
             });
         },
 
-        set(value, { session, message }) {
-            logger.info(
-                "Write",
-                Diagnostic.strong(`${backing}.state.${name}`),
-                ActionContext.via({ message }),
-            )
+        set(value, { message }) {
 
-            return withBehavior(backing, session, { message }, false, behavior => {
+            return withBehavior(backing, message, behavior => {
+                logger.info(
+                    "Write",
+                    Diagnostic.strong(`${backing}.state.${name}`),
+                    behavior.context.transaction.via,
+                )
+
                 const state = behavior.state as Record<string, any>;
 
                 state[name] = value;

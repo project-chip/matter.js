@@ -6,11 +6,14 @@
 
 import { InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
+import { ClusterId } from "../../../datatype/ClusterId.js";
+import { Logger } from "../../../log/Logger.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
 import { camelize } from "../../../util/String.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
+import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
 import type { ValidationContext } from "../validation/context.js";
@@ -18,19 +21,13 @@ import type { Val } from "./Val.js";
 
 const VERSION_KEY = "__version__";
 
+const logger = Logger.get("Datasource");
+
 /**
  * Datasource manages the canonical root of a state tree.  The "state" property of a Behavior is a reference to a
  * Datasource.
  *
- * Datasource behavior differs if there is a transaction present:
- *
- *   - Outside a transaction, properties update immediately when set. Non-volatile values become dirty but do not
- *     persist automatically.
- *
- *   - Inside a transaction the root reference is isolated.  Changes are queued until commit.  On commit changes are
- *     persisted and change events emit.
- *
- * Datasources maintain a version number and trigger change events.  If modified in a transaction they compute changes
+ * Datasources maintain a version number and triggers change events.  If modified in a transaction they compute changes
  * and persist values as necessary.
  */
 export interface Datasource<T extends StateType = StateType> extends Resource {
@@ -43,22 +40,6 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
      * The data's version.
      */
     readonly version: number;
-
-    /**
-     * If non-volatile values change without a transaction, the store is marked dirty and you must use {@link save} to
-     * persist the values.
-     */
-    readonly dirty: boolean;
-
-    /**
-     * Persist non-volatile values modified without a transaction.
-     *
-     * Currently will throw an error if resources cannot be locked.  And transaction isolation means values may be
-     * overwritten in a shared environment.
-     *
-     * So this is intended for use in non-shared contexts like behavior initialization.
-     */
-    save(transaction: Transaction): void;
 
     /**
      * Validate values against the schema.
@@ -83,14 +64,6 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
         get version() {
             return internals.version;
-        },
-
-        get dirty() {
-            return !!internals.dirty;
-        },
-
-        save(transaction: Transaction) {
-            save(this, internals, transaction);
         },
 
         validate(session: ValueSupervisor.Session, context?: ValidationContext) {
@@ -125,11 +98,6 @@ export namespace Datasource {
         supervisor: ValueSupervisor;
 
         /**
-         * The version of the data.
-         */
-        version?: number;
-
-        /**
          * Events of the form "fieldName$Change", if present, emit after field changes commit.
          */
         events?: Events;
@@ -150,6 +118,11 @@ export namespace Datasource {
          * Optional storage for non-volatile values.
          */
         store?: Store;
+
+        /**
+         * The cluster used for access control checks.
+         */
+        cluster?: ClusterId;
     }
 
     /**
@@ -180,7 +153,7 @@ interface Internals extends Datasource.Options {
     name: string,
     values: Val.Struct;
     version: number;
-    dirty?: Val.Struct;
+    persistedVersion?: number;
 }
 
 interface Changes {
@@ -202,23 +175,22 @@ function configure(options: Datasource.Options): Internals {
         values[key] = initialValues[key];
     }
 
-    let dirty;
     let version: number;
+    let persistedVersion: number | undefined;
     if (!options.versioning) {
         // We still version, we just don't persist
         version = 1;
     } else if (typeof initialValues[VERSION_KEY] === "number") {
-        version = initialValues[VERSION_KEY] % 0xffff_ffff;
+        version = persistedVersion = initialValues[VERSION_KEY] % 0xffff_ffff;
     } else {
-        version = options.version ?? Crypto.getRandomUInt32();
-        dirty = { [VERSION_KEY]: version };
+        version = Crypto.getRandomUInt32();
     }
 
     return {
         ...options,
         version,
+        persistedVersion,
         values: values,
-        dirty,
     };
 }
 
@@ -256,6 +228,20 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
     }
 
+    // If the version number is dirty, immediately join the transaction.  But we don't want this to prevent generation
+    // of the reference so just log a warning if the resource cannot be locked
+    if (internals.version !== internals.persistedVersion) {
+        try {
+            join();
+        } catch (e) {
+            if (e instanceof SynchronousTransactionConflictError) {
+                logger.warn(`Datasource ${internals.name} lock unavailable for persisting version number, will retry on next write`);
+            } else {
+                throw e;
+            }
+        }
+    }
+
     const reference: Val.Reference<Val.Struct> = {
         get original() {
             return internals.values;
@@ -270,70 +256,26 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         },
 
         change(mutator) {
-            // If we are transactional ensure transaction is exclusive and we are participating
-            if (transaction) {
-                // Join the transaction
-                transaction.addResourcesSync(resource);
-                transaction.addParticipants(participant);
+            // Join the transaction
+            join();
 
-                // Upgrade transaction if not already exclusive
-                transaction.beginSync();
-        
-                // Clone values if we haven't already
-                if (values === internals.values) {
-                    const old = values;
-                    values = new internals.type();
-                    for (const index of fields) {
-                        values[index] = old[index];
-                    }
+            // Upgrade transaction if not already exclusive
+            transaction.beginSync();
+    
+            // Clone values if we haven't already
+            if (values === internals.values) {
+                const old = values;
+                values = new internals.type();
+                for (const index of fields) {
+                    values[index] = old[index];
                 }
-
-                // Point subreferences to the new value
-                refreshSubrefs();
             }
+
+            // Point subreferences to the new value
+            refreshSubrefs();
 
             // Perform the mutation
             mutator();
-        },
-
-        /**
-         * Post-processing for non-transactional changes, which take immediate effect.
-         */
-        notify(index?: string, oldValue?: Val, newValue?: Val) {
-            // Index should be set because we only parent a struct reference
-            if (!index) {
-                return;
-            }
-
-            // Ignore no-op changes
-            if (isDeepEqual(oldValue, newValue)) {
-                return;
-            }
-
-            // Persistent values become dirty
-            if (persistentFields.has(index)) {
-                if (!internals.dirty) {
-                    internals.dirty = {};
-                }
-                internals.dirty[index] = newValue;
-            }
-
-            // Increment version.  Need to store it as dirty as well
-            incrementVersion();
-
-            if (internals.versioning) {
-                if (!internals.dirty) {
-                    internals.dirty = {};
-                }
-                internals.dirty[VERSION_KEY] = internals.version;
-            }
-
-            refreshSubrefs();
-
-            const event = internals.events?.[`${index}$Change`];
-            if (event) {
-                event.emit(newValue, oldValue, session);
-            }
         },
 
         refresh() {
@@ -342,6 +284,11 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     };
 
     return reference;
+
+    function join() {
+        transaction.addResourcesSync(resource);
+        transaction.addParticipants(participant);
+    }
 
     // Need to invoke this anytime we change values
     function refreshSubrefs() {
@@ -366,8 +313,12 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     function computeChanges() {
         changes = undefined;
 
+        if (internals.versioning && internals.persistedVersion !== internals.version) {
+            changes = { notifications: [], persistent: { [VERSION_KEY]: internals.version } };
+        }
+
         if (internals.values === values) {
-            return;
+            return changes;
         }
 
         for (const name in values) {
@@ -385,7 +336,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     changes.persistent[name] = values[name];
                 }
 
-                const event = internals.events?.[name];
+                const event = internals.events?.[`${name}$Change`];
                 if (event) {
                     changes.notifications.push({
                         event,
@@ -432,10 +383,11 @@ function createRootReference(resource: Resource, internals: Internals, session: 
      * For commit phase two we make the working values canonical and notify listeners.
      */
     function commit2() {
+        if (values[VERSION_KEY] !== undefined) {
+            internals.persistedVersion = internals.version;
+            delete values[VERSION_KEY];
+        }
         internals.values = values;
-
-        // Any lingering changes we are not responsible for persist here
-        delete internals.dirty;
 
         if (!changes) {
             return;
@@ -468,31 +420,4 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         transaction?.promise.finally(reset);
     }
-}
-
-function save(resource: Resource, internals: Internals, transaction: Transaction) {
-    const dirty = internals.dirty;
-    if (!dirty) {
-        return;
-    }
-
-    transaction.addResourcesSync(resource);
-    transaction.addParticipants({
-        toString() {
-            return internals.name;
-        },
-
-        async commit1() {
-            await internals.store?.set(transaction, dirty);
-        },
-
-        // Best we can do for phase 2 is mark values as clean
-        commit2() {
-            delete internals.dirty;
-        },
-
-        // We cannot roll-back dirty values
-        rollback() {},
-    });
-    transaction.beginSync();
 }
