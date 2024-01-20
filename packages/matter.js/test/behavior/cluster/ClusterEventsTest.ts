@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../../src/behavior/Behavior.js";
-import { ActionContext } from "../../../src/behavior/ActionContext.js";
+import { ActionContext } from "../../../src/behavior/server/context/ActionContext.js";
 import { ClusterEvents } from "../../../src/behavior/cluster/ClusterEvents.js";
 import { Observable } from "../../../src/util/Observable.js";
 import { MyCluster } from "./cluster-behavior-test-util.js";

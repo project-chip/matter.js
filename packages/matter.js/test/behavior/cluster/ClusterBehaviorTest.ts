@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../../src/behavior/Behavior.js";
-import { ActionContext } from "../../../src/behavior/ActionContext.js";
+import { ActionContext } from "../../../src/behavior/server/context/ActionContext.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";

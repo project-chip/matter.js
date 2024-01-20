@@ -50,7 +50,6 @@ export interface Packet {
 export interface DecodedPacket extends Packet {
     header: DecodedPacketHeader;
 }
-
 export interface Message {
     packetHeader: PacketHeader;
     payloadHeader: PayloadHeader;

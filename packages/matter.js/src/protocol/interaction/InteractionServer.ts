@@ -169,7 +169,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
             isFabricFiltered,
             interactionModelRevision,
         }: ReadRequest,
-        message?: Message,
+        message: Message,
     ): Promise<DataReportPayload> {
         logger.debug(
             `Received read request from ${exchange.channel.name}: attributes:${
@@ -356,7 +356,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         attribute: AnyAttributeServer<any>,
         session: Session<MatterDevice>,
         isFabricFiltered: boolean,
-        message?: Message,
+        message: Message,
     ) {
         return attribute.getWithVersion(session, isFabricFiltered, message);
     }

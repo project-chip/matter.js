@@ -25,7 +25,7 @@ export class NodeClient implements Node {
         return undefined;
     }
 
-    get root(): Agent.Instance<RootEndpoint["behaviors"]> {
+    get root(): Agent.Instance<RootEndpoint> {
         return this.rootPart.agent;
     }
 

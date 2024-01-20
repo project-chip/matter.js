@@ -30,7 +30,7 @@ import { PrimitiveManager } from "./PrimitiveManager.js";
 export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
     const config = createConfig(owner, schema);
 
-    return (list, session, context) => {
+    return (list, session, location) => {
         // Sanity check
         if (!Array.isArray(list.value)) {
             throw new SchemaImplementationError(
@@ -39,7 +39,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
             );
         }
 
-        return createProxy(config, list as Val.Reference<Val.List>, session, context);
+        return createProxy(config, list as Val.Reference<Val.List>, session, location);
     };
 }
 
@@ -84,7 +84,7 @@ function createProxy(
     config: ListConfig,
     reference: Val.Reference<Val.List>,
     session: ValueSupervisor.Session,
-    context?: AccessControl.Context,
+    location?: AccessControl.Location,
 ) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
@@ -95,10 +95,6 @@ function createProxy(
         }
 
         reference.change(() => (reference.value.length = length));
-
-        if (!session.transaction) {
-            reference.notify();
-        }
     };
     let hasEntry = (index: number) => reference.value[index] !== undefined;
     // Create the base entry reader.  The reader is different for containers vs. primitive values
@@ -106,7 +102,7 @@ function createProxy(
     if (config.manageEntries) {
         // Base reader produces managed containers
         readEntry = index => {
-            authorizeRead(session, context);
+            authorizeRead(session, location);
 
             if (index < 0 || index >= reference.value.length) {
                 throw new ReadError(config.schema, `Index ${index} is out of bounds`);
@@ -131,18 +127,15 @@ function createProxy(
                     index,
                     () => true,
 
-                    // Provide a clone function if we have a transaction. Otherwise we write directly to the field
-                    session.transaction
-                        ? val =>
-                              Array.isArray(val)
-                                  ? [...(val as Val.List)]
-                                  : typeof val === "object" && val !== null
-                                    ? { ...val }
-                                    : val
-                        : undefined,
+                    val =>
+                        Array.isArray(val)
+                            ? [...(val as Val.List)]
+                            : typeof val === "object" && val !== null
+                            ? { ...val }
+                            : val
                 );
 
-                subref.owner = manageEntry(subref, session, context);
+                subref.owner = manageEntry(subref, session, location);
             }
 
             return subref.owner;
@@ -150,7 +143,7 @@ function createProxy(
     } else {
         // Primitive value -- no management necessary
         readEntry = index => {
-            authorizeRead(session, context);
+            authorizeRead(session, location);
             if (index < 0 || index > reference.value.length) {
                 throw new WriteError(config.schema, `Index ${index} is out of bounds`);
             }
@@ -161,7 +154,7 @@ function createProxy(
 
     // Create an entry writer
     let writeEntry = (index: number, value: Val) => {
-        authorizeWrite(session, context);
+        authorizeWrite(session, location);
 
         if (index < 0 || index > reference.value.length + 1) {
             throw new WriteError(config.schema, `Index ${index} is out of bounds`);
@@ -172,10 +165,6 @@ function createProxy(
         }
 
         reference.change(() => (reference.value[index] = value));
-
-        if (!session.transaction) {
-            reference.notify();
-        }
     };
 
     // If the list is fabric-scoped, wrap read and write to map indices
@@ -194,7 +183,7 @@ function createProxy(
                 }
 
                 // If there's no fabric index or it's a match, consider "in scope"
-                if (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric) {
+                if (!entry.fabricIndex || entry.fabricIndex === session.fabric) {
                     if (nextPos === index) {
                         // Found our target
                         return i;
@@ -244,7 +233,7 @@ function createProxy(
                             StatusCode.Failure,
                         );
                     }
-                    (value as { fabricIndex?: number }).fabricIndex ??= session.associatedFabric;
+                    (value as { fabricIndex?: number }).fabricIndex ??= session.fabric;
                     nextWriteEntry(mapScopedToActual(index, false), value);
                 }
             };
@@ -255,13 +244,14 @@ function createProxy(
                     const entry = reference.value[i] as undefined | { fabricIndex?: number };
                     if (
                         typeof entry === "object" &&
-                        (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric)
+                        (!entry.fabricIndex || entry.fabricIndex === session.fabric)
                     ) {
                         length++;
                     }
                 }
                 return length;
             };
+            
             setListLength = (length: number) => {
                 const formerLength = getListLength();
 
@@ -270,7 +260,7 @@ function createProxy(
                         const entry = reference.value[i] as undefined | { fabricIndex?: number };
                         if (
                             typeof entry === "object" &&
-                            (!entry.fabricIndex || entry.fabricIndex === session.associatedFabric)
+                            (!entry.fabricIndex || entry.fabricIndex === session.fabric)
                         ) {
                             reference.value.splice(mapScopedToActual(i, false), 1);
                         } else {
@@ -282,10 +272,6 @@ function createProxy(
                         }
                     }
                 });
-
-                if (!session.transaction) {
-                    reference.notify();
-                }
             };
         }
     }

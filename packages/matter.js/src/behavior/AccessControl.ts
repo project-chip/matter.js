@@ -5,7 +5,9 @@
  */
 
 import { AccessLevel } from "../cluster/Cluster.js";
+import { ClusterId } from "../datatype/ClusterId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
+import { SubjectId } from "../datatype/SubjectId.js";
 import { Access } from "../model/aspects/index.js";
 import { ElementTag } from "../model/index.js";
 import { Model, ValueModel } from "../model/models/index.js";
@@ -91,26 +93,47 @@ export namespace AccessControl {
     /**
      * A function that asserts access control requirements are met.
      */
-    export type Assertion = (session: Session, context?: Context) => void;
+    export type Assertion = (session: Session, location?: Location) => void;
 
     /**
      * A function that returns true iff access control requirements are met.
      */
-    export type Verification = (session: Session, context?: Context) => boolean;
+    export type Verification = (session: Session, location?: Location) => boolean;
+
+    /**
+     * Metadata that varies with position in the data model.
+     */
+    export interface Location {
+        /**
+         * The owning behavior.
+         */
+        cluster?: ClusterId;
+
+        /**
+         * The fabric that owns the data subtree.  Undefined or {@link FabricIndex.NO_FABRIC} disable fabric
+         * enforcement.
+         */
+        owningFabric?: FabricIndex;
+    }
 
     /**
      * Authorization metadata that varies with session.
      */
-    export type Session = {
+    export interface Session {
         /**
          * The access level of the authorized client.
          */
-        readonly accessLevel: AccessLevel;
+        accessLevelFor(location?: Location): AccessLevel;
 
         /**
          * The fabric of the authorized client.
          */
-        readonly associatedFabric?: FabricIndex;
+        readonly fabric?: FabricIndex;
+
+        /**
+         * The authenticated {@link SubjectId} for online sessions.
+         */
+        readonly subject?: SubjectId;
 
         /**
          * If this is true, fabric-scoped lists are filtered to the accessing
@@ -137,33 +160,9 @@ export namespace AccessControl {
          */
         offline?: boolean;
     };
-
-    /**
-     * An offline session that disables access controls.
-     */
-    export const OfflineSession: Session = {
-        // Set access level as low as possible.  It should be ignored due to offline status but make faulty logic fail
-        // early
-        accessLevel: AccessLevel.View,
-
-        // Disable access level enforcement
-        offline: true,
-    };
-
-    /**
-     * Metadata that varies with data structure position.
-     */
-    export interface Context {
-        /**
-         * The fabric that owns the data subtree.  Undefined or {@link FabricIndex.NO_FABRIC} disable fabric
-         * enforcement.
-         */
-        owningFabric?: FabricIndex;
-    }
 }
 
 Object.freeze(AccessControl);
-Object.freeze(AccessControl.OfflineSession);
 
 function enforcerFor(schema: Schema): AccessControl {
     if (schema.tag === ElementTag.Command) {
@@ -175,48 +174,48 @@ function enforcerFor(schema: Schema): AccessControl {
 function dataEnforcerFor(schema: Schema): AccessControl {
     const limits = limitsFor(schema);
 
-    let mayRead: AccessControl.Verification = session => {
+    let mayRead: AccessControl.Verification = (session, location) => {
         if (session.offline || session.command) {
             return true;
         }
 
-        if (session.accessLevel >= limits.readLevel) {
+        if (session.accessLevelFor(location) >= limits.readLevel) {
             return true;
         }
 
         return false;
     };
 
-    let mayWrite: AccessControl.Verification = session => {
+    let mayWrite: AccessControl.Verification = (session, location) => {
         if (session.offline || session.command) {
             return true;
         }
 
-        if (session.accessLevel >= limits.writeLevel) {
+        if (session.accessLevelFor(location) >= limits.writeLevel) {
             return true;
         }
 
         return false;
     };
 
-    let authorizeRead: AccessControl.Assertion = session => {
+    let authorizeRead: AccessControl.Assertion = (session, location) => {
         if (session.offline || session.command) {
             return;
         }
 
-        if (session.accessLevel >= limits.readLevel) {
+        if (session.accessLevelFor(location) >= limits.readLevel) {
             return;
         }
 
         throw new ReadError(schema, "Permission denied", StatusCode.UnsupportedAccess);
     };
 
-    let authorizeWrite: AccessControl.Assertion = session => {
+    let authorizeWrite: AccessControl.Assertion = (session, location) => {
         if (session.offline || session.command) {
             return;
         }
 
-        if (session.accessLevel >= limits.readLevel) {
+        if (session.accessLevelFor(location) >= limits.readLevel) {
             return;
         }
 
@@ -227,7 +226,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         const wrappedAuthorizeWrite = authorizeWrite;
         const wrappedMayWrite = mayWrite;
 
-        authorizeWrite = (session, context) => {
+        authorizeWrite = (session, location) => {
             if (!session.offline && !session.timed) {
                 throw new WriteError(
                     schema,
@@ -235,15 +234,15 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                     StatusCode.NeedsTimedInteraction,
                 );
             }
-            wrappedAuthorizeWrite?.(session, context);
+            wrappedAuthorizeWrite?.(session, location);
         };
 
-        mayWrite = (session, context) => {
+        mayWrite = (session, location) => {
             if (!session.offline && !session.timed) {
                 return false;
             }
 
-            return wrappedMayWrite(session, context);
+            return wrappedMayWrite(session, location);
         };
     }
 
@@ -253,17 +252,17 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         const wrappedAuthorizeWrite = authorizeWrite;
         const wrappedMayWrite = mayWrite;
 
-        authorizeRead = (session, context) => {
+        authorizeRead = (session, location) => {
             if (session.offline || session.command) {
                 return;
             }
 
             if (session.fabricFiltered) {
-                if (session.associatedFabric === undefined) {
+                if (session.fabric === undefined) {
                     throw new ReadError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
                 }
 
-                if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+                if (location?.owningFabric && location.owningFabric !== session.fabric) {
                     throw new WriteError(
                         schema,
                         "Permission denied: Owning/accessing fabric mismatch",
@@ -272,55 +271,55 @@ function dataEnforcerFor(schema: Schema): AccessControl {
                 }
             }
 
-            wrappedAuthorizeRead(session, context);
+            wrappedAuthorizeRead(session, location);
         };
 
-        mayRead = (session, context) => {
+        mayRead = (session, location) => {
             if (session.offline || session.command) {
                 return true;
             }
 
-            if (session.associatedFabric === undefined) {
+            if (session.fabric === undefined) {
                 return false;
             }
 
-            if (session.fabricFiltered && context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+            if (session.fabricFiltered && location?.owningFabric && location.owningFabric !== session.fabric) {
                 return false;
             }
 
-            return wrappedMayRead(session, context);
+            return wrappedMayRead(session, location);
         };
 
-        authorizeWrite = (session, context) => {
+        authorizeWrite = (session, location) => {
             if (session.offline || session.command) {
                 return;
             }
 
-            if (session.associatedFabric === undefined) {
+            if (session.fabric === undefined) {
                 throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
-            if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+            if (location?.owningFabric && location.owningFabric !== session.fabric) {
                 throw new WriteError(schema, "Permission denied: Owning/accessing fabric mismatch");
             }
 
-            wrappedAuthorizeWrite(session, context);
+            wrappedAuthorizeWrite(session, location);
         };
 
-        mayWrite = (session, context) => {
+        mayWrite = (session, location) => {
             if (session.offline || session.command) {
                 return true;
             }
 
-            if (session.associatedFabric === undefined) {
+            if (session.fabric === undefined) {
                 return false;
             }
 
-            if (context?.owningFabric && context.owningFabric !== session.associatedFabric) {
+            if (location?.owningFabric && location.owningFabric !== session.fabric) {
                 return false;
             }
 
-            return wrappedMayWrite(session, context);
+            return wrappedMayWrite(session, location);
         };
     }
 
@@ -392,7 +391,7 @@ function commandEnforcerFor(schema: Schema): AccessControl {
             return false;
         },
 
-        authorizeInvoke(session) {
+        authorizeInvoke(session, location) {
             if (session.offline) {
                 return;
             }
@@ -409,18 +408,18 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 );
             }
 
-            if (fabric && session.associatedFabric === undefined) {
+            if (fabric && session.fabric === undefined) {
                 throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
-            if (session.accessLevel >= limits.writeLevel) {
+            if (session.accessLevelFor(location) >= limits.writeLevel) {
                 return;
             }
 
             throw new InvokeError(schema, "Permission denied", StatusCode.UnsupportedAccess);
         },
 
-        mayInvoke(session) {
+        mayInvoke(session, location) {
             if (session.offline) {
                 return true;
             }
@@ -433,11 +432,11 @@ function commandEnforcerFor(schema: Schema): AccessControl {
                 return false;
             }
 
-            if (fabric && session.associatedFabric === undefined) {
+            if (fabric && session.fabric === undefined) {
                 return false;
             }
 
-            if (session.accessLevel >= limits.writeLevel) {
+            if (session.accessLevelFor(location) >= limits.writeLevel) {
                 return true;
             }
 

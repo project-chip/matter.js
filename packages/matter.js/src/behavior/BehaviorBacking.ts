@@ -17,7 +17,6 @@ import { camelize } from "../util/String.js";
 import type { Behavior } from "./Behavior.js";
 import { SchemaViolationError } from "./errors.js";
 import { Datasource } from "./state/managed/Datasource.js";
-import { Transaction } from "./state/transaction/Transaction.js";
 
 const logger = Logger.get("BehaviorBacking");
 
@@ -117,6 +116,10 @@ export abstract class BehaviorBacking {
     }
 
     /**
+     * 
+     */
+
+    /**
      * Create an instance of the backed {@link Behavior}.
      *
      * Derivatives may override to perform additional setup beyond simple instantiation.
@@ -137,27 +140,22 @@ export abstract class BehaviorBacking {
      */
     get datasource() {
         if (!this.#datasource) {
-            this.#datasource = Datasource({
-                name: `${this.part}.${this.type.id}.state`,
-                supervisor: this.type.supervisor,
-                type: this.type.State,
-                events: this.events as unknown as Datasource.Events,
-                defaults: this.part.behaviors.defaultsFor(this.type),
-                store: this.store,
-                versioning: this.type.versioning,
-            });
+            this.#datasource = Datasource(this.datasourceOptions);
         }
 
         return this.#datasource;
     }
 
-    /**
-     * Persist dirty values.
-     */
-    save(transaction: Transaction) {
-        if (this.#datasource?.dirty) {
-            this.#datasource.save(transaction);
-        }
+    protected get datasourceOptions() {
+        return {
+            name: `${this.part}.${this.type.id}.state`,
+            supervisor: this.type.supervisor,
+            type: this.type.State,
+            events: this.events as unknown as Datasource.Events,
+            defaults: this.part.behaviors.defaultsFor(this.type),
+            store: this.store,
+            versioning: this.type.versioning,
+        };
     }
 
     /**

@@ -31,9 +31,8 @@ import type { ClusterState } from "./ClusterState.js";
  * Behaviors should store all mutable state in their {@link Behavior.state} property.  Other fields will be transient
  * and may not be retained across invocations.
  *
- * TODO - currently ClusterBehaviors may be instantiated with unsupported mandatory commands and attributes.  Currently
- * this is a runtime error but not a build-time error.  Should we generate abstract methods etc. for this, make the
- * edits by hand as we implement "standard" behaviors, or just leave as a runtime error?
+ * ClusterBehaviors may be instantiated with unsupported mandatory commands and attributes.  This is currently results
+ * in a runtime error but it will not cause a type error during development.
  */
 export class ClusterBehavior extends Behavior {
     #cluster: ClusterType;
@@ -42,19 +41,6 @@ export class ClusterBehavior extends Behavior {
      * The ID of ClusterBehavior implementations is the uncapitalized cluster name.
      */
     static override id: Uncapitalize<string>;
-
-    /**
-     * TODO - this disables lazy loading of behaviors.  This is desirable for small-scale nodes but for large nodes lazy
-     * init may be useful.  However this requires refactor of InteractionEndpointStructure which eagerly caches the
-     * entire node structure.  Refactoring there is desirable anyway so maintenance of that cache is less expensive;
-     * revisit this when that refactoring is complete.
-     */
-    static override readonly immediate = true;
-
-    /**
-     * Cluster data must be versioned.
-     */
-    static override readonly versioning = true;
 
     /**
      * The cluster implemented by this behavior.
@@ -79,6 +65,16 @@ export class ClusterBehavior extends Behavior {
      * Method definitions.
      */
     static readonly Interface = ClusterInterface.Empty;
+
+    /**
+     * All ClusterBehavior initialization currently runs as part of {@link Part} initialization.
+     */
+    static override readonly immediate = true;
+
+    /**
+     * Cluster data must be versioned.
+     */
+    static override readonly versioning = true;
 
     constructor(agent: Agent, backing: BehaviorBacking) {
         super(agent, backing);

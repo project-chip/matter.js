@@ -21,7 +21,7 @@ export interface Node extends PartOwner {
     /**
      * Access the root endpoint.
      */
-    readonly root: Agent.Instance<RootEndpoint["behaviors"]>;
+    readonly root: Agent.Instance<RootEndpoint>;
 
     /**
      * Access the root endpoint as a {@link Part}.

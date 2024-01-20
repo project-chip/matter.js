@@ -8,7 +8,7 @@ import type { ClusterType } from "../../cluster/ClusterType.js";
 import type { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import type { Observable } from "../../util/Observable.js";
 import type { Behavior } from "../Behavior.js";
-import type { ActionContext } from "../ActionContext.js";
+import type { ActionContext } from "../server/context/ActionContext.js";
 import type { ClusterOf, Named } from "./ClusterBehaviorUtil.js";
 
 /**

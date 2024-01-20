@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "../behavior/AccessControl.js";
 import { Behavior } from "../behavior/Behavior.js";
-import type { ActionContext } from "../behavior/ActionContext.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
@@ -21,25 +19,24 @@ import { PartLifecycle } from "./part/PartLifecycle.js";
 import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
+import { OfflineContext } from "../behavior/server/context/OfflineContext.js";
 
 /**
- * Endpoints consist of a hierarchy of parts.  This class manages the current
- * state of a single part.
+ * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
  *
- * You can interact with endpoints using an {@link Agent} created
- * with {@link Part.getAgent}.  Agents are stateless and designed for quick
- * instantiation so you can create them as needed then discard.
- * 
- * Most often direct access to {@link Agent} is transparent as Matter.js
- * acquires an agent as necessary for {@link Behavior} interactions.
+ * You can interact with endpoints using an {@link Agent} created with {@link Part.agentFor}.  Agents are stateless and
+ * designed for quick instantiation so you can create them as needed then discard.
+ *
+ * Most often direct access to {@link Agent} is transparent as Matter.js acquires an agent as necessary for
+ * {@link Behavior} interactions.
  */
 export class Part<T extends EndpointType = EndpointType.Empty> implements PartOwner {
     #type: EndpointType;
     #id?: string;
     #number?: EndpointNumber;
     #owner?: PartOwner;
-    #agentType?: Agent.Type<T["behaviors"]>;
-    #offlineAgent?: Agent.Instance<T["behaviors"]>;
+    #agentType?: Agent.Type<T>;
+    #offlineAgent?: Agent.Instance<T>;
     #behaviors?: Behaviors;
     #lifecycle: PartLifecycle;
     #parts?: Parts;
@@ -61,8 +58,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely
-     * identifies the {@link Part} in the scope of the Matter node.
+     * The Matter {@link EndpointNumber} of the endpoint.  This uniquely identifies the {@link Part} in the scope of the
+     * Matter node.
      */
     get number(): EndpointNumber {
         if (this.#number === undefined) {
@@ -293,25 +290,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Create an {@link Agent}.  This is the primary means of
-     * interacting with an endpoint.
-     *
-     * If {@link ActionContext.fabric} is not present the operation will
-     * fail.
+     * Create an {@link Agent.Type} for the part.
      */
-    getAgent(context: ActionContext): Agent.Instance<T["behaviors"]> {
-        return new this.#resolvedAgentType(this, context);
+    get agentType() {
+        if (!this.#agentType) {
+            this.#agentType = Agent.for(this.type, this.behaviors.supported);
+        }
+        return this.#agentType;
     }
 
     /**
-     * Access an offline {@link Agent}.  An offline agent enforces no ACLs and
-     * all state is read/write.
+     * Access an offline {@link Agent}.  An "offline" agent enforces no ACLs and all state is read/write.
      *
-     * This should only be used for local purposes.  All network interaction
-     * should use {@link getAgent} to create a context-aware agent.
+     * This should only be used for local purposes.  All network interaction should use an agent retrieved from an
+     * OnlineContext.
      */
     get agent() {
-        return this.#agent;
+        if (!this.#offlineAgent) {
+            return this.#offlineAgent = OfflineContext().agentFor(this);
+        }
+        return this.#offlineAgent;
     }
 
     /**
@@ -324,13 +322,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
                 part.visit(visitor);
             }
         }
-    }
-
-    get #agent() {
-        if (!this.#offlineAgent) {
-            this.#offlineAgent = new this.#resolvedAgentType(this, AccessControl.OfflineSession);
-        }
-        return this.#offlineAgent;
     }
 
     async destroy() {
@@ -373,13 +364,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
         return `${owner}${this.#type.name}#${id}`;
     }
-
-    get #resolvedAgentType() {
-        if (!this.#agentType) {
-            this.#agentType = Agent.for(this.type.name, this.behaviors.supported);
-        }
-        return this.#agentType;
-    }
 }
 
 export namespace Part {
@@ -407,8 +391,7 @@ export namespace Part {
     }    
 
     /**
-     * Definition of a Part.  May be an {@link EndpointType},
-     * {@link Configuration}, or a {@link Part} instance.
+     * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.
      */
     export type Definition<T extends EndpointType = EndpointType.Empty> =
         | T

@@ -423,7 +423,7 @@ export namespace OperationalCredentialsServer {
         [Val.properties](session: ValueSupervisor.Session) {
             return {
                 get currentFabricIndex() {
-                    return session.associatedFabric ?? FabricIndex.NO_FABRIC;
+                    return session.fabric ?? FabricIndex.NO_FABRIC;
                 },
             };
         }

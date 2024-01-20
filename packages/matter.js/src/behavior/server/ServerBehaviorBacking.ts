@@ -4,19 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessLevel } from "../../cluster/Cluster.js";
 import { FieldValue } from "../../model/index.js";
 import { ServerResetService } from "../../node/server/ServerResetService.js";
 import { PartStoreService } from "../../node/server/storage/PartStoreService.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
-import { ActionContext } from "../ActionContext.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "../BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Val } from "../state/managed/Val.js";
 import { Transaction } from "../state/transaction/Transaction.js";
+import { OfflineContext } from "./context/OfflineContext.js";
 
 /**
  * This class backs the server implementation of a behavior.
@@ -45,15 +44,11 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 this.#applyTransitiveDefaults(behavior.state);
 
                 // State must now conform to the schema
-                this.datasource.validate(behavior.context);
+                const context = behavior.context;
+                this.datasource.validate(context);
 
-                // For initializers we do not invoke with a transaction, instead persisting dirty values after
-                // initialization.
-                //
-                // TODO - this gets the commit under the umbrella of "initialization" for error handling but we could
-                // also add a general utility for lazy persistence of dirty state
-                const transaction = new Transaction(ActionContext.via(behavior.context));
-                this.save(transaction);
+                // If initialization modified state, initiate commit
+                const transaction = context.transaction;
                 if (transaction.status === Transaction.Status.Exclusive) {
                     return transaction.commit();
                 }
@@ -72,9 +67,10 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
         const defaults = this.part.behaviors.defaultsFor(this.type) ?? {};
 
-        const transaction = new Transaction("node reset");
-        const state = this.datasource.reference({ transaction, accessLevel: AccessLevel.View, offline: true }) as Val.Struct;
+        const context = OfflineContext();
+        const state = this.datasource.reference(context) as Val.Struct;
 
+        const transaction = context.transaction;
         for (const member of this.type.schema?.members) {
             // Minor optimization
             const name = camelize(member.name);
