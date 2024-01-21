@@ -63,12 +63,17 @@ async function main() {
                             description: "Enable BLE support",
                             type: "boolean",
                         },
-                        "factory-reset": {
+                        bleHciId: {
+                            description: "HCI ID of the BLE adapter to use",
+                            type: "number",
+                            default: 0,
+                        },
+                        factoryReset: {
                             description: "Factory-Reset storage of this node",
                             default: false,
                             type: "boolean",
                         },
-                        "net-interface": {
+                        netInterface: {
                             description: "Network interface to use for MDNS announcements and scanning",
                             type: "string",
                             default: undefined,
@@ -78,12 +83,16 @@ async function main() {
             async argv => {
                 if (argv.help) return;
 
-                const { nodeNum, ble, nodeType, factoryReset, netInterface } = argv;
+                const { nodeNum, ble, bleHciId, nodeType, factoryReset, netInterface } = argv;
 
                 theNode = new MatterNode(nodeNum, netInterface);
                 await theNode.initialize(factoryReset);
 
                 const theShell = new Shell(theNode, PROMPT);
+
+                if (bleHciId) {
+                    theNode.Store.set("BleHciId", bleHciId);
+                }
 
                 if (ble) {
                     // Initialize Ble

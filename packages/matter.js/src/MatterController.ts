@@ -384,7 +384,6 @@ export class MatterController {
             },
         );
 
-        await paseUnsecureMessageChannel.close();
         await unsecureSession.destroy();
         return new MessageChannel(paseChannel, paseSecureSession);
     }
@@ -609,7 +608,6 @@ export class MatterController {
                 throw new PairRetransmissionLimitReachedError(error.message);
             }, // Convert error
         );
-        await operationalUnsecureMessageExchange.close(); // We reconnect using CASE, so close unsecure connection
         await unsecureSession.destroy();
         const channel = new MessageChannel(operationalChannel, operationalSecureSession);
         await this.channelManager.setChannel(this.fabric, peerNodeId, channel);
