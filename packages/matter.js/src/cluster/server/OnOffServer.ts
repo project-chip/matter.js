@@ -50,11 +50,12 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
         initializeClusterServer: ({ attributes: { onOff, startUpOnOff } }) => {
             const startUpOnOffValue = startUpOnOff?.getLocal() ?? null;
             if (startUpOnOffValue !== null) {
+                const currentOnOffStatus = onOff.getLocal();
                 const targetOnOffValue =
                     startUpOnOffValue === OnOff.StartUpOnOff.Toggle
-                        ? !onOff.getLocal()
+                        ? !currentOnOffStatus
                         : startUpOnOffValue === OnOff.StartUpOnOff.On;
-                if (targetOnOffValue !== onOff.getLocal()) {
+                if (targetOnOffValue !== currentOnOffStatus) {
                     onOff.setLocal(targetOnOffValue);
                 }
             }
