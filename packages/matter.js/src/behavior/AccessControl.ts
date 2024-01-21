@@ -14,6 +14,7 @@ import { Model, ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";
+import { SchemaPath } from "./supervision/SchemaPath.js";
 
 const cache = new WeakMap<Schema, AccessControl>();
 
@@ -93,17 +94,22 @@ export namespace AccessControl {
     /**
      * A function that asserts access control requirements are met.
      */
-    export type Assertion = (session: Session, location?: Location) => void;
+    export type Assertion = (session: Session, location: Location) => void;
 
     /**
      * A function that returns true iff access control requirements are met.
      */
-    export type Verification = (session: Session, location?: Location) => boolean;
+    export type Verification = (session: Session, location: Location) => boolean;
 
     /**
      * Metadata that varies with position in the data model.
      */
     export interface Location {
+        /**
+         * The diagnostic path to the location.
+         */
+        path: SchemaPath;
+
         /**
          * The owning behavior.
          */
@@ -207,7 +213,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        throw new ReadError(schema, "Permission denied", StatusCode.UnsupportedAccess);
+        throw new ReadError(location, "Permission denied", StatusCode.UnsupportedAccess);
     };
 
     let authorizeWrite: AccessControl.Assertion = (session, location) => {
@@ -219,7 +225,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             return;
         }
 
-        throw new WriteError(schema, "Permission denied", StatusCode.UnsupportedAccess);
+        throw new WriteError(location, "Permission denied", StatusCode.UnsupportedAccess);
     };
 
     if (limits.timed) {
@@ -229,7 +235,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         authorizeWrite = (session, location) => {
             if (!session.offline && !session.timed) {
                 throw new WriteError(
-                    schema,
+                    location,
                     "Permission denied because interaction is not timed",
                     StatusCode.NeedsTimedInteraction,
                 );
@@ -259,12 +265,12 @@ function dataEnforcerFor(schema: Schema): AccessControl {
 
             if (session.fabricFiltered) {
                 if (session.fabric === undefined) {
-                    throw new ReadError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+                    throw new ReadError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
                 }
 
                 if (location?.owningFabric && location.owningFabric !== session.fabric) {
                     throw new WriteError(
-                        schema,
+                        location,
                         "Permission denied: Owning/accessing fabric mismatch",
                         StatusCode.UnsupportedAccess,
                     );
@@ -296,11 +302,11 @@ function dataEnforcerFor(schema: Schema): AccessControl {
             }
 
             if (session.fabric === undefined) {
-                throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+                throw new WriteError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
             if (location?.owningFabric && location.owningFabric !== session.fabric) {
-                throw new WriteError(schema, "Permission denied: Owning/accessing fabric mismatch");
+                throw new WriteError(location, "Permission denied: Owning/accessing fabric mismatch");
             }
 
             wrappedAuthorizeWrite(session, location);
@@ -324,12 +330,12 @@ function dataEnforcerFor(schema: Schema): AccessControl {
     }
 
     if (!limits.readable) {
-        authorizeRead = session => {
+        authorizeRead = (session, location) => {
             if (session.offline || session.command) {
                 return;
             }
 
-            throw new ReadError(schema, "Permission defined: Value is write-only");
+            throw new ReadError(location, "Permission defined: Value is write-only");
         };
 
         mayRead = session => {
@@ -338,11 +344,11 @@ function dataEnforcerFor(schema: Schema): AccessControl {
     }
 
     if (!limits.writable) {
-        authorizeWrite = session => {
+        authorizeWrite = (session, location) => {
             if (session.offline || session.command) {
                 return;
             }
-            throw new WriteError(schema, "Permission denied: Value is read-only");
+            throw new WriteError(location, "Permission denied: Value is read-only");
         };
 
         mayWrite = session => {
@@ -357,8 +363,8 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         authorizeWrite,
         mayWrite,
 
-        authorizeInvoke() {
-            throw new SchemaImplementationError(schema, "Permission denied: Invoke request but non-command schema");
+        authorizeInvoke(_session, location) {
+            throw new SchemaImplementationError(location, "Permission denied: Invoke request but non-command schema");
         },
 
         mayInvoke() {
@@ -375,16 +381,16 @@ function commandEnforcerFor(schema: Schema): AccessControl {
     return {
         limits,
 
-        authorizeRead() {
-            throw new SchemaImplementationError(schema, "Permission denied: Read request but command schema");
+        authorizeRead(_session, location) {
+            throw new SchemaImplementationError(location, "Permission denied: Read request but command schema");
         },
 
         mayRead() {
             return false;
         },
 
-        authorizeWrite() {
-            throw new SchemaImplementationError(schema, "Permission denied: Write request but command schema");
+        authorizeWrite(_session, location) {
+            throw new SchemaImplementationError(location, "Permission denied: Write request but command schema");
         },
 
         mayWrite() {
@@ -397,26 +403,26 @@ function commandEnforcerFor(schema: Schema): AccessControl {
             }
 
             if (!session.command) {
-                throw new InvokeError(schema, "Invoke attempt without command context");
+                throw new InvokeError(location, "Invoke attempt without command context");
             }
 
             if (timed && !session.timed) {
                 throw new InvokeError(
-                    schema,
+                    location,
                     "Invoke attempt without required timed context",
                     StatusCode.TimedRequestMismatch,
                 );
             }
 
             if (fabric && session.fabric === undefined) {
-                throw new WriteError(schema, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+                throw new WriteError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
             }
 
             if (session.accessLevelFor(location) >= limits.writeLevel) {
                 return;
             }
 
-            throw new InvokeError(schema, "Permission denied", StatusCode.UnsupportedAccess);
+            throw new InvokeError(location, "Permission denied", StatusCode.UnsupportedAccess);
         },
 
         mayInvoke(session, location) {

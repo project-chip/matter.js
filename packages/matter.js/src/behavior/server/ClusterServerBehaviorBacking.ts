@@ -35,6 +35,7 @@ import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
 import { OnlineContext } from "./context/OnlineContext.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
+import { SchemaPath } from "../supervision/SchemaPath.js";
 
 const logger = Logger.get("Behavior");
 
@@ -148,12 +149,7 @@ function withBehavior<T>(
     const context = message ? OnlineContext.retrieve(message) : OfflineContext();
     const agent = context.agentFor(backing.part);
 
-    try {
-        return fn(agent.get(backing.type));
-    } catch (e) {
-        backing.injectErrorSource(e);
-        throw e;
-    }
+    return fn(agent.get(backing.type));
 }
 
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
@@ -181,7 +177,13 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
                     requestDiagnostic,
                 );
         
-                access.authorizeInvoke(behavior.context, { cluster: behavior.cluster.id });
+                access.authorizeInvoke(
+                    behavior.context,
+                    {
+                        path: SchemaPath(`${behavior}.${name}`),
+                        cluster: behavior.cluster.id,
+                    }
+                );
 
             return (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
         });

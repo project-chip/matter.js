@@ -22,10 +22,10 @@ export function createConformanceValidator(
 ): ValueSupervisor.Validate {
     const validate = astToFunction(schema, featureMap, supportedFeatures);
 
-    return (value, session, options) => {
-        validate?.(value, session, options);
+    return (value, session, location) => {
+        validate?.(value, session, location);
         if (value !== undefined) {
-            nextValidator?.(value, session, options);
+            nextValidator?.(value, session, location);
         }
     };
 }

@@ -21,7 +21,7 @@ import {
 } from "./assertions.js";
 import { createConformanceValidator } from "./conformance.js";
 import { createConstraintValidator } from "./constraint.js";
-import { ValidationContext } from "./context.js";
+import { ValidationLocation } from "./location.js";
 import { Val } from "../managed/Val.js";
 
 /**
@@ -95,9 +95,9 @@ function createNullValidator(
     nextValidator?: ValueSupervisor.Validate,
 ): ValueSupervisor.Validate | undefined {
     if (schema.effectiveQuality.nullable === true) {
-        return (value, options) => {
+        return (value, options, location) => {
             if (value !== null) {
-                nextValidator?.(value, options);
+                nextValidator?.(value, options, location);
             }
         };
     }
@@ -109,10 +109,10 @@ function createNullValidator(
 function createEnumValidator(schema: ValueModel): ValueSupervisor.Validate | undefined {
     const valid = new Set(schema.members.map(member => member.id).filter(e => e !== undefined));
 
-    return value => {
-        assertNumber(value, schema);
+    return (value, _session, location) => {
+        assertNumber(value, location);
         if (!valid.has(value)) {
-            throw new DatatypeError(schema, "defined in enum", value);
+            throw new DatatypeError(location, "defined in enum", value);
         }
     };
 }
@@ -134,20 +134,22 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
         };
     }
 
-    return value => {
-        assertObject(value, schema);
+    return (value, _session, location) => {
+        assertObject(value, location);
 
         for (const key in value) {
             const field = fields[key];
+            const subpath = location.path.at(key);
+
             if (field === undefined) {
-                throw new DatatypeError(schema, "defined in bitmap", key);
+                throw new DatatypeError(subpath, "defined in bitmap", key);
             }
 
             const fieldValue = value[key];
-            assertNumber(fieldValue, field.schema);
+            assertNumber(fieldValue, subpath);
 
             if (fieldValue > field.max) {
-                throw new DatatypeError(field.schema, "in range of bit field", fieldValue);
+                throw new DatatypeError(subpath, "in range of bit field", fieldValue);
             }
         }
     };
@@ -155,19 +157,19 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
 
 function createSimpleValidator(
     schema: ValueModel,
-    validateType: (value: Val, schema: ValueModel) => void,
+    validateType: (value: Val, location: ValidationLocation) => void,
 ): ValueSupervisor.Validate {
     const validateConstraint = createConstraintValidator(schema.effectiveConstraint, schema);
 
-    return (value, session, options) => {
+    return (value, session, location) => {
         // If undefined, only conformance tests apply
         if (value === undefined) {
             return;
         }
 
-        validateType(value, schema);
+        validateType(value, location);
 
-        validateConstraint?.(value, session, options?.siblings);
+        validateConstraint?.(value, session, location);
     };
 }
 
@@ -183,12 +185,13 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
         validators[camelize(field.name)] = factory.get(field).validate;
     }
 
-    return (struct, session) => {
-        assertObject(struct, schema);
-        const options: ValidationContext = {
+    return (struct, session, location) => {
+        assertObject(struct, location);
+        const sublocation = {
+            path: location.path.at(""),
             siblings: struct,
             choices: {},
-        };
+        } as ValidationLocation;
 
         for (const name in validators) {
             let value;
@@ -204,21 +207,26 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
                 value = struct[name];
             }
 
-            validators[name](value, session, options);
+            sublocation.path.name = name;
+            validators[name](value, session, sublocation);
         }
 
-        for (const name in options.choices) {
-            const choice = options.choices[name];
+        for (const name in sublocation.choices) {
+            const choice = sublocation.choices[name];
+            
             if (choice.count < choice.target) {
                 throw new ConformanceError(
                     schema,
+                    location,
                     `Too few fields present (${choice.count} of min ${choice.target})`,
                     name,
                 );
             }
+
             if (choice.count > choice.target && !choice.orMore) {
                 throw new ConformanceError(
                     schema,
+                    location,
                     `Too many fields present (${choice.count} of max ${choice.target})`,
                     name,
                 );
@@ -229,27 +237,38 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
 function createListValidator(schema: ValueModel, factory: RootSupervisor): ValueSupervisor.Validate | undefined {
     const entry = schema.listEntry;
-    let validateEntries: undefined | ((list: Val.List, session: ValueSupervisor.Session) => void);
+    let validateEntries: undefined | ValueSupervisor.Validate;
     if (entry) {
         let entryValidator = factory.get(entry).validate;
 
-        validateEntries = (list: Val.List, session: ValueSupervisor.Session) => {
-            for (const e of list) {
+        validateEntries = (list: Val, session: ValueSupervisor.Session, location: ValidationLocation) => {
+            if (!list || typeof (list as Iterable<unknown>)[Symbol.iterator] !== "function") {
+                throw new DatatypeError(location, "a list", list);
+            }
+
+            let index = 0;
+            const sublocation = {
+                path: location.path.at(""),
+            }
+            for (const e of list as Iterable<unknown>) {
                 if (e === undefined || e === null) {
                     // Accept nullish
                     continue;
                 }
 
-                entryValidator(e, session);
+                sublocation.path.name = index;
+                entryValidator(e, session, sublocation);
+
+                index++;
             }
         };
     }
 
     const validateConstraint = createConstraintValidator(schema.constraint, schema);
 
-    return (value, session, context) => {
-        assertArray(value, schema);
-        validateConstraint?.(value, session, context?.siblings);
-        validateEntries?.(value, session);
+    return (value, session, location) => {
+        assertArray(value, location);
+        validateConstraint?.(value, session, location);
+        validateEntries?.(value, session, location);
     };
 }

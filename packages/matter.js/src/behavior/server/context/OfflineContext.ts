@@ -12,7 +12,6 @@ export let nextInternalId = 1;
 /**
  * Create an offline {@link ActionContext}.  Interactions with private matter.js APIs happen in an offline context.
  */
-
 export function OfflineContext(): ActionContext {
     const id = nextInternalId;
     nextInternalId = (nextInternalId + 1) % 65535;

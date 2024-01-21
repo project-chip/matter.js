@@ -7,7 +7,7 @@
 import type { AccessControl } from "../AccessControl.js";
 import type { Val } from "../state/managed/Val.js";
 import type { Transaction } from "../state/transaction/Transaction.js";
-import type { ValidationContext } from "../state/validation/context.js";
+import type { ValidationLocation } from "../state/validation/location.js";
 import type { RootSupervisor } from "./RootSupervisor.js";
 import type { Schema } from "./Schema.js";
 
@@ -67,7 +67,7 @@ export namespace ValueSupervisor {
         transaction: Transaction;
     }
 
-    export type Validate = (value: Val, session: Session, context?: ValidationContext) => void;
+    export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;
 
-    export type Manage = (reference: Val.Reference, session: Session, location?: AccessControl.Location) => Val;
+    export type Manage = (reference: Val.Reference, session: Session, location: AccessControl.Location) => Val;
 }

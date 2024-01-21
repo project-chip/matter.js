@@ -9,6 +9,7 @@ import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from ".
 import { Properties } from "../../../../src/util/Type.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { OfflineContext } from "../../../../src/behavior/server/context/OfflineContext.js";
+import { SchemaPath } from "../../../../src/behavior/supervision/SchemaPath.js";
 
 export function Fields(...definition: { name?: string; type?: string; conformance?: string }[]): Fields {
     return definition.map(
@@ -70,7 +71,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
 
     // Perform validation
     try {
-        manager.validate(record ?? {}, OfflineContext());
+        manager.validate(record ?? {}, OfflineContext(), { path: SchemaPath(cluster.path) });
         expect(error).undefined;
     } catch (e) {
         if (!error || (e as any).constructor.name === "AssertionError") {

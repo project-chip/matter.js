@@ -67,7 +67,7 @@ export function StructManager(
         ) {
             // Only objects are acceptable
             if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
-                throw new SchemaImplementationError(schema, `Cannot manage ${typeof ref.value} because it is not a struct`);
+                throw new SchemaImplementationError(location, `Cannot manage ${typeof ref.value} because it is not a struct`);
             }
 
             // If we have a fabric index, update the context
@@ -75,7 +75,7 @@ export function StructManager(
                 const owningFabric = (ref as Val.Reference<Val.Struct>).value.fabricIndex as FabricIndex | undefined;
                 location = { ...location, owningFabric };
             }
-
+if (location === undefined) { debugger }
             Object.defineProperties(this, {
                 [REF]: {
                     value: ref as Val.Reference<Val.Struct>,
@@ -108,10 +108,10 @@ export function StructManager(
                 },
             },
         },
-    }) as new (value: Val, session: AccessControl.Session) => Val.Struct;
+    }) as new (value: Val, session: AccessControl.Session, location: AccessControl.Location) => Val.Struct;
 
-    return (reference, session) => {
-        reference.owner = new Wrapper(reference, session);
+    return (reference, session, location) => {
+        reference.owner = new Wrapper(reference, session, location);
         return reference.owner;
     };
 }
@@ -197,7 +197,8 @@ function configureProperty(
                 // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
                 // validation step that is performed on commit when choice conformance is in play.
                 try {
-                    validate(value, this[SESSION], { siblings: struct });
+                    if (this[LOCATION] === undefined) debugger;
+                    validate(value, this[SESSION], { path: this[LOCATION].path, siblings: struct });
                 } catch (e) {
                     // Undo our change on error.  Rollback will take care of this when transactional but this handles
                     // the cases of 1.) no transaction, and 2.) error is caught within transaction
@@ -272,7 +273,10 @@ function configureProperty(
             const assertWriteOk = (value: Val) => {
                 // Note - this needs to mirror behavior in the setter above
                 access.authorizeWrite(this[SESSION], this[LOCATION]);
-                validate(value, this[SESSION], { siblings: this[REF].value });
+                validate(value, this[SESSION], {
+                    path: this[LOCATION].path, 
+                    siblings: this[REF].value
+                });
             };
 
             // If we have a transaction we will clone the container before

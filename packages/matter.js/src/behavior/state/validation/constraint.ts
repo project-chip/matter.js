@@ -15,7 +15,9 @@ import { assertArray, assertNumeric, assertSequence } from "./assertions.js";
  * Creates a function that validates values based on the constraint in the
  * schema.
  */
-export function createConstraintValidator(constraint: Constraint, schema: ValueModel) {
+export function createConstraintValidator(constraint: Constraint, schema: ValueModel):
+    ValueSupervisor.Validate | undefined
+{
     if (constraint.empty) {
         return;
     }
@@ -26,19 +28,27 @@ export function createConstraintValidator(constraint: Constraint, schema: ValueM
 
         case Metatype.integer:
         case Metatype.float:
-            return (value: Val) => {
-                assertNumeric(value, schema);
+            return (value, _session, location) => {
+                assertNumeric(value, location);
                 if (!constraint.test(value)) {
-                    throw new ConstraintError(schema, `Value ${value} is not within bounds defined by constraint`);
+                    throw new ConstraintError(
+                        schema,
+                        location,
+                        `Value ${value} is not within bounds defined by constraint`
+                    );
                 }
             };
 
         case Metatype.string:
         case Metatype.bytes:
-            return (value: Val) => {
-                assertSequence(value, schema);
+            return (value: Val, _session, location) => {
+                assertSequence(value, location);
                 if (!constraint.test(value.length)) {
-                    throw new ConstraintError(schema, `Value ${value} is not within bounds defined by constraint`);
+                    throw new ConstraintError(
+                        schema,
+                        location,
+                        `Value ${value} is not within bounds defined by constraint`
+                    );
                 }
             };
 
@@ -63,21 +73,32 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
         }
     }
 
-    return (value, session, options) => {
-        assertArray(value, schema);
+    return (value, session, location) => {
+        assertArray(value, location);
 
-        if (!constraint.test(value.length, options?.siblings)) {
-            throw new ConstraintError(schema, `Array length ${value.length} is not within bounds defined by constraint`);
+        if (!constraint.test(value.length, location.siblings)) {
+            throw new ConstraintError(
+                schema,
+                location,
+                `Array length ${value.length} is not within bounds defined by constraint`,
+            );
         }
 
         if (validateEntryConstraint) {
+            const sublocation = {
+                ...location,
+                path: location.path.at(""),
+            }
+
+            let pos = 0;
             for (const e of value) {
                 if (e === undefined || e === null) {
                     // Accept nullish
                     continue;
                 }
 
-                validateEntryConstraint(e, session);
+                sublocation.path.name = pos;
+                validateEntryConstraint(e, session, sublocation);
             }
         }
     };

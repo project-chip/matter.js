@@ -5,7 +5,9 @@
  */
 
 import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
+import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
+import { SchemaPath } from "../../supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../managed/Val.js";
 import {
@@ -23,7 +25,7 @@ import {
     isStatic,
     type RuntimeNode,
 } from "./conformance-util.js";
-import { ValidationContext } from "./context.js";
+import { ValidationLocation } from "./location.js";
 
 /**
  * Generates JS function equivalent of a conformance expression.
@@ -78,17 +80,17 @@ export function astToFunction(
             // field is conformant
             const evaluate = compiledNode.evaluate;
 
-            return (value, _session, options) => {
-                const staticNode = evaluate(value, options);
+            return (value, session, location) => {
+                const staticNode = evaluate(value, location);
 
                 switch (staticNode.code) {
                     case Code.Conformant:
-                        requireValue(value);
+                        requireValue(value, session, location);
                         break;
 
                     case Code.Nonconformant:
                     case Code.Disallowed:
-                        disallowValue(value);
+                        disallowValue(value, session, location);
                         break;
 
                     case Code.Optional:
@@ -96,7 +98,7 @@ export function astToFunction(
 
                     default:
                         throw new SchemaImplementationError(
-                            schema,
+                            SchemaPath(schema.path),
                             `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
                         );
                 }
@@ -104,7 +106,7 @@ export function astToFunction(
 
         default:
             throw new SchemaImplementationError(
-                schema,
+                SchemaPath(schema.path),
                 `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
             );
     }
@@ -173,7 +175,10 @@ export function astToFunction(
                 ast satisfies never;
 
                 // Throw at runtime
-                throw new SchemaImplementationError(schema, `Unsupported conformance AST node type ${(ast as any).type}`);
+                throw new SchemaImplementationError(
+                    SchemaPath(schema.path),
+                    `Unsupported conformance AST node type ${(ast as any).type}`
+                );
         }
     }
 
@@ -191,7 +196,7 @@ export function astToFunction(
         const compiled = compile(param.expr);
 
         const name = param.name;
-        const template: ValidationContext.Choice = {
+        const template: ValidationLocation.Choice = {
             count: 0,
             target: param.num,
             orMore: !!param.orMore,
@@ -231,7 +236,10 @@ export function astToFunction(
      */
     function createGroup(param: Conformance.Ast.Group): DynamicNode {
         if (!Array.isArray(param)) {
-            throw new SchemaImplementationError(schema, "Conformance AST group parameter is not an array");
+            throw new SchemaImplementationError(
+                SchemaPath(schema.path),
+                "Conformance AST group parameter is not an array"
+            );
         }
 
         // A "group" is a list of conformances; any success passes the entire
@@ -475,7 +483,10 @@ export function astToFunction(
                 return createLogicalBinaryEvaluator(compiledLhs, compiledRhs, (lhs, rhs) => (lhs ? !rhs : rhs));
 
             default:
-                throw new SchemaImplementationError(schema, `Unknown logical binary operator ${operator}`);
+                throw new SchemaImplementationError(
+                    SchemaPath(schema.path),
+                    `Unknown logical binary operator ${operator}`
+                );
         }
     }
 
@@ -502,15 +513,15 @@ export function astToFunction(
         return createLogicalInversion(operand);
     }
 
-    function requireValue(value: Val) {
+    function requireValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value === undefined) {
-            throw new ConformanceError(schema, "Field must be defined");
+            throw new ConformanceError(schema, location, "Field must be defined");
         }
     }
 
-    function disallowValue(value: Val) {
+    function disallowValue(value: Val, _session: AccessControl.Session, location: ValidationLocation) {
         if (value !== undefined) {
-            throw new ConformanceError(schema, "Field must not be defined");
+            throw new ConformanceError(schema, location, "Field must not be defined");
         }
     }
 }

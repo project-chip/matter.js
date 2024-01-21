@@ -10,6 +10,7 @@ import { AccessControl } from "../../../AccessControl.js";
 import { ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
+import { SchemaPath } from "../../../supervision/SchemaPath.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { ManagedReference } from "../ManagedReference.js";
 import { Val } from "../Val.js";
@@ -34,7 +35,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
         // Sanity check
         if (!Array.isArray(list.value)) {
             throw new SchemaImplementationError(
-                schema,
+                location,
                 `Cannot manage ${typeof list.value} because it is not an array`,
             );
         }
@@ -46,7 +47,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
 function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
     const entry = schema instanceof ValueModel ? schema.listEntry : undefined;
     if (entry === undefined) {
-        throw new SchemaImplementationError(schema, `List schema has no entry definition`);
+        throw new SchemaImplementationError(SchemaPath(schema.path), `List schema has no entry definition`);
     }
 
     const entryManager = owner.get(entry);
@@ -84,32 +85,40 @@ function createProxy(
     config: ListConfig,
     reference: Val.Reference<Val.List>,
     session: ValueSupervisor.Session,
-    location?: AccessControl.Location,
+    location: AccessControl.Location,
 ) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
     let getListLength = () => reference.value.length;
     let setListLength = (length: number) => {
         if (length > 65535) {
-            throw new WriteError(config.schema, `Index ${length} is greater than allowed maximum of 65535`);
+            throw new WriteError(location, `Index ${length} is greater than allowed maximum of 65535`);
         }
 
         reference.change(() => (reference.value.length = length));
     };
     let hasEntry = (index: number) => reference.value[index] !== undefined;
+
     // Create the base entry reader.  The reader is different for containers vs. primitive values
-    let readEntry: (index: number) => Val;
+    let readEntry: (index: number, location: AccessControl.Location) => Val;
+
+    // Template used to convey sub-location information
+    const sublocation = {
+        ...location,
+        path: location.path.at(-1),
+    }
+
     if (config.manageEntries) {
         // Base reader produces managed containers
-        readEntry = index => {
+        readEntry = (index, location) => {
             authorizeRead(session, location);
 
             if (index < 0 || index >= reference.value.length) {
-                throw new ReadError(config.schema, `Index ${index} is out of bounds`);
+                throw new ReadError(location, `Index ${index} is out of bounds`);
             }
 
             if (index > 65535) {
-                throw new ReadError(config.schema, `Index ${index} is greater than allowed maximum of 65535`);
+                throw new ReadError(location, `Index ${index} is greater than allowed maximum of 65535`);
             }
 
             // AFAICT spec doesn't contemplate sparse arrays but it's kind of assumed.  If the value is nullish then
@@ -142,10 +151,10 @@ function createProxy(
         };
     } else {
         // Primitive value -- no management necessary
-        readEntry = index => {
+        readEntry = (index, location) => {
             authorizeRead(session, location);
             if (index < 0 || index > reference.value.length) {
-                throw new WriteError(config.schema, `Index ${index} is out of bounds`);
+                throw new WriteError(location, `Index ${index} is out of bounds`);
             }
 
             return reference.value[index];
@@ -153,15 +162,15 @@ function createProxy(
     }
 
     // Create an entry writer
-    let writeEntry = (index: number, value: Val) => {
+    let writeEntry = (index: number, value: Val, location: AccessControl.Location) => {
         authorizeWrite(session, location);
 
         if (index < 0 || index > reference.value.length + 1) {
-            throw new WriteError(config.schema, `Index ${index} is out of bounds`);
+            throw new WriteError(location, `Index ${index} is out of bounds`);
         }
 
         if (index > 65535) {
-            throw new ReadError(config.schema, `Index ${index} is greater than allowed maximum of 65535`);
+            throw new ReadError(location, `Index ${index} is greater than allowed maximum of 65535`);
         }
 
         reference.change(() => (reference.value[index] = value));
@@ -171,7 +180,7 @@ function createProxy(
     if (config.fabricScoped) {
         function mapScopedToActual(index: number, reading: boolean) {
             if (index < 0) {
-                throw new (reading ? ReadError : WriteError)(config.schema, `Negative index ${index} unsupported`);
+                throw new (reading ? ReadError : WriteError)(location, `Negative index ${index} unsupported`);
             }
 
             let nextPos = 0;
@@ -195,7 +204,7 @@ function createProxy(
             }
 
             if (reading) {
-                throw new ReadError(config.schema, `Index ${index} extends beyond available entries`);
+                throw new ReadError(location, `Index ${index} extends beyond available entries`);
             }
 
             if (nextPos === index) {
@@ -203,7 +212,7 @@ function createProxy(
                 return reference.value.length;
             }
 
-            throw new WriteError(config.schema, `Index ${index} would leave gaps in fabric-filtered list`);
+            throw new WriteError(location, `Index ${index} would leave gaps in fabric-filtered list`);
         }
 
         if (session.fabricFiltered || config.fabricSensitive) {
@@ -211,30 +220,30 @@ function createProxy(
 
             hasEntry = (index: number) => {
                 try {
-                    return nextReadEntry(mapScopedToActual(index, true)) !== undefined;
+                    return nextReadEntry(mapScopedToActual(index, true), location) !== undefined;
                 } catch (e) {
                     return false;
                 }
             };
-            readEntry = (index: number) => {
-                return nextReadEntry(mapScopedToActual(index, true));
+            readEntry = (index: number, location: AccessControl.Location) => {
+                return nextReadEntry(mapScopedToActual(index, true), location);
             };
 
             const nextWriteEntry = writeEntry;
-            writeEntry = (index: number, value: Val) => {
+            writeEntry = (index: number, value: Val, location: AccessControl.Location) => {
                 if (value === undefined) {
                     const valueIndex = mapScopedToActual(index, false);
                     reference.value.splice(valueIndex, 1);
                 } else {
                     if (typeof value !== "object") {
                         throw new WriteError(
-                            config.schema,
+                            location,
                             `Fabric scoped list value is not an object`,
                             StatusCode.Failure,
                         );
                     }
                     (value as { fabricIndex?: number }).fabricIndex ??= session.fabric;
-                    nextWriteEntry(mapScopedToActual(index, false), value);
+                    nextWriteEntry(mapScopedToActual(index, false), value, location);
                 }
             };
 
@@ -265,7 +274,7 @@ function createProxy(
                             reference.value.splice(mapScopedToActual(i, false), 1);
                         } else {
                             throw new WriteError(
-                                config.schema,
+                                location,
                                 `Fabric scoped list value is not an object`,
                                 StatusCode.Failure,
                             );
@@ -279,7 +288,8 @@ function createProxy(
     return new Proxy([], {
         get(_target, property, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                return readEntry(Number.parseInt(property));
+                sublocation.path.name = property;
+                return readEntry(Number.parseInt(property), sublocation);
             } else if (property === "length") {
                 return getListLength();
             }
@@ -290,8 +300,9 @@ function createProxy(
         // On write we enter a transaction
         set(_target, property, newValue, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                validateEntry(newValue, session);
-                writeEntry(Number.parseInt(property), newValue);
+                sublocation.path.name = property;
+                validateEntry(newValue, session, sublocation);
+                writeEntry(Number.parseInt(property), newValue, sublocation);
                 return true;
             } else if (property === "length") {
                 setListLength(newValue);
@@ -311,7 +322,8 @@ function createProxy(
 
         deleteProperty: (_target, property) => {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                writeEntry(Number.parseInt(property), undefined);
+                sublocation.path.name = property;
+                writeEntry(Number.parseInt(property), undefined, sublocation);
                 return true;
             }
 

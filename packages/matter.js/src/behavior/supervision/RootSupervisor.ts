@@ -12,20 +12,20 @@ import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { Schema } from "./Schema.js";
 import { ValueSupervisor } from "./ValueSupervisor.js";
+import { camelize } from "../../util/String.js";
 
 /**
- * A RootSupervisor is a {@link ValueSupervisor} that supervises a specific
- * root {@link Schema}.  It acts as a factory for {@link ValueSupervisor}s
- * for sub-schemas of the root schema.
+ * A RootSupervisor is a {@link ValueSupervisor} that supervises a specific root {@link Schema}.  It acts as a factory
+ * for {@link ValueSupervisor}s for sub-schemas of the root schema.
  *
- * You can produce an ValueSupervisor for any schema using this factory.
- * However, there are specific customizations controlled by the root schema:
+ * You can produce n ValueSupervisor for any schema using this factory. However, there are specific customizations
+ * controlled by the root schema:
  *
- * - Change eventing occur for root schema members.  In the case of a cluster
- *   this means you can monitor for changes on a per-attribute basis.
+ * - Change eventing occur for root schema members.  In the case of a cluster this means you can monitor for changes on
+ *   a per-attribute basis.
  *
- * - If the root schema defines a cluster, the cluster's featureMap and
- *   supportedFeatures affect conformance-based validation.
+ * - If the root schema defines a cluster, the cluster's featureMap and supportedFeatures affect conformance-based
+ *   validation.
  */
 export class RootSupervisor implements ValueSupervisor {
     #generating = new Set<Schema>();
@@ -34,7 +34,8 @@ export class RootSupervisor implements ValueSupervisor {
     #supportedFeatures: FeatureSet;
     #members: Set<ValueModel>;
     #root: ValueSupervisor;
-    #persists = false;
+    #memberNames?: Set<string>;
+    #persistentNames?: Set<string>;
 
     /**
      * Create a new supervisor.
@@ -53,13 +54,6 @@ export class RootSupervisor implements ValueSupervisor {
         this.#members = new Set(schema.members);
 
         this.#root = this.#createValueSupervisor(schema, managed);
-
-        for (const member of this.#members) {
-            if (member.effectiveQuality.nonvolatile) {
-                this.#persists = true;
-                break;
-            }
-        }
     }
 
     get owner() {
@@ -90,10 +84,35 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     /**
-     * Determine if supervised state has persistent values.
+     * The names of all members.
      */
-    get persists() {
-        return this.#persists;
+    get memberNames() {
+        let names = this.#memberNames;
+        if (!names) {
+            names = new Set;
+            for (const member of this.#members) {
+                names.add(camelize(member.name));
+            }
+            this.#memberNames = names;
+        }
+        return names;
+    }
+
+    /**
+     * Names of fields configured as non-volatile.
+     */
+    get persistentNames() {
+        let persistent = this.#persistentNames;
+        if (!persistent) {
+            persistent = new Set;
+            for (const member of this.#members) {
+                if (member.effectiveQuality.nonvolatile) {
+                    persistent.add(camelize(member.name));
+                }
+            }
+            this.#persistentNames = persistent;
+        }
+        return persistent;
     }
 
     /**
@@ -117,8 +136,7 @@ export class RootSupervisor implements ValueSupervisor {
      * @returns the I/O implementation
      */
     get(schema: Schema): ValueSupervisor {
-        // #root isn't set whilc we generate root schema so guard against
-        // this.#root === undefined
+        // #root isn't set whilc we generate root schema so guard against this.#root === undefined
         if (schema === this.#root?.schema) {
             return this;
         }
@@ -133,11 +151,9 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     #createValueSupervisor(schema: Schema, managed?: new () => Val) {
-        // Implements deferred generation (see comments below).  Proxies to
-        // the real generator, installs the generated function, then invokes.
-        // Since I/O functions are properties and not methods, we then continue
-        // to proxy to the generated function for places where the function is
-        // held directly.
+        // Implements deferred generation (see comments below).  Proxies to the real generator, installs the generated
+        // function, then invokes. Since I/O functions are properties and not methods, we then continue to proxy to the
+        // generated function for places where the function is held directly.
         const deferGeneration = (
             name: string,
             generator: (schema: Schema, factory: RootSupervisor, base?: new () => Val) => any,
@@ -189,12 +205,11 @@ export class RootSupervisor implements ValueSupervisor {
     }
 
     /**
-     * If a schema has circular references, code generation may need to defer
-     * generation of child functions to avoid infinite loops.
+     * If a schema has circular references, code generation may need to defer generation of child functions to avoid
+     * infinite loops.
      *
-     * In order to keep generation code simpler we use this method to detect
-     * when lazy generation is necessary and install stubs that bootstrap each
-     * method.
+     * In order to keep generation code simpler we use this method to detect when lazy generation is necessary and
+     * install stubs that bootstrap each method.
      */
     #isGenerating(schema: Schema) {
         return this.#generating.has(schema);
