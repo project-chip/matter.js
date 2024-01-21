@@ -97,7 +97,7 @@ export class Agent {
      * Functionally identical to {@link load} but has no return value.
      */
     activate(type: Behavior.Type) {
-        this.#part.behaviors.activate(type);
+        this.#part.behaviors.activate(type, this);
     }
 
     /**

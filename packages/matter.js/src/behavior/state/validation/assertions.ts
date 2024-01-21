@@ -4,56 +4,54 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ValueModel } from "../../../model/index.js";
 import { ByteArray } from "../../../util/ByteArray.js";
-import { DatatypeError } from "../../errors.js";
-import { Schema } from "../../supervision/Schema.js";
+import { DatatypeError, SchemaErrorPath } from "../../errors.js";
 import { Val } from "../managed/Val.js";
 
-export function assertNumber(value: Val, schema: Schema): asserts value is number {
+export function assertNumber(value: Val, path: SchemaErrorPath): asserts value is number {
     if (typeof value === "number") {
         return;
     }
-    throw new DatatypeError(schema, "a number", value);
+    throw new DatatypeError(path, "a number", value);
 }
 
-export function assertObject(value: Val, schema: Schema): asserts value is Val.Struct {
+export function assertObject(value: Val, path: SchemaErrorPath): asserts value is Val.Struct {
     if (typeof value === "object" && value !== null && !Array.isArray(value)) {
         return;
     }
-    throw new DatatypeError(schema, "an object", value);
+    throw new DatatypeError(path, "an object", value);
 }
 
-export function assertNumeric(value: Val, schema: ValueModel): asserts value is number | bigint {
+export function assertNumeric(value: Val, path: SchemaErrorPath): asserts value is number | bigint {
     if (typeof value === "number" || typeof value === "bigint") {
         return;
     }
-    throw new DatatypeError(schema, "number a number or bigint", value);
+    throw new DatatypeError(path, "number a number or bigint", value);
 }
 
-export function assertString(value: Val, schema: ValueModel): asserts value is string {
+export function assertString(value: Val, path: SchemaErrorPath): asserts value is string {
     if (typeof value === "string") {
         return;
     }
-    throw new DatatypeError(schema, "a string", value);
+    throw new DatatypeError(path, "a string", value);
 }
 
-export function assertBytes(value: Val, schema: ValueModel): asserts value is ByteArray {
+export function assertBytes(value: Val, path: SchemaErrorPath): asserts value is ByteArray {
     if (value instanceof ByteArray) {
         return;
     }
-    throw new DatatypeError(schema, "a byte array", value);
+    throw new DatatypeError(path, "a byte array", value);
 }
 
-export function assertSequence(value: Val, schema: ValueModel): asserts value is string | ByteArray {
+export function assertSequence(value: Val, path: SchemaErrorPath): asserts value is string | ByteArray {
     if (typeof value === "string" || value instanceof ByteArray) {
         return;
     }
-    throw new DatatypeError(schema, "a string or byte array", value);
+    throw new DatatypeError(path, "a string or byte array", value);
 }
 
-export function assertArray(value: Val, schema: ValueModel): asserts value is Val[] {
+export function assertArray(value: Val, path: SchemaErrorPath): asserts value is Val[] {
     if (!Array.isArray(value)) {
-        throw new DatatypeError(schema, "an array", value);
+        throw new DatatypeError(path, "an array", value);
     }
 }

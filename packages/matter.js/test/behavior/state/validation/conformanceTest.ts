@@ -18,7 +18,7 @@ const AllTests = Tests({
                 requires: {
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "M": Field must be defined',
+                        message: 'Validating Test.test: Conformance "M": Field must be defined',
                     },
                 },
             }),
@@ -43,7 +43,7 @@ const AllTests = Tests({
                     supports: ["foo"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "F": Field must be defined',
+                        message: 'Validating Test.test: Conformance "F": Field must be defined',
                     },
                 },
 
@@ -51,7 +51,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "F": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "F": Field must not be defined',
                     },
                 },
 
@@ -72,7 +72,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "[F]": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "[F]": Field must not be defined',
                     },
                 },
 
@@ -87,7 +87,7 @@ const AllTests = Tests({
                 "requires if disabled": {
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "!F": Field must be defined',
+                        message: 'Validating Test.test: Conformance "!F": Field must be defined',
                     },
                 },
 
@@ -96,7 +96,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "!F": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "!F": Field must not be defined',
                     },
                 },
 
@@ -117,7 +117,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "[!F]": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "[!F]": Field must not be defined',
                     },
                 },
 
@@ -144,7 +144,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "F | B": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "F | B": Field must not be defined',
                         },
                     },
 
@@ -174,7 +174,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "[F | B]": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "[F | B]": Field must not be defined',
                         },
                     },
 
@@ -193,7 +193,7 @@ const AllTests = Tests({
                         supports: ["foo", "bar"],
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "F & B": Field must be defined',
+                            message: 'Validating Test.test: Conformance "F & B": Field must be defined',
                         },
                     },
 
@@ -201,7 +201,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "F & B": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
                         },
                     },
 
@@ -210,7 +210,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "F & B": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
                         },
                     },
 
@@ -219,7 +219,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "F & B": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "F & B": Field must not be defined',
                         },
                     },
 
@@ -248,7 +248,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "[F & B]": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
                         },
                     },
 
@@ -257,7 +257,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "[F & B]": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
                         },
                     },
 
@@ -266,7 +266,7 @@ const AllTests = Tests({
                         record: { test: 1234 },
                         error: {
                             type: ConformanceError,
-                            message: 'Validating Test.Test: Conformance "[F & B]": Field must not be defined',
+                            message: 'Validating Test.test: Conformance "[F & B]": Field must not be defined',
                         },
                     },
 
@@ -294,7 +294,7 @@ const AllTests = Tests({
                     supports: ["aye", "bee", "see"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A & B & C": Field must be defined',
+                        message: 'Validating Test.test: Conformance "A & B & C": Field must be defined',
                     },
                 },
 
@@ -303,7 +303,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A & B & C": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "A & B & C": Field must not be defined',
                     },
                 },
 
@@ -327,7 +327,7 @@ const AllTests = Tests({
                     supports: ["aye", "bee"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A & (B | C)": Field must be defined',
+                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must be defined',
                     },
                 },
 
@@ -335,7 +335,7 @@ const AllTests = Tests({
                     supports: ["aye", "see"],
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A & (B | C)": Field must be defined',
+                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must be defined',
                     },
                 },
 
@@ -344,7 +344,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A & (B | C)": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "A & (B | C)": Field must not be defined',
                     },
                 },
 
@@ -369,7 +369,7 @@ const AllTests = Tests({
                     record: { test: 1234 },
                     error: {
                         type: ConformanceError,
-                        message: 'Validating Test.Test: Conformance "A | B & C": Field must not be defined',
+                        message: 'Validating Test.test: Conformance "A | B & C": Field must not be defined',
                     },
                 },
             }),

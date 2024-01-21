@@ -27,6 +27,7 @@ import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { FORBIDDEN_PASSCODES } from "../../../CommissioningServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { IdentityService } from "../../../node/server/IdentityService.js";
+import { Agent } from "../../../endpoint/Agent.js";
 
 const logger = Logger.get("Commissioning");
 
@@ -67,7 +68,7 @@ export class CommissioningBehavior extends Behavior {
         if (!pd) {
             const bi = this.agent.get(BasicInformationBehavior).state;
 
-            const deviceType = inferDeviceType(this.part);
+            const deviceType = inferDeviceType(this.part, this.agent);
 
             if (!deviceType) {
                 throw new ImplementationError(
@@ -165,8 +166,7 @@ export namespace CommissioningBehavior {
     }
 }
 
-function inferDeviceType(part: Part): DeviceTypeId | undefined {
-    const agent = part.agent;
+function inferDeviceType(part: Part, agent: Agent): DeviceTypeId | undefined {
     let recurse = false;
     for (const dt of agent.get(DescriptorBehavior).state.deviceTypeList) {
         switch (dt.deviceType) {
@@ -188,7 +188,7 @@ function inferDeviceType(part: Part): DeviceTypeId | undefined {
     }
     
     for (const child of part.parts) {
-        const deviceType = inferDeviceType(child);
+        const deviceType = inferDeviceType(child, agent);
         if (deviceType !== undefined) {
             return deviceType;
         }

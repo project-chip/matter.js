@@ -7,13 +7,16 @@
 import { ValueModel } from "../model/index.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
+import { SchemaPath } from "./supervision/SchemaPath.js";
+
+export type SchemaErrorPath = (SchemaPath & { path?: undefined }) | { path: SchemaPath };
 
 /**
  * Thrown due to schema violations.
  */
 export class SchemaViolationError extends StatusResponseError {
-    constructor(prefix: string, schema: Schema, message: string, code: StatusCode) {
-        const text = `${prefix} ${schema.path}: ${message} (${code})`;
+    constructor(prefix: string, path: SchemaErrorPath, message: string, code: StatusCode) {
+        const text = `${prefix} ${path.path ?? path}: ${message} (${code})`;
         super(text, code);
 
         // Remove default status code injection
@@ -25,8 +28,8 @@ export class SchemaViolationError extends StatusResponseError {
  * Thrown for invalid reads.
  */
 export class ReadError extends SchemaViolationError {
-    constructor(schema: Schema, message: string, code?: StatusCode) {
-        super("Reading", schema, message, code ?? StatusCode.UnsupportedRead);
+    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
+        super("Reading", path, message, code ?? StatusCode.UnsupportedRead);
     }
 }
 
@@ -34,8 +37,8 @@ export class ReadError extends SchemaViolationError {
  * Thrown for invalid writes.
  */
 export class WriteError extends SchemaViolationError {
-    constructor(schema: Schema, message: string, code?: StatusCode) {
-        super("Writing", schema, message, code ?? StatusCode.UnsupportedWrite);
+    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
+        super("Writing", path, message, code ?? StatusCode.UnsupportedWrite);
     }
 }
 
@@ -43,8 +46,8 @@ export class WriteError extends SchemaViolationError {
  * Thrown for invalid invokes.
  */
 export class InvokeError extends SchemaViolationError {
-    constructor(schema: Schema, message: string, code?: StatusCode) {
-        super("Invoking", schema, message, code ?? StatusCode.UnsupportedAccess);
+    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
+        super("Invoking", path, message, code ?? StatusCode.UnsupportedAccess);
     }
 }
 
@@ -52,8 +55,8 @@ export class InvokeError extends SchemaViolationError {
  * Thrown when validation fails.
  */
 export class ValidateError extends SchemaViolationError {
-    constructor(schema: Schema, message: string, code?: StatusCode) {
-        super("Validating", schema, message, code ?? StatusCode.InvalidDataType);
+    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
+        super("Validating", path, message, code ?? StatusCode.InvalidDataType);
     }
 }
 
@@ -61,12 +64,12 @@ export class ValidateError extends SchemaViolationError {
  * Thrown when a value is of the wrong datatype.
  */
 export class DatatypeError extends ValidateError {
-    constructor(schema: Schema, type: string, value: unknown, code?: StatusCode) {
+    constructor(path: SchemaErrorPath, type: string, value: unknown, code?: StatusCode) {
         const str = `${value}`;
         if (str.length > 60) {
             value = `${str.substring(60)}…`;
         }
-        super(schema, `Value "${str}" is not ${type}`, code);
+        super(path, `Value "${str}" is not ${type}`, code);
     }
 }
 
@@ -74,8 +77,8 @@ export class DatatypeError extends ValidateError {
  * Thrown when constraint is violated.
  */
 export class ConstraintError extends ValidateError {
-    constructor(schema: Schema, message: string) {
-        super(schema, `Constraint "${(schema as ValueModel).constraint}": ${message}`, StatusCode.ConstraintError);
+    constructor(schema: Schema, path: SchemaErrorPath, message: string) {
+        super(path, `Constraint "${(schema as ValueModel).constraint}": ${message}`, StatusCode.ConstraintError);
     }
 }
 
@@ -83,14 +86,14 @@ export class ConstraintError extends ValidateError {
  * Thrown when conformance is violated.
  */
 export class ConformanceError extends ValidateError {
-    constructor(schema: Schema, message: string, choice?: string) {
+    constructor(schema: Schema, path: SchemaErrorPath, message: string, choice?: string) {
         let prefix;
         if (choice) {
             prefix = `Conformance choice "${choice}"`;
         } else {
             prefix = `Conformance "${(schema as ValueModel).conformance}"`;
         }
-        super(schema, `${prefix}: ${message}`, StatusCode.InvalidAction);
+        super(path, `${prefix}: ${message}`, StatusCode.InvalidAction);
     }
 }
 
@@ -99,7 +102,7 @@ export class ConformanceError extends ValidateError {
  * a local (vs network client) problem.
  */
 export class SchemaImplementationError extends SchemaViolationError {
-    constructor(schema: Schema, message: string, code?: StatusCode) {
-        super("Definition of", schema, message, code ?? StatusCode.Failure);
+    constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {
+        super("Definition of", path, message, code ?? StatusCode.Failure);
     }
 }

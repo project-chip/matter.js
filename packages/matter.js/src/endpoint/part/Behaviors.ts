@@ -20,6 +20,7 @@ import { PartInitializer } from "./PartInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
+import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -71,21 +72,11 @@ export class Behaviors {
         if (!this.#supported.descriptor) {
             this.#supported.descriptor = DescriptorServer;
         }
-
-        // On reset we reset backings
-        part.construction.change.on(status => {
-            if (status === LifecycleStatus.Inactive) {
-                for (const backing of Object.values(this.#backings)) {
-                    backing.reset();
-                }
-            }
-        });
     }
 
     /**
-     * Obtain the initial state for a particular behavior if supported.  This
-     * is state values as present when the behavior is first initialized for a
-     * new part.
+     * Obtain the initial state for a particular behavior if supported.  This is state values as present when the
+     * behavior is first initialized for a new part.
      */
     initialStateFor<const T extends Behavior.Type>(type: T) {
         if (this.#supported[type.id]?.supports(type)) {
@@ -97,21 +88,32 @@ export class Behaviors {
     }
 
     /**
-     * Activate any behaviors designated for immediate activation.  Returns a
-     * promise iff any behaviors have ongoing initialization.
+     * Activate any behaviors designated for immediate activation.  Returns a promise iff any behaviors have ongoing
+     * initialization.
      */
-    initialize(): MaybePromise {
+    initialize(agent: Agent): MaybePromise {
         for (const type of Object.values(this.supported)) {
+            const backing = this.#backings[type.id];
+
+            // If we already have a backing, our part has reset and we need to reset the backing
+            if (backing) {
+                backing.reset(agent);
+                continue;
+            }
+
+            // If we don't yet have a backing but the behavior requires immediate activation, activate now
             if (type.immediate) {
-                this.#part.agent.activate(type);
+                this.activate(type, agent);
             }
         }
 
+        // If all behaviors are initialized then we complete synchronously
         const initializing = this.#initializing;
         if (!initializing?.size) {
             return;
         }
 
+        // Return a promise that fulfills once all behaviors complete initialization
         return new Promise<void>((fulfilled) => {
             const initializationListener = () => {
                 if (initializing.size === 0) {
@@ -174,17 +176,15 @@ export class Behaviors {
     }
 
     /**
-     * Create a behavior asynchronously.  Waits for the behavior to complete
-     * initialization.
+     * Create a behavior asynchronously.  Waits for the behavior to complete initialization.
      */
     async createAsync(type: Behavior.Type, agent: Agent) {
         return MaybePromise.then(
             () => this.createMaybeAsync(type, agent),
             undefined,
             e => {
-                // We log the actual error produced by the backing.  Here we
-                // want the error to present as incapacitated access with a
-                // proper stack trace
+                // We log the actual error produced by the backing.  Here we want the error to present as incapacitated
+                // access with a proper stack trace
                 const backing = this.#backings[type.id];
                 if (!backing) {
                     throw e;
@@ -197,24 +197,22 @@ export class Behaviors {
     /**
      * Create a behavior, possibly asynchronously.
      *
-     * This method returns a {@link Promise} only if await is necessary so the
-     * behavior can be used immediately if possible.
+     * This method returns a {@link Promise} only if await is necessary so the behavior can be used immediately if
+     * possible.
      */
     createMaybeAsync(type: Behavior.Type, agent: Agent): MaybePromise<Behavior> {
-        this.activate(type);
+        this.activate(type, agent);
         let backing = this.#backings[type.id];
 
         if (!backing.construction.ready) {
             return backing.construction
                 .then(() => backing.createBehavior(agent, type))
                 .catch(() => {
-                    // The backing logs the actual error so here the error
-                    // should just throw "unavailable due to initialization
-                    // error"
+                    // The backing logs the actual error so here the error should just throw "unavailable due to
+                    // initialization error"
                     backing.construction.assert(backing.toString());
 
-                    // Shouldn't get here but catch result type needs to be a
-                    // behavior
+                    // Shouldn't get here but catch result type needs to be a behavior
                     return backing.createBehavior(agent, type);
                 });
         }
@@ -226,18 +224,16 @@ export class Behaviors {
 
     /**
      * Activate a behavior.
-     * 
-     * Semantically identical to createAsync() but does not return a
-     * {@link Promise} or throw an error.
-     * 
-     * Behaviors that fail initialization will be marked as incapacitated in
-     * {@link status}.
+     *
+     * Semantically identical to createAsync() but does not return a {@link Promise} or throw an error.
+     *
+     * Behaviors that fail initialization will be marked as incapacitated in {@link status}.
      */
-    activate(type: Behavior.Type) {
+    activate(type: Behavior.Type, agent: Agent) {
         let backing = this.#backings[type.id];
 
         if (!backing) {
-            backing = this.#createBacking(type);
+            backing = this.#createBacking(type, agent);
         }
         
         return backing.construction;
@@ -255,15 +251,23 @@ export class Behaviors {
      * Destroy all behaviors that are initialized (have backings present).
      */
     async [Symbol.asyncDispose]() {
+        const agent = this.#part.agent;
+
         for (const id in this.#backings) {
-            await this.#backings[id][Symbol.asyncDispose]();
+            await this.#backings[id].destroy(agent);
         }
+
         this.#backings = {};
+
+        // Commit any state changes that occurred during destructino
+        const transaction = agent.context.transaction;
+        if (transaction.status !== Transaction.Status.Exclusive) {
+            await transaction.commit();
+        }
     }
 
     /**
-     * Ensure a set of behavior requirements are met.  Throws an error
-     * detailing missing requirements.
+     * Ensure a set of behavior requirements are met.  Throws an error detailing missing requirements.
      */
     validateRequirements(requirements?: SupportedBehaviors) {
         if (!requirements) {
@@ -310,17 +314,15 @@ export class Behaviors {
         return defaults;
     }
 
-    #createBacking(type: Behavior.Type) {
-        // Ensure the type is supported.  If it is, we instantiate with our
-        // type rather than the specified type because our type might be an
-        // extension
+    #createBacking(type: Behavior.Type, agent: Agent) {
+        // Ensure the type is supported.  If it is, we instantiate with our type rather than the specified type because
+        // our type might be an extension
         const myType = this.#getBehaviorType(type);
         if (!myType) {
             throw new ImplementationError(`Request for unsupported behavior ${this.#part}${type.id}}`);
         }
 
-        // Ask the owner to create the backing.  This is specialized for the
-        // owner (e.g. client or server)
+        // Ask the owner to create the backing.  This is specialized for the owner (e.g. client or server)
         if (!this.#part.owner) {
             throw new ImplementationError(`Attempted initialization of ${this.#part}${type.id} of uninstalled part`);
         }
@@ -328,13 +330,13 @@ export class Behaviors {
         const backing = this.#part.serviceFor(PartInitializer).createBacking(this.#part, myType);
         this.#backings[type.id] = backing;
 
-        this.#initializeBacking(backing);
+        this.#initializeBacking(backing, agent);
 
         return backing;
     }
 
-    #initializeBacking(backing: BehaviorBacking) {
-        backing.initialize();
+    #initializeBacking(backing: BehaviorBacking, agent: Agent) {
+        backing.initialize(agent);
 
         // Initialize backing state
         if (!backing.construction.ready) {

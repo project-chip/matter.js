@@ -20,6 +20,7 @@ import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
 import { OfflineContext } from "../behavior/server/context/OfflineContext.js";
+import { Transaction } from "../behavior/state/transaction/Transaction.js";
 
 /**
  * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
@@ -36,7 +37,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #number?: EndpointNumber;
     #owner?: PartOwner;
     #agentType?: Agent.Type<T>;
-    #offlineAgent?: Agent.Instance<T>;
     #behaviors?: Behaviors;
     #lifecycle: PartLifecycle;
     #parts?: Parts;
@@ -162,12 +162,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
+        const agent = this.agent;
+
+        // Initialize myself and behaviors
         let promise = MaybePromise.then(
             () => {
                 this.owner.serviceFor(PartInitializer).initializeDescendent(this);
-                return this.behaviors.initialize();
+                return this.behaviors.initialize(agent);
             },
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
+        );
+
+        // Persist any state changes resulting from initialization
+        promise = MaybePromise.then(
+            promise,
+            () => {
+                const transaction = agent.context.transaction;
+                if (transaction.status === Transaction.Status.Exclusive) {
+                    transaction.commit();
+                }
+            }
         );
 
         return promise;
@@ -300,16 +314,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Access an offline {@link Agent}.  An "offline" agent enforces no ACLs and all state is read/write.
+     * Perform offline work on the part.  An "offline" agent enforces no ACLs and all state is read/write.
      *
      * This should only be used for local purposes.  All network interaction should use an agent retrieved from an
      * OnlineContext.
      */
     get agent() {
-        if (!this.#offlineAgent) {
-            return this.#offlineAgent = OfflineContext().agentFor(this);
-        }
-        return this.#offlineAgent;
+        return OfflineContext().agentFor(this);
     }
 
     /**

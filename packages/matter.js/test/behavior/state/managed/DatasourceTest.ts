@@ -114,6 +114,9 @@ describe("Datasource", () => {
             }
 
             set foo(value) {
+                if (value === "foo") {
+                    return;
+                }
                 throw new Error(`Bad value "${value}"`);
             }
         }
@@ -161,13 +164,23 @@ describe("Datasource", () => {
         await context.transaction.commit();
 
         expect(store.sets.length).equals(1);
-        expect(Object.keys(store.sets[0]).length === 1);
+        expect(Object.keys(store.sets[0]).length).equals(1);
         expect(typeof store.sets[0].__version__).equals("number");
 
         const { context: context2 } = createReference(ds);
         await context2.transaction.commit();
 
         expect(store.sets.length).equals(1);
+    })
+
+    it("does not commit version if already persisted", async () => {
+        const store = createStore({ __version__: 1234 });
+
+        const { ds, context } = createDatasourceAndReference({ store, versioning: true });
+        await context.transaction.commit();
+
+        expect(store.sets.length).equals(0);
+        expect(ds.version).equals(1234);
     })
 
     it("commits changes after initial load", async () => {

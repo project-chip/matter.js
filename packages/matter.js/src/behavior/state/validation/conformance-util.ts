@@ -5,10 +5,11 @@
  */
 
 import { Conformance } from "../../../model/index.js";
-import { SchemaImplementationError } from "../../errors.js";
+import { SchemaErrorPath, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
+import { SchemaPath } from "../../supervision/SchemaPath.js";
 import { Val } from "../managed/Val.js";
-import { ValidationContext } from "./context.js";
+import { ValidationLocation } from "./location.js";
 
 export enum Code {
     // Ignored in logical disjunctions (groups and "|" operator); equivalent to
@@ -46,7 +47,7 @@ export type StaticNode =
 
 export interface RuntimeNode {
     code: Code.Evaluate;
-    evaluate: (value: Val, options?: ValidationContext) => StaticNode;
+    evaluate: (value: Val, location: ValidationLocation) => StaticNode;
 }
 
 export type DynamicNode = StaticNode | RuntimeNode;
@@ -54,9 +55,9 @@ export type DynamicNode = StaticNode | RuntimeNode;
 /**
  * Convert a static node to a dynamic node at runtime.
  */
-export function evaluateNode(node: DynamicNode, value: Val, options?: ValidationContext): StaticNode {
+export function evaluateNode(node: DynamicNode, value: Val, location: ValidationLocation): StaticNode {
     if (node.code === Code.Evaluate) {
-        return node.evaluate(value, options);
+        return node.evaluate(value, location);
     }
     return node;
 }
@@ -99,9 +100,9 @@ export function asBoolean(node: StaticNode) {
  *
  * We use this to ensure inputs to binary operators make sense.
  */
-export function assertValue(schema: Schema, node: DynamicNode, where: string): asserts node is ValueNode {
+export function assertValue(location: SchemaErrorPath, node: DynamicNode, where: string): asserts node is ValueNode {
     if (node.code !== Code.Value) {
-        throw new SchemaImplementationError(schema, `Expected a value for ${where} but conformance node is "${node.code}"`);
+        throw new SchemaImplementationError(location, `Expected a value for ${where} but conformance node is "${node.code}"`);
     }
 }
 
@@ -173,14 +174,15 @@ function performComparison(
     lhs: StaticNode,
     rhs: StaticNode,
     schema: Schema,
+    location: SchemaErrorPath,
 ): StaticNode {
     const operator = ComparisonOperators[operatorName];
     if (operator === undefined) {
-        throw new SchemaImplementationError(schema, `Unknown binary operator ${operatorName}`);
+        throw new SchemaImplementationError(SchemaPath(schema.path), `Unknown binary operator ${operatorName}`);
     }
 
-    assertValue(schema, lhs, `Left-hand side of "${operatorName}"`);
-    assertValue(schema, rhs, `Right-hand side of "${operatorName}"`);
+    assertValue(location, lhs, `Left-hand side of "${operatorName}"`);
+    assertValue(location, rhs, `Right-hand side of "${operatorName}"`);
 
     if (
         lhs.value !== undefined &&
@@ -206,19 +208,20 @@ export function createComparison(
 ): DynamicNode {
     // If both sides are static evaluate statically
     if (isStatic(lhs) && isStatic(rhs)) {
-        return performComparison(operatorName, lhs, rhs, schema);
+        return performComparison(operatorName, lhs, rhs, schema, SchemaPath(schema.path));
     }
 
     // Evaluate at runtime
     return {
         code: Code.Evaluate,
 
-        evaluate: (value, options) =>
+        evaluate: (value, location) =>
             performComparison(
                 operatorName,
-                evaluateNode(lhs, value, options),
-                evaluateNode(rhs, value, options),
+                evaluateNode(lhs, value, location),
+                evaluateNode(rhs, value, location),
                 schema,
+                location,
             ),
     };
 }

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Agent } from "../../endpoint/Agent.js";
 import { FieldValue } from "../../model/index.js";
 import { ServerResetService } from "../../node/server/ServerResetService.js";
 import { PartStoreService } from "../../node/server/storage/PartStoreService.js";
@@ -46,17 +47,11 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 // State must now conform to the schema
                 const context = behavior.context;
                 this.datasource.validate(context);
-
-                // If initialization modified state, initiate commit
-                const transaction = context.transaction;
-                if (transaction.status === Transaction.Status.Exclusive) {
-                    return transaction.commit();
-                }
             }
         )
     }
 
-    protected override async resetState() {
+    protected override async resetState(agent: Agent) {
         const members = this.type.schema?.members;
         if (!members) {
             // Without metadata this is not relevant
@@ -70,7 +65,8 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         const context = OfflineContext();
         const state = this.datasource.reference(context) as Val.Struct;
 
-        const transaction = context.transaction;
+        const transaction = agent.context.transaction;
+
         for (const member of this.type.schema?.members) {
             // Minor optimization
             const name = camelize(member.name);
@@ -91,10 +87,6 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
             // Set the value
             state[name] = defaults[name];
-        }
-
-        if (transaction.status === Transaction.Status.Exclusive) {
-            await transaction.commit();
         }
     }
 

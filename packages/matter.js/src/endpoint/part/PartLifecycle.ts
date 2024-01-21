@@ -9,6 +9,7 @@ import { Observable } from "../../util/Observable.js";
 import type { Node } from "../../node/Node.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { MaybePromise } from "../../util/Promises.js";
 
 /**
  * State related to a {@link Part}'s lifecycle.
@@ -22,6 +23,7 @@ export class PartLifecycle {
     #installed = new Observable<[]>();
     #ready = new Observable<[]>();
     #destroyed = new Observable<[]>();
+    #reset = new Observable<[], MaybePromise<void>>();
     #changed = new Observable<[type: PartLifecycle.Change, part: Part]>();
     #queuedUpdates?: Array<PartLifecycle.Change>;
 
@@ -83,13 +85,18 @@ export class PartLifecycle {
 
     constructor(part: Part) {
         this.#part = part;
+        this.#reset.on(() => {
+            this.#isReady = this.#isInstalled = false;
+        });
     }
 
     /**
-     * Reset the {@link Part}.  After reset the part is reverted to uninstalled state.
+     * Reset the {@link Part}.  On reset the part reverts to uninstalled state.  When reinstalled it will reinitialize
+     * behaviors and all child parts.
      */
-    async reset() {
+    reset() {
         this.#isReady = this.#isInstalled = false;
+
         this.#part.construction.setStatus(LifecycleStatus.Inactive);
     }
 

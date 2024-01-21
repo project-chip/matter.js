@@ -103,8 +103,8 @@ export class DescriptorServer extends DescriptorBehavior {
 
         // The presence of IndexBehavior indicates a flat namespace as required by Matter standard for root and
         // aggregator endpoints
-        if (part.behaviors.has(IndexBehavior)) {
-            const index = part.agent.get(IndexBehavior);
+        if (this.agent.has(IndexBehavior)) {
+            const index = this.agent.get(IndexBehavior);
             const numbers = Object.keys(index.state.partsByNumber)
                 .map(n => Number.parseInt(n));
 

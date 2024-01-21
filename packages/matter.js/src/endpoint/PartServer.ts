@@ -7,7 +7,6 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { BehaviorBacking } from "../behavior/BehaviorBacking.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
-import { DescriptorServer } from "../behavior/definitions/descriptor/DescriptorServer.js";
 import { ClusterServerBehaviorBacking } from "../behavior/server/ClusterServerBehaviorBacking.js";
 import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.js";
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
@@ -86,10 +85,6 @@ export class PartServer implements EndpointInterface {
         return this.#name;
     }
 
-    get agent() {
-        return this.#part.agent;
-    }
-
     getNumber(): EndpointNumber {
         if (this.number === undefined) {
             throw new InternalError("Endpoint ID has not been assigned yet");
@@ -103,9 +98,8 @@ export class PartServer implements EndpointInterface {
     }
 
     updatePartsList(): EndpointNumber[] {
-        // No actual update, parts list is maintained by Parts
-        const descriptor = this.#part.agent.get(DescriptorServer);
-        return descriptor.state.partsList;
+        // We don't use this
+        return [];
     }
 
     getChildEndpoints(): EndpointInterface[] {

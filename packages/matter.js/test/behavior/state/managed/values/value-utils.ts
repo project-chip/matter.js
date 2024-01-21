@@ -7,6 +7,7 @@
 import { OfflineContext } from "../../../../../src/behavior/server/context/OfflineContext.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
+import { SchemaPath } from "../../../../../src/behavior/supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
 import { InternalError } from "../../../../../src/common/MatterError.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
@@ -101,7 +102,7 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
                     context = this.context;
                 }
             }
-            return supervisor.manage(rootRef, context) as Val.Struct;
+            return supervisor.manage(rootRef, context, { path: SchemaPath("TestStruct") }) as Val.Struct;
         }
     }
 }
