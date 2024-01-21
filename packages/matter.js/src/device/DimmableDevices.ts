@@ -8,9 +8,9 @@ import { createDefaultLevelControlClusterServer } from "../cluster/server/LevelC
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
-import { DeviceTypes } from "./DeviceTypes.js";
+import { DeviceTypeDefinition, DeviceTypes } from "./DeviceTypes.js";
 import { EndpointOptions } from "./Endpoint.js";
-import { getClusterInitialAttributeValues, OnOffBaseDevice } from "./OnOffDevices.js";
+import { OnOffBaseDevice, getClusterInitialAttributeValues } from "./OnOffDevices.js";
 
 type DimmableDeviceCommands = {
     moveToLevel: ClusterServerHandlers<typeof LevelControl.Complete>["moveToLevel"];
@@ -26,6 +26,15 @@ type DimmableDeviceCommands = {
 class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevice, DimmableDeviceCommands>(
     OnOffBaseDevice,
 ) {
+    constructor(
+        definition: DeviceTypeDefinition,
+        attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
+        options: EndpointOptions = {},
+        isLighting = false,
+    ) {
+        super(definition, attributeInitialValues, options, isLighting);
+    }
+
     protected override addDeviceClusters(
         attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
         excludeList: ClusterId[] = [],
@@ -39,6 +48,7 @@ class DimmableBaseDevice extends extendPublicHandlerMethods<typeof OnOffBaseDevi
                         attributeInitialValues,
                         OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
                     ),
+                    this.isLighting,
                 ),
             );
         }
@@ -86,7 +96,7 @@ export class DimmablePluginUnitDevice extends DimmableBaseDevice {
         if (dimmableAttributeValues !== undefined) {
             initialAttributeValues[LevelControl.Cluster.id] = dimmableAttributeValues;
         }
-        super(DeviceTypes.DIMMABLE_PLUGIN_UNIT, initialAttributeValues, options);
+        super(DeviceTypes.DIMMABLE_PLUGIN_UNIT, initialAttributeValues, options, false);
     }
 }
 
@@ -103,6 +113,6 @@ export class DimmableLightDevice extends DimmableBaseDevice {
         if (dimmableAttributeValues !== undefined) {
             initialAttributeValues[LevelControl.Cluster.id] = dimmableAttributeValues;
         }
-        super(DeviceTypes.DIMMABLE_LIGHT, initialAttributeValues, options);
+        super(DeviceTypes.DIMMABLE_LIGHT, initialAttributeValues, options, true);
     }
 }
