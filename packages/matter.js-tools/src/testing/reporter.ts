@@ -112,7 +112,6 @@ export abstract class ProgressReporter implements Reporter {
 }
 
 const actualConsole = console;
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const actualLog = actualConsole.log;
 
 function proxy(...args: any[]) {

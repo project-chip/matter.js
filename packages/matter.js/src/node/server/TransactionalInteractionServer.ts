@@ -112,7 +112,7 @@ export class TransactionalInteractionServer extends InteractionServer {
      * transactionality.  Matter does not address this so semantics are going to be highly implementation dependent if
      * they make sense at all.
      */
-    async #transact<T extends Promise<unknown>>(
+    async #transact<T extends Promise<any>>(
         why: "Read" | "Write" | "Invoke",
         options: OnlineContext.Options,
         fn: () => T

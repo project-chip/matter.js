@@ -103,7 +103,6 @@ export class Typescript {
 
     private getCompilerOptions(filename: string) {
         filename = this.pkg.resolve(filename);
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         const file = ts.readConfigFile(filename, ts.sys.readFile);
         this.passTscError(file.error);
         const config = ts.parseJsonConfigFileContent(file.config, ts.sys, dirname(filename));

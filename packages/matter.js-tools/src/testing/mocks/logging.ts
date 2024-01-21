@@ -31,7 +31,6 @@ export function loggerSetup(Logger: LoggerLike) {
 
     let messageBuffer: [number, string][] | undefined;
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const defaultLog = Logger.log;
 
     function passMessage(args: [number, string]) {

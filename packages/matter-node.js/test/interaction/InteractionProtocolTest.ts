@@ -820,11 +820,9 @@ async function getDummyMessageExchange(
 }
 
 describe("InteractionProtocol", () => {
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     let realGetRandomData = Crypto.get().getRandomData;
 
     before(() => {
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         realGetRandomData = Crypto.get().getRandomData;
         Crypto.get().getRandomData = (length: number) => {
             return new Uint8Array(length);

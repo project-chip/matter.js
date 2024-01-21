@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../src/behavior/Behavior.js";
-import { BehaviorBacking } from "../../src/behavior/BehaviorBacking.js";
+import { BehaviorBacking } from "../../src/behavior/internal/BehaviorBacking.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { EventEmitter, Observable } from "../../src/util/Observable.js";
 import { MockPart } from "../endpoint/mock-part.js";

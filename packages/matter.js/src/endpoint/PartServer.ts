@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { BehaviorBacking } from "../behavior/BehaviorBacking.js";
+import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
 import { ClusterServerBehaviorBacking } from "../behavior/server/ClusterServerBehaviorBacking.js";
 import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.js";

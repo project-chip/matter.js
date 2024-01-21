@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
-import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";

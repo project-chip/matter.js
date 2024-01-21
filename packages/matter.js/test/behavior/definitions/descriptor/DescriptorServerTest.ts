@@ -19,7 +19,7 @@ async function createFamily() {
         number: 1,
     });
 
-    const child = await MockPart.create({ type: MockEndpoint, number: 2, owner: parent.part });
+    const child = await MockPart.create({ type: MockEndpoint, number: 2, owner: parent });
 
     return { parent, child };
 }

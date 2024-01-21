@@ -9,9 +9,9 @@ import { ImplementationError, NotImplementedError } from "../common/MatterError.
 import { Agent } from "../endpoint/Agent.js";
 import { assertSecureSession } from "../session/SecureSession.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
-import { EventEmitter } from "../util/Observable.js";
+import { EventEmitter, Observable } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
-import type { BehaviorBacking } from "./BehaviorBacking.js";
+import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";
 import { BehaviorSupervisor } from "./supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "./supervision/RootSupervisor.js";
@@ -202,6 +202,35 @@ export abstract class Behavior {
      */
     toString() {
         return `${this.part}.${(this.constructor as Behavior.Type).id}`;
+    }
+
+    /**
+     * React to a {@link Observable}.
+     * 
+     * Behaviors may use this method similarly to {@link Observable.on}.  It provides several benefits over installing
+     * an observer directly:
+     * 
+     *   - The behavior uninstalls {@link reactor} on destruction
+     * 
+     *   - If {@link reactor} is asynchronous, the behavior tracks the resulting promise, providing error handling and
+     *     ensuring the promise completes before the Part is destroyed
+     * 
+     *   - The behavior ensures reactors run serially even if they are asynchronous
+     * 
+     *   - Each reactor runs in its own ActionContext; writes occur in an independent transaction
+     * 
+     * You should not use arrow functions for reactors as this will prevent you from accessing the Behavior in the
+     * correct context.
+     * 
+     * If {@link observable} is a high-volume emitter, it would be better to implement synchronous or very fast
+     * asynchronous reactors to avoid accumulating too many deferred reactions.
+     */
+    protected reactTo<This, T extends any[], R>(
+        this: This,
+        observable: Observable<T, R>,
+        reactor: (this: This, ...args: T) => R
+    ) {
+        (this as Internal)[BACKING].reactTo(observable, reactor);
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 
 export * from "./Behavior.js";
-export * from "./BehaviorBacking.js";
+export * from "./internal/BehaviorBacking.js";
 export * from "./server/context/ActionContext.js";
 export * from "./cluster/ClusterBehavior.js";
 export * from "./cluster/ClusterInterface.js";
