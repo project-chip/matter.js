@@ -363,9 +363,8 @@ describe("BtpSessionHandler", () => {
 
             onHandleMatterMessageCallback = async (matterMessage: ByteArray) => {
                 handleMatterMessageResolver(matterMessage);
-                MockTime.getTimer(
-                    5000,
-                    () => btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")),
+                MockTime.getTimer(5000, () =>
+                    btpSessionHandler?.sendMatterMessage(ByteArray.fromHex("090807060504030201")),
                 );
             };
 
