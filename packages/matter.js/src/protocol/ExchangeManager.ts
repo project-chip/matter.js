@@ -222,17 +222,29 @@ export class ExchangeManager<ContextT> {
                     async () => await this.deleteExchange(exchangeIndex),
                 );
                 this.exchanges.set(exchangeIndex, exchange);
-                await exchange.send(MessageType.StandaloneAck, new ByteArray(0));
+                await exchange.send(MessageType.StandaloneAck, new ByteArray(0), {
+                    includeAcknowledgeMessageId: message.packetHeader.messageId,
+                });
                 await exchange.close();
                 logger.debug(
                     `Ignoring unsolicited message ${messageId} for protocol ${message.payloadHeader.protocolId}.`,
                 );
             } else {
-                if (protocolHandler === undefined)
+                if (protocolHandler === undefined) {
                     throw new MatterFlowError(`Unsupported protocol ${message.payloadHeader.protocolId}`);
-                logger.warn(
-                    `Discarding message ${messageId} for unsupported protocol ${message.payloadHeader.protocolId}.`,
-                );
+                }
+                if (isDuplicate) {
+                    logger.warn(
+                        `Ignoring duplicate message ${messageId} (requires no ack) for protocol ${message.payloadHeader.protocolId}.`,
+                    );
+                    return;
+                } else {
+                    logger.warn(
+                        `Discarding unexpected message ${messageId} for protocol ${
+                            message.payloadHeader.protocolId
+                        }: ${Logger.toJSON(message)}`,
+                    );
+                }
             }
 
             // TODO A node SHOULD limit itself to a maximum of 5 concurrent exchanges over a unicast session. This is
