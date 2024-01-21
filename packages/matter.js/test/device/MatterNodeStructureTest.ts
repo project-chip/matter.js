@@ -36,7 +36,7 @@ import { Aggregator } from "../../src/device/Aggregator.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
+import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer, attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
@@ -314,7 +314,7 @@ describe("Endpoint Structures", () => {
             expect((generalCommissioningCluster?.attributes as any).acceptedCommandList.get().length).equal(3);
         });
 
-        it("One device with one Light endpoints - no unique id, use index", async () => {
+        it("One device with one OnOff endpoints - no unique id, use index", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -356,9 +356,9 @@ describe("Endpoint Structures", () => {
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffDevice = new OnOffPluginUnitDevice();
 
-            node.addDevice(onoffLightDevice);
+            node.addDevice(onoffDevice);
 
             node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
@@ -405,7 +405,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one Light endpoints - with uniqueid", async () => {
+        it("One device with one OnOff endpoints - with uniqueid", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -447,9 +447,9 @@ describe("Endpoint Structures", () => {
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
+            const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
-            node.addDevice(onoffLightDevice);
+            node.addDevice(onoffDevice);
 
             node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
@@ -496,7 +496,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
+        it("One device with one OnOff endpoints - no uniqueid, use index, from storage", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -539,9 +539,9 @@ describe("Endpoint Structures", () => {
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffDevice = new OnOffPluginUnitDevice();
 
-            node.addDevice(onoffLightDevice);
+            node.addDevice(onoffDevice);
 
             node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(11);
@@ -588,7 +588,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(6);
         });
 
-        it("One device with one Light endpoints - with uniqueid, from storage", async () => {
+        it("One device with one OnOff endpoints - with uniqueid, from storage", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -631,9 +631,9 @@ describe("Endpoint Structures", () => {
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { uniqueStorageKey: "test-unique-id" });
+            const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
 
-            node.addDevice(onoffLightDevice);
+            node.addDevice(onoffDevice);
 
             node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(11);
@@ -688,8 +688,8 @@ describe("Endpoint Structures", () => {
 
             const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            onoffLightDevice.addClusterServer(
+            const onoffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(11) });
+            onoffDevice.addClusterServer(
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
@@ -703,20 +703,20 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            aggregator.addBridgedDevice(onoffLightDevice);
-            expect(() => aggregator.addBridgedDevice(onoffLightDevice)).throw(
+            aggregator.addBridgedDevice(onoffDevice);
+            expect(() => aggregator.addBridgedDevice(onoffDevice)).throw(
                 `Endpoint with id 11 already exists as child from 1.`,
             );
         });
 
-        it("Aggregator Structure with one Light endpoint and defined endpoint IDs", () => {
+        it("Aggregator Structure with one OnOff endpoint and defined endpoint IDs", () => {
             const rootEndpoint = new RootEndpoint();
             addRequiredRootClusters(rootEndpoint);
 
             const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            onoffLightDevice.addClusterServer(
+            const onoffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(11) });
+            onoffDevice.addClusterServer(
                 ClusterServer(
                     BridgedDeviceBasicInformationCluster,
                     {
@@ -730,7 +730,7 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            aggregator.addBridgedDevice(onoffLightDevice);
+            aggregator.addBridgedDevice(onoffDevice);
             rootEndpoint.addChildEndpoint(aggregator);
 
             rootEndpoint.updatePartsList();
@@ -812,7 +812,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(deviceTypeListAttribute?.getLocal()).deep.equal([
                 {
-                    deviceType: DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code),
+                    deviceType: DeviceTypeId(DeviceTypes.ON_OFF_PLUGIN_UNIT.code),
                     revision: 2,
                 },
                 {
@@ -826,20 +826,20 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(7);
         });
 
-        it("Device Structure with one aggregator and two Light endpoints and defined endpoint IDs", () => {
+        it("Device Structure with one aggregator and two plug endpoints and defined endpoint IDs", () => {
             const rootEndpoint = new RootEndpoint();
             addRequiredRootClusters(rootEndpoint);
 
             const aggregator = new Aggregator([], { endpointId: EndpointNumber(1) });
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(12) });
+            const onoffDevice11 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(11) });
+            const onoffDevice12 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(12) });
 
-            aggregator.addBridgedDevice(onoffLightDevice11, {
+            aggregator.addBridgedDevice(onoffDevice11, {
                 nodeLabel: "Socket 1",
                 reachable: true,
             });
-            aggregator.addBridgedDevice(onoffLightDevice12, {
+            aggregator.addBridgedDevice(onoffDevice12, {
                 nodeLabel: "Socket 2",
                 reachable: true,
             });
@@ -937,7 +937,7 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(deviceTypeListAttribute?.getLocal()).deep.equal([
                 {
-                    deviceType: DeviceTypeId(DeviceTypes.ON_OFF_LIGHT.code),
+                    deviceType: DeviceTypeId(DeviceTypes.ON_OFF_PLUGIN_UNIT.code),
                     revision: 2,
                 },
                 {
@@ -951,7 +951,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(8);
         });
 
-        it("Device Structure with two aggregators and two Light endpoints and defined endpoint IDs", () => {
+        it("Device Structure with two aggregators and two OnOff endpoints and defined endpoint IDs", () => {
             const rootEndpoint = new RootEndpoint();
             addRequiredRootClusters(rootEndpoint);
 
@@ -966,14 +966,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(11) });
-            const onoffLightDevice12 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(12) });
+            const onoffDevice11 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(11) });
+            const onoffDevice12 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(12) });
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            aggregator1.addBridgedDevice(onoffDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            aggregator1.addBridgedDevice(onoffDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -990,14 +990,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(21) });
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(22) });
+            const onoffDevice21 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(21) });
+            const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(22) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            aggregator2.addBridgedDevice(onoffDevice21, {
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            aggregator2.addBridgedDevice(onoffDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1103,7 +1103,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(10);
         });
 
-        it("Device Structure with two aggregators and two Light endpoints and all auto-assigned endpoint IDs", async () => {
+        it("Device Structure with two aggregators and two OnOff endpoints and all auto-assigned endpoint IDs", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -1155,14 +1155,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice();
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffDevice11 = new OnOffPluginUnitDevice();
+            const onoffDevice12 = new OnOffPluginUnitDevice();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            aggregator1.addBridgedDevice(onoffDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            aggregator1.addBridgedDevice(onoffDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1179,14 +1179,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice();
+            const onoffDevice21 = new OnOffPluginUnitDevice();
+            const onoffDevice22 = new OnOffPluginUnitDevice();
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            aggregator2.addBridgedDevice(onoffDevice21, {
                 nodeLabel: "Socket 2-1",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            aggregator2.addBridgedDevice(onoffDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
@@ -1296,7 +1296,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(10);
         });
 
-        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
+        it("Device Structure with two aggregators and three OnOff/Composed endpoints and all partly auto-assigned endpoint IDs", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -1349,14 +1349,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(3) });
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffDevice11 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(3) });
+            const onoffDevice12 = new OnOffPluginUnitDevice();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            aggregator1.addBridgedDevice(onoffDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            aggregator1.addBridgedDevice(onoffDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1373,21 +1373,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(18) });
+            const onoffDevice21 = new OnOffPluginUnitDevice();
+            const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(18) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            aggregator2.addBridgedDevice(onoffDevice21, {
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            aggregator2.addBridgedDevice(onoffDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
 
-            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
+            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_PLUGIN_UNIT, [
+                new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
                 new OnOffPluginUnitDevice(),
             ]);
             aggregator2.addBridgedDevice(composedDevice, {
@@ -1546,7 +1546,7 @@ describe("Endpoint Structures", () => {
             expect(eventPaths.length).equal(11);
         });
 
-        it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
+        it("Device Structure with two aggregators and three OnOff/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
             const testStorage = new StorageBackendMemory();
             const testStorageManager = new StorageManager(testStorage);
             await testStorageManager.initialize();
@@ -1600,14 +1600,14 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice11 = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
-            const onoffLightDevice12 = new OnOffLightDevice();
+            const onoffDevice11 = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "3333" });
+            const onoffDevice12 = new OnOffPluginUnitDevice();
 
-            aggregator1.addBridgedDevice(onoffLightDevice11, {
+            aggregator1.addBridgedDevice(onoffDevice11, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
-            aggregator1.addBridgedDevice(onoffLightDevice12, {
+            aggregator1.addBridgedDevice(onoffDevice12, {
                 nodeLabel: "Socket 1-2",
                 reachable: true,
             });
@@ -1624,21 +1624,21 @@ describe("Endpoint Structures", () => {
                 ),
             );
 
-            const onoffLightDevice21 = new OnOffLightDevice();
-            const onoffLightDevice22 = new OnOffLightDevice(undefined, { endpointId: EndpointNumber(18) });
+            const onoffDevice21 = new OnOffPluginUnitDevice();
+            const onoffDevice22 = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(18) });
 
-            aggregator2.addBridgedDevice(onoffLightDevice21, {
+            aggregator2.addBridgedDevice(onoffDevice21, {
                 nodeLabel: "Socket 2-1",
                 serialNumber: "12345678",
                 reachable: true,
             });
-            aggregator2.addBridgedDevice(onoffLightDevice22, {
+            aggregator2.addBridgedDevice(onoffDevice22, {
                 nodeLabel: "Socket 2-2",
                 reachable: true,
             });
 
-            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_LIGHT, [
-                new OnOffLightDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
+            const composedDevice = new ComposedDevice(DeviceTypes.ON_OFF_PLUGIN_UNIT, [
+                new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "COMPOSED.SUB1" }),
                 new OnOffPluginUnitDevice(),
             ]);
             aggregator2.addBridgedDevice(composedDevice, {
@@ -1805,8 +1805,8 @@ describe("Endpoint Structures", () => {
             });
 
             // Add another device
-            const onoffLightDevice13 = new OnOffLightDevice();
-            aggregator1.addBridgedDevice(onoffLightDevice13, {
+            const onoffDevice13 = new OnOffPluginUnitDevice();
+            aggregator1.addBridgedDevice(onoffDevice13, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
@@ -1814,7 +1814,7 @@ describe("Endpoint Structures", () => {
             expect(endpointStorage.get("serial_node-matter-0000-index_0-index_2")).equal(44);
 
             // And remove one
-            aggregator1.removeBridgedDevice(onoffLightDevice11);
+            aggregator1.removeBridgedDevice(onoffDevice11);
 
             expect(node.getNextEndpointId(false)).equal(45);
             expect(structureChangeCounter).equal(2);
@@ -1836,8 +1836,8 @@ describe("Endpoint Structures", () => {
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
 
             // Add the removed back and verify it gets same endpointID as before
-            const onoffLightDevice11New = new OnOffLightDevice(undefined, { uniqueStorageKey: "3333" });
-            aggregator1.addBridgedDevice(onoffLightDevice11New, {
+            const onoffDevice11New = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "3333" });
+            aggregator1.addBridgedDevice(onoffDevice11New, {
                 nodeLabel: "Socket 1-1 NEW",
                 reachable: true,
             });
@@ -1896,12 +1896,12 @@ describe("Endpoint Structures", () => {
             node.setStorage(testStorageContext);
             addRequiredRootClusters(node.getRootEndpoint());
 
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffDevice = new OnOffPluginUnitDevice();
 
             let initCalled = false;
             let destroyCalled = false;
             // Overwrite Identify Cluster with init and destroy methods
-            onoffLightDevice.addClusterServer(
+            onoffDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -1924,7 +1924,7 @@ describe("Endpoint Structures", () => {
             expect(initCalled).false;
             expect(destroyCalled).false;
 
-            node.addDevice(onoffLightDevice);
+            node.addDevice(onoffDevice);
 
             node.assignEndpointIds();
             expect(node.getNextEndpointId(false)).equal(2);
@@ -1944,7 +1944,7 @@ describe("Endpoint Structures", () => {
             // Overwrite cluster server - old gets destroyed, new initialized
             let init2Called = false;
             let destroy2Called = false;
-            onoffLightDevice.addClusterServer(
+            onoffDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -2015,12 +2015,12 @@ describe("Endpoint Structures", () => {
             addRequiredRootClusters(node.getRootEndpoint());
 
             const aggregator = new Aggregator();
-            const onoffLightDevice = new OnOffLightDevice();
+            const onoffDevice = new OnOffPluginUnitDevice();
 
             let initCalled = false;
             let destroyCalled = false;
             // Overwrite Identify Cluster with init and destroy methods
-            onoffLightDevice.addClusterServer(
+            onoffDevice.addClusterServer(
                 ClusterServer(
                     IdentifyCluster,
                     {
@@ -2043,7 +2043,7 @@ describe("Endpoint Structures", () => {
             expect(initCalled).false;
             expect(destroyCalled).false;
 
-            aggregator.addBridgedDevice(onoffLightDevice, {
+            aggregator.addBridgedDevice(onoffDevice, {
                 nodeLabel: "Socket 1-1",
                 reachable: true,
             });
@@ -2064,7 +2064,7 @@ describe("Endpoint Structures", () => {
             expect(initCalled).true;
             expect(destroyCalled).false;
 
-            aggregator.removeBridgedDevice(onoffLightDevice);
+            aggregator.removeBridgedDevice(onoffDevice);
 
             expect(destroyCalled).true;
         });

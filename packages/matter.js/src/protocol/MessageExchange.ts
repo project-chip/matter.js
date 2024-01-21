@@ -53,6 +53,9 @@ export type ExchangeSendOptions = {
 
     /** Allows to specify if the send message requires to be acknowledged by the receiver or not. */
     requiresAck?: boolean;
+
+    /** Use the provided acknowledge MessageId instead checking the latest to send one */
+    includeAcknowledgeMessageId?: number;
 };
 
 /** The base number for the exponential backoff equation. */
@@ -67,8 +70,12 @@ const MRP_BACKOFF_MARGIN = 1.1;
 /** The number of retransmissions before transitioning from linear to exponential backoff. */
 const MRP_BACKOFF_THRESHOLD = 1;
 
-/** @see {@link MatterCoreSpecificationV1_0}, section 4.11.2.1 */
+/** @see {@link MatterCoreSpecificationV1_2}, section 4.11.2.1 */
+// TODO this is calculated too static and only valid for the session timing defaults. Adjust to be dynamic or really counter based
 const MAXIMUM_TRANSMISSION_TIME_MS = 9495; // 413 + 825 + 1485 + 2541 + 4231 ms as per specs
+
+/** @see {@link MatterCoreSpecificationV1_2}, section 4.11.8 */
+const MRP_STANDALONE_ACK_TIMEOUT_MS = 200;
 
 export class MessageExchange<ContextT> {
     static fromInitialMessage<ContextT>(
@@ -116,6 +123,16 @@ export class MessageExchange<ContextT> {
     private readonly retransmissionRetries: number;
     private readonly messagesQueue = new Queue<Message>();
     private receivedMessageToAck: Message | undefined;
+    private receivedMessageAckTimer = Time.getTimer(MRP_STANDALONE_ACK_TIMEOUT_MS, () => {
+        if (this.receivedMessageToAck !== undefined) {
+            const messageToAck = this.receivedMessageToAck;
+            this.receivedMessageToAck = undefined;
+            // TODO: We need to track this promise later
+            this.sendStandaloneAckForMessage(messageToAck).catch(error =>
+                logger.error("An error happened when sending a standalone ack", error),
+            );
+        }
+    });
     private sentMessageToAck: Message | undefined;
     private sentMessageAckSuccess: ((...args: any[]) => void) | undefined;
     private sentMessageAckFailure: ((error?: Error) => void) | undefined;
@@ -155,6 +172,16 @@ export class MessageExchange<ContextT> {
         );
     }
 
+    async sendStandaloneAckForMessage(message: Message) {
+        const {
+            packetHeader: { messageId },
+            payloadHeader: { requiresAck },
+        } = message;
+        if (!requiresAck) return;
+
+        await this.send(MessageType.StandaloneAck, new ByteArray(0), { includeAcknowledgeMessageId: messageId });
+    }
+
     async onMessageReceived(message: Message, isDuplicate = false) {
         const {
             packetHeader: { messageId },
@@ -167,7 +194,7 @@ export class MessageExchange<ContextT> {
         if (isDuplicate) {
             // Received a message retransmission but the reply is not ready yet, ignoring
             if (requiresAck) {
-                await this.send(MessageType.StandaloneAck, new ByteArray(0));
+                await this.sendStandaloneAckForMessage(message);
             }
             return;
         }
@@ -210,17 +237,41 @@ export class MessageExchange<ContextT> {
             );
         }
         if (requiresAck) {
+            // We still have a message to ack, so ack this one as standalone ack directly
+            if (this.receivedMessageToAck !== undefined) {
+                this.receivedMessageAckTimer.stop();
+                await this.sendStandaloneAckForMessage(this.receivedMessageToAck);
+                return;
+            }
             this.receivedMessageToAck = message;
+            this.receivedMessageAckTimer.start();
         }
         await this.messagesQueue.write(message);
     }
 
     async send(messageType: number, payload: ByteArray, options?: ExchangeSendOptions) {
-        const { expectAckOnly = false, minimumResponseTimeoutMs, requiresAck } = options ?? {};
-        if (this.sentMessageToAck !== undefined)
+        const {
+            expectAckOnly = false,
+            minimumResponseTimeoutMs,
+            requiresAck,
+            includeAcknowledgeMessageId,
+        } = options ?? {};
+        if (messageType === MessageType.StandaloneAck && requiresAck) {
+            throw new MatterFlowError("A standalone ack may not require acknowledgement.");
+        }
+        if (this.sentMessageToAck !== undefined && messageType !== MessageType.StandaloneAck)
             throw new MatterFlowError("The previous message has not been acked yet, cannot send a new message.");
 
         this.session.notifyActivity(false);
+
+        let ackedMessageId = includeAcknowledgeMessageId;
+        if (ackedMessageId === undefined) {
+            ackedMessageId = this.receivedMessageToAck?.packetHeader.messageId;
+            if (ackedMessageId !== undefined && messageType !== MessageType.StandaloneAck) {
+                this.receivedMessageAckTimer.stop();
+                this.receivedMessageToAck = undefined;
+            }
+        }
 
         // TODO Add support to also send controlMessages for Group messages, use different messagecounter!
         const message: Message = {
@@ -240,14 +291,12 @@ export class MessageExchange<ContextT> {
                 messageType,
                 isInitiatorMessage: this.isInitiator,
                 requiresAck: requiresAck ?? messageType !== MessageType.StandaloneAck,
-                ackedMessageId: this.receivedMessageToAck?.packetHeader.messageId,
+                ackedMessageId,
                 hasSecuredExtension: false,
             },
             payload,
         };
-        if (messageType !== MessageType.StandaloneAck) {
-            this.receivedMessageToAck = undefined;
-        }
+
         let ackPromise: Promise<Message> | undefined;
         if (message.payloadHeader.requiresAck) {
             this.sentMessageToAck = message;
@@ -286,7 +335,7 @@ export class MessageExchange<ContextT> {
         return this.messagesQueue.read();
     }
 
-    async waitFor(messageType: number, timeoutMs = 60_000) {
+    async waitFor(messageType: number, timeoutMs = 180_000) {
         const message = await this.messagesQueue.read(timeoutMs);
         const {
             payloadHeader: { messageType: receivedMessageType },
@@ -352,8 +401,11 @@ export class MessageExchange<ContextT> {
 
     async destroy() {
         if (this.closeTimer === undefined && this.receivedMessageToAck !== undefined) {
+            this.receivedMessageAckTimer.stop();
+            const messageToAck = this.receivedMessageToAck;
+            this.receivedMessageToAck = undefined;
             try {
-                await this.send(MessageType.StandaloneAck, new ByteArray(0));
+                await this.sendStandaloneAckForMessage(messageToAck);
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
@@ -403,11 +455,15 @@ export class MessageExchange<ContextT> {
         if (this.closeTimer !== undefined) return; // close was already called
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks
+        // TODO: Make this dynamic based on the values?
         this.closeTimer = Time.getTimer(MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
 
         if (this.receivedMessageToAck !== undefined) {
+            this.receivedMessageAckTimer.stop();
+            const messageToAck = this.receivedMessageToAck;
+            this.receivedMessageToAck = undefined;
             try {
-                await this.send(MessageType.StandaloneAck, new ByteArray(0));
+                await this.sendStandaloneAckForMessage(messageToAck);
             } catch (error) {
                 logger.error("An error happened when closing the exchange", error);
             }
