@@ -13,63 +13,68 @@ import { AccessLevel } from "../../../cluster/Cluster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
+import { MaybePromise } from "../../../util/Promises.js";
+import { Diagnostic } from "../../../log/Diagnostic.js";
 
 /**
- * Create an online {@link ActionContext}.  Public Matter API interactions happen in an online context.
+ * Operate in online context.  Public Matter API interactions happen in online context.
  */
-export function OnlineContext(options: OnlineContext.Options): ActionContext {
-    let context = (options.message as InternalMessage)[CONTEXT];
-    if (context) {
-        return context;
-    }
+export function OnlineContext(options: OnlineContext.Options) {
+    return {
+        act<T>(actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
+            let agents: undefined | ContextAgents;
 
-    let agents: undefined | ContextAgents;
-
-    let fabric: FabricIndex;
-    let subject: SubjectId;
-    
-    const session = options.session;
-    if (session) {
-        assertSecureSession(session);
-        fabric = options.session.getAssociatedFabric().fabricIndex;
-
-        // TODO - group subject
-        subject = options.session.getPeerNodeId() as SubjectId;
-    } else {
-        fabric = options.fabric;
-        subject = options.subject;
-    }
-
-    if (fabric === undefined) {
-        throw new ImplementationError("OnlineContxt requires an authorized fabric");
-    }
-    if (subject === undefined) {
-        throw new ImplementationError("OnlineContext requires an authorizied subject");
-    }
-
-    context = {
-        ...options,
-        session,
-        subject,
-        fabric,
-        transaction: new Transaction(`online#${options.message?.packetHeader.messageId.toString(16) ?? "unknown"}`),
-
-        accessLevelFor(_location?: AccessControl.Location) {
-            // TODO - use AccessControlServer on the RootNodeEndpoint
-            //const accessControl = accessContext.behavior.node.get(AccessControlServer);
-            //return accessControl.accessLevelFor((context as ActionContext), accessContext);
-            return AccessLevel.Administer;
-        },
-
-        agentFor<T extends EndpointType>(part: Part<T>): Agent.Instance<T> {
-            if (!agents) {
-                agents = ContextAgents(context as ActionContext);
+            let fabric: FabricIndex;
+            let subject: SubjectId;
+            
+            const session = options.session;
+            if (session) {
+                assertSecureSession(session);
+                fabric = options.session.getAssociatedFabric().fabricIndex;
+        
+                // TODO - group subject
+                subject = options.session.getPeerNodeId() as SubjectId;
+            } else {
+                fabric = options.fabric;
+                subject = options.subject;
             }
-            return agents.agentFor(part);
-        },
-    };
-
-    return context;
+        
+            if (fabric === undefined) {
+                throw new ImplementationError("OnlineContxt requires an authorized fabric");
+            }
+            if (subject === undefined) {
+                throw new ImplementationError("OnlineContext requires an authorizied subject");
+            }
+        
+            const via = Diagnostic.via(`online#${options.message?.packetHeader.messageId.toString(16) ?? "unknown"}`);
+        
+            return Transaction.act(via, transaction => {
+                const context = {
+                    ...options,
+                    session,
+                    subject,
+                    fabric,
+                    transaction,
+        
+                    accessLevelFor(_location?: AccessControl.Location) {
+                        // TODO - use AccessControlServer on the RootNodeEndpoint
+                        //const accessControl = accessContext.behavior.node.get(AccessControlServer);
+                        //return accessControl.accessLevelFor((context as ActionContext), accessContext);
+                        return AccessLevel.Administer;
+                    },
+        
+                    agentFor<T extends EndpointType>(part: Part<T>): Agent.Instance<T> {
+                        if (!agents) {
+                            agents = ContextAgents(context as ActionContext);
+                        }
+                        return agents.agentFor(part);
+                    },
+                };
+        
+                return actor(context);
+            });
+        }
+    }
 }
 
 export namespace OnlineContext {
@@ -107,4 +112,3 @@ export const CONTEXT = Symbol("context");
 export interface InternalMessage extends Message {
     [CONTEXT]?: ActionContext;
 }
-

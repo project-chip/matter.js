@@ -31,19 +31,34 @@ namespace TestBehavior {
     }
 }
 
+function test(what: string, fn: (behavior: TestBehavior) => void) {
+    it(what, async () => {
+        const part = await MockPart.createWith(TestBehavior);
+        part.offline(agent => {
+            const behavior = agent.test;
+            fn(behavior);
+        });
+    });
+}
+
 describe("Behavior", () => {
     type IsObject<T> = T extends undefined ? false : T extends object ? true : false;
 
-    it("instantiates with correct properties", async () => {
-        const behavior = await MockPart.createBehavior(TestBehavior);
+    test("instantiates with correct properties", behavior => {
+        expect(behavior.agent.get(TestBehavior)).equals(behavior);
+        expect(behavior.state.valueOne).equals(1);
+        expect(behavior.state.valueTwo).equals(2);
+        expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
+    })
+
+    test("instantiates with correct properties", behavior => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
         expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
     });
 
-    it("unifies state", async () => {
-        const behavior = await MockPart.createBehavior(TestBehavior);
+    test("unifies state", behavior => {
         const state = behavior.state;
 
         ({}) as IsObject<typeof state> satisfies true;
@@ -57,12 +72,16 @@ describe("Behavior", () => {
         TestBehavior.id satisfies "test";
         NewBehavior.id satisfies "test";
 
-        const behavior = await MockPart.createBehavior(NewBehavior);
-        const state = behavior.state;
+        const part = await MockPart.createWith(NewBehavior);
+        part.offline(agent => {
+            const behavior = agent.test;
 
-        ({}) as IsObject<typeof state> satisfies true;
+            const state = behavior.state;
 
-        expect(state.valueOne).equals(3);
-        expect(state.valueTwo).equals(2);
+            ({}) as IsObject<typeof state> satisfies true;
+
+            expect(state.valueOne).equals(3);
+            expect(state.valueTwo).equals(2);
+        });
     });
 });

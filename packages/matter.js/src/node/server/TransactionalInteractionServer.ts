@@ -5,24 +5,19 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { ActionContext } from "../../behavior/server/context/ActionContext.js";
 import { OnlineContext } from "../../behavior/server/context/OnlineContext.js";
-import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Part } from "../../endpoint/Part.js";
 import { PartServer } from "../../endpoint/PartServer.js";
-import { Logger } from "../../log/Logger.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { Session } from "../../session/Session.js";
 import { track } from "../../util/Promises.js";
 import { SubscriptionOptions } from "../options/SubscriptionOptions.js";
 import { ServerStore } from "./storage/ServerStore.js";
-
-const logger = Logger.get("TransactionalInteractionServer");
 
 /**
  * Wire up an InteractionServer that initializes an InvocationContext earlier than the cluster API supports.
@@ -113,8 +108,6 @@ export class TransactionalInteractionServer extends InteractionServer {
     /**
      * Perform an action with transaction support.
      *
-     * If a transaction is present in the session after the action, commit or rollback depending on whether the action succeeded.
-     *
      * Note that we currently wrap individual reads/writes/invokes in transactions with no support for cross-action
      * transactionality.  Matter does not address this so semantics are going to be highly implementation dependent if
      * they make sense at all.
@@ -124,27 +117,6 @@ export class TransactionalInteractionServer extends InteractionServer {
         options: OnlineContext.Options,
         fn: () => T
     ) {
-        const context = OnlineContext(options);
-
-        try {
-            return await track(fn(), [ why, context.transaction.via ]);
-        } catch (e) {
-            try {
-                await this.#end(context, "rollback");
-            } catch (e) {
-                logger.error("Unhandled error in transaction rollback", e);
-            }
-            throw e;
-        } finally {
-            await this.#end(context, "commit");
-        }
-    }
-
-    async #end(context: ActionContext, method: "commit" | "rollback") {
-        OnlineContext.release(context);
-
-        if (context.transaction.status === Transaction.Status.Exclusive) {
-            await context.transaction[method]();
-        }
+        return OnlineContext(options).act(context => track(fn(), [ why, context.transaction.via ]));
     }
 }

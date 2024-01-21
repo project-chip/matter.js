@@ -12,19 +12,27 @@ import type { MatterCoreSpecificationV1_2 } from "../../../spec/Specifications.j
 import { Part } from "../../../endpoint/Part.js";
 import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Agent } from "../../../endpoint/Agent.js";
+import type { AccessLevel } from "../../../cluster/Cluster.js";
+import type { OnlineContext } from "./OnlineContext.js";
+import type { OfflineContext } from "./OfflineContext.js";
 
 /**
  * Provides contextual information for Matter actions such as accessing attributes or invoking commands.
  * 
+ * Matter.js provides an "online" ActionContext for you when responding to network requests.  You can also use
+ * "offline" agents to invoke cluster APIs {@link Part} without an active user session.
+ * 
+ * See {@link OnlineContext} and {@link OfflineContext} for details of these two types of interaction.
+ * 
  * Context includes:
  * 
- *   - The {@link accessLevel} unless this is an {@link offline} "superuser" context
+ *   - Authorization details such as {@link AccessLevel}, {@link subject} and accessing {@link fabric}
  * 
- *   - If applicable, fabric information including the {@link fabric}
+ *   - The {@link transaction} required to make state changes
  * 
- *   - The {@link transaction} if state access is transactional
+ *   - Factory functions for {@link Agent} instances you can use to interact with {@link Part}s
  * 
- *   - Where applicable, lower-level contextual information including the wire {@link message}
+ *   - When responding to network requests, low-level contextual information such as the wire {@link message}
  * 
  * For the formal definition of an "action" see {@link MatterCoreSpecificationV1_2} § 8.2.4
  */

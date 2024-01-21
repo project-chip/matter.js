@@ -21,6 +21,7 @@ import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
 import { OfflineContext } from "../behavior/server/context/OfflineContext.js";
 import { Transaction } from "../behavior/state/transaction/Transaction.js";
+import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 
 /**
  * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
@@ -41,6 +42,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     #lifecycle: PartLifecycle;
     #parts?: Parts;
     #construction: AsyncConstruction<Part<T>>;
+    #stateView = {} as SupportedBehaviors.StateOf<T["behaviors"]>;
 
     /**
      * A string that uniquely identifies a Part.
@@ -94,6 +96,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             );
         }
         return this.#behaviors;
+    }
+
+    /**
+     * Current state values for all behaviors.  This view is read-only.
+     * 
+     * If a behavior is not fully initalized its state may be incomplete.
+     */
+    get state() {
+        return this.#stateView;
     }
     
     get construction() {
@@ -162,29 +173,29 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             throw new InternalError("Part initialized without owner");
         }
 
-        const agent = this.agent;
+        return this.offline(agent => {
+            // Initialize myself and behaviors
+            let promise = MaybePromise.then(
+                () => {
+                    this.owner.serviceFor(PartInitializer).initializeDescendent(this);
+                    return this.behaviors.initialize(agent);
+                },
+                () => this.lifecycle.change(PartLifecycle.Change.Ready),
+            );
 
-        // Initialize myself and behaviors
-        let promise = MaybePromise.then(
-            () => {
-                this.owner.serviceFor(PartInitializer).initializeDescendent(this);
-                return this.behaviors.initialize(agent);
-            },
-            () => this.lifecycle.change(PartLifecycle.Change.Ready),
-        );
-
-        // Persist any state changes resulting from initialization
-        promise = MaybePromise.then(
-            promise,
-            () => {
-                const transaction = agent.context.transaction;
-                if (transaction.status === Transaction.Status.Exclusive) {
-                    transaction.commit();
+            // Persist any state changes resulting from initialization
+            promise = MaybePromise.then(
+                promise,
+                () => {
+                    const transaction = agent.context.transaction;
+                    if (transaction.status === Transaction.Status.Exclusive) {
+                        transaction.commit();
+                    }
                 }
-            }
-        );
+            );
 
-        return promise;
+            return promise;
+        });
     }
 
     set id(id: string) {
@@ -314,13 +325,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Perform offline work on the part.  An "offline" agent enforces no ACLs and all state is read/write.
-     *
-     * This should only be used for local purposes.  All network interaction should use an agent retrieved from an
-     * OnlineContext.
+     * Perform offline work on the part.  When offline, ACLs are ignored and all state is read/write.
+     * 
+     * This should only be used for local purposes.  All network interaction should use OnlineContext.
      */
-    get agent() {
-        return OfflineContext().agentFor(this);
+    offline<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+        return OfflineContext.act(context => {
+            return actor(context.agentFor(this));
+        })
     }
 
     /**

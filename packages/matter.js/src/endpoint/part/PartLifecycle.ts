@@ -23,7 +23,7 @@ export class PartLifecycle {
     #installed = new Observable<[]>();
     #ready = new Observable<[]>();
     #destroyed = new Observable<[]>();
-    #reset = new Observable<[], MaybePromise<void>>();
+    #reset = new Observable<[], MaybePromise>();
     #changed = new Observable<[type: PartLifecycle.Change, part: Part]>();
     #queuedUpdates?: Array<PartLifecycle.Change>;
 

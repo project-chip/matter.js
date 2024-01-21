@@ -187,12 +187,19 @@ export abstract class BehaviorBacking {
     }
 
     /**
+     * A read-only offline view of behavior state.
+     */
+    get stateView() {
+        return this.#datasource?.view ?? {};
+    }
+
+    /**
      * Internal initialization logic.  Broken out from {@link initialize} for the convenience of moving
      * de-initialization logic into {@link AsyncConstruction} during factory reset.
      * 
      * @param before used for factory reset to revert the backing's state
      */
-    #initialize(agent: Agent, before?: () => MaybePromise<void>) {
+    #initialize(agent: Agent, before?: () => MaybePromise) {
         const init = () => {
             // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
             // will throw if the behavior isn't initialized
@@ -217,7 +224,7 @@ export abstract class BehaviorBacking {
     /**
      * Invoke {@link Behavior.destroy} to clean up application logic.
      */
-    #invokeDestroy(agent: Agent): MaybePromise<void> {
+    #invokeDestroy(agent: Agent): MaybePromise {
         switch (this.#construction.status) {
             case LifecycleStatus.Active:
                 break;

@@ -12,6 +12,11 @@ import type { Transaction } from "./Transaction.js";
  */
 export enum Status {
     /**
+     * Transaction may be used only for read operations.
+     */
+    ReadOnly = "read only",
+
+    /**
      * Transaction is registered but there are no ACID guarantees.
      */
     Shared = "shared",
@@ -41,6 +46,11 @@ export enum Status {
      * Transaction is in the process of rolling back.
      */
     RollingBack = "rolling back",
+
+    /**
+     * Transaction is destroyed, no further operations permitted.
+     */
+    Destroyed = "destroyed",
 }
 
 export namespace Status {

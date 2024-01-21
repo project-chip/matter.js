@@ -6,7 +6,6 @@
 
 import type { Agent } from "../endpoint/Agent.js";
 import type { Part } from "../endpoint/Part.js";
-import type { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import type { PartOwner } from "../endpoint/part/PartOwner.js";
 import type { Diagnostic } from "../log/Diagnostic.js";
 import type { AsyncConstruction } from "../util/AsyncConstruction.js";
@@ -19,17 +18,11 @@ import type { Host } from "./Host.js";
  */
 export interface Node extends PartOwner {
     /**
-     * Access the root endpoint.
+     * Access the root {@link Part}.
+     *
+     * This is a lower-level API than the {@link Agent} API available with {@link root}.
      */
-    readonly root: Agent.Instance<RootEndpoint>;
-
-    /**
-     * Access the root endpoint as a {@link Part}.
-     * 
-     * This is a lower-level API than the {@link Agent} API available with
-     * {@link root}.
-     */
-    readonly rootPart: Part;
+    readonly root: Part;
 
     /**
      * Provide diagnostic information.
@@ -58,31 +51,27 @@ export interface Node extends PartOwner {
      */
     set host(host: Host);
 
-    // The batch interface that follows would be an efficiency win but most
-    // features are marked as provisional as of Matter 1.2 implying they are
-    // not well supported, so deprioritizing implementation.
+    // The batch interface that follows would be an efficiency win but most features are marked as provisional as of
+    // Matter 1.2 implying they are not well supported, so deprioritizing implementation.
 
     /**
-     * Batch invocation.  This optimization allows you to invoke multiple
-     * requests in one network payload.
+     * Batch invocation.  This optimization allows you to invoke multiple requests in one network payload.
      */
     //invoke(action: InvokeRequestAction): Promise<InvokeResponseAction>;
 
     /**
-     * Batch read.  This optimization allows you to read data for multiple
-     * attributes and/or events with a single network request.
+     * Batch read.  This optimization allows you to read data for multiple attributes and/or events with a single
+     * network request.
      */
     //read(action: ReadRequestAction): Promise<ReportDataAction>;
 
     /**
-     * Batch write.  This optimization allows you to change multiple attributes
-     * with a single network request.
+     * Batch write.  This optimization allows you to change multiple attributes with a single network request.
      */
     //write(action: WriteRequestAction): Promise<WriteResponseAction>;
 
     /**
-     * Batch subscribe.  This optimization allows you to subscribe to multiple
-     * events with a single network request.
+     * Batch subscribe.  This optimization allows you to subscribe to multiple events with a single network request.
      */
     //subscribe(action: SubscribeRequestAction): Promise<SubscribeResponseAction>;
 }

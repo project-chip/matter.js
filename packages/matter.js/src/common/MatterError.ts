@@ -33,3 +33,12 @@ export class UnexpectedDataError extends MatterError {}
  * provided data. if you are sure your code is correct please report the issue.
  */
 export class ImplementationError extends MatterError {}
+
+/**
+ * Thrown for write attempts against immutable data.
+ */
+export class ReadOnlyError extends ImplementationError {
+    constructor(message = "This view is read-only") {
+        super(message);
+    }
+}

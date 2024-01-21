@@ -61,7 +61,7 @@ function participantFor(transaction: Transaction, partStore: PartStore) {
             return partStore.toString();
         },
 
-        commit1(): MaybePromise<void> {
+        commit1(): MaybePromise {
             // Persistence serves phase one commit; values are added directly to
             // the journal so nothing necessary here
         },
@@ -72,7 +72,7 @@ function participantFor(transaction: Transaction, partStore: PartStore) {
             }
         },
 
-        rollback(): MaybePromise<void> {
+        rollback(): MaybePromise {
             delete this.mutations;
         },
     };

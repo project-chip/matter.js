@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../../common/MatterError.js";
+import { AccessLevel } from "../../../cluster/Cluster.js";
+import { InternalError, ReadOnlyError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { Logger } from "../../../log/Logger.js";
@@ -17,6 +18,7 @@ import { StateType } from "../StateType.js";
 import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
+import { ReadOnlyTransaction } from "../transaction/Tx.js";
 import type { Val } from "./Val.js";
 
 const VERSION_KEY = "__version__";
@@ -45,6 +47,11 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
      * Validate values against the schema.
      */
     validate(session: ValueSupervisor.Session): void;
+
+    /**
+     * Obtain a read-only view of values.
+     */
+    readonly view: T;
 }
 
 /**
@@ -52,6 +59,8 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
  */
 export function Datasource<const T extends StateType = StateType>(options: Datasource.Options<T>): Datasource<T> {
     const internals = configure(options);
+
+    let readOnlyView: undefined | T;
 
     return {
         toString() {
@@ -72,7 +81,22 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
         validate(session: ValueSupervisor.Session) {
             internals.supervisor.validate(internals.values, session, { path: internals.path })
-        }
+        },
+
+        get view() {
+            if (!readOnlyView) {
+                readOnlyView = options.supervisor.manage(
+                    createReadOnlyRootReference(internals),
+                    {
+                        offline: true,
+                        accessLevelFor() { return AccessLevel.View },
+                        transaction: ReadOnlyTransaction,
+                    },
+                    { path: internals.path },
+                ) as T;
+            }
+            return readOnlyView;
+        },
     };
 }
 
@@ -426,4 +450,25 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         transaction.promise.finally(reset);
     }
+}
+
+/**
+ * Create a read-only view of the root reference.
+ */
+function createReadOnlyRootReference(internals: Internals): Val.Reference<Val.Struct> {
+    return {
+        get value() {
+            return internals.values;
+        },
+
+        get original() {
+            return internals.values;
+        },
+
+        change() {
+            throw new ReadOnlyError();
+        },
+
+        refresh() {},
+    };
 }

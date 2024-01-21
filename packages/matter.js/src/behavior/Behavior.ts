@@ -186,7 +186,7 @@ export abstract class Behavior {
      * This method may be synchronous or asyncronous.  If asynchronous, the behavior will not be available for external
      * use until initialization completes.
      */
-    initialize(_options?: {}): MaybePromise<void> {}
+    initialize(_options?: {}): MaybePromise {}
 
     /**
      * Release resources.  This is the public API for releasing application resources held by behaviors in internal
@@ -195,7 +195,7 @@ export abstract class Behavior {
      * We use the somewhat cryptic {@link Symbol.asyncDispose} because "destroy" would be a conflict if Matter ever
      * adds a command called "destroy".
      */
-    [Symbol.asyncDispose](): MaybePromise<void> {}
+    [Symbol.asyncDispose](): MaybePromise {}
 
     /**
      * Description used in diagnostic messages.

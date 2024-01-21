@@ -75,7 +75,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
      * method.
      */
-    start(initializer: () => MaybePromise<void>): this;
+    start(initializer: () => MaybePromise): this;
 
     /**
      * AsyncConstruction may be cancellable.  If not this method does nothing.  Regardless you must wait for promise
@@ -101,7 +101,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
     subject: T,
-    initializer?: () => MaybePromise<void>,
+    initializer?: () => MaybePromise,
     cancel?: () => void,
 ): AsyncConstruction<T> {
     let promise: MaybePromise;
@@ -141,7 +141,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return change;
         },
 
-        start(initializer: () => MaybePromise<void>) {
+        start(initializer: () => MaybePromise) {
             if (started) {
                 throw new ImplementationError("Initialization has already started");
             }
