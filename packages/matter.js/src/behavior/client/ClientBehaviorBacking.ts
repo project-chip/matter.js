@@ -7,7 +7,7 @@
 import { NotImplementedError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
 import { Behavior } from "../Behavior.js";
-import { BehaviorBacking } from "../BehaviorBacking.js";
+import { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
 
 export class ClientBehaviorBacking extends BehaviorBacking {

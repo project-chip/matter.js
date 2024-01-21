@@ -12,7 +12,7 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
-import { BehaviorBacking } from "../BehaviorBacking.js";
+import { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Val } from "../state/managed/Val.js";
 import { Transaction } from "../state/transaction/Transaction.js";

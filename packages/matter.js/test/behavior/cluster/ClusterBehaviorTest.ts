@@ -92,7 +92,6 @@ describe("ClusterBehavior", () => {
             part.offline(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
-                // eslint-disable-next-line @typescript-eslint/unbound-method
                 expect(behavior.reqCmd).is.a("function");
                 expect(behavior.events.reqAttr$Change.constructor.name).equals("Emitter");
                 expect(behavior.events.reqEv.constructor.name).equals("Emitter");

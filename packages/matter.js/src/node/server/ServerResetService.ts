@@ -6,7 +6,7 @@
 
 import { ServerStore } from "./storage/ServerStore.js";
 import type { NodeServer } from "./NodeServer.js";
-import type { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import type { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Logger } from "../../log/Logger.js";
 import { Host } from "../Host.js";
 import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";

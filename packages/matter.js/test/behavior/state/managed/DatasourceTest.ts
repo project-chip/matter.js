@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "../../../../src/behavior/server/context/ActionContext.js";
 import { OfflineContext } from "../../../../src/behavior/server/context/OfflineContext.js";
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
@@ -12,6 +13,7 @@ import { BehaviorSupervisor } from "../../../../src/behavior/supervision/Behavio
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DatatypeModel, FieldElement } from "../../../../src/model/index.js";
 import { Observable } from "../../../../src/util/Observable.js";
+import { MaybePromise } from "../../../../src/util/Promises.js";
 
 class MyState {
     foo = "bar";
@@ -47,67 +49,71 @@ function createStore(initialValues: Val.Struct = {}): Datasource.Store & { sets:
     }
 }
 
-function createDatasource<const T extends StateType = typeof MyState>(options: Partial<Datasource.Options<T>> = {}): Datasource<T> {
+function createDatasource<const T extends StateType = typeof MyState>(
+    options: Partial<Datasource.Options<T>> = {}
+): Datasource<T> {
     return Datasource({
         name: "test.state",
-        type: MyState,
+        type: (options.type ?? MyState) as T,
         supervisor,
         ...options,
-    })
+    });
 }
 
-function createReference<const T extends StateType = typeof MyState>(datasource: Datasource<T>) {
-    const context = OfflineContext();
-    const state = datasource.reference(context);
-    return { context, state };
+async function withReference<R, const T extends StateType>(
+    datasource: Datasource<T>,
+    actor: (params: { context: ActionContext, state: InstanceType<T> }) => MaybePromise<R>
+) {
+    return await OfflineContext.act(context => actor({
+        context,
+        state: datasource.reference(context),
+    }));
 }
 
-function createDatasourceAndReference<const T extends StateType = typeof MyState>(
-    options: Partial<Datasource.Options<T>> = {}
+async function withDatasourceAndReference<R, const T extends StateType = typeof MyState>(
+    options: Partial<Datasource.Options<T>> = {},
+    actor: ((params: { context: ActionContext, state: InstanceType<T>, ds: Datasource<T>}) => MaybePromise<R>),
 ) {
     const ds = createDatasource(options);
-    const { context, state } = createReference(ds);
-    return { ds: ds, context, state };
+    return await withReference(ds, ({ context, state }) => actor({ context, state, ds }));
 }
 
 describe("Datasource", () => {
-    it("reference is a MyState", () => {
-        const { state } = createDatasourceAndReference();
-        state satisfies MyState;
-        expect(state.foo).equals("bar");
+    it("reference is a MyState", async () => {
+        await withDatasourceAndReference({}, ({ state }) => {
+            state satisfies MyState;
+            expect(state.foo).equals("bar");
+        });
     });
 
-    it("caches state implementations", () => {
-        const { state: state1 } = createDatasourceAndReference();
-        const { state: state2 } = createDatasourceAndReference();
-
-        const constructor1 = state1.constructor;
-        const constructor2 = state2.constructor;
+    it("caches state implementations", async () => {
+        const constructor1 = await withDatasourceAndReference({}, ({ state }) => state.constructor);
+        const constructor2 = await withDatasourceAndReference({}, ({ state }) => state.constructor);
 
         expect(constructor1).equals(constructor2);
     });
 
-    it("sets and gets", async () => {
-        const { ds, state, context } = createDatasourceAndReference();
+    it("sets and gets with proper isolation", async () => {
+        await withDatasourceAndReference({}, async ({ ds, state, context}) => {
+            state.foo = "BAR";
+            expect(state.foo).equals("BAR");
 
-        state.foo = "BAR";
-        expect(state.foo).equals("BAR");
+            await withReference(ds, async ({ state: state2, context: context2 }) => {
+                await context.transaction.commit();
 
-        const { state: state2, context: context2 } = createReference(ds);
-        expect(state2.foo).equals("bar");
-        
-        await context.transaction.commit();
+                // state2 reads should be isolated
+                expect(state2.foo).equals("bar");
+                await context2.transaction.rollback();
+                expect(state2.foo).equals("BAR");
 
-        // state2 reads should be isolated
-        expect(state2.foo).equals("bar");
-        await context2.transaction.rollback();
-        expect(state2.foo).equals("BAR");
-
-        const { state: state3 } = createReference(ds);
-        expect(state3.foo).equals("BAR");
+                await withReference(ds, async ({ state: state3 }) => {
+                    expect(state3.foo).equals("BAR");
+                });
+            });
+        });
     });
 
-    it("handles rejection well", () => {
+    it("handles rejection well", async () => {
         class State {
             get foo() {
                 return "foo";
@@ -119,20 +125,20 @@ describe("Datasource", () => {
                 }
                 throw new Error(`Bad value "${value}"`);
             }
-        }
+        };
 
         const supervisor = BehaviorSupervisor({ id: "test", State });
 
-        const { state } = createDatasourceAndReference({
-            type: State,
-            supervisor
-        });
-
-        expect(() => (state.foo = "bar")).throws(`Bad value "bar"`);
-        expect(state.foo).equals("foo");
+        await withDatasourceAndReference(
+            { type: State, supervisor },
+            ({ state }) => {
+                expect(() => (state.foo = "bar")).throws(`Bad value "bar"`);
+                expect(state.foo).equals("foo");
+            }
+        );
     });
 
-    it("handles dynamic properties", () => {
+    it("handles dynamic properties", async () => {
         const dynamic = {
             foo: "hello",
         }
@@ -146,29 +152,34 @@ describe("Datasource", () => {
 
         const supervisor = BehaviorSupervisor({ id: "test", State });
 
-        const { state } = createDatasourceAndReference({
-            type: State,
-            supervisor
-        });
-
-        expect(state.foo).equals("hello");
-        state.foo = "goodbye";
-        expect(state.foo).equals("goodbye");
-        expect(dynamic.foo).equals("goodbye");
-    })
+        await withDatasourceAndReference(
+            { type: State, supervisor },
+            ({ state }) => {
+                expect(state.foo).equals("hello");
+                state.foo = "goodbye";
+                expect(state.foo).equals("goodbye");
+                expect(dynamic.foo).equals("goodbye");
+            }
+        );
+    });
 
     it("commits version after initial load and not subsequently", async () => {
         const store = createStore({ __version__: undefined });
 
-        const { ds, context } = createDatasourceAndReference({ store, versioning: true });
-        await context.transaction.commit();
+        await withDatasourceAndReference(
+            { store, versioning: true },
+            async ({ ds, context }) => {
+                await context.transaction.commit();
 
-        expect(store.sets.length).equals(1);
-        expect(Object.keys(store.sets[0]).length).equals(1);
-        expect(typeof store.sets[0].__version__).equals("number");
-
-        const { context: context2 } = createReference(ds);
-        await context2.transaction.commit();
+                expect(store.sets.length).equals(1);
+                expect(Object.keys(store.sets[0]).length).equals(1);
+                expect(typeof store.sets[0].__version__).equals("number");
+        
+                await withReference(ds, async ({ context }) =>
+                    await context.transaction.commit()
+                )
+            }
+        )
 
         expect(store.sets.length).equals(1);
     })
@@ -176,24 +187,29 @@ describe("Datasource", () => {
     it("does not commit version if already persisted", async () => {
         const store = createStore({ __version__: 1234 });
 
-        const { ds, context } = createDatasourceAndReference({ store, versioning: true });
-        await context.transaction.commit();
+        await withDatasourceAndReference(
+            { store, versioning: true },
+            async ({ ds, context }) => {
+                await context.transaction.commit();
 
-        expect(store.sets.length).equals(0);
-        expect(ds.version).equals(1234);
-    })
+                expect(store.sets.length).equals(0);
+                expect(ds.version).equals(1234);
+            }
+        )
+    });
 
-    it("commits changes after initial load", async () => {
+    it("auto-commits changes after initial load", async () => {
         const store = createStore();
-        const { context, state } = createDatasourceAndReference({
-            store,
-            versioning: true,
-            supervisor: persistentSupervisor,
-        })
+        await withDatasourceAndReference(
+            {
+                store,
+                versioning: true,
+                supervisor: persistentSupervisor,
+            },
 
-        state.foo = "rab";
-
-        await context.transaction.commit();
+            // Just set foo but rely on commit when we leave transaction context
+            ({ state }) => state.foo = "rab"
+        );
 
         expect(store.sets).deep.equals(
             [
@@ -207,25 +223,29 @@ describe("Datasource", () => {
 
     it("commits persistent changes subsequent to initialization", async () => {
         const store = createStore();
-        const { ds, state, context } = createDatasourceAndReference({
-            store,
+        const ds = createDatasource({
+            store: store,
             versioning: true,
             supervisor: persistentSupervisor,
         });
 
-        await context.transaction.commit();
-        expect(store.sets.length).equals(0);
+        await withReference(ds, async ({ state, context }) => {
+            await context.transaction.commit();
+            expect(store.sets.length).equals(0);
+    
+            state.foo = "rab";
+            await context.transaction.commit();
+    
+            expect(store.sets.length).equals(1);
+            expect(store.sets[0]).deep.equals({ __version__: 2, foo: "rab" });
+        });
 
-        state.foo = "rab";
-        await context.transaction.commit();
+        await withReference(ds, async ({ state }) => {
+            state.foo = "woof";
 
-        expect(store.sets.length).equals(1);
-        expect(store.sets[0]).deep.equals({ __version__: 2, foo: "rab" });
-
-        const { context: context2, state: state2 } = createReference(ds);
-        state2.foo = "woof";
-        await context2.transaction.commit();
-
+            // Auto-commit
+        });
+    
         expect(store.sets.length).equals(2);
         expect(store.sets[1]).deep.equals({ __version__: 3, foo: "woof" });
     })
@@ -243,20 +263,24 @@ describe("Datasource", () => {
             })
         );
 
-        const { context, state } = createDatasourceAndReference({ events });
-        await context.transaction.commit();
+        await withDatasourceAndReference(
+            { events },
+            async ({ context, state }) => {
+                await context.transaction.commit();
 
-        expect(changed).false;
+                expect(changed).false;
+        
+                state.foo = "BAR";
+        
+                expect(changed).false;
 
-        state.foo = "BAR";
-
-        expect(changed).false;
-
-        await context.transaction.commit();
+                // Auto-commit
+            }
+        );
 
         expect(changed).true;
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         expect(result).eventually.deep.equal(["BAR", "bar", context]);
-    })
+    });
 });

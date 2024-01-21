@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
-import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Part } from "../Part.js";
 
 /**

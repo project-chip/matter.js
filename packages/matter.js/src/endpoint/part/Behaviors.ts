@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
-import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
+import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { PartLifecycle } from "./PartLifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";

@@ -11,7 +11,7 @@ import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { Behavior } from "../Behavior.js";
-import type { BehaviorBacking } from "../BehaviorBacking.js";
+import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
 import { Schema } from "../supervision/Schema.js";
 import { createType, type ClusterOf } from "./ClusterBehaviorUtil.js";

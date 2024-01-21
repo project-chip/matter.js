@@ -4,16 +4,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LifecycleStatus } from "../common/Lifecycle.js";
-import { ImplementationError, InternalError } from "../common/MatterError.js";
-import type { Agent } from "../endpoint/Agent.js";
-import type { Part } from "../endpoint/Part.js";
-import { Logger } from "../log/Logger.js";
-import { AsyncConstruction } from "../util/AsyncConstruction.js";
-import { EventEmitter } from "../util/Observable.js";
-import { MaybePromise } from "../util/Promises.js";
-import type { Behavior } from "./Behavior.js";
-import { Datasource } from "./state/managed/Datasource.js";
+import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import type { Agent } from "../../endpoint/Agent.js";
+import type { Part } from "../../endpoint/Part.js";
+import { Logger } from "../../log/Logger.js";
+import { AsyncConstruction } from "../../util/AsyncConstruction.js";
+import { EventEmitter } from "../../util/Observable.js";
+import { MaybePromise } from "../../util/Promises.js";
+import type { Behavior } from "../Behavior.js";
+import { Datasource } from "../state/managed/Datasource.js";
+import { Reactors } from "./Reactors.js";
 
 const logger = Logger.get("BehaviorBacking");
 
@@ -27,6 +28,7 @@ export abstract class BehaviorBacking {
     #events?: EventEmitter;
     #options?: Behavior.Options;
     #datasource?: Datasource;
+    #reactors?: Reactors;
     #construction: AsyncConstruction<BehaviorBacking>;
 
     get construction() {
@@ -244,7 +246,17 @@ export abstract class BehaviorBacking {
         }
 
         const behavior = (agent as unknown as Record<string, Behavior>)[this.type.id];
-        return MaybePromise.then(
+
+        let result = MaybePromise.then(
+            () => {
+                this.#reactors?.[Symbol.asyncDispose]();
+            },
+            () => {
+                this.#reactors = undefined;
+            }
+        );
+
+        result = MaybePromise.then(
             () => behavior?.[Symbol.asyncDispose](),
             undefined,
             e => logger.error(`Destroying ${this}:`, e),

@@ -56,7 +56,6 @@ export function generalSetup(Mocha: typeof MochaType) {
     // Reset mocks before each suite.  Suites could conceivably have callbacks
     // that occur across tests.  If individual tests need a reset the suite
     // needs to handle itself.
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const actualBeforeAll = Mocha.Suite.prototype.beforeAll;
     Mocha.Suite.prototype.beforeAll = function (this: Mocha.Context, ...args: any) {
         MockTime.reset();

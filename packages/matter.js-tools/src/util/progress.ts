@@ -8,7 +8,6 @@ import colors from "ansi-colors";
 import { stdout } from "process";
 import { Package } from "./package.js";
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 const actualWrite = process.stdout.write;
 
 const FRONT = "\x1b[G";

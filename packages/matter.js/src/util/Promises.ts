@@ -10,6 +10,7 @@ import type { Environment } from "../common/Environment.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
+import { ValueElement } from "../model/index.js";
 
 /**
  * Obtain a promise with functions to resolve and reject.
@@ -75,19 +76,19 @@ export type MaybePromise<T = void> = T | Promise<T>;
  */
 export type MaybePromiseLike<T = void> = T | PromiseLike<T>;
 
-export namespace MaybePromise {
+export const MaybePromise = {
     /**
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
-    export function is<T>(value: MaybePromiseLike<T>): value is PromiseLike<T> {
+    is<T>(value: MaybePromiseLike<T>): value is PromiseLike<T> {
         return typeof value === "object" && typeof (value as { then?: unknown; }).then === "function";
-    }
+    },
 
     /**
      * Chained MaybePromise.  Invokes the resolve function immediately if the {@link MaybePromise} is not a
      * {@link Promise}, otherwise the same as a normal {@link Promise.then}.
      */
-    export function then<I, O1 = never, O2 = never>(
+    then<I, O1 = never, O2 = never>(
         producer: MaybePromise<I> | (() => MaybePromise<I>),
         resolve?: (input: I) => MaybePromise<O1>,
         reject?: (error: any) => MaybePromise<O2>
@@ -99,7 +100,7 @@ export namespace MaybePromise {
             } else {
                 value = producer;
             }
-            if (is(value)) {
+            if (MaybePromise.is(value)) {
                 return value.then(resolve, reject);
             }
             if (resolve) {
@@ -114,6 +115,40 @@ export namespace MaybePromise {
 
         // Make TypeScript happy
         return undefined as MaybePromise<O1 | O2>;
+    },
+
+    /**
+     * Equivalent of {@link Promise.finally}.
+     */
+    finally<T>(
+        producer: MaybePromise<any> | (() => MaybePromise<any>),
+        onfinally?: (() => void) | undefined | null
+    ): MaybePromise<T> {
+        try {
+            if (typeof producer === "function") {
+                producer = producer();
+            }
+        } finally {
+            if (MaybePromise.is(producer)) {
+                if (typeof (producer as Promise<any>).finally === "function") {
+                    return (producer as Promise<T>).finally(onfinally);
+                } else {
+                    producer.then(
+                        value => {
+                            onfinally?.();
+                            return value;
+                        },
+                        error => {
+                            onfinally?.();
+                            throw error;
+                        }
+                    )
+                }
+            } else {
+                onfinally?.();
+            }
+        }
+        return producer;
     }
 }
 
@@ -230,8 +265,11 @@ export namespace Tracker {
  * 
  * Registers the promise with the default {@link Tracker}.
  */
-export function track<const T extends Promise<unknown>>(promise: T, what?: {}): T {
-    return Tracker.global.track(promise, what) as T;
+export function track<const T>(value: MaybePromise<T>, what?: {}): MaybePromise<T> {
+    if (MaybePromise.is(value)) {
+        return Tracker.global.track(value, what) as T;
+    }
+    return value;
 }
 
 DiagnosticSource.add(Tracker.global);

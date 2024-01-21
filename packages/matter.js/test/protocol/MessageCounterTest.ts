@@ -14,13 +14,11 @@ import { Endian } from "../../src/util/ByteArray.js";
 import { DataWriter } from "../../src/util/DataWriter.js";
 
 describe("MessageCounter", () => {
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     let realGetRandomData = Crypto.get().getRandomData;
     let getRandom32BitNumber: (() => number) | undefined;
     let testStorageContext: StorageContext;
 
     before(() => {
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         realGetRandomData = Crypto.get().getRandomData;
         Crypto.get().getRandomData = (length: number) => {
             if (length === 4 && getRandom32BitNumber !== undefined) {
