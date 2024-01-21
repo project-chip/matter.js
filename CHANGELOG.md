@@ -15,9 +15,14 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Implemented handling for session interval parameters as defined by Matter 1.2 specification
   * Enhancement: Improved discovery data handling and use MDNS data for Pase/Case connections session interval parameters
   * Enhancement: Storing session parameter with session resumption details to reuse on session restores
+  * Enhancement: Prevented resending the same MDNS scanner queries
   * Fix: Only set session active timestamp if we create a session based on an incoming message and not when we are the creator of the session to prevent too fast resubmissions
+  * Fix: Correctly handle CASE Resumptions without known resumption records and fallback to a full CASE session establishment
 * matter.js API:
   * Enhancement: Stored Discovery and Basic information data for commissioned nodes and allow API access for easy determination of devices without need to connect to them
+  * Enhancement: Improved OnOff/Dimmable Lighing devices and add Startup handling to match specification
+  * Enhancement: Optimized Commissioning error handling
+  * Enhancement: Added connection options to Controller connect methods
 * matter.js shell:
   * Enhancement: Adjusted logic to output detailed node information on nodes command
 
