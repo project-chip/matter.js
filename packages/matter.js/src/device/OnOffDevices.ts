@@ -58,11 +58,13 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
      * @param definition Device type definition of the device to create
      * @param attributeInitialValues Optional object with initial attribute values for automatically added clusters
      * @param options Optional endpoint options
+     * @param isLighting Define if Lighting feature is set
      */
     constructor(
         definition: DeviceTypeDefinition,
         attributeInitialValues?: { [key: ClusterId]: AttributeInitialValues<any> },
         options: EndpointOptions = {},
+        protected isLighting = false,
     ) {
         super(definition, options);
         this.addDeviceClusters(attributeInitialValues);
@@ -98,6 +100,7 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
                 createDefaultOnOffClusterServer(
                     this.commandHandler,
                     getClusterInitialAttributeValues(attributeInitialValues, OnOff.Cluster),
+                    this.isLighting,
                 ),
             );
         }
@@ -150,7 +153,7 @@ export class OnOffPluginUnitDevice extends OnOffBaseDevice {
         if (onOffAttributeInitialValues !== undefined) {
             initialAttributeValues[OnOff.Cluster.id] = onOffAttributeInitialValues;
         }
-        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, initialAttributeValues, options);
+        super(DeviceTypes.ON_OFF_PLUGIN_UNIT, initialAttributeValues, options, false);
     }
 }
 
@@ -166,7 +169,7 @@ export class OnOffLightDevice extends OnOffBaseDevice {
         if (onOffAttributeInitialValues !== undefined) {
             initialAttributeValues[OnOff.Cluster.id] = onOffAttributeInitialValues;
         }
-        super(DeviceTypes.ON_OFF_LIGHT, initialAttributeValues, options);
+        super(DeviceTypes.ON_OFF_LIGHT, initialAttributeValues, options, true);
     }
 
     protected override addDeviceClusters(
@@ -182,6 +185,7 @@ export class OnOffLightDevice extends OnOffBaseDevice {
                         attributeInitialValues,
                         OnOff.Cluster.with(OnOff.Feature.LevelControlForLighting),
                     ),
+                    true,
                 ),
             );
         }
