@@ -24,15 +24,15 @@ export interface Participant {
     /**
      * Commit phase one.
      */
-    commit1(): MaybePromise<void>;
+    commit1(): MaybePromise;
 
     /**
      * Commit phase two.
      */
-    commit2(): MaybePromise<void>;
+    commit2(): MaybePromise;
 
     /**
      * Drop isolated writes and revert to original canonical source.
      */
-    rollback(): MaybePromise<void>;
+    rollback(): MaybePromise;
 }

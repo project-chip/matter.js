@@ -16,7 +16,6 @@ import { BehaviorBacking } from "../BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Val } from "../state/managed/Val.js";
 import { Transaction } from "../state/transaction/Transaction.js";
-import { OfflineContext } from "./context/OfflineContext.js";
 
 /**
  * This class backs the server implementation of a behavior.
@@ -62,8 +61,7 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
         const defaults = this.part.behaviors.defaultsFor(this.type) ?? {};
 
-        const context = OfflineContext();
-        const state = this.datasource.reference(context) as Val.Struct;
+        const state = this.datasource.reference(agent.context) as Val.Struct;
 
         const transaction = agent.context.transaction;
 

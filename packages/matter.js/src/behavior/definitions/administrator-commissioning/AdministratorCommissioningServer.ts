@@ -199,12 +199,9 @@ export namespace AdministratorCommissioningServer {
                 );
             }
 
-            this
-                .part
-                .agent
-                .get(AdministratorCommissioningServer)
-                .state
-                .adminFabricIndex = null;
+            this.part.offline(agent => {
+                agent.get(AdministratorCommissioningServer).state.adminFabricIndex = null;
+            });
         }
     }
 

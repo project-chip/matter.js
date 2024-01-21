@@ -19,15 +19,17 @@ export class IdentityConflictError extends ImplementationError {};
 export class IdentityService {
     #nodeDescription: string;
     #port?: number;
-    #index?: IndexBehavior;
+    #index?: IndexBehavior.State;
+    #root: Part;
 
     constructor(root: Part, nodeDescription: string, port?: number) {
         this.#nodeDescription = nodeDescription;
         this.#port = port;
+        this.#root = root;
 
         const acquireIndex = () => {
             root.behaviors.require(IndexBehavior);
-            this.#index = root.agent.get(IndexBehavior);
+            this.#index = (root.state as { index: IndexBehavior.State }).index;
         }
 
         // Obtain the part index used for validating identity availability.  If the root part isn't yet initialized we
@@ -57,9 +59,20 @@ export class IdentityService {
      * Ensure that a number is available for assignment to a {@link Part}.
      */
     assertNumberAvailable(number: number, part: Part) {
-        const other = this.#index?.forNumber(number);
+        let other;
+        if (this.#root.lifecycle.hasNumber && this.#root.number === number) {
+            other = this.#root;
+        } else {
+            other = this.#index?.partsById[number];
+        }
         if (other && other !== part) {
-            throw new IdentityConflictError(`Another part already exists with number ${number}`)
+            let owner;
+            if (other.lifecycle.hasId) {
+                owner = `part ${other.id}`;
+            } else {
+                owner = `another part`
+            }
+            throw new IdentityConflictError(`Endpoint number ${number} is already assigned to ${owner}`);
         }
     }
 }

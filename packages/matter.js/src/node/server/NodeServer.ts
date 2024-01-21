@@ -67,10 +67,6 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     get root() {
-        return this.rootPart.agent;
-    }
-
-    get rootPart() {
         if (!this.#root) {
             throw new UninitializedDependencyError(
                 this.constructor.name,
@@ -172,21 +168,20 @@ export class NodeServer extends BaseNodeServer implements Node {
 
         await this.construction;
 
-        const agent = this.root;
-
         await this.advertise();
 
-        if (!this.commissioned) {
-            try {
-                const commissioning = await agent.load(CommissioningBehavior);
-                commissioning.initiateCommissioning();
-            } catch (e) {
-                if (e instanceof Error) {
-                    Diagnostic.prefixError("Cannot initiate commissioning", e);
+        await this.root.offline(async agent => {
+            const commissioning = await agent.load(CommissioningBehavior);
+            if (!this.commissioned)
+                try {
+                    commissioning.initiateCommissioning();
+                } catch (e) {
+                    if (e instanceof Error) {
+                        Diagnostic.prefixError("Cannot initiate commissioning", e);
+                    }
+                    throw e;
                 }
-                throw e;
-            }
-        }
+        });
 
         logger.notice(Diagnostic.strong(this.toString()), "is online");
     }
@@ -221,21 +216,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     add(part: Part): void;
 
     add(endpoint: Part.Definition) {
-        this.rootPart.parts.add(endpoint);
-    }
-
-    /**
-     * An index of all parts.
-     */
-    get index() {
-        return this.root.get(IndexBehavior);
-    }
-
-    /**
-     * Retrieve a part by number.
-     */
-    partForNumber(number: number) {
-       return this.root.get(IndexBehavior).forNumber(number);
+        this.root.parts.add(endpoint);
     }
 
     /**
@@ -350,7 +331,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     protected override get commissioningConfig() {
-        return this.root.get(CommissioningBehavior).state as CommissioningOptions.Configuration;
+        return (this.root.state as unknown as { commissioning: CommissioningOptions.Configuration }).commissioning;
     }
 
     protected override get networkConfig() {
@@ -359,7 +340,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     protected override get rootEndpoint() {
         if (!this.#rootServer) {
-            this.#rootServer = PartServer.forPart(this.rootPart);
+            this.#rootServer = PartServer.forPart(this.root);
         }
         return this.#rootServer;
     }
@@ -373,7 +354,7 @@ export class NodeServer extends BaseNodeServer implements Node {
     }
 
     protected override get advertiseOnStartup() {
-        return !!this.root.get(CommissioningBehavior).state.automaticAnnouncement;
+        return !!this.commissioningConfig.automaticAnnouncement;
     }
 
     protected override emitCommissioningChanged(_fabric: FabricIndex): void {}
@@ -394,7 +375,7 @@ export class NodeServer extends BaseNodeServer implements Node {
 
     protected override async createMatterDevice() {
         this.#interactionServer = new TransactionalInteractionServer(
-            this.rootPart,
+            this.root,
             this.store,
             this.#configuration.subscription
         );

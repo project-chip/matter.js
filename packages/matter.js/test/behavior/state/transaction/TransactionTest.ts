@@ -22,76 +22,123 @@ class TestResource implements Resource {
 }
 
 interface TestParticipant extends Participant {
-    invoked: Array<string>;
+    invoked: string[];
+
+    expect(...invokes: string[]): void;
 }
 
-function TestParticipant(options?: Partial<Participant>): TestParticipant {
-    return {
+let transaction: Transaction;
+let transaction2: Transaction;
+let transaction3: Transaction;
+
+export interface TestParticipantOptions extends Partial<Participant> {
+    transaction?: Transaction;
+}
+
+/**
+ * Add a {@link TestParticipant} to {@link transaction}.
+ */
+function join(options?: TestParticipantOptions): TestParticipant {
+    const participant: TestParticipant = {
         toString() {
             return "TestParticipant";
         },
 
         invoked: Array<string>(),
 
-        commit1(): MaybePromise<void> {
+        commit1(): MaybePromise {
             this.invoked.push("commit1");
             return options?.commit1?.();
         },
 
-        commit2(): MaybePromise<void> {
+        commit2(): MaybePromise {
             this.invoked.push("commit2");
             return options?.commit2?.();
         },
 
-        rollback(): MaybePromise<void> {
+        rollback(): MaybePromise {
             this.invoked.push("rollback");
             return options?.rollback?.();
         },
+
+        expect(...invokes: string[]) {
+            expect(this.invoked).equals(invokes);
+        }
     };
+
+    const tx = options?.transaction ?? transaction;
+    tx.addParticipants(participant);
+
+    return participant;
 }
 
-class TestTransaction extends Transaction {
-    participant: Participant;
-
-    constructor(participant?: Participant) {
-        super("TestTransaction");
-        this.participant = participant ?? TestParticipant();
-    }
-
-    addParticipant() {
-        this.addParticipants(this.participant);
-    }
-
-    expectInvoked(...invoked: string[]) {
-        expect((this.participant as TestParticipant).invoked).deep.equals(invoked);
-    }
+/**
+ * Add a {@link TestParticipant} to {@link transaction2}.
+ */
+function join2(options?: TestParticipantOptions) {
+    return join({
+        ...options,
+        transaction: transaction2,
+    })
 }
 
-function create({ participant }: { participant?: Participant } = {}) {
-    if (!participant) {
-        participant = TestParticipant();
-    }
+/**
+ * Add a {@link TestParticipant} to {@link transaction3}.
+ */
+function join3(options?: TestParticipantOptions) {
+    return join({
+        ...options,
+        transaction: transaction3,
+    })
+}
 
-    const transaction = new TestTransaction(participant);
+/**
+ * Run a test against {@link transaction}.
+ */
+function test(what: string, actor: () => MaybePromise) {
+    it(what, () => Transaction.act("test", tx => {
+        transaction = tx;
+        return actor()
+    }));
+}
 
-    transaction.addParticipant();
+/**
+ * Run a test against {@link transaction} and {@link transaction2}.
+ */
+function test2(what: string, actor: () => MaybePromise) {
+    test(what, () => {
+        Transaction.act("test2", tx => {
+            transaction2 = tx;
+            return actor();
+        })
+    })
+}
 
-    return transaction;
+/**
+ * Run a test against all three transactions.
+ */
+function test3(what: string, actor: () => MaybePromise) {
+    test2(what, () => {
+        Transaction.act("test3", tx => {
+            transaction3 = tx;
+            return actor();
+        })
+    })
 }
 
 describe("Transaction", () => {
-    it("handles commit and rollback on shared", async () => {
-        const transaction = create();
+    test("handles commit and rollback on shared", async () => {
+        const p = join();
         await transaction.commit();
 
-        transaction.addParticipant();
+        join();
         await transaction.rollback();
 
-        transaction.expectInvoked("rollback", "rollback");
+        p.expect("rollback", "rollback");
     });
 
-    it("flows through commit correctly", async () => {
-        const transaction = create();
+    test("flows through commit correctly", async () => {
+        const p = join();
 
         expect(transaction.status).equals(Status.Shared);
         await transaction.begin();
@@ -99,11 +146,11 @@ describe("Transaction", () => {
         await transaction.commit();
         expect(transaction.status).equals(Status.Shared);
 
-        transaction.expectInvoked("commit1", "commit2");
+        p.expect("commit1", "commit2");
     });
 
-    it("flows through rollback correctly", async () => {
-        const transaction = create();
+    test("flows through rollback correctly", async () => {
+        const p = join();
 
         expect(transaction.status).equals(Status.Shared);
         await transaction.begin();
@@ -111,12 +158,12 @@ describe("Transaction", () => {
         await transaction.rollback();
         expect(transaction.status).equals(Status.Shared);
 
-        transaction.expectInvoked("rollback");
+        p.expect("rollback");
     });
 
     describe("keeps its promises", async () => {
-        it("after commit", async () => {
-            const transaction = create();
+        test("after commit", async () => {
+            join();
 
             await transaction.begin();
             const promise = transaction.promise;
@@ -125,8 +172,8 @@ describe("Transaction", () => {
             expect(promise).eventually.equals(undefined);
         });
 
-        it("after rolling back", async () => {
-            const transaction = create();
+        test("after rolling back", async () => {
+            join();
 
             await transaction.begin();
             const promise = transaction.promise;
@@ -136,44 +183,40 @@ describe("Transaction", () => {
         });
     });
 
-    it("rolls back and throws on commit phase 1 error", () => {
-        it("synchronously", () => {
-            const transaction = create({
-                participant: TestParticipant({
-                    commit1() {
-                        throw new Error("oops");
-                    },
-                }),
+    describe("rolls back and throws on commit phase 1 error", () => {
+        test("synchronously", () => {
+            const p = join({
+                commit1() {
+                    throw new Error("oops");
+                },
             });
 
             transaction.beginSync();
 
             expect(() => transaction.commit()).throws(FinalizationError);
 
-            transaction.expectInvoked("commit1", "rollback");
+            p.expect("commit1", "rollback");
         });
 
-        it("asychonously", async () => {
-            const transaction = create({
-                participant: TestParticipant({
-                    async commit1() {
-                        throw new Error("oops");
-                    },
-                }),
+        test("asychonously", async () => {
+            const p = join({
+                async commit1() {
+                    throw new Error("oops");
+                },
             });
 
             await transaction.begin();
 
             await expect(transaction.commit()).rejectedWith(FinalizationError);
 
-            transaction.expectInvoked("commit1", "rollback");
+            p.expect("commit1", "rollback");
         });
     });
 
     describe("locks and unlocks resource", async () => {
         describe("asynchronously", async () => {
-            it("on becoming exclusive & committing", async () => {
-                const transaction = create();
+            test("on becoming exclusive & committing", async () => {
+                join();
 
                 const resource = new TestResource();
                 await transaction.addResources(resource);
@@ -186,8 +229,9 @@ describe("Transaction", () => {
                 expect(resource.lockedBy).undefined;
             });
 
-            it("on adding to exclusive & rolling back", async () => {
-                const transaction = create();
+            test("on adding to exclusive & rolling back", async () => {
+                join();
+
                 await transaction.begin();
 
                 const resource = new TestResource();
@@ -201,8 +245,8 @@ describe("Transaction", () => {
         });
 
         describe("synchronously", async () => {
-            it("on becoming exclusive & rolling back", async () => {
-                const transaction = create();
+            test("on becoming exclusive & rolling back", async () => {
+                join();
 
                 const resource = new TestResource();
                 transaction.addResourcesSync(resource);
@@ -215,8 +259,9 @@ describe("Transaction", () => {
                 expect(resource.lockedBy).undefined;
             });
 
-            it("on adding to exclusive & committing", async () => {
-                const transaction = create();
+            test("on adding to exclusive & committing", async () => {
+                join();
+
                 transaction.beginSync();
 
                 const resource = new TestResource();
@@ -232,27 +277,27 @@ describe("Transaction", () => {
 
     describe("blocking locks", async () => {
         describe("synchronously", async () => {
-            it("throws on becoming exclusive", async () => {
+            test2("throws on becoming exclusive", async () => {
                 const resource = new TestResource();
 
-                const transaction1 = create();
-                transaction1.addResourcesSync(resource);
-                transaction1.beginSync();
+                join();
+                transaction.addResourcesSync(resource);
+                transaction.beginSync();
 
-                const transaction2 = create();
+                join2();
                 transaction2.addResourcesSync(resource);
                 expect(() => transaction2.beginSync()).throws(SynchronousTransactionConflictError);
                 expect(transaction2.status).equals(Transaction.Status.Shared);
             });
 
-            it("throws on adding to exclusive", async () => {
+            test2("throws on adding to exclusive", async () => {
                 const resource = new TestResource();
 
-                const transaction1 = create();
-                transaction1.addResourcesSync(resource);
-                transaction1.beginSync();
+                join();
+                transaction.addResourcesSync(resource);
+                transaction.beginSync();
 
-                const transaction2 = create();
+                join2();
                 transaction2.beginSync();
                 expect(() => transaction2.addResourcesSync(resource)).throws(SynchronousTransactionConflictError);
                 expect(transaction2.status).equals(Transaction.Status.Exclusive);
@@ -260,37 +305,37 @@ describe("Transaction", () => {
         });
 
         describe("asynchronously", async () => {
-            it("waits on becoming exclusive", async () => {
+            test2("waits on becoming exclusive", async () => {
                 const resource = new TestResource();
 
-                const transaction1 = create();
-                await transaction1.addResources(resource);
-                await transaction1.begin();
+                join();
+                await transaction.addResources(resource);
+                await transaction.begin();
 
-                const transaction2 = create();
+                join2();
                 await transaction2.addResources(resource);
                 const t2begin = transaction2.begin();
 
-                expect(resource.lockedBy).equals(transaction1);
-                await transaction1.commit();
+                expect(resource.lockedBy).equals(transaction);
+                await transaction.commit();
                 expect(resource.lockedBy).equals(undefined);
                 await t2begin;
                 expect(resource.lockedBy).equals(transaction2);
             });
 
-            it("waits on adding to exclusive", async () => {
+            test2("waits on adding to exclusive", async () => {
                 const resource = new TestResource();
 
-                const transaction1 = create();
-                await transaction1.addResources(resource);
-                await transaction1.begin();
+                join();
+                await transaction.addResources(resource);
+                await transaction.begin();
 
-                const transaction2 = create();
+                join2();
                 await transaction2.begin();
                 const t2add = transaction2.addResources(resource);
 
-                expect(resource.lockedBy).equals(transaction1);
-                await transaction1.commit();
+                expect(resource.lockedBy).equals(transaction);
+                await transaction.commit();
                 await t2add;
                 expect(resource.lockedBy).equals(transaction2);
             });
@@ -298,46 +343,46 @@ describe("Transaction", () => {
     });
 
     describe("detects deadlocks", () => {
-        it("directly", async () => {
+        test("directly", async () => {
             const resource1 = new TestResource("Food");
             const resource2 = new TestResource("Water");
 
-            const transaction1 = create();
-            await transaction1.addResources(resource1);
-            await transaction1.begin();
+            join();
+            await transaction.addResources(resource1);
+            await transaction.begin();
 
-            const transaction2 = create();
+            join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
             const t2add1 = transaction2.addResources(resource1);
 
-            await expect(transaction1.addResources(resource2)).rejectedWith(TransactionDeadlockError);
-            await transaction1.rollback();
+            await expect(transaction.addResources(resource2)).rejectedWith(TransactionDeadlockError);
+            await transaction.rollback();
             await t2add1;
         });
 
-        it("indirectly", async () => {
+        test3("indirectly", async () => {
             const resource1 = new TestResource("Food");
             const resource2 = new TestResource("Water");
             const resource3 = new TestResource("Shelter");
 
-            const transaction1 = create();
-            await transaction1.addResources(resource1);
-            await transaction1.begin();
+            join();
+            await transaction.addResources(resource1);
+            await transaction.begin();
 
-            const transaction2 = create();
+            join2();
             await transaction2.addResources(resource2);
             await transaction2.begin();
             const t2add1 = transaction2.addResources(resource1);
 
-            const transaction3 = create();
+            join3();
             await transaction3.addResources(resource3);
             await transaction3.begin();
             const t3add2 = transaction3.addResources(resource2);
 
             // 2 waits on 1, 3 waits on 2, then deadlock when 1 waits on 3
-            await expect(transaction1.addResources(resource3)).rejectedWith(TransactionDeadlockError);
-            await transaction1.rollback();
+            await expect(transaction.addResources(resource3)).rejectedWith(TransactionDeadlockError);
+            await transaction.rollback();
             await t2add1;
             await transaction2.rollback();
             await t3add2;

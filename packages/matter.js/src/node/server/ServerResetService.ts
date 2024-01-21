@@ -70,7 +70,7 @@ export class ServerResetService {
             this.#active = true;
 
             // Reset parts
-            await this.#server.rootPart.lifecycle.reset();
+            await this.#server.root.lifecycle.reset();
 
             // Clear data that's not managed by behaviors (TODO - this should shrink over time)
             if (this.#isFactoryReset) {
@@ -80,8 +80,8 @@ export class ServerResetService {
             }
     
             // Reinitialize
-            this.#server.rootPart.lifecycle.change(PartLifecycle.Change.Installed);
-            await this.#server.rootPart.construction;
+            this.#server.root.lifecycle.change(PartLifecycle.Change.Installed);
+            await this.#server.root.construction;
         } catch (e) {
             this.#active = false;
             logger.error(`Terminating due to error in ${type} reset of ${this.#server}:`, e);

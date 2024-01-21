@@ -67,7 +67,7 @@ export class ServerBehaviorInitializer extends PartInitializer {
             }
         }
 
-        if (part === this.#server.rootPart) {
+        if (part === this.#server.root) {
             return "root";
         }
 

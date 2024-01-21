@@ -110,7 +110,7 @@ interface MyClusterBaseInterface {
 }
 
 interface MyClusterAwesomeInterface {
-    becomeAwesome(request: number): MaybePromise<void>
+    becomeAwesome(request: number): MaybePromise
 }
 
 interface MyClusterInterface {

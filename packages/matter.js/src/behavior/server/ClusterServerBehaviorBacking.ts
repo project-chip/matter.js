@@ -25,7 +25,6 @@ import { Session } from "../../session/Session.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
-import { OfflineContext } from "./context/OfflineContext.js";
 import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
@@ -101,7 +100,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         // can be cleaned up as we factor out legacy code but for now just pass our validated state and use
         // ClusterServer's TLV validation as backup
         const datasource = this.datasource;
-        const initialValues = datasource.reference(OfflineContext());
+        const initialValues = datasource.view;
 
         // Create the cluster server
         const clusterServer = ClusterServer(this.type.cluster, initialValues, handlers, supportedEvents);
@@ -143,10 +142,10 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
-    message: Message | undefined,
+    message: Message,
     fn: (behavior: ClusterBehavior) => T,
 ): T {
-    const context = message ? OnlineContext.retrieve(message) : OfflineContext();
+    const context = OnlineContext.retrieve(message);
     const agent = context.agentFor(backing.part);
 
     return fn(agent.get(backing.type));
@@ -199,6 +198,11 @@ function createAttributeAccessors(
 } {
     return {
         get({ message }) {
+            if (!message) {
+                // If there is no message this is getLocal
+                return (backing.datasource.view as unknown as Val.Struct)[name];
+            }
+
             return withBehavior(backing, message, behavior => {
                 logger.debug(
                     "Read",
@@ -215,6 +219,9 @@ function createAttributeAccessors(
         },
 
         set(value, { message }) {
+            if (message === undefined) {
+                throw new ImplementationError("You must set local values through the Behavior API");
+            }
 
             return withBehavior(backing, message, behavior => {
                 logger.info(

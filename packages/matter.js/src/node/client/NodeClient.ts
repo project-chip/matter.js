@@ -5,7 +5,6 @@
  */
 
 import { ImplementationError, NotImplementedError } from "../../common/MatterError.js";
-import { Agent } from "../../endpoint/Agent.js";
 import { Part } from "../../endpoint/Part.js";
 import type { RootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
@@ -25,11 +24,7 @@ export class NodeClient implements Node {
         return undefined;
     }
 
-    get root(): Agent.Instance<RootEndpoint> {
-        return this.rootPart.agent;
-    }
-
-    get rootPart(): Part<RootEndpoint> {
+    get root(): Part<RootEndpoint> {
         throw new NotImplementedError();
     }
 

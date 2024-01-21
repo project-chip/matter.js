@@ -9,7 +9,7 @@ import { BehaviorBacking } from "../../behavior/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { PartLifecycle } from "./PartLifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";
-import { ImplementationError } from "../../common/MatterError.js";
+import { ImplementationError, ReadOnlyError } from "../../common/MatterError.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import { MaybePromise } from "../../util/Promises.js";
@@ -56,12 +56,14 @@ export class Behaviors {
             throw new ImplementationError('Part "behaviors" option must be an array of Behavior.Type instances');
         }
         for (const id in supported) {
-            if (!(supported[id].prototype instanceof Behavior)) {
+            const type = supported[id];
+            if (!(type.prototype instanceof Behavior)) {
                 throw new ImplementationError(`${part}.${id}" is not a Behavior.Type`);
             }
-            if (typeof supported[id].id !== "string") {
+            if (typeof type.id !== "string") {
                 throw new ImplementationError(`${part}.${id} has no ID`);
             }
+            this.#augmentPartState(type);
         }
 
         this.#part = part;
@@ -155,9 +157,11 @@ export class Behaviors {
         this.#supported[type.id] = type;
 
         this.#part.lifecycle.change(PartLifecycle.Change.ServersChanged);
-            
+
         if (type.immediate && this.#part.lifecycle.isInstalled) {
-            this.#part.agent.activate(type);
+            this.#part.offline(agent => {
+                this.activate(type, agent);
+            })
         }
     }
 
@@ -251,19 +255,19 @@ export class Behaviors {
      * Destroy all behaviors that are initialized (have backings present).
      */
     async [Symbol.asyncDispose]() {
-        const agent = this.#part.agent;
+        this.#part.offline(async agent => {
+            for (const id in this.#backings) {
+                await this.#backings[id].destroy(agent);
+            }
 
-        for (const id in this.#backings) {
-            await this.#backings[id].destroy(agent);
-        }
+            this.#backings = {};
 
-        this.#backings = {};
-
-        // Commit any state changes that occurred during destructino
-        const transaction = agent.context.transaction;
-        if (transaction.status !== Transaction.Status.Exclusive) {
-            await transaction.commit();
-        }
+            // Commit any state changes that occurred during destructino
+            const transaction = agent.context.transaction;
+            if (transaction.status !== Transaction.Status.Exclusive) {
+                await transaction.commit();
+            }
+        });
     }
 
     /**
@@ -366,5 +370,19 @@ export class Behaviors {
         }
 
         return myType;
+    }
+
+    #augmentPartState(type: Behavior.Type) {
+        Object.defineProperty(this.#part.state, type.id, {
+            get: () => {
+                this.#backings[type.id]?.stateView ?? {};
+            },
+
+            set() {
+                throw new ReadOnlyError();
+            },
+
+            enumerable: true,
+        })
     }
 }

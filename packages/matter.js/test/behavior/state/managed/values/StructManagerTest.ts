@@ -4,11 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ActionContext } from "../../../../../src/behavior/server/context/ActionContext.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
+import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
+import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { FieldElement } from "../../../../../src/model/index.js";
+import { MaybePromise } from "../../../../../src/util/Promises.js";
 import { TestStruct } from "./value-utils.js";
 
-function createNested() {
+export type Nested = {
+    substruct: {
+        foo: string
+    }
+}
+
+function testNested(actor: (vars: { struct: TestStruct, cx: ActionContext, ref: Nested }) => MaybePromise): MaybePromise {
     const struct = TestStruct(
         {
             substruct: {
@@ -23,50 +33,47 @@ function createNested() {
             substruct: {
                 foo: "bar",
             },
-        });
-
-    const ref = struct.reference() as {
-        substruct: {
-            foo: string;
         }
-    };
+    );
 
-    return { struct, ref };
+    return struct.online({ fabric: FabricIndex(1), subject: NodeId(1) }, (ref, cx) => {
+        return actor({ struct, cx, ref: ref as Nested });
+    });
 }
 
 describe("StructManager", () => {
     it("applies nested defaults", () => {
-        const { ref } = createNested();
-
-        expect(typeof ref.substruct).equals("object");
-        expect(ref.substruct.foo).equals("bar");
+        testNested(({ ref }) => {
+            expect(typeof ref.substruct).equals("object");
+            expect(ref.substruct.foo).equals("bar");
+        })
     });
 
     it("accepts nested changes", async () => {
-        const { struct, ref } = createNested();
+        await testNested(async ({cx, struct, ref}) => {
+            ref.substruct.foo = "rab";
 
-        ref.substruct.foo = "rab";
-
-        expect(ref.substruct.foo).equals("rab");
-
-        await struct.commit();
-
-        const substruct = struct.fields.substruct as Val.Struct;
-        expect(typeof substruct).equals("object");
-        expect(substruct.foo).equals("rab"); 
+            expect(ref.substruct.foo).equals("rab");
+    
+            await cx.transaction.commit();
+    
+            const substruct = struct.fields.substruct as Val.Struct;
+            expect(typeof substruct).equals("object");
+            expect(substruct.foo).equals("rab"); 
+        });
     });
 
     it("notifies on nested change", async () => {
-        const { struct, ref } = createNested();
+        await testNested(async ({cx, struct, ref}) => {
+            ref.substruct.foo = "rab";
 
-        ref.substruct.foo = "rab";
+            expect(struct.notifies.length).equals(0);
 
-        expect(struct.notifies.length).equals(0);
+            await cx.transaction.commit();
 
-        await struct.commit();
-
-        expect(struct.notifies).deep.equal([
-            { index: "foo", oldValue: { foo: "bar" }, newValue: { foo: "rab" } }
-        ]);
+            expect(struct.notifies).deep.equal([
+                { index: "foo", oldValue: { foo: "bar" }, newValue: { foo: "rab" } }
+            ]);
+        });
     });
 });

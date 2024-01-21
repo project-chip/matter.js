@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OfflineContext } from "../../../../../src/behavior/server/context/OfflineContext.js";
+import { ActionContext } from "../../../../../src/behavior/server/context/ActionContext.js";
+import { OnlineContext } from "../../../../../src/behavior/server/context/OnlineContext.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { SchemaPath } from "../../../../../src/behavior/supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
-import { InternalError } from "../../../../../src/common/MatterError.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
+import { MaybePromise } from "../../../../../src/util/Promises.js";
+import { Identity } from "../../../../../src/util/Type.js";
 
 /**
  * Create schema for a single field.
@@ -56,8 +58,16 @@ export function listOf(entryType: string | Partial<FieldElement>, listType?: Par
     })
 }
 
+export interface Online2 {
+    cx1: ActionContext,
+    cx2: ActionContext,
+    ref1: Val.Struct,
+    ref2: Val.Struct,
+}
+
 /**
- * A simplified source for managed structs, similar to Datasource but provides access to the raw underlying values.
+ * A simplified source for managed structs, similar to Datasource but provides types and access to the raw underlying
+ * values.
  */
 export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
     const supervisor = new RootSupervisor(new DatatypeModel(structOf(fields)));
@@ -81,28 +91,28 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
         fields: struct,
         notifies,
 
-        context: undefined as (undefined | ValueSupervisor.Session),
-
-        async commit() {
-            if (!this.context) {
-                throw new InternalError("Commit without context");
-            }
-            await this.context.transaction.commit();
-        },
-
         expect(expected: Val.Struct) {
             expect(struct).deep.equals(expected);
         },
 
-        reference(context?: ValueSupervisor.Session) {
-            if (context === undefined) {
-                if (this.context === undefined) {
-                    context = this.context = OfflineContext();
-                } else {
-                    context = this.context;
-                }
-            }
+        online(cx: OnlineContext.Options, actor: (ref: Val.Struct, cx: ActionContext) => MaybePromise) {
+            return OnlineContext(cx).act(cx =>
+                actor(this.reference(cx), cx)
+            )
+        },
+
+        online2(cx1: OnlineContext.Options, cx2: OnlineContext.Options, actor: (online: Online2) => MaybePromise) {
+            return this.online(cx1, (ref1, cx1) =>
+                this.online(cx2, (ref2, cx2) =>
+                    actor({ cx1, cx2, ref1, ref2 })
+                )
+            )
+        },
+
+        reference(context: ValueSupervisor.Session) {
             return supervisor.manage(rootRef, context, { path: SchemaPath("TestStruct") }) as Val.Struct;
         }
     }
 }
+
+export type TestStruct = Identity<ReturnType<typeof TestStruct>>;
