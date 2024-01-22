@@ -15,7 +15,7 @@ import {
     type SupportedEventsList,
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
-import { ImplementationError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
@@ -32,9 +32,9 @@ import { ValidatedElements } from "../cluster/ValidatedElements.js";
 import { Val } from "../state/managed/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { OnlineContext } from "./context/OnlineContext.js";
 import { ServerBehaviorBacking } from "./ServerBehaviorBacking.js";
 import { SchemaPath } from "../supervision/SchemaPath.js";
+import { Contextual } from "./context/Contextual.js";
 
 const logger = Logger.get("Behavior");
 
@@ -145,7 +145,11 @@ function withBehavior<T>(
     message: Message,
     fn: (behavior: ClusterBehavior) => T,
 ): T {
-    const context = OnlineContext.retrieve(message);
+    const context = Contextual.contextOf(message);
+    if (!context) {
+        throw new InternalError("Message context not installed");
+    }
+
     const agent = context.agentFor(backing.part);
 
     return fn(agent.get(backing.type));
@@ -173,6 +177,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
                     "Invoke",
                     Diagnostic.strong(`${backing}.${name}`),
                     behavior.context.transaction.via,
+                    "via",
                     requestDiagnostic,
                 );
         
@@ -207,6 +212,7 @@ function createAttributeAccessors(
                 logger.debug(
                     "Read",
                     Diagnostic.strong(`${backing}.state.${name}`),
+                    "via",
                     behavior.context.transaction.via,
                 );
 
@@ -227,6 +233,7 @@ function createAttributeAccessors(
                 logger.info(
                     "Write",
                     Diagnostic.strong(`${backing}.state.${name}`),
+                    "via",
                     behavior.context.transaction.via,
                 )
 

@@ -21,32 +21,51 @@ const logger = Logger.get("Transaction");
 export function executeTransaction<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
     const tx = new Tx(via);
 
-    return MaybePromise.then(
-        () => actor(tx),
+    let committed = false;
+    return MaybePromise.finally(
+        () => MaybePromise.then(
+            () => {
+                actor(tx);
+            },
 
-        result => {
+            result => {
+                committed = true;
+
+                return MaybePromise.then(
+                    () => tx.commit(),
+                    () => result, 
+                )
+            },
+
+            error => {
+                // If we've committed, error happened during commit and we've already logged cleaned up
+                if (committed) {
+                    throw error;
+                }
+
+                // If we haven't committed, error is in the actor
+                return MaybePromise.then(
+                    (): T => {
+                        logger.warn("Transaction", tx.via, ": Rolling back due to error");
+                        tx.rollback();
+                        tx.destroy();
+                        throw error;
+                    },
+
+                    undefined,
+
+                    (error2): T => {
+                        logger.error("Transaction", tx.via, ": Error-induced rolled back caused additional error:", error2);
+                        tx.destroy();                    
+                        throw error;
+                    },
+                )
+            },
+        ),
+
+        () => {
             tx.destroy();
-            return result;
-        },
-
-        error => {
-            return MaybePromise.then(
-                (): T => {
-                    logger.warn("Transaction", tx.via, ": Rolling back due to error");
-                    tx.rollback();
-                    tx.destroy();
-                    throw error;
-                },
-
-                undefined,
-
-                (error2): T => {
-                    logger.error("Transaction", tx.via, ": Error-induced rolled back caused additional error:", error2);
-                    tx.destroy();                    
-                    throw error;
-                },
-            )
-        },
+        }
     );
 }
 
@@ -212,14 +231,14 @@ class Tx implements Transaction {
             return this.rollback();
         } else {
             // Perform the actual commit
-            return this.#finalize(Status.CommittingPhaseOne, "Committed", () => this.#executeCommit());
+            return this.#finalize(Status.CommittingPhaseOne, "committed", () => this.#executeCommit());
         }
     }
 
     rollback() {
         this.#assertAvailable();
         
-        return this.#finalize(Status.RollingBack, "Rolled back", () => this.#executeRollback());
+        return this.#finalize(Status.RollingBack, "rolled back", () => this.#executeRollback());
     }
 
     async waitFor(others: Iterable<Transaction>) {
@@ -291,7 +310,7 @@ class Tx implements Transaction {
      * Commit logic passed to #finish.
      */
     #executeCommit(): MaybePromise {
-        //this.#log("Commit");
+        this.#log("commit");
         const result = this.#executeCommit1();
         if (MaybePromise.is(result)) {
             return result.then(() => this.#executeCommit2());
@@ -388,7 +407,7 @@ class Tx implements Transaction {
      * Rollback logic passed to #finish.
      */
     #executeRollback() {
-        //this.#log("Rollback");
+        this.#log("rollback");
         let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
@@ -420,10 +439,10 @@ class Tx implements Transaction {
     }
 
     #log(...message: unknown[]) {
-        logger.debug(message, this.#via);
+        logger.debug("Transaction", this.#via, message);
     }
 
-    #locksChanged(resources: Set<Resource>, how = "Acquired") {
+    #locksChanged(resources: Set<Resource>, how = "acquired") {
         if (!resources.size) {
             return;
         }
@@ -437,7 +456,11 @@ class Tx implements Transaction {
 
     #assertAvailable() {
         if (this.#status === Status.Destroyed) {
-            logger.warn("You have accessed transaction", this.via, "outside of the context in which it was active.  You must open a new context for this operation");
+            logger.warn(
+                "You have accessed transaction",
+                this.via,
+                "outside of the context in which it was active.  You must open a new context for this operation"
+            );
             throw new TransactionFlowError(`Transaction ${this.#via} is destroyed`);
         }
         if (this.#status === Status.ReadOnly) {

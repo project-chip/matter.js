@@ -19,23 +19,21 @@ import { DescriptorBehavior } from "./DescriptorBehavior.js";
  */
 export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
+        // We update PartsList differently if there's an index
         if (this.part.behaviors.has(IndexBehavior)) {
-            this.agent.get(IndexBehavior).events.change.on(() => {
-                this.state.partsList = this.#partsList;
-            });
-        }
-        this.part.lifecycle.changed.on(
-            (type, part) => this.#applyChange(type, part)
-        );
-
-        this.state.serverList = this.#serverList;
-
-        if (this.part.hasParts) { 
+            this.reactTo(this.agent.get(IndexBehavior).events.change, this.#updatePartsList)
+        } else if (this.part.hasParts) {
             for (const part of this.part.parts) {
                 this.#monitorDestruction(part);
             }
-            this.state.partsList = this.#partsList;
         }
+        this.#updatePartsList();
+
+        // Handle lifecycle changes
+        this.reactTo(this.part.lifecycle.changed, this.#applyChange);
+
+        // Initialize ServerList
+        this.state.serverList = this.#serverList;
 
         if (!this.state.deviceTypeList.length) {
             const partType = this.part.type;
@@ -73,7 +71,7 @@ export class DescriptorServer extends DescriptorBehavior {
                 if (!this.part.parts.has(part)) {
                     return;
                 }
-                this.state.partsList = this.#partsList;
+                this.#updatePartsList();
                 this.#monitorDestruction(part);
                 break;
 
@@ -90,15 +88,13 @@ export class DescriptorServer extends DescriptorBehavior {
      * Monitor part for removal.
      */
     #monitorDestruction(part: Part) {
-        part.lifecycle.destroyed.once(() => {
-            this.state.partsList = this.#partsList;
-        });
+        this.reactTo(part.lifecycle.destroyed, this.#updatePartsList, { offline: true });
     }
 
     /**
-     * Computed current parts list.
+     * Update the parts list.
      */
-    get #partsList() {
+    #updatePartsList() {
         const part = this.part;
 
         // The presence of IndexBehavior indicates a flat namespace as required by Matter standard for root and
@@ -114,15 +110,15 @@ export class DescriptorServer extends DescriptorBehavior {
                 numbers.splice(pos, 1);
             }
 
-            return numbers as EndpointNumber[];
+            this.state.partsList = numbers as EndpointNumber[];
+            return;
+        }else if (part.hasParts) {
+            // No IndexBehavior, just direct descendents
+            this.state.partsList = [ ...part.parts ].map(part => part.number) as EndpointNumber[];
+        } else {
+            // No sub-parts
+            this.state.partsList = [];
         }
-
-        // If IndexBehavior is not present then just list direct descendants
-        if (part.hasParts) {
-            return [ ...part.parts ].map(part => part.number) as EndpointNumber[];
-        }
-
-        return [];
     }
 
     /**

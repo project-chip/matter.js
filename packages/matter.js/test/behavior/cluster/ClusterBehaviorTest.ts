@@ -13,7 +13,6 @@ import { Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockPart } from "../../endpoint/mock-part.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
-import { Part } from "../../../src/endpoint/Part.js";
 
 describe("ClusterBehavior", () => {
     type Match<Input, Type> = Input extends Type ? true : false;

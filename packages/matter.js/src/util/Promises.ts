@@ -10,7 +10,6 @@ import type { Environment } from "../common/Environment.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
-import { ValueElement } from "../model/index.js";
 
 /**
  * Obtain a promise with functions to resolve and reject.

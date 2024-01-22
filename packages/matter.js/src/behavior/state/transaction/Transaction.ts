@@ -8,7 +8,7 @@ import { MaybePromise } from "../../../util/Promises.js";
 import { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";
 import { Status } from "./Status.js";
-import { executeTransaction } from "./Tx.js";
+import { ReadOnlyTransaction, executeTransaction } from "./Tx.js";
 
 /**
  * By default, Matter.js state is transactional.
@@ -148,11 +148,16 @@ type ParticipantType = Participant;
 
 export namespace Transaction {
     /**
-     * Perform a transactional operation.  This is the only way to obtain a transaction.
+     * Perform a transactional operation.  This is the only way to obtain a read/write transaction.
      */
     export function act<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
         return executeTransaction(via, actor);
     }
+
+    /**
+     * A read-only transaction that may be outside without context.
+     */
+    export const ReadOnly = ReadOnlyTransaction;
 
     export const Status = StatusEnum;
     export type Status = StatusType;

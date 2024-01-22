@@ -11,6 +11,7 @@ import { assertSecureSession } from "../session/SecureSession.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { EventEmitter, Observable } from "../util/Observable.js";
 import { MaybePromise } from "../util/Promises.js";
+import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";
 import { BehaviorSupervisor } from "./supervision/BehaviorSupervisor.js";
@@ -205,32 +206,15 @@ export abstract class Behavior {
     }
 
     /**
-     * React to a {@link Observable}.
-     * 
-     * Behaviors may use this method similarly to {@link Observable.on}.  It provides several benefits over installing
-     * an observer directly:
-     * 
-     *   - The behavior uninstalls {@link reactor} on destruction
-     * 
-     *   - If {@link reactor} is asynchronous, the behavior tracks the resulting promise, providing error handling and
-     *     ensuring the promise completes before the Part is destroyed
-     * 
-     *   - The behavior ensures reactors run serially even if they are asynchronous
-     * 
-     *   - Each reactor runs in its own ActionContext; writes occur in an independent transaction
-     * 
-     * You should not use arrow functions for reactors as this will prevent you from accessing the Behavior in the
-     * correct context.
-     * 
-     * If {@link observable} is a high-volume emitter, it would be better to implement synchronous or very fast
-     * asynchronous reactors to avoid accumulating too many deferred reactions.
+     * Install a {@link Reactor}.
      */
     protected reactTo<This, T extends any[], R>(
         this: This,
         observable: Observable<T, R>,
-        reactor: (this: This, ...args: T) => R
+        reactor: Reactor<T, R>,
+        options?: Reactor.Options
     ) {
-        (this as Internal)[BACKING].reactTo(observable, reactor);
+        (this as Internal)[BACKING].reactTo(observable, reactor, options);
     }
 
     /**

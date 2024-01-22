@@ -43,9 +43,10 @@ export class ServerBehaviorBacking extends BehaviorBacking {
             () => {
                 this.#applyTransitiveDefaults(behavior.state);
 
-                // State must now conform to the schema
+                // State must now conform to the schema.  Validate the behavior's state rather than internal state
+                // because the behavior likely has uncommitted changes
                 const context = behavior.context;
-                this.datasource.validate(context);
+                this.datasource.validate(context, behavior.state);
             }
         )
     }
