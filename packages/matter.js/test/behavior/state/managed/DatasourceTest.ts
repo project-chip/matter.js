@@ -207,7 +207,7 @@ describe("Datasource", () => {
                 supervisor: persistentSupervisor,
             },
 
-            // Just set foo but rely on commit when we leave transaction context
+            // Just set foo, rely on auto-commit when we leave transaction context
             ({ state }) => state.foo = "rab"
         );
 

@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../../MatterDevice.js";
+import type { MatterDevice } from "../../../MatterDevice.js";
 import type { Message } from "../../../codec/MessageCodec.js";
-import { SecureSession } from "../../../session/SecureSession.js";
-import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
+import type { SecureSession } from "../../../session/SecureSession.js";
+import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import type { MatterCoreSpecificationV1_2 } from "../../../spec/Specifications.js";
-import { Part } from "../../../endpoint/Part.js";
-import { EndpointType } from "../../../endpoint/type/EndpointType.js";
-import { Agent } from "../../../endpoint/Agent.js";
+import type { Part } from "../../../endpoint/Part.js";
+import type { EndpointType } from "../../../endpoint/type/EndpointType.js";
+import type { Agent } from "../../../endpoint/Agent.js";
 import type { AccessLevel } from "../../../cluster/Cluster.js";
 import type { OnlineContext } from "./OnlineContext.js";
 import type { OfflineContext } from "./OfflineContext.js";

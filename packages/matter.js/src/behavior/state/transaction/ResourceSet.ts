@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Logger } from "../../../log/Logger.js";
 import { describeList } from "../../../util/String.js";
 import { SynchronousTransactionConflictError, TransactionDeadlockError, TransactionFlowError } from "./Errors.js";
 import type { Resource } from "./Resource.js";
 import type { Transaction } from "./Transaction.js";
+
+const logger = Logger.get("ResourceSet");
 
 /**
  * An internal set of resources supporting bulk operations for {@link Transaction}.
@@ -63,18 +66,19 @@ export class ResourceSet {
                 if (resource.lockedBy === this.#transaction) {
                     continue;
                 }
+                logger.warn("Transaction", this.#transaction.via, "blocked by", resource.lockedBy.via);
                 blocked.add(resource);
             }
             toLock.add(resource);
         }
         if (blocked.size) {
+            logger.warn("You may need to await transaction.begin() to acquire locks asynchronously");
             const names = [...blocked].map(s => s.toString());
             throw new SynchronousTransactionConflictError(
-                `Cannot acquire transaction lock for ${describeList(
+                `Cannot lock ${describeList(
                     "and",
                     ...names,
-                )} because there is already an exclusive transaction.  ` +
-                    "You can await transaction.begin() to avoid this error",
+                )} synchronously`,
             );
         }
 

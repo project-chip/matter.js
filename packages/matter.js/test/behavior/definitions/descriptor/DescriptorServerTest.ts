@@ -44,7 +44,7 @@ describe("DescriptorServer", () => {
 
     it("adds device type automatically if necessary", async () => {
         const device = await MockPart.create(MockEndpoint);
-        expect(device.descriptor.state.deviceTypeList).deep.equals([
+        expect(device.state.descriptor.deviceTypeList).deep.equals([
             {
                 deviceType: 1,
                 revision: 1,
@@ -58,7 +58,7 @@ describe("DescriptorServer", () => {
         });
 
         const device = await MockPart.create(Device2Endpoint);
-        expect(device.descriptor.state.deviceTypeList).deep.equals([
+        expect(device.state.descriptor.deviceTypeList).deep.equals([
             {
                 deviceType: 2,
                 revision: 2,
@@ -69,25 +69,25 @@ describe("DescriptorServer", () => {
     it("adds servers automatically", async () => {
         const device = await MockPart.create(MockEndpoint);
 
-        device.require(OnOffServer);
+        device.behaviors.require(OnOffServer);
 
-        expect(device.descriptor.state.serverList).deep.equals([29, 6]);
+        expect(device.state.descriptor.serverList).deep.equals([29, 6]);
     });
 
     it("adds parts automatically", async () => {
         const { parent } = await createFamily();
 
-        const partsList = parent.descriptor.state.partsList;
+        const partsList = parent.state.descriptor.partsList;
         expect(partsList).deep.equals([2]);
     });
 
     it("removes parts automatically", async () => {
         const { parent, child } = await createFamily();
 
-        const partsState = parent.descriptor.state;
+        const partsState = parent.state.descriptor;
         expect(partsState.partsList).deep.equals([2]);
 
-        await child.part.destroy();
+        await child.destroy();
         expect(partsState.partsList).deep.equals([]);
     });
 });

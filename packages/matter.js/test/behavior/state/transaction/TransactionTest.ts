@@ -19,6 +19,10 @@ class TestResource implements Resource {
     lockedBy?: Transaction;
 
     constructor(public description = "TestResource") {}
+
+    toString() {
+        return this.description;
+    }
 }
 
 interface TestParticipant extends Participant {
@@ -27,19 +31,8 @@ interface TestParticipant extends Participant {
     expect(...invokes: string[]): void;
 }
 
-let transaction: Transaction;
-let transaction2: Transaction;
-let transaction3: Transaction;
-
-export interface TestParticipantOptions extends Partial<Participant> {
-    transaction?: Transaction;
-}
-
-/**
- * Add a {@link TestParticipant} to {@link transaction}.
- */
-function join(options?: TestParticipantOptions): TestParticipant {
-    const participant: TestParticipant = {
+function TestParticipant(options?: Partial<Participant>) {
+    return {
         toString() {
             return "TestParticipant";
         },
@@ -62,9 +55,24 @@ function join(options?: TestParticipantOptions): TestParticipant {
         },
 
         expect(...invokes: string[]) {
-            expect(this.invoked).equals(invokes);
+            expect(this.invoked).deep.equals(invokes);
         }
-    };
+    }
+}
+
+let transaction: Transaction;
+let transaction2: Transaction;
+let transaction3: Transaction;
+
+export interface JoinOptions extends Partial<Participant> {
+    transaction?: Transaction;
+}
+
+/**
+ * Add a {@link TestParticipant} to {@link transaction}.
+ */
+function join(options?: JoinOptions): TestParticipant {
+    const participant = TestParticipant(options);
 
     const tx = options?.transaction ?? transaction;
     tx.addParticipants(participant);
@@ -75,7 +83,7 @@ function join(options?: TestParticipantOptions): TestParticipant {
 /**
  * Add a {@link TestParticipant} to {@link transaction2}.
  */
-function join2(options?: TestParticipantOptions) {
+function join2(options?: JoinOptions) {
     return join({
         ...options,
         transaction: transaction2,
@@ -85,7 +93,7 @@ function join2(options?: TestParticipantOptions) {
 /**
  * Add a {@link TestParticipant} to {@link transaction3}.
  */
-function join3(options?: TestParticipantOptions) {
+function join3(options?: JoinOptions) {
     return join({
         ...options,
         transaction: transaction3,
@@ -127,11 +135,63 @@ function test3(what: string, actor: () => MaybePromise) {
 }
 
 describe("Transaction", () => {
+    describe("automatic resolution", () => {
+        it("commits synchronously", () => {
+            const p = TestParticipant();
+
+            Transaction.act("test", tx => {
+                tx.addParticipants(p);
+                tx.beginSync();
+            });
+
+            p.expect("commit1", "commit2");
+        })
+
+        it("commits asynchronously", async () => {
+            const p = TestParticipant();
+
+            await Transaction.act("test", async tx => {
+                tx.addParticipants(p);
+                await tx.begin();
+            });
+
+            p.expect("commit1", "commit2");
+        })
+
+        it("rolls back synchronously", () => {
+            const p = TestParticipant();
+
+            expect(
+                () => Transaction.act("test", tx => {
+                    tx.addParticipants(p);
+                    tx.beginSync();
+                    throw "oops";
+                })
+            ).throws("oops");
+
+            p.expect("rollback");
+        })
+
+        it("rolls back asynchronously", async () => {
+            const p = TestParticipant();
+
+            await expect(
+                Transaction.act("test", async tx => {
+                    tx.addParticipants(p);
+                    tx.beginSync();
+                    throw "oops";
+                })
+            ).rejectedWith("oops");
+
+            p.expect("rollback");
+        })
+    })
+
     test("handles commit and rollback on shared", async () => {
         const p = join();
         await transaction.commit();
 
-        join();
+        transaction.addParticipants(p);
         await transaction.rollback();
 
         p.expect("rollback", "rollback");
@@ -169,7 +229,7 @@ describe("Transaction", () => {
             const promise = transaction.promise;
             transaction.commit();
 
-            expect(promise).eventually.equals(undefined);
+            await expect(promise).eventually.equals(undefined);
         });
 
         test("after rolling back", async () => {
@@ -179,7 +239,7 @@ describe("Transaction", () => {
             const promise = transaction.promise;
             await transaction.rollback();
 
-            expect(promise).eventually.equals(undefined);
+            await expect(promise).eventually.equals(undefined);
         });
     });
 
@@ -343,7 +403,7 @@ describe("Transaction", () => {
     });
 
     describe("detects deadlocks", () => {
-        test("directly", async () => {
+        test2("directly", async () => {
             const resource1 = new TestResource("Food");
             const resource2 = new TestResource("Water");
 
@@ -388,4 +448,80 @@ describe("Transaction", () => {
             await t3add2;
         });
     });
+
+    describe("after destruction", () => {
+        function destroyedSync(description: string, fn: () => void) {
+            it(description, () => {
+                Transaction.act("destroyedSync", tx => transaction = tx);
+
+                expect(
+                    fn
+                ).throws("Transaction destroyedSync is destroyed")
+            });
+        }
+
+        async function destroyedAsync(description: string, fn: () => Promise<void>) {
+            it(description, async () => {
+                Transaction.act("destroyedAsync", tx => transaction = tx);
+
+                await expect(
+                    fn()
+                ).rejectedWith("Transaction destroyedAsync is destroyed");
+            });
+        }
+
+        destroyedSync("rejects commit", () => transaction.commit());
+
+        destroyedSync("rejects rollback", () => transaction.rollback());
+
+        destroyedSync("rejects addResourcesSync", () =>
+            transaction.addResourcesSync(new TestResource())
+        )
+
+        destroyedAsync("rejects addResources", () =>
+            transaction.addResources(new TestResource())
+        )
+
+        destroyedSync("rejects addParticipant", () =>
+            transaction.addParticipants(TestParticipant())
+        )
+    });
+
+    describe("read-only", () => {
+        function readonlySync(description: string, fn: () => void) {
+            it(description, () => {
+                transaction = Transaction.ReadOnly;
+
+                expect(
+                    fn
+                ).throws("This view is read-only")
+            });
+        }
+
+        async function readonlyAsync(description: string, fn: () => Promise<void>) {
+            it(description, async () => {
+                transaction = Transaction.ReadOnly;
+
+                await expect(
+                    fn()
+                ).rejectedWith("This view is read-only");
+            });
+        }
+
+        readonlySync("rejects commit", () => transaction.commit());
+
+        readonlySync("rejects rollback", () => transaction.rollback());
+
+        readonlySync("rejects addResourcesSync", () =>
+            transaction.addResourcesSync(new TestResource())
+        )
+
+        readonlyAsync("rejects addResources", () =>
+            transaction.addResources(new TestResource())
+        )
+
+        readonlySync("rejects addParticipant", () =>
+            transaction.addParticipants(TestParticipant())
+        )
+    })
 });

@@ -10,11 +10,12 @@ import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { Part } from "../../../endpoint/Part.js";
 import { AccessControl } from "../../AccessControl.js";
 import { AccessLevel } from "../../../cluster/Cluster.js";
-import { ImplementationError, InternalError } from "../../../common/MatterError.js";
+import { ImplementationError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
+import { Contextual } from "./Contextual.js";
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.
@@ -46,7 +47,13 @@ export function OnlineContext(options: OnlineContext.Options) {
                 throw new ImplementationError("OnlineContext requires an authorizied subject");
             }
         
-            const via = Diagnostic.via(`online#${options.message?.packetHeader.messageId.toString(16) ?? "unknown"}`);
+            let via;
+            const message = options.message;
+            via = Diagnostic.via(`online#${
+                message?.packetHeader.messageId.toString(16) ?? "?"
+            }:${
+                options.subject?.toString(16) ?? "?"
+            }`);
         
             return Transaction.act(via, transaction => {
                 const context = {
@@ -69,9 +76,23 @@ export function OnlineContext(options: OnlineContext.Options) {
                         }
                         return agents.agentFor(part);
                     },
+
+                    get [Contextual.context](): ActionContext {
+                        return this;
+                    }
                 };
         
-                return actor(context);
+                if (message) {
+                    Contextual.setContextOf(message, context);
+                }
+
+                try {
+                    return actor(context);
+                } finally {
+                    if (message) {
+                        Contextual.setContextOf(message, undefined);
+                    }
+                }
             });
         }
     }
@@ -88,27 +109,4 @@ export namespace OnlineContext {
             | { session: Session<MatterDevice>, fabric?: undefined, subject?: undefined }
             | { session?: undefined, fabric: FabricIndex, subject: SubjectId }
         );
-
-    export function retrieve(message: Message) {
-        const context = (message as InternalMessage)[CONTEXT];
-        if (context === undefined) {
-            throw new InternalError("No ActionContext associated with message");
-        }
-        return context;
-    }
-
-    export function release(context: ActionContext) {
-        delete (context.message as InternalMessage)[CONTEXT];
-    }
-}
-
-export const CONTEXT = Symbol("context");
-
-/**
- * We graft a transaction onto the message as it the contextual object that exists for the life of a request.
- * 
- * Perhaps instead makes sense to wire ActionContext into lower levels of the server but this works for now.
- */
-export interface InternalMessage extends Message {
-    [CONTEXT]?: ActionContext;
 }

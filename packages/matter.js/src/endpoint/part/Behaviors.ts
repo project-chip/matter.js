@@ -55,6 +55,11 @@ export class Behaviors {
         if (typeof supported !== "object") {
             throw new ImplementationError('Part "behaviors" option must be an array of Behavior.Type instances');
         }
+
+        this.#part = part;
+        this.#supported = supported;
+        this.#options = options;
+
         for (const id in supported) {
             const type = supported[id];
             if (!(type.prototype instanceof Behavior)) {
@@ -65,10 +70,6 @@ export class Behaviors {
             }
             this.#augmentPartState(type);
         }
-
-        this.#part = part;
-        this.#supported = supported;
-        this.#options = options;
 
         // DescriptorBehavior is mandatory for all parts
         if (!this.#supported.descriptor) {

@@ -120,7 +120,7 @@ function plainLogFormatter(now: Date, level: Level, facility: string, prefix: st
         strong: producer => creator.text(`*${producer()}*`),
         weak: producer => creator.text(producer()),
         status: (status, producer) => `${statusIcon(status)}${producer()}`,
-        via: text => creator.text(`via ${text}`),
+        via: text => creator.text(text),
     });
 
     return `${formatTime(now)} ${Level[level]} ${facility} ${prefix}${formattedValues}`;
@@ -270,7 +270,7 @@ function ansiLogFormatter(now: Date, level: Level, facility: string, nestPrefix:
                 return result;
             },
 
-            via: text => creator.text(`${normal("via")} ${style("via", text)}`),
+            via: text => creator.text(style("via", text)),
         }
     );
 
@@ -382,7 +382,7 @@ function htmlLogFormatter(now: Date, level: Level, facility: string, prefix: str
             strong: producer => `<em>${producer()}</em>`,
             weak: producer => htmlSpan(`weak`, producer()),
             status: (status, producer) => htmlSpan(`status-${status}`, producer()),
-            via: text => htmlSpan("via", `via ${escape(text)}`),
+            via: text => htmlSpan("via", escape(text)),
         },
     );
 

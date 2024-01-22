@@ -10,9 +10,10 @@ import type { Agent } from "../../endpoint/Agent.js";
 import type { Part } from "../../endpoint/Part.js";
 import { Logger } from "../../log/Logger.js";
 import { AsyncConstruction } from "../../util/AsyncConstruction.js";
-import { EventEmitter } from "../../util/Observable.js";
+import { EventEmitter, Observable } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import type { Behavior } from "../Behavior.js";
+import { Reactor } from "../Reactor.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Reactors } from "./Reactors.js";
 
@@ -196,6 +197,20 @@ export abstract class BehaviorBacking {
     }
 
     /**
+     * Install a reactor.
+     */
+    reactTo<T extends any[], R>(
+        observable: Observable<T, R>,
+        reactor: Reactor<T, R>,
+        options?: Reactor.Options,
+    ) {
+        if (!this.#reactors) {
+            this.#reactors = new Reactors(this);
+        }
+        this.#reactors.add(observable, reactor, options);
+    }
+
+    /**
      * Internal initialization logic.  Broken out from {@link initialize} for the convenience of moving
      * de-initialization logic into {@link AsyncConstruction} during factory reset.
      * 
@@ -257,9 +272,11 @@ export abstract class BehaviorBacking {
         );
 
         result = MaybePromise.then(
+            result,
             () => behavior?.[Symbol.asyncDispose](),
-            undefined,
             e => logger.error(`Destroying ${this}:`, e),
         )
+
+        return result;
     }
 }

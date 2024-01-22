@@ -46,7 +46,7 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
     /**
      * Validate values against the schema.
      */
-    validate(session: ValueSupervisor.Session): void;
+    validate(session: ValueSupervisor.Session, values?: Val.Struct): void;
 
     /**
      * Obtain a read-only view of values.
@@ -79,8 +79,8 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             return internals.version;
         },
 
-        validate(session: ValueSupervisor.Session) {
-            internals.supervisor.validate(internals.values, session, { path: internals.path })
+        validate(session: ValueSupervisor.Session, values?: Val.Struct) {
+            internals.supervisor.validate(values ?? internals.values, session, { path: internals.path })
         },
 
         get view() {

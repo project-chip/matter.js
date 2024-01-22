@@ -8,6 +8,7 @@ import { EndpointType } from "../../../endpoint/type/EndpointType.js";
 import { ContextAgents } from "./ContextAgents.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { ReadOnlyTransaction } from "../../state/transaction/Tx.js";
+import { Contextual } from "./Contextual.js";
 
 export let nextInternalId = 1;
 
@@ -71,6 +72,10 @@ function createOfflineContext(transaction: Transaction) {
                 agents = ContextAgents(context);
             }
             return agents?.agentFor(part);
+        },
+
+        get [Contextual.context]() {
+            return this;
         }
     });
 

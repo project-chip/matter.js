@@ -20,7 +20,6 @@ import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
 import { OfflineContext } from "../behavior/server/context/OfflineContext.js";
-import { Transaction } from "../behavior/state/transaction/Transaction.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 
 /**
@@ -181,17 +180,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
                     return this.behaviors.initialize(agent);
                 },
                 () => this.lifecycle.change(PartLifecycle.Change.Ready),
-            );
-
-            // Persist any state changes resulting from initialization
-            promise = MaybePromise.then(
-                promise,
-                () => {
-                    const transaction = agent.context.transaction;
-                    if (transaction.status === Transaction.Status.Exclusive) {
-                        transaction.commit();
-                    }
-                }
             );
 
             return promise;
