@@ -77,16 +77,6 @@ export function createType<const C extends ClusterType>(cluster: C, base: Behavi
 }
 
 /**
- * Utility to omit the generic "string" from a string record.
- *
- * We need this to enable ClusterBehavior.for on the base class where the element objects otherwise have a generic
- * string key that messes up covariance.
- */
-export type Named<O extends Record<string, any>> = {
-    [K in string & keyof O as string extends K ? never : K]: O[K];
-};
-
-/**
  * The cluster type for a behavior.
  */
 export type ClusterOf<B extends Behavior.Type> = InstanceType<B> extends { cluster: infer C extends ClusterType }
@@ -110,9 +100,6 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
     for (const name in cluster.attributes) {
         const attribute = cluster.attributes[name];
         if (isGlobal(attribute)) {
-            continue;
-        }
-        if (attribute.optional && !(name in oldDefaults)) {
             continue;
         }
         newAttributes[name] = attribute;
@@ -252,21 +239,37 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
     return result;
 }
 
+/**
+ * TODO - currently we inject default values for attributes even if they're optional, thus indicating support.
+ * Developer may override by setting the default to undefined, but it may be desirable to instead set the default to
+ * undefined if the attribute is not mandatory
+ */
 function selectDefaultValue(oldDefault: Val, clusterAttr: Attribute<any, any>, schemaAttr?: AttributeModel) {
     if (oldDefault) {
         return oldDefault;
+    }
+
+    if (clusterAttr.optional) {
+        return;
     }
 
     if (clusterAttr.default !== undefined) {
         return clusterAttr.default;
     }
 
-    if (!schemaAttr?.conformance.mandatory) {
+    if (!schemaAttr) {
         return;
     }
 
     if (schemaAttr.nullable) {
         return null;
+    }
+
+    // TODO - skip the following defaults if conformance is not absolutely mandatory.  This is pretty limited, may need
+    // to use more sophisticated evaluation if insufficient
+    const conformance = schemaAttr.effectiveConformance;
+    if (!conformance.mandatory) {
+        return;
     }
 
     switch (schemaAttr.effectiveMetatype) {

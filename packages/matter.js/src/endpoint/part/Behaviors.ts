@@ -9,7 +9,7 @@ import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { PartLifecycle } from "./PartLifecycle.js";
 import { Val } from "../../behavior/state/managed/Val.js";
-import { ImplementationError, ReadOnlyError } from "../../common/MatterError.js";
+import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";
 import { MaybePromise } from "../../util/Promises.js";
@@ -21,6 +21,10 @@ import { Diagnostic } from "../../log/Diagnostic.js";
 import { LifecycleStatus } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
+import { ActionContext } from "../../behavior/context/ActionContext.js";
+import { Logger } from "../../log/Logger.js";
+
+const logger = Logger.get("Behaviors");
 
 /**
  * This class manages {@link Behavior} instances owned by a {@link Part}.
@@ -60,6 +64,11 @@ export class Behaviors {
         this.#supported = supported;
         this.#options = options;
 
+        // DescriptorBehavior is unequivocally mandatory
+        if (!this.#supported.descriptor) {
+            this.#supported.descriptor = DescriptorServer;
+        }
+
         for (const id in supported) {
             const type = supported[id];
             if (!(type.prototype instanceof Behavior)) {
@@ -68,26 +77,10 @@ export class Behaviors {
             if (typeof type.id !== "string") {
                 throw new ImplementationError(`${part}.${id} has no ID`);
             }
-            this.#augmentPartState(type);
+            this.#augmentPartShortcuts(type);
         }
 
-        // DescriptorBehavior is mandatory for all parts
-        if (!this.#supported.descriptor) {
-            this.#supported.descriptor = DescriptorServer;
-        }
-    }
-
-    /**
-     * Obtain the initial state for a particular behavior if supported.  This is state values as present when the
-     * behavior is first initialized for a new part.
-     */
-    initialStateFor<const T extends Behavior.Type>(type: T) {
-        if (this.#supported[type.id]?.supports(type)) {
-            return {
-                ...type.defaults,
-                ...this.#options[type.id],
-            } as Behavior.StateOf<T>;
-        }
+        this.#part.lifecycle.reset.on(async context => await this.#factoryReset(context));
     }
 
     /**
@@ -96,15 +89,6 @@ export class Behaviors {
      */
     initialize(agent: Agent): MaybePromise {
         for (const type of Object.values(this.supported)) {
-            const backing = this.#backings[type.id];
-
-            // If we already have a backing, our part has reset and we need to reset the backing
-            if (backing) {
-                backing.reset(agent);
-                continue;
-            }
-
-            // If we don't yet have a backing but the behavior requires immediate activation, activate now
             if (type.immediate) {
                 this.activate(type, agent);
             }
@@ -157,12 +141,12 @@ export class Behaviors {
 
         this.#supported[type.id] = type;
 
+        this.#augmentPartShortcuts(type);
+
         this.#part.lifecycle.change(PartLifecycle.Change.ServersChanged);
 
         if (type.immediate && this.#part.lifecycle.isInstalled) {
-            this.#part.offline(agent => {
-                this.activate(type, agent);
-            })
+            this.#activateLate(type);
         }
     }
 
@@ -256,7 +240,7 @@ export class Behaviors {
      * Destroy all behaviors that are initialized (have backings present).
      */
     async [Symbol.asyncDispose]() {
-        this.#part.offline(async agent => {
+        this.#part.offline("dispose-behaviors", async agent => {
             for (const id in this.#backings) {
                 await this.#backings[id].destroy(agent);
             }
@@ -301,7 +285,8 @@ export class Behaviors {
     }
 
     /**
-     * Obtain default values for a behavior.
+     * Obtain default values for a behavior.  This is state values as present when the behavior is first initialized for
+     * a new part.
      */
     defaultsFor(type: Behavior.Type) {
         const options = this.#options[type.id];
@@ -319,20 +304,35 @@ export class Behaviors {
         return defaults;
     }
 
+    #activateLate(type: Behavior.Type) {
+        this.#part.offline("behavior-offline-activation", agent => this.activate(type, agent));
+    }
+
+    /**
+     * Forcefully obtain a backing regardless of initialization state.  Intended for part shortcuts, shouldn't be used
+     * otherwise.
+     */
+    #backingFor(type: Behavior.Type) {
+        let backing = this.#backings[type.id];
+        if (!backing) {
+            this.#activateLate(type);
+            backing = this.#backings[type.id];
+            if (backing === undefined) {
+                throw new InternalError(`Behavior ${this.#part}.${type.id} late activation did not create backing`);
+            }
+        }
+        return backing;
+    }
+
     #createBacking(type: Behavior.Type, agent: Agent) {
         // Ensure the type is supported.  If it is, we instantiate with our type rather than the specified type because
         // our type might be an extension
         const myType = this.#getBehaviorType(type);
         if (!myType) {
-            throw new ImplementationError(`Request for unsupported behavior ${this.#part}${type.id}}`);
+            throw new ImplementationError(`Request for unsupported behavior ${this.#part}.${type.id}}`);
         }
 
-        // Ask the owner to create the backing.  This is specialized for the owner (e.g. client or server)
-        if (!this.#part.owner) {
-            throw new ImplementationError(`Attempted initialization of ${this.#part}${type.id} of uninstalled part`);
-        }
-
-        const backing = this.#part.serviceFor(PartInitializer).createBacking(this.#part, myType);
+        const backing = this.#part.env.get(PartInitializer).createBacking(this.#part, myType);
         this.#backings[type.id] = backing;
 
         this.#initializeBacking(backing, agent);
@@ -373,10 +373,22 @@ export class Behaviors {
         return myType;
     }
 
-    #augmentPartState(type: Behavior.Type) {
+    #augmentPartShortcuts(type: Behavior.Type) {
         Object.defineProperty(this.#part.state, type.id, {
             get: () => {
-                this.#backings[type.id]?.stateView ?? {};
+                return this.#backingFor(type).stateView;
+            },
+
+            set() {
+                throw new ReadOnlyError();
+            },
+
+            enumerable: true,
+        });
+
+        Object.defineProperty(this.#part.events, type.id, {
+            get: () => {
+                return this.#backingFor(type).events;
             },
 
             set() {
@@ -385,5 +397,19 @@ export class Behaviors {
 
             enumerable: true,
         })
+    }
+
+    async #factoryReset(context: ActionContext) {
+        const agent = context.agentFor(this.#part);
+        for (const type of Object.values(this.#supported)) {
+            try {
+                const backing = await this.activate(type, agent);
+                await backing.createBehavior(agent, type)[Symbol.asyncDispose]();
+                await backing.factoryReset(context);
+            } catch (e) {
+                logger.error(`Error during factory reset of ${this.#part}.${type.id}:`, e);
+            }
+            delete this.#backings[type.id];
+        }
     }
 }

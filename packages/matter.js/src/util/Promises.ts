@@ -6,7 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Environment } from "../common/Environment.js";
 import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { DiagnosticSource } from "../log/DiagnosticSource.js";
@@ -67,8 +66,10 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
 
 /**
  * Return type for functions that are optionally asynchronous.
+ * 
+ * TODO - as currently defined MaybePromise of a Promise incorrectly wraps as a Promise of a Promise
  */
-export type MaybePromise<T = void> = T | Promise<T>;
+export type MaybePromise<T = void> = T | PromiseLike<T>;
 
 /**
  * Promise-like version of above.
@@ -79,7 +80,7 @@ export const MaybePromise = {
     /**
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
-    is<T>(value: MaybePromiseLike<T>): value is PromiseLike<T> {
+    is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
         return typeof value === "object" && typeof (value as { then?: unknown; }).then === "function";
     },
 
@@ -89,8 +90,8 @@ export const MaybePromise = {
      */
     then<I, O1 = never, O2 = never>(
         producer: MaybePromise<I> | (() => MaybePromise<I>),
-        resolve?: (input: I) => MaybePromise<O1>,
-        reject?: (error: any) => MaybePromise<O2>
+        resolve?: ((input: I) => MaybePromise<O1>) | null,
+        reject?: ((error: any) => MaybePromise<O2>) | null
     ): MaybePromise<O1 | O2> {
         try {
             let value;
@@ -117,31 +118,43 @@ export const MaybePromise = {
     },
 
     /**
+     * Equivalent of {@link Promise.catch}.
+     */
+    catch<T, TResult = never>(
+        producer: MaybePromise<T> | (() => MaybePromise<T>),
+        onrejected?: ((reason: any) => MaybePromise<TResult>) | undefined | null,
+    ) {
+        return this.then(producer, undefined, onrejected);
+    },
+
+    /**
      * Equivalent of {@link Promise.finally}.
      */
     finally<T>(
-        producer: MaybePromise<any> | (() => MaybePromise<any>),
+        producer: MaybePromise<T> | (() => MaybePromise<T>),
         onfinally?: (() => void) | undefined | null
     ): MaybePromise<T> {
         try {
             if (typeof producer === "function") {
-                producer = producer();
+                producer = (producer as () => MaybePromise<T>)();
             }
         } finally {
             if (MaybePromise.is(producer)) {
                 if (typeof (producer as Promise<any>).finally === "function") {
                     return (producer as Promise<T>).finally(onfinally);
                 } else {
-                    producer.then(
-                        value => {
-                            onfinally?.();
-                            return value;
-                        },
-                        error => {
-                            onfinally?.();
-                            throw error;
-                        }
-                    )
+                    producer = producer.then(
+                        value =>
+                            MaybePromise.then(
+                                () => onfinally?.(),
+                                () => value,
+                            ),
+                        error =>
+                            MaybePromise.then(
+                                () => onfinally?.(),
+                                () => { throw error }
+                            )
+                    );
                 }
             } else {
                 onfinally?.();
@@ -156,9 +169,9 @@ export const MaybePromise = {
  * 
  * Stores unfulfilled promises with metadata useful for diagnosing process state.
  */
-export class Tracker implements Environment.Task {
+export class Tracker {
     #parent: Tracker | undefined;
-    #tracked = new Map<Promise<unknown>, Tracker.Descriptor>;
+    #tracked = new Map<PromiseLike<unknown>, Tracker.Descriptor>;
     
     get name() {
         return "Unfulfilled tracked promises";
@@ -177,7 +190,6 @@ export class Tracker implements Environment.Task {
      * Create a new tracker.
      * 
      * @param parent if supplied, promises will be tracked by parent too
-     * @param environment if supplied, hooked to support diagnostics
      */
     constructor(parent: Tracker | undefined = Tracker.global) {
         this.#parent = parent;
@@ -220,7 +232,10 @@ export class Tracker implements Environment.Task {
             }
         });
 
-        return promise.finally(() => this.#tracked.delete(promise as Promise<T>));
+        return MaybePromise.finally(
+            promise,
+            () => this.#tracked.delete(promise as Promise<T>)
+        );
     }
 }
 
@@ -245,7 +260,7 @@ export namespace Tracker {
      * Information about a tracked promise.
      */
     export interface Descriptor {
-        promise: Promise<any>;
+        promise: PromiseLike<any>;
         detail?: unknown;
         elapsed: Diagnostic.Elapsed;
         [Diagnostic.value]: unknown
@@ -423,4 +438,98 @@ export function MimicPromise<T>(
     );
 
     return result;
+}
+
+/**
+ * A promise that supports cancellation.
+ */
+export class CancellablePromise<T = void> extends Promise<T> {
+    #cancelled = false;
+    #cancel?: () => void;
+
+    override then<TResult1 = T, TResult2 = never>(
+        onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+        onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+    ): CancellablePromise<TResult1 | TResult2> {
+        const result = super.then(onfulfilled, onrejected) as CancellablePromise<TResult1 | TResult2>;
+
+        result.#cancel = () => this.cancel();
+
+        return result;
+    }
+
+    /**
+     * Cancel the promise if supported.
+     */
+    cancel() {
+        if (this.#cancelled) {
+            return;
+        }
+        this.#cancelled = true;
+        this.#cancel?.();
+    }
+
+    /**
+     * Like the constructor but allows you to supply a cancellation method.
+     */
+    static create<T>(
+        executor: (
+            resolve: (value: T | PromiseLike<T>) => void,
+            reject: (reason?: any) => void
+        ) => void,
+        cancel: () => void,
+    ) {
+        const result = new CancellablePromise(executor);
+        result.#cancel = cancel;
+        return result;
+    }
+
+    /**
+     * Like {@link Promise.resolve} but allows you to supply a cancellation method.
+     */
+    static for<T>(source: T, cancel: () => void) {
+        const result = this.resolve(source) as CancellablePromise<T>;
+        result.#cancel = cancel;
+        return result;
+    }
+
+    /**
+     * Cancel a promise if it is cancellable.
+     */
+    static cancel(promise: unknown) {
+        if (promise === undefined || promise === null) {
+            return;
+        }
+        const { then, cancel } = promise as CancellablePromise;
+        if (typeof then === "function" && typeof cancel === "function") {
+            cancel.call(promise);
+        }
+    }
+
+    override catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): CancellablePromise<T | TResult> {
+        // This is annoying - JS does everything we need here but TS doesn't patch up the types correctly.  So this
+        // function is runtime overhead solely for type information
+        return super.catch(onrejected) as CancellablePromise<T | TResult>;
+    }
+
+    override finally(onfinally?: (() => void) | undefined | null): CancellablePromise<T> {
+        // Same comment here as for catch()
+        return super.finally(onfinally) as CancellablePromise<T>;
+    }
+
+    static override resolve(): CancellablePromise<void>;
+
+    static override resolve<T>(value: T): CancellablePromise<Awaited<T>>;
+    
+    static override resolve<T>(value: T | PromiseLike<T>): CancellablePromise<Awaited<T>>;
+
+    static override resolve<T = never>(value?: T | PromiseLike<T>): CancellablePromise<Awaited<T>> {
+        if (value !== undefined && value !== null) {
+            const { then, catch: c, finally: f, cancel } = value as CancellablePromise<any>;
+            if (typeof then === "function" && typeof c === "function" && typeof f === "function" && typeof cancel === "function") {
+                return value as CancellablePromise<Awaited<T>>;
+            }
+        }
+        return super.resolve(value) as CancellablePromise<Awaited<T>>;
+    }
 }

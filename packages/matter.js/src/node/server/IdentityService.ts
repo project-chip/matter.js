@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IndexBehavior } from "../../behavior/definitions/index/IndexBehavior.js";
+import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
+import { IndexBehavior } from "../../behavior/system/index/IndexBehavior.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
 
@@ -17,27 +18,22 @@ export class IdentityConflictError extends ImplementationError {};
  * Provides NodeServer and Part identification.
  */
 export class IdentityService {
-    #nodeDescription: string;
-    #port?: number;
-    #index?: IndexBehavior.State;
-    #root: Part;
+    #partsById?: Record<string, Part | undefined>;
+    #node: Part;
 
-    constructor(root: Part, nodeDescription: string, port?: number) {
-        this.#nodeDescription = nodeDescription;
-        this.#port = port;
-        this.#root = root;
+    constructor(node: Part) {
+        this.#node = node;
 
         const acquireIndex = () => {
-            root.behaviors.require(IndexBehavior);
-            this.#index = (root.state as { index: IndexBehavior.State }).index;
+            this.#partsById = OfflineContext.ReadOnly.agentFor(node).get(IndexBehavior).partsById;
         }
 
         // Obtain the part index used for validating identity availability.  If the root part isn't yet initialized we
         // don't need to validate identities anyway
-        if (root.lifecycle.isReady) {
+        if (node.lifecycle.isReady) {
             acquireIndex();
         } else {
-            root.lifecycle.ready.once(acquireIndex);
+            node.lifecycle.ready.on(acquireIndex);
         }
     }
 
@@ -45,14 +41,7 @@ export class IdentityService {
      * Textual description of the node.
      */
     get nodeDescription() {
-        return this.#nodeDescription;
-    }
-
-    /**
-     * The network port the node is listening on.
-     */
-    get port() {
-        return this.#port;
+        return this.#node.toString();
     }
 
     /**
@@ -60,10 +49,10 @@ export class IdentityService {
      */
     assertNumberAvailable(number: number, part: Part) {
         let other;
-        if (this.#root.lifecycle.hasNumber && this.#root.number === number) {
-            other = this.#root;
+        if (this.#node.lifecycle.hasNumber && this.#node.number === number) {
+            other = this.#node;
         } else {
-            other = this.#index?.partsById[number];
+            other = this.#partsById?.[number];
         }
         if (other && other !== part) {
             let owner;

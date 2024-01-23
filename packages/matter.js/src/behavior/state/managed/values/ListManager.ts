@@ -15,6 +15,7 @@ import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { ManagedReference } from "../ManagedReference.js";
 import { Val } from "../Val.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
+import { InternalCollection, REF } from "./internals.js";
 
 /**
  * We must use a proxy to properly encapsulate array data.
@@ -31,16 +32,16 @@ import { PrimitiveManager } from "./PrimitiveManager.js";
 export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervisor.Manage {
     const config = createConfig(owner, schema);
 
-    return (list, session, location) => {
+    return (list, session) => {
         // Sanity check
         if (!Array.isArray(list.value)) {
             throw new SchemaImplementationError(
-                location,
+                list.location,
                 `Cannot manage ${typeof list.value} because it is not an array`,
             );
         }
 
-        return createProxy(config, list as Val.Reference<Val.List>, session, location);
+        return createProxy(config, list as Val.Reference<Val.List>, session);
     };
 }
 
@@ -85,14 +86,13 @@ function createProxy(
     config: ListConfig,
     reference: Val.Reference<Val.List>,
     session: ValueSupervisor.Session,
-    location: AccessControl.Location,
 ) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
     let getListLength = () => reference.value.length;
     let setListLength = (length: number) => {
         if (length > 65535) {
-            throw new WriteError(location, `Index ${length} is greater than allowed maximum of 65535`);
+            throw new WriteError(reference.location, `Index ${length} is greater than allowed maximum of 65535`);
         }
 
         reference.change(() => (reference.value.length = length));
@@ -104,21 +104,21 @@ function createProxy(
 
     // Template used to convey sub-location information
     const sublocation = {
-        ...location,
-        path: location.path.at(-1),
+        ...reference.location,
+        path: reference.location.path.at(-1),
     }
 
     if (config.manageEntries) {
         // Base reader produces managed containers
-        readEntry = (index, location) => {
-            authorizeRead(session, location);
+        readEntry = (index) => {
+            authorizeRead(session, reference.location);
 
             if (index < 0 || index >= reference.value.length) {
-                throw new ReadError(location, `Index ${index} is out of bounds`);
+                throw new ReadError(reference.location, `Index ${index} is out of bounds`);
             }
 
             if (index > 65535) {
-                throw new ReadError(location, `Index ${index} is greater than allowed maximum of 65535`);
+                throw new ReadError(reference.location, `Index ${index} is greater than allowed maximum of 65535`);
             }
 
             // AFAICT spec doesn't contemplate sparse arrays but it's kind of assumed.  If the value is nullish then
@@ -128,12 +128,13 @@ function createProxy(
                 return value;
             }
 
-            let subref = reference.subreferences?.[index];
+            let subref = reference.subrefs?.[index];
 
             if (subref === undefined) {
                 subref = ManagedReference(
                     reference,
                     index,
+
                     () => true,
 
                     val =>
@@ -144,7 +145,7 @@ function createProxy(
                             : val
                 );
 
-                subref.owner = manageEntry(subref, session, location);
+                subref.owner = manageEntry(subref, session);
             }
 
             return subref.owner;
@@ -173,6 +174,11 @@ function createProxy(
             throw new ReadError(location, `Index ${index} is greater than allowed maximum of 65535`);
         }
 
+        // Unwrap incoming managed values
+        if (value && (value as InternalCollection)[REF]) {
+            value = (value as InternalCollection)[REF].value;
+        }
+
         reference.change(() => (reference.value[index] = value));
     };
 
@@ -180,7 +186,7 @@ function createProxy(
     if (config.fabricScoped) {
         function mapScopedToActual(index: number, reading: boolean) {
             if (index < 0) {
-                throw new (reading ? ReadError : WriteError)(location, `Negative index ${index} unsupported`);
+                throw new (reading ? ReadError : WriteError)(reference.location, `Negative index ${index} unsupported`);
             }
 
             let nextPos = 0;
@@ -192,7 +198,7 @@ function createProxy(
                 }
 
                 // If there's no fabric index or it's a match, consider "in scope"
-                if (!entry.fabricIndex || entry.fabricIndex === session.fabric) {
+                if (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric) {
                     if (nextPos === index) {
                         // Found our target
                         return i;
@@ -204,7 +210,7 @@ function createProxy(
             }
 
             if (reading) {
-                throw new ReadError(location, `Index ${index} extends beyond available entries`);
+                throw new ReadError(reference.location, `Index ${index} extends beyond available entries`);
             }
 
             if (nextPos === index) {
@@ -212,7 +218,7 @@ function createProxy(
                 return reference.value.length;
             }
 
-            throw new WriteError(location, `Index ${index} would leave gaps in fabric-filtered list`);
+            throw new WriteError(reference.location, `Index ${index} would leave gaps in fabric-filtered list`);
         }
 
         if (session.fabricFiltered || config.fabricSensitive) {
@@ -220,11 +226,12 @@ function createProxy(
 
             hasEntry = (index: number) => {
                 try {
-                    return nextReadEntry(mapScopedToActual(index, true), location) !== undefined;
+                    return nextReadEntry(mapScopedToActual(index, true), reference.location) !== undefined;
                 } catch (e) {
                     return false;
                 }
             };
+
             readEntry = (index: number, location: AccessControl.Location) => {
                 return nextReadEntry(mapScopedToActual(index, true), location);
             };
@@ -253,7 +260,10 @@ function createProxy(
                     const entry = reference.value[i] as undefined | { fabricIndex?: number };
                     if (
                         typeof entry === "object" &&
-                        (!entry.fabricIndex || entry.fabricIndex === session.fabric)
+                        (
+                            session.offline
+                            || (!entry.fabricIndex || entry.fabricIndex === session.fabric)
+                        )
                     ) {
                         length++;
                     }
@@ -269,12 +279,15 @@ function createProxy(
                         const entry = reference.value[i] as undefined | { fabricIndex?: number };
                         if (
                             typeof entry === "object" &&
-                            (!entry.fabricIndex || entry.fabricIndex === session.fabric)
+                            (
+                                session.offline
+                                || (!entry.fabricIndex || entry.fabricIndex === session.fabric)
+                            )
                         ) {
                             reference.value.splice(mapScopedToActual(i, false), 1);
                         } else {
                             throw new WriteError(
-                                location,
+                                reference.location,
                                 `Fabric scoped list value is not an object`,
                                 StatusCode.Failure,
                             );
@@ -292,6 +305,8 @@ function createProxy(
                 return readEntry(Number.parseInt(property), sublocation);
             } else if (property === "length") {
                 return getListLength();
+            } else if (property === REF) {
+                return reference;
             }
 
             return Reflect.get(reference.value, property, receiver);

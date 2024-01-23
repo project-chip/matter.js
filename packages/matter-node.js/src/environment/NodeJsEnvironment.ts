@@ -6,8 +6,9 @@
 
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
-import { Environment, ImplementationError } from "../exports/common.js";
+import { ImplementationError } from "../exports/common.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
+import { Environment } from "@project-chip/matter.js/environment";
 
 /**
  * This is the default environment implementation for Node:

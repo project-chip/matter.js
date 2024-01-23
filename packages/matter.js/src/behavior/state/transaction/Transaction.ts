@@ -24,6 +24,8 @@ import { ReadOnlyTransaction, executeTransaction } from "./Tx.js";
  * Persistence is implemented by a list of participants.  Commits are two phase.  If an error is thrown in phase one all
  * participants roll back. An error in phase 2 could result in data inconsistency as we don't have any form of retry as
  * of yet.
+ * 
+ * TODO - does prevent deadlock but we should probably add a timeout for resource locking
  */
 export interface Transaction {
     /**
@@ -52,12 +54,17 @@ export interface Transaction {
     readonly waitingOn: Iterable<Transaction> | undefined;
 
     /**
-     * Obtain a promise that resolves when the transaction commits or rolls back.
+     * Resolves when the transaction commits or rolls back.
      *
      * When the transaction commits or rolls back it returns to a shared state and the promise is replaced.  So this is
      * only useful prior to commit or rollback.
      */
     readonly promise: Promise<void>;
+
+    /**
+     * Resolves when the {@link Transaction.status} becomes {@link Status.Destroyed}.
+     */
+    readonly destroyed: Promise<void>;
 
     /**
      * Add {@link Resources} to the transaction.
@@ -149,13 +156,18 @@ type ParticipantType = Participant;
 export namespace Transaction {
     /**
      * Perform a transactional operation.  This is the only way to obtain a read/write transaction.
+     * 
+     * The transaction will commit automatically if it is exclusive (write mode) after the actor returns.
+     * 
+     * The transaction is destroyed when {@link act} returns.  You will receive an error if you access it after it is
+     * destroyed.
      */
     export function act<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
         return executeTransaction(via, actor);
     }
 
     /**
-     * A read-only transaction that may be outside without context.
+     * A read-only transaction you may use without context.
      */
     export const ReadOnly = ReadOnlyTransaction;
 

@@ -18,7 +18,7 @@ const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
  * the class for the features your implementation supports.
  */
 export class OnOffServer extends Base {
-    protected declare internal: OnOffServer.InternalState;
+    protected declare internal: OnOffServer.Internal;
 
     override on() {
         this.state.onOff = true;
@@ -135,7 +135,7 @@ export class OnOffServer extends Base {
 }
 
 export namespace OnOffServer {
-    export class InternalState {
+    export class Internal {
         timedOnTimer?: Timer;
         delayedOffTimer?: Timer;
     }

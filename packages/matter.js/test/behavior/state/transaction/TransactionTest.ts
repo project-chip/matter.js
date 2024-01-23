@@ -263,6 +263,8 @@ describe("Transaction", () => {
                 async commit1() {
                     throw new Error("oops");
                 },
+
+                async rollback() {},
             });
 
             await transaction.begin();

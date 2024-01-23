@@ -5,12 +5,13 @@
  */
 
 import { AccessLevel } from "../../../cluster/Cluster.js";
-import { InternalError, ReadOnlyError } from "../../../common/MatterError.js";
+import { InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { Logger } from "../../../log/Logger.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
+import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { SchemaPath } from "../../supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
@@ -51,7 +52,7 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
     /**
      * Obtain a read-only view of values.
      */
-    readonly view: T;
+    readonly view: InstanceType<T>;
 }
 
 /**
@@ -60,7 +61,7 @@ export interface Datasource<T extends StateType = StateType> extends Resource {
 export function Datasource<const T extends StateType = StateType>(options: Datasource.Options<T>): Datasource<T> {
     const internals = configure(options);
 
-    let readOnlyView: undefined | T;
+    let readOnlyView: undefined | InstanceType<T>;
 
     return {
         toString() {
@@ -71,7 +72,6 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
             return options.supervisor.manage(
                 createRootReference(this, internals, session),
                 session,
-                { path: internals.path }
             ) as InstanceType<T>;
         },
 
@@ -85,15 +85,15 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
         get view() {
             if (!readOnlyView) {
+                const session: ValueSupervisor.Session = {
+                    offline: true,
+                    accessLevelFor() { return AccessLevel.View },
+                    transaction: ReadOnlyTransaction,
+                };
                 readOnlyView = options.supervisor.manage(
-                    createReadOnlyRootReference(internals),
-                    {
-                        offline: true,
-                        accessLevelFor() { return AccessLevel.View },
-                        transaction: ReadOnlyTransaction,
-                    },
-                    { path: internals.path },
-                ) as T;
+                    createRootReference(this, internals, session),
+                    session,
+                ) as InstanceType<T>;
             }
             return readOnlyView;
         },
@@ -182,6 +182,7 @@ interface Internals extends Datasource.Options {
     values: Val.Struct;
     version: number;
     persistedVersion?: number;
+    changed?: Observable<[oldValues: Val.Struct]>;
 }
 
 interface Changes {
@@ -236,9 +237,14 @@ function configure(options: Datasource.Options): Internals {
  *
  * This reference provides external access to the {@link Val.Struct} in the context of a specific session.
  */
-function createRootReference(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
+function createRootReference(
+    resource: Resource,
+    internals: Internals,
+    session: ValueSupervisor.Session,
+) {
     let values = internals.values;
     let changes: Changes | undefined;
+    let expired = false;
 
     const participant = {
         toString() {
@@ -252,12 +258,31 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     const transaction = session.transaction;
     transaction.promise.finally(reset);
 
+    // Register a listener on the datasource so we can update our reference when the datasource changes
+    const changeListener = (oldValues: Val.Struct) => {
+        if (values === oldValues) {
+            values = internals.values;
+            refreshSubrefs();
+        }
+    }
+    if (!internals.changed) {
+        internals.changed = Observable();
+    }
+    internals.changed.on(changeListener);
+
+    // When the transaction is destroyed, decouple from the datasource and expire
+    transaction.destroyed.then(() => {
+        internals.changed?.off(changeListener);
+        expired = true;
+        refreshSubrefs();
+    });
+
     const fields = internals.supervisor.memberNames;
     const persistentFields = internals.supervisor.persistentNames;
 
     // If the version number is dirty, immediately join the transaction.  But we don't want this to prevent generation
     // of the reference so just log a warning if the resource cannot be locked
-    if (internals.version !== internals.persistedVersion) {
+    if (internals.versioning && internals.version !== internals.persistedVersion) {
         try {
             startWrite();
         } catch (e) {
@@ -269,12 +294,17 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         }
     }
 
+    // This is the actual reference
     const reference: Val.Reference<Val.Struct> = {
         get original() {
             return internals.values;
         },
 
         get value() {
+            if (expired) {
+                throw new ExpiredReferenceError(this.location);
+            }
+
             return values;
         },
 
@@ -282,7 +312,19 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             throw new InternalError(`Cannot set root reference for ${internals.supervisor.schema.name}`);
         },
 
+        get expired() {
+            return expired;
+        },
+
+        get location() {
+            return { path: internals.path };
+        },
+
         change(mutator) {
+            if (expired) {
+                throw new ExpiredReferenceError(this.location);
+            }
+
             // Join the transaction
             startWrite();
 
@@ -296,13 +338,16 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                 for (const index of fields) {
                     values[index] = old[index];
                 }
-            }
 
-            // Point subreferences to the new value
-            refreshSubrefs();
+                // Point subreferences to the clone
+                refreshSubrefs();
+            }
 
             // Perform the mutation
             mutator();
+
+            // Refresh subrefs referencing any mutated values
+            refreshSubrefs();
         },
 
         refresh() {
@@ -325,7 +370,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
     // Need to invoke this anytime we change values
     function refreshSubrefs() {
-        const subrefs = reference.subreferences;
+        const subrefs = reference.subrefs;
         if (subrefs) {
             for (const key in subrefs) {
                 subrefs[key].refresh();
@@ -417,7 +462,10 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             internals.persistedVersion = persistedVersion;
             delete values[VERSION_KEY];
         }
+
+        const oldValues = internals.values;
         internals.values = values;
+        internals.changed?.emit(oldValues);
 
         if (!changes) {
             return;
@@ -450,25 +498,4 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         transaction.promise.finally(reset);
     }
-}
-
-/**
- * Create a read-only view of the root reference.
- */
-function createReadOnlyRootReference(internals: Internals): Val.Reference<Val.Struct> {
-    return {
-        get value() {
-            return internals.values;
-        },
-
-        get original() {
-            return internals.values;
-        },
-
-        change() {
-            throw new ReadOnlyError();
-        },
-
-        refresh() {},
-    };
 }

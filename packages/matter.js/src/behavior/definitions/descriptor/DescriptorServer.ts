@@ -11,7 +11,7 @@ import { Part } from "../../../endpoint/Part.js";
 import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
 import { TypeFromSchema } from "../../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
-import { IndexBehavior } from "../index/IndexBehavior.js";
+import { IndexBehavior } from "../../system/index/IndexBehavior.js";
 import { DescriptorBehavior } from "./DescriptorBehavior.js";
 
 /**
@@ -21,7 +21,11 @@ export class DescriptorServer extends DescriptorBehavior {
     override initialize() {
         // We update PartsList differently if there's an index
         if (this.part.behaviors.has(IndexBehavior)) {
-            this.reactTo(this.agent.get(IndexBehavior).events.change, this.#updatePartsList)
+            this.reactTo(
+                this.agent.get(IndexBehavior).events.change,
+                this.#updatePartsList,
+                { lock: true },
+            )
         } else if (this.part.hasParts) {
             for (const part of this.part.parts) {
                 this.#monitorDestruction(part);
@@ -30,7 +34,11 @@ export class DescriptorServer extends DescriptorBehavior {
         this.#updatePartsList();
 
         // Handle lifecycle changes
-        this.reactTo(this.part.lifecycle.changed, this.#applyChange);
+        this.reactTo(
+            this.part.lifecycle.changed,
+            this.#applyChange,
+            { lock: true }
+        );
 
         // Initialize ServerList
         this.state.serverList = this.#serverList;
@@ -88,7 +96,11 @@ export class DescriptorServer extends DescriptorBehavior {
      * Monitor part for removal.
      */
     #monitorDestruction(part: Part) {
-        this.reactTo(part.lifecycle.destroyed, this.#updatePartsList, { offline: true });
+        this.reactTo(
+            part.lifecycle.destroyed,
+            this.#updatePartsList,
+            { lock: true }
+        );
     }
 
     /**
@@ -101,7 +113,7 @@ export class DescriptorServer extends DescriptorBehavior {
         // aggregator endpoints
         if (this.agent.has(IndexBehavior)) {
             const index = this.agent.get(IndexBehavior);
-            const numbers = Object.keys(index.state.partsByNumber)
+            const numbers = Object.keys(index.partsByNumber)
                 .map(n => Number.parseInt(n));
 
             // My part should not appear in its own PartsList
@@ -112,7 +124,7 @@ export class DescriptorServer extends DescriptorBehavior {
 
             this.state.partsList = numbers as EndpointNumber[];
             return;
-        }else if (part.hasParts) {
+        } else if (part.hasParts) {
             // No IndexBehavior, just direct descendents
             this.state.partsList = [ ...part.parts ].map(part => part.number) as EndpointNumber[];
         } else {

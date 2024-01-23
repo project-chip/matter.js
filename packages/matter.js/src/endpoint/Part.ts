@@ -6,7 +6,7 @@
 
 import { Behavior } from "../behavior/Behavior.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
-import { ImplementationError, InternalError } from "../common/MatterError.js";
+import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
@@ -16,11 +16,11 @@ import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
 import { PartInitializer } from "./part/PartInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
 import { PartLifecycle } from "./part/PartLifecycle.js";
-import type { PartOwner } from "./part/PartOwner.js";
 import { Parts } from "./part/Parts.js";
 import { EndpointType } from "./type/EndpointType.js";
-import { OfflineContext } from "../behavior/server/context/OfflineContext.js";
+import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
+import { Environment } from "../environment/Environment.js";
 
 /**
  * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
@@ -31,17 +31,18 @@ import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
  * Most often direct access to {@link Agent} is transparent as Matter.js acquires an agent as necessary for
  * {@link Behavior} interactions.
  */
-export class Part<T extends EndpointType = EndpointType.Empty> implements PartOwner {
+export class Part<T extends EndpointType = EndpointType.Empty> {
     #type: EndpointType;
     #id?: string;
     #number?: EndpointNumber;
-    #owner?: PartOwner;
+    #owner?: Part;
     #agentType?: Agent.Type<T>;
     #behaviors?: Behaviors;
     #lifecycle: PartLifecycle;
     #parts?: Parts;
     #construction: AsyncConstruction<Part<T>>;
     #stateView = {} as SupportedBehaviors.StateOf<T["behaviors"]>;
+    #eventsView = {} as SupportedBehaviors.EventsOf<T["behaviors"]>;
 
     /**
      * A string that uniquely identifies a Part.
@@ -75,13 +76,24 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     /**
      * The owner of the part.
      */
-    get owner(): PartOwner {
+    get owner(): Part | undefined {
         if (!this.#owner) {
             throw new ImplementationError(
                 "Part owner is not available until node is installed"
             );
         }
         return this.#owner;
+    }
+
+    /**
+     * The part's environment.  Part implementations use the environment to access platform components such as storage
+     * and network components.
+     */
+    get env(): Environment {
+        if (this.owner) {
+            return this.owner.env;
+        }
+        return Environment.default;
     }
 
     /**
@@ -105,6 +117,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     get state() {
         return this.#stateView;
     }
+
+    /**
+     * Events for all behaviors.
+     */
+    get events() {
+        return this.#eventsView;
+    }
     
     get construction() {
         return this.#construction;
@@ -112,7 +131,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
     constructor(config: Part.Configuration<T> | T);
 
-    constructor(type: T, options: Part.Options<T>);
+    constructor(type: T, options?: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
         // Create construction early so parts and behaviors can hook events
@@ -120,14 +139,18 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
 
         if (Part.isConfiguration(definition)) {
             options = definition;
-            definition = definition.type
+            this.#type = definition.type as T;
+        } else {
+            this.#type = definition as T;
         }
 
-        this.#type = definition;
-        const behaviors = this.#type.behaviors ?? [];
-        this.#behaviors = new Behaviors(this, behaviors, { ...options?.config });
+        this.#lifecycle = this.createLifecycle();
 
-        this.#lifecycle = new PartLifecycle(this);
+        this.#behaviors = new Behaviors(
+            this,
+            this.#type.behaviors,
+            (options ?? {}) as Record<string, object | undefined>,
+        );
 
         if (options?.id !== undefined) {
             this.id = options?.id;
@@ -148,14 +171,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         }
 
         this.#construction.start(() => {
-            if (this.#lifecycle.isInstalled) {
+            if (this.lifecycle.isInstalled) {
                 // Immediate initialization
                 return this.#initialize();
             }
- 
+     
             // Deferred initialization -- wait for installation
             return new Promise<void>((fulfilled, rejected) => {
-                this.#lifecycle.installed.once(() => {
+                this.lifecycle.installed.once(() => {
                     MaybePromise.then(
                         () => this.#initialize(),
                         fulfilled,
@@ -163,26 +186,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
                     );
                 });
             });
-        });
-    }
-
-    #initialize() {
-        if (!this.owner) {
-            // Shouldn't be possible
-            throw new InternalError("Part initialized without owner");
-        }
-
-        return this.offline(agent => {
-            // Initialize myself and behaviors
-            let promise = MaybePromise.then(
-                () => {
-                    this.owner.serviceFor(PartInitializer).initializeDescendent(this);
-                    return this.behaviors.initialize(agent);
-                },
-                () => this.lifecycle.change(PartLifecycle.Change.Ready),
-            );
-
-            return promise;
         });
     }
 
@@ -241,7 +244,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
             }
 
             if (this.lifecycle.isInstalled) {
-                this.serviceFor(IdentityService).assertNumberAvailable(number, this);
+                this.env.get(IdentityService).assertNumberAvailable(number, this);
             }
         }
 
@@ -250,7 +253,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.lifecycle.change(PartLifecycle.Change.NumberAssigned);
     }
 
-    set owner(owner: PartOwner | undefined) {
+    set owner(owner: Part | undefined) {
         if (this.#owner === owner) {
             return;
         }
@@ -264,7 +267,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.#owner = owner;
         
         try {
-            owner.adoptChild(this);
+            owner.parts.add(this);
         } catch (e) {
             this.#owner = undefined;
             throw e;
@@ -296,10 +299,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
     }
 
     /**
-     * Access lifecycle information.
+     * Part information that varies as the part initializes.
      */
     get lifecycle() {
         return this.#lifecycle;
+    }
+
+    protected createLifecycle() {
+        return new PartLifecycle(this);
     }
 
     /**
@@ -317,8 +324,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
      * 
      * This should only be used for local purposes.  All network interaction should use OnlineContext.
      */
-    offline<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
-        return OfflineContext.act(context => {
+    offline<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+        return OfflineContext.act(purpose, context => {
             return actor(context.agentFor(this));
         })
     }
@@ -345,61 +352,75 @@ export class Part<T extends EndpointType = EndpointType.Empty> implements PartOw
         this.#owner = undefined;
     }
 
-    adoptChild(part: Part) {
-        this.parts.add(part);
-    }
-
-    serviceFor<T>(type: abstract new(...args: any[]) => T): T {
-        if (!this.#owner) {
-            throw new ImplementationError("Cannot access services because owner is not installed");
-        }
-        return this.#owner.serviceFor(type);
-    }
-
     toString() {
         let owner;
-        if (this.lifecycle.isInstalled && this.owner instanceof Part) {
-            owner = `${this.owner}.`;
+        if (this.#owner instanceof Part) {
+            owner = `${this.#owner}.`;
         } else {
             owner = "";
         }
 
         let id;
-        if (this.#lifecycle.hasId) {
+        if (this.lifecycle.hasId) {
             id = this.id;
-        } else if (this.#lifecycle.hasNumber) {
-            id = `#${this.number}`;
+        } else if (this.lifecycle.hasNumber) {
+            id = `${this.number}`;
         } else {
             id = "?";
         }
 
         return `${owner}${this.#type.name}#${id}`;
     }
+
+    /**
+     * Asynchronous initialization.
+     * 
+     * Derivatives may override to perform async construction prior to full initialization.
+     */
+    protected initialize(agent: Agent.Instance<T>) {
+        this.env.get(PartInitializer).initializeDescendent(this);
+        return this.behaviors.initialize(agent);
+    }
+
+    #initialize() {
+        return MaybePromise.then(
+            // Initialize myself and behaviors in a single offline transaction
+            () => this.offline(`initialize<${this}>`, agent => this.initialize(agent)),
+
+            // Update lifecycle indicating initialization is complete
+            () => this.lifecycle.change(PartLifecycle.Change.Ready),
+        )
+    }
 }
 
 export namespace Part {
     /**
-     * Construction options for {@link Part}.
+     * Single-object configuration for a {@link Part}.
      */
-    export type Options<T extends EndpointType = EndpointType.Empty> = 
+    export type Configuration<T extends EndpointType = EndpointType.Empty> = 
         & {
-            owner?: PartOwner | Agent;
+            type: T;
+            owner?: Part | Agent;
             id?: string;
             number?: number;
-            config?: BehaviorConfigurations<T>;
             parts?: Iterable<Part.Definition>;
+        }
+        & {
+            [K in keyof T["behaviors"]]?:
+                K extends "type" ? T
+                : K extends "owner" ? Part | Agent
+                : K extends "id" ? string
+                : K extends "number" ? number
+                : K extends "parts" ? Iterable<Part.Definition>
+                : Behavior.Options<T["behaviors"][K]>
         };
 
     /**
-     * Options with embedded type.
+     * {@link Part} options with separate type.
      */
-     export type Configuration<T extends EndpointType = EndpointType.Empty> =
-        & { type: T }
-        & Options<T>;
-
-    export type BehaviorConfigurations<T extends EndpointType> = {
-        [id in keyof T["behaviors"]]?: Behavior.Options<T["behaviors"][id]>
-    }    
+    export type Options<T extends EndpointType = EndpointType.Empty> = {
+        [K in keyof Configuration<T> as K extends "type" ? never : K]: Configuration<T>[K]
+    }
 
     /**
      * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.
@@ -410,11 +431,9 @@ export namespace Part {
         | Part<T>;
 
     /**
-     * Determine whether a {@link Definition} is a {@link Configuration}.
+     * Determine whether {@link Definition} is a {@link Configuration}.
      */
-    export function isConfiguration<T extends EndpointType>(
-        definition: Definition<T>
-    ): definition is Configuration<T> {
+    export function isConfiguration<T extends EndpointType>(definition: Definition<T>): definition is Configuration<T> {
         return !(definition instanceof Part) && !!(definition as Configuration<T>).type;
     }
 

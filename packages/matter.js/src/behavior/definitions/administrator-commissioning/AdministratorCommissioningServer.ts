@@ -199,7 +199,7 @@ export namespace AdministratorCommissioningServer {
                 );
             }
 
-            this.part.offline(agent => {
+            this.part.offline("clear-admin-fabric", agent => {
                 agent.get(AdministratorCommissioningServer).state.adminFabricIndex = null;
             });
         }
@@ -207,6 +207,6 @@ export namespace AdministratorCommissioningServer {
 
     export class State extends AdministratorCommissioningBehavior.State {
         // Spec doesn't declare a default here so set manually
-        windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
+        override windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
     }
 }

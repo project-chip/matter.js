@@ -5,14 +5,14 @@
  */
 
 import { ImplementationError } from "../../../common/MatterError.js";
+import { Environment } from "../../../environment/Environment.js";
+import { StorageService } from "../../../environment/StorageService.js";
 import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
-import { Environment } from "../../../common/Environment.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
-import type { NodeServer } from "../NodeServer.js";
-import { PartStoreFactory } from "./PartStoreService.js";
+import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
 
 export const logger = Logger.get("NodeStore");
 
@@ -42,13 +42,17 @@ export class ServerStore {
      * TODO - implement conversion from 0.7 format so people can change API
      * seamlessly
      */
-    constructor(environment: Environment, nodeId: string, nextEndpointNumber: number) {
-        let nextNumber = nextEndpointNumber;
+    constructor(environment: Environment, nodeId?: string) {
+        if (nodeId === undefined) {
+            throw new ImplementationError("ServerStore must be created with a nodeId");
+        }
+
+        let nextNumber = 1;
 
         this.#construction = AsyncConstruction(
             this,
             async () => {
-                this.#storageManager = await environment.createStorage(nodeId);
+                this.#storageManager = await environment.get(StorageService).open(nodeId);
         
                 this.#rootStore = await asyncNew(
                     PartStoreFactory,
@@ -61,8 +65,8 @@ export class ServerStore {
         )
     }
 
-    static async create(environment: Environment, nodeId: string, nextEndpointNumber: number) {
-        return await asyncNew(this, environment, nodeId, nextEndpointNumber);
+    static async create(environment: Environment, nodeId: string) {
+        return await asyncNew(this, environment, nodeId);
     }
 
     async [Symbol.asyncDispose]() {
@@ -98,7 +102,7 @@ export class ServerStore {
         return this.#fabricStorage;
     }
 
-    get partStores() {
+    get partStores(): PartStoreService {
         if (this.#rootStore === undefined) {
             throw new ImplementationError("Part storage accessed prior to initialization");
         }

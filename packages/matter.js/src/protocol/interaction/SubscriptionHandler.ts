@@ -13,7 +13,7 @@ import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Fabric } from "../../fabric/Fabric.js";
 import { Logger } from "../../log/Logger.js";
-import { SubscriptionOptions } from "../../node/options/SubscriptionOptions.js";
+import { SubscriptionOptions } from "./SubscriptionOptions.js";
 import { SecureSession } from "../../session/SecureSession.js";
 import { Time, Timer } from "../../time/Time.js";
 import { TlvSchema, TypeFromSchema } from "../../tlv/TlvSchema.js";

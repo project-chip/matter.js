@@ -5,7 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { OnlineContext } from "../../behavior/server/context/OnlineContext.js";
+import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { Message } from "../../codec/MessageCodec.js";
@@ -16,7 +16,7 @@ import { InteractionEndpointStructure } from "../../protocol/interaction/Interac
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { Session } from "../../session/Session.js";
 import { track } from "../../util/Promises.js";
-import { SubscriptionOptions } from "../options/SubscriptionOptions.js";
+import { ServerRootEndpoint } from "./ServerRootEndpoint.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
 /**
@@ -34,17 +34,17 @@ import { ServerStore } from "./storage/ServerStore.js";
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
 
-    constructor(root: Part, store: ServerStore, subscriptionOptions: SubscriptionOptions) {
+    constructor(part: Part<ServerRootEndpoint>) {
         const structure = new InteractionEndpointStructure;
         
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
-        structure.initializeFromEndpoint(PartServer.forPart(root));
-        root.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(root)))
+        structure.initializeFromEndpoint(PartServer.forPart(part));
+        part.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(part)))
 
         super({
-            eventHandler: store.eventHandler,
+            eventHandler: part.env.get(ServerStore).eventHandler,
             endpointStructure: structure,
-            subscriptionOptions: subscriptionOptions,
+            subscriptionOptions: part.state.network.subscriptionOptions,
         })
         this.#endpointStructure = structure;
     }

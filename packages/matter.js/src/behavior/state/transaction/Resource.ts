@@ -7,9 +7,8 @@
 import type { Transaction } from "./Transaction.js";
 
 /**
- * A transaction resource is the target a {@link Participant} is mutating.
- * The {@link Coordinator} tracks the state of resources to
- * ensure only a single transaction ever has exclusive access.
+ * A transaction resource is the target a {@link Participant} is mutating. The {@link Coordinator} tracks the state of
+ * resources to ensure only a single transaction ever has exclusive access.
  */
 export interface Resource {
     /**
@@ -21,4 +20,13 @@ export interface Resource {
      * Locking transaction, maintained by {@link Transaction}.
      */
     lockedBy?: Transaction;
+
+    /**
+     * Inform {@link Transaction} this resource is a standin for another resource.
+     */
+    [Resource.reference]?: Resource;
+}
+
+export namespace Resource {
+    export const reference = Symbol("reference");
 }

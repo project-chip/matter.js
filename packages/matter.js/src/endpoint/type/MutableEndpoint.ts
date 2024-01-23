@@ -84,7 +84,7 @@ export namespace MutableEndpoint {
         B,
         "behaviors" | "defaults" | "set" | "with"
     > & {
-        behaviors: SB;
+        behaviors: B["behaviors"] & SB;
         defaults: SupportedBehaviors.StateOf<SB>;
         set(defaults: SupportedBehaviors.InputStateOf<SB>): With<B, SB>;
         with<const BL extends SupportedBehaviors.List>(...behaviors: BL): With<B, SupportedBehaviors.With<SB, BL>>;

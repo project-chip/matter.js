@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { ExpiredReferenceError } from "../../errors.js";
 import { Val } from "./Val.js";
 
 type Container = Record<string | number, Val>;
@@ -43,8 +44,12 @@ export function ManagedReference(
     assertWriteOk: (value: Val) => void,
     clone: (container: Val) => Val,
 ) {
-    const original = (parent.value as Container)[index];
-    let value = original;
+    let value = (parent.value as Container)[index];
+    let expired = false;
+    const location = {
+        ...parent.location,
+        path: parent.location.path.at(index),
+    }
 
     const reference: Val.Reference = {
         owner: parent,
@@ -52,7 +57,18 @@ export function ManagedReference(
         get value() {
             // Authorization is unnecessary here because the reference would
             // not exist if access is unauthorized
+            if (expired) {
+                throw new ExpiredReferenceError(location);
+            }
             return value;
+        },
+
+        get expired() {
+            return expired;
+        },
+
+        get location() {
+            return location;
         },
 
         set value(newValue: Val) {
@@ -72,13 +88,17 @@ export function ManagedReference(
         },
 
         get original() {
-            return original;
+            return (parent.original as Container)[index];
         },
 
         change(mutator: () => void) {
+            if (expired) {
+                throw new ExpiredReferenceError(this.location);
+            }
+
             parent.change(() => {
                 // In transactions, clone the value if we haven't done so yet
-                if (clone && value === original) {
+                if (clone && value === this.original) {
                     const newValue = clone(value);
                     (parent.value as Container)[index] = newValue;
                     replaceValue(newValue);
@@ -90,16 +110,24 @@ export function ManagedReference(
         },
 
         refresh() {
+            if (parent.expired) {
+                expired = true;
+            }
             replaceValue((parent.value as Container)[index]);
         },
     };
+
+    if (!parent.subrefs) {
+        parent.subrefs = {};
+    }
+    parent.subrefs[index] = reference;
 
     return reference;
 
     function replaceValue(newValue: Val) {
         value = newValue;
 
-        const subrefs = reference.subreferences;
+        const subrefs = reference.subrefs;
         if (subrefs) {
             for (const key in subrefs) {
                 subrefs[key].refresh();

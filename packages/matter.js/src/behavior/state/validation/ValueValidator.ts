@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { InternalError } from "../../../common/MatterError.js";
 import { ClusterModel, Metatype, ValueModel } from "../../../model/index.js";
 import { camelize } from "../../../util/String.js";
-import { ConformanceError, DatatypeError } from "../../errors.js";
+import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import {
     assertArray,
+    assertBoolean,
     assertBytes,
     assertNumber,
     assertNumeric,
@@ -23,6 +23,7 @@ import { createConformanceValidator } from "./conformance.js";
 import { createConstraintValidator } from "./constraint.js";
 import { ValidationLocation } from "./location.js";
 import { Val } from "../managed/Val.js";
+import { SchemaPath } from "../../supervision/SchemaPath.js";
 
 /**
  * Generate a function that performs data validation.
@@ -75,12 +76,12 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
         case undefined:
             if (schema.type === undefined) {
-                throw new InternalError(`There is no type defined for ${schema.name}`);
+                throw new SchemaImplementationError(SchemaPath(schema.path), `No type defined`);
             }
-            throw new InternalError(`Cannot determine metatype for ${schema.name} type ${schema.type}`);
+            throw new SchemaImplementationError(SchemaPath(schema.path), `Cannot determine metatype for type ${schema.type}`);
 
         default:
-            throw new InternalError(`Unsupported validation metatype ${metatype}`);
+            throw new SchemaImplementationError(SchemaPath((schema as Schema).path), `Unsupported validation metatype ${metatype}`);
     }
 
     validator = createNullValidator(schema, validator);
@@ -146,10 +147,14 @@ function createBitmapValidator(schema: ValueModel): ValueSupervisor.Validate | u
             }
 
             const fieldValue = value[key];
-            assertNumber(fieldValue, subpath);
+            if (field.max === 1) {
+                assertBoolean(fieldValue, subpath);
+            } else {
+                assertNumber(fieldValue, subpath);
 
-            if (fieldValue > field.max) {
-                throw new DatatypeError(subpath, "in range of bit field", fieldValue);
+                if (fieldValue > field.max) {
+                    throw new DatatypeError(subpath, "in range of bit field", fieldValue);
+                }
             }
         }
     };
@@ -178,7 +183,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
     for (const field of schema.members) {
         // Global fields currently handled in lower levels
-        if (field.isGlobalAttribute) {
+        if (field.isGlobalAttribute || field.deprecated) {
             continue;
         }
 

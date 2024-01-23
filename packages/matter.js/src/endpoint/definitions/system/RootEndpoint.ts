@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PartsBehavior } from "../../../behavior/definitions/parts/PartsBehavior.js";
-import { IndexBehavior } from "../../../behavior/definitions/index/IndexBehavior.js";
+import { PartsBehavior } from "../../../behavior/system/parts/PartsBehavior.js";
+import { IndexBehavior } from "../../../behavior/system/index/IndexBehavior.js";
 import {
     BasicInformationServer as BaseBasicInformationServer
 } from "../../../behavior/definitions/basic-information/BasicInformationServer.js";

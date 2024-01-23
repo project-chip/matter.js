@@ -9,9 +9,8 @@ import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { TlvSchema } from "../tlv/TlvSchema.js";
 import { Branded, Merge } from "../util/Type.js";
 
-// ClusterType is duplicative of Cluster.  At some point we may migrate away
-// from Cluster entirely but until we do we use Cluster definitions where
-// feasible to ease compatibility
+// ClusterType is duplicative of Cluster.  At some point we may migrate away from Cluster entirely but until we do we
+// use Cluster definitions where feasible to ease compatibility
 import {
     Attribute as ClusterAttribute,
     Command as ClusterCommand,
@@ -20,8 +19,7 @@ import {
 } from "./Cluster.js";
 
 /**
- * A "cluster" is a grouping of related functionality that a Matter endpoint
- * supports.
+ * A "cluster" is a grouping of related functionality that a Matter endpoint supports.
  *
  * ClusterType describes the functionality of a specific type of cluster.
  */
@@ -116,14 +114,12 @@ export namespace ClusterType {
     }
 
     /**
-     * An "element set" defines the set of elements (commands, attributes or
-     * events) of a cluster.
+     * An "element set" defines the set of elements (commands, attributes or events) of a cluster.
      */
     export type ElementSet<T> = Record<string, T>;
 
     /**
-     * Cluster "elements" are attributes, commands and events that may comprise
-     * a cluster.
+     * Cluster "elements" are attributes, commands and events that may comprise a cluster.
      */
     export interface Elements {
         /**
@@ -162,89 +158,86 @@ export namespace ClusterType {
         readonly extensions?: readonly Extension<F>[];
 
         /**
-         * If you enable features, this property tracks the shape of the
-         * cluster with no features enabled.
+         * If you enable features, this property tracks the shape of the cluster with no features enabled.
          */
         readonly base?: ClusterType;
 
         /**
-         * If true, this flag indicates that the cluster is not known to
-         * matter.js.  This implies a cluster ID for which we do not have a
-         * cluster definition.
+         * If true, this flag indicates that the cluster is not known to matter.js.  This implies a cluster ID for which
+         * we do not have a cluster definition.
          *
-         * Some functionality is available for unknown clusters but an official
-         * Matter definition is generally required for full functionality.
+         * Some functionality is available for unknown clusters but an official Matter definition is generally required
+         * for full functionality.
          */
         readonly unknown: boolean;
     }
 
     /**
-     * Extract the type of a cluster's attributes (excluding global
-     * attributes).
+     * Extract the type of a cluster's attributes (excluding global attributes).
      */
     export type AttributesOf<C> = C extends { attributes: infer E extends { [K in string]: ClusterType.Attribute } }
-        ? string extends keyof E
-            ? EmptyElementSet<Attribute>
-            : Omit<
-                  { -readonly [K in string & keyof E as E[K] extends ClusterType.Attribute ? K : never]: E[K] },
-                  keyof GlobalAttributes<any>
-              >
+        ? {
+            -readonly [
+                K in keyof E as
+                    string extends K ? never
+                    : K extends keyof GlobalAttributes<any> ? never
+                    : K
+                ]: C["attributes"][K]
+        }
         : EmptyElementSet<Attribute>;
 
     /**
      * Extract the type of a cluster's commands.
      */
     export type CommandsOf<C> = C extends { commands: infer E extends { [K in string]: ClusterType.Command } }
-        ? string extends keyof E
-            ? EmptyElementSet<Command>
-            : { -readonly [K in keyof E as E[K] extends ClusterType.Command ? K : never]: E[K] }
+        ? {
+            -readonly [
+                K in keyof E as
+                    string extends K ? never
+                    : K
+            ]: E[K]
+        }
         : EmptyElementSet<Command>;
 
     /**
      * Extract the type of a cluster's events.
      */
     export type EventsOf<C> = C extends { events: infer E extends { [K in string]: ClusterType.Event } }
-        ? string extends keyof E
-            ? EmptyElementSet<Command>
-            : { -readonly [K in keyof E as E[K] extends ClusterType.Event ? K : never]: E[K] }
+        ? {
+            -readonly [
+                K in keyof E as
+                    string extends K ? never
+                    : K
+            ]: E[K]
+        }
         : EmptyElementSet<Event>;
 
     /**
-     * This bit of hackery describes a set that has no elements but for which
-     * typescript thinks it knows the type if you index generically by string.
+     * This bit of hackery describes a set that has no elements but for which typescript thinks it knows the type if you
+     * index generically by string.
      */
     export type EmptyElementSet<T> = Record<string, never> & Record<string, T>;
-
-    /**
-     * Helper that makes object entries optional if an associated definition
-     * has an "optional" field set to true.
-     */
-    export type SomeOptional<
-        DefinitionsT extends Record<string, { optional?: boolean }>,
-        ObjectT extends Record<string, any>,
-    > = {
-        [E in keyof DefinitionsT & keyof ObjectT as DefinitionsT[E] extends { optional: true } ? never : E]: ObjectT[E];
-    } & {
-        [E in keyof DefinitionsT & keyof ObjectT as DefinitionsT[E] extends { optional: true }
-            ? E
-            : never]?: ObjectT[E];
-    };
 
     /**
      * The collective object type of the cluster's attributes.
      */
     export type AttributeValues<T> = ValuesOfAttributes<ClusterType.AttributesOf<T>>;
 
-    export type ValuesOfAttributes<AttrsT extends { [K: string]: Attribute }> = SomeOptional<
-        AttrsT,
-        {
-            [K in keyof AttrsT as [AttrsT[K]] extends [never] ? never : K]: AttrsT[K] extends {
+    export type ValuesOfAttributes<AttrsT extends { [K: string]: Attribute }> =
+        & {
+            [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? never : K]: AttrsT[K] extends {
                 schema: TlvSchema<infer T>;
             }
                 ? T
                 : never;
         }
-    >;
+        & {
+            [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? K : never]?: AttrsT[K] extends {
+                schema: TlvSchema<infer T>;
+            }
+                ? T
+                : never;
+        };
 
     export type RelaxTypes<V> = V extends number
         ? number
@@ -262,35 +255,33 @@ export namespace ClusterType {
     export type InputAttributeValues<T extends ClusterType> = RelaxTypes<AttributeValues<T>>;
 
     /**
-     * Matter clusters support named "features" that enable sets of optional
-     * functionality.
+     * Matter clusters support named "features" that enable sets of optional functionality.
      *
-     * There is not a 1:1 mapping between features and cluster elements.  Some
-     * elements are enabled only when specific features are enabled or disabled
-     * in combination.
+     * There is not a 1:1 mapping between features and cluster elements.  Some elements are enabled only when specific
+     * features are enabled or disabled in combination.
      *
-     * Further, some features are mutually exclusive and thus do not generate a
-     * valid cluster when used in combination.
+     * Further, some features are mutually exclusive and thus do not generate a valid cluster when used in combination.
      *
-     * This type describes a feature combination and how it alters a cluster.
-     * ClusterComposer uses this metadata to generate clusters based on
-     * selected features.
+     * This type describes a feature combination and how it alters a cluster. ClusterComposer uses this metadata to
+     * generate clusters based on selected features.
      */
     export interface Extension<F extends BitSchema = {}> {
         /**
          * Flags indicating the features for which this extension applies.
          *
          * For each feature the flag is a tri-state component:
+         * 
          *   - true = feature is required to enable extension
+         * 
          *   - false = extension cannot be enabled if feature is enabled
+         * 
          *   - undefined = feature is not irrelevant for the extension
          */
         flags: TypeFromPartialBitSchema<F>;
 
         /**
-         * The elements to inject if the flags match active features.  If the
-         * component is "false" the cluster cannot be instantiated with the
-         * feature combination.
+         * The elements to inject if the flags match active features.  If the component is "false" the cluster cannot be
+         * instantiated with the feature combination.
          */
         component: false | Partial<Elements>;
     }

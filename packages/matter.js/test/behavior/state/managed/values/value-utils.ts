@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../../../../src/behavior/server/context/ActionContext.js";
-import { OnlineContext } from "../../../../../src/behavior/server/context/OnlineContext.js";
+import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
+import { OnlineContext } from "../../../../../src/behavior/context/server/OnlineContext.js";
+import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
-import { SchemaPath } from "../../../../../src/behavior/supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
+import { Observable } from "../../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
+import { camelize } from "../../../../../src/util/String.js";
 import { Identity } from "../../../../../src/util/Type.js";
 
 /**
@@ -65,34 +67,37 @@ export interface Online2 {
     ref2: Val.Struct,
 }
 
+class TestState {}
+
 /**
- * A simplified source for managed structs, similar to Datasource but provides types and access to the raw underlying
- * values.
+ * Utility for creating a managed struct via a datasource.
  */
 export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
     const supervisor = new RootSupervisor(new DatatypeModel(structOf(fields)));
 
-    const struct = { ...defaults } as Val.Struct;
-
     const notifies: { index: string | undefined, oldValue: Val, newValue: Val }[] = [];
 
-    const rootRef: Val.Reference = {
-        value: struct,
-        original: {},
-        
-        change(mutator: () => void) {
-            mutator();
-        },
-
-        refresh() {},
+    const events = {} as Record<string, Observable>;
+    for (const index in fields) {
+        const observable = Observable();
+        events[`${camelize(index)}$Change`] = observable;
+        observable.on((newValue: Val, oldValue: Val) => { notifies.push({ index, oldValue, newValue }) })
     }
 
+    const datasource = Datasource({
+        name: "TestStruct",
+        type: TestState,
+        supervisor,
+        defaults,
+        events,
+    })
+
     return {
-        fields: struct,
+        get fields() { return datasource.view as Val.Struct },
         notifies,
 
         expect(expected: Val.Struct) {
-            expect(struct).deep.equals(expected);
+            expect(this.fields).deep.equals(expected);
         },
 
         online(cx: OnlineContext.Options, actor: (ref: Val.Struct, cx: ActionContext) => MaybePromise) {
@@ -110,7 +115,7 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
         },
 
         reference(context: ValueSupervisor.Session) {
-            return supervisor.manage(rootRef, context, { path: SchemaPath("TestStruct") }) as Val.Struct;
+            return datasource.reference(context) as Val.Struct;
         }
     }
 }

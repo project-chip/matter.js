@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../../../../src/behavior/server/context/ActionContext.js";
+import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
@@ -20,16 +20,20 @@ export interface TwoLists {
 }
 
 export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLists) => MaybePromise) {
-    const struct = TestStruct({
-        list: listOf(
-            structOf({
-                fabricIndex: "fabric-idx",
-                value: "uint8",
-            }),
-            { access: "F" },
-        ),
-    });
-    struct.fields.list = [];
+    const struct = TestStruct(
+        {
+            list: listOf(
+                structOf({
+                    fabricIndex: "fabric-idx",
+                    value: "uint8",
+                }),
+                { access: "F" },
+            ),
+        },
+        {
+            list: [],
+        }
+    );
 
     const cx1 = {
         fabricFiltered: true,
@@ -46,22 +50,23 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
     return struct.online2(cx1, cx2, async ({cx1, cx2, ref1, ref2 }) => {
         const list1 = ref1.list as ValueList;
         const list2 = ref2.list as ValueList;
+
         list1[0] = { value: 1 };
         await cx1.transaction.commit();
         list2[0] = { value: 2 };
         await cx2.transaction.commit();
         list1[1] = { value: 3 };
         await cx1.transaction.commit();
-        list1[1] = { value: 4 };
+        list2[1] = { value: 4 };
         await cx2.transaction.commit();
+
         await actor(struct, { cx1, cx2, list1, list2 });
     })
 }
 
 describe("ListManager", () => {
     it("basic get/set", async () => {
-        const struct = TestStruct({ list: listOf("string") });
-        struct.fields.list = [];
+        const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
         await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async ref => {
             const list = ref.list as string[];
@@ -79,8 +84,7 @@ describe("ListManager", () => {
     });
 
     it("basic array functions", async () => {
-        const struct = TestStruct({ list: listOf("string") });
-        struct.fields.list = [];
+        const struct = TestStruct({ list: listOf("string") }, { list: [] });
 
         await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async (ref, cx) => {
             const list = ref.list as string[];
@@ -179,7 +183,7 @@ describe("ListManager", () => {
             await cx1.transaction.commit();
             list2.splice(1, 1);
             await cx2.transaction.commit();
-
+            
             struct.expect({
                 list: [
                     { fabricIndex: 1, value: 1 },

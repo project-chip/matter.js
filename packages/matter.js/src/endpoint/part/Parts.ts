@@ -10,7 +10,6 @@ import { PartLifecycle } from "./PartLifecycle.js";
 import { EndpointType } from "../type/EndpointType.js";
 import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
-import { LifecycleStatus } from "../../common/Lifecycle.js";
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -39,15 +38,6 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
             for (const part of this.#children) {
                 if (!part.lifecycle.isInstalled) {
                     part.lifecycle.change(PartLifecycle.Change.Installed);
-                }
-            }
-        });
-
-        // Propagate reset to children
-        this.#part.construction.change.on(status => {
-            if (status === LifecycleStatus.Inactive) {
-                for (const child of this.#children) {
-                    child.lifecycle.reset();
                 }
             }
         });
@@ -158,7 +148,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     
     #validateInsertion(forefather: Part, part: Part, usedNumbers?: Set<number>) {
         if (part.lifecycle.hasNumber) {
-            this.#part.serviceFor(IdentityService).assertNumberAvailable(part.number, part);
+            this.#part.env.get(IdentityService).assertNumberAvailable(part.number, part);
             if (usedNumbers?.has(part.number)) {
                 throw new IdentityConflictError(
                     `Cannot add part ${forefather} because descendents have conflicting definitions for endpoint number ${part.number}`

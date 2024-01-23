@@ -9,10 +9,10 @@ import { AttestationCertificateManager } from "../../../certificate/AttestationC
 import { CertificationDeclarationManager } from "../../../certificate/CertificationDeclarationManager.js";
 import { SecureSession } from "../../../session/SecureSession.js";
 import { ByteArray } from "../../../util/ByteArray.js";
-import { CommissioningOptions } from "../../../node/options/CommissioningOptions.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { PrivateKey } from "../../../crypto/Key.js";
 import { ImplementationError } from "../../../common/MatterError.js";
+import { ProductDescription } from "../../system/product-description/ProductDescription.js";
 
 /**
  * Device certification used by the OperationalCredentials cluster.
@@ -37,7 +37,7 @@ export class DeviceCertification {
 
     constructor(
         config?: DeviceCertification.Configuration,
-        product?: CommissioningOptions.ProductDescription,
+        product?: ProductDescription,
     ) {
         if (config) {
             this.#privateKey = config.privateKey instanceof ByteArray

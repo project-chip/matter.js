@@ -15,6 +15,13 @@ export function assertNumber(value: Val, path: SchemaErrorPath): asserts value i
     throw new DatatypeError(path, "a number", value);
 }
 
+export function assertBoolean(value: Val, path: SchemaErrorPath): asserts value is number {
+    if (typeof value === "boolean" || value === 0 || value === 1) {
+        return;
+    }
+    throw new DatatypeError(path, "a boolean", value);
+}
+
 export function assertObject(value: Val, path: SchemaErrorPath): asserts value is Val.Struct {
     if (typeof value === "object" && value !== null && !Array.isArray(value)) {
         return;

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessControl } from "../../AccessControl.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 
 /**
@@ -32,19 +33,29 @@ export namespace Val {
      */
     export interface Reference<T extends Val = Val> {
         /**
-         * The current value of the referenced property.
+         * The current value of the referenced property.  Cleared when the reference is no longer functional.
          */
         value: T;
 
         /**
-         * The original value of the referenced property.
+         * The current canonical value of the referenced property.
          */
         readonly original: T;
 
         /**
+         * When true, the reference is no longer usable because the owning context has exited.
+         */
+        readonly expired: boolean;
+
+        /**
+         * Diagnostic path to the referenced value.
+         */
+        location: AccessControl.Location;
+
+        /**
          * Active references to child properties.
          */
-        subreferences?: Record<number | string, Reference>;
+        subrefs?: Record<number | string, Reference>;
 
         /**
          * Mutates data.  Clones the container and updates metadata when called on an unmodified transactional
