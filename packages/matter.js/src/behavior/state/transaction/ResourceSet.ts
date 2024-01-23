@@ -7,7 +7,7 @@
 import { Logger } from "../../../log/Logger.js";
 import { describeList } from "../../../util/String.js";
 import { SynchronousTransactionConflictError, TransactionDeadlockError, TransactionFlowError } from "./Errors.js";
-import type { Resource } from "./Resource.js";
+import { Resource } from "./Resource.js";
 import type { Transaction } from "./Transaction.js";
 
 const logger = Logger.get("ResourceSet");
@@ -17,11 +17,16 @@ const logger = Logger.get("ResourceSet");
  */
 export class ResourceSet {
     #transaction: Transaction;
-    #resources: Iterable<Resource>;
+    #resources = new Set<Resource>;
 
     constructor(transaction: Transaction, resources: Iterable<Resource> = transaction.resources) {
         this.#transaction = transaction;
-        this.#resources = resources;
+        for (let resource of resources) {
+            while (resource[Resource.reference]) {
+                resource = resource[Resource.reference];
+            }
+            this.#resources.add(resource);
+        }
     }
 
     /**
@@ -107,8 +112,7 @@ export class ResourceSet {
     }
 
     /**
-     * Ensure that a transaction that is committing or rolling back has all
-     * resources locked.
+     * Ensure that a transaction that is committing or rolling back has all resources locked.
      *
      * This is just a sanity check.
      */
@@ -121,21 +125,16 @@ export class ResourceSet {
     }
 
     /**
-     * If two transactions would block each other then we would have a
-     * deadlock.
+     * If two transactions would block each other then we would have a deadlock.
      *
-     * This is unlikely but not impossible.  It can happen if an endpoint is
-     * added to an exclusive transaction but a second transaction already has
-     * exclusivity on the new endpoint *and* is waiting on the first
-     * transaction.
+     * This is unlikely but not impossible.  It can happen if an endpoint is added to an exclusive transaction but a
+     * second transaction already has exclusivity on the new endpoint *and* is waiting on the first transaction.
      *
-     * So... detect if the wait graph would have cycles if we an endpoint.  If
-     * so, throw an error.
+     * So... detect if the wait graph would have cycles if we an endpoint.  If so, throw an error.
      */
     #detectDeadlock(blockedBy: Set<Transaction>) {
-        // Recursively examine the transaction holding each resource we wish
-        // to lock.  If any of them are waiting for a resource that I have
-        // locked then we've detected deadlock
+        // Recursively examine the transaction holding each resource we wish to lock.  If any of them are waiting for a
+        // resource that I have locked then we've detected deadlock
         const examined = new Set<Transaction>();
         const examineBlocker = (transaction: Transaction) => {
             examined.add(transaction);

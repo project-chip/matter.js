@@ -98,8 +98,25 @@ export class ConformanceError extends ValidateError {
 }
 
 /**
- * Thrown for issues with metadata definitions or related data that are
- * a local (vs network client) problem.
+ * Thrown for access attempts against a managed value that is no longer valid.
+ */
+export class ExpiredReferenceError extends SchemaViolationError {
+    constructor(path: SchemaErrorPath) {
+        super("Reference to", path, "is no longer valid because the referencing context has exited", StatusCode.Failure);
+    }
+}
+
+/**
+ * Thrown for access attempts against a managed value referencing a container that was removed.
+ */
+export class PhantomReferenceError extends SchemaViolationError {
+    constructor(path: SchemaErrorPath) {
+        super("Reference to", path, "is no longer valid because the container was removed", StatusCode.Failure);
+    }
+}
+
+/**
+ * Thrown for issues with metadata definitions or related data that are a local (vs network client) problem.
  */
 export class SchemaImplementationError extends SchemaViolationError {
     constructor(path: SchemaErrorPath, message: string, code?: StatusCode) {

@@ -69,5 +69,5 @@ export namespace ValueSupervisor {
 
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;
 
-    export type Manage = (reference: Val.Reference, session: Session, location: AccessControl.Location) => Val;
+    export type Manage = (reference: Val.Reference, session: Session) => Val;
 }

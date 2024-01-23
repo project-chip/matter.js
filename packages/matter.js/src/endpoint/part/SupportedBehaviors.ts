@@ -79,6 +79,13 @@ export namespace SupportedBehaviors {
     };
 
     /**
+     * Compound events for all behaviors.
+     */
+    export type EventsOf<SB extends SupportedBehaviors> = {
+        [K in keyof SB]: Behavior.EventsOf<SB[K]>;
+    }
+
+    /**
      * Input version of {@link StateOf}.
      */
     export type InputStateOf<SB extends SupportedBehaviors> = {

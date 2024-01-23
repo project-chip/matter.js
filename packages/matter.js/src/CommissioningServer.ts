@@ -53,7 +53,6 @@ import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
 import { UdpInterface } from "./net/UdpInterface.js";
-import { CommissioningOptions } from "./node/options/CommissioningOptions.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "./protocol/interaction/InteractionServer.js";
@@ -71,6 +70,7 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
+import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -222,7 +222,7 @@ export class CommissioningServer extends MatterNode {
     private readonly passcode: number;
     private readonly discriminator: number;
     private readonly flowType: CommissioningFlowType;
-    private readonly productDescription: CommissioningOptions.ProductDescription;
+    private readonly productDescription: ProductDescription;
     private readonly certification: DeviceCertification;
 
     private storage?: StorageContext;

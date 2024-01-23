@@ -2,7 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
 import { MockEndpoint } from "../behavior/mock-behavior.js";
-import { MockOwner } from "./mock-part-owner.js";
+import { MockNode } from "./mock-node.js";
 
 export class MockBehavior1 extends Behavior {
     static override readonly id = "one";
@@ -26,24 +26,45 @@ export namespace MockBehavior2 {
     }
 }
 
+const activeParts = new Set<MockPart<any>>();
+
+// I think we can get by without this
+// afterEach(async () => {
+//     while (activeParts.size) {
+//         await activeParts[Symbol.iterator]().next().value?.destroy();
+//     }
+// });
+
 export class MockPart<T extends EndpointType> extends Part<T> {
     constructor(definition: T | Part.Configuration<T>);
 
     constructor(type: T, options: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
+        let type: T;
+        
         if (Part.isConfiguration(definition)) {
             options = definition;
-            definition = definition.type;
-        }
-        if (!options) {
-            options = {};
-        }
-        if (!("owner" in options)) {
-            options.owner = new MockOwner();
+            type = definition.type;
+        } else {
+            type = definition;
+            if (!options) {
+                options = {} as Part.Options<T>;
+            }
         }
 
-        super(definition, options);
+        if (!("owner" in options)) {
+            options.owner = new MockNode();
+        }
+
+        super(type, options);
+
+        activeParts.add(this);
+    }
+
+    override async destroy() {
+        activeParts.delete(this);
+        await super.destroy();
     }
 
     static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<MockPart<T>>;

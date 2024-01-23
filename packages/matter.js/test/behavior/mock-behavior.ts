@@ -7,6 +7,7 @@
 import { DescriptorServer } from "../../src/behavior/definitions/descriptor/DescriptorServer.js";
 import { MutableEndpoint } from "../../src/endpoint/type/MutableEndpoint.js";
 import type { Fabric } from "../../src/fabric/Fabric.js";
+import { Observable } from "../../src/util/Observable.js";
 
 class MockFabricImplementation {
     fabricIndex;
@@ -25,3 +26,13 @@ export const MockEndpoint = MutableEndpoint({
     deviceType: 1,
     deviceRevision: 1,
 }).with(DescriptorServer);
+
+/**
+ * Utility to convert the next emit of an observable to a promise.
+ */
+export async function triggered<T extends any[]>(event: Observable<T>) {
+    const changed = new Promise<void>(resolve => {
+        event.once(() => resolve());
+    });
+    await changed;
+}

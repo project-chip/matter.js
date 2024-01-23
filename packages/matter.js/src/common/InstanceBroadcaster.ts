@@ -6,8 +6,8 @@
 
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { CommissioningOptions } from "../node/options/CommissioningOptions.js";
 import { BitFlag, BitmapSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
+import { ProductDescription } from "../behavior/system/product-description/ProductDescription.js";
 
 export const PairingHintBitmap = {
     /**
@@ -131,7 +131,7 @@ export const PairingHintBitmap = {
 
 export const PairingHintBitmapSchema = BitmapSchema(PairingHintBitmap);
 
-export interface CommissioningModeInstanceData extends CommissioningOptions.ProductDescription {
+export interface CommissioningModeInstanceData extends ProductDescription {
     /** Device discriminator for commissionable announcements. */
     discriminator: number;
 

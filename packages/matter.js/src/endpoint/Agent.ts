@@ -5,7 +5,7 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { ActionContext } from "../behavior/server/context/ActionContext.js";
+import { ActionContext } from "../behavior/context/ActionContext.js";
 import { GeneratedClass } from "../util/GeneratedClass.js";
 import { MaybePromise } from "../util/Promises.js";
 import type { Part } from "./Part.js";

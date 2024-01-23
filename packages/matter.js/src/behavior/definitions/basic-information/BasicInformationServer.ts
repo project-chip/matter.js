@@ -7,6 +7,7 @@
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
+import { NetworkServer } from "../../system/networking/NetworkServer.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
 const logger = Logger.get("BasicInformationServer");
@@ -46,5 +47,48 @@ export class BasicInformationServer extends BasicInformationBehavior {
         setDefault("dataModelRevision", 1);
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
+
+        this.reactTo(
+            this.agent.get(NetworkServer).events.online$Change,
+            this.#emitLifecycleEvent,
+        );
+    }
+
+    #emitLifecycleEvent(online: boolean) {
+        if (online) {
+            this.events.startUp.emit(
+                { softwareVersion: this.state.softwareVersion },
+                this.context,
+            );
+        } else {
+            this.events.shutDown?.emit(
+                undefined,
+                this.context,
+            )
+        }
+    }
+}
+
+export namespace BasicInformationServer {
+    export interface ProductDescription {
+        /**
+         * The device name for commissioning announcements.
+         */
+        readonly name: string;
+
+        /**
+         * The device type for commissioning announcements.
+         */
+        readonly deviceType: number;
+
+        /**
+         * The vendor ID for commissioning announcements.
+         */
+        readonly vendorId: VendorId;
+
+        /**
+         * The product ID for commissioning announcements.
+         */
+        readonly productId: number;
     }
 }

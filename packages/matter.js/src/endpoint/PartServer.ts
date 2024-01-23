@@ -7,8 +7,6 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
-import { ClusterServerBehaviorBacking } from "../behavior/server/ClusterServerBehaviorBacking.js";
-import { ServerBehaviorBacking } from "../behavior/server/ServerBehaviorBacking.js";
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -18,10 +16,11 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
-import { IdentityService } from "../node/server/IdentityService.js";
-import { PartStoreService } from "../node/server/storage/PartStoreService.js";
 import { EndpointInterface } from "./EndpointInterface.js";
 import { Part } from "./Part.js";
+import { ClusterServerBehaviorBacking } from "../behavior/internal/ClusterServerBacking.js";
+import { ServerBehaviorBacking } from "../behavior/internal/ServerBacking.js";
+import { ServerStore } from "../node/server/storage/ServerStore.js";
 
 const logger = Logger.get("PartServer");
 
@@ -123,7 +122,12 @@ export class PartServer implements EndpointInterface {
     }
 
     async [Symbol.asyncDispose]() {
-        await this.#part[Symbol.asyncDispose]();
+        // I believe the cluster servers are effectively disposed when the structure is emptied
+        this.#clusterServers.clear();
+        delete (this.#part as ServerPart)[SERVER];
+        for (const part of this.#part.parts) {
+            await part[Symbol.asyncDispose]();
+        }
     }
 
     setStructureChangedCallback(callback: () => void): void {
@@ -223,19 +227,15 @@ export class PartServer implements EndpointInterface {
     }
 
     get #diagnosticDict() {
-        const isNew = this.#part.owner
-            .serviceFor(PartStoreService)
+        const isNew = this.#part.env
+            .get(ServerStore)
+            .partStores
             .storeForPart(this.#part)
             .isNew;
-
-        const port = this.#part.owner
-            .serviceFor(IdentityService)
-            .port;
 
         return Diagnostic.dict({
             "endpoint#": this.#part.number,
             type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
-            port,
             "known": !isNew,
             "behaviors": this.#part.behaviors,
         })

@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../common/MatterError.js";
 import { LifecycleStatus } from "../common/Lifecycle.js";
-import { Tracker, MaybePromise } from "./Promises.js";
+import { Tracker, MaybePromise, CancellablePromise } from "./Promises.js";
 import { Observable } from "./Observable.js";
 
 /**
@@ -89,6 +89,11 @@ export interface AsyncConstruction<T> extends Promise<T> {
     assert(description?: string): void;
 
     /**
+     * Asserts construction is complete and that an object is defined.
+     */
+    assert<T>(description: string, dependency: T | undefined): T;
+    
+    /**
      * Manually force a specific {@link status}.
      * 
      * This offers flexibility in component lifecycle management including resetting component to inactive state and
@@ -143,7 +148,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         start(initializer: () => MaybePromise) {
             if (started) {
-                throw new ImplementationError("Initialization has already started");
+                throw new ImplementationError(`Initialization of ${subject} has already started`);
             }
             started = true;
 
@@ -211,8 +216,27 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
         },
 
-        assert(description) {
-            LifecycleStatus.assertActive(status, description ?? subject.constructor.name)
+        assert(description?: string, dependency?: any) {
+            LifecycleStatus.assertActive(status, description ?? subject.constructor.name);
+
+            if (arguments.length < 2) {
+                return;
+            }
+
+            try {
+                if (dependency === undefined) {
+                    throw new ImplementationError(`Property is undefined`);
+                }
+            } catch (e) {
+                if (!(e instanceof Error)) {
+                    e = new ImplementationError((e ?? "(unknown error)").toString())
+                }
+                if (e instanceof Error) {
+                    e.message = `Cannot access ${description}: ${e.message}`;
+                }
+                throw e;
+            }
+            return dependency;
         },
         
         then<TResult1 = T, TResult2 = never>(
@@ -221,14 +245,12 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
         ): Promise<TResult1 | TResult2> {
             if (!started) {
                 // Initialization has not started so we need to create a
-                // placeholder promise.  Do not create a real promise becase
-                // we do not want the VM to get confused and think we don't
-                // have an error handler installed
+                // placeholder promise
                 
-                promise = new Promise((resolve, reject) => {
+                promise = CancellablePromise.create((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
-                });
+                }, () => this.cancel());
 
                 promise = Tracker.global.track(
                     promise,
@@ -236,7 +258,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 );
             }
             if (promise) {
-                return promise.then(() => subject).then(onfulfilled, onrejected);
+                return CancellablePromise.resolve(promise).then(() => subject).then(onfulfilled, onrejected);
             }
 
             if (error) {
@@ -252,8 +274,19 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return this.then(undefined, onrejected);
         },
 
-        finally(onfinally) {
-            return this.then().finally(onfinally);
+        finally(onfinally: () => void): Promise<T> {
+            return this.then(
+                result =>
+                    MaybePromise.then(
+                        () => onfinally(),
+                        () => result,
+                    ),
+                error =>
+                    MaybePromise.then(
+                        () => onfinally(),
+                        () => { throw error },
+                    ),
+            );
         },
 
         setStatus(newStatus: LifecycleStatus, newError?: any) {

@@ -193,7 +193,7 @@ export namespace ClusterBehavior {
 
         readonly Events: ClusterEvents.Type<C, B>;
         readonly State: new () => ClusterState.Type<C, B>;
-        readonly InternalState: B["InternalState"];
+        readonly Internal: B["Internal"];
         readonly Interface: I;
 
         readonly schema?: Schema;

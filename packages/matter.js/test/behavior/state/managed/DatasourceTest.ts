@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../../../src/behavior/server/context/ActionContext.js";
-import { OfflineContext } from "../../../../src/behavior/server/context/OfflineContext.js";
+import { ActionContext } from "../../../../src/behavior/context/ActionContext.js";
+import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
 import { Val } from "../../../../src/behavior/state/managed/Val.js";
@@ -64,7 +64,7 @@ async function withReference<R, const T extends StateType>(
     datasource: Datasource<T>,
     actor: (params: { context: ActionContext, state: InstanceType<T> }) => MaybePromise<R>
 ) {
-    return await OfflineContext.act(context => actor({
+    return await OfflineContext.act("test-datasource", context => actor({
         context,
         state: datasource.reference(context),
     }));
@@ -99,10 +99,11 @@ describe("Datasource", () => {
             expect(state.foo).equals("BAR");
 
             await withReference(ds, async ({ state: state2, context: context2 }) => {
+                expect(state2.foo).equals("bar");
+
                 await context.transaction.commit();
 
-                // state2 reads should be isolated
-                expect(state2.foo).equals("bar");
+                expect(state2.foo).equals("BAR");
                 await context2.transaction.rollback();
                 expect(state2.foo).equals("BAR");
 

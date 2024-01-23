@@ -16,7 +16,7 @@ import { assertSecureSession } from "../../../session/SecureSession.js";
 import { Val } from "../../state/managed/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
-import { CommissioningBehavior } from "../commissioning/CommissioningBehavior.js";
+import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import {
@@ -54,20 +54,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         this.state.commissionedFabrics = this.state.fabrics.length;
-    }
-
-    get #certification() {
-        const certification = this.internal.certification;
-        if (certification) {
-            return certification;
-        }
-
-        const commissioning = this.agent.get(CommissioningBehavior);
-
-        return (this.internal.certification = new DeviceCertification(
-            this.state.certification,
-            commissioning.productDescription,
-        ));
     }
 
     override attestationRequest({ attestationNonce }: AttestationRequest) {
@@ -400,6 +386,18 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         this.session.getContext().getFailSafeContext().setRootCert(rootCaCertificate);
+    }
+
+    get #certification() {
+        const certification = this.internal.certification;
+        if (certification) {
+            return certification;
+        }
+
+        return (this.internal.certification = new DeviceCertification(
+            this.state.certification,
+            this.agent.get(ProductDescriptionServer).state,
+        ));
     }
 }
 

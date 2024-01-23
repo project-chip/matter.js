@@ -8,7 +8,7 @@ import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervi
 import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
 import { Properties } from "../../../../src/util/Type.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
-import { OfflineContext } from "../../../../src/behavior/server/context/OfflineContext.js";
+import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { SchemaPath } from "../../../../src/behavior/supervision/SchemaPath.js";
 
 export function Fields(...definition: { name?: string; type?: string; conformance?: string }[]): Fields {

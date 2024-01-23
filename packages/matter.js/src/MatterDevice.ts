@@ -10,6 +10,7 @@
  * @deprecated
  */
 
+import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
@@ -32,7 +33,6 @@ import { Diagnostic } from "./log/Diagnostic.js";
 import { Logger } from "./log/Logger.js";
 import { NetInterface, isNetworkInterface } from "./net/NetInterface.js";
 import { NetworkError } from "./net/Network.js";
-import { CommissioningOptions } from "./node/options/CommissioningOptions.js";
 import { ChannelManager } from "./protocol/ChannelManager.js";
 import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
@@ -104,10 +104,26 @@ export class MatterDevice {
         return this;
     }
 
-    addTransportInterface(netInterface: TransportInterface) {
-        this.exchangeManager.addTransportInterface(netInterface);
-        this.transportInterfaces.push(netInterface);
+    async deleteBroadcaster(broadcaster: InstanceBroadcaster) {
+        const pos = this.broadcasters.findIndex(b => b === broadcaster);
+        if (pos !== -1) {
+            this.broadcasters.splice(pos, 1);
+            await broadcaster.expireAllAnnouncements();
+        }
+    }
+
+    addTransportInterface(transport: TransportInterface) {
+        this.exchangeManager.addTransportInterface(transport);
+        this.transportInterfaces.push(transport);
         return this;
+    }
+
+    async deleteTransportInterface(transport: TransportInterface) {
+        const pos = this.transportInterfaces.findIndex(t => t === transport);
+        if (pos !== -1) {
+            this.transportInterfaces.splice(pos, 1);
+            await transport.close();
+        }
     }
 
     hasProtocolHandler(protocolId: number) {

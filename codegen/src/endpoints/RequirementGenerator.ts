@@ -81,8 +81,8 @@ export class RequirementGenerator {
 
     generate() {
         if (this.#mandatoryParts) {
-            this.file.addImport("behavior/definitions/parts/PartsBehavior.js", "PartsBehavior");
-            this.file.addImport("behavior/definitions/index/IndexBehavior.js", "IndexBehavior");
+            this.file.addImport("behavior/system/parts/PartsBehavior.js", "PartsBehavior");
+            this.file.addImport("behavior/system/index/IndexBehavior.js", "IndexBehavior");
             this.mandatoryBlock.atom("Parts", "PartsBehavior");
             this.mandatoryBlock.atom("Index", "IndexBehavior");
         }

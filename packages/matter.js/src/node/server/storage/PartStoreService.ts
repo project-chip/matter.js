@@ -6,7 +6,6 @@
 
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
-import type { NodeServer } from "../NodeServer.js";
 import { ServerPartStore } from "./ServerPartStore.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";

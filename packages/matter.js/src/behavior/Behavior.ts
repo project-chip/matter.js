@@ -14,12 +14,12 @@ import { MaybePromise } from "../util/Promises.js";
 import { Reactor } from "./Reactor.js";
 import type { BehaviorBacking } from "./internal/BehaviorBacking.js";
 import { DerivedState, EmptyState } from "./state/StateType.js";
+import { Resource } from "./state/transaction/Resource.js";
 import { BehaviorSupervisor } from "./supervision/BehaviorSupervisor.js";
 import { RootSupervisor } from "./supervision/RootSupervisor.js";
 import { Schema } from "./supervision/Schema.js";
 
-// We store state and events using this symbol because TS prevents us from defining the corresponding getters as part of
-// the class
+// Internal fields
 const BACKING = Symbol("endpoint-owner");
 const STATE = Symbol("state");
 const INTERNAL = Symbol("internal");
@@ -173,7 +173,7 @@ export abstract class Behavior {
     /**
      * Implementation of internal state.  Subclasses may override to extend.
      */
-    static InternalState = EmptyState;
+    static Internal = EmptyState;
 
     /**
      * Implementation of the events property.  Subclasses may override to extend.
@@ -192,9 +192,6 @@ export abstract class Behavior {
     /**
      * Release resources.  This is the public API for releasing application resources held by behaviors in internal
      * state.
-     * 
-     * We use the somewhat cryptic {@link Symbol.asyncDispose} because "destroy" would be a conflict if Matter ever
-     * adds a command called "destroy".
      */
     [Symbol.asyncDispose](): MaybePromise {}
 
@@ -208,10 +205,10 @@ export abstract class Behavior {
     /**
      * Install a {@link Reactor}.
      */
-    protected reactTo<This, T extends any[], R>(
+    protected reactTo<This, O extends Observable<any[], any>>(
         this: This,
-        observable: Observable<T, R>,
-        reactor: Reactor<T, R>,
+        observable: O,
+        reactor: Reactor<Parameters<O["emit"]>, ReturnType<O["emit"]>>,
         options?: Reactor.Options
     ) {
         (this as Internal)[BACKING].reactTo(observable, reactor, options);
@@ -247,6 +244,10 @@ export abstract class Behavior {
                 }),
             },
         }) as unknown as This;
+    }
+
+    get [Resource.reference]() {
+        return (this as unknown as Internal)[BACKING].datasource;
     }
 }
 
@@ -305,7 +306,7 @@ export namespace Behavior {
         readonly versioning: boolean;
         readonly supervisor: RootSupervisor;
         readonly State: new () => {};
-        readonly InternalState: new () => {};
+        readonly Internal: new () => {};
         readonly Events: typeof EventEmitter;
     }
 
@@ -326,6 +327,11 @@ export namespace Behavior {
      * Input variant of StateOf.
      */
     export type InputStateOf<B extends Type> = Partial<ClusterType.RelaxTypes<StateOf<B>>>;
+
+    /**
+     * The events type of a behavior {@link Type}.
+     */
+    export type EventsOf<B extends Type> = InstanceType<B["Events"]>;
 
     /**
      * Initialization options.

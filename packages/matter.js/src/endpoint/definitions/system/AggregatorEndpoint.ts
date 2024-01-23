@@ -6,8 +6,8 @@
 
 /*** THIS FILE IS GENERATED, DO NOT EDIT ***/
 
-import { PartsBehavior } from "../../../behavior/definitions/parts/PartsBehavior.js";
-import { IndexBehavior } from "../../../behavior/definitions/index/IndexBehavior.js";
+import { PartsBehavior } from "../../../behavior/system/parts/PartsBehavior.js";
+import { IndexBehavior } from "../../../behavior/system/index/IndexBehavior.js";
 import { ActionsServer as BaseActionsServer } from "../../../behavior/definitions/actions/ActionsServer.js";
 import { MutableEndpoint } from "../../type/MutableEndpoint.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";

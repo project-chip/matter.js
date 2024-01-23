@@ -50,19 +50,31 @@ export namespace My {
         features: {
             awesome: BitFlag(0),
         },
+
+        // Note -- not a good way to test it automatically but including comments inline below so we can manually
+        // confirm that types are homomorphic and thus convey comments and code location
     
         attributes: {
+            /** This attribute is required */
             reqAttr: Attribute(1, TlvString, { default: "hello" }),
+
+            /** This attribute is optional */
             optAttr: OptionalAttribute(2, TlvBoolean, { default: true }),
         },
     
         commands: {
+            /** This command is required */
             reqCmd: Command(5, TlvString, 5, TlvString),
+
+            /** This command is optional */
             optCmd: OptionalCommand(6, TlvBoolean, 6, TlvBoolean),
         },
     
         events: {
+            /** This event is required */
             reqEv: Event(7, EventPriority.Critical, TlvString),
+
+            /** This event is optional */
             optEv: OptionalEvent(8, EventPriority.Debug, TlvString),
         },
 

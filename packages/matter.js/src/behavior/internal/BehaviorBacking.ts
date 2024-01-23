@@ -14,6 +14,7 @@ import { EventEmitter, Observable } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
+import { ActionContext } from "../context/ActionContext.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Reactors } from "./Reactors.js";
 
@@ -54,22 +55,17 @@ export abstract class BehaviorBacking {
      * Called by Behaviors class once the backing is installed.
      */
     initialize(agent: Agent) {
-        this.#initialize(agent);
-    }
+        return MaybePromise.then(
+            () => this.construction.start(() => {
+                // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+                // will throw if the behavior isn't initialized
+                const behavior = this.createBehavior(agent, this.#type);
 
-    /**
-     * Reset state to uninstalled (and thus uninitialized).
-     */
-    reset(agent: Agent) {
-        this.#initialize(
-            agent,
-            () => MaybePromise.then(
-                () => this.#invokeDestroy(agent),
-                () => {
-                    this.construction.setStatus(LifecycleStatus.Inactive)
-                    this.resetState(agent);
-                }
-            )
+                // Perform actual initialization
+                return this.invokeInitializer(behavior, this.#options);
+            }),
+            undefined,
+            e => logger.error(e),
         );
     }
 
@@ -101,7 +97,7 @@ export abstract class BehaviorBacking {
      * 
      * This is an optional extension point for derivatives.
      */
-    protected resetState(_agent: Agent) {}
+    factoryReset(_context: ActionContext): MaybePromise {}
 
     /**
      * The {@link Part} that owns the behavior.
@@ -166,7 +162,7 @@ export abstract class BehaviorBacking {
      */
     getInternal() {
         if (!this.#internal) {
-            this.#internal = new this.#type.InternalState();
+            this.#internal = new this.#type.Internal();
         }
 
         return this.#internal;
@@ -199,43 +195,15 @@ export abstract class BehaviorBacking {
     /**
      * Install a reactor.
      */
-    reactTo<T extends any[], R>(
-        observable: Observable<T, R>,
-        reactor: Reactor<T, R>,
+    reactTo<O extends Observable<any[], any>>(
+        observable: O,
+        reactor: Reactor<Parameters<O["emit"]>, ReturnType<O["emit"]>>,
         options?: Reactor.Options,
     ) {
         if (!this.#reactors) {
             this.#reactors = new Reactors(this);
         }
         this.#reactors.add(observable, reactor, options);
-    }
-
-    /**
-     * Internal initialization logic.  Broken out from {@link initialize} for the convenience of moving
-     * de-initialization logic into {@link AsyncConstruction} during factory reset.
-     * 
-     * @param before used for factory reset to revert the backing's state
-     */
-    #initialize(agent: Agent, before?: () => MaybePromise) {
-        const init = () => {
-            // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
-            // will throw if the behavior isn't initialized
-            const behavior = this.createBehavior(agent, this.#type);
-
-            // Perform actual initialization
-            return this.invokeInitializer(behavior, this.#options);
-        };
-
-        MaybePromise.then(
-            () => this.construction.start(() => {
-                if (before) {
-                    return MaybePromise.then(before, init);
-                }
-                return init();
-            }),
-            undefined,
-            e => logger.error(e),
-        );
     }
 
     /**
@@ -247,9 +215,9 @@ export abstract class BehaviorBacking {
                 break;
 
             case LifecycleStatus.Initializing:
-                // If the behavior is still initializing it's probably stuck.  Throwing isn't a solution but definitely
+                // If the behavior is still initializing its probably stuck.  Throwing isn't a solution but probably
                 // better than destroying while still initializing
-                throw new InternalError(`Behavior ${this} reset while still initializing`);
+                throw new InternalError(`Behavior ${this} destroyed while still initializing`);
 
             case LifecycleStatus.Destroyed:
                 // Destroyed state is permanent; we can't recover

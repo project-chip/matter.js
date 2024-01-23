@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../../../../src/behavior/server/context/ActionContext.js";
+import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { Val } from "../../../../../src/behavior/state/managed/Val.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
@@ -72,7 +72,7 @@ describe("StructManager", () => {
             await cx.transaction.commit();
 
             expect(struct.notifies).deep.equal([
-                { index: "foo", oldValue: { foo: "bar" }, newValue: { foo: "rab" } }
+                { index: "substruct", oldValue: { foo: "bar" }, newValue: { foo: "rab" } }
             ]);
         });
     });

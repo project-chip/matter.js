@@ -10,17 +10,16 @@ import { Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { AccessControl } from "../../../AccessControl.js";
-import { SchemaImplementationError } from "../../../errors.js";
+import { PhantomReferenceError, SchemaImplementationError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import type { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { ManagedReference } from "../ManagedReference.js";
 import { Val } from "../Val.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
+import { InternalCollection, REF } from "./internals.js";
 
-const REF = Symbol("value");
 const SESSION = Symbol("options");
-const LOCATION = Symbol("location");
 const AUTHORIZE_READ = Symbol("authorize-read");
 
 /**
@@ -37,7 +36,7 @@ export function StructManager(
 
     // Scan the schema and configure each member (field or attribute) as a property
     for (const member of schema.members) {
-        if (member.isGlobalAttribute) {
+        if (member.isGlobalAttribute || member.deprecated) {
             continue;
         }
 
@@ -63,28 +62,24 @@ export function StructManager(
             this: Wrapper,
             ref: Val.Reference,
             session: ValueSupervisor.Session,
-            location: AccessControl.Location,
         ) {
             // Only objects are acceptable
             if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
-                throw new SchemaImplementationError(location, `Cannot manage ${typeof ref.value} because it is not a struct`);
+                throw new SchemaImplementationError(ref.location, `Cannot manage ${typeof ref.value} because it is not a struct`);
             }
 
             // If we have a fabric index, update the context
             if (hasFabricIndex) {
                 const owningFabric = (ref as Val.Reference<Val.Struct>).value.fabricIndex as FabricIndex | undefined;
-                location = { ...location, owningFabric };
+                ref.location = { ...ref.location, owningFabric };
             }
-if (location === undefined) { debugger }
+
             Object.defineProperties(this, {
                 [REF]: {
                     value: ref as Val.Reference<Val.Struct>,
                 },
                 [SESSION]: {
                     value: session,
-                },
-                [LOCATION]: {
-                    value: location,
                 },
             });
 
@@ -104,14 +99,14 @@ if (location === undefined) { debugger }
                         throw new ImplementationError(`Direct read of unknown property ${index}`);
                     }
 
-                    access.authorizeRead(this[SESSION], this[LOCATION]);
+                    access.authorizeRead(this[SESSION], this[REF].location);
                 },
             },
         },
-    }) as new (value: Val, session: AccessControl.Session, location: AccessControl.Location) => Val.Struct;
+    }) as new (value: Val, session: AccessControl.Session) => Val.Struct;
 
-    return (reference, session, location) => {
-        reference.owner = new Wrapper(reference, session, location);
+    return (reference, session) => {
+        reference.owner = new Wrapper(reference, session);
         return reference.owner;
     };
 }
@@ -133,9 +128,9 @@ export namespace StructManager {
     }
 }
 
-interface Wrapper extends Val.Struct {
+interface Wrapper extends Val.Struct, InternalCollection {
     /**
-     * A reference to the proxied value.
+     * A reference to the raw value.
      */
     [REF]: Val.Reference<Val.Struct>;
 
@@ -143,11 +138,6 @@ interface Wrapper extends Val.Struct {
      * Information regarding the current user session.
      */
     [SESSION]: ValueSupervisor.Session;
-
-    /**
-     * Information about the location of the wrapped value.
-     */
-    [LOCATION]: AccessControl.Location;
 
     /**
      * Direct read authorization.
@@ -166,7 +156,7 @@ function configureProperty(
         enumerable: true,
 
         set(this: Wrapper, value: Val) {
-            access.authorizeWrite(this[SESSION], this[LOCATION]);
+            access.authorizeWrite(this[SESSION], this[REF].location);
 
             const oldValue = this[REF].value[name];
 
@@ -186,6 +176,11 @@ function configureProperty(
                     target = struct;
                 }
 
+                // Unwrap if incoming value is managed
+                if (value && (value as InternalCollection)[REF]) {
+                    value = (value as InternalCollection)[REF];
+                }
+
                 // Modify the value
                 target[name] = value;
 
@@ -197,8 +192,7 @@ function configureProperty(
                 // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
                 // validation step that is performed on commit when choice conformance is in play.
                 try {
-                    if (this[LOCATION] === undefined) debugger;
-                    validate(value, this[SESSION], { path: this[LOCATION].path, siblings: struct });
+                    validate(value, this[SESSION], { path: this[REF].location.path, siblings: struct });
                 } catch (e) {
                     // Undo our change on error.  Rollback will take care of this when transactional but this handles
                     // the cases of 1.) no transaction, and 2.) error is caught within transaction
@@ -213,8 +207,11 @@ function configureProperty(
     if (manage === PrimitiveManager) {
         // For primitives we don't need a manager so just proxy reads directly
         descriptor.get = function (this: Wrapper) {
-            if (access.mayRead(this[SESSION], this[LOCATION])) {
+            if (access.mayRead(this[SESSION], this[REF].location)) {
                 const struct = this[REF].value as Val.Dynamic;
+                if (struct === undefined) {
+                    throw new PhantomReferenceError(this[REF].location);
+                }
                 if (struct[Val.properties]) {
                     const properties = (struct as Val.Dynamic)[Val.properties](this[SESSION]);
                     if (name in properties) {
@@ -257,7 +254,7 @@ function configureProperty(
             // Note that we only mask values that are unreadable.  This is appropriate when the parent object is
             // visible.  For direct access to a property we should throw an error but that must be implemented at a
             // higher level because we cannot differentiate here
-            if (!access.mayRead(this[SESSION], this[LOCATION])) {
+            if (!access.mayRead(this[SESSION], this[REF].location)) {
                 return undefined;
             }
 
@@ -265,16 +262,16 @@ function configureProperty(
                 return value;
             }
 
-            let managed = this[REF].subreferences?.[name];
+            let managed = this[REF].subrefs?.[name];
             if (managed) {
                 return managed.owner;
             }
 
             const assertWriteOk = (value: Val) => {
                 // Note - this needs to mirror behavior in the setter above
-                access.authorizeWrite(this[SESSION], this[LOCATION]);
+                access.authorizeWrite(this[SESSION], this[REF].location);
                 validate(value, this[SESSION], {
-                    path: this[LOCATION].path, 
+                    path: this[REF].location.path, 
                     siblings: this[REF].value
                 });
             };
@@ -288,7 +285,7 @@ function configureProperty(
                 cloneContainer,
             );
 
-            ref.owner = manage(ref, this[SESSION], this[LOCATION]);
+            ref.owner = manage(ref, this[SESSION]);
 
             return ref.owner;
         };

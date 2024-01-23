@@ -116,7 +116,7 @@ export namespace AccessControl {
         cluster?: ClusterId;
 
         /**
-         * The fabric that owns the data subtree.  Undefined or {@link FabricIndex.NO_FABRIC} disable fabric
+         * The fabric that owns the data subtree.  Undefined or {@link FabricIndex.NO_FABRIC} disables fabric
          * enforcement.
          */
         owningFabric?: FabricIndex;

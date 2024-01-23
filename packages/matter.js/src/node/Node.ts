@@ -4,74 +4,125 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Agent } from "../endpoint/Agent.js";
-import type { Part } from "../endpoint/Part.js";
-import type { PartOwner } from "../endpoint/part/PartOwner.js";
-import type { Diagnostic } from "../log/Diagnostic.js";
-import type { AsyncConstruction } from "../util/AsyncConstruction.js";
-import type { Host } from "./Host.js";
+import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
+import { NetworkBehavior } from "../behavior/system/networking/NetworkBehavior.js";
+import { UnsupportedDependencyError } from "../common/Lifecycle.js";
+import { ImplementationError } from "../common/MatterError.js";
+import { Part } from "../endpoint/Part.js";
+import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
+import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
+import { EndpointType } from "../endpoint/type/EndpointType.js";
+import { Environment } from "../environment/Environment.js";
+import { RuntimeService } from "../environment/RuntimeService.js";
+import { NodeLifecycle } from "./NodeLifecycle.js";
 
 /**
- * A "node" is a top-level resource that is addressable directly on a network.
- *
- * NodeInterface offers interaction with a node.
+ * A Matter Node.
+ * 
+ * In Matter, a "node" is an individually addressable top-level network resource.
  */
-export interface Node extends PartOwner {
-    /**
-     * Access the root {@link Part}.
-     *
-     * This is a lower-level API than the {@link Agent} API available with {@link root}.
-     */
-    readonly root: Part;
+export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
+    #environment: Environment;
+
+    constructor(config: Node.Configuration<T> | T);
+
+    constructor(type: T, options: Node.Options<T>);
+
+    constructor(definition: T | Part.Configuration<T>, options?: Node.Options<T>) {
+        let type: T;
+        if (Part.isConfiguration(definition)) {
+            type = definition.type as T;
+            options = { ...definition } as Node.Options<T>;
+        } else {
+            type = definition as T;
+            options = { ...options } as Node.Options<T>;
+        }
+
+        const parentEnvironment = options.environment ?? Environment.default;
+
+        if (options.id === undefined) {
+            options.id = `node${parentEnvironment.vars.increment("node.nextFallbackId")}`;
+        }
+
+        super(type, options as unknown as Part.Options<T>);
+
+        // We create a local environment so nodes can offer node-specific services via the environment
+        this.#environment = new Environment(options.id, parentEnvironment);
+
+        if (this.lifecycle.hasNumber) {
+            if (this.number !== 0) {
+                throw new ImplementationError("The root endpoint ID must be 0");
+            }
+        } else {
+            this.number = 0;
+        }
+
+        // We don't really get "installed" as we are the root part.  This informs the part it is ready for full
+        // initialization
+        this.lifecycle.change(PartLifecycle.Change.Installed);
+    }
+
+    override get env() {
+        return this.#environment;
+    }
 
     /**
-     * Provide diagnostic information.
+     * Lifecycle information.
      */
-    readonly [Diagnostic.value]: unknown;
+    override createLifecycle(): NodeLifecycle {
+        return new NodeLifecycle(this);
+    }
 
     /**
-     * Node initialization status.
-     */
-    readonly construction: AsyncConstruction<Node>;
-
-    /**
-     * Bring the node online.
-     */
-    start(): Promise<void>;
-
-    /**
-     * Terminate and release resources.
-     */
-    [Symbol.asyncDispose](): Promise<void>;
-
-    /**
-     * Set the installed host for the node.
+     * Run the node in standalone mode.
      * 
-     * TODO - Remove after further refactoring
+     * If you are implementing a single node this is the most convenient way to bring it online.
      */
-    set host(host: Host);
+    async run() {
+        const runtime = this.env.get(RuntimeService);
 
-    // The batch interface that follows would be an efficiency win but most features are marked as provisional as of
-    // Matter 1.2 implying they are not well supported, so deprioritizing implementation.
-
-    /**
-     * Batch invocation.  This optimization allows you to invoke multiple requests in one network payload.
-     */
-    //invoke(action: InvokeRequestAction): Promise<InvokeResponseAction>;
-
-    /**
-     * Batch read.  This optimization allows you to read data for multiple attributes and/or events with a single
-     * network request.
-     */
-    //read(action: ReadRequestAction): Promise<ReportDataAction>;
+        try {
+            runtime.add(this);
+            await runtime.run();
+        } finally {
+            runtime.delete(this);
+        }
+    }
 
     /**
-     * Batch write.  This optimization allows you to change multiple attributes with a single network request.
+     * Start the node.
+     * 
+     * Typically invoked by {@link RuntimeService}.
      */
-    //write(action: WriteRequestAction): Promise<WriteResponseAction>;
+    async [RuntimeService.start]() {
+        if (!this.behaviors.has(NetworkBehavior)) {
+            throw new UnsupportedDependencyError(this.toString(), "Cannot run because NetworkBehavior is unsupported");
+        }
 
-    /**
-     * Batch subscribe.  This optimization allows you to subscribe to multiple events with a single network request.
-     */
-    //subscribe(action: SubscribeRequestAction): Promise<SubscribeResponseAction>;
+        OfflineContext.act("node-startup", context => {
+            const agent = context.agentFor(this);
+            agent.get(NetworkBehavior).start();
+        });
+
+        return this.lifecycle.activity;
+    }
+
+    override get lifecycle(): NodeLifecycle {
+        // We only have to override the lifecycle getter so 
+        return super.lifecycle as NodeLifecycle;
+    }
+}
+
+export namespace Node {
+    export type Configuration<T extends EndpointType> =
+        & { environment?: Environment }
+        & {
+            [K in keyof Part.Configuration<T>]: K extends "environment" ? Environment : Part.Configuration<T>[K]
+        };
+
+    export type Options<T extends EndpointType> =
+        & { environment?: Environment }
+        & {
+            [K in keyof Part.Options<T>]?: K extends "environment" ? Environment : Part.Options<T>[K]
+        };
 }

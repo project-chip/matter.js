@@ -9,7 +9,7 @@ import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { MaybePromise, createPromise } from "../../../util/Promises.js";
 import { describeList } from "../../../util/String.js";
-import { FinalizationError, TransactionFlowError } from "./Errors.js";
+import { FinalizationError, TransactionDestroyedError, TransactionFlowError } from "./Errors.js";
 import type { Participant } from "./Participant.js";
 import type { Resource } from "./Resource.js";
 import { ResourceSet } from "./ResourceSet.js";
@@ -18,15 +18,16 @@ import { Transaction } from "./Transaction.js";
 
 const logger = Logger.get("Transaction");
 
+/**
+ * This is the only public interface to this file.
+ */
 export function executeTransaction<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
     const tx = new Tx(via);
 
     let committed = false;
     return MaybePromise.finally(
         () => MaybePromise.then(
-            () => {
-                actor(tx);
-            },
+            () => actor(tx),
 
             result => {
                 committed = true;
@@ -38,28 +39,31 @@ export function executeTransaction<T>(via: string, actor: (transaction: Transact
             },
 
             error => {
-                // If we've committed, error happened during commit and we've already logged cleaned up
+                // If we've committed, error happened during commit and we've already logged and cleaned up
                 if (committed) {
                     throw error;
                 }
 
-                // If we haven't committed, error is in the actor
-                return MaybePromise.then(
-                    (): T => {
-                        logger.warn("Transaction", tx.via, ": Rolling back due to error");
-                        tx.rollback();
+                let promise = MaybePromise.then(
+                    () => {
+                        logger.warn("Rolling back", tx.via, "due to error:", error);
+                        return tx.rollback();
+                    },
+                    undefined,
+                    error2 => {
+                        logger.error("Secondary error in", tx.via, "rollback:", error2);
+                    }
+                )
+
+                promise = MaybePromise.finally(
+                    promise,
+                    () => {
                         tx.destroy();
                         throw error;
-                    },
-
-                    undefined,
-
-                    (error2): T => {
-                        logger.error("Transaction", tx.via, ": Error-induced rolled back caused additional error:", error2);
-                        tx.destroy();                    
-                        throw error;
-                    },
+                    }
                 )
+
+                return promise as MaybePromise<T>;
             },
         ),
 
@@ -81,6 +85,8 @@ class Tx implements Transaction {
     #resolve?: () => void;
     #waitingOn?: Iterable<Transaction>;
     #via: string;
+    #destroyed?: Promise<void>;
+    #resolveDestroyed?: () => void;
 
     constructor(via: string, readonly = false) {
         this.#via = Diagnostic.via(via);
@@ -97,6 +103,7 @@ class Tx implements Transaction {
         this.#resources.clear();
         this.#roles.clear();
         this.#participants.clear();
+        this.#resolveDestroyed?.();
     }
 
     get via() {
@@ -126,6 +133,16 @@ class Tx implements Transaction {
             this.#resolve = resolver;
         }
         return this.#promise;
+    }
+
+    get destroyed() {
+        if (this.status === Status.Destroyed) {
+            return Promise.resolve();
+        }
+        if (this.#destroyed === undefined) {
+            this.#destroyed = new Promise(resolve => this.#resolveDestroyed = resolve);
+        }
+        return this.#destroyed;
     }
 
     async addResources(...resources: Resource[]) {
@@ -272,7 +289,7 @@ class Tx implements Transaction {
             // Release locks
             const set = new ResourceSet(this, this.#resources);
             const unlocked = set.releaseLocks();
-            this.#locksChanged(unlocked, `${why}; released`);
+            this.#locksChanged(unlocked, `${why}; unlocked`);
 
             // Release participants
             this.#participants.clear();
@@ -288,29 +305,20 @@ class Tx implements Transaction {
         }
 
         // Perform the commit or rollback
-        let promise: MaybePromise = undefined;
-        try {
-            this.#status = status;
-            promise = finalizer();
-            if (MaybePromise.is(promise)) {
-                promise = promise.finally(cleanup);
-            }
-        } finally {
-            if (!promise) {
-                cleanup();
-            }
-        }
-
-        // If synchronous we're done, if async this promise resolves at
-        // completion
-        return promise;
+        return MaybePromise.finally(
+            () => {
+                this.#status = status;
+                return finalizer();
+            },
+            () => cleanup()
+        );
     }
 
     /**
      * Commit logic passed to #finish.
      */
     #executeCommit(): MaybePromise {
-        this.#log("commit");
+        //this.#log("commit");
         const result = this.#executeCommit1();
         if (MaybePromise.is(result)) {
             return result.then(() => this.#executeCommit2());
@@ -322,7 +330,6 @@ class Tx implements Transaction {
         // Commit phase 1
         const phase1Error = (participant: Participant, error: any) => {
             logger.error(`Error committing ${participant} (phase one), rolling back:`, error);
-            this.#status = Status.RollingBack;
             return MaybePromise.then(this.#executeRollback(), () => {
                 throw new FinalizationError(
                     `Transaction rolled back due to unhandled error in commit (phase one) participant ${participant}`,
@@ -334,7 +341,7 @@ class Tx implements Transaction {
         // sync/async wrapper that acts like a promise
         const participantIterator = this.participants[Symbol.iterator]();
 
-        function commitNextParticipant() {
+        function commitNextParticipant(): MaybePromise {
             const next = participantIterator.next();
 
             if (next.done) {
@@ -343,18 +350,11 @@ class Tx implements Transaction {
 
             const participant = next.value;
 
-            try {
-                const promise = participant.commit1();
-                if (MaybePromise.is(promise)) {
-                    return promise
-                        .then(() => { commitNextParticipant() })
-                        .catch(e => phase1Error(participant, e));
-                } else {
-                    commitNextParticipant();
-                }
-            } catch (e) {
-                return phase1Error(participant, e);
-            }
+            return MaybePromise.then(
+                () => participant.commit1(),
+                () => commitNextParticipant(),
+                error => phase1Error(participant, error),
+            );
         }
 
         return commitNextParticipant();
@@ -364,7 +364,7 @@ class Tx implements Transaction {
         // Commit phase 2
         const phase2Error = (participant: Participant, error: any) => {
             logger.error(
-                `Error committing (phase two) ${participant}, state may become inconsistent:`,
+                `Error committing (phase two) ${participant}, state inconsistency possible:`,
                 error,
             );
 
@@ -379,24 +379,24 @@ class Tx implements Transaction {
         let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
         for (const participant of this.participants) {
-            try {
-                let promise = participant.commit2();
-                if (MaybePromise.is(promise)) {
-                    promise = promise.catch(e => phase2Error(participant, e));
-                    if (ongoing) {
-                        ongoing.push(promise);
-                    } else {
-                        ongoing = [ promise ];
-                    }
+            const promise = MaybePromise.then(
+                () => participant.commit2(),
+                undefined,
+                error => phase2Error(participant, error),
+            )
+
+            if (MaybePromise.is(promise)) {
+                if (ongoing) {
+                    ongoing.push(promise as Promise<void>);
+                } else {
+                    ongoing = [ promise as Promise<void> ];
                 }
-            } catch (e) {
-                return phase2Error(participant, e);
             }
         }
 
         if (ongoing) {
             // Async commit
-            return Promise.all(ongoing).then(() => throwIfErrored(errored, "in commit phase 2"));
+            return Promise.allSettled(ongoing).then(() => throwIfErrored(errored, "in commit phase 2"));
         } else {
             // Synchronous commit
             throwIfErrored(errored, "in commit phase 2");
@@ -407,34 +407,48 @@ class Tx implements Transaction {
      * Rollback logic passed to #finish.
      */
     #executeRollback() {
-        this.#log("rollback");
+        //this.#log("rollback");
+        this.#status = Status.RollingBack;
         let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
+
         for (const participant of this.participants) {
-            try {
-                let promise = participant.rollback();
-                if (MaybePromise.is(promise)) {
-                    promise = promise.catch(e => error(participant, e));
-                    if (ongoing) {
-                        ongoing.push(promise);
+            // Perform rollback
+            const promise = MaybePromise.then(
+                () => participant.rollback(),
+                undefined,
+                error => {
+                    logger.error(`Error rolling back ${participant}, state inconsistency possible:`, error);
+
+                    if (errored) {
+                        errored.push(participant);
                     } else {
-                        ongoing = [ promise ];
+                        errored = [ participant ];
                     }
+                },
+            );
+
+            // If commit is asynchronous, collect the promise
+            if (MaybePromise.is(promise)) {
+                if (ongoing) {
+                    ongoing.push(promise as Promise<void>);
+                } else {
+                    ongoing = [ promise as Promise<void> ];
                 }
-            } catch (e) {
-                error(participant, e);
             }
         }
-        throwIfErrored(errored, "rolling back");
 
-        function error(participant: Participant, error: any) {
-            logger.error(`Error rolling back ${participant}, state may become inconsistent:`, error);
+        const finished = () => {
+            this.#status = Status.Shared;
+            throwIfErrored(errored, "in commit phase 2");
+        }
 
-            if (errored) {
-                errored.push(participant);
-            } else {
-                errored = [ participant ];
-            }
+        if (ongoing) {
+            // Async commit
+            return Promise.allSettled(ongoing).then(finished);
+        } else {
+            // Synchronous commit
+            finished();
         }
     }
 
@@ -442,15 +456,14 @@ class Tx implements Transaction {
         logger.debug("Transaction", this.#via, message);
     }
 
-    #locksChanged(resources: Set<Resource>, how = "acquired") {
+    #locksChanged(resources: Set<Resource>, how = "locked") {
         if (!resources.size) {
             return;
         }
 
         this.#log(
             how,
-            `write lock${resources.size > 1 ? "s" : ""} for`,
-            describeList("and", ...[...resources].map(r => r.toString()))
+            Diagnostic.strong(describeList("and", ...[...resources].map(r => r.toString())))
         );
     }
 
@@ -459,9 +472,9 @@ class Tx implements Transaction {
             logger.warn(
                 "You have accessed transaction",
                 this.via,
-                "outside of the context in which it was active.  You must open a new context for this operation"
+                "outside of the context in which it was active.  Open a new context or ensure your operation completes before the context exits",
             );
-            throw new TransactionFlowError(`Transaction ${this.#via} is destroyed`);
+            throw new TransactionDestroyedError(`Transaction ${this.#via} is destroyed`);
         }
         if (this.#status === Status.ReadOnly) {
             throw new ReadOnlyError();
@@ -477,6 +490,6 @@ function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
     }
     const suffix = errored.length > 1 ? "s" : "";
     throw new FinalizationError(
-        `Unhandled error${suffix} ${when} participant${suffix}${describeList("and", ...errored.map(p => p.toString()))}`,
+        `Unhandled error${suffix} ${when} participant${suffix} ${describeList("and", ...errored.map(p => p.toString()))}`,
     );
 }
