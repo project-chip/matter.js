@@ -223,6 +223,11 @@ class AdministratorCommissioningManager {
         }
         logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
+
+        const device = session.getContext();
+        if (device.isFailsafeArmed()) {
+            await device.getFailSafeContext().expire();
+        }
     }
 
     /** Cleanup resources and stop the timer when the ClusterServer is destroyed. */
