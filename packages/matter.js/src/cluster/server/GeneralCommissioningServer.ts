@@ -157,6 +157,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
             },
         );
 
+        if (session.isPase()) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
+                debugText: "Command not executed over CASE session.",
+            };
+        }
+
         const device = session.getContext();
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
