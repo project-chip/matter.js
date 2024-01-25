@@ -88,10 +88,10 @@ export class Aggregator extends Endpoint {
         device: Device | ComposedDevice,
         bridgedBasicInformation?: AttributeInitialValues<typeof BridgedDeviceBasicInformationCluster.attributes>,
     ): void {
-        // Add DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION device type to the device exposed via Aggregator
+        // Add DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO device type to the device exposed via Aggregator
         const deviceTypes = device.getDeviceTypes();
-        if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION)) {
-            deviceTypes.push(DeviceTypes.BRIDGED_DEVICE_WITH_POWER_SOURCE_INFORMATION);
+        if (!deviceTypes.includes(DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO)) {
+            deviceTypes.push(DeviceTypes.BRIDGED_DEVICE_WITH_POWERSOURCE_INFO);
             device.setDeviceTypes(deviceTypes);
         }
         if (bridgedBasicInformation !== undefined) {
