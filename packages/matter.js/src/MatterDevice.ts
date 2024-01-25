@@ -288,9 +288,6 @@ export class MatterDevice {
         if (this.failSafeContext !== undefined) {
             this.failSafeContext.associatedFabric = fabric;
         }
-        if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
-            await this.endCommissioning();
-        }
         this.commissioningChangedCallback(fabric.fabricIndex);
         const fabrics = this.fabricManager.getFabrics();
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
