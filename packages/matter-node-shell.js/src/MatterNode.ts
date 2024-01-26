@@ -8,7 +8,7 @@
 import { CommissioningController, MatterServer } from "@project-chip/matter-node.js";
 
 import { NodeId } from "@project-chip/matter-node.js/datatype";
-import { Endpoint, PairedNode } from "@project-chip/matter-node.js/device";
+import { CommissioningControllerNodeOptions, Endpoint, PairedNode } from "@project-chip/matter-node.js/device";
 import { Logger } from "@project-chip/matter-node.js/log";
 import { StorageBackendDisk, StorageContext, StorageManager } from "@project-chip/matter-node.js/storage";
 import { requireMinNodeVersion } from "@project-chip/matter-node.js/util";
@@ -107,7 +107,7 @@ export class MatterNode {
         await this.matterController.start();
     }
 
-    async connectAndGetNodes(nodeIdStr?: string) {
+    async connectAndGetNodes(nodeIdStr?: string, connectOptions?: CommissioningControllerNodeOptions) {
         await this.start();
         const nodeId = nodeIdStr !== undefined ? NodeId(BigInt(nodeIdStr)) : undefined;
 
@@ -116,9 +116,9 @@ export class MatterNode {
         }
         let nodes: PairedNode[];
         if (nodeId === undefined) {
-            nodes = await this.commissioningController.connect();
+            nodes = await this.commissioningController.connect(connectOptions);
         } else {
-            nodes = [await this.commissioningController.connectNode(NodeId(nodeId))];
+            nodes = [await this.commissioningController.connectNode(NodeId(nodeId), connectOptions)];
         }
         return nodes;
     }
