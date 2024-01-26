@@ -80,7 +80,6 @@ runs:
              build
           "
         cp out/linux-x64-light/chip-lighting-app ../bin/
-        ./scripts/build/build_examples.py --target linux-x64-chip-tool build
         cp out/linux-x64-chip-tool/chip-tool ../bin/
       #          More options for later, but takes long to build
       #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
@@ -144,5 +143,7 @@ runs:
     - name: Patch test definitions
       shell: bash
       run: |
+        ls -la chip-testing/patched-test-files/*
         cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
+        ls -la connectedhomeip/src/app/tests/suites/*
       # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
