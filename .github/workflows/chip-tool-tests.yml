@@ -216,10 +216,14 @@ jobs:
       - name: Check out matter.js
         uses: actions/checkout@v4
 
+      - name: Install sudo
+        run: apt-get update && apt-get install -y sudo
+
       - name: Initialize chip tests
         uses: ./.github/actions/prepare-chip-testing
         with:
           rebuild-chip-tool: 'false'
+          build-python: 'true'
 
       - name: Run Tests
         run: |

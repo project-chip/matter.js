@@ -18,6 +18,10 @@ inputs:
     description: 'Also Build matter-js?'
     required: true
     default: "true"
+  build-python:
+    description: 'Also Build chip python?'
+    required: false
+    default: "false"
 
 runs:
   using: 'composite'
@@ -54,7 +58,8 @@ runs:
         scripts/checkout_submodules.py --shallow --platform linux
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
-    - name: Build python stuff
+    - if: ${{ inputs.build-python == 'true' }}
+      name: Build python framework
       id: build-python
       shell: bash
       run: |
@@ -139,5 +144,7 @@ runs:
     - name: Patch test definitions
       shell: bash
       run: |
+        ls -la 
+        ls -la chip-testing
         cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
       # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
