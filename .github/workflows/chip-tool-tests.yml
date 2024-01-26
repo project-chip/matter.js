@@ -200,6 +200,7 @@ jobs:
               --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
             '
   repl_tests_linux:
+    needs: [chip-tests-needed]
     name: REPL Tests - Linux
 
     env:
