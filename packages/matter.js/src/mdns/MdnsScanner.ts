@@ -195,6 +195,21 @@ export class MdnsScanner implements Scanner {
     private setQueryRecords(queryId: string, queries: DnsQuery[], answers: DnsRecord<any>[] = []) {
         const activeExistingQuery = this.activeAnnounceQueries.get(queryId);
         if (activeExistingQuery) {
+            const { queries: existingQueries } = activeExistingQuery;
+            const newQueries = queries.filter(
+                query =>
+                    !existingQueries.some(
+                        existingQuery =>
+                            existingQuery.name === query.name &&
+                            existingQuery.recordType === query.recordType &&
+                            existingQuery.recordClass === query.recordClass,
+                    ),
+            );
+            if (newQueries.length === 0) {
+                // All queries already sent out
+                logger.debug(`No new query records for query ${queryId}, keeping existing queries.`);
+                return;
+            }
             answers = [...activeExistingQuery.answers, ...answers];
         }
         this.activeAnnounceQueries.set(queryId, { queries, answers });

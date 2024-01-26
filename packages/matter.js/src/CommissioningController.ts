@@ -342,7 +342,7 @@ export class CommissioningController extends MatterNode {
      * Connects to all paired nodes.
      * After connection the endpoint data of the device is analyzed and an object structure is created.
      */
-    async connect() {
+    async connect(connectOptions?: CommissioningControllerNodeOptions) {
         const controller = this.assertControllerIsStarted();
 
         if (!controller.isCommissioned()) {
@@ -352,7 +352,7 @@ export class CommissioningController extends MatterNode {
         }
 
         for (const nodeId of controller.getCommissionedNodes()) {
-            await this.connectNode(nodeId);
+            await this.connectNode(nodeId, connectOptions);
         }
         return Array.from(this.connectedNodes.values());
     }

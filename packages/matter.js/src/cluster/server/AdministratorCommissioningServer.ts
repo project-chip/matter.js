@@ -6,6 +6,7 @@
 
 import { MatterDevice } from "../../MatterDevice.js";
 import { InternalError } from "../../common/MatterError.js";
+import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
 import { Logger } from "../../log/Logger.js";
@@ -13,7 +14,11 @@ import { StatusCode, StatusResponseError } from "../../protocol/interaction/Stat
 import { Session } from "../../session/Session.js";
 import { PaseServer } from "../../session/pase/PaseServer.js";
 import { Time, Timer } from "../../time/Time.js";
+import { TlvUInt16, TlvUInt32 } from "../../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../tlv/TlvObject.js";
+import { TlvByteString } from "../../tlv/TlvString.js";
 import { ByteArray } from "../../util/ByteArray.js";
+import { AccessLevel, Command, TlvNoResponse } from "../Cluster.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
@@ -22,6 +27,33 @@ const logger = Logger.get("AdministratorCommissioningServer");
 
 export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
 export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
+
+const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
+
+/**
+ * Monkey patching Tlv Structure of openCommissioningWindow command to prevent data validation of the fields to be
+ * handled as ConstraintError because we need to return a special error.
+ * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
+ */
+AdministratorCommissioning.Base.commands = {
+    ...AdministratorCommissioning.Cluster.commands,
+    openCommissioningWindow: Command(
+        0x0,
+        TlvObject({
+            commissioningTimeout: TlvField(0, TlvUInt16),
+            pakePasscodeVerifier: TlvField(1, TlvByteString),
+            discriminator: TlvField(2, TlvUInt16.bound({ max: 4095 })),
+            iterations: TlvField(3, TlvUInt32),
+            salt: TlvField(4, TlvByteString),
+        }),
+        0x0,
+        TlvNoResponse,
+        {
+            invokeAcl: AccessLevel.Administer,
+            timed: true,
+        },
+    ),
+};
 
 // General:
 // TODO If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments arise, this command SHALL fail with a cluster specific status code of PAKEParameterError.
@@ -105,6 +137,29 @@ class AdministratorCommissioningManager {
         commissioningTimeout: number,
         session: Session<MatterDevice>,
     ) {
+        // We monkey patched the Tlv definition above, so take care about correct error handling
+        if (pakeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
+            throw new StatusResponseError(
+                "PAKE Passcode verifier length is invalid.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+        if (iterations < 1000 || iterations > 100_000) {
+            throw new StatusResponseError(
+                "PAKE iterations invalid.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+        if (salt.length < 16 || salt.length > 32) {
+            throw new StatusResponseError(
+                "PAKE salt has invalid length.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+
         const device = session.getContext();
 
         this.assertCommissioningWindowRequirements(commissioningTimeout, device);
@@ -168,6 +223,11 @@ class AdministratorCommissioningManager {
         }
         logger.debug("Revoking commissioning window.");
         await this.closeCommissioningWindow(session);
+
+        const device = session.getContext();
+        if (device.isFailsafeArmed()) {
+            await device.getFailSafeContext().expire();
+        }
     }
 
     /** Cleanup resources and stop the timer when the ClusterServer is destroyed. */

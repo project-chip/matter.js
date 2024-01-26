@@ -469,7 +469,15 @@ export class MatterController {
             },
         );
 
-        await commissioningManager.executeCommissioning();
+        try {
+            await commissioningManager.executeCommissioning();
+        } catch (error) {
+            if (this.commissionedNodes.has(peerNodeId)) {
+                // We might have added data for an operational address that we need to cleanup
+                this.commissionedNodes.delete(peerNodeId);
+            }
+            throw error;
+        }
 
         this.controllerStorage.set("fabric", this.fabric.toStorageObject());
 
