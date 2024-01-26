@@ -39,7 +39,7 @@ import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { SecureSession } from "./session/SecureSession.js";
-import { Session } from "./session/Session.js";
+import { Session, SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
@@ -235,9 +235,7 @@ export class MatterDevice {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
     }) {
         const { fabric } = args;
         const session = await this.sessionManager.createSecureSession({

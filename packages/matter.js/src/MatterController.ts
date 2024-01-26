@@ -39,6 +39,7 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
+import { SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
@@ -377,9 +378,11 @@ export class MatterController {
 
         // Do PASE paring
         const unsecureSession = this.sessionManager.createUnsecureSession({
-            idleIntervalMs: device?.SII,
-            activeIntervalMs: device?.SAI,
-            activeThresholdMs: device?.SAT,
+            sessionParameters: {
+                idleIntervalMs: device?.SII,
+                activeIntervalMs: device?.SAI,
+                activeThresholdMs: device?.SAT,
+            },
             isInitiator: true,
         });
         const paseUnsecureMessageChannel = new MessageChannel(paseChannel, unsecureSession);
@@ -388,12 +391,7 @@ export class MatterController {
             SECURE_CHANNEL_PROTOCOL_ID,
         );
         const paseSecureSession = await tryCatchAsync(
-            async () =>
-                await this.paseClient.pair(this, paseExchange, passcode, {
-                    idleIntervalMs: device?.SII,
-                    activeIntervalMs: device?.SAI,
-                    activeThresholdMs: device?.SAT,
-                }),
+            async () => await this.paseClient.pair(this, paseExchange, passcode),
             Error,
             async error => {
                 // Close the exchange if the pairing fails and rethrow the error
@@ -631,10 +629,13 @@ export class MatterController {
         }
 
         const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
+        const { sessionParameters } = this.findResumptionRecordByNodeId(peerNodeId) ?? {};
         const unsecureSession = this.sessionManager.createUnsecureSession({
-            idleIntervalMs: discoveryData?.SII,
-            activeIntervalMs: discoveryData?.SAI,
-            activeThresholdMs: discoveryData?.SAT,
+            sessionParameters: {
+                idleIntervalMs: discoveryData?.SII ?? sessionParameters?.idleIntervalMs,
+                activeIntervalMs: discoveryData?.SAI ?? sessionParameters?.activeIntervalMs,
+                activeThresholdMs: discoveryData?.SAT ?? sessionParameters?.activeThresholdMs,
+            },
             isInitiator: true,
         });
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, unsecureSession);
@@ -645,12 +646,7 @@ export class MatterController {
                     SECURE_CHANNEL_PROTOCOL_ID,
                 );
                 return tryCatchAsync(
-                    async () =>
-                        await this.caseClient.pair(this, exchange, this.fabric, peerNodeId, {
-                            idleIntervalMs: discoveryData?.SII,
-                            activeIntervalMs: discoveryData?.SAI,
-                            activeThresholdMs: discoveryData?.SAT,
-                        }),
+                    async () => await this.caseClient.pair(this, exchange, this.fabric, peerNodeId),
                     Error,
                     async error => {
                         // Close the exchange if the pairing fails and rethrow the error
@@ -773,9 +769,7 @@ export class MatterController {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
     }) {
         const session = await this.sessionManager.createSecureSession({
             ...args,

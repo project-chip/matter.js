@@ -12,9 +12,7 @@ import { PbkdfParameters, Spake2p } from "../../crypto/Spake2p.js";
 import { NodeId } from "../../datatype/NodeId.js";
 import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
-import { TypeFromBitmapSchema } from "../../schema/BitmapSchema.js";
 import { ByteArray } from "../../util/ByteArray.js";
-import { TlvSessionParameters } from "./PaseMessages.js";
 import { DEFAULT_PASSCODE_ID, PaseClientMessenger, SPAKE_CONTEXT } from "./PaseMessenger.js";
 
 const logger = Logger.get("PaseClient");
@@ -38,12 +36,7 @@ export class PaseClient {
         return Crypto.getRandomUInt16() % 4096;
     }
 
-    async pair(
-        client: MatterController,
-        exchange: MessageExchange<MatterController>,
-        setupPin: number,
-        discoverySessionParams?: TypeFromBitmapSchema<typeof TlvSessionParameters>,
-    ) {
+    async pair(client: MatterController, exchange: MessageExchange<MatterController>, setupPin: number) {
         const messenger = new PaseClientMessenger(exchange);
         const random = Crypto.getRandom();
         const sessionId = await client.getNextAvailableSessionId(); // Initiator Session Id
@@ -62,7 +55,7 @@ export class PaseClient {
         if (pbkdfParameters === undefined)
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
 
-        const sessionParams = pbkdfSessionParams ?? discoverySessionParams;
+        const sessionParameters = pbkdfSessionParams ?? exchange.session.getSessionParameters();
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
@@ -88,9 +81,7 @@ export class PaseClient {
             salt: new ByteArray(0),
             isInitiator: true,
             isResumption: false,
-            idleIntervalMs: sessionParams?.idleIntervalMs,
-            activeIntervalMs: sessionParams?.activeIntervalMs,
-            activeThresholdMs: sessionParams?.activeThresholdMs,
+            sessionParameters,
         });
         await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);

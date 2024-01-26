@@ -15,7 +15,7 @@ import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/Messa
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
 import { ByteArray, Endian } from "../util/ByteArray.js";
 import { DataWriter } from "../util/DataWriter.js";
-import { Session } from "./Session.js";
+import { Session, SessionParameterOptions } from "./Session.js";
 
 const logger = Logger.get("SecureSession");
 
@@ -50,9 +50,7 @@ export class SecureSession<T> extends Session<T> {
         isResumption: boolean;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
     }) {
         const {
             context,
@@ -65,9 +63,7 @@ export class SecureSession<T> extends Session<T> {
             isInitiator,
             isResumption,
             closeCallback,
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            sessionParameters,
             subscriptionChangedCallback,
         } = args;
         const keys = await Crypto.hkdf(
@@ -90,9 +86,7 @@ export class SecureSession<T> extends Session<T> {
             attestationKey,
             closeCallback,
             subscriptionChangedCallback,
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            sessionParameters,
             isInitiator,
         });
     }
@@ -108,10 +102,7 @@ export class SecureSession<T> extends Session<T> {
         attestationKey: ByteArray;
         closeCallback: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        retransmissionRetries?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
         isInitiator: boolean;
     }) {
         super({

@@ -852,8 +852,7 @@ async function getDummyMessageExchange(
         closeCallback: async () => {
             /* */
         },
-        idleIntervalMs: 1000,
-        activeIntervalMs: 1000,
+        sessionParameters: { idleIntervalMs: 1000, activeIntervalMs: 1000 },
     });
     return {
         channel: { name: "test" },

@@ -12,6 +12,10 @@ import { MessageReceptionState } from "../protocol/MessageReceptionState.js";
 import { Time } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
 
+/**
+ * The maximum number of transmission attempts for a given reliable message. The sender MAY choose this value as it
+ * sees fit.
+ */
 export const MRP_MAX_TRANSMISSIONS = 5;
 
 /** Maximum sleep interval of node when in active mode. */
@@ -23,12 +27,13 @@ export const SESSION_IDLE_INTERVAL_MS = 300;
 /** Minimum amount the node SHOULD stay awake after network activity. */
 export const SESSION_ACTIVE_THRESHOLD_MS = 4000;
 
-interface SessionParameters {
+export interface SessionParameters {
     idleIntervalMs: number;
     activeIntervalMs: number;
     activeThresholdMs: number;
-    retransmissionRetries: number;
 }
+
+export type SessionParameterOptions = Partial<SessionParameters>;
 
 export abstract class Session<T> {
     abstract get name(): string;
@@ -38,7 +43,6 @@ export abstract class Session<T> {
     protected readonly idleIntervalMs: number;
     protected readonly activeIntervalMs: number;
     protected readonly activeThresholdMs: number;
-    protected readonly retransmissionRetries: number;
     protected readonly closeCallback: () => Promise<void>;
     protected readonly messageCounter: MessageCounter;
     protected readonly messageReceptionState: MessageReceptionState;
@@ -47,20 +51,18 @@ export abstract class Session<T> {
         messageCounter: MessageCounter;
         messageReceptionState: MessageReceptionState;
         closeCallback: () => Promise<void>;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        retransmissionRetries?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
         setActiveTimestamp: boolean;
     }) {
         const {
             messageCounter,
             messageReceptionState,
             closeCallback,
-            idleIntervalMs = SESSION_IDLE_INTERVAL_MS,
-            activeIntervalMs = SESSION_ACTIVE_INTERVAL_MS,
-            activeThresholdMs = SESSION_ACTIVE_THRESHOLD_MS,
-            retransmissionRetries = MRP_MAX_TRANSMISSIONS,
+            sessionParameters: {
+                idleIntervalMs = SESSION_IDLE_INTERVAL_MS,
+                activeIntervalMs = SESSION_ACTIVE_INTERVAL_MS,
+                activeThresholdMs = SESSION_ACTIVE_THRESHOLD_MS,
+            } = {},
             setActiveTimestamp,
         } = args;
         this.messageCounter = messageCounter;
@@ -69,7 +71,6 @@ export abstract class Session<T> {
         this.idleIntervalMs = idleIntervalMs;
         this.activeIntervalMs = activeIntervalMs;
         this.activeThresholdMs = activeThresholdMs;
-        this.retransmissionRetries = retransmissionRetries;
         if (setActiveTimestamp) {
             this.activeTimestamp = this.timestamp;
         }
@@ -96,12 +97,11 @@ export abstract class Session<T> {
     }
 
     getSessionParameters(): SessionParameters {
-        const { idleIntervalMs, activeIntervalMs, activeThresholdMs, retransmissionRetries } = this;
+        const { idleIntervalMs, activeIntervalMs, activeThresholdMs } = this;
         return {
             idleIntervalMs,
             activeIntervalMs,
             activeThresholdMs,
-            retransmissionRetries,
         };
     }
 

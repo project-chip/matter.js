@@ -73,7 +73,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             destinationId,
             random: peerRandom,
             ecdhPublicKey: peerEcdhPublicKey,
-            sessionParams,
+            sessionParams: sessionParameters,
         } = sigma1;
 
         // Try to resume a previous session
@@ -105,9 +105,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: true,
-                idleIntervalMs: sessionParams?.idleIntervalMs,
-                activeIntervalMs: sessionParams?.activeIntervalMs,
-                activeThresholdMs: sessionParams?.activeThresholdMs,
+                sessionParameters,
             });
 
             // Generate sigma 2 resume
@@ -170,7 +168,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 sessionId,
                 ecdhPublicKey,
                 encrypted,
-                sessionParams,
+                sessionParams: sessionParameters,
             });
 
             // Read and process sigma 3
@@ -216,9 +214,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: false,
-                idleIntervalMs: sessionParams?.idleIntervalMs,
-                activeIntervalMs: sessionParams?.activeIntervalMs,
-                activeThresholdMs: sessionParams?.activeThresholdMs,
+                sessionParameters,
             });
             logger.info(
                 `session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
@@ -227,7 +223,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             );
             await messenger.sendSuccess();
 
-            const resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
+            const resumptionRecord = {
+                peerNodeId,
+                fabric,
+                sharedSecret,
+                resumptionId,
+                sessionParameters: secureSession.getSessionParameters(),
+            };
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);

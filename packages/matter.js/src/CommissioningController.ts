@@ -285,56 +285,62 @@ export class CommissioningController extends MatterNode {
         );
         this.connectedNodes.set(nodeId, pairedNode);
 
-        await this.enhanceDeviceDetails(nodeId, pairedNode, connectOptions?.autoSubscribe !== false);
+        if (connectOptions?.autoSubscribe !== false) {
+            await this.enhanceDeviceDetailsFromCache(nodeId, pairedNode);
+        } else {
+            await this.enhanceDeviceDetailsFromRemote(nodeId, pairedNode);
+        }
 
         return pairedNode;
     }
 
-    private async enhanceDeviceDetails(nodeId: NodeId, pairedNode: PairedNode, dataAvailableLocally: boolean) {
+    private async enhanceDeviceDetailsFromCache(nodeId: NodeId, pairedNode: PairedNode) {
         const controller = this.assertControllerIsStarted();
 
         const globalAttributeKeys = Object.keys(GlobalAttributes({}));
-        if (dataAvailableLocally) {
-            const basicInformationClient = pairedNode.getRootClusterClient(BasicInformation.Cluster);
-            if (basicInformationClient !== undefined) {
-                const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-                for (const attributeName of Object.keys(basicInformationClient.attributes)) {
-                    if (!globalAttributeKeys.includes(attributeName)) {
-                        const attribute = (basicInformationClient.attributes as any)[attributeName];
-                        if (attribute instanceof SupportedAttributeClient) {
-                            try {
-                                basicInformationData[attributeName] = await attribute.get();
-                            } catch (error) {
-                                logger.info(
-                                    `Error while getting attribute ${attributeName} for node ${nodeId}: ${error}`,
-                                );
-                            }
-                        }
-                    }
-                }
-                controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-            } else {
-                logger.info(`No basic information cluster found for node ${nodeId}`);
+        const basicInformationClient = pairedNode.getRootClusterClient(BasicInformation.Cluster);
+        if (basicInformationClient === undefined) {
+            logger.info(`No basic information cluster found for node ${nodeId}`);
+            return;
+        }
+        const basicInformationData = {} as Record<string, SupportedStorageTypes>;
+        for (const attributeName of Object.keys(basicInformationClient.attributes)) {
+            if (globalAttributeKeys.includes(attributeName)) {
+                continue;
             }
-        } else {
-            try {
-                const interactionClient = await pairedNode.getInteractionClient();
-                const basicInformationAttributes = await interactionClient.getMultipleAttributes({
-                    attributes: [{ endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }],
-                });
-                const basicInformationData = {} as Record<string, SupportedStorageTypes>;
-                for (const {
-                    path: { attributeName },
-                    value,
-                } of basicInformationAttributes) {
-                    if (!globalAttributeKeys.includes(attributeName)) {
-                        basicInformationData[attributeName] = value;
-                    }
+            const attribute = (basicInformationClient.attributes as any)[attributeName];
+            if (attribute instanceof SupportedAttributeClient) {
+                try {
+                    basicInformationData[attributeName] = await attribute.get();
+                } catch (error) {
+                    logger.info(`Error while getting attribute ${attributeName} for node ${nodeId}: ${error}`);
                 }
-                controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
-            } catch (error) {
-                logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
             }
+        }
+        controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+    }
+
+    private async enhanceDeviceDetailsFromRemote(nodeId: NodeId, pairedNode: PairedNode) {
+        const controller = this.assertControllerIsStarted();
+
+        const globalAttributeKeys = Object.keys(GlobalAttributes({}));
+        try {
+            const interactionClient = await pairedNode.getInteractionClient();
+            const basicInformationAttributes = await interactionClient.getMultipleAttributes({
+                attributes: [{ endpointId: EndpointNumber(0), clusterId: BasicInformation.Cluster.id }],
+            });
+            const basicInformationData = {} as Record<string, SupportedStorageTypes>;
+            for (const {
+                path: { attributeName },
+                value,
+            } of basicInformationAttributes) {
+                if (!globalAttributeKeys.includes(attributeName)) {
+                    basicInformationData[attributeName] = value;
+                }
+            }
+            controller.enhanceCommissionedNodeDetails(nodeId, { basicInformationData });
+        } catch (error) {
+            logger.info(`Error while enhancing basic information for node ${nodeId}: ${error}`);
         }
     }
 

@@ -9,6 +9,7 @@ import { MatterError, MatterFlowError } from "../common/MatterError.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Logger } from "../log/Logger.js";
 import {
+    MRP_MAX_TRANSMISSIONS,
     SESSION_ACTIVE_INTERVAL_MS,
     SESSION_ACTIVE_THRESHOLD_MS,
     SESSION_IDLE_INTERVAL_MS,
@@ -151,12 +152,11 @@ export class MessageExchange<ContextT> {
         private readonly protocolId: number,
         private readonly closeCallback: () => Promise<void>,
     ) {
-        const { activeIntervalMs, idleIntervalMs, retransmissionRetries, activeThresholdMs } =
-            session.getSessionParameters();
+        const { activeIntervalMs, idleIntervalMs, activeThresholdMs } = session.getSessionParameters();
         this.activeIntervalMs = activeIntervalMs ?? SESSION_ACTIVE_INTERVAL_MS;
         this.idleIntervalMs = idleIntervalMs ?? SESSION_IDLE_INTERVAL_MS;
         this.activeThresholdMs = activeThresholdMs ?? SESSION_ACTIVE_THRESHOLD_MS;
-        this.retransmissionRetries = retransmissionRetries;
+        this.retransmissionRetries = MRP_MAX_TRANSMISSIONS;
         logger.debug(
             "New exchange",
             Logger.dict({

@@ -138,9 +138,7 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
             salt: new ByteArray(0),
             isInitiator: false,
             isResumption: false,
-            idleIntervalMs: sessionParams?.idleIntervalMs,
-            activeIntervalMs: sessionParams?.activeIntervalMs,
-            activeThresholdMs: sessionParams?.activeThresholdMs,
+            sessionParameters: sessionParams,
         });
         logger.info(`Session ${sessionId} created with ${messenger.getChannelName()}.`);
 

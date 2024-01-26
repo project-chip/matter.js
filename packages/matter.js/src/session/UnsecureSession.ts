@@ -12,7 +12,7 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateUnencryptedWithRollover } from "../protocol/MessageReceptionState.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { NoAssociatedFabricError } from "./SecureSession.js";
-import { Session } from "./Session.js";
+import { Session, SessionParameterOptions } from "./Session.js";
 import { UNICAST_UNSECURE_SESSION_ID } from "./SessionManager.js";
 
 export class UnsecureSession<T> extends Session<T> {
@@ -25,10 +25,7 @@ export class UnsecureSession<T> extends Session<T> {
         messageCounter: MessageCounter;
         closeCallback: () => Promise<void>;
         initiatorNodeId?: NodeId;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
-        retransmissionRetries?: number;
+        sessionParameters?: SessionParameterOptions;
         isInitiator?: boolean;
     }) {
         const { context, initiatorNodeId, isInitiator } = args;

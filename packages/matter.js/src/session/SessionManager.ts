@@ -11,12 +11,11 @@ import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
-import { TypeFromBitmapSchema } from "../schema/BitmapSchema.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { SecureSession } from "./SecureSession.js";
+import { SessionParameterOptions, SessionParameters } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
-import { TlvSessionParameters } from "./pase/PaseMessages.js";
 
 const logger = Logger.get("SessionManager");
 
@@ -27,7 +26,7 @@ export interface ResumptionRecord {
     resumptionId: ByteArray;
     fabric: Fabric;
     peerNodeId: NodeId;
-    sessionParams?: TypeFromBitmapSchema<typeof TlvSessionParameters>;
+    sessionParameters: SessionParameters;
 }
 
 type ResumptionStorageRecord = {
@@ -36,6 +35,11 @@ type ResumptionStorageRecord = {
     resumptionId: Uint8Array;
     fabricId: FabricId;
     peerNodeId: NodeId;
+    sessionParameters: {
+        idleIntervalMs: number;
+        activeIntervalMs: number;
+        activeThresholdMs: number;
+    };
 };
 
 export class SessionManager<ContextT> {
@@ -55,12 +59,10 @@ export class SessionManager<ContextT> {
 
     createUnsecureSession(options: {
         initiatorNodeId?: NodeId;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
         isInitiator?: boolean;
     }) {
-        const { initiatorNodeId, idleIntervalMs, activeIntervalMs, activeThresholdMs, isInitiator } = options;
+        const { initiatorNodeId, sessionParameters, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
             if (this.unsecureSessions.has(initiatorNodeId)) {
                 throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
@@ -75,9 +77,7 @@ export class SessionManager<ContextT> {
                     this.unsecureSessions.delete(session.getNodeId());
                 },
                 initiatorNodeId,
-                idleIntervalMs,
-                activeIntervalMs,
-                activeThresholdMs,
+                sessionParameters,
                 isInitiator: isInitiator ?? false,
             });
 
@@ -98,9 +98,7 @@ export class SessionManager<ContextT> {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleIntervalMs?: number;
-        activeIntervalMs?: number;
-        activeThresholdMs?: number;
+        sessionParameters?: SessionParameterOptions;
         closeCallback?: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
     }) {
@@ -113,9 +111,7 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            sessionParameters,
             closeCallback,
             subscriptionChangedCallback,
         } = args;
@@ -134,9 +130,7 @@ export class SessionManager<ContextT> {
                 await closeCallback?.();
                 this.sessions.delete(sessionId);
             },
-            idleIntervalMs,
-            activeIntervalMs,
-            activeThresholdMs,
+            sessionParameters,
             subscriptionChangedCallback: () => subscriptionChangedCallback?.(),
         });
         this.sessions.set(sessionId, session);
@@ -256,33 +250,39 @@ export class SessionManager<ContextT> {
     storeResumptionRecords() {
         this.sessionStorage.set<ResumptionStorageRecord[]>(
             "resumptionRecords",
-            [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
-                nodeId,
-                sharedSecret,
-                resumptionId,
-                fabricId: fabric.fabricId,
-                peerNodeId: peerNodeId,
-            })),
+            [...this.resumptionRecords].map(
+                ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) => ({
+                    nodeId,
+                    sharedSecret,
+                    resumptionId,
+                    fabricId: fabric.fabricId,
+                    peerNodeId: peerNodeId,
+                    sessionParameters,
+                }),
+            ),
         );
     }
 
     initFromStorage(fabrics: Fabric[]) {
         const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
-        storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
-            logger.info("restoring resumption record for node", nodeId);
-            const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
-            if (!fabric) {
-                logger.error("fabric not found for resumption record", fabricId);
-                return;
-            }
-            this.resumptionRecords.set(nodeId, {
-                sharedSecret,
-                resumptionId,
-                fabric,
-                peerNodeId,
-            });
-        });
+        storedResumptionRecords.forEach(
+            ({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId, sessionParameters }) => {
+                logger.info("restoring resumption record for node", nodeId);
+                const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
+                if (!fabric) {
+                    logger.error("fabric not found for resumption record", fabricId);
+                    return;
+                }
+                this.resumptionRecords.set(nodeId, {
+                    sharedSecret,
+                    resumptionId,
+                    fabric,
+                    peerNodeId,
+                    sessionParameters,
+                });
+            },
+        );
     }
 
     getActiveSessionInformation() {
