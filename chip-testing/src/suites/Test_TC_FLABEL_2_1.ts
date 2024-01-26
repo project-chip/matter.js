@@ -3,7 +3,7 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Test_TC_FLABEL_1_1 } from "./Test_TC_FLABEL_1_1";
+import { Test_TC_FLABEL_1_1 } from "./Test_TC_FLABEL_1_1.js";
 
 import { FixedLabel } from "@project-chip/matter.js/cluster";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";

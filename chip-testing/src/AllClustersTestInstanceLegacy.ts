@@ -1,0 +1,164 @@
+/**
+ * @license
+ * Copyright 2022 The node-matter Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
+
+import { Storage, StorageManager } from "@project-chip/matter.js/storage";
+
+import {
+    AdministratorCommissioning,
+    BasicAdminCommissioningHandler,
+    BasicInformation,
+    ClusterServer,
+    NetworkCommissioning,
+    UserLabel,
+} from "@project-chip/matter.js/cluster";
+import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
+import { DimmableLightDevice } from "@project-chip/matter.js/device";
+import { ByteArray } from "@project-chip/matter.js/util";
+import { TestInstance } from "./GenericTestApp.js";
+
+export class AllClustersTestInstanceLegacy implements TestInstance {
+    matterServer: MatterServer | undefined;
+    storageManager: StorageManager;
+    commissioningServer: CommissioningServer | undefined;
+    protected appName: string;
+    onOffDeviceEndpoint1: DimmableLightDevice = new DimmableLightDevice(undefined, undefined, {
+        endpointId: EndpointNumber(1),
+    });
+
+    constructor(
+        storage: Storage,
+        protected options: {
+            appName: string;
+            discriminator?: number;
+            passcode?: number;
+        },
+    ) {
+        this.storageManager = new StorageManager(storage);
+        this.appName = options.appName;
+    }
+
+    /** Set up the test instance MatterServer. */
+    async setup() {
+        try {
+            await this.storageManager.initialize(); // hacky but works
+            this.matterServer = new MatterServer(this.storageManager);
+
+            this.commissioningServer = await this.setupCommissioningServer();
+            await this.matterServer.addCommissioningServer(this.commissioningServer);
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+            console.log((error as Error).stack);
+            throw error;
+        }
+        process.stdout.write(`====> Chip test Runner "${this.appName}": Setup done\n`);
+    }
+
+    /** Start the test instance MatterServer with the included device. */
+    async start() {
+        if (!this.matterServer) throw new Error("matterServer not initialized on start");
+        try {
+            await this.matterServer.start();
+        } catch (error) {
+            // Catch and log error, else the test framework hides issues here
+            console.log(error);
+        }
+        console.log("mDNS service published:");
+        console.log();
+
+        const pairingData = this.commissioningServer?.getPairingCode();
+        if (!pairingData) throw new Error("No pairing data available");
+        const { qrPairingCode } = pairingData;
+
+        console.log(`SetupQRCode: [${qrPairingCode}]`);
+
+        process.stdout.write(`====> Chip test Runner "${this.appName}": Start instance\n`);
+    }
+
+    /** Stop the test instance MatterServer and the device. */
+    async stop() {
+        if (!this.matterServer) throw new Error("matterServer not initialized on close");
+        await this.matterServer.close();
+        this.matterServer = undefined;
+        process.stdout.write(`====> Chip test Runner "${this.appName}": Stop instance\n`);
+    }
+
+    async setupCommissioningServer() {
+        const commissioningServer = new CommissioningServer({
+            port: 5540,
+            deviceName: this.appName,
+            deviceType: DeviceTypeId(0xffff),
+            passcode: this.options.passcode ?? 20202021,
+            discriminator: this.options.discriminator ?? 3840,
+            basicInformation: {
+                vendorName: "Vendorname",
+                vendorId: VendorId(0xfff1),
+                nodeLabel: "",
+                productName: "Productname",
+                productLabel: "Productlabel",
+                productId: 0x8001,
+                serialNumber: `node-matter`,
+                manufacturingDate: "20210101",
+                partNumber: "123456",
+                productUrl: "https://test.com",
+                uniqueId: `node-matter-unique`,
+                productAppearance: {
+                    finish: BasicInformation.ProductFinish.Satin,
+                    primaryColor: BasicInformation.Color.Purple,
+                },
+            },
+            delayedAnnouncement: false,
+        });
+
+        // We upgrade the AdminCommissioningCluster to also allow Basic Commissioning, so we can use for more testcases
+        commissioningServer.addRootClusterServer(
+            ClusterServer(
+                AdministratorCommissioning.Cluster.with("Basic"),
+                {
+                    windowStatus: AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen,
+                    adminFabricIndex: null,
+                    adminVendorId: null,
+                },
+                BasicAdminCommissioningHandler(),
+            ),
+        );
+
+        const networkId = new ByteArray(32);
+        commissioningServer.addRootClusterServer(
+            ClusterServer(
+                NetworkCommissioning.Cluster.with("EthernetNetworkInterface"),
+                {
+                    maxNetworks: 1,
+                    interfaceEnabled: true,
+                    lastConnectErrorValue: 0,
+                    lastNetworkId: networkId,
+                    lastNetworkingStatus: NetworkCommissioning.NetworkCommissioningStatus.Success,
+                    networks: [{ networkId: networkId, connected: true }],
+                },
+                {}, // Ethernet is not requiring any methods
+            ),
+        );
+        commissioningServer.addRootClusterServer(
+            ClusterServer(
+                UserLabel.Cluster,
+                {
+                    labelList: [],
+                },
+                {},
+            ),
+        );
+
+        this.onOffDeviceEndpoint1.addFixedLabel("foo", "bar");
+        this.onOffDeviceEndpoint1.addFixedLabel("foo", "bar2");
+        this.onOffDeviceEndpoint1.addUserLabel("foo", "bar");
+
+        commissioningServer.addDevice(this.onOffDeviceEndpoint1);
+
+        return commissioningServer;
+    }
+}

@@ -45,23 +45,38 @@ runs:
         path: ./bin
         key: ${{ inputs.runner-os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
 
+    - name: Checkout Matter SDK
+      id: checkout-sdk
+      shell: bash
+      run: |
+        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
+        cd connectedhomeip
+        scripts/checkout_submodules.py --shallow --platform linux
+
+    # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
+    - name: Build python stuff
+      id: build-python
+      shell: bash
+      run: |
+        cd connectedhomeip
+        ./scripts/run_in_build_env.sh './scripts/build_python.sh --install_virtual_env out/venv'
+
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build executables
       id: build-executables
       shell: bash
       run: |
-        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
         cd connectedhomeip
-        scripts/checkout_submodules.py --shallow --platform linux
-        source scripts/activate.sh
-        ./scripts/build/build_examples.py --target linux-x64-light build
+        ./scripts/run_in_build_env.sh \
+          "./scripts/build/build_examples.py \
+             --target linux-x64-light \
+             --target linux-x64-chip-tool \
+             build
+          "
         cp out/linux-x64-light/chip-lighting-app ../bin/
-        rm -rf out/linux-x64-light
         ./scripts/build/build_examples.py --target linux-x64-chip-tool build
         cp out/linux-x64-chip-tool/chip-tool ../bin/
-        rm -rf out/linux-x64-chip-tool
-        rm -rf connectedhomeip
       #          More options for later, but takes long to build
       #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
       #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
@@ -121,3 +136,8 @@ runs:
       run: |
         npm ci
 
+    - name: Patch test definitions
+      shell: bash
+      run: |
+        cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
+      # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK

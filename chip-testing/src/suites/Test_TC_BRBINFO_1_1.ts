@@ -9,7 +9,7 @@ import { BridgedDeviceBasicInformation } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { Aggregator, OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
-import { DeviceTestInstance } from "../DeviceTestInstance";
+import { DeviceTestInstance } from "../DeviceTestInstance.js";
 
 /**
  * Test case "TC-BRBINFO-1.1"
@@ -18,7 +18,6 @@ import { DeviceTestInstance } from "../DeviceTestInstance";
 export class Test_TC_BRBINFO_1_1 extends DeviceTestInstance {
     onOffDevice = new OnOffPluginUnitDevice(undefined, { endpointId: EndpointNumber(3) });
     aggregator = new Aggregator();
-    commissioningServer?: CommissioningServer;
 
     constructor(storage: StorageBackendMemory, overrideTestName?: string) {
         super(overrideTestName ?? "Test_TC_BRBINFO_1_1", "GeneralTestPicsFile.txt", storage);

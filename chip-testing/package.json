@@ -5,6 +5,7 @@
     "private": true,
     "license": "Apache-2.0",
     "author": "Project CHIP Authors",
+    "type": "module",
     "bugs": {
         "url": "https://github.com/project-chip/matter.js/issues"
     },

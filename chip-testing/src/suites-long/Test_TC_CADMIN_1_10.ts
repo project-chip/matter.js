@@ -5,7 +5,7 @@
  */
 
 // Needs to be first import!
-import { Test_TC_CADMIN_1_4 } from "./Test_TC_CADMIN_1_4";
+import { Test_TC_CADMIN_1_4 } from "./Test_TC_CADMIN_1_4.js";
 
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 

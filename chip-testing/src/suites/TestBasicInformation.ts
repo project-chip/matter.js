@@ -10,7 +10,7 @@ import { BasicInformation } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
-import { DeviceTestInstance } from "../DeviceTestInstance";
+import { DeviceTestInstance } from "../DeviceTestInstance.js";
 
 /** Test case "TestBasicInformation" */
 export class TestBasicInformation extends DeviceTestInstance {

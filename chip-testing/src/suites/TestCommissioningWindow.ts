@@ -5,7 +5,7 @@
  */
 
 // Needs to be first import!
-import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance";
+import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance.js";
 
 import {
     AdministratorCommissioning,

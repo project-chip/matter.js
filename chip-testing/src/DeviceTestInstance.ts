@@ -1,16 +1,17 @@
 import { CommissioningServer, MatterServer } from "@project-chip/matter-node.js";
 
-import { StorageBackendMemory, StorageManager } from "@project-chip/matter.js/storage";
+import { Storage, StorageManager } from "@project-chip/matter.js/storage";
 
 /** Base class for all chip tool test instances */
 export abstract class DeviceTestInstance {
     matterServer: MatterServer | undefined;
     storageManager: StorageManager;
+    commissioningServer: CommissioningServer | undefined;
 
     constructor(
         public testName: string,
         public PICSConfig: string,
-        public storage: StorageBackendMemory,
+        public storage: Storage,
     ) {
         this.storageManager = new StorageManager(storage);
     }
@@ -24,7 +25,8 @@ export abstract class DeviceTestInstance {
             await this.storageManager.initialize(); // hacky but works
             this.matterServer = new MatterServer(this.storageManager);
 
-            await this.matterServer.addCommissioningServer(await this.setupCommissioningServer());
+            this.commissioningServer = await this.setupCommissioningServer();
+            await this.matterServer.addCommissioningServer(this.commissioningServer);
         } catch (error) {
             // Catch and log error, else the test framework hides issues here
             console.log(error);

@@ -3,7 +3,7 @@ import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 import * as assert from "assert";
 import { spawn } from "child_process";
 import { promises as fs } from "fs";
-import { DeviceTestInstance } from "../src/DeviceTestInstance";
+import { DeviceTestInstance } from "../src/DeviceTestInstance.js";
 import * as LongRunningTests from "../src/suites-long/index.js";
 import * as NormalTests from "../src/suites/index.js";
 

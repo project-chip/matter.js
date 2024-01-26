@@ -5,7 +5,7 @@
  */
 
 export { TestArmFailSafe } from "./TestArmFailSafe.js";
-export { TestBasicInformation } from "./TestBasicInformation";
+export { TestBasicInformation } from "./TestBasicInformation.js";
 export { TestCASERecovery } from "./TestCASERecovery.js";
 export { TestCommissioningWindow } from "./TestCommissioningWindow.js";
 export { TestDiscovery } from "./TestDiscovery.js";

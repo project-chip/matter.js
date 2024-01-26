@@ -5,7 +5,7 @@
  */
 
 // Needs to be first import!
-import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance";
+import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance.js";
 
 import { ClusterServer, NetworkCommissioning, NetworkCommissioningCluster } from "@project-chip/matter.js/cluster";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";

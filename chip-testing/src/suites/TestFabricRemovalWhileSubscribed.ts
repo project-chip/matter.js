@@ -5,7 +5,7 @@
  */
 
 // Needs to be first import!
-import { TestCommissioningWindow } from "./TestCommissioningWindow";
+import { TestCommissioningWindow } from "./TestCommissioningWindow.js";
 
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 

@@ -5,7 +5,7 @@
  */
 
 // Needs to be first import!
-import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance";
+import { MinimalOnOffDeviceTestInstance } from "../MinimalOnOffDeviceTestInstance.js";
 
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
 

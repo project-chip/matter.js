@@ -14,7 +14,7 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
-import { DeviceTestInstance } from "./DeviceTestInstance";
+import { DeviceTestInstance } from "./DeviceTestInstance.js";
 
 export class MinimalOnOffDeviceTestInstance extends DeviceTestInstance {
     onOffDevice: OnOffPluginUnitDevice | undefined;

@@ -8,7 +8,7 @@ import { CommissioningServer } from "@project-chip/matter-node.js";
 import { DeviceTypeId, VendorId } from "@project-chip/matter.js/datatype";
 import { OnOffPluginUnitDevice } from "@project-chip/matter.js/device";
 import { StorageBackendMemory } from "@project-chip/matter.js/storage";
-import { DeviceTestInstance } from "../DeviceTestInstance";
+import { DeviceTestInstance } from "../DeviceTestInstance.js";
 
 /**
  * Test case "TC_ULABEL_1.1"
@@ -16,7 +16,6 @@ import { DeviceTestInstance } from "../DeviceTestInstance";
  */
 export class Test_TC_ULABEL_1_1 extends DeviceTestInstance {
     onOffDevice = new OnOffPluginUnitDevice();
-    commissioningServer?: CommissioningServer;
 
     constructor(storage: StorageBackendMemory, overrideTestName?: string) {
         super(overrideTestName ?? "Test_TC_ULABEL_1_1", "GeneralTestPicsFile.txt", storage);

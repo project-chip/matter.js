@@ -3,16 +3,16 @@
  * Copyright 2022 The node-matter Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Test_TC_BINFO_1_1 } from "./Test_TC_BINFO_1_1";
+import { Test_TC_BINFO_1_1 } from "./Test_TC_BINFO_1_1.js";
 
-import { StorageBackendMemory } from "@project-chip/matter.js/storage";
+import { Storage } from "@project-chip/matter.js/storage";
 
 /**
  * Test case "TC_BINFO_2.2"
  * 12.2.2. [TC-BINFO-2.2] Events [DUT-Server]
  */
 export class Test_TC_BINFO_2_2 extends Test_TC_BINFO_1_1 {
-    constructor(storage: StorageBackendMemory) {
+    constructor(storage: Storage) {
         super(storage, "Test_TC_BINFO_2_2");
     }
 
