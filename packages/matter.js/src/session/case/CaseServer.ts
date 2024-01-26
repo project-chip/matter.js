@@ -78,14 +78,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
         // Try to resume a previous session
         const resumptionId = Crypto.getRandomData(16);
-        let resumptionRecord;
 
+        const resumptionRecord =
+            peerResumptionId !== undefined && peerResumeMic !== undefined
+                ? server.findResumptionRecordById(peerResumptionId)
+                : undefined;
         // We try to resume the session
-        if (
-            peerResumptionId !== undefined &&
-            peerResumeMic !== undefined &&
-            (resumptionRecord = server.findResumptionRecordById(peerResumptionId)) !== undefined
-        ) {
+        if (peerResumptionId !== undefined && peerResumeMic !== undefined && resumptionRecord !== undefined) {
             const { sharedSecret, fabric, peerNodeId } = resumptionRecord;
             const peerResumeKey = await Crypto.hkdf(
                 sharedSecret,
@@ -134,7 +133,10 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
-        } else if (peerResumptionId === undefined && peerResumeMic === undefined) {
+        } else if (
+            (peerResumptionId === undefined && peerResumeMic === undefined) ||
+            (peerResumptionId !== undefined && peerResumeMic !== undefined && resumptionRecord === undefined)
+        ) {
             // Generate sigma 2
             // TODO: Pass through a group id?
             const fabric = server.findFabricFromDestinationId(destinationId, peerRandom);
@@ -217,11 +219,16 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             );
             await messenger.sendSuccess();
 
-            resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
+            const resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);
         } else {
+            logger.info(
+                `Invalid resumption ID or resume MIC received from ${messenger.getChannelName()}`,
+                peerResumptionId,
+                peerResumeMic,
+            );
             throw new UnexpectedDataError("Invalid resumption ID or resume MIC.");
         }
     }
