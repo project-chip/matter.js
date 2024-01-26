@@ -143,7 +143,5 @@ runs:
     - name: Patch test definitions
       shell: bash
       run: |
-        ls -la chip-testing/patched-test-files/*
         cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
-        ls -la connectedhomeip/src/app/tests/suites/*
       # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
