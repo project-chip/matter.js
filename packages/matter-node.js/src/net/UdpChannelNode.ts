@@ -16,7 +16,11 @@ function createDgramSocket(host: string | undefined, port: number | undefined, o
     const socket = dgram.createSocket(options);
     return new Promise<dgram.Socket>((resolve, reject) => {
         const handleBindError = (error: Error) => {
-            socket.close();
+            try {
+                socket.close();
+            } catch (error) {
+                logger.debug("Error on closing socket", error);
+            }
             reject(error);
         };
         socket.on("error", handleBindError);
@@ -127,6 +131,10 @@ export class UdpChannelNode implements UdpChannel {
     }
 
     async close() {
-        this.socket.close();
+        try {
+            this.socket.close();
+        } catch (error) {
+            logger.debug("Error on closing socket", error);
+        }
     }
 }

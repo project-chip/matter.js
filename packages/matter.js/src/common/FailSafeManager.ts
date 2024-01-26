@@ -109,8 +109,7 @@ export class FailSafeManager {
 
     /** Expire the FailSafe context. This is called by the timer and can also be called manually if needed. */
     async expire() {
-        this.failSafeTimer.stop();
-        this.maxCumulativeFailsafeTimer.stop();
+        this.complete();
         await this.expiryCallback();
     }
 

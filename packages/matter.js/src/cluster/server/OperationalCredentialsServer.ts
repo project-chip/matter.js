@@ -6,16 +6,17 @@
 
 // TODO: Rename to NodeOperationalCredentialsServer to match with specs
 
+import { MatterDevice } from "../../MatterDevice.js";
 import { MatterFabricConflictError } from "../../common/FailSafeManager.js";
 import { MatterFlowError } from "../../common/MatterError.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { PrivateKey } from "../../crypto/Key.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { FabricTableFullError } from "../../fabric/FabricManager.js";
 import { Logger } from "../../log/Logger.js";
-import { MatterDevice } from "../../MatterDevice.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
-import { assertSecureSession, SecureSession } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { MatterCoreSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvUInt32 } from "../../tlv/TlvNumber.js";
 import { TlvField, TlvObject, TlvOptionalField } from "../../tlv/TlvObject.js";
@@ -269,6 +270,14 @@ export const OperationalCredentialsClusterHandler: (
     updateNoc: async ({ request: { nocValue, icacValue }, attributes: { nocs, fabrics }, session }) => {
         assertSecureSession(session);
 
+        tryCatch(
+            () => session.getAssociatedFabric(),
+            NoAssociatedFabricError,
+            () => {
+                throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
+            },
+        );
+
         const device = session.getContext();
 
         device.assertFailSafeArmed("updateNoc received while failsafe is not armed.");
@@ -325,8 +334,14 @@ export const OperationalCredentialsClusterHandler: (
 
     updateFabricLabel: async ({ request: { label }, attributes: { fabrics }, session }) => {
         assertSecureSession(session, "updateOperationalCert should be called on a secure session.");
-        const fabric = session.getFabric();
-        if (fabric === undefined) throw new MatterFlowError("updateOperationalCert on a session linked to a fabric.");
+
+        const fabric = tryCatch(
+            () => session.getAssociatedFabric(),
+            NoAssociatedFabricError,
+            () => {
+                throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
+            },
+        );
 
         const currentFabricIndex = fabric.fabricIndex;
         const device = session.getContext();

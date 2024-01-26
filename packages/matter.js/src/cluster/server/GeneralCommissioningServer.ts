@@ -5,8 +5,10 @@
  */
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
+import { tryCatch } from "../../common/TryCatchHandler.js";
 import { Logger } from "../../log/Logger.js";
-import { assertSecureSession } from "../../session/SecureSession.js";
+import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
+import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
 import { AdministratorCommissioning } from "../definitions/AdministratorCommissioningCluster.js";
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
@@ -147,19 +149,28 @@ export const GeneralCommissioningClusterHandler: (options?: {
     },
 
     commissioningComplete: async ({ session, attributes: { breadcrumb } }) => {
+        const fabric = tryCatch(
+            () => session.getAssociatedFabric(),
+            NoAssociatedFabricError,
+            () => {
+                throw new StatusResponseError("No associated fabric existing", StatusCode.UnsupportedAccess);
+            },
+        );
+
+        if (session.isPase()) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
+                debugText: "Command not executed over CASE session.",
+            };
+        }
+
         const device = session.getContext();
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }
 
         assertSecureSession(session, "commissioningComplete can only be called on a secure session");
-        const fabric = session.getFabric();
-        if (fabric === undefined) {
-            return {
-                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
-                debugText: "No Fabric associated with the session.",
-            };
-        }
+
         const failSafeContext = device.getFailSafeContext();
         if (fabric.fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
             return {
