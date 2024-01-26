@@ -29,6 +29,7 @@ import { Time } from "../time/Time.js";
 import { TypeFromSchema } from "../tlv/TlvSchema.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { InteractionClient } from "./interaction/InteractionClient.js";
+import { StatusResponseError } from "./interaction/StatusCode.js";
 
 const logger = Logger.get("ControllerCommissioner");
 
@@ -313,7 +314,7 @@ export class ControllerCommissioner {
                     logger.error(
                         `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} failed with recoverable error: ${error.message} ... Continuing with process`,
                     );
-                } else if (error instanceof CommissioningError) {
+                } else if (error instanceof CommissioningError || error instanceof StatusResponseError) {
                     logger.error(
                         `Commissioning step ${step.stepNumber}.${step.subStepNumber}: ${step.name} failed with error: ${error.message} ... Aborting commissioning`,
                     );
@@ -333,6 +334,12 @@ export class ControllerCommissioner {
                     // accepting PASE again.
                     await this.resetFailsafeTimer();
 
+                    if (error instanceof StatusResponseError) {
+                        // Convert error
+                        const commError = new CommissioningError(error.message);
+                        commError.stack = error.stack;
+                        throw commError;
+                    }
                     throw error;
                 } else {
                     throw error;
