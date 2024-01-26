@@ -78,7 +78,10 @@ export class CaseClient {
             const { sharedSecret, fabric, sessionParameters: resumptionSessionParams } = resumptionRecord;
             const { sessionId: peerSessionId, resumptionId, resumeMic } = sigma2Resume;
 
-            const sessionParameters = resumptionSessionParams ?? exchange.session.getSessionParameters();
+            const sessionParameters = {
+                ...exchange.session.getSessionParameters(),
+                ...(resumptionSessionParams ?? {}),
+            };
 
             const resumeSalt = ByteArray.concat(random, resumptionId);
             const resumeKey = await Crypto.hkdf(sharedSecret, resumeSalt, KDFSR2_KEY_INFO);
@@ -100,9 +103,7 @@ export class CaseClient {
             logger.info(`Case client: session resumed with ${messenger.getChannelName()}`);
 
             resumptionRecord.resumptionId = resumptionId; /* update resumptionId */
-            if (sessionParameters !== undefined) {
-                resumptionRecord.sessionParameters = secureSession.getSessionParameters(); /* update mrpParams */
-            }
+            resumptionRecord.sessionParameters = secureSession.getSessionParameters(); /* update mrpParams */
         } else {
             // Process sigma2
             const {
@@ -112,7 +113,10 @@ export class CaseClient {
                 sessionId: peerSessionId,
                 sessionParams: sigma2SessionParams,
             } = sigma2;
-            const sessionParameters = sigma2SessionParams ?? exchange.session.getSessionParameters();
+            const sessionParameters = {
+                ...exchange.session.getSessionParameters(),
+                ...(sigma2SessionParams ?? {}),
+            };
             const sharedSecret = Crypto.ecdhGenerateSecret(peerEcdhPublicKey, ecdh);
             const sigma2Salt = ByteArray.concat(
                 operationalIdentityProtectionKey,

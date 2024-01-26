@@ -55,7 +55,10 @@ export class PaseClient {
         if (pbkdfParameters === undefined)
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
 
-        const sessionParameters = pbkdfSessionParams ?? exchange.session.getSessionParameters();
+        const sessionParameters = {
+            ...exchange.session.getSessionParameters(),
+            ...(pbkdfSessionParams ?? {}),
+        };
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
