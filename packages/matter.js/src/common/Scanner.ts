@@ -13,29 +13,9 @@ import { ServerAddress, ServerAddressIp } from "./ServerAddress.js";
  * All information exposed by a commissionable device via announcements.
  * The properties are named identical as in the Matter specification.
  */
-export type CommissionableDevice = {
-    deviceIdentifier: string;
-
-    /** The device's addresses IP/port pairs */
-    addresses: ServerAddress[];
-
-    /** Sleep Idle Interval */
-    SII?: number;
-
-    /** Sleep Active Interval */
-    SAI?: number;
-
-    /** TCP supported */
-    T?: number;
-
-    /** Discriminator */
-    D: number;
-
+export type DiscoveryData = {
     /** VendorId + ProductId */
     VP?: string;
-
-    /** Commissioning Mode */
-    CM: number;
 
     /** Device type */
     DT?: number;
@@ -51,6 +31,43 @@ export type CommissionableDevice = {
 
     /** Pairing instructions */
     PI?: string;
+
+    /** Sleep Idle Interval */
+    SII?: number;
+
+    /** Sleep Active Interval */
+    SAI?: number;
+
+    /** Session active threshold */
+    SAT?: number;
+
+    /** TCP supported */
+    T?: number;
+
+    /** ICD Long Idle Time operating mode supported */
+    ICD?: number;
+};
+
+export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData & {
+    /** The device's addresses IP/port pairs */
+    addresses: SA[];
+};
+
+export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> =
+    D extends DiscoverableDevice<infer SA> ? SA : never;
+
+export type OperationalDevice = DiscoverableDevice<ServerAddressIp> & {
+    deviceIdentifier: string;
+};
+
+export type CommissionableDevice = DiscoverableDevice<ServerAddress> & {
+    deviceIdentifier: string;
+
+    /** Discriminator */
+    D: number;
+
+    /** Commissioning Mode */
+    CM: number;
 };
 
 /**
@@ -97,13 +114,13 @@ export interface Scanner {
         nodeId: NodeId,
         timeoutSeconds?: number,
         ignoreExistingRecords?: boolean,
-    ): Promise<ServerAddressIp[]>;
+    ): Promise<OperationalDevice | undefined>;
 
     /**
      * Return already discovered addresses of an operational paired device and return them. Does not send out new
      * DNS-SD queries.
      */
-    getDiscoveredOperationalDevices(fabric: Fabric, nodeId: NodeId): ServerAddressIp[];
+    getDiscoveredOperationalDevice(fabric: Fabric, nodeId: NodeId): OperationalDevice | undefined;
 
     /**
      * Send DNS-SD queries to discover commissionable devices by a provided identifier (e.g. discriminator,

@@ -50,10 +50,15 @@ export class PaseClient {
         });
         const {
             responsePayload,
-            response: { pbkdfParameters, sessionId: peerSessionId },
+            response: { pbkdfParameters, sessionId: peerSessionId, sessionParams: pbkdfSessionParams },
         } = await messenger.readPbkdfParamResponse();
         if (pbkdfParameters === undefined)
             throw new UnexpectedDataError("Missing requested PbkdfParameters in the response.");
+
+        const sessionParameters = {
+            ...exchange.session.getSessionParameters(),
+            ...(pbkdfSessionParams ?? {}),
+        };
 
         // Compute pake1 and read pake2
         const { w0, w1 } = await Spake2p.computeW0W1(pbkdfParameters, setupPin);
@@ -79,6 +84,7 @@ export class PaseClient {
             salt: new ByteArray(0),
             isInitiator: true,
             isResumption: false,
+            sessionParameters,
         });
         await messenger.close();
         logger.info(`Pase client: Paired successfully with ${messenger.getChannelName()}.`);

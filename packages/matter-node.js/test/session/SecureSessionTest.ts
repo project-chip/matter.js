@@ -58,6 +58,7 @@ describe("SecureSession", () => {
         closeCallback: async () => {
             /* do nothing */
         },
+        isInitiator: true,
     });
 
     describe("decrypt", () => {

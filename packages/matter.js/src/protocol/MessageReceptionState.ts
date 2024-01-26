@@ -15,6 +15,10 @@ const MSG_COUNTER_WINDOW_SIZE = 32;
 
 export class DuplicateMessageError extends MatterError {}
 
+export abstract class MessageReceptionState {
+    abstract updateMessageCounter(messageCounter: number): void;
+}
+
 /**
  * Implements a message reception state for encrypted messages without rollover.
  * A counter in the range [(max_message_counter + 1) to (232 - 1)] SHALL be considered new, and cause the
@@ -22,11 +26,12 @@ export class DuplicateMessageError extends MatterError {}
  * Message counters within the range of the bitmap SHALL be considered duplicate if the corresponding bit
  * offset is set to true. All other message counters SHALL be considered duplicate.
  */
-export class MessageReceptionStateEncryptedWithoutRollover {
+export class MessageReceptionStateEncryptedWithoutRollover extends MessageReceptionState {
     protected maximumMessageCounter: number | undefined;
     private messageCounterBitmap = 0xffffffff; // All bits set to 1
 
     constructor(messageCounter?: number) {
+        super();
         if (messageCounter !== undefined) {
             this.initialize(messageCounter);
         }

@@ -146,11 +146,14 @@ export type CommissioningModeInstanceData = {
     /** Device discriminator for commissionable announcements. */
     discriminator: number;
 
-    /** Sleep Idle Interval of the device for commissionable announcements. */
-    sleepIdleInterval?: number;
+    /** Session Idle Interval of the device for commissionable announcements. */
+    sessionIdleInterval?: number;
 
-    /** Sleep Active Interval of the device for commissionable announcements. */
-    sleepActiveInterval?: number;
+    /** Session Active Interval of the device for commissionable announcements. */
+    sessionActiveInterval?: number;
+
+    /** Duration of time the node should stay Active after the last network activity. **/
+    sessionActiveThreshold?: number;
 
     /** Pairing Hint of the device for commissionable announcements. */
     pairingHint?: TypeFromPartialBitSchema<typeof PairingHintBitmap>;
@@ -172,19 +175,25 @@ export type CommissionerInstanceData = {
     /** Device type for commissionable announcements. */
     deviceType?: number;
 
-    /** Sleep Idle Interval of the device for commissionable announcements. */
-    sleepIdleInterval?: number;
+    /** Session Idle Interval of the device for commissionable announcements. */
+    sessionIdleInterval?: number;
 
-    /** Sleep Active Interval of the device for commissionable announcements. */
-    sleepActiveInterval?: number;
+    /** Session Active Interval of the device for commissionable announcements. */
+    sessionActiveInterval?: number;
+
+    /** This key defines the duration of time the node stays Active after the last network activity. **/
+    sessionActiveThreshold?: number;
 };
 
 export type OperationalInstanceData = {
-    /** Sleep Idle Interval of the device for operational announcements. */
-    sleepIdleInterval?: number;
+    /** Session Idle Interval of the device for operational announcements. */
+    sessionIdleInterval?: number;
 
-    /** Sleep Active Interval of the device for operational announcements. */
-    sleepActiveInterval?: number;
+    /** Session Active Interval of the device for operational announcements. */
+    sessionActiveInterval?: number;
+
+    /** This key defines the duration of time the node stays Active after the last network activity. **/
+    sessionActiveThreshold?: number;
 };
 
 /** Interface for classes that allow to announce one Matter instance. */

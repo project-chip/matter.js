@@ -39,7 +39,7 @@ import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { SecureSession } from "./session/SecureSession.js";
-import { Session } from "./session/Session.js";
+import { Session, SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
 import { StorageContext } from "./storage/StorageContext.js";
@@ -235,8 +235,7 @@ export class MatterDevice {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        sessionParameters?: SessionParameterOptions;
     }) {
         const { fabric } = args;
         const session = await this.sessionManager.createSecureSession({
@@ -558,8 +557,8 @@ export class MatterDevice {
         timeOutSeconds = 5,
     ): Promise<undefined | { session: Session<MatterDevice>; channel: Channel<ByteArray> }> {
         // TODO: return the first not undefined answer or undefined
-        const matterServer = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
-        if (matterServer.length === 0) return undefined;
+        const device = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
+        if (device === undefined) return undefined;
         const session = this.sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
@@ -567,7 +566,7 @@ export class MatterDevice {
         if (networkInterface === undefined || !isNetworkInterface(networkInterface)) {
             throw new NetworkError("No network interface found");
         } // TODO meeehhh
-        return { session, channel: await networkInterface.openChannel(matterServer[0]) };
+        return { session, channel: await networkInterface.openChannel(device.addresses[0]) };
     }
 
     async stop() {

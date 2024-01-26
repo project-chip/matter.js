@@ -16,7 +16,7 @@ import { RootCertificateManager } from "./certificate/RootCertificateManager.js"
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { Channel } from "./common/Channel.js";
 import { NoProviderError } from "./common/MatterError.js";
-import { Scanner } from "./common/Scanner.js";
+import { CommissionableDevice, DiscoveryData, Scanner } from "./common/Scanner.js";
 import { ServerAddress, ServerAddressIp, serverAddressToString } from "./common/ServerAddress.js";
 import { tryCatchAsync } from "./common/TryCatchHandler.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "./crypto/Crypto.js";
@@ -39,10 +39,12 @@ import { SECURE_CHANNEL_PROTOCOL_ID } from "./protocol/securechannel/SecureChann
 import { StatusReportOnlySecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
 import { TypeFromPartialBitSchema } from "./schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "./schema/PairingCodeSchema.js";
+import { SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { CaseClient } from "./session/case/CaseClient.js";
 import { PaseClient } from "./session/pase/PaseClient.js";
 import { StorageContext } from "./storage/StorageContext.js";
+import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { Time, Timer } from "./time/Time.js";
 import { TlvEnum } from "./tlv/TlvNumber.js";
 import { TlvField, TlvObject } from "./tlv/TlvObject.js";
@@ -63,6 +65,8 @@ export type CommissioningSuccessFailureResponse = TypeFromSchema<typeof TlvCommi
 
 export type CommissionedNodeDetails = {
     operationalServerAddress?: ServerAddressIp;
+    discoveryData?: DiscoveryData;
+    basicInformationData?: Record<string, SupportedStorageTypes>;
 };
 
 const DEFAULT_FABRIC_INDEX = FabricIndex(1);
@@ -170,7 +174,7 @@ export class MatterController {
         } else if (this.controllerStorage.has("operationalServerAddress")) {
             // Migrate legacy storages, TODO: Remove later
             const operationalServerAddress = this.controllerStorage.get<ServerAddressIp>("operationalServerAddress");
-            this.setOperationalServerAddress(this.fabric.nodeId, operationalServerAddress);
+            this.setOperationalDeviceData(this.fabric.nodeId, operationalServerAddress);
             this.controllerStorage.delete("operationalServerAddress");
         } else if (this.controllerStorage.has("fabricCommissioned")) {
             // Migrate legacy storages, TODO: Remove later
@@ -283,42 +287,43 @@ export class MatterController {
         );
 
         // If we have a known address we try this first before we discover the device
-        const commissionServers =
-            knownAddress !== undefined
-                ? [knownAddress]
-                : await ControllerDiscovery.discoverDeviceAddressesByIdentifier(
-                      scannersToUse,
-                      identifierData,
-                      timeoutSeconds,
-                  );
-
         let paseSecureChannel: MessageChannel<MatterController> | undefined;
-        try {
+        let discoveryData: DiscoveryData | undefined;
+
+        // If we have a last known address, try this first
+        if (knownAddress !== undefined) {
+            try {
+                paseSecureChannel = await this.initializePaseSecureChannel(knownAddress, passcode);
+            } catch (error) {
+                if (!(error instanceof RetransmissionLimitReachedError)) {
+                    throw error;
+                }
+            }
+        }
+        if (paseSecureChannel === undefined) {
+            const discoveredDevices = await ControllerDiscovery.discoverDeviceAddressesByIdentifier(
+                scannersToUse,
+                identifierData,
+                timeoutSeconds,
+            );
+
             const { result } = await ControllerDiscovery.iterateServerAddresses(
-                commissionServers,
+                discoveredDevices,
                 RetransmissionLimitReachedError,
                 async () =>
-                    scannersToUse.flatMap(scanner =>
-                        scanner.getDiscoveredCommissionableDevices(identifierData).flatMap(device => device.addresses),
-                    ),
-                async address => await this.initializePaseSecureChannel(address, passcode),
+                    scannersToUse.flatMap(scanner => scanner.getDiscoveredCommissionableDevices(identifierData)),
+                async (address, device) => {
+                    const channel = await this.initializePaseSecureChannel(address, passcode, device);
+                    discoveryData = device;
+                    return channel;
+                },
             );
 
             // Pairing was successful, so store the address and assign the established secure channel
             paseSecureChannel = result;
-        } catch (e) {
-            if (e instanceof PairRetransmissionLimitReachedError && knownAddress !== undefined) {
-                // Know address was a failure, so discover the device now anew
-                return await this.commission({
-                    commissioning: commissioningOptions,
-                    discovery: { identifierData, timeoutSeconds, discoveryCapabilities },
-                    passcode,
-                });
-            }
-            throw e;
         }
 
-        return await this.commissionDevice(paseSecureChannel, commissioningOptions);
+        return await this.commissionDevice(paseSecureChannel, commissioningOptions, discoveryData);
     }
 
     async disconnect(nodeId: NodeId) {
@@ -332,7 +337,7 @@ export class MatterController {
         this.sessionManager.removeResumptionRecord(nodeId);
         await this.channelManager.removeChannel(this.fabric, nodeId);
         this.commissionedNodes.delete(nodeId);
-        this.storeCommisionedNodes();
+        this.storeCommissionedNodes();
     }
 
     /**
@@ -343,8 +348,12 @@ export class MatterController {
     private async initializePaseSecureChannel(
         address: ServerAddress,
         passcode: number,
+        device?: CommissionableDevice,
     ): Promise<MessageChannel<MatterController>> {
         let paseChannel: Channel<ByteArray>;
+        if (device !== undefined) {
+            logger.info(`Commissioning device`, MdnsScanner.discoveryDataDiagnostics(device));
+        }
         if (address.type === "udp") {
             const { ip } = address;
 
@@ -368,7 +377,14 @@ export class MatterController {
         }
 
         // Do PASE paring
-        const unsecureSession = this.sessionManager.createUnsecureSession();
+        const unsecureSession = this.sessionManager.createUnsecureSession({
+            sessionParameters: {
+                idleIntervalMs: device?.SII,
+                activeIntervalMs: device?.SAI,
+                activeThresholdMs: device?.SAT,
+            },
+            isInitiator: true,
+        });
         const paseUnsecureMessageChannel = new MessageChannel(paseChannel, unsecureSession);
         const paseExchange = this.exchangeManager.initiateExchangeWithChannel(
             paseUnsecureMessageChannel,
@@ -395,6 +411,7 @@ export class MatterController {
     private async commissionDevice(
         paseSecureMessageChannel: MessageChannel<MatterController>,
         commissioningOptions: CommissioningOptions,
+        discoveryData?: DiscoveryData,
     ): Promise<NodeId> {
         // TODO: Create the fabric only when needed before commissioning (to do when refactoring MatterController away)
         // TODO also move certificateManager and other parts into that class to get rid of them here
@@ -446,7 +463,7 @@ export class MatterController {
                 await paseSecureMessageChannel.close(); // We reconnect using Case, so close PASE connection
 
                 // Look for the device broadcast over MDNS and do CASE pairing
-                return await this.connect(peerNodeId, 120); // Wait maximum 120s to find the operational device for commissioning process
+                return await this.connect(peerNodeId, 120, discoveryData); // Wait maximum 120s to find the operational device for commissioning process
             },
         );
 
@@ -468,12 +485,13 @@ export class MatterController {
     private async reconnectLastKnownAddress(
         peerNodeId: NodeId,
         operationalAddress: ServerAddressIp,
+        discoveryData?: DiscoveryData,
     ): Promise<MessageChannel<MatterController> | undefined> {
         const { ip, port } = operationalAddress;
         try {
             logger.debug(`Resume device connection to configured server at ${ip}:${port}`);
-            const channel = await this.pair(peerNodeId, operationalAddress);
-            this.setOperationalServerAddress(peerNodeId, operationalAddress);
+            const channel = await this.pair(peerNodeId, operationalAddress, discoveryData);
+            this.setOperationalDeviceData(peerNodeId, operationalAddress);
             return channel;
         } catch (error) {
             if (
@@ -492,6 +510,7 @@ export class MatterController {
         peerNodeId: NodeId,
         operationalAddress?: ServerAddressIp,
         timeoutSeconds?: number,
+        discoveryData?: DiscoveryData,
     ) {
         const discoveryPromises = new Array<() => Promise<MessageChannel<MatterController>>>();
 
@@ -499,7 +518,11 @@ export class MatterController {
         let reconnectionPollingTimer: Timer | undefined;
 
         if (operationalAddress !== undefined) {
-            const directReconnection = await this.reconnectLastKnownAddress(peerNodeId, operationalAddress);
+            const directReconnection = await this.reconnectLastKnownAddress(
+                peerNodeId,
+                operationalAddress,
+                discoveryData,
+            );
             if (directReconnection !== undefined) {
                 return directReconnection;
             }
@@ -510,7 +533,11 @@ export class MatterController {
                 reconnectionPollingTimer = Time.getPeriodicTimer(RECONNECTION_POLLING_INTERVAL, async () => {
                     try {
                         logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
-                        const result = await this.reconnectLastKnownAddress(peerNodeId, operationalAddress);
+                        const result = await this.reconnectLastKnownAddress(
+                            peerNodeId,
+                            operationalAddress,
+                            discoveryData,
+                        );
                         if (result !== undefined && reconnectionPollingTimer?.isRunning) {
                             reconnectionPollingTimer?.stop();
                             resolver(result);
@@ -539,14 +566,23 @@ export class MatterController {
                 reconnectionPollingTimer?.stop();
             }
 
-            const { result, resultAddress } = await ControllerDiscovery.iterateServerAddresses(
-                scanResult,
+            const { result } = await ControllerDiscovery.iterateServerAddresses(
+                [scanResult],
                 PairRetransmissionLimitReachedError,
-                async () => this.mdnsScanner.getDiscoveredOperationalDevices(this.fabric, peerNodeId),
-                async address => await this.pair(peerNodeId, address),
+                async () => {
+                    const device = this.mdnsScanner.getDiscoveredOperationalDevice(this.fabric, peerNodeId);
+                    return device !== undefined ? [device] : [];
+                },
+                async (address, device) => {
+                    const result = await this.pair(peerNodeId, address, device);
+                    this.setOperationalDeviceData(peerNodeId, address, {
+                        ...discoveryData,
+                        ...device,
+                    });
+                    return result;
+                },
             );
 
-            this.setOperationalServerAddress(peerNodeId, resultAddress);
             return result;
         });
 
@@ -559,11 +595,11 @@ export class MatterController {
      * device is discovered again using its operational instance details.
      * It returns the operational MessageChannel on success.
      */
-    private async resume(peerNodeId: NodeId, timeoutSeconds?: number) {
+    private async resume(peerNodeId: NodeId, timeoutSeconds?: number, discoveryData?: DiscoveryData) {
         const operationalAddress = this.getLastOperationalAddress(peerNodeId);
 
         try {
-            return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, timeoutSeconds);
+            return await this.connectOrDiscoverNode(peerNodeId, operationalAddress, timeoutSeconds, discoveryData);
         } catch (error) {
             if (
                 (error instanceof DiscoveryError || error instanceof PairRetransmissionLimitReachedError) &&
@@ -578,7 +614,7 @@ export class MatterController {
     }
 
     /** Pair with an operational device (already commissioned) and establish a CASE session. */
-    private async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp) {
+    private async pair(peerNodeId: NodeId, operationalServerAddress: ServerAddressIp, discoveryData?: DiscoveryData) {
         const { ip, port } = operationalServerAddress;
         // Do CASE pairing
         const isIpv6Address = isIPv6(ip);
@@ -593,7 +629,15 @@ export class MatterController {
         }
 
         const operationalChannel = await operationalInterface.openChannel(operationalServerAddress);
-        const unsecureSession = this.sessionManager.createUnsecureSession();
+        const { sessionParameters } = this.findResumptionRecordByNodeId(peerNodeId) ?? {};
+        const unsecureSession = this.sessionManager.createUnsecureSession({
+            sessionParameters: {
+                idleIntervalMs: discoveryData?.SII ?? sessionParameters?.idleIntervalMs,
+                activeIntervalMs: discoveryData?.SAI ?? sessionParameters?.activeIntervalMs,
+                activeThresholdMs: discoveryData?.SAT ?? sessionParameters?.activeThresholdMs,
+            },
+            isInitiator: true,
+        });
         const operationalUnsecureMessageExchange = new MessageChannel(operationalChannel, unsecureSession);
         const operationalSecureSession = await tryCatchAsync(
             async () => {
@@ -630,18 +674,56 @@ export class MatterController {
         return Array.from(this.commissionedNodes.keys());
     }
 
-    private setOperationalServerAddress(nodeId: NodeId, operationalServerAddress: ServerAddressIp) {
-        const nodeDetails = this.commissionedNodes.get(nodeId) ?? { operationalServerAddress };
+    getCommissionedNodesDetails() {
+        return Array.from(this.commissionedNodes.entries()).map(
+            ([nodeId, { operationalServerAddress, discoveryData, basicInformationData }]) => ({
+                nodeId,
+                operationalAddress: operationalServerAddress
+                    ? serverAddressToString(operationalServerAddress)
+                    : undefined,
+                advertisedName: discoveryData?.DN,
+                discoveryData,
+                basicInformationData,
+            }),
+        );
+    }
+
+    private setOperationalDeviceData(
+        nodeId: NodeId,
+        operationalServerAddress: ServerAddressIp,
+        discoveryData?: DiscoveryData,
+    ) {
+        const nodeDetails = this.commissionedNodes.get(nodeId) ?? {};
         nodeDetails.operationalServerAddress = operationalServerAddress;
+        if (discoveryData !== undefined) {
+            nodeDetails.discoveryData = {
+                ...nodeDetails.discoveryData,
+                ...discoveryData,
+            };
+        }
         this.commissionedNodes.set(nodeId, nodeDetails);
-        this.storeCommisionedNodes();
+        this.storeCommissionedNodes();
+    }
+
+    enhanceCommissionedNodeDetails(
+        nodeId: NodeId,
+        data: { basicInformationData: Record<string, SupportedStorageTypes> },
+    ) {
+        const nodeDetails = this.commissionedNodes.get(nodeId);
+        if (nodeDetails === undefined) {
+            throw new Error(`Node ${nodeId} is not commissioned.`);
+        }
+        const { basicInformationData } = data;
+        nodeDetails.basicInformationData = basicInformationData;
+        this.commissionedNodes.set(nodeId, nodeDetails);
+        this.storeCommissionedNodes();
     }
 
     private getLastOperationalAddress(nodeId: NodeId) {
         return this.commissionedNodes.get(nodeId)?.operationalServerAddress;
     }
 
-    private storeCommisionedNodes() {
+    private storeCommissionedNodes() {
         this.controllerStorage.set("commissionedNodes", Array.from(this.commissionedNodes.entries()));
     }
 
@@ -649,13 +731,17 @@ export class MatterController {
      * Connect to the device by opening a channel and creating a new CASE session if necessary.
      * Returns a InteractionClient on success.
      */
-    async connect(peerNodeId: NodeId, timeoutSeconds?: number) {
+    async connect(peerNodeId: NodeId, timeoutSeconds?: number, discoveryData?: DiscoveryData) {
+        if (discoveryData == undefined) {
+            discoveryData = this.commissionedNodes.get(peerNodeId)?.discoveryData;
+        }
+
         let channel: MessageChannel<any>;
         try {
             channel = this.channelManager.getChannel(this.fabric, peerNodeId);
         } catch (error) {
             if (error instanceof NoChannelError) {
-                channel = await this.resume(peerNodeId, timeoutSeconds);
+                channel = await this.resume(peerNodeId, timeoutSeconds, discoveryData);
             } else {
                 throw error;
             }
@@ -683,8 +769,7 @@ export class MatterController {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        sessionParameters?: SessionParameterOptions;
     }) {
         const session = await this.sessionManager.createSecureSession({
             ...args,

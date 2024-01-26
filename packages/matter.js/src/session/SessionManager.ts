@@ -14,6 +14,7 @@ import { MessageCounter } from "../protocol/MessageCounter.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { SecureSession } from "./SecureSession.js";
+import { SessionParameterOptions, SessionParameters } from "./Session.js";
 import { UnsecureSession } from "./UnsecureSession.js";
 
 const logger = Logger.get("SessionManager");
@@ -25,6 +26,7 @@ export interface ResumptionRecord {
     resumptionId: ByteArray;
     fabric: Fabric;
     peerNodeId: NodeId;
+    sessionParameters: SessionParameters;
 }
 
 type ResumptionStorageRecord = {
@@ -33,6 +35,11 @@ type ResumptionStorageRecord = {
     resumptionId: Uint8Array;
     fabricId: FabricId;
     peerNodeId: NodeId;
+    sessionParameters: {
+        idleIntervalMs: number;
+        activeIntervalMs: number;
+        activeThresholdMs: number;
+    };
 };
 
 export class SessionManager<ContextT> {
@@ -50,22 +57,29 @@ export class SessionManager<ContextT> {
         this.sessionStorage = storage.createContext("SessionManager");
     }
 
-    createUnsecureSession(initiatorNodeId?: NodeId) {
+    createUnsecureSession(options: {
+        initiatorNodeId?: NodeId;
+        sessionParameters?: SessionParameterOptions;
+        isInitiator?: boolean;
+    }) {
+        const { initiatorNodeId, sessionParameters, isInitiator } = options;
         if (initiatorNodeId !== undefined) {
             if (this.unsecureSessions.has(initiatorNodeId)) {
                 throw new MatterFlowError(`UnsecureSession with NodeId ${initiatorNodeId} already exists.`);
             }
         }
         while (true) {
-            const session = new UnsecureSession(
-                this.context,
-                this.globalUnencryptedMessageCounter,
-                () => {
+            const session = new UnsecureSession({
+                context: this.context,
+                messageCounter: this.globalUnencryptedMessageCounter,
+                closeCallback: async () => {
                     logger.info(`Remove Session ${session.name} from session manager.`);
                     this.unsecureSessions.delete(session.getNodeId());
                 },
                 initiatorNodeId,
-            );
+                sessionParameters,
+                isInitiator: isInitiator ?? false,
+            });
 
             const ephermalNodeId = session.getNodeId();
             if (this.unsecureSessions.has(ephermalNodeId)) continue;
@@ -84,8 +98,7 @@ export class SessionManager<ContextT> {
         salt: ByteArray;
         isInitiator: boolean;
         isResumption: boolean;
-        idleRetransmissionTimeoutMs?: number;
-        activeRetransmissionTimeoutMs?: number;
+        sessionParameters?: SessionParameterOptions;
         closeCallback?: () => Promise<void>;
         subscriptionChangedCallback?: () => void;
     }) {
@@ -98,8 +111,7 @@ export class SessionManager<ContextT> {
             salt,
             isInitiator,
             isResumption,
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            sessionParameters,
             closeCallback,
             subscriptionChangedCallback,
         } = args;
@@ -118,8 +130,7 @@ export class SessionManager<ContextT> {
                 await closeCallback?.();
                 this.sessions.delete(sessionId);
             },
-            idleRetransmissionTimeoutMs,
-            activeRetransmissionTimeoutMs,
+            sessionParameters,
             subscriptionChangedCallback: () => subscriptionChangedCallback?.(),
         });
         this.sessions.set(sessionId, session);
@@ -239,33 +250,39 @@ export class SessionManager<ContextT> {
     storeResumptionRecords() {
         this.sessionStorage.set<ResumptionStorageRecord[]>(
             "resumptionRecords",
-            [...this.resumptionRecords].map(([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric }]) => ({
-                nodeId,
-                sharedSecret,
-                resumptionId,
-                fabricId: fabric.fabricId,
-                peerNodeId: peerNodeId,
-            })),
+            [...this.resumptionRecords].map(
+                ([nodeId, { sharedSecret, resumptionId, peerNodeId, fabric, sessionParameters }]) => ({
+                    nodeId,
+                    sharedSecret,
+                    resumptionId,
+                    fabricId: fabric.fabricId,
+                    peerNodeId: peerNodeId,
+                    sessionParameters,
+                }),
+            ),
         );
     }
 
     initFromStorage(fabrics: Fabric[]) {
         const storedResumptionRecords = this.sessionStorage.get<ResumptionStorageRecord[]>("resumptionRecords", []);
 
-        storedResumptionRecords.forEach(({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId }) => {
-            logger.info("restoring resumption record for node", nodeId);
-            const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
-            if (!fabric) {
-                logger.error("fabric not found for resumption record", fabricId);
-                return;
-            }
-            this.resumptionRecords.set(nodeId, {
-                sharedSecret,
-                resumptionId,
-                fabric,
-                peerNodeId,
-            });
-        });
+        storedResumptionRecords.forEach(
+            ({ nodeId, sharedSecret, resumptionId, fabricId, peerNodeId, sessionParameters }) => {
+                logger.info("restoring resumption record for node", nodeId);
+                const fabric = fabrics.find(fabric => fabric.fabricId === fabricId);
+                if (!fabric) {
+                    logger.error("fabric not found for resumption record", fabricId);
+                    return;
+                }
+                this.resumptionRecords.set(nodeId, {
+                    sharedSecret,
+                    resumptionId,
+                    fabric,
+                    peerNodeId,
+                    sessionParameters,
+                });
+            },
+        );
     }
 
     getActiveSessionInformation() {

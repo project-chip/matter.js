@@ -73,7 +73,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             destinationId,
             random: peerRandom,
             ecdhPublicKey: peerEcdhPublicKey,
-            mrpParams,
+            sessionParams: sessionParameters,
         } = sigma1;
 
         // Try to resume a previous session
@@ -105,8 +105,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: true,
-                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
-                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+                sessionParameters,
             });
 
             // Generate sigma 2 resume
@@ -164,7 +163,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             });
             const encrypted = Crypto.encrypt(sigma2Key, encryptedData, TBE_DATA2_NONCE);
             const sessionId = await server.getNextAvailableSessionId();
-            const sigma2Bytes = await messenger.sendSigma2({ random, sessionId, ecdhPublicKey, encrypted, mrpParams });
+            const sigma2Bytes = await messenger.sendSigma2({
+                random,
+                sessionId,
+                ecdhPublicKey,
+                encrypted,
+                sessionParams: sessionParameters,
+            });
 
             // Read and process sigma 3
             const {
@@ -209,8 +214,7 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
                 salt: secureSessionSalt,
                 isInitiator: false,
                 isResumption: false,
-                idleRetransmissionTimeoutMs: mrpParams?.idleRetransTimeoutMs,
-                activeRetransmissionTimeoutMs: mrpParams?.activeRetransTimeoutMs,
+                sessionParameters,
             });
             logger.info(
                 `session ${secureSession.getId()} created with ${messenger.getChannelName()} for Fabric ${NodeId.toHexString(
@@ -219,7 +223,13 @@ export class CaseServer implements ProtocolHandler<MatterDevice> {
             );
             await messenger.sendSuccess();
 
-            const resumptionRecord = { peerNodeId, fabric, sharedSecret, resumptionId };
+            const resumptionRecord = {
+                peerNodeId,
+                fabric,
+                sharedSecret,
+                resumptionId,
+                sessionParameters: secureSession.getSessionParameters(),
+            };
 
             await messenger.close();
             server.saveResumptionRecord(resumptionRecord);

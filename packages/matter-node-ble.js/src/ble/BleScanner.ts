@@ -7,12 +7,7 @@
 import type { Peripheral } from "@abandonware/noble";
 import { BleError } from "@project-chip/matter.js/ble";
 import { BtpCodec } from "@project-chip/matter.js/codec";
-import {
-    CommissionableDevice,
-    CommissionableDeviceIdentifiers,
-    Scanner,
-    ServerAddressIp,
-} from "@project-chip/matter.js/common";
+import { CommissionableDevice, CommissionableDeviceIdentifiers, Scanner } from "@project-chip/matter.js/common";
 import { VendorId } from "@project-chip/matter.js/datatype";
 import { Logger } from "@project-chip/matter.js/log";
 import { Time, Timer } from "@project-chip/matter.js/time";
@@ -208,14 +203,14 @@ export class BleScanner implements Scanner {
         return foundRecords;
     }
 
-    async findOperationalDevice(): Promise<ServerAddressIp[]> {
+    async findOperationalDevice(): Promise<undefined> {
         logger.info(`skip BLE scan because scanning for operational devices is not supported`);
-        return [];
+        return undefined;
     }
 
-    getDiscoveredOperationalDevices(): ServerAddressIp[] {
+    getDiscoveredOperationalDevice(): undefined {
         logger.info(`skip BLE scan because scanning for operational devices is not supported`);
-        return [];
+        return undefined;
     }
 
     async findCommissionableDevices(
