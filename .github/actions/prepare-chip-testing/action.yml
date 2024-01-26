@@ -47,7 +47,7 @@ runs:
         cache-name: chip-bin
       with:
         path: ./bin
-        key: ${{ inputs.runner-os }}-build-new-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
+        key: ${{ inputs.runner-os }}-build-yaml-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
 
     - name: Checkout Matter SDK
       id: checkout-sdk
