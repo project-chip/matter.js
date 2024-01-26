@@ -45,7 +45,7 @@ jobs:
       - name: Check out matter.js
         uses: actions/checkout@v4
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |
@@ -57,7 +57,7 @@ jobs:
               - "package.json"
               - "packages/**/package.json"
 
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes-long-tests
         with:
           filters: |
@@ -125,32 +125,7 @@ jobs:
               --runner chip_tool_python \
               --chip-tool ../bin/chip-tool \
               --log-level info \
-              --target-glob \ 
-                "{ \
-                  Test_AddNewFabricFromExistingFabric, \
-                  Test_TC_BINFO*, \
-                  Test_TC_BRBINFO*, \
-                  Test_TC_CADMIN*, \
-                  Test_TC_CGEN*, \
-                  Test_TC_CNET*, \
-                  Test_TC_DESC*, \
-                  Test_TC_?LABEL*, \
-                  Test_TC_OO*, \
-                  Test_TC_OPCREDS*, \
-                  TestArmFailSafe, \
-                  TestBasicInformation, \
-                  TestCASERecovery, \
-                  TestCommandsById, \
-                  TestCommissioningWindow, \
-                  TestFabricRemovalWhileSubscribed, \
-                  TestGeneralCommissioning, \
-                  TestMultiAdmin, \
-                  TestOperationalCredentialsCluster, \
-                  TestSelfFabricRemoval, \
-                  TestSubscribe_*, \
-                  TestUserLabelCluster*, \
-                  TestDiscovery \
-                }" \
+              --target-glob "{Test_AddNewFabricFromExistingFabric,Test_TC_BINFO*,Test_TC_BRBINFO*,Test_TC_CADMIN*,Test_TC_CGEN*,Test_TC_CNET*,Test_TC_DESC*,Test_TC_?LABEL*,Test_TC_OO*,Test_TC_OPCREDS*,TestArmFailSafe,TestBasicInformation,TestCASERecovery,TestCommandsById,TestCommissioningWindow,TestFabricRemovalWhileSubscribed,TestGeneralCommissioning,TestMultiAdmin,TestOperationalCredentialsCluster,TestSelfFabricRemoval,TestSubscribe_*,TestUserLabelCluster*,TestDiscovery}" \
               run \
               --iterations 1 \
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
@@ -181,18 +156,7 @@ jobs:
             './scripts/tests/run_test_suite.py \
               --runner chip_tool_python \
               --log-level info \
-              --target-glob \ 
-                "{ \
-                  Test_TC_CADMIN_1_3, \
-                  Test_TC_CADMIN_1_4, \
-                  Test_TC_CADMIN_1_5, \
-                  Test_TC_CADMIN_1_6, \
-                  Test_TC_CADMIN_1_9, \
-                  Test_TC_CADMIN_1_10, \
-                  Test_TC_CADMIN_1_16, \
-                  Test_TC_CADMIN_1_23, \
-                  Test_TC_CADMIN_1_24 \
-                }" \
+              --target-glob "{Test_TC_CADMIN_1_3,Test_TC_CADMIN_1_4,Test_TC_CADMIN_1_5,Test_TC_CADMIN_1_6,Test_TC_CADMIN_1_9,Test_TC_CADMIN_1_10,Test_TC_CADMIN_1_16,Test_TC_CADMIN_1_23,Test_TC_CADMIN_1_24}" \
               --include-tags MANUAL \
               run \
               --chip-tool ../bin/chip-tool \
