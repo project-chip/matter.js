@@ -163,19 +163,13 @@ jobs:
               --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
               --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
             '
-  repl_tests_linux:
-    needs: [chip-tests-needed]
-    name: REPL Tests - Linux
+  python-repl-tests:
+    needs: [prepare-chip-build]
 
     env:
       TSAN_OPTIONS: "halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt"
 
     runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/project-chip/chip-build:32
-      options: --privileged --sysctl "net.ipv6.conf.all.disable_ipv6=0
-        net.ipv4.conf.all.forwarding=0 net.ipv6.conf.all.forwarding=0"
 
     steps:
       - name: Check out matter.js
