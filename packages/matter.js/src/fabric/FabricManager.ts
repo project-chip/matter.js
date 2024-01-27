@@ -7,9 +7,12 @@
 import { InternalError, MatterError, MatterFlowError } from "../common/MatterError.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { NodeId } from "../datatype/NodeId.js";
+import { Logger } from "../log/Logger.js";
 import { StorageContext } from "../storage/StorageContext.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Fabric, FabricJsonObject } from "./Fabric.js";
+
+const logger = Logger.get("FabricManager");
 
 /** Specific Error for when a fabric is not found. */
 export class FabricNotFoundError extends MatterError {}
@@ -50,6 +53,7 @@ export class FabricManager {
     }
 
     addFabric(fabric: Fabric) {
+        logger.debug(`addFabric ${fabric.fabricIndex}->${fabric.fabricId}`);
         const { fabricIndex } = fabric;
         if (this.fabrics.has(fabricIndex)) {
             throw new MatterFlowError(`Fabric with index ${fabricIndex} already exists.`);
@@ -65,6 +69,7 @@ export class FabricManager {
             throw new FabricNotFoundError(
                 `Fabric with index ${fabricIndex} cannot be removed because it does not exist.`,
             );
+        logger.debug(`removeFabric ${fabric.fabricIndex}->${fabric.fabricId}`);
         this.fabrics.delete(fabricIndex);
         this.persistFabrics();
         this.fabricRemoveCallback?.(fabricIndex, fabric.rootNodeId);
@@ -77,6 +82,9 @@ export class FabricManager {
     findFabricFromDestinationId(destinationId: ByteArray, initiatorRandom: ByteArray) {
         for (const fabric of this.fabrics.values()) {
             const candidateDestinationId = fabric.getDestinationId(fabric.nodeId, initiatorRandom);
+            logger.debug(
+                `findFabricFromDestinationId ${fabric.fabricIndex}->${fabric.fabricId}: ${candidateDestinationId.toHex()} vs ${destinationId.toHex()}`,
+            );
             if (!candidateDestinationId.equals(destinationId)) continue;
             return fabric;
         }

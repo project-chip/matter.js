@@ -242,9 +242,6 @@ export class MatterDevice {
             ...args,
             closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-                if (session.isPase() && this.failSafeContext !== undefined) {
-                    await this.failSafeContext.expire();
-                }
                 if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
