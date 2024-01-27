@@ -100,9 +100,5 @@ export class FabricManager {
             throw new MatterFlowError(`Fabric with index ${fabricIndex} does not exist to revoke.`);
         }
         await fabric.remove();
-        if (fabricIndex === this.nextFabricIndex) {
-            this.nextFabricIndex--;
-            if (this.nextFabricIndex < 1) this.nextFabricIndex = 254;
-        }
     }
 }
