@@ -182,6 +182,7 @@ jobs:
           build-python: 'true'
 
       - name: Run Tests
+        shell: bash
         run: |
           cd connectedhomeip
           mkdir -p out/trace_data
