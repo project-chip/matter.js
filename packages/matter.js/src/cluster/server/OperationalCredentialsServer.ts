@@ -199,7 +199,7 @@ export const OperationalCredentialsClusterHandler: (
 
         assertSecureSession(session);
         if (session.isPase()) {
-            logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${session.name}.`);
+            logger.debug(`Add Fabric with index ${fabric.fabricIndex} to PASE session ${session.name}.`);
             session.addAssociatedFabric(fabric);
         }
 
