@@ -17,8 +17,7 @@
     "scripts": {
         "clean": "matter-build clean",
         "build": "matter-build",
-        "build-clean": "matter-build --clean",
-        "test-chip": "matter-test --force-exit"
+        "build-clean": "matter-build --clean"
     },
     "dependencies": {
         "@project-chip/matter-node.js": "0.7.5-alpha.0-20240126-d299c688",
