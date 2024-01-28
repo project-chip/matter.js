@@ -18,10 +18,6 @@ inputs:
     description: 'Also Build matter-js?'
     required: true
     default: "true"
-  build-python:
-    description: 'Also Build chip python?'
-    required: false
-    default: "false"
 
 runs:
   using: 'composite'
@@ -53,6 +49,14 @@ runs:
         path: ./bin
         key: ${{ inputs.runner-os }}-build-yaml-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
+    - name: Checkout Matter SDK
+      id: checkout-sdk
+      shell: bash
+      run: |
+        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
+        cd connectedhomeip
+        scripts/checkout_submodules.py --shallow --platform linux
+
     - name: Cache Python Environments files
       id: cache-env
       uses: actions/cache@v3
@@ -62,16 +66,8 @@ runs:
         path: ./connectedhomeip/.environment
         key: ${{ inputs.runner-os }}-env-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
-    - name: Checkout Matter SDK
-      id: checkout-sdk
-      shell: bash
-      run: |
-        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
-        cd connectedhomeip
-        scripts/checkout_submodules.py --shallow --platform linux
-
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
-    - if: ${{ steps.cache-env.outputs.cache-hit != 'true' || inputs.build-python == 'true' }}
+    - if: ${{ steps.cache-env.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build python framework
       id: build-python
       shell: bash
