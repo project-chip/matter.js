@@ -66,6 +66,15 @@ runs:
         path: ./connectedhomeip/.environment
         key: ${{ inputs.runner-os }}-env-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
+    - name: Cache Chip out files
+      id: cache-out
+      uses: actions/cache@v3
+      env:
+        cache-name: chip-out
+      with:
+        path: ./connectedhomeip/out/
+        key: ${{ inputs.runner-os }}-out-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
+
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
     - if: ${{ steps.cache-env.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
       name: Build python framework
