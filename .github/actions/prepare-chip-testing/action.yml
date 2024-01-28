@@ -59,7 +59,7 @@ runs:
       env:
         cache-name: chip-env
       with:
-        path: ./.environment
+        path: ./connectedhomeip/.environment
         key: ${{ inputs.runner-os }}-env-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
     - name: Checkout Matter SDK
