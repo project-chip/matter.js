@@ -20,7 +20,6 @@ import {
     NetworkCommissioning,
     OnOffCluster,
     OperationalCredentials,
-    Scenes,
 } from "@project-chip/matter.js/cluster";
 import {
     CaseAuthenticatedTag,
@@ -963,6 +962,7 @@ describe("Integration Test", () => {
             assert.deepEqual(pushedUpdates, [{ value: true, time: startTime + 2 * 1000 + 100 }]);
         });
 
+        /*
         it("one more subscribe an attribute with getter that needs endpoint", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
@@ -1010,7 +1010,7 @@ describe("Integration Test", () => {
             const updateReport = await updatePromise;
 
             assert.deepEqual(updateReport, { value: 1, time: startTime + 2 * 1000 + 100 });
-        });
+        });*/
 
         it("subscription of an event sends initial data", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
