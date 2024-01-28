@@ -44,7 +44,6 @@ runs:
       shell: bash
       run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
-    # Cache Bin files
     - name: Cache Bin files
       id: cache-bin
       uses: actions/cache@v3
@@ -53,6 +52,15 @@ runs:
       with:
         path: ./bin
         key: ${{ inputs.runner-os }}-build-yaml-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
+
+    - name: Cache Python Environments files
+      id: cache-bin
+      uses: actions/cache@v3
+      env:
+        cache-name: chip-env
+      with:
+        path: ./.environment
+        key: ${{ inputs.runner-os }}-env-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
     - name: Checkout Matter SDK
       id: checkout-sdk
@@ -63,7 +71,7 @@ runs:
         scripts/checkout_submodules.py --shallow --platform linux
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
-    - if: ${{ inputs.build-python == 'true' }}
+    - if: ${{ steps.cache-env.outputs.cache-hit != 'true' || inputs.build-python == 'true' }}
       name: Build python framework
       id: build-python
       shell: bash
