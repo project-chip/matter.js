@@ -15,7 +15,7 @@ import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { InternalError } from "../../common/MatterError.js";
+import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
@@ -254,38 +254,52 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 }
 
                 return attributes.flatMap(({ path, attribute }) => {
-                    return tryCatch(
-                        () => {
-                            const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
-                            const { nodeId, endpointId, clusterId } = path;
-
-                            const versionFilterValue =
-                                endpointId !== undefined && clusterId !== undefined
-                                    ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                                    : undefined;
-                            if (versionFilterValue !== undefined && versionFilterValue === version) {
-                                logger.debug(
-                                    `Read attribute from ${
-                                        exchange.channel.name
-                                    }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
-                                        value,
-                                    )} (version=${version}) ignored because of dataVersionFilter`,
-                                );
-                                return [];
-                            }
-
-                            logger.debug(
-                                `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                                    path,
-                                )}=${Logger.toJSON(value)} (version=${version})`,
-                            );
-
-                            const { schema } = attribute;
-                            return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
-                        },
+                    const { nodeId, endpointId, clusterId } = path;
+                    const { value, version } = tryCatch(
+                        () => attribute.getWithVersion(exchange.session, isFabricFiltered),
                         NoAssociatedFabricError,
-                        () => [],
+                        () => {
+                            // This is not fully correct but shpuld be sufficient for now
+                            // TODO: Fix with devices-gen branch!
+                            //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                            //  Assume for now that in this place we only need to handle fabric sensitive case
+                            if (endpointId === undefined || clusterId === undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
+                            if (cluster === undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            return {
+                                version: cluster.clusterDataVersion,
+                                value: [],
+                            };
+                        },
                     );
+
+                    const versionFilterValue =
+                        endpointId !== undefined && clusterId !== undefined
+                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                            : undefined;
+                    if (versionFilterValue !== undefined && versionFilterValue === version) {
+                        logger.debug(
+                            `Read attribute from ${
+                                exchange.channel.name
+                            }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                                value,
+                            )} (version=${version}) ignored because of dataVersionFilter`,
+                        );
+                        return [];
+                    }
+
+                    logger.debug(
+                        `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                            path,
+                        )}=${Logger.toJSON(value)} (version=${version})`,
+                    );
+
+                    const { schema } = attribute;
+                    return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
                 });
             },
         );
