@@ -259,7 +259,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         () => attribute.getWithVersion(exchange.session, isFabricFiltered),
                         NoAssociatedFabricError,
                         () => {
-                            // This is not fully correct but shpuld be sufficient for now
+                            // This is not fully correct but should be sufficient for now
                             // TODO: Fix with devices-gen branch!
                             //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
                             //  Assume for now that in this place we only need to handle fabric sensitive case

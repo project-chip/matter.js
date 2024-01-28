@@ -54,7 +54,7 @@ runs:
         key: ${{ inputs.runner-os }}-build-yaml-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
 
     - name: Cache Python Environments files
-      id: cache-bin
+      id: cache-env
       uses: actions/cache@v3
       env:
         cache-name: chip-env
