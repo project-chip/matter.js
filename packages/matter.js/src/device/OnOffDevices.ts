@@ -7,12 +7,10 @@ import { Attributes, Cluster, Commands, Events } from "../cluster/Cluster.js";
 import { Groups } from "../cluster/definitions/GroupsCluster.js";
 import { Identify } from "../cluster/definitions/IdentifyCluster.js";
 import { OnOff } from "../cluster/definitions/OnOffCluster.js";
-import { Scenes } from "../cluster/definitions/ScenesCluster.js";
 import { AttributeInitialValues, ClusterServerHandlers } from "../cluster/server/ClusterServerTypes.js";
 import { createDefaultGroupsClusterServer } from "../cluster/server/GroupsServer.js";
 import { createDefaultIdentifyClusterServer } from "../cluster/server/IdentifyServer.js";
 import { createDefaultOnOffClusterServer } from "../cluster/server/OnOffServer.js";
-import { createDefaultScenesClusterServer } from "../cluster/server/ScenesServer.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../schema/BitmapSchema.js";
 import { extendPublicHandlerMethods } from "../util/NamedHandler.js";
@@ -92,9 +90,11 @@ export class OnOffBaseDevice extends extendPublicHandlerMethods<typeof Device, O
         if (!excludeList.includes(Groups.Cluster.id)) {
             this.addClusterServer(createDefaultGroupsClusterServer());
         }
+        /** Scenes cluster is provisional and Matter 1.3 will also change it completely, so do not add for now
         if (!excludeList.includes(Scenes.Cluster.id)) {
             this.addClusterServer(createDefaultScenesClusterServer());
         }
+         */
         if (!excludeList.includes(OnOff.Cluster.id)) {
             this.addClusterServer(
                 createDefaultOnOffClusterServer(
