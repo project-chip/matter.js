@@ -28,7 +28,7 @@ import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { SecureSession, assertSecureSession } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -254,32 +254,38 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 }
 
                 return attributes.flatMap(({ path, attribute }) => {
-                    const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
-                    const { nodeId, endpointId, clusterId } = path;
+                    return tryCatch(
+                        () => {
+                            const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
+                            const { nodeId, endpointId, clusterId } = path;
 
-                    const versionFilterValue =
-                        endpointId !== undefined && clusterId !== undefined
-                            ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
-                            : undefined;
-                    if (versionFilterValue !== undefined && versionFilterValue === version) {
-                        logger.debug(
-                            `Read attribute from ${
-                                exchange.channel.name
-                            }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
-                                value,
-                            )} (version=${version}) ignored because of dataVersionFilter`,
-                        );
-                        return [];
-                    }
+                            const versionFilterValue =
+                                endpointId !== undefined && clusterId !== undefined
+                                    ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
+                                    : undefined;
+                            if (versionFilterValue !== undefined && versionFilterValue === version) {
+                                logger.debug(
+                                    `Read attribute from ${
+                                        exchange.channel.name
+                                    }: ${this.endpointStructure.resolveAttributeName(path)}=${Logger.toJSON(
+                                        value,
+                                    )} (version=${version}) ignored because of dataVersionFilter`,
+                                );
+                                return [];
+                            }
 
-                    logger.debug(
-                        `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
-                            path,
-                        )}=${Logger.toJSON(value)} (version=${version})`,
+                            logger.debug(
+                                `Read attribute from ${exchange.channel.name}: ${this.endpointStructure.resolveAttributeName(
+                                    path,
+                                )}=${Logger.toJSON(value)} (version=${version})`,
+                            );
+
+                            const { schema } = attribute;
+                            return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
+                        },
+                        NoAssociatedFabricError,
+                        () => [],
                     );
-
-                    const { schema } = attribute;
-                    return [{ attributeData: { path, dataVersion: version, payload: value, schema } }];
                 });
             },
         );
