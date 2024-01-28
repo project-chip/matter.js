@@ -15,7 +15,7 @@ export interface TestInstance {
     stop: () => Promise<void>;
 }
 
-export async function startTestApp(testInstanceClass: ClassExtends<TestInstance>) {
+export async function startTestApp(appName: string, testInstanceClass: ClassExtends<TestInstance>) {
     const storageName = `/tmp/chip_${getParameter("KVS") ?? "kvs"}`;
 
     const storage = new StorageBackendSyncJsonFile(storageName);
@@ -24,6 +24,7 @@ export async function startTestApp(testInstanceClass: ClassExtends<TestInstance>
     }
 
     const testInstance = new testInstanceClass(storage, {
+        appName,
         discriminator: getIntParameter("discriminator"),
         passcode: getIntParameter("passcode"),
     });
@@ -31,15 +32,15 @@ export async function startTestApp(testInstanceClass: ClassExtends<TestInstance>
     await testInstance.setup();
     await testInstance.start();
 
-    console.log(`Wait for tests`);
+    console.log(`======> Waiting for tests`);
 
-    process.on("SIGTERM", () => {
-        console.log(`Close test instance ...`);
+    function exitHandler(signal: string) {
+        console.log(`======> Closing test instance because of ${signal} ...`);
         testInstance
             .stop()
             .then(() =>
                 storage.close().then(() => {
-                    console.log(`Test instance successfully closed.`);
+                    console.log(`======> Test instance successfully closed.`);
                     process.exit(0);
                 }),
             )
@@ -47,5 +48,10 @@ export async function startTestApp(testInstanceClass: ClassExtends<TestInstance>
                 console.log(error.stack);
                 process.exit(1);
             });
-    });
+    }
+
+    process.on("SIGTERM", () => exitHandler("SIGTERM"));
+    process.on("SIGINT", () => exitHandler("SIGINT"));
+
+    process.on("exit", code => console.log(`======> Exit Test instance with code ${code}`));
 }

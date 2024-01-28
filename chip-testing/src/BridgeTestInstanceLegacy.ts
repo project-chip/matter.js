@@ -16,7 +16,6 @@ import {
 } from "@project-chip/matter.js/cluster";
 import { DeviceTypeId, EndpointNumber, VendorId } from "@project-chip/matter.js/datatype";
 import { Aggregator, DimmableLightDevice } from "@project-chip/matter.js/device";
-import { Storage } from "@project-chip/matter.js/storage";
 import { ByteArray } from "@project-chip/matter.js/util";
 import { AllClustersTestInstanceLegacy } from "./AllClustersTestInstanceLegacy.js";
 
@@ -25,19 +24,6 @@ export class BridgeTestInstanceLegacy extends AllClustersTestInstanceLegacy {
     onOffDeviceEndpoint3: DimmableLightDevice = new DimmableLightDevice(undefined, undefined, {
         endpointId: EndpointNumber(3),
     });
-
-    constructor(
-        storage: Storage,
-        options: {
-            discriminator?: number;
-            passcode?: number;
-        },
-    ) {
-        super(storage, {
-            appName: "BridgeApp",
-            ...options,
-        });
-    }
 
     override async setupCommissioningServer() {
         const commissioningServer = new CommissioningServer({

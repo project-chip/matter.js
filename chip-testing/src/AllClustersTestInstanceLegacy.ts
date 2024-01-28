@@ -46,7 +46,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
     async setup() {
         try {
             await this.storageManager.initialize(); // hacky but works
-            this.matterServer = new MatterServer(this.storageManager);
+            this.matterServer = new MatterServer(this.storageManager, { mdnsInterface: "en0" });
 
             this.commissioningServer = await this.setupCommissioningServer();
             await this.matterServer.addCommissioningServer(this.commissioningServer);
@@ -56,7 +56,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             console.log((error as Error).stack);
             throw error;
         }
-        process.stdout.write(`====> Chip test Runner "${this.appName}": Setup done\n`);
+        console.log(`======> ${this.appName}: Setup done`);
     }
 
     /** Start the test instance MatterServer with the included device. */
@@ -68,6 +68,8 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             // Catch and log error, else the test framework hides issues here
             console.log(error);
         }
+
+        // Magic logging chip testing waits for
         console.log("mDNS service published:");
         console.log();
 
@@ -75,9 +77,11 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
         if (!pairingData) throw new Error("No pairing data available");
         const { qrPairingCode } = pairingData;
 
+        // Magic logging chip testing waits for
         console.log(`SetupQRCode: [${qrPairingCode}]`);
+        console.log();
 
-        process.stdout.write(`====> Chip test Runner "${this.appName}": Start instance\n`);
+        console.log(`======> ${this.appName}: Instance started`);
     }
 
     /** Stop the test instance MatterServer and the device. */
@@ -85,7 +89,7 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
         if (!this.matterServer) throw new Error("matterServer not initialized on close");
         await this.matterServer.close();
         this.matterServer = undefined;
-        process.stdout.write(`====> Chip test Runner "${this.appName}": Stop instance\n`);
+        console.log(`======> ${this.appName}: Instance stopped`);
     }
 
     async setupCommissioningServer() {
