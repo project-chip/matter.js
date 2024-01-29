@@ -51,6 +51,8 @@ jobs:
     - name: Prepare chip tests
       if: steps.changes.outputs.result == 'ok'
       uses: ./.github/actions/prepare-chip-testing
+      with:
+        build-matter-js: "false"
 
     - name: chip-tool-test execution
       if: steps.changes.outputs.result == 'ok'
@@ -69,6 +71,13 @@ jobs:
             --all-clusters-app ../chip-testing/dist/esm/AllClustersTestAppLegacy.js \
             --bridge-app ../chip-testing/dist/esm/BridgeTestAppLegacy.js \
           '
+
+    - name: Cleanup chip tests
+      if: steps.changes.outputs.result == 'ok'
+      id: cleanup-chip-tests
+      shell: bash
+      run: |
+        rm -rf connectedhomeip
 
     - name: Determine the version bump
       if: steps.changes.outputs.result == 'ok'
