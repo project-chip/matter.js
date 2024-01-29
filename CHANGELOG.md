@@ -33,6 +33,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Optimized Commissioning error handling
   * Enhancement: Added connection options to Controller connect methods
   * Enhancement: Enhanced CLI arguments parser to allow "--name" additionally to "-name"
+  * Fix: Adjusted the Group limits in GroupKeyManagement cluster to 1 because we do not support groups yet
   * Fix: (Luligu) Corrected the Device type for bridged nodes with Power source information
 * matter.js shell:
   * Enhancement: Adjusted logic to output detailed node information on nodes command

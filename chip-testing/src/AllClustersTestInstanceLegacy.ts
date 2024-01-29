@@ -69,16 +69,15 @@ export class AllClustersTestInstanceLegacy implements TestInstance {
             console.log(error);
         }
 
-        // Magic logging chip testing waits for
-        console.log("mDNS service published:");
-        console.log();
-
         const pairingData = this.commissioningServer?.getPairingCode();
         if (!pairingData) throw new Error("No pairing data available");
         const { qrPairingCode } = pairingData;
 
         // Magic logging chip testing waits for
         console.log(`SetupQRCode: [${qrPairingCode}]`);
+        console.log();
+        // Magic logging chip testing waits for
+        console.log("mDNS service published:");
         console.log();
 
         console.log(`======> ${this.appName}: Instance started`);
