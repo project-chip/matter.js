@@ -81,7 +81,7 @@ export class NobleBleCentralInterface implements NetInterface {
             );
         }
         if (peripheral.state !== "disconnected") {
-            // Try to cleanup strange in between states
+            // Try to cleanup strange "in between" states
             await peripheral.disconnectAsync();
         }
         await peripheral.connectAsync();
