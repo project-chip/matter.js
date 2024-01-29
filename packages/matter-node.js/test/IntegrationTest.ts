@@ -963,6 +963,7 @@ describe("Integration Test", () => {
         });
 
         /*
+        TODO Re-enable when Scenes are updated with Matter 1.3
         it("one more subscribe an attribute with getter that needs endpoint", async () => {
             const nodeId = commissioningController.getCommissionedNodes()[0];
             const node = commissioningController.getConnectedNode(nodeId);
