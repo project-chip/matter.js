@@ -403,8 +403,8 @@ export class CommissioningServer extends MatterNode {
                 {
                     groupKeyMap: [],
                     groupTable: [],
-                    maxGroupsPerFabric: 254,
-                    maxGroupKeysPerFabric: 254,
+                    maxGroupsPerFabric: 1, // TODO: Increase once we add group support, for now only IPK is supported
+                    maxGroupKeysPerFabric: 1,
                 },
                 GroupKeyManagementClusterHandler(),
             ),
