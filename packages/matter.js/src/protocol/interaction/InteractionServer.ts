@@ -15,7 +15,7 @@ import { asClusterServerInternal } from "../../cluster/server/ClusterServerTypes
 import { CommandServer } from "../../cluster/server/CommandServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
 import { Message, SessionType } from "../../codec/MessageCodec.js";
-import { InternalError } from "../../common/MatterError.js";
+import { InternalError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { Crypto } from "../../crypto/Crypto.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
@@ -28,7 +28,7 @@ import { Logger } from "../../log/Logger.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
-import { SecureSession, assertSecureSession } from "../../session/SecureSession.js";
+import { NoAssociatedFabricError, SecureSession, assertSecureSession } from "../../session/SecureSession.js";
 import { StorageContext } from "../../storage/StorageContext.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
@@ -254,8 +254,28 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                 }
 
                 return attributes.flatMap(({ path, attribute }) => {
-                    const { value, version } = attribute.getWithVersion(exchange.session, isFabricFiltered);
                     const { nodeId, endpointId, clusterId } = path;
+                    const { value, version } = tryCatch(
+                        () => attribute.getWithVersion(exchange.session, isFabricFiltered),
+                        NoAssociatedFabricError,
+                        () => {
+                            // This is not fully correct but should be sufficient for now
+                            // TODO: Fix with devices-gen branch!
+                            //  Fabric scoped attributes are access errors, fabric sensitive attributes are just filtered
+                            //  Assume for now that in this place we only need to handle fabric sensitive case
+                            if (endpointId === undefined || clusterId === undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            const cluster = this.endpointStructure.getClusterServer(endpointId, clusterId);
+                            if (cluster === undefined) {
+                                throw new MatterFlowError("Should never happen");
+                            }
+                            return {
+                                version: cluster.clusterDataVersion,
+                                value: [],
+                            };
+                        },
+                    );
 
                     const versionFilterValue =
                         endpointId !== undefined && clusterId !== undefined

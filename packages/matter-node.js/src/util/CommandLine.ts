@@ -10,13 +10,16 @@ import { execSync } from "child_process";
 const commandArguments = process.argv.slice(2);
 
 export function getParameter(name: string) {
-    const markerIndex = commandArguments.indexOf(`-${name}`);
+    let markerIndex = commandArguments.indexOf(`-${name}`);
+    if (markerIndex === -1) markerIndex = commandArguments.indexOf(`--${name}`);
     if (markerIndex === -1 || markerIndex + 1 === commandArguments.length) return undefined;
     return commandArguments[markerIndex + 1];
 }
 
 export function hasParameter(name: string) {
-    return commandArguments.includes(`-${name}`);
+    let markerIncluded = commandArguments.includes(`-${name}`);
+    if (!markerIncluded) markerIncluded = commandArguments.includes(`--${name}`);
+    return markerIncluded;
 }
 
 export function getIntParameter(name: string) {

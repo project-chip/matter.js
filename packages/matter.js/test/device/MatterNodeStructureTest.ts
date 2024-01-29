@@ -20,7 +20,6 @@ import { Identify, IdentifyCluster } from "../../src/cluster/definitions/Identif
 import { NetworkCommissioning } from "../../src/cluster/definitions/NetworkCommissioningCluster.js";
 import { OnOffCluster } from "../../src/cluster/definitions/OnOffCluster.js";
 import { OperationalCredentialsCluster } from "../../src/cluster/definitions/OperationalCredentialsCluster.js";
-import { ScenesCluster } from "../../src/cluster/definitions/ScenesCluster.js";
 import { AdministratorCommissioningHandler } from "../../src/cluster/server/AdministratorCommissioningServer.js";
 import { AttributeServer } from "../../src/cluster/server/AttributeServer.js";
 import { ClusterServer } from "../../src/cluster/server/ClusterServer.js";
@@ -383,11 +382,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(BindingCluster)).ok;
 
@@ -400,8 +398,8 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(161);
-            expect(commandPaths.length).equal(38);
+            expect(attributePaths.length).equal(149);
+            expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
 
@@ -474,11 +472,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(BindingCluster)).ok;
 
@@ -491,8 +488,8 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(1)]);
 
-            expect(attributePaths.length).equal(161);
-            expect(commandPaths.length).equal(38);
+            expect(attributePaths.length).equal(149);
+            expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
 
@@ -566,11 +563,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(10))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(10))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(BindingCluster)).ok;
 
@@ -583,8 +579,8 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(161);
-            expect(commandPaths.length).equal(38);
+            expect(attributePaths.length).equal(149);
+            expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
 
@@ -658,11 +654,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GroupKeyManagementCluster)).ok;
             expect(endpoints.get(EndpointNumber(0))?.hasClusterServer(GeneralCommissioning.Cluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(10))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(10))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(10))?.hasClusterServer(BindingCluster)).ok;
 
@@ -675,8 +670,8 @@ describe("Endpoint Structures", () => {
             ) as AttributeServer<EndpointNumber[]>;
             expect(rootPartsListAttribute?.getLocal()).deep.equal([EndpointNumber(10)]);
 
-            expect(attributePaths.length).equal(161);
-            expect(commandPaths.length).equal(38);
+            expect(attributePaths.length).equal(149);
+            expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(6);
         });
     });
@@ -753,11 +748,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(1);
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BindingCluster)).ok;
@@ -821,8 +815,8 @@ describe("Endpoint Structures", () => {
                 },
             ]);
 
-            expect(attributePaths.length).equal(179);
-            expect(commandPaths.length).equal(38);
+            expect(attributePaths.length).equal(167);
+            expect(commandPaths.length).equal(28);
             expect(eventPaths.length).equal(7);
         });
 
@@ -865,20 +859,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(1))?.getAllClusterServers().length).equal(1);
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(12))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(12))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(BindingCluster)).ok;
@@ -946,8 +938,8 @@ describe("Endpoint Structures", () => {
                 },
             ]);
 
-            expect(attributePaths.length).equal(238);
-            expect(commandPaths.length).equal(58);
+            expect(attributePaths.length).equal(214);
+            expect(commandPaths.length).equal(38);
             expect(eventPaths.length).equal(8);
         });
 
@@ -1024,20 +1016,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(11))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(11))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(12))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(12))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(12))?.hasClusterServer(BindingCluster)).ok;
@@ -1046,20 +1036,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(21))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(21))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(21))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(22))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(22))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(22))?.hasClusterServer(BindingCluster)).ok;
@@ -1098,8 +1086,8 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(22),
             ]);
 
-            expect(attributePaths.length).equal(380);
-            expect(commandPaths.length).equal(98);
+            expect(attributePaths.length).equal(332);
+            expect(commandPaths.length).equal(58);
             expect(eventPaths.length).equal(10);
         });
 
@@ -1217,20 +1205,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(1))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(2))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(2))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(2))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BindingCluster)).ok;
@@ -1239,20 +1225,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(4))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(4))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(5))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(5))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(5))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(6))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(6))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(6))?.hasClusterServer(BindingCluster)).ok;
@@ -1291,8 +1275,8 @@ describe("Endpoint Structures", () => {
                 EndpointNumber(6),
             ]);
 
-            expect(attributePaths.length).equal(380);
-            expect(commandPaths.length).equal(98);
+            expect(attributePaths.length).equal(332);
+            expect(commandPaths.length).equal(58);
             expect(eventPaths.length).equal(10);
         });
 
@@ -1423,20 +1407,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(37))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(37))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(38))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(38))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(BindingCluster)).ok;
@@ -1445,20 +1427,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(39))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(39))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(40))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(40))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(18))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(18))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(BindingCluster)).ok;
@@ -1467,19 +1447,17 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(41))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(41))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(42))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(42))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(43))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(43))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(BindingCluster)).ok;
 
@@ -1541,8 +1519,8 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(502);
-            expect(commandPaths.length).equal(138);
+            expect(attributePaths.length).equal(430);
+            expect(commandPaths.length).equal(78);
             expect(eventPaths.length).equal(11);
         });
 
@@ -1674,20 +1652,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(37))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(37))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(3))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(3))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(38))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(38))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(38))?.hasClusterServer(BindingCluster)).ok;
@@ -1696,20 +1672,18 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(39))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(39))?.hasClusterServer(FixedLabelCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(40))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(40))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(40))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(18))?.getAllClusterServers().length).equal(7);
+            expect(endpoints.get(EndpointNumber(18))?.getAllClusterServers().length).equal(6);
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(18))?.hasClusterServer(BindingCluster)).ok;
@@ -1718,19 +1692,17 @@ describe("Endpoint Structures", () => {
             expect(endpoints.get(EndpointNumber(41))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(41))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(42))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(42))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(42))?.hasClusterServer(BindingCluster)).ok;
 
-            expect(endpoints.get(EndpointNumber(43))?.getAllClusterServers().length).equal(6);
+            expect(endpoints.get(EndpointNumber(43))?.getAllClusterServers().length).equal(5);
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints.get(EndpointNumber(43))?.hasClusterServer(BindingCluster)).ok;
 
@@ -1792,8 +1764,8 @@ describe("Endpoint Structures", () => {
             );
             expect(endpointStorage.get("serial_node-matter-0000-index_1-unique_COMPOSED2-index_1")).equal(43);
 
-            expect(attributePaths.length).equal(502);
-            expect(commandPaths.length).equal(138);
+            expect(attributePaths.length).equal(430);
+            expect(commandPaths.length).equal(78);
             expect(eventPaths.length).equal(11);
 
             let structureChangeCounter = 0;
@@ -1826,11 +1798,10 @@ describe("Endpoint Structures", () => {
             expect(endpoints2.size).equal(10);
             expect(endpoints2.has(EndpointNumber(3))).equal(false);
 
-            expect(endpoints2.get(EndpointNumber(44))?.getAllClusterServers().length).equal(7);
+            expect(endpoints2.get(EndpointNumber(44))?.getAllClusterServers().length).equal(6);
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(DescriptorCluster)).ok;
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(IdentifyCluster)).ok;
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(GroupsCluster)).ok;
-            expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(ScenesCluster)).ok;
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(OnOffCluster)).ok;
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(BindingCluster)).ok;
             expect(endpoints2.get(EndpointNumber(44))?.hasClusterServer(BridgedDeviceBasicInformationCluster)).ok;
@@ -1850,7 +1821,7 @@ describe("Endpoint Structures", () => {
             const { endpoints: endpoints3 } = endpointStructure3;
 
             expect(endpoints3.size).equal(11);
-            expect(endpoints3.get(EndpointNumber(3))?.getAllClusterServers().length).equal(7);
+            expect(endpoints3.get(EndpointNumber(3))?.getAllClusterServers().length).equal(6);
         });
     });
 

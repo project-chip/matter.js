@@ -23,12 +23,16 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Only set session active timestamp if we create a session based on an incoming message and not when we are the creator of the session to prevent too fast resubmissions
   * Fix: Correctly handle CASE Resumptions without known resumption records and fallback to a full CASE session establishment
   * Fix: Enhanced commissioning flow based on latest Matter SDK test cases and match with specification
+  * Fix: Enhanced handling for fabric scoped command invokes to match with specification
+  * Fix: Enhanced handling for fabric sensitive attribute reads to match with specification
 * matter.js API:
   * Enhancement: Allowed to pass connect options when connecting a node for Controller
   * Enhancement: Stored Discovery and Basic information data for commissioned nodes and allow API access for easy determination of devices without need to connect to them
-  * Enhancement: Improved OnOff/Dimmable Lighing devices and add Startup handling to match specification
+  * Enhancement: Improved OnOff/Dimmable Lighting devices and add Startup handling to match specification
+  * Enhancement: Remove Scenes cluster for now from all device types because provisional and changes upcoming with Matter 1.3
   * Enhancement: Optimized Commissioning error handling
   * Enhancement: Added connection options to Controller connect methods
+  * Enhancement: Enhanced CLI arguments parser to allow "--name" additionally to "-name"
   * Fix: (Luligu) Corrected the Device type for bridged nodes with Power source information
 * matter.js shell:
   * Enhancement: Adjusted logic to output detailed node information on nodes command

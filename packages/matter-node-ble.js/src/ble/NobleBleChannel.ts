@@ -69,6 +69,7 @@ export class NobleBleCentralInterface implements NetInterface {
         const { peripheral, hasAdditionalAdvertisementData } = (
             Ble.get().getBleScanner() as BleScanner
         ).getDiscoveredDevice(address.peripheralAddress);
+        logger.debug("BLE peripheral state", peripheral.state);
         if (peripheral.state === "connected" || peripheral.state === "connecting") {
             throw new BleError(
                 `Peripheral ${address.peripheralAddress} is already connected or connecting. Only one connection supported right now.`,
@@ -78,6 +79,10 @@ export class NobleBleCentralInterface implements NetInterface {
             throw new BleError(
                 `Peripheral ${address.peripheralAddress} is already connected. Only one connection supported right now.`,
             );
+        }
+        if (peripheral.state !== "disconnected") {
+            // Try to cleanup strange "in between" states
+            await peripheral.disconnectAsync();
         }
         await peripheral.connectAsync();
 
@@ -232,7 +237,7 @@ export class NobleBleChannel implements Channel<ByteArray> {
         private readonly peripheral: Peripheral,
         private readonly btpSession: BtpSessionHandler,
     ) {
-        peripheral.on("disconnect", () => {
+        peripheral.once("disconnect", () => {
             logger.debug(`Disconnected from peripheral ${peripheral.address}`);
             this.connected = false;
             void this.btpSession.close();

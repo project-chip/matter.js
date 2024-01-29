@@ -242,9 +242,6 @@ export class MatterDevice {
             ...args,
             closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
-                if (session.isPase() && this.failSafeContext !== undefined) {
-                    await this.failSafeContext.expire();
-                }
                 if (!session.closingAfterExchangeFinished) {
                     // Delayed closing is executed when exchange is closed
                     await this.exchangeManager.closeSession(session);
@@ -292,7 +289,7 @@ export class MatterDevice {
         this.sendFabricAnnouncements(fabrics, true).catch(error =>
             logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
         );
-        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId }));
+        logger.info("Announce done", Logger.dict({ fabric: fabric.fabricId, fabricIndex: fabric.fabricIndex }));
         return fabric.fabricIndex;
     }
 
@@ -341,6 +338,7 @@ export class MatterDevice {
 
         logger.info("Failsafe timer expired, Reset fabric builder.");
         if (failSafeContext.fabricIndex !== undefined && !failSafeContext.forUpdateNoc) {
+            logger.debug(`Revoking fabric with index ${failSafeContext.fabricIndex}`);
             await this.fabricManager.revokeFabric(failSafeContext.fabricIndex);
         }
 

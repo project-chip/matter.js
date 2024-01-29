@@ -27,7 +27,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+        sudo apt-get install -y git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
 
     - name: Prepare Bin Directory
       id: prepare_bin
@@ -35,7 +35,11 @@ runs:
       run: |
         mkdir bin
 
-    # Cache Bin files
+    - name: Get current date
+      id: date
+      shell: bash
+      run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
     - name: Cache Bin files
       id: cache-bin
       uses: actions/cache@v3
@@ -43,7 +47,42 @@ runs:
         cache-name: chip-bin
       with:
         path: ./bin
-        key: ${{ inputs.runner-os }}-build-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}
+        key: ${{ inputs.runner-os }}-build-yaml-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
+
+    - name: Checkout Matter SDK
+      id: checkout-sdk
+      shell: bash
+      run: |
+        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
+        cd connectedhomeip
+        scripts/checkout_submodules.py --shallow --platform linux
+
+    - name: Cache Python Environments files
+      id: cache-env
+      uses: actions/cache@v3
+      env:
+        cache-name: chip-env
+      with:
+        path: ./connectedhomeip/.environment
+        key: ${{ inputs.runner-os }}-env-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
+
+    - name: Cache Chip out files
+      id: cache-out
+      uses: actions/cache@v3
+      env:
+        cache-name: chip-out
+      with:
+        path: ./connectedhomeip/out/
+        key: ${{ inputs.runner-os }}-out-${{ env.cache-name }}-${{ inputs.connectedhomeip-tag }}-${{ env.DATE }}
+
+    # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
+    - if: ${{ steps.cache-env.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
+      name: Build python framework
+      id: build-python
+      shell: bash
+      run: |
+        cd connectedhomeip
+        ./scripts/run_in_build_env.sh './scripts/build_python.sh --install_virtual_env out/venv'
 
     # Only build if cache is not hit or if the commit message contains '[rebuild-chip]'
     - if: ${{ steps.cache-bin.outputs.cache-hit != 'true' || inputs.rebuild-chip-tool == 'true' }}
@@ -51,17 +90,13 @@ runs:
       id: build-executables
       shell: bash
       run: |
-        git clone https://github.com/project-chip/connectedhomeip.git --depth=1 --branch=${{ inputs.connectedhomeip-tag }}
         cd connectedhomeip
-        scripts/checkout_submodules.py --shallow --platform linux
-        source scripts/activate.sh
-        ./scripts/build/build_examples.py --target linux-x64-light build
-        cp out/linux-x64-light/chip-lighting-app ../bin/
-        rm -rf out/linux-x64-light
-        ./scripts/build/build_examples.py --target linux-x64-chip-tool build
+        ./scripts/run_in_build_env.sh \
+          "./scripts/build/build_examples.py \
+             --target linux-x64-chip-tool \
+             build
+          "
         cp out/linux-x64-chip-tool/chip-tool ../bin/
-        rm -rf out/linux-x64-chip-tool
-        rm -rf connectedhomeip
       #          More options for later, but takes long to build
       #          ./scripts/build/build_examples.py --target linux-x64-all-clusters build
       #          cp out/linux-x64-all-clusters/chip-all-clusters-app ../bin/
@@ -121,3 +156,8 @@ runs:
       run: |
         npm ci
 
+    - name: Patch test definitions
+      shell: bash
+      run: |
+        cp -r chip-testing/patched-test-files/* connectedhomeip/src/app/tests/suites/
+      # needed as long as we are still on Matter 1.1 but use tests from master branch from SDK
