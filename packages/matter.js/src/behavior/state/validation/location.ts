@@ -5,7 +5,7 @@
  */
 
 import { SchemaPath } from "../../supervision/SchemaPath.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 
 /**
  * Contextual information tracked during validation.

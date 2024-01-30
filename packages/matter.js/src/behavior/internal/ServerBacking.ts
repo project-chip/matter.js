@@ -11,7 +11,7 @@ import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 import { Datasource } from "../state/managed/Datasource.js";
-import { Val } from "../state/managed/Val.js";
+import { Val } from "../state/Val.js";
 import { Transaction } from "../state/transaction/Transaction.js";
 import { ActionContext } from "../context/ActionContext.js";
 import { ServerStore } from "../../node/server/storage/ServerStore.js";

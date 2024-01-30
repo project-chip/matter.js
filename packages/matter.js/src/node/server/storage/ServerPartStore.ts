@@ -1,4 +1,4 @@
-import { Val } from "../../../behavior/state/managed/Val.js";
+import { Val } from "../../../behavior/state/Val.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";

@@ -8,7 +8,7 @@ import { Metatype } from "../../../../model/definitions/index.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import type { Schema } from "../../../supervision/Schema.js";
 import { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { Val } from "../Val.js";
+import { Val } from "../../Val.js";
 import { ListManager } from "./ListManager.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 import { StructManager } from "./StructManager.js";

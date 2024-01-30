@@ -8,7 +8,7 @@ import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
-import { Environment } from "@project-chip/matter.js/environment";
+import { Environment, RuntimeService, VariableService, StorageService } from "@project-chip/matter.js/environment";
 
 /**
  * This is the default environment implementation for Node:
@@ -23,108 +23,74 @@ import { Environment } from "@project-chip/matter.js/environment";
  * You can modify any of the functionality by overriding or replacing the
  * environment altogether.
  */
-export class NodeJsEnvironment extends Environment {
-    #installed = false;
-    readonly #interrupt = (): void => this.interrupt();
-    readonly #diagnose = (): void => { process.on("SIGUSR2", this.#diagnose); this.diagnose(); };
+export function NodeJsEnvironment() {
+    const env = new Environment("default");
 
-    constructor(name: string) {
-        super(name);
+    loadVariables(env);
+    configureSignals(env);
+    configureStorage(env);
 
-        this.tasks.added.on(() => this.setInstalled());
-        this.tasks.deleted.on(() => this.setInstalled());
-    }
-
-    protected override loadVariables() {
-        let variables = loadEnvAndArgs();
-        variables = setDefaults(variables);
-        variables = loadConfigFile(variables);
-
-        return variables;
-    }
-
-    protected override loadStorage(name: string) {
-        return new StorageBackendDisk(
-            resolve(this.location, name),
-            this.variables.storage?.clear === "true"
-        );
-    }
-
-    protected override get location() {
-        let path = this.variables.storage?.path;
-        if (path === undefined || path === "") {
-            path = this.variables.path.root;
-        } else {
-            path = resolve(this.variables.path.root, path);
-        }
-        return path;
-    }
-
-    protected setInstalled() {
-        if (!this.#installed && this.tasks.size) {
-            process.on("SIGINT", this.#interrupt);
-            process.on("SIGUSR2", this.#diagnose);
-            this.#installed = true;
-        }
-        if (this.#installed && !this.tasks.size) {
-            process.off("SIGINT", this.#interrupt);
-            process.off("SIGUSR2", this.#diagnose);
-            this.#installed = false;
-        }
-    }
+    return env;
 }
 
-function addVariable(into: Record<string, any>, path: string[], value: any) {
-    if (!path.length) {
-        return;
-    }
+function loadVariables(env: Environment) {
+    const vars = env.vars;
 
-    let current = into[path[0]];
-    if (path.length === 1) {
-        if (current === undefined) {
-            into[path[0]] = value;
-        }
-        return;
-    }
-
-    if (typeof current !== "object") {
-        current = into[path[0]] = {};
-    }
-    addVariable(current, path.slice(1), value);
+    vars.addUnixEnvStyle(process.env);
+    vars.addArgvStyle(process.argv);
+    vars.addConfigStyle(getDefaults(vars));
+    vars.addConfigStyle(loadConfigFile(vars));
 }
 
-function loadEnvAndArgs() {
-    const variables = {} as Record<string, any>;
+function configureSignals(env: Environment) {
+    const runtime = env.get(RuntimeService);
 
-    // Quick & dirty environment variable ingestion
-    for (const key in process.env) {
-        if (key.startsWith("MATTER_")) {
-            addVariable(variables, key.slice(7).toLowerCase().split("_"), process.env[key]);
-        }
+    const interrupt = (): void => runtime.cancel();
+    const diagnose = (): void => { process.on("SIGUSR2", env.diagnose); env.diagnose(); };
+
+    runtime.started.on(() => {
+        process.on("SIGINT", interrupt);
+        process.on("SIGUSR2", diagnose);
+    });
+
+    runtime.stopped.on(() => {
+        process.off("SIGINT", interrupt);
+        process.off("SIGUSR2", diagnose);
+    });
+}
+
+function configureStorage(env: Environment) {
+    const service = env.get(StorageService);
+    const location = env.vars.get("storage.path", ".");
+    service.location = location;
+    service.factory = namespace => new StorageBackendDisk(
+        resolve(location, namespace),
+        env.vars.get("storage.clear", false),
+    )
+}
+
+export function loadConfigFile(vars: VariableService) {
+    const path = vars.get("path.config", "config.json");
+
+    if (!existsSync(path)) {
+        return {};
     }
 
-    // Quick & even dirtier command line parsing
-    for (let arg of process.argv) {
-        if (!arg.startsWith("--")) {
-            continue;
-        }
-        arg = arg.slice(2);
-
-        const separatorPos = arg.indexOf("=");
-        let key, value;
-
-        if (separatorPos === -1) {
-            key = arg;
-            value = true;
-        } else {
-            key = arg.slice(0, separatorPos);
-            value = arg.slice(separatorPos + 1);
-        }
-
-        addVariable(variables, key.toLowerCase().split("-"), value);
+    let configJson;
+    try {
+        configJson = readFileSync(path).toString();
+    } catch (e: any) {
+        throw new ImplementationError(`Error reading configuration file ${path}: ${e.message}`);
     }
 
-    return variables;
+    let configVars;
+    try {
+        configVars = JSON.parse(configJson);
+    } catch (e: any) {
+        throw new ImplementationError(`Error parsing configuration file ${path}: ${e.message}`);
+    }
+
+    return configVars;
 }
 
 function getDefaultRoot(envName: string) {
@@ -142,73 +108,16 @@ function getDefaultRoot(envName: string) {
     return matterDir;
 }
 
-export function merge(a: Record<string, any>, b: Record<string, any>) {
-    const merged = { ...a };
-    for (const key in b) {
-        const aval = a[key];
-        const bval = b[key];
-        if (typeof bval === "object") {
-            if (typeof aval === "object") {
-                merged[key] = merge(aval, bval);
-            } else {
-                merged[key] = bval;
-            }
-        } else if (typeof aval !== "object") {
-            merged[key] = bval;
-        }
-    }
-    return merged;
-}
+export function getDefaults(vars: VariableService) {
+    const envName = vars.get("environment", "default");
+    const rootPath = vars.get("path.root", getDefaultRoot(envName));
+    const configPath = resolve(rootPath, vars.get("path.config", "config.json"));
 
-export function loadConfigFile(variables: Record<string, any>) {
-    const path = variables.path.config;
-
-    if (!existsSync(path)) {
-        return variables;
-    }
-
-    let configJson;
-    try {
-        configJson = readFileSync(path).toString();
-    } catch (e: any) {
-        throw new ImplementationError(`Error reading configuration file ${path}: ${e.message}`);
-    }
-
-    let configVars;
-    try {
-        configVars = JSON.parse(configJson);
-    } catch (e: any) {
-        throw new ImplementationError(`Error parsing configuration file ${path}: ${e.message}`);
-    }
-
-    return merge(configVars, variables);
-}
-
-export function setDefaults(variables: Record<string, any>) {
-    let envName = variables?.environment;
-    if (envName === undefined || envName === "") {
-        envName = "default";
-    }
-
-    let rootPath = variables?.path?.root;
-    if (rootPath === undefined || rootPath === "") {
-        rootPath = getDefaultRoot(envName);
-    }
-
-    let configPath = variables?.path?.config;
-    if (configPath === undefined || configPath === "") {
-        configPath = "config.json";
-    }
-    configPath = resolve(rootPath, configPath);
-
-    return merge(
-        {
-            environment: envName,
-            path: {
-                root: rootPath,
-                config: configPath,
-            },
+    return {
+        environment: envName,
+        path: {
+            root: rootPath,
+            config: configPath,
         },
-        variables,
-    );
+    };
 }

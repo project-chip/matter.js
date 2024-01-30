@@ -5,7 +5,7 @@
  */
 
 import { ExpiredReferenceError } from "../../errors.js";
-import { Val } from "./Val.js";
+import { Val } from "../Val.js";
 
 type Container = Record<string | number, Val>;
 

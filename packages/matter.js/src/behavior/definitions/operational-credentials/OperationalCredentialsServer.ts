@@ -13,7 +13,7 @@ import { FabricTableFullError } from "../../../fabric/FabricManager.js";
 import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
-import { Val } from "../../state/managed/Val.js";
+import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";

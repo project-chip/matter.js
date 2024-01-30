@@ -9,7 +9,7 @@ import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
 import { SchemaPath } from "../../supervision/SchemaPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 import {
     Code,
     ConformantNode,

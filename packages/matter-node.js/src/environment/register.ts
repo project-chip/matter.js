@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment } from "../exports/common.js";
+import { Environment } from "@project-chip/matter.js/environment";
 import { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 
-Environment.default = new NodeJsEnvironment("default");
+Environment.default = NodeJsEnvironment();

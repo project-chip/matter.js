@@ -7,7 +7,7 @@
 import { InternalError } from "../../common/MatterError.js";
 import { AttributeModel, ClusterModel, FeatureSet, Globals, ValueModel } from "../../model/index.js";
 import { AccessControl } from "../AccessControl.js";
-import { Val } from "../state/managed/Val.js";
+import { Val } from "../state/Val.js";
 import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
 import { Schema } from "./Schema.js";

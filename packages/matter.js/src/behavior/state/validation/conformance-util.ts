@@ -8,7 +8,7 @@ import { Conformance } from "../../../model/index.js";
 import { SchemaErrorPath, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
 import { SchemaPath } from "../../supervision/SchemaPath.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 import { ValidationLocation } from "./location.js";
 
 export enum Code {

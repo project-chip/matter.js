@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "../../behavior/state/managed/Val.js";
+import { Val } from "../../behavior/state/Val.js";
 import type { Datasource } from "../../behavior/state/managed/Datasource.js";
 
 /**

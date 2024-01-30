@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Node } from "../Node.js";
-import { RootEndpoint as BaseRootEndpoint } from "../../endpoint/definitions/system/RootEndpoint.js";
-import { Identity } from "../../util/Type.js";
+import { Node } from "./Node.js";
+import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
+import { Identity } from "../util/Type.js";
 
 /**
  * A client-side Matter {@link Node}.

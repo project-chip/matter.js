@@ -5,7 +5,7 @@
  */
 
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
-import { Val } from "../../../../../src/behavior/state/managed/Val.js";
+import { Val } from "../../../../../src/behavior/state/Val.js";
 import { FabricIndex } from "../../../../../src/datatype/FabricIndex.js";
 import { NodeId } from "../../../../../src/datatype/NodeId.js";
 import { FieldElement } from "../../../../../src/model/index.js";

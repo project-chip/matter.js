@@ -13,7 +13,7 @@ import { EventEmitter, Observable } from "../../util/Observable.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
 import { DerivedState } from "../state/StateType.js";
-import { Val } from "../state/managed/Val.js";
+import { Val } from "../state/Val.js";
 import { Schema } from "../supervision/Schema.js";
 import type { ClusterBehavior } from "./ClusterBehavior.js";
 

@@ -7,7 +7,7 @@
 // This demonstrates bringing a "light" device online with matter.js.
 
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
-import { NodeServer } from "@project-chip/matter.js/node";
+import { ServerNode } from "@project-chip/matter.js/node";
 
 // Install Matter.js extensions for Node.js
 import "@project-chip/matter-node.js";
@@ -49,7 +49,7 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 // Note there are a large number of options to NodeServer that we are allowing to take default values here.
 //
 // TODO - reference more verbose example
-const server = await NodeServer.create();
+const server = new ServerNode();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
 server.add(ExampleLight);
