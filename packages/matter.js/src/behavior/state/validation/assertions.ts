@@ -6,7 +6,7 @@
 
 import { ByteArray } from "../../../util/ByteArray.js";
 import { DatatypeError, SchemaErrorPath } from "../../errors.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 
 export function assertNumber(value: Val, path: SchemaErrorPath): asserts value is number {
     if (typeof value === "number") {

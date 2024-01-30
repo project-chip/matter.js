@@ -15,7 +15,7 @@ import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { SubjectId } from "../../../datatype/SubjectId.js";
 import { MaybePromise } from "../../../util/Promises.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
-import { Contextual } from "./Contextual.js";
+import { Contextual } from "../Contextual.js";
 
 /**
  * Operate in online context.  Public Matter API interactions happen in online context.

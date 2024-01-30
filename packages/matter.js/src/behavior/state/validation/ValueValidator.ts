@@ -22,7 +22,7 @@ import {
 import { createConformanceValidator } from "./conformance.js";
 import { createConstraintValidator } from "./constraint.js";
 import { ValidationLocation } from "./location.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 import { SchemaPath } from "../../supervision/SchemaPath.js";
 
 /**

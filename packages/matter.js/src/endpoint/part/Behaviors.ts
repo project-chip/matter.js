@@ -8,7 +8,7 @@ import { Behavior } from "../../behavior/Behavior.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { PartLifecycle } from "./PartLifecycle.js";
-import { Val } from "../../behavior/state/managed/Val.js";
+import { Val } from "../../behavior/state/Val.js";
 import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
 import { BasicSet } from "../../util/Set.js";
 import { camelize, describeList } from "../../util/String.js";

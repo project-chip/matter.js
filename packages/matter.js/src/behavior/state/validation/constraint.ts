@@ -8,7 +8,7 @@ import { InternalError } from "../../../common/MatterError.js";
 import { Constraint, Metatype, ValueModel } from "../../../model/index.js";
 import { ConstraintError } from "../../errors.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import { Val } from "../managed/Val.js";
+import { Val } from "../Val.js";
 import { assertArray, assertNumeric, assertSequence } from "./assertions.js";
 
 /**

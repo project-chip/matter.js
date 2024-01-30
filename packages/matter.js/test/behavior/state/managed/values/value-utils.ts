@@ -7,7 +7,7 @@
 import { ActionContext } from "../../../../../src/behavior/context/ActionContext.js";
 import { OnlineContext } from "../../../../../src/behavior/context/server/OnlineContext.js";
 import { Datasource } from "../../../../../src/behavior/state/managed/Datasource.js";
-import { Val } from "../../../../../src/behavior/state/managed/Val.js";
+import { Val } from "../../../../../src/behavior/state/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";

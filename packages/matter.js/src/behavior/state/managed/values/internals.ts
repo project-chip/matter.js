@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Val } from "../Val.js";
+import { Val } from "../../Val.js";
 
 export const REF = Symbol("ref");
 

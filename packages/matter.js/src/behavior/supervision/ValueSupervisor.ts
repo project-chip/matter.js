@@ -5,7 +5,7 @@
  */
 
 import type { AccessControl } from "../AccessControl.js";
-import type { Val } from "../state/managed/Val.js";
+import type { Val } from "../state/Val.js";
 import type { Transaction } from "../state/transaction/Transaction.js";
 import type { ValidationLocation } from "../state/validation/location.js";
 import type { RootSupervisor } from "./RootSupervisor.js";

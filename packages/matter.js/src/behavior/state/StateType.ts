@@ -5,7 +5,7 @@
  */
 
 import { GeneratedClass } from "../../util/GeneratedClass.js";
-import { Val } from "./managed/Val.js";
+import { Val } from "./Val.js";
 
 /**
  * State is a plain JS object.

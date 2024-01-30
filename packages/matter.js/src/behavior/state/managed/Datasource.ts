@@ -20,7 +20,7 @@ import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
 import { ReadOnlyTransaction } from "../transaction/Tx.js";
-import type { Val } from "./Val.js";
+import type { Val } from "../Val.js";
 
 const VERSION_KEY = "__version__";
 

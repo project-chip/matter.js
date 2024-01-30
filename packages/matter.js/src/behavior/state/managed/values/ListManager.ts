@@ -13,7 +13,7 @@ import { Schema } from "../../../supervision/Schema.js";
 import { SchemaPath } from "../../../supervision/SchemaPath.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { ManagedReference } from "../ManagedReference.js";
-import { Val } from "../Val.js";
+import { Val } from "../../Val.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 import { InternalCollection, REF } from "./internals.js";
 

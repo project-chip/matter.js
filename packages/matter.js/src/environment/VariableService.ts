@@ -133,7 +133,7 @@ export class VariableService {
         this.#vars = merge(this.#vars, vars);
     }
 
-    addUnixEnvStyle(vars: Record<string, string>) {
+    addUnixEnvStyle(vars: Record<string, string | undefined>) {
         this.addConfigStyle(parseUnixStyle(vars))
     }
 
@@ -184,11 +184,14 @@ function addVariable(into: Record<string, any>, path: string[], value: any) {
     addVariable(current, path.slice(1), value);
 }
 
-function parseUnixStyle(values: Record<string, string>) {
+function parseUnixStyle(values: Record<string, string | undefined>) {
     const variables = {} as VariableService.Map;
 
     for (const key in values) {
         if (key.startsWith("MATTER_")) {
+            if (process.env[key] === undefined || process.env[key] === "") {
+                continue;
+            }
             addVariable(variables, key.slice(7).toLowerCase().split("_"), process.env[key]);
         }
     }

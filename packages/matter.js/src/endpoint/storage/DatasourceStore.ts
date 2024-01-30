@@ -5,7 +5,7 @@
  */
 
 import { Datasource } from "../../behavior/state/managed/Datasource.js";
-import { Val } from "../../behavior/state/managed/Val.js";
+import { Val } from "../../behavior/state/Val.js";
 import { Participant } from "../../behavior/state/transaction/Participant.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { MaybePromise } from "../../util/Promises.js";

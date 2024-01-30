@@ -8,7 +8,7 @@ import { ActionContext } from "../../../../src/behavior/context/ActionContext.js
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { StateType } from "../../../../src/behavior/state/StateType.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
-import { Val } from "../../../../src/behavior/state/managed/Val.js";
+import { Val } from "../../../../src/behavior/state/Val.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
 import { DatatypeModel, FieldElement } from "../../../../src/model/index.js";

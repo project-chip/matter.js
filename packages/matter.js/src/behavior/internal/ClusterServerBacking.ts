@@ -29,12 +29,12 @@ import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
-import { Val } from "../state/managed/Val.js";
+import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
 import { ServerBehaviorBacking } from "./ServerBacking.js";
 import { SchemaPath } from "../supervision/SchemaPath.js";
-import { Contextual } from "../context/server/Contextual.js";
+import { Contextual } from "../context/Contextual.js";
 
 const logger = Logger.get("Behavior");
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../ActionContext.js";
+import { ActionContext } from "./ActionContext.js";
 
 /**
  * Components may implement this interface to convey any associated {@link ActionContext}.

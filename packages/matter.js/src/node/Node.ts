@@ -8,6 +8,7 @@ import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { NetworkBehavior } from "../behavior/system/networking/NetworkBehavior.js";
 import { UnsupportedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { Agent } from "../endpoint/Agent.js";
 import { Part } from "../endpoint/Part.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
@@ -23,10 +24,6 @@ import { NodeLifecycle } from "./NodeLifecycle.js";
  */
 export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
     #environment: Environment;
-
-    constructor(config: Node.Configuration<T> | T);
-
-    constructor(type: T, options: Node.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Node.Options<T>) {
         let type: T;
@@ -67,6 +64,13 @@ export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
     }
 
     /**
+     * Add a top-level endpoint.
+     */
+    add(definition: Part.Definition | Agent) {
+        this.parts.add(definition);
+    }
+
+    /**
      * Lifecycle information.
      */
     override createLifecycle(): NodeLifecycle {
@@ -77,6 +81,8 @@ export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
      * Run the node in standalone mode.
      * 
      * If you are implementing a single node this is the most convenient way to bring it online.
+     * 
+     * With multiple nodes you can instead use {@link RuntimeService.add} then {@link RuntimeService.run}.
      */
     async run() {
         const runtime = this.env.get(RuntimeService);

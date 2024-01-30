@@ -52,7 +52,9 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     }
 
     add(child: Part.Definition | Agent) {
-        this.#children.add(this.#partFor(child));
+        const part = this.#partFor(child);
+        this.#children.add(part);
+        return part;
     }
 
     delete(child: Part | Agent) {

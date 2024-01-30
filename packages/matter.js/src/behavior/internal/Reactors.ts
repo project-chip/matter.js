@@ -10,7 +10,7 @@ import type { Observable, Observer } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { Reactor } from "../Reactor.js";
 import { ActionContext } from "../context/ActionContext.js";
-import { Contextual } from "../context/server/Contextual.js";
+import { Contextual } from "../context/Contextual.js";
 import { OfflineContext } from "../context/server/OfflineContext.js";
 import { Resource } from "../state/transaction/Resource.js";
 import type { BehaviorBacking } from "./BehaviorBacking.js";

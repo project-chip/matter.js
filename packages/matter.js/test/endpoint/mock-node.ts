@@ -13,13 +13,13 @@ import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js"
 import { StorageManager } from "../../src/storage/StorageManager.js";
 import { PartStore } from "../../src/endpoint/storage/PartStore.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
-import { Val } from "../../src/behavior/state/managed/Val.js";
+import { Val } from "../../src/behavior/state/Val.js";
 import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
 import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
 import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
 import { Environment } from "../../src/environment/Environment.js";
 import { Node } from "../../src/node/Node.js";
-import { ServerNode } from "../../src/node/server/ServerNode.js";
+import { ServerNode } from "../../src/node/ServerNode.js";
 import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
 import { StorageService } from "../../src/environment/StorageService.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";

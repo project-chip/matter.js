@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AccessControl } from "../../AccessControl.js";
-import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
+import { AccessControl } from "../AccessControl.js";
+import type { ValueSupervisor } from "../supervision/ValueSupervisor.js";
 
 /**
  * General type for state values.
