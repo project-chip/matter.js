@@ -64,7 +64,7 @@ function configureSignals(env: Environment) {
 
 function configureStorage(env: Environment) {
     const service = env.get(StorageService);
-    const location = env.vars.get("storage.path", ".");
+    const location = env.vars.get("storage.path", env.vars.get("path.root", "."));
     service.location = location;
     service.factory = namespace => new StorageBackendDisk(
         resolve(location, namespace),
