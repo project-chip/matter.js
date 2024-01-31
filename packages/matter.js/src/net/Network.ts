@@ -10,6 +10,7 @@ import { UdpChannel, UdpChannelOptions } from "./UdpChannel.js";
 export class NetworkError extends MatterError {}
 
 export abstract class Network {
+    // TODO - remove this singleton
     static get: () => Network = () => {
         throw new NoProviderError("No provider configured");
     };

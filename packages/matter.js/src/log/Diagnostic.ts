@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { LifecycleStatus } from "../common/Lifecycle.js";
+import type { Lifecycle } from "../common/Lifecycle.js";
 
 /**
  * Logged values may implement this interface to customize presentation.
@@ -13,14 +13,14 @@ import type { LifecycleStatus } from "../common/Lifecycle.js";
  * Diagnostics from common value types.
  */
 export interface Diagnostic {
-    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | LifecycleStatus,
+    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | Lifecycle.Status,
     readonly [Diagnostic.value]?: unknown;
 }
 
 /**
  * Create a diagnostic giving a value a specific presentation.
  */
-export function Diagnostic(presentation: Diagnostic.Presentation | LifecycleStatus, value: unknown): Diagnostic {
+export function Diagnostic(presentation: Diagnostic.Presentation | Lifecycle.Status, value: unknown): Diagnostic {
     return {
         [Diagnostic.presentation]: presentation,
         [Diagnostic.value]: value,
@@ -217,16 +217,16 @@ export namespace Diagnostic {
     }
 
     /**
-     * Create a diagnostic with a specific {@link LifecycleStatus}.
+     * Create a diagnostic with a specific {@link Lifecycle}.
      */
-    export function lifecycle(status: LifecycleStatus, value: unknown) {
+    export function lifecycle(status: Lifecycle.Status, value: unknown) {
         return Diagnostic(status, value);
     }
 
     /**
-     * Create a diagnostic for a {@link LifecycleStatus.Map}.
+     * Create a diagnostic for a {@link Lifecycle.Map}.
      */
-    export function lifecycleList(map: LifecycleStatus.Map<any>) {
+    export function lifecycleList(map: Lifecycle.Map<any>) {
         return Object.entries(map).map(([label, status]) => Diagnostic(status, label));
     }
 

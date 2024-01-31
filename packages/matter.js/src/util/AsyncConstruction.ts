@@ -5,8 +5,8 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { LifecycleStatus } from "../common/Lifecycle.js";
-import { Tracker, MaybePromise, CancellablePromise } from "./Promises.js";
+import { Lifecycle } from "../common/Lifecycle.js";
+import { Tracker, MaybePromise } from "./Promises.js";
 import { Observable } from "./Observable.js";
 
 /**
@@ -64,18 +64,23 @@ export interface AsyncConstruction<T> extends Promise<T> {
     /**
      * Status of the constructed object.
      */
-    readonly status: LifecycleStatus;
+    readonly status: Lifecycle.Status;
 
     /**
      * Notifications of state change.  Normally you just await construction but this offers more granular events.
      */
-    readonly change: Observable<[ status: LifecycleStatus, subject: T ]>;
+    readonly change: Observable<[ status: Lifecycle.Status, subject: T ]>;
 
     /**
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
      * method.
      */
     start(initializer: () => MaybePromise): this;
+
+    /**
+     * Invoke destruction logic then move to destroyed status.
+     */
+    destroy(destructor: () => MaybePromise): this;
 
     /**
      * AsyncConstruction may be cancellable.  If not this method does nothing.  Regardless you must wait for promise
@@ -101,7 +106,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
      *
      * This method fails if initialization is ongoing; await completion first.
      */
-    setStatus(status: LifecycleStatus, error?: any): void;
+    setStatus(status: Lifecycle.Status, error?: any): void;
 }
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
@@ -116,10 +121,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let canceled = false;
     let placeholderResolve: undefined | (() => void);
     let placeholderReject: undefined | ((error: any) => void)
-    let status = LifecycleStatus.Initializing;
-    let change: Observable<[status: LifecycleStatus, subject: T]> | undefined;
+    let status = Lifecycle.Status.Initializing;
+    let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
 
-    function setStatus(newStatus: LifecycleStatus) {
+    function setStatus(newStatus: Lifecycle.Status) {
         status = newStatus;
         if (change) {
             change.emit(status, subject);
@@ -158,7 +163,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             } catch (e) {
                 error = e;
                 ready = true;
-                setStatus(LifecycleStatus.Incapacitated);
+                setStatus(Lifecycle.Status.Incapacitated);
                 if (placeholderReject) {
                     const reject = placeholderReject;
                     placeholderResolve = placeholderReject = undefined;
@@ -172,14 +177,17 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 initialization = initialization.then(
                     () => {
                         ready = true;
-                        if (status === LifecycleStatus.Initializing) {
-                            setStatus(LifecycleStatus.Active);
+                        if (status === Lifecycle.Status.Initializing) {
+                            setStatus(Lifecycle.Status.Active);
                         }
                     },
                     e => {
                         error = e;
                         ready = true;
-                        setStatus(LifecycleStatus.Incapacitated);
+                        if (status !== Lifecycle.Status.Destroying && status !== Lifecycle.Status.Destroyed) {
+                            setStatus(Lifecycle.Status.Incapacitated);
+                        }
+                        throw e;
                     }
                 );
                 if (promise) {
@@ -189,8 +197,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 }
             } else {
                 ready = true;
-                if (status === LifecycleStatus.Initializing) {
-                    setStatus(LifecycleStatus.Active);
+                if (status === Lifecycle.Status.Initializing) {
+                    setStatus(Lifecycle.Status.Active);
                 }
                 if (placeholderResolve) {
                     const resolve = placeholderResolve;
@@ -209,15 +217,15 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
             if (cancel) {
                 canceled = true;
-                if (status === LifecycleStatus.Initializing) {
-                    setStatus(LifecycleStatus.Destroyed);
+                if (status === Lifecycle.Status.Initializing) {
+                    setStatus(Lifecycle.Status.Destroyed);
                 }
                 cancel?.();
             }
         },
 
         assert(description?: string, dependency?: any) {
-            LifecycleStatus.assertActive(status, description ?? subject.constructor.name);
+            Lifecycle.assertActive(status, description ?? subject.constructor.name);
 
             if (arguments.length < 2) {
                 return;
@@ -247,10 +255,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 // Initialization has not started so we need to create a
                 // placeholder promise
                 
-                promise = CancellablePromise.create((resolve, reject) => {
+                promise = new Promise((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
-                }, () => this.cancel());
+                });
 
                 promise = Tracker.global.track(
                     promise,
@@ -258,7 +266,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 );
             }
             if (promise) {
-                return CancellablePromise.resolve(promise).then(() => subject).then(onfulfilled, onrejected);
+                return Promise.resolve(promise).then(() => subject).then(onfulfilled, onrejected);
             }
 
             if (error) {
@@ -272,6 +280,24 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult> {
             return this.then(undefined, onrejected);
+        },
+
+        destroy(destructor) {
+            if (status === Lifecycle.Status.Destroying || status === Lifecycle.Status.Destroyed) {
+                return this;
+            }
+
+            status = Lifecycle.Status.Destroying;
+            promise = MaybePromise.finally(
+                promise,
+
+                () => MaybePromise.finally(
+                    destructor(),
+                    () => setStatus(Lifecycle.Status.Destroyed),
+                )
+            )
+
+            return this;
         },
 
         finally(onfinally: () => void): Promise<T> {
@@ -289,7 +315,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             );
         },
 
-        setStatus(newStatus: LifecycleStatus, newError?: any) {
+        setStatus(newStatus: Lifecycle.Status, newError?: any) {
             if (this.status === newStatus) {
                 return;
             }
@@ -299,21 +325,27 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
 
             switch (newStatus) {
-                case LifecycleStatus.Inactive:
+                case Lifecycle.Status.Inactive:
                     promise = undefined;
                     started = ready = canceled = false;
                     error = undefined;
                     break;
 
-                case LifecycleStatus.Initializing:
+                case Lifecycle.Status.Initializing:
                     throw new ImplementationError("Cannot change status because initialization is ongoing");
                 
-                case LifecycleStatus.Active:
+                case Lifecycle.Status.Active:
                     promise = undefined;
                     started = ready = true;
                     canceled = false;
                     error = undefined;
                     break;
+
+                case Lifecycle.Status.Destroying:
+                    throw new ImplementationError("Cannot change status because destruction is ongoing");
+
+                case Lifecycle.Status.Destroyed:
+                    throw new ImplementationError("Cannot change status because destruction is final");
 
                 default:
                     started = ready = true;

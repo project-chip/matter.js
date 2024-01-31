@@ -46,8 +46,8 @@ export class CommissioningBehavior extends Behavior {
         }
 
         this.reactTo(
-            (this.part.lifecycle as NodeLifecycle).online,
-            this.#onlineChange,
+            (this.part.lifecycle as NodeLifecycle).ready,
+            this.#nodeReady,
         );
 
         this.reactTo(
@@ -133,7 +133,7 @@ export class CommissioningBehavior extends Behavior {
         ]
     });
 
-    #onlineChange() {
+    #nodeReady() {
         if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
             this.initiateCommissioning();
         }

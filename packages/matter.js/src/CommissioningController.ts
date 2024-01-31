@@ -21,6 +21,7 @@ import { CommissioningControllerNodeOptions, PairedNode } from "./device/PairedN
 import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { CommissioningOptions } from "./protocol/ControllerCommissioner.js";
 import { ControllerDiscovery } from "./protocol/ControllerDiscovery.js";
@@ -180,8 +181,8 @@ export class CommissioningController extends MatterNode {
 
         return await MatterController.create(
             mdnsScanner,
-            this.ipv4Disabled ? undefined : await UdpInterface.create("udp4", localPort, this.listeningAddressIpv4),
-            await UdpInterface.create("udp6", localPort, this.listeningAddressIpv6),
+            this.ipv4Disabled ? undefined : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
+            await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
             storage,
             peerNodeId => {
                 logger.info(`Session for peer node ${peerNodeId} disconnected ...`);

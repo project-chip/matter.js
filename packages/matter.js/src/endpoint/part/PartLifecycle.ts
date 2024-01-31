@@ -8,8 +8,8 @@ import type { Part } from "../Part.js";
 import { Observable } from "../../util/Observable.js";
 import type { Node } from "../../node/Node.js";
 import { ImplementationError } from "../../common/MatterError.js";
-import { CancellablePromise, MaybePromise } from "../../util/Promises.js";
-import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { MaybePromise } from "../../util/Promises.js";
+import { Lifecycle } from "../../common/Lifecycle.js";
 import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
 
@@ -28,7 +28,6 @@ export class PartLifecycle {
     #reset = new Observable<[context: ActionContext], MaybePromise>();
     #changed = new Observable<[type: PartLifecycle.Change, part: Part]>();
     #queuedUpdates?: Array<PartLifecycle.Change>;
-    #activity: CancellablePromise<void>;
 
     /**
      * Emitted when a part is installed into an initialized owner.
@@ -94,7 +93,6 @@ export class PartLifecycle {
     }
 
     constructor(part: Part) {
-        this.#activity = CancellablePromise.resolve(part.construction).then();
         this.#part = part;
     }
 
@@ -106,20 +104,17 @@ export class PartLifecycle {
             throw new ImplementationError("Cannot reset uninstalled part");
         }
 
-        // Cancel any ongoing activity
-        CancellablePromise.cancel(this.#activity);
+        await this.#part.construction;
 
         // Run reset once cancelled
-        this.act(async () => {
-            this.#isReady = this.#isInstalled = false;
+        this.#isReady = this.#isInstalled = false;
 
-            await OfflineContext.act("factory-reset", async context => {
-                await this.#factoryReset(context);
-            })
+        await OfflineContext.act("factory-reset", async context => {
+            await this.#factoryReset(context);
+        })
 
-            this.#part.construction.setStatus(LifecycleStatus.Inactive);
-            this.change(PartLifecycle.Change.Installed);
-        });
+        this.#part.construction.setStatus(Lifecycle.Status.Inactive);
+        this.change(PartLifecycle.Change.Installed);
     }
 
     /**
@@ -191,30 +186,6 @@ export class PartLifecycle {
         } finally {
             this.#queuedUpdates = undefined;
         }
-    }
-
-    /**
-     * A promise representing an exclusive ongoing activity.
-     * 
-     * Construction, network service and factory reset are examples of Part activities.
-     */
-    get activity() {
-        return this.#activity;
-    }
-
-    /**
-     * Set the {@link activity} for the {@link Part}.  If already involved in ongoing activity, {@link actor} defers
-     * until current activity completes.
-     */
-    act(actor: () => PromiseLike<any>) {
-        this.#activity = this.#activity.then(() => actor());
-    }
-
-    /**
-     * Cancel any ongoing activity if it supports cancellation.
-     */
-    cancel() {
-        CancellablePromise.cancel(this.#activity);
     }
 }
 

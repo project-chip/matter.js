@@ -7,46 +7,47 @@
 import { Diagnostic } from "../log/Diagnostic.js";
 import { ImplementationError } from "./MatterError.js";
 
-/**
- * Standard statuses in an object's lifecycle.
- */
-export enum LifecycleStatus {
-    Unknown = "unknown",
-    Inactive = "inactive",
-    Initializing = "initializing",
-    Active = "active",
-    Incapacitated = "incapacitated",
-    Destroyed = "destroyed",
-}
+export namespace Lifecycle {
+    /**
+     * Standard statuses in an object's lifecycle.
+     */
+    export enum Status {
+        Unknown = "unknown",
+        Inactive = "inactive",
+        Initializing = "initializing",
+        Active = "active",
+        Incapacitated = "incapacitated",
+        Destroying = "destroying",
+        Destroyed = "destroyed",
+    }
 
-export namespace LifecycleStatus {
     /**
      * Lifecycle status for multiple items.
      */
-    export type Map<T extends keyof any> = Record<T, LifecycleStatus>;
+    export type Map<T extends keyof any> = Record<T, Status>;
 
     /**
      * Assert subject is active.
      */
-    export function assertActive(status: LifecycleStatus, description?: string) {
+    export function assertActive(status: Status, description?: string) {
         if (!description) {
             description = "dependency";
         }
 
         switch (status) {
-            case LifecycleStatus.Active:
+            case Status.Active:
                 return;
 
-            case LifecycleStatus.Inactive:
+            case Status.Inactive:
                 throw new UninitializedDependencyError(description, "is not initialized");
     
-            case LifecycleStatus.Initializing:
+            case Status.Initializing:
                 throw new UninitializedDependencyError(description, "is still initializing");
 
-            case LifecycleStatus.Incapacitated:
+            case Status.Incapacitated:
                  throw new IncapacitatedDependencyError(description, "initialization failed");
 
-            case LifecycleStatus.Destroyed:
+            case Status.Destroyed:
                 throw new DestroyedDependencyError(description, "was destroyed");
         }
 

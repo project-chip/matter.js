@@ -25,26 +25,24 @@ export function OnlineContext(options: OnlineContext.Options) {
         act<T>(actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
             let agents: undefined | ContextAgents;
 
-            let fabric: FabricIndex;
+            let fabric: FabricIndex | undefined;
             let subject: SubjectId;
             
             const session = options.session;
+
             if (session) {
                 assertSecureSession(session);
-                fabric = options.session.getAssociatedFabric().fabricIndex;
+                fabric = session.getFabric()?.fabricIndex;
         
                 // TODO - group subject
-                subject = options.session.getPeerNodeId() as SubjectId;
+                subject = session.getPeerNodeId() as SubjectId;
             } else {
                 fabric = options.fabric;
                 subject = options.subject;
             }
         
-            if (fabric === undefined) {
-                throw new ImplementationError("OnlineContxt requires an authorized fabric");
-            }
             if (subject === undefined) {
-                throw new ImplementationError("OnlineContext requires an authorizied subject");
+                throw new ImplementationError("OnlineContext requires an authorized subject");
             }
         
             let via;

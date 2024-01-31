@@ -56,19 +56,20 @@ const DEFAULT_PAIRING_HINT = {
  * This class is handing MDNS Announcements for multiple instances/devices
  */
 export class MdnsBroadcaster {
-    static async create(options?: { enableIpv4?: boolean; multicastInterface?: string }) {
+    static async create(network: Network, options?: { enableIpv4?: boolean; multicastInterface?: string }) {
         const { enableIpv4, multicastInterface } = options ?? {};
         return new MdnsBroadcaster(
-            await MdnsServer.create({ enableIpv4, netInterface: multicastInterface }),
+            network,
+            await MdnsServer.create(network, { enableIpv4, netInterface: multicastInterface }),
             enableIpv4,
         );
     }
 
-    private readonly network = Network.get();
     private readonly activeCommissioningAnnouncements = new Set<number>();
     private readonly activeOperationalAnnouncements = new Map<number, FabricIndex[]>();
 
     constructor(
+        private readonly network: Network,
         private readonly mdnsServer: MdnsServer,
         private readonly enableIpv4?: boolean,
     ) {}

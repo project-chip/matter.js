@@ -9,6 +9,8 @@ import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 import { Environment, RuntimeService, VariableService, StorageService } from "@project-chip/matter.js/environment";
+import { NetworkNode } from "../net/NetworkNode.js";
+import { Network } from "@project-chip/matter.js/net";
 
 /**
  * This is the default environment implementation for Node:
@@ -29,6 +31,7 @@ export function NodeJsEnvironment() {
     loadVariables(env);
     configureSignals(env);
     configureStorage(env);
+    configureNetwork(env);
 
     return env;
 }
@@ -67,6 +70,10 @@ function configureStorage(env: Environment) {
         resolve(location, namespace),
         env.vars.get("storage.clear", false),
     )
+}
+
+function configureNetwork(env: Environment) {
+    env.set(Network, new NetworkNode());
 }
 
 export function loadConfigFile(vars: VariableService) {

@@ -220,9 +220,9 @@ describe("Integration Test", () => {
         assert.equal(commissioningServer.getPort(), matterPort);
 
         // override the mdns scanner to avoid the client to try to resolve the server's address
-        serverMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: SERVER_IPv6 });
+        serverMdnsScanner = await MdnsScanner.create(Network.get(), { enableIpv4: false, netInterface: SERVER_IPv6 });
         commissioningServer.setMdnsScanner(serverMdnsScanner);
-        mdnsBroadcaster = await MdnsBroadcaster.create({ enableIpv4: false, multicastInterface: SERVER_IPv6 });
+        mdnsBroadcaster = await MdnsBroadcaster.create(Network.get(), { enableIpv4: false, multicastInterface: SERVER_IPv6 });
         commissioningServer.setMdnsBroadcaster(mdnsBroadcaster);
         await commissioningServer.advertise();
 
@@ -266,7 +266,7 @@ describe("Integration Test", () => {
     describe("commission", () => {
         it("the client commissions a new device", async () => {
             // override the mdns scanner to avoid the client to try to resolve the server's address
-            clientMdnsScanner = await MdnsScanner.create({ enableIpv4: false, netInterface: CLIENT_IPv6 });
+            clientMdnsScanner = await MdnsScanner.create(Network.get(), { enableIpv4: false, netInterface: CLIENT_IPv6 });
             commissioningController.setMdnsScanner(clientMdnsScanner);
 
             // During commissioning too much magic happens, MockTime do not work in this case

@@ -11,7 +11,9 @@
         "incremental": true,
 
         // Matter.js most likely won't work with older versions of ES
-        "target": "es2018",
+        // TODO - es2022 would allow us to use error.cause but requires node 16.9+, probably OK since 16 is EOL; we
+        // already require top-level await so effectively require es2022 anyway
+        "target": "es2021",
 
         // Generate modules as ES2020 or CommonJS
         "module": "node16",

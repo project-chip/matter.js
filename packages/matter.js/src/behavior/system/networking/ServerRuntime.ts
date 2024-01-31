@@ -11,13 +11,13 @@ import { PartServer } from "../../../endpoint/PartServer.js";
 import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
 import { UdpInterface } from "../../../net/UdpInterface.js";
 import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
-import { Part } from "../../../endpoint/Part.js";
-import { ServerRootEndpoint } from "../../../node/server/ServerRootEndpoint.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
 import { MdnsService } from "../../../environment/MdnsService.js";
+import { Network } from "../../../net/Network.js";
+import type { ServerNode } from "../../../node/ServerNode.js";
 
 /**
  * Handles network functionality for {@link NodeServer}.
@@ -32,10 +32,10 @@ export class ServerRuntime extends NetworkRuntime {
     #bleTransport?: TransportInterface;
 
     override get owner() {
-        return super.owner as Part<ServerRootEndpoint>;
+        return super.owner as ServerNode;
     }
 
-    constructor(owner: Part<ServerRootEndpoint>) {
+    constructor(owner: ServerNode) {
         super(owner);
     }
 
@@ -73,6 +73,7 @@ export class ServerRuntime extends NetworkRuntime {
     protected async getPrimaryNetInterface() {
         if (this.#primaryNetInterface === undefined) {
             this.#primaryNetInterface = await UdpInterface.create(
+                this.owner.env.get(Network),
                 "udp6",
                 this.owner.state.network.port,
                 this.owner.state.network.listeningAddressIpv6
@@ -112,7 +113,12 @@ export class ServerRuntime extends NetworkRuntime {
 
         if (netconf.ipv4) {
             device.addTransportInterface(
-                await UdpInterface.create("udp4", netconf.port, netconf.listeningAddressIpv4),
+                await UdpInterface.create(
+                    this.owner.env.get(Network),
+                    "udp4",
+                    netconf.port,
+                    netconf.listeningAddressIpv4
+                ),
             );
         }
 
@@ -177,7 +183,7 @@ export class ServerRuntime extends NetworkRuntime {
     }
 
     protected override async startup() {
-        const mdnsScanner = this.owner.env.get(MdnsService).scanner;
+        const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
 
         this.#interactionServer = new TransactionalInteractionServer(this.owner);
 
@@ -208,7 +214,9 @@ export class ServerRuntime extends NetworkRuntime {
         await this.#matterDevice.start();
     }
 
-    protected override async shutdown() {
+    override async [Symbol.asyncDispose]() {
+        await super[Symbol.asyncDispose]();
+
         if (this.#matterDevice) {
             await this.#matterDevice.stop();
             this.#matterDevice = undefined;

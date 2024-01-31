@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import type { Part } from "../../endpoint/Part.js";
@@ -77,7 +77,7 @@ export abstract class BehaviorBacking {
             () => this.#invokeDestroy(agent),
             () => {
                 this.#internal = this.#events = this.#options = this.#datasource = undefined;
-                this.construction.setStatus(LifecycleStatus.Destroyed);
+                this.construction.setStatus(Lifecycle.Status.Destroyed);
             }
         )
     }
@@ -211,15 +211,15 @@ export abstract class BehaviorBacking {
      */
     #invokeDestroy(agent: Agent): MaybePromise {
         switch (this.#construction.status) {
-            case LifecycleStatus.Active:
+            case Lifecycle.Status.Active:
                 break;
 
-            case LifecycleStatus.Initializing:
+            case Lifecycle.Status.Initializing:
                 // If the behavior is still initializing its probably stuck.  Throwing isn't a solution but probably
                 // better than destroying while still initializing
                 throw new InternalError(`Behavior ${this} destroyed while still initializing`);
 
-            case LifecycleStatus.Destroyed:
+            case Lifecycle.Status.Destroyed:
                 // Destroyed state is permanent; we can't recover
                 throw new InternalError(`Behavior ${this} already destroyed`);
 

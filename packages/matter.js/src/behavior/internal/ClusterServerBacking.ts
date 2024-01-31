@@ -142,7 +142,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
 
 function withBehavior<T>(
     backing: ClusterServerBehaviorBacking,
-    message: Message,
+    message: Message | undefined,
     fn: (behavior: ClusterBehavior) => T,
 ): T {
     const context = Contextual.contextOf(message);
@@ -225,10 +225,6 @@ function createAttributeAccessors(
         },
 
         set(value, { message }) {
-            if (message === undefined) {
-                throw new ImplementationError("You must set local values through the Behavior API");
-            }
-
             return withBehavior(backing, message, behavior => {
                 logger.info(
                     "Write",

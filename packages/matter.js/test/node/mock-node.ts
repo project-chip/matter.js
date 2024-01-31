@@ -19,12 +19,12 @@ import { Transaction } from "../../src/behavior/state/transaction/Transaction.js
 import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
 import { Environment } from "../../src/environment/Environment.js";
 import { Node } from "../../src/node/Node.js";
-import { ServerNode } from "../../src/node/ServerNode.js";
 import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
 import { StorageService } from "../../src/environment/StorageService.js";
 import { IdentityService } from "../../src/node/server/IdentityService.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
+import { ServerNode } from "../../src/node/ServerNode.js";
 
 export class MockPartInitializer extends PartInitializer {
     #nextId = 1;
@@ -129,10 +129,12 @@ export class MockNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends
     constructor(type: T = ServerRootEndpoint as T) {
         const environment = new Environment("test");
 
-        let options: Node.Options<T> = {};
-        options.environment = environment;
+        const config = {
+            type,
+            environment,
+        } as Node.Configuration<T>;
 
-        super(type, options);
+        super(config);
         (this.#storage as any).initialized = true;
     }
 
