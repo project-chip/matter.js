@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { NetworkBehavior } from "../behavior/system/networking/NetworkBehavior.js";
-import { UnsupportedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { Agent } from "../endpoint/Agent.js";
 import { Part } from "../endpoint/Part.js";
@@ -15,36 +12,32 @@ import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
 import { Environment } from "../environment/Environment.js";
 import { RuntimeService } from "../environment/RuntimeService.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
+
+const logger = Logger.get("Node");
 
 /**
  * A Matter Node.
  * 
  * In Matter, a "node" is an individually addressable top-level network resource.
  */
-export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
+export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     #environment: Environment;
+    #online = false;
 
-    constructor(definition: T | Part.Configuration<T>, options?: Node.Options<T>) {
-        let type: T;
-        if (Part.isConfiguration(definition)) {
-            type = definition.type as T;
-            options = { ...definition } as Node.Options<T>;
-        } else {
-            type = definition as T;
-            options = { ...options } as Node.Options<T>;
+    constructor(config: Node.Configuration<T>) {
+        const parentEnvironment = config.environment ?? Environment.default;
+
+        if (config.id === undefined) {
+            config.id = `node${parentEnvironment.vars.increment("node.nextFallbackId")}`;
         }
 
-        const parentEnvironment = options.environment ?? Environment.default;
-
-        if (options.id === undefined) {
-            options.id = `node${parentEnvironment.vars.increment("node.nextFallbackId")}`;
-        }
-
-        super(type, options as unknown as Part.Options<T>);
+        super(config);
 
         // We create a local environment so nodes can offer node-specific services via the environment
-        this.#environment = new Environment(options.id, parentEnvironment);
+        this.#environment = new Environment(config.id, parentEnvironment);
 
         if (this.lifecycle.hasNumber) {
             if (this.number !== 0) {
@@ -57,6 +50,31 @@ export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
         // We don't really get "installed" as we are the root part.  This informs the part it is ready for full
         // initialization
         this.lifecycle.change(PartLifecycle.Change.Installed);
+
+        this.lifecycle.ready.on(() => {
+            if (this.#online) {
+                return;
+            }
+
+            this.#online = true;
+            logger.notice(Diagnostic.strong(this.toString()), "is online");
+        });
+
+        this.lifecycle.reset.on(() => this.#goingOffline());
+    }
+
+    override async [Symbol.asyncDispose]() {
+        this.#goingOffline();
+        return super[Symbol.asyncDispose]();
+    }
+
+    #goingOffline() {
+        if (!this.#online) {
+            return;
+        }
+
+        this.#online= false;
+        logger.notice(Diagnostic.strong(this.toString()), "going offline");
     }
 
     override get env() {
@@ -81,36 +99,13 @@ export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
      * Run the node in standalone mode.
      * 
      * If you are implementing a single node this is the most convenient way to bring it online.
-     * 
-     * With multiple nodes you can instead use {@link RuntimeService.add} then {@link RuntimeService.run}.
      */
     async run() {
         const runtime = this.env.get(RuntimeService);
 
-        try {
-            runtime.add(this);
-            await runtime.run();
-        } finally {
-            runtime.delete(this);
-        }
-    }
+        runtime.addWorker(this);
 
-    /**
-     * Start the node.
-     * 
-     * Typically invoked by {@link RuntimeService}.
-     */
-    async [RuntimeService.start]() {
-        if (!this.behaviors.has(NetworkBehavior)) {
-            throw new UnsupportedDependencyError(this.toString(), "Cannot run because NetworkBehavior is unsupported");
-        }
-
-        OfflineContext.act("node-startup", context => {
-            const agent = context.agentFor(this);
-            agent.get(NetworkBehavior).start();
-        });
-
-        return this.lifecycle.activity;
+        await runtime.inactive;
     }
 
     override get lifecycle(): NodeLifecycle {
@@ -120,15 +115,37 @@ export class Node<T extends EndpointType = RootEndpoint> extends Part<T> {
 }
 
 export namespace Node {
-    export type Configuration<T extends EndpointType> =
-        & { environment?: Environment }
-        & {
-            [K in keyof Part.Configuration<T>]: K extends "environment" ? Environment : Part.Configuration<T>[K]
-        };
+    export interface NodeOptions extends Part.PartOptions {
+        environment?: Environment;
+    }
 
-    export type Options<T extends EndpointType> =
-        & { environment?: Environment }
-        & {
-            [K in keyof Part.Options<T>]?: K extends "environment" ? Environment : Part.Options<T>[K]
-        };
+    export type Options<T extends RootEndpoint = RootEndpoint> = Part.Options<T, NodeOptions>;
+
+    export type Configuration<T extends RootEndpoint = RootEndpoint> = Part.Configuration<T, NodeOptions>;
+
+    export function nodeConfigFor<T extends RootEndpoint>(
+        defaultType: T,
+        configuration: undefined | T | Configuration<T>,
+        options?: Options<T>
+    ): Node.Configuration<T> {
+        if (!options) {
+            options = {};
+        }
+        if (configuration === undefined) {
+            return {
+                type: defaultType,
+                ...options,
+            };
+        }
+        if ((configuration as EndpointType).deviceType !== undefined) {
+            return {
+                type: configuration as T,
+                ...options,
+            }
+        }
+        return {
+            type: defaultType,
+            ...configuration,
+        } as Part.Configuration<T>;
+    }
 }

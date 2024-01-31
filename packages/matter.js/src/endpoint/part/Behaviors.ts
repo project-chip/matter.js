@@ -18,7 +18,7 @@ import type { Part } from "../Part.js";
 import type { SupportedBehaviors } from "./SupportedBehaviors.js";
 import { PartInitializer } from "./PartInitializer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
-import { LifecycleStatus } from "../../common/Lifecycle.js";
+import { Lifecycle } from "../../common/Lifecycle.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
@@ -44,9 +44,9 @@ export class Behaviors {
     }
 
     get status() {
-        const status = {} as Record<string, LifecycleStatus>;
+        const status = {} as Record<string, Lifecycle.Status>;
         for (const key in this.#supported) {
-            status[key] = this.#backings[key]?.status ?? LifecycleStatus.Inactive;
+            status[key] = this.#backings[key]?.status ?? Lifecycle.Status.Inactive;
         }
         return status;
     }

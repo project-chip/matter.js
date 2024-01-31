@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError, NoProviderError } from "../../../common/MatterError.js";
+import { NoProviderError } from "../../../common/MatterError.js";
 import { EventEmitter, Observable } from "../../../util/Observable.js";
-import { CancellablePromise } from "../../../util/Promises.js";
 import { Behavior } from "../../Behavior.js";
 import { ActionContext } from "../../context/ActionContext.js";
 import type { NetworkRuntime } from "./NetworkRuntime.js";
@@ -26,30 +25,11 @@ export class NetworkBehavior extends Behavior {
     override initialize() {
         this.state.operationalPort = this.state.port;
         this.state.online = false;
+        this.internal.runtime = this.createRuntime();
     }
 
-    /**
-     * Activate networking functionality.
-     */
-    start() {
-        if (this.internal.runtime) {
-            throw new ImplementationError(`${this} is already started`);
-        }
-        const runtime = this.internal.runtime = this.createRuntime();
-
-        this.part.lifecycle.act(() =>
-            CancellablePromise.for(
-                runtime.run(),
-                () => this.cancel(),
-            )
-        );
-    }
-
-    /**
-     * Terminate networking functionality.
-     */
-    async cancel() {
-        this.internal.runtime?.cancel();
+    async [Symbol.asyncDispose]() {
+        await this.internal.runtime?.[Symbol.asyncDispose]();
     }
 
     protected createRuntime(): NetworkRuntime {

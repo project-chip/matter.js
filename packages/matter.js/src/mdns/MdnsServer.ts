@@ -34,11 +34,13 @@ export enum AnnouncementType {
 }
 
 export class MdnsServer {
-    static async create(options?: { enableIpv4?: boolean; netInterface?: string }) {
+    static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4 = true, netInterface } = options ?? {};
         return new MdnsServer(
+            network,
             await UdpMulticastServer.create({
-                netInterface: netInterface,
+                network,
+                netInterface,
                 broadcastAddressIpv4: enableIpv4 ? MDNS_BROADCAST_IPV4 : undefined,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
                 listeningPort: MDNS_BROADCAST_PORT,
@@ -47,7 +49,6 @@ export class MdnsServer {
         );
     }
 
-    private readonly network = Network.get();
     private recordsGenerator = new Map<string, (netInterface: string) => DnsRecord<any>[]>();
     private readonly records = new Cache<Map<string, DnsRecord<any>[]>>(
         "MDNS discovery",
@@ -63,6 +64,7 @@ export class MdnsServer {
     private readonly recordLastSentAsMulticastAnswer = new Map<string, number>();
 
     constructor(
+        private readonly network: Network,
         private readonly multicastServer: UdpMulticastServer,
         private readonly netInterface: string | undefined,
     ) {

@@ -14,9 +14,10 @@ import { UdpChannel } from "./UdpChannel.js";
 const logger = Logger.get("UdpMulticastServer");
 
 export interface UdpMulticastServerOptions {
+    network: Network;
     listeningPort: number;
-    broadcastAddressIpv4?: string;
     broadcastAddressIpv6: string;
+    broadcastAddressIpv4?: string;
     netInterface?: string;
 }
 
@@ -26,8 +27,8 @@ export class UdpMulticastServer {
         broadcastAddressIpv4,
         broadcastAddressIpv6,
         listeningPort,
+        network,
     }: UdpMulticastServerOptions) {
-        const network = Network.get();
         return new UdpMulticastServer(
             network,
             broadcastAddressIpv4,

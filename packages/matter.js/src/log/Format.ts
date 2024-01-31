@@ -8,7 +8,7 @@ import { ImplementationError, InternalError } from "../common/MatterError.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Diagnostic } from "./Diagnostic.js";
 import { Level } from "./Level.js";
-import { LifecycleStatus } from "../common/Lifecycle.js";
+import { Lifecycle } from "../common/Lifecycle.js";
 
 /**
  * Get a formatter for the specified format.
@@ -63,17 +63,18 @@ interface Formatter {
     value(producer: Producer): string;
     strong(producer: Producer): string;
     weak(producer: Producer): string;
-    status(status: LifecycleStatus, producer: Producer): string;
+    status(status: Lifecycle.Status, producer: Producer): string;
     via(text: string): string;
 }
 
 const LifecycleIcons = {
-    [LifecycleStatus.Unknown]: "?",
-    [LifecycleStatus.Inactive]: "💤",
-    [LifecycleStatus.Initializing]: "⌛",
-    [LifecycleStatus.Active]: "✔",
-    [LifecycleStatus.Incapacitated]: "✘",
-    [LifecycleStatus.Destroyed]: "☠︎",
+    [Lifecycle.Status.Unknown]: "?",
+    [Lifecycle.Status.Inactive]: "💤",
+    [Lifecycle.Status.Initializing]: "⌛",
+    [Lifecycle.Status.Active]: "✔",
+    [Lifecycle.Status.Incapacitated]: "✘",
+    [Lifecycle.Status.Destroying]: "☠︎",
+    [Lifecycle.Status.Destroyed]: "☠︎",
 }
 
 /**
@@ -106,8 +107,8 @@ function plaintextCreator() {
     }
 }
 
-function statusIcon(status: LifecycleStatus) {
-    return LifecycleIcons[status] ?? LifecycleIcons[LifecycleStatus.Unknown]
+function statusIcon(status: Lifecycle.Status) {
+    return LifecycleIcons[status] ?? LifecycleIcons[Lifecycle.Status.Unknown]
 }
 
 function plainLogFormatter(now: Date, level: Level, facility: string, prefix: string, values: any[]) {
@@ -188,6 +189,7 @@ const Styles = {
     initializing: { color: "yellow" },
     active: { color: "green" },
     incapacitated: { color: "red" },
+    destroying: { color: "gray" },
     destroyed: { color: "gray" },
     via: { color: "magenta" },
 } as const satisfies Record<string, Style>;
@@ -538,12 +540,12 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
             }
             return renderDictionary(value as object, formatter);
 
-        case LifecycleStatus.Unknown:
-        case LifecycleStatus.Inactive:
-        case LifecycleStatus.Initializing:
-        case LifecycleStatus.Active:
-        case LifecycleStatus.Incapacitated:
-        case LifecycleStatus.Destroyed:
+        case Lifecycle.Status.Unknown:
+        case Lifecycle.Status.Inactive:
+        case Lifecycle.Status.Initializing:
+        case Lifecycle.Status.Active:
+        case Lifecycle.Status.Incapacitated:
+        case Lifecycle.Status.Destroyed:
             return formatter.status(presentation, () => renderDiagnostic(value, formatter));
 
         default:

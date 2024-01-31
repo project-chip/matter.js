@@ -20,7 +20,9 @@ export class UdpChannelFake implements UdpChannel {
         const { ips } = network.getIpMac(netInterface ?? FAKE_INTERFACE_NAME);
         const ipv4 = type === "udp4";
         const localAddress = ips.filter(ip => isIPv4(ip) || !ipv4)[0];
-        if (localAddress === undefined) throw new NetworkError("No matching IP on the specified interface");
+        if (localAddress === undefined) {
+            throw new NetworkError("No matching IP on the specified interface");
+        }
         return new UdpChannelFake(localAddress, listeningAddress, listeningPort);
     }
 

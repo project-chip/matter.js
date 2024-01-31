@@ -8,6 +8,7 @@ import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { MdnsBroadcaster } from "../mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "../mdns/MdnsScanner.js";
+import { Network } from "../net/Network.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Environment } from "./Environment.js";
@@ -29,14 +30,15 @@ export class MdnsService {
 
         this.#construction = AsyncConstruction(this, async () => {
             const vars = environment.get(VariableService);
+            const network = environment.get(Network);
 
             const enableIpv4 = options?.ipv4 ?? environment.get(VariableService).boolean("mdns.ipv4") ?? true;
-            this.#broadcaster = await MdnsBroadcaster.create({
+            this.#broadcaster = await MdnsBroadcaster.create(network, {
                 enableIpv4,
                 multicastInterface: vars.get("mdns.discoverInterface", options?.discoverInterface),
             });
 
-            this.#scanner = await MdnsScanner.create({
+            this.#scanner = await MdnsScanner.create(network, {
                 enableIpv4,
                 netInterface: vars.get("mdns.announceInterface", options?.announceInterface),
             })
@@ -48,7 +50,7 @@ export class MdnsService {
     }
 
     get broadcaster() {
-        this.#runtime.add(this);
+        this.#runtime.addWorker(this);
         return this.#construction.assert("MDNS broadcaster", this.#broadcaster)
     }
 
@@ -65,23 +67,23 @@ export class MdnsService {
     }
 
     async [Symbol.asyncDispose]() {
-        await this.#construction;
+        await this.#construction.destroy(async () => {
+            const broadcasterDisposal = MaybePromise.then(
+                this.#broadcaster?.close(),
+                undefined,
+                e => logger.error("Error disposing of MDNS broadcaster", e)
+            );
 
-        const broadcasterDisposal = MaybePromise.then(
-            this.#broadcaster?.close(),
-            undefined,
-            e => logger.error("Error disposing of MDNS broadcaster", e)
-        );
+            const scannerDisposal = MaybePromise.then(
+                this.#scanner?.close(),
+                undefined,
+                e => logger.error("Error disposing of MDNS scanner", e)
+            );
 
-        const scannerDisposal = MaybePromise.then(
-            this.#scanner?.close(),
-            undefined,
-            e => logger.error("Error disposing of MDNS scanner", e)
-        );
+            await Promise.all([ broadcasterDisposal, scannerDisposal ]);
 
-        await Promise.all([ broadcasterDisposal, scannerDisposal ]);
-
-        this.#broadcaster = this.#scanner = undefined;
+            this.#broadcaster = this.#scanner = undefined;
+        });
     }
 }
 

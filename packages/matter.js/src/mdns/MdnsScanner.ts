@@ -27,7 +27,9 @@ import { ServerAddress, ServerAddressIp } from "../common/ServerAddress.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { DiagnosticDictionary, Logger } from "../log/Logger.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
+import { Network } from "../net/Network.js";
 import { UdpMulticastServer } from "../net/UdpMulticastServer.js";
 import { Time, Timer } from "../time/Time.js";
 import { ByteArray } from "../util/ByteArray.js";
@@ -74,10 +76,11 @@ const START_ANNOUNCE_INTERVAL_SECONDS = 1.5;
  * It sends out queries to discover various types of Matter device types and listens for announcements.
  */
 export class MdnsScanner implements Scanner {
-    static async create(options?: { enableIpv4?: boolean; netInterface?: string }) {
+    static async create(network: Network, options?: { enableIpv4?: boolean; netInterface?: string }) {
         const { enableIpv4, netInterface } = options ?? {};
         return new MdnsScanner(
             await UdpMulticastServer.create({
+                network,
                 netInterface: netInterface,
                 broadcastAddressIpv4: enableIpv4 ? MDNS_BROADCAST_IPV4 : undefined,
                 broadcastAddressIpv6: MDNS_BROADCAST_IPV6,
@@ -981,7 +984,7 @@ export class MdnsScanner implements Scanner {
     }
 
     static discoveryDataDiagnostics(data: DiscoveryData) {
-        return new DiagnosticDictionary({
+        return Diagnostic.dict({
             SII: data.SII,
             SAI: data.SAI,
             SAT: data.SAT,
@@ -999,7 +1002,7 @@ export class MdnsScanner implements Scanner {
     static deviceAddressDiagnostics(addresses: Map<string, MatterServerRecordWithExpire>) {
         return Array.from(addresses.values()).map(
             address =>
-                new DiagnosticDictionary({
+                Diagnostic.dict({
                     ip: address.ip,
                     port: address.port,
                     type: address.type,

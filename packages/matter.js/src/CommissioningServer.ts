@@ -75,6 +75,7 @@ import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
 import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
+import { Network } from "./net/Network.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -679,12 +680,12 @@ export class CommissioningServer extends MatterNode {
             },
             (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
         )
-            .addTransportInterface(await UdpInterface.create("udp6", this.port, this.options.listeningAddressIpv6))
+            .addTransportInterface(await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6))
             .addScanner(this.mdnsScanner)
             .addProtocolHandler(this.interactionServer);
         if (!this.ipv4Disabled) {
             this.deviceInstance.addTransportInterface(
-                await UdpInterface.create("udp4", this.port, this.options.listeningAddressIpv4),
+                await UdpInterface.create(Network.get(), "udp4", this.port, this.options.listeningAddressIpv4),
             );
         }
 

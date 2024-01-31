@@ -9,7 +9,7 @@ import { Logger } from "./log/Logger.js";
 import { MatterNode } from "./MatterNode.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
-import { NetworkError } from "./net/Network.js";
+import { Network, NetworkError } from "./net/Network.js";
 import { StorageManager } from "./storage/StorageManager.js";
 
 const logger = Logger.get("MatterServer");
@@ -224,13 +224,13 @@ export class MatterServer {
      */
     async start() {
         if (this.mdnsBroadcaster === undefined) {
-            this.mdnsBroadcaster = await MdnsBroadcaster.create({
+            this.mdnsBroadcaster = await MdnsBroadcaster.create(Network.get(), {
                 enableIpv4: !this.ipv4Disabled,
                 multicastInterface: this.options?.mdnsInterface ?? this.options?.mdnsAnnounceInterface,
             });
         }
         if (this.mdnsScanner === undefined) {
-            this.mdnsScanner = await MdnsScanner.create({
+            this.mdnsScanner = await MdnsScanner.create(Network.get(), {
                 enableIpv4: !this.ipv4Disabled,
                 netInterface: this.options?.mdnsInterface,
             });

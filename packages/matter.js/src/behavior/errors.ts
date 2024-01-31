@@ -102,7 +102,7 @@ export class ConformanceError extends ValidateError {
  */
 export class ExpiredReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
-        super("Reference to", path, "is no longer valid because the referencing context has exited", StatusCode.Failure);
+        super("Reference to", path, "Referencing invalidated by context exit", StatusCode.Failure);
     }
 }
 
@@ -111,7 +111,7 @@ export class ExpiredReferenceError extends SchemaViolationError {
  */
 export class PhantomReferenceError extends SchemaViolationError {
     constructor(path: SchemaErrorPath) {
-        super("Reference to", path, "is no longer valid because the container was removed", StatusCode.Failure);
+        super("Reference to", path, "Container was removed", StatusCode.Failure);
     }
 }
 

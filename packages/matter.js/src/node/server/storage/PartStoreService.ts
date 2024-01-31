@@ -145,7 +145,7 @@ export class PartStoreFactory extends PartStoreService {
         if (!part.lifecycle.hasId) {
             throw new InternalError("Part storage access without assigned ID");
         }
-        if (part.owner instanceof Part) {
+        if (part.owner) {
             return this.storeForPart(part.owner).childStoreFor(part);
         }
         if (part.number !== 0) {

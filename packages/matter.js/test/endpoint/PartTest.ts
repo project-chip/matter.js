@@ -12,7 +12,7 @@ import { Part } from "../../src/endpoint/Part.js";
 import { RootEndpoint } from "../../src/endpoint/definitions/system/RootEndpoint.js";
 import { WindowCoveringDevice } from "../../src/endpoint/definitions/device/WindowCoveringDevice.js";
 import { WindowCoveringServer } from "../../src/behavior/definitions/window-covering/WindowCoveringServer.js";
-import { MockNode } from "./mock-node.js";
+import { MockNode } from "../node/mock-node.js";
 import { WindowCoveringCluster } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 
 const WindowCoveringLiftDevice =

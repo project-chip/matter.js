@@ -2,7 +2,7 @@ import { Behavior } from "../../src/behavior/Behavior.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
 import { MockEndpoint } from "../behavior/mock-behavior.js";
-import { MockNode } from "./mock-node.js";
+import { MockNode } from "../node/mock-node.js";
 
 export class MockBehavior1 extends Behavior {
     static override readonly id = "one";
@@ -41,23 +41,13 @@ export class MockPart<T extends EndpointType> extends Part<T> {
     constructor(type: T, options: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
-        let type: T;
-        
-        if (Part.isConfiguration(definition)) {
-            options = definition;
-            type = definition.type;
-        } else {
-            type = definition;
-            if (!options) {
-                options = {} as Part.Options<T>;
-            }
+        const config = Part.configurationFor(definition, options);
+
+        if (!("owner" in config)) {
+            config.owner = new MockNode();
         }
 
-        if (!("owner" in options)) {
-            options.owner = new MockNode();
-        }
-
-        super(type, options);
+        super(config);
 
         activeParts.add(this);
     }
@@ -69,10 +59,10 @@ export class MockPart<T extends EndpointType> extends Part<T> {
 
     static create<const T extends EndpointType>(definition: T | Part.Configuration<T>): Promise<MockPart<T>>;
 
-    static create<const T extends EndpointType>(type: T, options: Part.Options<T>): Promise<MockPart<T>>;
+    static create<const T extends EndpointType>(type: T, options: Part.Configuration<T>): Promise<MockPart<T>>;
 
-    static async create(definition: EndpointType | Part.Configuration<EndpointType>, options?: Part.Options) {
-        const part = new MockPart(definition as any, options as any);
+    static async create(definition: EndpointType | Part.Configuration, options?: Part.Options) {
+        const part = new MockPart(Part.configurationFor(definition, options));
         return await part.construction;
     }
 

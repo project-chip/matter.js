@@ -57,9 +57,8 @@ export function ManagedReference(
         get value() {
             // Authorization is unnecessary here because the reference would
             // not exist if access is unauthorized
-            if (expired) {
-                throw new ExpiredReferenceError(location);
-            }
+
+            // Note that we allow read from expired references
             return value;
         },
 
@@ -112,6 +111,7 @@ export function ManagedReference(
         refresh() {
             if (parent.expired) {
                 expired = true;
+                return;
             }
             replaceValue((parent.value as Container)[index]);
         },

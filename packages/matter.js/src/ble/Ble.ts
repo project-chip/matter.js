@@ -21,7 +21,7 @@ export abstract class Ble {
     static get = BleDisabled;
 
     static get enabled() {
-        return this.get === BleDisabled;
+        return this.get !== BleDisabled;
     }
 
     abstract getBlePeripheralInterface(): TransportInterface;

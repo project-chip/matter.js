@@ -13,19 +13,11 @@ import { Observable } from "../util/Observable.js";
  * Extended lifecycle information that only applies to root endpoints.
  */
 export class NodeLifecycle extends PartLifecycle {
-    #online = Observable<[context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
 
     constructor(part: Part) {
         super(part);
-    }
-
-    /**
-     * Emits when node is accessible from network.
-     */
-    get online() {
-        return this.#online;
     }
 
     /**

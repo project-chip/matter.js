@@ -77,11 +77,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      * The owner of the part.
      */
     get owner(): Part | undefined {
-        if (!this.#owner) {
-            throw new ImplementationError(
-                "Part owner is not available until node is installed"
-            );
-        }
         return this.#owner;
     }
 
@@ -137,35 +132,32 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         // Create construction early so parts and behaviors can hook events
         this.#construction = AsyncConstruction(this);
 
-        if (Part.isConfiguration(definition)) {
-            options = definition;
-            this.#type = definition.type as T;
-        } else {
-            this.#type = definition as T;
-        }
+        const config = Part.configurationFor(definition, options);
 
+        this.#type = config.type;
+;
         this.#lifecycle = this.createLifecycle();
 
         this.#behaviors = new Behaviors(
             this,
             this.#type.behaviors,
-            (options ?? {}) as Record<string, object | undefined>,
+            config as Record<string, object | undefined>,
         );
 
-        if (options?.id !== undefined) {
-            this.id = options?.id;
+        if (config.id !== undefined) {
+            this.id = config.id;
         }
 
-        if (options?.number !== undefined) {
-            this.number = options?.number;
+        if (config.number !== undefined) {
+            this.number = config.number;
         }
 
-        if (options?.owner) {
-            this.owner = options.owner instanceof Agent ? options.owner.part : options.owner;
+        if (config.owner) {
+            this.owner = config.owner instanceof Agent ? config.owner.part : config.owner;
         }
 
-        if (options?.parts) {
-            for (const part of options.parts) {
+        if (config.parts) {
+            for (const part of config.parts) {
                 this.parts.add(part);
             }
         }
@@ -347,9 +339,11 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     async [Symbol.asyncDispose]() {
-        await this.behaviors[Symbol.asyncDispose]();
-        this.lifecycle.change(PartLifecycle.Change.Destroyed);
-        this.#owner = undefined;
+        await this.construction.destroy(async () => {
+            await this.behaviors[Symbol.asyncDispose]();
+            this.lifecycle.change(PartLifecycle.Change.Destroyed);
+            this.#owner = undefined;
+        })
     }
 
     toString() {
@@ -394,33 +388,26 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 }
 
 export namespace Part {
-    /**
-     * Single-object configuration for a {@link Part}.
-     */
-    export type Configuration<T extends EndpointType = EndpointType.Empty> = 
-        & {
-            type: T;
-            owner?: Part | Agent;
-            id?: string;
-            number?: number;
-            parts?: Iterable<Part.Definition>;
-        }
-        & {
-            [K in keyof T["behaviors"]]?:
-                K extends "type" ? T
-                : K extends "owner" ? Part | Agent
-                : K extends "id" ? string
-                : K extends "number" ? number
-                : K extends "parts" ? Iterable<Part.Definition>
-                : Behavior.Options<T["behaviors"][K]>
-        };
-
-    /**
-     * {@link Part} options with separate type.
-     */
-    export type Options<T extends EndpointType = EndpointType.Empty> = {
-        [K in keyof Configuration<T> as K extends "type" ? never : K]: Configuration<T>[K]
+    export type BehaviorOptions<T extends EndpointType = EndpointType.Empty, O extends PartOptions = PartOptions> = {
+        [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>
     }
+
+    export interface PartOptions {
+        owner?: Part | Agent;
+        id?: string;
+        number?: number;
+        parts?: Iterable<Part.Definition>;
+    }
+
+    export type Options<
+        T extends EndpointType = EndpointType.Empty,
+        O extends PartOptions = PartOptions
+    > = BehaviorOptions<T, O> & O;
+
+    export type Configuration<
+        T extends EndpointType = EndpointType.Empty,
+        O extends PartOptions = PartOptions
+    > = Options<T, O> & { type: T };
 
     /**
      * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.
@@ -431,10 +418,16 @@ export namespace Part {
         | Part<T>;
 
     /**
-     * Determine whether {@link Definition} is a {@link Configuration}.
+     * Obtain a configuration from constructor parameters.
      */
-    export function isConfiguration<T extends EndpointType>(definition: Definition<T>): definition is Configuration<T> {
-        return !(definition instanceof Part) && !!(definition as Configuration<T>).type;
+    export function configurationFor<T extends EndpointType>(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
+        if ((definition as EndpointType).deviceType) {
+            return {
+                ...options,
+                type: definition as T,
+            } as Configuration<T>;
+        };
+        return definition as Configuration<T>;
     }
 
     /**

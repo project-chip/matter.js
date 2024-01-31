@@ -6,10 +6,9 @@
 
 import { Ble } from "../../../ble/Ble.js";
 import { ImplementationError } from "../../../common/MatterError.js";
-import { Part } from "../../../endpoint/Part.js";
 import { Logger } from "../../../log/Logger.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
-import { ServerRootEndpoint } from "../../../node/server/ServerRootEndpoint.js";
+import type { ServerNode } from "../../../node/ServerNode.js";
 import { SubscriptionOptions } from "../../../protocol/interaction/SubscriptionOptions.js";
 import { TypeFromPartialBitSchema } from "../../../schema/BitmapSchema.js";
 import { DiscoveryCapabilitiesBitmap } from "../../../schema/PairingCodeSchema.js";
@@ -66,11 +65,7 @@ export class NetworkServer extends NetworkBehavior {
     }
 
     protected override createRuntime() {
-        return new ServerRuntime(this.part as Part<ServerRootEndpoint>);
-    }
-
-    async [Symbol.asyncDispose]() {
-        await this.cancel();
+        return new ServerRuntime(this.part as ServerNode);
     }
 
     /**

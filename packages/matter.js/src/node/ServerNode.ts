@@ -8,7 +8,6 @@ import { CommissioningBehavior } from "../behavior/system/commissioning/Commissi
 import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { Agent } from "../endpoint/Agent.js";
-import { Part } from "../endpoint/Part.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartInitializer } from "../endpoint/part/PartInitializer.js";
 import { Identity } from "../util/Type.js";
@@ -22,26 +21,23 @@ import { ServerStore } from "./server/storage/ServerStore.js";
  * 
  * The Matter specification often refers to server-side nodes as "devices".
  */
-export class ServerNode<T extends ServerNode.RootEndpoint> extends Node<T> {
-    constructor();
+export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
+    constructor(type?: T, options?: Node.Options<T>);
 
-    constructor(config: Node.Configuration<T> | T);
+    constructor(config: Node.Options<T>);
 
-    constructor(type: T, options: Node.Options<T>);
-
-    constructor(definition: T | Part.Configuration<T> = ServerNode.RootEndpoint as T, options?: Node.Options<T>) {
-        super(definition as T, options as Node.Options<T>);
+    constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
+        super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {
         // Load the environment with node-specific services
-        this.env.set(
-            ServerStore,
-            await ServerStore.create(
-                this.env,
-                this.id,
-            )
+        const serverStore = await ServerStore.create(
+            this.env,
+            this.id,
         );
+
+        this.env.set(ServerStore, serverStore);
 
         this.env.set(
             PartInitializer,
