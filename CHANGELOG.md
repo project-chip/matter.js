@@ -39,6 +39,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adjusted logic to output detailed node information on nodes command
   * Enhancement: Do not subscribe all attributes when connecting a node for administrative actions (unpair, open commissioning windows)
   * Enhancement: Allowed to specify the BLE HCI id as shell start parameter and store in settings
+  * Fix: Fixed issues when using quoted strings as CLI parameters (e.g. for wifi/thread credentials or JSON structs for commands/attribute writes)
 
 ## 0.7.4 (2023-12-31)
 * Matter-Core functionality:

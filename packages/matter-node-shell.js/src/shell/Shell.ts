@@ -5,6 +5,7 @@
  */
 
 import { MatterError } from "@project-chip/matter-node.js/common";
+import { commandlineParser } from "@project-chip/matter-node.js/util";
 import readline from "readline";
 import type { Argv } from "yargs";
 import yargs from "yargs/yargs";
@@ -85,7 +86,13 @@ export class Shell {
      */
     async onReadLine(line: string) {
         if (line) {
-            const args = line.split(/\s+/);
+            let args;
+            try {
+                args = commandlineParser(line);
+            } catch (error) {
+                process.stderr.write(`Error happened during command parsing: ${error}\n`);
+                return;
+            }
             const yargsInstance = yargs(args)
                 .command([
                     cmdCommission(this.theNode),
