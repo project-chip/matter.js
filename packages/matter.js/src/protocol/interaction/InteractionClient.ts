@@ -864,6 +864,9 @@ export class InteractionClient {
                     commandId: requestId,
                 })} with ${Logger.toJSON(request)}`,
             );
+
+            requestSchema.validate(request);
+
             const commandFields = requestSchema.encodeTlv(request);
 
             if (timedRequest) {
