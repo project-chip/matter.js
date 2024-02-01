@@ -13,6 +13,7 @@ import {
     asClusterServerInternal,
     type CommandHandler,
     type SupportedEventsList,
+    ClusterServerObjInternal,
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
@@ -136,6 +137,15 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             createChangeHandler(this, name);
         }
 
+        // Disable redundant command logging
+        const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any>)._commands;
+        for (const name in commandServers) {
+            const server = commandServers[name];
+            if (server) {
+                server.debug = () => {};
+            }
+        }
+
         this.#server.addClusterServer(clusterServer);
     }
 }
@@ -177,7 +187,6 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
                     "Invoke",
                     Diagnostic.strong(`${backing}.${name}`),
                     behavior.context.transaction.via,
-                    "via",
                     requestDiagnostic,
                 );
         

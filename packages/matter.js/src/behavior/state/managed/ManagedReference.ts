@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { Val } from "../Val.js";
 
@@ -46,7 +47,7 @@ export function ManagedReference(
 ) {
     let value = (parent.value as Container)[index];
     let expired = false;
-    const location = {
+    let location = {
         ...parent.location,
         path: parent.location.path.at(index),
     }
@@ -68,6 +69,10 @@ export function ManagedReference(
 
         get location() {
             return location;
+        },
+
+        set location(loc: AccessControl.Location) {
+            location = loc;
         },
 
         set value(newValue: Val) {

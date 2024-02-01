@@ -18,29 +18,48 @@ import { Transaction } from "./Transaction.js";
 
 const logger = Logger.get("Transaction");
 
+const MAX_CHAINED_COMMITS = 5;
+
 /**
  * This is the only public interface to this file.
  */
 export function executeTransaction<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
     const tx = new Tx(via);
+    let commits = 0;
 
-    let committed = false;
+    // Post-commit logic may result in the transaction requiring commit again so commit iteratively up to
+    // MAX_CHAINED_COMMITS times
+    function commit(): MaybePromise {
+        commits++;
+
+        if (commits > MAX_CHAINED_COMMITS) {
+            throw new TransactionFlowError(`Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates a logic error`);
+        }
+
+        return MaybePromise.then(
+            () => tx.commit(),
+            () => {
+                if (tx.status === Transaction.Status.Exclusive) {
+                    return commit();
+                }
+            }
+        )
+    }
+
     return MaybePromise.finally(
         () => MaybePromise.then(
             () => actor(tx),
 
             result => {
-                committed = true;
-
                 return MaybePromise.then(
-                    () => tx.commit(),
+                    () => commit(),
                     () => result, 
                 )
             },
 
             error => {
                 // If we've committed, error happened during commit and we've already logged and cleaned up
-                if (committed) {
+                if (commits) {
                     throw error;
                 }
 
@@ -165,6 +184,7 @@ class Tx implements Transaction {
             const locked = set.acquireLocksSync();
             this.#locksChanged(locked);
         } else if (this.#status !== Status.Shared) {
+            debugger;
             throw new TransactionFlowError(`Cannot add resources to transaction that is ${this.status}`);
         }
 
@@ -244,12 +264,17 @@ class Tx implements Transaction {
         this.#assertAvailable();
         
         if (this.#status === Status.Shared) {
-            // Use rollback() to inform participants to refresh state
+            // Use rollback() to reset state
             return this.rollback();
-        } else {
-            // Perform the actual commit
-            return this.#finalize(Status.CommittingPhaseOne, "committed", () => this.#executeCommit());
         }
+
+        const participants = [ ...this.#participants ];
+
+        // Perform the actual commit
+        return MaybePromise.then(
+            () => this.#finalize(Status.CommittingPhaseOne, "committed", () => this.#executeCommit()),
+            () => this.#executePostCommit(participants),
+        );
     }
 
     rollback() {
@@ -319,29 +344,20 @@ class Tx implements Transaction {
      */
     #executeCommit(): MaybePromise {
         //this.#log("commit");
-        const result = this.#executeCommit1();
-        if (MaybePromise.is(result)) {
-            return result.then(() => this.#executeCommit2());
-        }
-        return this.#executeCommit2();
+        return MaybePromise.then(
+            () => this.#executeCommit1(),
+            () => this.#executeCommit2(),
+        )
     }
 
     #executeCommit1(): MaybePromise {
         // Commit phase 1
-        const phase1Error = (participant: Participant, error: any) => {
-            logger.error(`Error committing ${participant} (phase one), rolling back:`, error);
-            return MaybePromise.then(this.#executeRollback(), () => {
-                throw new FinalizationError(
-                    `Transaction rolled back due to unhandled error in commit (phase one) participant ${participant}`,
-                );
-            });
-        }
 
         // Ugh.  Iterating with MaybePromise sucks, need to make a proper
         // sync/async wrapper that acts like a promise
         const participantIterator = this.participants[Symbol.iterator]();
 
-        function commitNextParticipant(): MaybePromise {
+        const commitNextParticipant = (): MaybePromise => {
             const next = participantIterator.next();
 
             if (next.done) {
@@ -353,7 +369,14 @@ class Tx implements Transaction {
             return MaybePromise.then(
                 () => participant.commit1(),
                 () => commitNextParticipant(),
-                error => phase1Error(participant, error),
+                error => {
+                    logger.error(`Error committing ${participant} (phase one), rolling back:`, error);
+                    return MaybePromise.then(this.#executeRollback(), () => {
+                        throw new FinalizationError(
+                            `Transaction rolled back due to unhandled error in commit (phase one) participant ${participant}`,
+                        );
+                    });
+                },
             );
         }
 
@@ -362,19 +385,6 @@ class Tx implements Transaction {
 
     #executeCommit2() {
         // Commit phase 2
-        const phase2Error = (participant: Participant, error: any) => {
-            logger.error(
-                `Error committing (phase two) ${participant}, state inconsistency possible:`,
-                error,
-            );
-
-            if (errored) {
-                errored.push(participant);
-            } else {
-                errored = [ participant ];
-            }
-        }
-
         this.#status = Status.CommittingPhaseTwo;
         let errored: undefined | Array<Participant>;
         let ongoing: undefined | Array<Promise<void>>;
@@ -382,7 +392,18 @@ class Tx implements Transaction {
             const promise = MaybePromise.then(
                 () => participant.commit2(),
                 undefined,
-                error => phase2Error(participant, error),
+                error => {
+                    logger.error(
+                        `Error committing (phase two) ${participant}, state inconsistency possible:`,
+                        error,
+                    );
+
+                    if (errored) {
+                        errored.push(participant);
+                    } else {
+                        errored = [ participant ];
+                    }
+               },
             )
 
             if (MaybePromise.is(promise)) {
@@ -401,6 +422,30 @@ class Tx implements Transaction {
             // Synchronous commit
             throwIfErrored(errored, "in commit phase 2");
         }
+    }
+
+    #executePostCommit(participants: Participant[]) {
+        const participantIterator = participants[Symbol.iterator]();
+
+        const postCommitNextParticipant = (): MaybePromise => {
+            const next = participantIterator.next();
+
+            if (next.done) {
+                return;
+            }
+
+            const participant = next.value;
+
+            return MaybePromise.then(
+                () => participant.postCommit?.(),
+                () => postCommitNextParticipant(),
+                error => {
+                    logger.error(`Error post-commit of ${participant}:`, error);
+                },
+            );
+        }
+
+        return postCommitNextParticipant();
     }
 
     /**

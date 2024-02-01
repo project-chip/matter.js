@@ -71,7 +71,7 @@ export abstract class Behavior {
      * By default behaviors load lazily as they are accessed.  You can set this flag to true to force behaviors to load
      * immediately when the part is initialized.
      */
-    static readonly immediate: boolean = false;
+    static readonly early: boolean = false;
 
     /**
      * This flag enables persistent versioning of state data.
@@ -302,7 +302,7 @@ export namespace Behavior {
         readonly defaults: Record<string, any>;
 
         readonly schema?: Schema;
-        readonly immediate: boolean;
+        readonly early: boolean;
         readonly versioning: boolean;
         readonly supervisor: RootSupervisor;
         readonly State: new () => {};

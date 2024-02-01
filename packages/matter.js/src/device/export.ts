@@ -13,3 +13,4 @@ export * from "./Endpoint.js";
 export * from "./EndpointStructureLogger.js";
 export * from "./OnOffDevices.js";
 export * from "./PairedNode.js";
+export * from "./EndpointStructuralAdapter.js";

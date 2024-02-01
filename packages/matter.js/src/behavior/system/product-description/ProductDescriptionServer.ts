@@ -39,7 +39,7 @@ export class ProductDescriptionServer extends Behavior {
         }
 
         if (pd.productId === -1) {
-            pd.productId = -1;
+            pd.productId = bi.productId;
         }
 
         if (pd.deviceType === -1) {
@@ -50,6 +50,8 @@ export class ProductDescriptionServer extends Behavior {
                     "Cannot infer announcement device type because no device part is present; please set ProductDescription.deviceType",
                 );
             }
+
+            pd.deviceType = deviceType;
         }
     }
 }

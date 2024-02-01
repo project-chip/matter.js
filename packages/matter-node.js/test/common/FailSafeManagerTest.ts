@@ -5,9 +5,9 @@
  */
 
 import { ClusterServer, NetworkCommissioning } from "@project-chip/matter.js/cluster";
-import { FailSafeManager } from "@project-chip/matter.js/common";
+import { FailsafeManager } from "@project-chip/matter.js/common";
 import { EndpointNumber } from "@project-chip/matter.js/datatype";
-import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
+import { DeviceTypes, Endpoint, EndpointStructuralAdapter } from "@project-chip/matter.js/device";
 import { ByteArray, createPromise } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
@@ -48,7 +48,7 @@ describe("FailSafeManager Test", () => {
             rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const failSafe = new FailSafeManager({} as any, undefined, 100, 100, () => Promise.resolve(), rootEndpoint);
+            const failSafe = new FailsafeManager({} as any, undefined, 100, 100, () => Promise.resolve(), EndpointStructuralAdapter(rootEndpoint));
 
             // Now lets change network details
             const newNetworkId = new ByteArray(32);
@@ -57,7 +57,7 @@ describe("FailSafeManager Test", () => {
             networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);
 
             // Restore network data
-            failSafe.restoreEndpointState();
+            await failSafe.restoreEndpointState(EndpointStructuralAdapter(rootEndpoint));
 
             // Check if network data is restored
             assert.deepEqual(networkServer1.getNetworksAttribute(), [{ networkId: networkId, connected: true }]);
@@ -69,7 +69,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
-            new FailSafeManager({} as any, undefined, 1, 100, async () => resolver(), rootEndpoint);
+            new FailsafeManager({} as any, undefined, 1, 100, async () => resolver(), EndpointStructuralAdapter(rootEndpoint));
 
             await MockTime.advance(1000);
 
@@ -79,7 +79,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when failsafe expires after being rearmed (extended)", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = new FailsafeManager(
                 {} as any,
                 undefined,
                 3,
@@ -87,7 +87,7 @@ describe("FailSafeManager Test", () => {
                 async () => {
                     expired = true;
                 },
-                rootEndpoint,
+                EndpointStructuralAdapter(rootEndpoint),
             );
 
             await MockTime.advance(1500);
@@ -105,7 +105,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = new FailsafeManager(
                 {} as any,
                 undefined,
                 3,
@@ -113,7 +113,7 @@ describe("FailSafeManager Test", () => {
                 async () => {
                     expired = true;
                 },
-                rootEndpoint,
+                EndpointStructuralAdapter(rootEndpoint),
             );
 
             await MockTime.advance(1500);
@@ -125,7 +125,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = new FailsafeManager(
                 {} as any,
                 undefined,
                 3,
@@ -133,7 +133,7 @@ describe("FailSafeManager Test", () => {
                 async () => {
                     expired = true;
                 },
-                rootEndpoint,
+                EndpointStructuralAdapter(rootEndpoint),
             );
 
             await MockTime.advance(1500);
@@ -147,7 +147,7 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is not called when failsafe was completed", async () => {
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
             let expired = false;
-            const failSafe = new FailSafeManager(
+            const failSafe = new FailsafeManager(
                 {} as any,
                 undefined,
                 3,
@@ -155,7 +155,7 @@ describe("FailSafeManager Test", () => {
                 async () => {
                     expired = true;
                 },
-                rootEndpoint,
+                EndpointStructuralAdapter(rootEndpoint),
             );
 
             await MockTime.advance(1500);

@@ -9,8 +9,7 @@ import { NetworkCommissioning } from "../cluster/definitions/index.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { VendorId } from "../datatype/VendorId.js";
-import { Endpoint } from "../device/Endpoint.js";
-import { EndpointInterface } from "../endpoint/EndpointInterface.js";
+import { EndpointStructuralAdapter } from "../endpoint/StructuralAdapter.js";
 import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { Logger } from "../log/Logger.js";
 import { Time, Timer } from "../time/Time.js";
@@ -23,7 +22,7 @@ const logger = Logger.get("FailSafeManager");
 export class MatterFabricConflictError extends MatterFlowError {}
 
 /** Class to Handle one FailSafe context. This is mainly used when adding (Commissioning) or updating new Fabrics. */
-export class FailSafeManager {
+export class FailsafeManager {
     public readonly fabricBuilder = new FabricBuilder();
     public failSafeTimer: Timer;
     private maxCumulativeFailsafeTimer: Timer;
@@ -40,9 +39,9 @@ export class FailSafeManager {
         expiryLengthSeconds: number,
         maxCumulativeFailsafeSeconds: number,
         private readonly expiryCallback: () => Promise<void>,
-        readonly rootEndpoint: EndpointInterface,
+        rootEndpoint: EndpointStructuralAdapter,
     ) {
-        this.storeEndpointState();
+        this.storeEndpointState(rootEndpoint);
         this.failSafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();
         this.maxCumulativeFailsafeTimer = Time.getTimer("Max cumulative failsafe", maxCumulativeFailsafeSeconds * 1000, () =>
             this.expire(),
@@ -50,27 +49,30 @@ export class FailSafeManager {
     }
 
     /** Store required CLuster data when opening the FailSafe context to allow to restore them on expiry. */
-    private storeEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
+    private storeEndpointState(endpoint: EndpointStructuralAdapter) {
         // TODO: When implementing Network clusters we somehow need to make sure that a "temporary" network
         //  configuration is not persisted to disk. The NetworkClusterHandlers need to make sure it is only persisted
         //  when the commissioning is completed.
-        const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
+        const networkCluster = endpoint.getCluster(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
-            this.storedNetworkClusterState.set(endpoint.getNumber(), networkCluster.getNetworksAttribute());
+            this.storedNetworkClusterState.set(
+                endpoint.number,
+                networkCluster.get("networks"),
+            );
         }
-        for (const childEndpoint of endpoint.getChildEndpoints()) {
+        for (const childEndpoint of endpoint.children) {
             this.storeEndpointState(childEndpoint);
         }
     }
 
     /** Restore Cluster data when the FailSafe context expired. */
-    restoreEndpointState(endpoint: EndpointInterface = this.rootEndpoint) {
-        const endpointId = endpoint.getNumber();
+    async restoreEndpointState(endpoint: EndpointStructuralAdapter) {
+        const endpointId = endpoint.number;
         const networkState = this.storedNetworkClusterState.get(endpointId);
         if (networkState !== undefined) {
-            const networkCluster = endpoint.getClusterServer(NetworkCommissioning.Complete);
+            const networkCluster = endpoint.getCluster(NetworkCommissioning.Complete);
             if (networkCluster !== undefined) {
-                networkCluster.setNetworksAttribute(networkState);
+                await networkCluster.set("networks", networkState);
             } else {
                 logger.warn(
                     `NetworkCluster not found for endpoint ${endpointId}, but expected. Can not restore network data!`,
@@ -78,10 +80,8 @@ export class FailSafeManager {
             }
             this.storedNetworkClusterState.delete(endpointId);
         }
-        for (const childEndpoint of endpoint.getChildEndpoints()) {
-            if (childEndpoint instanceof Endpoint) {
-                this.restoreEndpointState(childEndpoint);
-            }
+        for (const childEndpoint of endpoint.children) {
+            await this.restoreEndpointState(childEndpoint);
         }
     }
 

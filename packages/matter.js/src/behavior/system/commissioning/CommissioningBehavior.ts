@@ -32,7 +32,7 @@ export class CommissioningBehavior extends Behavior {
 
     declare state: CommissioningBehavior.State;
 
-    static override immediate = true;
+    static override early = true;
  
     override initialize() {
         if (this.state.passcode === -1) {

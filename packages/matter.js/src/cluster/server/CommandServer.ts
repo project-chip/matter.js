@@ -67,13 +67,17 @@ export class CommandServer<RequestT, ResponseT> {
         }
 
         this.requestSchema.validate(request);
-        logger.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
+        this.debug(`Invoke ${this.name} with data ${Logger.toJSON(request)}`);
         const response = await this.handler(request, session, message, endpoint);
-        logger.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);
+        this.debug(`Invoke ${this.name} response : ${Logger.toJSON(response)}`);
         return {
             code: StatusCode.Success,
             responseId: this.responseId,
             response: this.responseSchema.encodeTlv(response),
         };
+    }
+
+    debug(message: string) {
+        logger.debug(message);
     }
 }

@@ -5,7 +5,7 @@
  */
 
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
-import { MatterFabricConflictError } from "../../../common/FailSafeManager.js";
+import { MatterFabricConflictError } from "../../../common/FailsafeManager.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
