@@ -17,7 +17,7 @@ const TheCrypto = {
         const bytes = new Uint8Array(length);
         
         // Elliptic can crash with pure-zero data
-        bytes[bytes.length - 1] = 1;
+        //bytes[bytes.length - 1] = 1;
 
         return bytes;
     },

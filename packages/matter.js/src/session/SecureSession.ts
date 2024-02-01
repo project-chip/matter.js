@@ -9,7 +9,8 @@ import { MatterFlowError } from "../common/MatterError.js";
 import { CRYPTO_SYMMETRIC_KEY_LENGTH, Crypto } from "../crypto/Crypto.js";
 import { NodeId } from "../datatype/NodeId.js";
 import { Fabric } from "../fabric/Fabric.js";
-import { DiagnosticDictionary, Logger } from "../log/Logger.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { MessageCounter } from "../protocol/MessageCounter.js";
 import { MessageReceptionStateEncryptedWithoutRollover } from "../protocol/MessageReceptionState.js";
 import { SubscriptionHandler } from "../protocol/interaction/SubscriptionHandler.js";
@@ -143,7 +144,7 @@ export class SecureSession<T> extends Session<T> {
         logger.debug(
             `Created secure ${this.isPase() ? "PASE" : "CASE"} session for fabric index ${fabric?.fabricIndex}`,
             this.name,
-            new DiagnosticDictionary({
+            Diagnostic.dict({
                 idleIntervalMs: this.idleIntervalMs,
                 activeIntervalMs: this.activeIntervalMs,
                 activeThresholdMs: this.activeThresholdMs,
