@@ -83,7 +83,7 @@ export class ObjectSchema<F extends TlvFields> extends TlvSchema<TypeFromFields<
             const fieldValue = (value as any)[name];
             if (fieldValue === undefined) {
                 if (!isOptional) {
-                    throw new ValidationError(`Missing mandatory field ${name}`);
+                    throw new ValidationError(`Missing mandatory field ${name}`, name);
                 }
                 continue;
             }
