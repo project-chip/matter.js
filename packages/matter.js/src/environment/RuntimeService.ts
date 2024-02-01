@@ -30,18 +30,12 @@ export class RuntimeService {
         environment.set(RuntimeService, this);
     }
 
-    get started() {
-        return this.#started;
-    }
-
-    get stopped() {
-        return this.#stopped;
-    }
-
-    static [Environmental.create](environment: Environment) {
-        return new this(environment);
-    }
-
+    /**
+     * Add a {@link Worker}.
+     * 
+     * The runtime considers itself "active" if there are one or more workers installed.  Workers that complete are
+     * removed and optionally destroyed.
+     */
     addWorker(worker: RuntimeService.Worker) {
         if (this.#workers.has(worker)) {
             return;
@@ -69,17 +63,33 @@ export class RuntimeService {
                         break;
                 }
             })
-        } else if (worker.construction?.then) {
-            Promise.resolve
-        }
-
-        if (typeof worker.then === "function") {
+        } else if (worker.then) {
             Promise.resolve(worker).finally(() => this.#disposeWorker(worker));
         }
     }
 
     /**
+     * Emits when a worker is added when previously there were none.
+     */
+    get started() {
+        return this.#started;
+    }
+
+    /**
+     * Emits when the last worker departs.
+     */
+    get stopped() {
+        return this.#stopped;
+    }
+
+    static [Environmental.create](environment: Environment) {
+        return new this(environment);
+    }
+
+    /**
      * Cancel execution.
+     * 
+     * On cancel the runtime destroys active workers.
      */
     cancel() {
         if (this.#canceled) {
@@ -93,9 +103,32 @@ export class RuntimeService {
         }
     }
 
+    /**
+     * Resolves when no workers are active.
+     */
+    get inactive() {
+        if (!this.#workers.size) {
+            return Promise.resolve();
+        }
+
+        return new Promise<void>(resolve => {
+            const listener = () => {
+                if (!this.#workers.size) {
+                    this.#workerDeleted.off(listener);
+                    resolve();
+                }
+            }
+            this.#workerDeleted.on(listener);
+        });
+    }
+
     async [Symbol.asyncDispose]() {
         this.cancel();
         await this.inactive;
+    }
+
+    get [Diagnostic.value]() {
+        return "Runtime";
     }
 
     async #disposeWorker(worker: RuntimeService.Worker) {
@@ -124,45 +157,69 @@ export class RuntimeService {
     }
 
     #deleteWorker(worker: RuntimeService.Worker) {
-        if (this.#workers.has(worker)) {
-            this.#workers.delete(worker);
-            this.#disposed.delete(worker);
-            this.#workerDeleted.emit();
-            if (this.#workers.size === 0) {
-                this.#stopped.emit();
-            }
-        }
-    }
-
-    /**
-     * Resolves when no workers are active.
-     */
-    get inactive() {
-        if (!this.#workers.size) {
-            return Promise.resolve();
+        if (!this.#workers.has(worker)) {
+            return;
         }
 
-        return new Promise<void>(resolve => {
-            const listener = () => {
-                if (!this.#workers.size) {
-                    this.#workerDeleted.off(listener);
-                    resolve();
-                }
-            }
-            this.#workerDeleted.on(listener);
-        });
-    }
+        // Remove the worker
+        this.#workers.delete(worker);
+        this.#disposed.delete(worker);
+        this.#workerDeleted.emit();
 
-    get [Diagnostic.value]() {
-        return "Runtime";
+        // If there are still non-helper workers, remain in active state
+        for (const worker of this.#workers) {
+            if (!worker.helper) {
+                return;
+            }
+        }
+
+        // No workers except helpers; cancel helpers and exit
+        this.cancel();
+        this.inactive.then(() => this.#stopped.emit());
     }
 }
 
 export namespace RuntimeService {
+    /**
+     * The runtime tracks individual discrete tasks as "workers".
+     *
+     * The state of the runtime is dependent on installed workers.  Any JS object may be a worker but the runtime's
+     * interaction with workers varies as documented here.
+     *
+     * If a worker is a {@link PromiseLike} the runtime will delete and/or destroy it when it completes.
+     */
     export interface Worker extends Partial<PromiseLike<any>> {
+        /**
+         * If this is true, the worker is considered a "helper".  When the last non-helper worker departs the runtime
+         * cancels helpers and emits {@link RuntimeService.stopped}.
+         */
         helper?: boolean;
+
+        /**
+         * If the worker supports {@link AsyncConstruction}, the runtime will monitor the worker's lifecycle:
+         *
+         *   - If the worker is incapacitated (e.g. experiences an error during initialization) the runtime will cancel
+         *     all workers and exit
+         *
+         *   - If the worker is destroyed deletes it from the set of known workers
+         */
         construction?: AsyncConstruction<any>;
+
+        /**
+         * If the worker supports {@link Symbol.asyncDispose} the runtime will invoke when the worker is no longer
+         * needed.  This happens if:
+         * 
+         *   - The worker is a {@link PromiseLike} that resolves
+         * 
+         *   - The worker's {@link construction} status changed as noted above
+         * 
+         *   - The runtime is canceled via {@link RuntimeService.cancel}
+         */
         [Symbol.asyncDispose]?: () => MaybePromise<void>;
+
+        /**
+         * Workers may implement {@link Symbol.dispose} to handle disposal.  Works the same as the async equivalent.
+         */
         [Symbol.dispose]?: () => void;
     }
 }
