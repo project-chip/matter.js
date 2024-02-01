@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Logger } from "@project-chip/matter.js/log";
+import { Logger, Format } from "@project-chip/matter.js/log";
 
-Logger.format = "ansi";
+Logger.format = Format.ANSI;
