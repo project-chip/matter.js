@@ -36,7 +36,7 @@ import { Aggregator } from "../../src/device/Aggregator.js";
 import { ComposedDevice } from "../../src/device/ComposedDevice.js";
 import { RootEndpoint } from "../../src/device/Device.js";
 import { DeviceTypes } from "../../src/device/DeviceTypes.js";
-import { OnOffLightDevice, OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
+import { OnOffPluginUnitDevice } from "../../src/device/OnOffDevices.js";
 import { EndpointInterface } from "../../src/endpoint/EndpointInterface.js";
 import { InteractionEndpointStructure } from "../../src/protocol/interaction/InteractionEndpointStructure.js";
 import { attributePathToId } from "../../src/protocol/interaction/InteractionServer.js";

@@ -5,8 +5,9 @@
  */
 
 import { LocalMatter } from "../local.js";
+import { ClusterElement as Cluster } from "@project-chip/matter.js/model";
 
-LocalMatter.children.push({
+LocalMatter.children.push(Cluster({
     tag: "cluster",
     name: "WindowCovering",
 
@@ -115,7 +116,7 @@ LocalMatter.children.push({
 
             children: [
                 {
-                    tag: "datatype",
+                    tag: "field",
                     name: "LiftPercent100thsValue",
                     id: 0x0,
                     type: "percent100ths",
@@ -130,7 +131,7 @@ LocalMatter.children.push({
             id: 0x8,
             children: [
                 {
-                    tag: "datatype",
+                    tag: "field",
                     name: "TiltPercent100thsValue",
                     id: 0x0,
                     type: "percent100ths",
@@ -140,4 +141,4 @@ LocalMatter.children.push({
             ],
         },
     ],
-});
+}));
