@@ -36,9 +36,9 @@ export class ArraySchema<T> extends TlvSchema<T[]> {
         super();
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag): void {
+    override encodeTlvInternal(writer: TlvWriter, value: T[], tag?: TlvTag, forWriteInteraction?: boolean): void {
         writer.writeTag({ type: TlvType.Array }, tag);
-        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element));
+        value.forEach(element => this.elementSchema.encodeTlvInternal(writer, element, undefined, forWriteInteraction));
         writer.writeTag({ type: TlvType.EndOfContainer });
     }
 

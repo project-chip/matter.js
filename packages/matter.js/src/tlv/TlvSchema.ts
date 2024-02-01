@@ -21,9 +21,9 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
         return writer.toByteArray();
     }
 
-    encodeTlv(value: T): TlvStream {
+    encodeTlv(value: T, forWriteInteraction = false): TlvStream {
         const writer = new TlvArrayWriter();
-        this.encodeTlvInternal(writer, value);
+        this.encodeTlvInternal(writer, value, undefined, forWriteInteraction);
         return writer.toTlvArray();
     }
 
@@ -38,7 +38,7 @@ export abstract class TlvSchema<T> extends Schema<T, ByteArray> implements TlvSc
 
     abstract decodeTlvInternalValue(reader: TlvReader, typeLength: TlvTypeLength): T;
 
-    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag): void;
+    abstract encodeTlvInternal(writer: TlvWriter, value: T, tag?: TlvTag, forWriteInteraction?: boolean): void;
 
     injectField(value: T, _fieldId: number, _fieldValue: any, _injectChecker: (fieldValue: any) => boolean): T {
         return value;

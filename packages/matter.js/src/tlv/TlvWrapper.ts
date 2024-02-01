@@ -20,8 +20,8 @@ export class TlvWrapper<O, T> extends TlvSchema<O> {
         return this.unwrap(this.underlyingSchema.decodeTlvInternalValue(reader, typeLength));
     }
 
-    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag | undefined): void {
-        this.underlyingSchema.encodeTlvInternal(writer, this.wrap(value), tag);
+    override encodeTlvInternal(writer: TlvWriter, value: O, tag?: TlvTag, forWriteInteraction?: boolean): void {
+        this.underlyingSchema.encodeTlvInternal(writer, this.wrap(value), tag, forWriteInteraction);
     }
 
     override validate(value: O): void {
