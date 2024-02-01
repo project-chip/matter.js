@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
-import { Properties } from "../../../../src/util/Type.js";
-import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
+import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
 import { SchemaPath } from "../../../../src/behavior/supervision/SchemaPath.js";
+import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
+import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
+import { Properties } from "../../../../src/util/Type.js";
 
 export function Fields(...definition: { name?: string; type?: string; conformance?: string }[]): Fields {
     return definition.map(

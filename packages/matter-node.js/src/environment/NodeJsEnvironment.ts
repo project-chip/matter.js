@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Environment, RuntimeService, StorageService, VariableService } from "@project-chip/matter.js/environment";
+import { Network } from "@project-chip/matter.js/net";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
-import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
-import { Environment, RuntimeService, VariableService, StorageService } from "@project-chip/matter.js/environment";
 import { NetworkNode } from "../net/NetworkNode.js";
-import { Network } from "@project-chip/matter.js/net";
+import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 
 /**
  * This is the default environment implementation for Node:
@@ -49,7 +49,10 @@ function configureSignals(env: Environment) {
     const runtime = env.get(RuntimeService);
 
     const interrupt = (): void => runtime.cancel();
-    const diagnose = (): void => { process.on("SIGUSR2", env.diagnose); env.diagnose(); };
+    const diagnose = (): void => {
+        process.on("SIGUSR2", env.diagnose);
+        env.diagnose();
+    };
 
     runtime.started.on(() => {
         process.on("SIGINT", interrupt);
@@ -66,10 +69,8 @@ function configureStorage(env: Environment) {
     const service = env.get(StorageService);
     const location = env.vars.get("storage.path", env.vars.get("path.root", "."));
     service.location = location;
-    service.factory = namespace => new StorageBackendDisk(
-        resolve(location, namespace),
-        env.vars.get("storage.clear", false),
-    )
+    service.factory = namespace =>
+        new StorageBackendDisk(resolve(location, namespace), env.vars.get("storage.clear", false));
 }
 
 function configureNetwork(env: Environment) {

@@ -24,7 +24,6 @@ import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EventId } from "../../datatype/EventId.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Logger } from "../../log/Logger.js";
-import { SubscriptionOptions } from "./SubscriptionOptions.js";
 import { MessageExchange } from "../../protocol/MessageExchange.js";
 import { ProtocolHandler } from "../../protocol/ProtocolHandler.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
@@ -57,6 +56,7 @@ import {
 } from "./InteractionProtocol.js";
 import { StatusCode, StatusResponseError } from "./StatusCode.js";
 import { SubscriptionHandler } from "./SubscriptionHandler.js";
+import { SubscriptionOptions } from "./SubscriptionOptions.js";
 
 export const INTERACTION_PROTOCOL_ID = 0x0001;
 export const INTERACTION_MODEL_REVISION = 11;

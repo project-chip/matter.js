@@ -48,7 +48,14 @@ describe("FailSafeManager Test", () => {
             rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const failSafe = new FailsafeManager({} as any, undefined, 100, 100, () => Promise.resolve(), EndpointStructuralAdapter(rootEndpoint));
+            const failSafe = new FailsafeManager(
+                {} as any,
+                undefined,
+                100,
+                100,
+                () => Promise.resolve(),
+                EndpointStructuralAdapter(rootEndpoint),
+            );
 
             // Now lets change network details
             const newNetworkId = new ByteArray(32);
@@ -69,7 +76,14 @@ describe("FailSafeManager Test", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
             const rootEndpoint = new Endpoint([DeviceTypes.ROOT], { endpointId: EndpointNumber(0) });
-            new FailsafeManager({} as any, undefined, 1, 100, async () => resolver(), EndpointStructuralAdapter(rootEndpoint));
+            new FailsafeManager(
+                {} as any,
+                undefined,
+                1,
+                100,
+                async () => resolver(),
+                EndpointStructuralAdapter(rootEndpoint),
+            );
 
             await MockTime.advance(1000);
 

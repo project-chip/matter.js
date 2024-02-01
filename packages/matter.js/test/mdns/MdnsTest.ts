@@ -79,7 +79,10 @@ const NODE_ID = NodeId(BigInt(1));
 
         beforeEach(async () => {
             Network.get = () => clientNetwork;
-            scanner = await MdnsScanner.create(Network.get(), { enableIpv4: testIpv4Enabled, netInterface: FAKE_INTERFACE_NAME });
+            scanner = await MdnsScanner.create(Network.get(), {
+                enableIpv4: testIpv4Enabled,
+                netInterface: FAKE_INTERFACE_NAME,
+            });
             scannerChannel = await UdpChannelFake.create(serverNetwork, {
                 listeningPort: 5353,
                 listeningAddress: testIpv4Enabled ? "224.0.0.251" : "ff02::fb",

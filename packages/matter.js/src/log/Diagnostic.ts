@@ -8,12 +8,12 @@ import type { Lifecycle } from "../common/Lifecycle.js";
 
 /**
  * Logged values may implement this interface to customize presentation.
- * 
+ *
  * You can use the utility functions such as {@link Diagnostic.dict} to create
  * Diagnostics from common value types.
  */
 export interface Diagnostic {
-    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | Lifecycle.Status,
+    readonly [Diagnostic.presentation]?: Diagnostic.Presentation | Lifecycle.Status;
     readonly [Diagnostic.value]?: unknown;
 }
 
@@ -24,7 +24,7 @@ export function Diagnostic(presentation: Diagnostic.Presentation | Lifecycle.Sta
     return {
         [Diagnostic.presentation]: presentation,
         [Diagnostic.value]: value,
-    }
+    };
 }
 
 export namespace Diagnostic {
@@ -96,20 +96,14 @@ export namespace Diagnostic {
      * Create a value presenting as a list of separate lines.
      */
     export function list(value: Iterable<unknown>) {
-        return Diagnostic(
-            Diagnostic.Presentation.List,
-            value,
-        )
+        return Diagnostic(Diagnostic.Presentation.List, value);
     }
 
     /**
      * Create a value presenting as segments of the same string without intervening spaces.
      */
     export function squash(...values: unknown[]) {
-        return Diagnostic(
-            Diagnostic.Presentation.Squash,
-            values,
-        )
+        return Diagnostic(Diagnostic.Presentation.Squash, values);
     }
 
     /**
@@ -185,7 +179,7 @@ export namespace Diagnostic {
                     Diagnostic.weak(" ("),
                     Diagnostic.weak(match[2]),
                     Diagnostic.weak(")"),
-                )
+                ),
             );
         }
 
@@ -194,25 +188,12 @@ export namespace Diagnostic {
             lines.shift();
         }
 
-        return Diagnostic(
-            Presentation.List,
-            [
-                message,
-                ...lines,
-            ]
-        )
+        return Diagnostic(Presentation.List, [message, ...lines]);
     }
 
     export function prefixError(prefix: string, cause: any) {
         if (cause instanceof Error) {
-            cause.message = upgrade(
-                `${prefix}: ${cause.message}`,
-                Diagnostic.squash(
-                    prefix,
-                    " ",
-                    cause.message,
-                )
-            );
+            cause.message = upgrade(`${prefix}: ${cause.message}`, Diagnostic.squash(prefix, " ", cause.message));
         }
     }
 
@@ -231,7 +212,7 @@ export namespace Diagnostic {
     }
 
     export interface Elapsed {
-        readonly startedAt: number,
+        readonly startedAt: number;
         readonly time: number;
         toString(): string;
     }
@@ -255,14 +236,18 @@ export namespace Diagnostic {
         } else {
             days = "";
         }
-        const hours = Math.floor(ms / 3_600_000).toString().padStart(2, "0");
+        const hours = Math.floor(ms / 3_600_000)
+            .toString()
+            .padStart(2, "0");
         ms %= 3_600_000;
-        const minutes = Math.floor(ms / 60_000).toString().padStart(2, "0");
+        const minutes = Math.floor(ms / 60_000)
+            .toString()
+            .padStart(2, "0");
         ms %= 60_000;
         const seconds = Math.floor(ms).toString().padStart(2, "0");
 
         return `${days}${hours}:${minutes}:${seconds}`;
-}
+    }
 
     /**
      * Create a diagnostic that renders as elapsed time since creation.
@@ -277,8 +262,8 @@ export namespace Diagnostic {
 
             toString() {
                 return interval(this.time);
-            }
-        }
+            },
+        };
     }
 
     /**

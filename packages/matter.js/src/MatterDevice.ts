@@ -87,7 +87,9 @@ export class MatterDevice {
 
         this.addProtocolHandler(this.secureChannelProtocol);
 
-        this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () => this.announce());
+        this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
+            this.announce(),
+        );
     }
 
     addScanner(scanner: Scanner) {
@@ -383,9 +385,7 @@ export class MatterDevice {
                 this.updateFabric(failsafeContext.associatedFabric);
             }
 
-            const operationalCredentialsCluster = rootEndpoint.getCluster(
-                OperationalCredentials.Cluster,
-            );
+            const operationalCredentialsCluster = rootEndpoint.getCluster(OperationalCredentials.Cluster);
             operationalCredentialsCluster?.refresh("nocs", fabric);
             operationalCredentialsCluster?.refresh("fabrics", fabric);
         }
@@ -397,16 +397,12 @@ export class MatterDevice {
             if (fabricIndex !== undefined) {
                 const fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
                 if (fabric !== undefined) {
-                    const basicInformationCluster = rootEndpoint.getCluster(
-                        BasicInformation.Cluster,
-                    );
+                    const basicInformationCluster = rootEndpoint.getCluster(BasicInformation.Cluster);
                     basicInformationCluster?.trigger("leave", { fabricIndex });
 
                     await fabric.remove();
 
-                    const operationalCredentialsCluster = rootEndpoint.getCluster(
-                        OperationalCredentials.Cluster,
-                    );
+                    const operationalCredentialsCluster = rootEndpoint.getCluster(OperationalCredentials.Cluster);
                     operationalCredentialsCluster?.refresh("nocs", fabric);
                     operationalCredentialsCluster?.refresh("commissionedFabrics", fabric);
                     operationalCredentialsCluster?.refresh("fabrics", fabric);

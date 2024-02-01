@@ -5,22 +5,22 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
+import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
+import { Environment } from "../environment/Environment.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
-import { PartInitializer } from "./part/PartInitializer.js";
 import { Behaviors } from "./part/Behaviors.js";
+import { PartInitializer } from "./part/PartInitializer.js";
 import { PartLifecycle } from "./part/PartLifecycle.js";
 import { Parts } from "./part/Parts.js";
-import { EndpointType } from "./type/EndpointType.js";
-import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
-import { Environment } from "../environment/Environment.js";
+import { EndpointType } from "./type/EndpointType.js";
 
 /**
  * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
@@ -46,14 +46,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * A string that uniquely identifies a Part.
-     * 
+     *
      * This ID must be unique amongst all Parts with the same owner.
      */
     get id() {
         if (this.#id === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "part ID is not yet assigned; set ID or await part.construction to avoid this error"
+                "part ID is not yet assigned; set ID or await part.construction to avoid this error",
             );
         }
         return this.#id;
@@ -67,7 +67,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         if (this.#number === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "part number is not yet assigned; set number or await part.construction to avoid this error"
+                "part number is not yet assigned; set number or await part.construction to avoid this error",
             );
         }
         return this.#number;
@@ -98,7 +98,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         if (this.#behaviors === undefined) {
             throw new UninitializedDependencyError(
                 this.toString(),
-                "behaviors are not yet initialized; await part.construction to avoid this error"
+                "behaviors are not yet initialized; await part.construction to avoid this error",
             );
         }
         return this.#behaviors;
@@ -106,7 +106,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Current state values for all behaviors.  This view is read-only.
-     * 
+     *
      * If a behavior is not fully initalized its state may be incomplete.
      */
     get state() {
@@ -119,7 +119,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     get events() {
         return this.#eventsView;
     }
-    
+
     get construction() {
         return this.#construction;
     }
@@ -135,14 +135,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         const config = Part.configurationFor(definition, options);
 
         this.#type = config.type;
-;
         this.#lifecycle = this.createLifecycle();
 
-        this.#behaviors = new Behaviors(
-            this,
-            this.#type.behaviors,
-            config as Record<string, object | undefined>,
-        );
+        this.#behaviors = new Behaviors(this, this.#type.behaviors, config as Record<string, object | undefined>);
 
         if (config.id !== undefined) {
             this.id = config.id;
@@ -167,15 +162,11 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
                 // Immediate initialization
                 return this.#initialize();
             }
-     
+
             // Deferred initialization -- wait for installation
             return new Promise<void>((fulfilled, rejected) => {
                 this.lifecycle.installed.once(() => {
-                    MaybePromise.then(
-                        () => this.#initialize(),
-                        fulfilled,
-                        rejected,
-                    );
+                    MaybePromise.then(() => this.#initialize(), fulfilled, rejected);
                 });
             });
         });
@@ -201,7 +192,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         if (this.lifecycle.isInstalled && this.owner instanceof Part) {
             this.owner.parts.assertIdAvailable(id);
         }
-        
+
         this.#id = id;
         this.lifecycle.change(PartLifecycle.Change.IdAssigned);
     }
@@ -211,13 +202,15 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
             return;
         }
         if (this.#number !== undefined) {
-            throw new ImplementationError(`${this} endpoint number ${this.#number} is already assigned, cannot reassign`)
+            throw new ImplementationError(
+                `${this} endpoint number ${this.#number} is already assigned, cannot reassign`,
+            );
         }
         if (typeof number !== "number") {
             throw new ImplementationError(`Illegal endpoint number type "${typeof number}"`);
         }
         if (!Number.isInteger(number)) {
-            throw new ImplementationError(`Endpoint number ${number} is not an integer`)
+            throw new ImplementationError(`Endpoint number ${number} is not an integer`);
         }
         if (number < 0) {
             throw new ImplementationError(`Endpoint number ${number} is negative`);
@@ -257,7 +250,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         }
 
         this.#owner = owner;
-        
+
         try {
             owner.parts.add(this);
         } catch (e) {
@@ -313,13 +306,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Perform offline work on the part.  When offline, ACLs are ignored and all state is read/write.
-     * 
+     *
      * This should only be used for local purposes.  All network interaction should use OnlineContext.
      */
     offline<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
         return OfflineContext.act(purpose, context => {
             return actor(context.agentFor(this));
-        })
+        });
     }
 
     /**
@@ -343,7 +336,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
             await this.behaviors[Symbol.asyncDispose]();
             this.lifecycle.change(PartLifecycle.Change.Destroyed);
             this.#owner = undefined;
-        })
+        });
     }
 
     toString() {
@@ -368,7 +361,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Asynchronous initialization.
-     * 
+     *
      * Derivatives may override to perform async construction prior to full initialization.
      */
     protected initialize(agent: Agent.Instance<T>) {
@@ -383,14 +376,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
             // Update lifecycle indicating initialization is complete
             () => this.lifecycle.change(PartLifecycle.Change.Ready),
-        )
+        );
     }
 }
 
 export namespace Part {
     export type BehaviorOptions<T extends EndpointType = EndpointType.Empty, O extends PartOptions = PartOptions> = {
-        [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>
-    }
+        [K in keyof T["behaviors"] as K extends keyof O ? never : K]?: Behavior.Options<T["behaviors"][K]>;
+    };
 
     export interface PartOptions {
         owner?: Part | Agent;
@@ -401,32 +394,32 @@ export namespace Part {
 
     export type Options<
         T extends EndpointType = EndpointType.Empty,
-        O extends PartOptions = PartOptions
+        O extends PartOptions = PartOptions,
     > = BehaviorOptions<T, O> & O;
 
     export type Configuration<
         T extends EndpointType = EndpointType.Empty,
-        O extends PartOptions = PartOptions
+        O extends PartOptions = PartOptions,
     > = Options<T, O> & { type: T };
 
     /**
      * Definition of a Part.  May be an {@link EndpointType}, {@link Configuration}, or a {@link Part} instance.
      */
-    export type Definition<T extends EndpointType = EndpointType.Empty> =
-        | T
-        | Configuration<T>
-        | Part<T>;
+    export type Definition<T extends EndpointType = EndpointType.Empty> = T | Configuration<T> | Part<T>;
 
     /**
      * Obtain a configuration from constructor parameters.
      */
-    export function configurationFor<T extends EndpointType>(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
+    export function configurationFor<T extends EndpointType>(
+        definition: T | Part.Configuration<T>,
+        options?: Part.Options<T>,
+    ) {
         if ((definition as EndpointType).deviceType) {
             return {
                 ...options,
                 type: definition as T,
             } as Configuration<T>;
-        };
+        }
         return definition as Configuration<T>;
     }
 

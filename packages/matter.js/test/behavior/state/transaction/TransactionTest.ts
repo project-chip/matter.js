@@ -58,8 +58,8 @@ function TestParticipant(options?: Partial<Participant>) {
 
         expect(...invokes: string[]) {
             expect(this.invoked).deep.equals(invokes);
-        }
-    }
+        },
+    };
 }
 
 let transaction: Transaction;
@@ -90,7 +90,7 @@ function join2(options?: JoinOptions) {
     return join({
         ...options,
         transaction: transaction2,
-    })
+    });
 }
 
 /**
@@ -100,17 +100,19 @@ function join3(options?: JoinOptions) {
     return join({
         ...options,
         transaction: transaction3,
-    })
+    });
 }
 
 /**
  * Run a test against {@link transaction}.
  */
 function test(what: string, actor: () => MaybePromise) {
-    it(what, () => Transaction.act("test", tx => {
-        transaction = tx;
-        return actor()
-    }));
+    it(what, () =>
+        Transaction.act("test", tx => {
+            transaction = tx;
+            return actor();
+        }),
+    );
 }
 
 /**
@@ -121,8 +123,8 @@ function test2(what: string, actor: () => MaybePromise) {
         Transaction.act("test2", tx => {
             transaction2 = tx;
             return actor();
-        })
-    })
+        });
+    });
 }
 
 /**
@@ -133,8 +135,8 @@ function test3(what: string, actor: () => MaybePromise) {
         Transaction.act("test3", tx => {
             transaction3 = tx;
             return actor();
-        })
-    })
+        });
+    });
 }
 
 describe("Transaction", () => {
@@ -148,7 +150,7 @@ describe("Transaction", () => {
             });
 
             p.expect("commit1", "commit2");
-        })
+        });
 
         it("commits asynchronously", async () => {
             const p = TestParticipant();
@@ -159,21 +161,21 @@ describe("Transaction", () => {
             });
 
             p.expect("commit1", "commit2");
-        })
+        });
 
         it("rolls back synchronously", () => {
             const p = TestParticipant();
 
-            expect(
-                () => Transaction.act("test", tx => {
+            expect(() =>
+                Transaction.act("test", tx => {
                     tx.addParticipants(p);
                     tx.beginSync();
                     throw "oops";
-                })
+                }),
             ).throws("oops");
 
             p.expect("rollback");
-        })
+        });
 
         it("rolls back asynchronously", async () => {
             const p = TestParticipant();
@@ -183,12 +185,12 @@ describe("Transaction", () => {
                     tx.addParticipants(p);
                     tx.beginSync();
                     throw "oops";
-                })
+                }),
             ).rejectedWith("oops");
 
             p.expect("rollback");
-        })
-    })
+        });
+    });
 
     test("handles commit and rollback on shared", async () => {
         const p = join();
@@ -201,7 +203,11 @@ describe("Transaction", () => {
     });
 
     test("flows through commit correctly", async () => {
-        const p = join({ postCommit: () => { p.invoked.push("postCommit") } });
+        const p = join({
+            postCommit: () => {
+                p.invoked.push("postCommit");
+            },
+        });
 
         expect(transaction.status).equals(Status.Shared);
         await transaction.begin();
@@ -457,21 +463,17 @@ describe("Transaction", () => {
     describe("after destruction", () => {
         function destroyedSync(description: string, fn: () => void) {
             it(description, () => {
-                Transaction.act("destroyedSync", tx => transaction = tx);
+                Transaction.act("destroyedSync", tx => (transaction = tx));
 
-                expect(
-                    fn
-                ).throws("Transaction destroyedSync is destroyed")
+                expect(fn).throws("Transaction destroyedSync is destroyed");
             });
         }
 
         async function destroyedAsync(description: string, fn: () => Promise<void>) {
             it(description, async () => {
-                Transaction.act("destroyedAsync", tx => transaction = tx);
+                Transaction.act("destroyedAsync", tx => (transaction = tx));
 
-                await expect(
-                    fn()
-                ).rejectedWith("Transaction destroyedAsync is destroyed");
+                await expect(fn()).rejectedWith("Transaction destroyedAsync is destroyed");
             });
         }
 
@@ -479,17 +481,11 @@ describe("Transaction", () => {
 
         destroyedSync("rejects rollback", () => transaction.rollback());
 
-        destroyedSync("rejects addResourcesSync", () =>
-            transaction.addResourcesSync(new TestResource())
-        )
+        destroyedSync("rejects addResourcesSync", () => transaction.addResourcesSync(new TestResource()));
 
-        destroyedAsync("rejects addResources", () =>
-            transaction.addResources(new TestResource())
-        )
+        destroyedAsync("rejects addResources", () => transaction.addResources(new TestResource()));
 
-        destroyedSync("rejects addParticipant", () =>
-            transaction.addParticipants(TestParticipant())
-        )
+        destroyedSync("rejects addParticipant", () => transaction.addParticipants(TestParticipant()));
     });
 
     describe("read-only", () => {
@@ -497,9 +493,7 @@ describe("Transaction", () => {
             it(description, () => {
                 transaction = Transaction.ReadOnly;
 
-                expect(
-                    fn
-                ).throws("This view is read-only")
+                expect(fn).throws("This view is read-only");
             });
         }
 
@@ -507,9 +501,7 @@ describe("Transaction", () => {
             it(description, async () => {
                 transaction = Transaction.ReadOnly;
 
-                await expect(
-                    fn()
-                ).rejectedWith("This view is read-only");
+                await expect(fn()).rejectedWith("This view is read-only");
             });
         }
 
@@ -517,16 +509,10 @@ describe("Transaction", () => {
 
         readonlySync("rejects rollback", () => transaction.rollback());
 
-        readonlySync("rejects addResourcesSync", () =>
-            transaction.addResourcesSync(new TestResource())
-        )
+        readonlySync("rejects addResourcesSync", () => transaction.addResourcesSync(new TestResource()));
 
-        readonlyAsync("rejects addResources", () =>
-            transaction.addResources(new TestResource())
-        )
+        readonlyAsync("rejects addResources", () => transaction.addResources(new TestResource()));
 
-        readonlySync("rejects addParticipant", () =>
-            transaction.addParticipants(TestParticipant())
-        )
-    })
+        readonlySync("rejects addParticipant", () => transaction.addParticipants(TestParticipant()));
+    });
 });

@@ -109,7 +109,7 @@ export class VariableService {
             return value;
         }
         if (typeof value === "string") {
-            value = Number.parseFloat(value)
+            value = Number.parseFloat(value);
             if (Number.isNaN(value)) {
                 return;
             }
@@ -135,7 +135,7 @@ export class VariableService {
     }
 
     addUnixEnvStyle(vars: Record<string, string | undefined>) {
-        this.addConfigStyle(parseUnixStyle(vars))
+        this.addConfigStyle(parseUnixStyle(vars));
     }
 
     addArgvStyle(vars: string[]) {
@@ -143,13 +143,16 @@ export class VariableService {
     }
 
     #parseName(name: string) {
-        return name.toLowerCase().split(".").map(segment => {
-            segment = segment.trim();
-            if (segment === "") {
-                throw new ImplementationError(`Variable name ${name} contains empty segments`);
-            }
-            return segment;
-        });
+        return name
+            .toLowerCase()
+            .split(".")
+            .map(segment => {
+                segment = segment.trim();
+                if (segment === "") {
+                    throw new ImplementationError(`Variable name ${name} contains empty segments`);
+                }
+                return segment;
+            });
     }
 }
 
@@ -160,7 +163,7 @@ export namespace VariableService {
         configStyle?: Map;
     }
 
-    export interface Map extends Record<string, Value> {};
+    export interface Map extends Record<string, Value> {}
     export type List = Value[];
     export type Primitive = number | string | boolean;
     export type Value = Primitive | Map | List;

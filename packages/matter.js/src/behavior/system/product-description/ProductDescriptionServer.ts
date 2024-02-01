@@ -100,7 +100,7 @@ function inferDeviceType(agent: Agent): DeviceTypeId | undefined {
     if (!recurse || !agent.part.hasParts) {
         return;
     }
-    
+
     for (const child of agent.part.parts) {
         const deviceType = inferDeviceType(agent.context.agentFor(child));
         if (deviceType !== undefined) {

@@ -24,7 +24,7 @@ import { ReadOnlyTransaction, executeTransaction } from "./Tx.js";
  * Persistence is implemented by a list of participants.  Commits are two phase.  If an error is thrown in phase one all
  * participants roll back. An error in phase 2 could result in data inconsistency as we don't have any form of retry as
  * of yet.
- * 
+ *
  * TODO - does prevent deadlock but we should probably add a timeout for resource locking
  */
 export interface Transaction {
@@ -156,9 +156,9 @@ type ParticipantType = Participant;
 export namespace Transaction {
     /**
      * Perform a transactional operation.  This is the only way to obtain a read/write transaction.
-     * 
+     *
      * The transaction will commit automatically if it is exclusive (write mode) after the actor returns.
-     * 
+     *
      * The transaction is destroyed when {@link act} returns.  You will receive an error if you access it after it is
      * destroyed.
      */

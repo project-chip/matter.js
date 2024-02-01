@@ -20,7 +20,7 @@ const logger = Logger.get("Node");
 
 /**
  * A Matter Node.
- * 
+ *
  * In Matter, a "node" is an individually addressable top-level network resource.
  */
 export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
@@ -73,7 +73,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
             return;
         }
 
-        this.#online= false;
+        this.#online = false;
         logger.notice(Diagnostic.strong(this.toString()), "going offline");
     }
 
@@ -97,7 +97,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
 
     /**
      * Run the node in standalone mode.
-     * 
+     *
      * If you are implementing a single node this is the most convenient way to bring it online.
      */
     async run() {
@@ -109,7 +109,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     }
 
     override get lifecycle(): NodeLifecycle {
-        // We only have to override the lifecycle getter so 
+        // We only have to override the lifecycle getter so
         return super.lifecycle as NodeLifecycle;
     }
 }
@@ -126,7 +126,7 @@ export namespace Node {
     export function nodeConfigFor<T extends RootEndpoint>(
         defaultType: T,
         configuration: undefined | T | Configuration<T>,
-        options?: Options<T>
+        options?: Options<T>,
     ): Node.Configuration<T> {
         if (!options) {
             options = {};
@@ -141,7 +141,7 @@ export namespace Node {
             return {
                 type: configuration as T,
                 ...options,
-            }
+            };
         }
         return {
             type: defaultType,

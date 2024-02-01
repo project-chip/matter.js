@@ -66,7 +66,7 @@ export function anyPromise<T>(promises: ((() => Promise<T>) | Promise<T>)[]): Pr
 
 /**
  * Return type for functions that are optionally asynchronous.
- * 
+ *
  * TODO - as currently defined MaybePromise of a Promise incorrectly wraps as a Promise of a Promise
  */
 export type MaybePromise<T = void> = T | PromiseLike<T>;
@@ -81,7 +81,7 @@ export const MaybePromise = {
      * Determine whether a {@link MaybePromiseLike} is a {@link Promise}.
      */
     is<T>(value: MaybePromise<T>): value is PromiseLike<T> {
-        return typeof value === "object" && typeof (value as { then?: unknown; }).then === "function";
+        return typeof value === "object" && typeof (value as { then?: unknown }).then === "function";
     },
 
     /**
@@ -91,7 +91,7 @@ export const MaybePromise = {
     then<I, O1 = never, O2 = never>(
         producer: MaybePromise<I> | (() => MaybePromise<I>),
         resolve?: ((input: I) => MaybePromise<O1>) | null,
-        reject?: ((error: any) => MaybePromise<O2>) | null
+        reject?: ((error: any) => MaybePromise<O2>) | null,
     ): MaybePromise<O1 | O2> {
         try {
             let value;
@@ -132,7 +132,7 @@ export const MaybePromise = {
      */
     finally<T>(
         producer: MaybePromise<T> | (() => MaybePromise<T>),
-        onfinally?: (() => void) | undefined | null
+        onfinally?: (() => void) | undefined | null,
     ): MaybePromise<T> {
         try {
             if (typeof producer === "function") {
@@ -152,8 +152,10 @@ export const MaybePromise = {
                         error =>
                             MaybePromise.then(
                                 () => onfinally?.(),
-                                () => { throw error }
-                            )
+                                () => {
+                                    throw error;
+                                },
+                            ),
                     );
                 }
             } else {
@@ -161,34 +163,34 @@ export const MaybePromise = {
             }
         }
         return producer;
-    }
-}
+    },
+};
 
 /**
  * A registry for promises.
- * 
+ *
  * Stores unfulfilled promises with metadata useful for diagnosing process state.
  */
 export class Tracker {
     #parent: Tracker | undefined;
-    #tracked = new Map<PromiseLike<unknown>, Tracker.Descriptor>;
-    
+    #tracked = new Map<PromiseLike<unknown>, Tracker.Descriptor>();
+
     get name() {
         return "Unfulfilled tracked promises";
     }
 
     get [Diagnostic.value]() {
         if (!this.#tracked?.size) {
-            return Diagnostic.list([ "(none)" ]);
+            return Diagnostic.list(["(none)"]);
         }
-        return [ "Unfulfilled tracked promises", Diagnostic.list(this.#tracked.values()) ];
+        return ["Unfulfilled tracked promises", Diagnostic.list(this.#tracked.values())];
     }
 
     static global = new Tracker(undefined);
 
     /**
      * Create a new tracker.
-     * 
+     *
      * @param parent if supplied, promises will be tracked by parent too
      */
     constructor(parent: Tracker | undefined = Tracker.global) {
@@ -198,10 +200,7 @@ export class Tracker {
     /**
      * Create a tracked promise.
      */
-    of<T>(
-        executor: Tracker.Executor<T>,
-        detail?: {},
-    ) {
+    of<T>(executor: Tracker.Executor<T>, detail?: {}) {
         return this.track(new Promise(executor), detail);
     }
 
@@ -228,14 +227,11 @@ export class Tracker {
                         label = "(anon)";
                     }
                 }
-                return [ label, Diagnostic.dict({ uptime: this.elapsed }) ];
-            }
+                return [label, Diagnostic.dict({ uptime: this.elapsed })];
+            },
         });
 
-        return MaybePromise.finally(
-            promise,
-            () => this.#tracked.delete(promise as Promise<T>)
-        );
+        return MaybePromise.finally(promise, () => this.#tracked.delete(promise as Promise<T>));
     }
 }
 
@@ -250,7 +246,7 @@ function labelFor(value: unknown) {
         return value.toString();
     }
     if ("description" in value) {
-        return labelFor((value as { description: unknown}).description);
+        return labelFor((value as { description: unknown }).description);
     }
     return value.toString();
 }
@@ -263,20 +259,17 @@ export namespace Tracker {
         promise: PromiseLike<any>;
         detail?: unknown;
         elapsed: Diagnostic.Elapsed;
-        [Diagnostic.value]: unknown
+        [Diagnostic.value]: unknown;
     }
 
     export interface Executor<T> {
-        (
-            resolve: (value: T | PromiseLike<T>) => void,
-            reject: (reason?: any) => void,
-        ): PromiseLike<T>;
+        (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void): PromiseLike<T>;
     }
 }
 
 /**
  * Track a {@link Promise}}.
- * 
+ *
  * Registers the promise with the default {@link Tracker}.
  */
 export function track<const T>(value: MaybePromise<T>, what?: {}): MaybePromise<T> {

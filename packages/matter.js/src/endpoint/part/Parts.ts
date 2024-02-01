@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
+import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
 import { Agent } from "../Agent.js";
 import { Part } from "../Part.js";
-import { PartLifecycle } from "./PartLifecycle.js";
 import { EndpointType } from "../type/EndpointType.js";
-import { BasicSet, MutableSet, ObservableSet } from "../../util/Set.js";
-import { IdentityConflictError, IdentityService } from "../../node/server/IdentityService.js";
+import { PartLifecycle } from "./PartLifecycle.js";
 
 /**
  * Manages parent-child relationship between endpoints.
@@ -22,7 +22,7 @@ import { IdentityConflictError, IdentityService } from "../../node/server/Identi
  */
 export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part> {
     #bubbleChange: (type: PartLifecycle.Change, part: Part) => void;
-    #children = new BasicSet<Part>;
+    #children = new BasicSet<Part>();
     #part: Part;
 
     constructor(part: Part) {
@@ -60,7 +60,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     delete(child: Part | Agent) {
         return this.#children.delete(this.#partFor(child));
     }
- 
+
     clear() {
         this.#children.clear();
     }
@@ -147,13 +147,13 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
 
         this.#children.delete(child);
     }
-    
+
     #validateInsertion(forefather: Part, part: Part, usedNumbers?: Set<number>) {
         if (part.lifecycle.hasNumber) {
             this.#part.env.get(IdentityService).assertNumberAvailable(part.number, part);
             if (usedNumbers?.has(part.number)) {
                 throw new IdentityConflictError(
-                    `Cannot add part ${forefather} because descendents have conflicting definitions for endpoint number ${part.number}`
+                    `Cannot add part ${forefather} because descendents have conflicting definitions for endpoint number ${part.number}`,
                 );
             }
         }
@@ -170,7 +170,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         // We cannot rely on index to track identity of incoming part hierarchy
         // because the entries are not yet present in the index
         if (!usedNumbers) {
-            usedNumbers = new Set;
+            usedNumbers = new Set();
         }
         if (part.number) {
             usedNumbers.add(part.number);
@@ -193,7 +193,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
                 child = {
                     type: child as EndpointType,
                     owner: this.#part,
-                }
+                };
             }
         }
 

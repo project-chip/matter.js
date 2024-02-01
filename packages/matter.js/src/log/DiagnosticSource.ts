@@ -6,7 +6,7 @@
 
 import { Diagnostic } from "./Diagnostic.js";
 
-const sources = new Set<DiagnosticSource>;
+const sources = new Set<DiagnosticSource>();
 
 /**
  * A source of diagnostic data.
@@ -33,6 +33,6 @@ export const DiagnosticSource = {
     },
 
     get [Diagnostic.value]() {
-        return [ ...sources ].map(source => [ Diagnostic.strong(source.name), source ]);
-    }
-}
+        return [...sources].map(source => [Diagnostic.strong(source.name), source]);
+    },
+};

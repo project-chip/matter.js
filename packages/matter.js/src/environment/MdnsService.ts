@@ -41,7 +41,7 @@ export class MdnsService {
             this.#scanner = await MdnsScanner.create(network, {
                 enableIpv4,
                 netInterface: vars.get("mdns.announceInterface", options?.announceInterface),
-            })
+            });
         });
     }
 
@@ -51,11 +51,11 @@ export class MdnsService {
 
     get broadcaster() {
         this.#runtime.addWorker(this);
-        return this.#construction.assert("MDNS broadcaster", this.#broadcaster)
+        return this.#construction.assert("MDNS broadcaster", this.#broadcaster);
     }
 
     get scanner() {
-        return this.#construction.assert("MDNS scanner", this.#scanner)
+        return this.#construction.assert("MDNS scanner", this.#scanner);
     }
 
     get [Diagnostic.value]() {
@@ -68,19 +68,15 @@ export class MdnsService {
 
     async [Symbol.asyncDispose]() {
         await this.#construction.destroy(async () => {
-            const broadcasterDisposal = MaybePromise.then(
-                this.#broadcaster?.close(),
-                undefined,
-                e => logger.error("Error disposing of MDNS broadcaster", e)
+            const broadcasterDisposal = MaybePromise.then(this.#broadcaster?.close(), undefined, e =>
+                logger.error("Error disposing of MDNS broadcaster", e),
             );
 
-            const scannerDisposal = MaybePromise.then(
-                this.#scanner?.close(),
-                undefined,
-                e => logger.error("Error disposing of MDNS scanner", e)
+            const scannerDisposal = MaybePromise.then(this.#scanner?.close(), undefined, e =>
+                logger.error("Error disposing of MDNS scanner", e),
             );
 
-            await Promise.all([ broadcasterDisposal, scannerDisposal ]);
+            await Promise.all([broadcasterDisposal, scannerDisposal]);
 
             this.#broadcaster = this.#scanner = undefined;
         });

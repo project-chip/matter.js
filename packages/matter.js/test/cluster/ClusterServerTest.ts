@@ -380,10 +380,11 @@ describe("ClusterServer structure", () => {
                 ImplementationError,
                 "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
             );
-            expect(() =>
-                basic2?.subscribeLocalConfigDisabledAttribute(() => {
-                    /* ignore */
-                }),
+            expect(
+                () =>
+                    basic2?.subscribeLocalConfigDisabledAttribute(() => {
+                        /* ignore */
+                    }),
             ).throw(
                 ImplementationError,
                 "Attribute localConfigDisabled is optional and not initialized. To use it please initialize it first.",
@@ -597,8 +598,12 @@ describe("ClusterServer structure", () => {
             await testStorageManager.initialize();
             let version = 1;
             asClusterServerInternal(server).datasource = {
-                get version() { return version },
-                increaseVersion() { return ++version },
+                get version() {
+                    return version;
+                },
+                increaseVersion() {
+                    return ++version;
+                },
                 changed() {},
             };
             expect(initCalled).true;

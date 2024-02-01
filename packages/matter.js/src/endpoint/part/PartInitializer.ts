@@ -15,7 +15,7 @@ export abstract class PartInitializer {
     /**
      * Initialize a {@link Part}.
      */
-    initializeDescendent(_part: Part) {};
+    initializeDescendent(_part: Part) {}
 
     /**
      * Create backing for a behavior of a descendent.

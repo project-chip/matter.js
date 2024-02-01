@@ -6,29 +6,29 @@
 
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
-import { ServerPartStore } from "./ServerPartStore.js";
+import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { IdentityConflictError } from "../IdentityService.js";
-import { PartStore } from "../../../endpoint/storage/PartStore.js";
+import { ServerPartStore } from "./ServerPartStore.js";
 
 const NEXT_NUMBER_KEY = "__nextNumber__";
 
 /**
  * Manages all {@link ServerPartStore}s for a {@link NodeServer}.
- * 
+ *
  * We eagerly load all available part data from disk because this allows us to keep {@link Part} initialization more
  * synchronous.  We can initialize most behaviors synchronously if their state is already in memory.
- * 
+ *
  * TODO - cleanup of storage for permanently removed endpoints
  */
 export abstract class PartStoreService {
     /**
      * Allocate an endpoint number.
-     * 
+     *
      * Either allocates a new number for a {@link Part} or reserves the part's number.  If the {@link Part} already has
      * a number but it is allocated to a different part it is an error.
-     * 
+     *
      * We must persist the assigned number and next endpoint number.  We are fairly resilient to the small chance that
      * persistence fails so we persist lazily and return synchronously.
      */
@@ -36,9 +36,9 @@ export abstract class PartStoreService {
 
     /**
      * Obtain the store for a single {@link Part}.
-     * 
+     *
      * These stores are cached internally by ID.
-     * 
+     *
      * TODO - when StorageContext becomes async we can keep this synchronous if we add "StorageContext.subcontexts" or
      * somesuch
      */
@@ -47,7 +47,7 @@ export abstract class PartStoreService {
 
 export class PartStoreFactory extends PartStoreService {
     #storage: StorageContext;
-    #allocatedNumbers = new Set<number>;
+    #allocatedNumbers = new Set<number>();
     #construction: AsyncConstruction<PartStoreFactory>;
     #persistedNextNumber?: number;
     #numbersPersisted?: Promise<void>;
@@ -68,22 +68,19 @@ export class PartStoreFactory extends PartStoreService {
             nextNumber = 1;
         }
 
-        this.#construction = AsyncConstruction(
-            this,
-            async () => {
-                // Load next number with excessive validation for the off-chance it somehow gets corrupted
-                this.#nextNumber = storage.get(NEXT_NUMBER_KEY, nextNumber) % 0xffff;
+        this.#construction = AsyncConstruction(this, async () => {
+            // Load next number with excessive validation for the off-chance it somehow gets corrupted
+            this.#nextNumber = storage.get(NEXT_NUMBER_KEY, nextNumber) % 0xffff;
 
-                if (!this.#nextNumber) {
-                    this.#nextNumber = 1;
-                } else {
-                    this.#persistedNextNumber = this.#nextNumber;
-                }
-
-                // Preload stores so we can access synchronously going forward
-                this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
+            if (!this.#nextNumber) {
+                this.#nextNumber = 1;
+            } else {
+                this.#persistedNextNumber = this.#nextNumber;
             }
-        );
+
+            // Preload stores so we can access synchronously going forward
+            this.#root = await asyncNew(ServerPartStore, "root", this.#storage, false);
+        });
     }
 
     async [Symbol.asyncDispose]() {
@@ -107,7 +104,7 @@ export class PartStoreFactory extends PartStoreService {
             if (this.#allocatedNumbers.has(part.number)) {
                 if (this.storeForPart(part).number !== part.number) {
                     throw new IdentityConflictError(
-                        `Part ${part.id} number ${part.number} is allocated to another part`
+                        `Part ${part.id} number ${part.number} is allocated to another part`,
                     );
                 }
                 return;
@@ -121,7 +118,7 @@ export class PartStoreFactory extends PartStoreService {
             }
 
             const startNumber = this.#nextNumber;
-            
+
             while (this.#nextNumber < 1 || this.#allocatedNumbers.has(this.#nextNumber)) {
                 this.#nextNumber = (this.#nextNumber + 1) % 0xffff;
                 if (this.#nextNumber === startNumber) {
@@ -141,7 +138,7 @@ export class PartStoreFactory extends PartStoreService {
 
     storeForPart(part: Part): ServerPartStore {
         this.#construction.assert();
-        
+
         if (!part.lifecycle.hasId) {
             throw new InternalError("Part storage access without assigned ID");
         }
@@ -168,7 +165,7 @@ export class PartStoreFactory extends PartStoreService {
             return;
         }
 
-        this.#numbersToPersist = [ part ];
+        this.#numbersToPersist = [part];
 
         const numberPersister = async () => {
             await this.#construction;
@@ -188,7 +185,7 @@ export class PartStoreFactory extends PartStoreService {
                 this.#storage.set(NEXT_NUMBER_KEY, this.#nextNumber);
                 this.#persistedNextNumber = this.#nextNumber;
             }
-        }
+        };
 
         // There is a very small chance that there is an outstanding worker that is persisting numbers but hasn't yet
         // completed.  If this is the case then wait our turn.  Otherwise there's an even smaller chance that
@@ -203,8 +200,8 @@ export class PartStoreFactory extends PartStoreService {
 
 export namespace PartStoreService {
     export interface Options {
-        storage: StorageContext,
-        nextNumber?: number,
-        load?: boolean,
+        storage: StorageContext;
+        nextNumber?: number;
+        load?: boolean;
     }
 }

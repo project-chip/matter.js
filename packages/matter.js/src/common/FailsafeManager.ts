@@ -43,8 +43,10 @@ export class FailsafeManager {
     ) {
         this.storeEndpointState(rootEndpoint);
         this.failSafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();
-        this.maxCumulativeFailsafeTimer = Time.getTimer("Max cumulative failsafe", maxCumulativeFailsafeSeconds * 1000, () =>
-            this.expire(),
+        this.maxCumulativeFailsafeTimer = Time.getTimer(
+            "Max cumulative failsafe",
+            maxCumulativeFailsafeSeconds * 1000,
+            () => this.expire(),
         ).start();
     }
 
@@ -55,10 +57,7 @@ export class FailsafeManager {
         //  when the commissioning is completed.
         const networkCluster = endpoint.getCluster(NetworkCommissioning.Complete);
         if (networkCluster !== undefined) {
-            this.storedNetworkClusterState.set(
-                endpoint.number,
-                networkCluster.get("networks"),
-            );
+            this.storedNetworkClusterState.set(endpoint.number, networkCluster.get("networks"));
         }
         for (const childEndpoint of endpoint.children) {
             this.storeEndpointState(childEndpoint);
@@ -112,7 +111,9 @@ export class FailsafeManager {
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
             // matches the fail-safe context’s associated Fabric, then the fail-safe timer SHALL be re- armed to expire
             // in ExpiryLengthSeconds.
-            this.failSafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () => this.expire()).start();
+            this.failSafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () =>
+                this.expire(),
+            ).start();
         }
     }
 

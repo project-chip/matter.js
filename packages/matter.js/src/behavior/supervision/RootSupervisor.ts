@@ -6,13 +6,13 @@
 
 import { InternalError } from "../../common/MatterError.js";
 import { AttributeModel, ClusterModel, FeatureSet, Globals, ValueModel } from "../../model/index.js";
+import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
-import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
+import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { Schema } from "./Schema.js";
 import { ValueSupervisor } from "./ValueSupervisor.js";
-import { camelize } from "../../util/String.js";
 
 /**
  * A RootSupervisor is a {@link ValueSupervisor} that supervises a specific root {@link Schema}.  It acts as a factory
@@ -89,7 +89,7 @@ export class RootSupervisor implements ValueSupervisor {
     get memberNames() {
         let names = this.#memberNames;
         if (!names) {
-            names = new Set;
+            names = new Set();
             for (const member of this.#members) {
                 names.add(camelize(member.name));
             }
@@ -104,7 +104,7 @@ export class RootSupervisor implements ValueSupervisor {
     get persistentNames() {
         let persistent = this.#persistentNames;
         if (!persistent) {
-            persistent = new Set;
+            persistent = new Set();
             for (const member of this.#members) {
                 if (member.effectiveQuality.nonvolatile) {
                     persistent.add(camelize(member.name));

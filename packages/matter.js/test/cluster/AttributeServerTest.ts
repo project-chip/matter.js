@@ -43,17 +43,17 @@ class MockClusterDatasource implements ClusterDatasource {
 }
 
 interface CreateOptions<T> {
-    id: AttributeId,
-    name: string,
-    schema: TlvSchema<T>,
-    isWritable: boolean,
-    isSubscribable: boolean,
-    requiresTimedInteraction: boolean,
-    defaultValue: T,
-    readonly datasource: ClusterDatasource,
-    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
-    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
+    id: AttributeId;
+    name: string;
+    schema: TlvSchema<T>;
+    isWritable: boolean;
+    isSubscribable: boolean;
+    requiresTimedInteraction: boolean;
+    defaultValue: T;
+    readonly datasource: ClusterDatasource;
+    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T;
+    setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean;
+    validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 }
 
 function withDefaults(options: Partial<CreateOptions<number>>) {
@@ -65,9 +65,9 @@ function withDefaults(options: Partial<CreateOptions<number>>) {
         isSubscribable: false,
         requiresTimedInteraction: false,
         defaultValue: 3,
-        datasource: new MockClusterDatasource,
-        ...options
-    } as CreateOptions<number>
+        datasource: new MockClusterDatasource(),
+        ...options,
+    } as CreateOptions<number>;
 }
 
 describe("AttributeServerTest", () => {
@@ -75,9 +75,9 @@ describe("AttributeServerTest", () => {
         function create(options: Partial<CreateOptions<number>> = {}) {
             const config = withDefaults({
                 isWritable: false,
-                ...options
+                ...options,
             });
-        
+
             return new FixedAttributeServer(
                 config.id,
                 config.name,
@@ -128,7 +128,7 @@ describe("AttributeServerTest", () => {
                 config.getter,
                 config.setter,
                 config.validator,
-            )
+            );
         }
 
         it("should return the value set in the constructor", () => {
@@ -196,7 +196,10 @@ describe("AttributeServerTest", () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return true; },
+                setter: value => {
+                    valueSet = value;
+                    return true;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
@@ -215,7 +218,10 @@ describe("AttributeServerTest", () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
@@ -234,7 +240,10 @@ describe("AttributeServerTest", () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: value => {
+                    valueSet = value;
+                    return false;
+                },
             });
 
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
@@ -258,7 +267,10 @@ describe("AttributeServerTest", () => {
             let oldValueTriggered2: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return true; },
+                setter: value => {
+                    valueSet = value;
+                    return true;
+                },
             });
             server.addValueChangeListener((value, version) => {
                 valueTriggered = value;
@@ -291,7 +303,10 @@ describe("AttributeServerTest", () => {
             let oldValueTriggered2: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             server.addValueChangeListener(() => {
                 throw new Error("Should not be triggered");
@@ -319,7 +334,10 @@ describe("AttributeServerTest", () => {
             let valueSet: number | undefined = undefined;
             const server = create({
                 getter: () => 4,
-                setter: value => { valueSet = value; return false; },
+                setter: value => {
+                    valueSet = value;
+                    return false;
+                },
             });
             expect(server.getWithVersion({} as SecureSession<MatterDevice>, false)).deep.equal({
                 value: 4,
@@ -354,16 +372,19 @@ describe("AttributeServerTest", () => {
 
         it("setter is not called when initialized", () => {
             let setterCalled = false;
-            const server = create({ setter: () => { setterCalled = true; return true } });
+            const server = create({
+                setter: () => {
+                    setterCalled = true;
+                    return true;
+                },
+            });
             server.init(1);
             expect(setterCalled).equal(false);
         });
 
         it("should throw an error if default value is invalid", () => {
-            expect(
-                () => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })
-            ).throws(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 3 is above the maximum, 2.'
+            expect(() => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
+                'Validation error for attribute "test": (Validation/135) Invalid value: 3 is above the maximum, 2.',
             );
         });
 
@@ -378,7 +399,11 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if set value is invalid according to custom validator only on set", () => {
-            const server = create({ validator: () => { throw Error("Validator error") } });
+            const server = create({
+                validator: () => {
+                    throw Error("Validator error");
+                },
+            });
             expect(() => server.setLocal(11)).throw("Validator error");
         });
     });
@@ -403,7 +428,6 @@ describe("AttributeServerTest", () => {
                 ZERO,
                 ZERO,
                 "",
-
             );
 
             const config = withDefaults(options);
@@ -422,7 +446,7 @@ describe("AttributeServerTest", () => {
                 config.getter,
                 config.setter,
                 config.validator,
-            )
+            );
         }
 
         it("should return the value set in the constructor if fabric context is empty", () => {
@@ -493,9 +517,9 @@ describe("AttributeServerTest", () => {
         });
 
         it("should throw an error if only getter is implemented but writable", () => {
-            expect(
-                () => create({ isWritable: true, getter: () => 7 })
-            ).throw('Getter and setter must be implemented together writeable fabric scoped attribute "test".');
+            expect(() => create({ isWritable: true, getter: () => 7 })).throw(
+                'Getter and setter must be implemented together writeable fabric scoped attribute "test".',
+            );
         });
 
         it("should throw an error when trying to get getter method value locally", () => {
@@ -518,7 +542,7 @@ describe("AttributeServerTest", () => {
             const server = create({
                 isWritable: true,
                 getter: () => 7,
-                setter: () => true
+                setter: () => true,
             });
             const testSession = { getAssociatedFabric: () => testFabric } as SecureSession<MatterDevice>;
 

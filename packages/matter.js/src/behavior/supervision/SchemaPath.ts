@@ -34,12 +34,12 @@ export function SchemaPath(name: string): SchemaPath {
             name: name,
             at,
             toString,
-        }
+        };
     }
 
     return {
         name,
         at,
         toString,
-    }
+    };
 }

@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type { Part } from "../Part.js";
-import { Observable } from "../../util/Observable.js";
-import type { Node } from "../../node/Node.js";
-import { ImplementationError } from "../../common/MatterError.js";
-import { MaybePromise } from "../../util/Promises.js";
-import { Lifecycle } from "../../common/Lifecycle.js";
-import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
+import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
+import { Lifecycle } from "../../common/Lifecycle.js";
+import { ImplementationError } from "../../common/MatterError.js";
+import type { Node } from "../../node/Node.js";
+import { Observable } from "../../util/Observable.js";
+import { MaybePromise } from "../../util/Promises.js";
+import type { Part } from "../Part.js";
 
 /**
  * State related to a {@link Part}'s lifecycle.
@@ -111,7 +111,7 @@ export class PartLifecycle {
 
         await OfflineContext.act("factory-reset", async context => {
             await this.#factoryReset(context);
-        })
+        });
 
         this.#part.construction.setStatus(Lifecycle.Status.Inactive);
         this.change(PartLifecycle.Change.Installed);
@@ -166,7 +166,7 @@ export class PartLifecycle {
         }
 
         // Emit events
-        this.#queuedUpdates = [ type ];
+        this.#queuedUpdates = [type];
         try {
             while (this.#queuedUpdates.length) {
                 const type = this.#queuedUpdates[0];

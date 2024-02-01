@@ -33,13 +33,17 @@ export class BtpSessionHandler {
     private currentIncomingSegmentedPayload: ByteArray | undefined;
     private prevIncomingSequenceNumber = 255; // Incoming Sequence Number received. Set to 255 to start at 0
     private prevIncomingAckNumber = -1; // Previous ackNumber received
-    private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () => this.btpAckTimeoutTriggered());
+    private readonly ackReceiveTimer = Time.getTimer("BTP ack timeout", BTP_ACK_TIMEOUT_MS, () =>
+        this.btpAckTimeoutTriggered(),
+    );
 
     private sequenceNumber = 0; // Sequence number is set to 0 already for the handshake, next sequence number is 1
     private prevAckedSequenceNumber = -1; // Previous (outgoing) Acked Sequence Number
     private readonly queuedOutgoingMatterMessages = new Array<DataReader<Endian.Little>>();
     private sendInProgress = false;
-    private readonly sendAckTimer = Time.getTimer("BTP send timeout", BTP_SEND_ACK_TIMEOUT_MS, () => this.btpSendAckTimeoutTriggered());
+    private readonly sendAckTimer = Time.getTimer("BTP send timeout", BTP_SEND_ACK_TIMEOUT_MS, () =>
+        this.btpSendAckTimeoutTriggered(),
+    );
     private isActive = true;
 
     /** Factory method to create a new BTPSessionHandler from a received handshake request */

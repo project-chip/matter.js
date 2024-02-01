@@ -457,7 +457,11 @@ export class MessageExchange<ContextT> {
 
         // Wait until all potential Resubmissions are done, also for Standalone-Acks
         // TODO: Make this dynamic based on the values?
-        this.closeTimer = Time.getTimer("Message exchange cleanup", MAXIMUM_TRANSMISSION_TIME_MS, async () => await this.closeInternal()).start();
+        this.closeTimer = Time.getTimer(
+            "Message exchange cleanup",
+            MAXIMUM_TRANSMISSION_TIME_MS,
+            async () => await this.closeInternal(),
+        ).start();
 
         if (this.receivedMessageToAck !== undefined) {
             this.receivedMessageAckTimer.stop();

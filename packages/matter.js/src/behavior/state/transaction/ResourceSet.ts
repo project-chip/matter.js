@@ -17,7 +17,7 @@ const logger = Logger.get("ResourceSet");
  */
 export class ResourceSet {
     #transaction: Transaction;
-    #resources = new Set<Resource>;
+    #resources = new Set<Resource>();
 
     constructor(transaction: Transaction, resources: Iterable<Resource> = transaction.resources) {
         this.#transaction = transaction;
@@ -79,12 +79,7 @@ export class ResourceSet {
         if (blocked.size) {
             logger.warn("You may need to await transaction.begin() to acquire locks asynchronously");
             const names = [...blocked].map(s => s.toString());
-            throw new SynchronousTransactionConflictError(
-                `Cannot lock ${describeList(
-                    "and",
-                    ...names,
-                )} synchronously`,
-            );
+            throw new SynchronousTransactionConflictError(`Cannot lock ${describeList("and", ...names)} synchronously`);
         }
 
         // Update resource status
@@ -99,7 +94,7 @@ export class ResourceSet {
      * Release locks.
      */
     releaseLocks() {
-        const unlocked = new Set<Resource>;
+        const unlocked = new Set<Resource>();
 
         for (const resource of this.#resources) {
             if (resource.lockedBy === this.#transaction) {

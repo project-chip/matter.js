@@ -46,7 +46,12 @@ export function createAttributeServer<
     attributeName: string,
     defaultValue: T,
     datasource: ClusterDatasource,
-    getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+    getter?: (
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+        isFabricFiltered?: boolean,
+        message?: Message,
+    ) => T,
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
@@ -174,7 +179,12 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
          * @param isFabricFiltered whether the read request is fabric scoped or not
          * @param message the wire message that initiated the request (if any)
          */
-        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+        getter?: (
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            isFabricFiltered?: boolean,
+            message?: Message,
+        ) => T,
     ) {
         super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue); // Fixed attributes do not change, so are not subscribable
 
@@ -194,7 +204,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     /**
      * Get the value of the attribute. This method is used by the Interaction model to read the value of the attribute
      * and includes the ACL check. It should not be used locally in the code!
-     * 
+     *
      * If a getter is defined the value is determined by that getter method.
      */
     get(session: Session<MatterDevice>, isFabricFiltered: boolean, message?: Message): T {
@@ -206,7 +216,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
     /**
      * Get the value of the attribute including the version number. This method is used by the Interaction model to read
      * the value of the attribute and includes the ACL check. It should not be used locally in the code!
-     * 
+     *
      * If a getter is defined the value is determined by that getter method. The version number is always 0 for fixed
      * attributes.
      */
@@ -282,7 +292,12 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
     override readonly isFixed = false;
     protected readonly valueChangeListeners = new Array<(value: T, version: number) => void>();
     protected readonly valueSetListeners = new Array<(newValue: T, oldValue: T) => void>();
-    protected readonly setter: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean;
+    protected readonly setter: (
+        value: T,
+        session?: Session<MatterDevice>,
+        endpoint?: EndpointInterface,
+        message?: Message,
+    ) => boolean;
     protected readonly validator: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void;
 
     constructor(
@@ -294,7 +309,12 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         requiresTimedInteraction: boolean,
         defaultValue: T,
         datasource: ClusterDatasource,
-        getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean, message?: Message) => T,
+        getter?: (
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            isFabricFiltered?: boolean,
+            message?: Message,
+        ) => T,
 
         /**
          * Optional setter function to handle special requirements or the data are stored in different places. If a
@@ -306,7 +326,12 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
          * @param endpoint the endpoint the cluster server of this attribute is assigned to.
          * @returns true if the value has changed, false otherwise.
          */
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
+        setter?: (
+            value: T,
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            message?: Message,
+        ) => boolean,
 
         /**
          * Optional Validator function to handle special requirements for verification of stored data. The method should
@@ -331,17 +356,7 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             );
         }
 
-        super(
-            id,
-            name,
-            schema,
-            isWritable,
-            isSubscribable,
-            requiresTimedInteraction,
-            defaultValue,
-            datasource,
-            getter,
-        );
+        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue, datasource, getter);
 
         if (setter === undefined) {
             this.setter = value => {

@@ -25,9 +25,9 @@ import { Resource } from "./state/transaction/Resource.js";
  *
  *   - Matter.js manages the context in which the reactor runs automatically, either joining the emitter's context or
  *     creating a dedicated offline context
- * 
+ *
  *   - Matter.js ensures that {@link reactor} only registers with {@link Observable} once for a given {@link Part}
- * 
+ *
  *   - You may optionally designate resources (including {@link Behavior}s) for locking prior to reaction
  *
  * You should not use arrow functions for reactors as this will prevent you from accessing the Behavior in the correct
@@ -36,12 +36,7 @@ import { Resource } from "./state/transaction/Resource.js";
  * If {@link observable} is a high-volume emitter, it would be better to implement synchronous or very fast asynchronous
  * reactors to avoid accumulating too many deferred reactions.
  */
-export type Reactor<T extends any[] = any[], R = any> =
-    (...args: T) => (
-        R extends void
-            ? MaybePromise
-            : R
-    );
+export type Reactor<T extends any[] = any[], R = any> = (...args: T) => R extends void ? MaybePromise : R;
 
 export namespace Reactor {
     /**
@@ -61,17 +56,17 @@ export namespace Reactor {
 
         /**
          * Designate resources for which this reaction requires exclusive write access.
-         * 
+         *
          * You may specify lock as a resource (e.g. a {@link Behavior}) or an array of resources.  Or specify "true" to
          * lock the reacting behavior.
-         * 
+         *
          * If set:
-         * 
+         *
          *   - The transaction of {@link Behavior.context} for the reacting {@link Behavior} will be exclusive during
          *     reaction
          *
          *   - The transaction will own locks on the designated resources
-         * 
+         *
          *   - The reaction will defer until the resource locks become available
          */
         lock?: true | Resource | Resource[];

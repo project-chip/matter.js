@@ -34,7 +34,7 @@ export class Graph {
         const rootPkg = new Package({ path: path });
         const rootNode = nodeMap[rootPkg.json.name];
         if (!rootNode) {
-            throw new InternalBuildError(`Package ${rootPkg.json.name} is not in workspace`)
+            throw new InternalBuildError(`Package ${rootPkg.json.name} is not in workspace`);
         }
 
         const nodes = new Set<Graph.Node>();
@@ -50,7 +50,7 @@ export class Graph {
 
         addNode(rootNode);
 
-        return await this.#createGraph([ ...nodes ]);
+        return await this.#createGraph([...nodes]);
     }
 
     // TODO - parallelization will be trivial except need to update Progress

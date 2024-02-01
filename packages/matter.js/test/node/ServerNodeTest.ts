@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MockServerNode } from "./mock-server-node.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
+import { MockServerNode } from "./mock-server-node.js";
 
 describe("ServerNode", () => {
     it("starts and stops", async () => {
@@ -20,7 +20,7 @@ describe("ServerNode", () => {
         server.add(OnOffLightDevice);
 
         await server.run();
-        
+
         expect(disposal).not.undefined;
 
         await disposal;

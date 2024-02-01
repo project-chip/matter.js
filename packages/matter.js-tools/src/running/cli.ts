@@ -6,10 +6,10 @@
 
 import { dirname, resolve } from "path";
 import { exit } from "process";
-import { Project } from "../building/project.js";
-import { executeNode } from "./execute.js";
 import { Builder } from "../building/builder.js";
 import { Graph } from "../building/graph.js";
+import { Project } from "../building/project.js";
+import { executeNode } from "./execute.js";
 
 /**
  * Build and execute a matter.js script.

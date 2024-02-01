@@ -38,19 +38,22 @@ export function BehaviorSupervisor(options: BehaviorSupervisor.Options): RootSup
     let featuresAvailable: Set<string>, featuresSupported: FeatureSet;
 
     const logical = options.schema ?? Schema.empty;
-    
+
     // Extract features and supportedFeatures from the logical schema
     if (logical instanceof ClusterModel) {
-        ({ featuresAvailable, featuresSupported } = FeatureSet.normalize(logical.featureMap, logical.supportedFeatures));
+        ({ featuresAvailable, featuresSupported } = FeatureSet.normalize(
+            logical.featureMap,
+            logical.supportedFeatures,
+        ));
     } else {
         featuresAvailable = new Set();
         featuresSupported = new FeatureSet([]);
     }
-    
+
     // Filter children based on feature conformance
-    const children = logical.children.filter(child =>
-        child.effectiveConformance.isApplicable(featuresAvailable, featuresSupported),
-    ).map(child => child.clone());
+    const children = logical.children
+        .filter(child => child.effectiveConformance.isApplicable(featuresAvailable, featuresSupported))
+        .map(child => child.clone());
 
     // Add fields for programmatic extensions
     addExtensionFields(logical, new options.State(), children);
@@ -93,7 +96,7 @@ export namespace BehaviorSupervisor {
  * Note 2: Finding fields isn't as simple as just using "for ... in" because
  * ES6 class accessors are non-enumerable.  So we instead search the prototype
  * chain for read/write descriptors.
- * 
+ *
  * Note 3: We can't do anything with types either.  This means e.g. writing to
  * subfields won't behave as expected.  Really to do things correctly behavior
  * authors should hand-craft schema.  Or maybe we do something with decorators?.
@@ -133,7 +136,7 @@ function addExtensionFields(base: Schema, defaultState: Val.Struct, children: Va
                 if (!descriptor.writable && !descriptor.set) {
                     field.quality = "F";
                 }
-    
+
                 children.push(field);
             }
         }

@@ -19,7 +19,7 @@ const logger = Logger.get("NetworkingServer");
 
 /**
  * Server implementation of {@link NetworkBehavior}.
- * 
+ *
  * This behavior mostly deals with configuration and events.  {@link NetworkServer} provides the actual network
  * implementation.
  */
@@ -58,10 +58,7 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
-        this.reactTo(
-            (this.part.lifecycle as NodeLifecycle).commissioned,
-            this.#enterCommissionedMode,
-        )
+        this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
     }
 
     protected override createRuntime() {
@@ -70,7 +67,7 @@ export class NetworkServer extends NetworkBehavior {
 
     /**
      * Immediately broadcast presence to the network.
-     * 
+     *
      * Announcements normally occur automatically at startup and at regular intervals for a limited period.
      */
     advertise() {
@@ -81,7 +78,7 @@ export class NetworkServer extends NetworkBehavior {
     }
 
     async #enterCommissionedMode() {
-        () => (this.internal.runtime as ServerRuntime).enterCommissionedMode()
+        () => (this.internal.runtime as ServerRuntime).enterCommissionedMode();
     }
 }
 

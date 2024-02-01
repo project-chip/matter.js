@@ -44,7 +44,7 @@ export class FeatureSet extends Set<FeatureSet.Flag> {
      * Determine if I am identical to another set.
      */
     is(other?: FeatureSet) {
-        return isDeepEqual([ ...this ].sort(), other ? [ ...other ].sort() : []);
+        return isDeepEqual([...this].sort(), other ? [...other].sort() : []);
     }
 
     map<T>(fn: (name: FeatureSet.Flag) => T): T[] {
@@ -60,7 +60,7 @@ export namespace FeatureSet {
     /**
      * Normalize the feature map and list of supported feature names into sets of "all" and "supported" features by
      * abbreviation.
-     * 
+     *
      * The input feature set may reference features by short name ("LT") or long name ("levelControlForLighting").  Name
      * match is case insensitive.
      */
@@ -68,14 +68,14 @@ export namespace FeatureSet {
         const featuresAvailable = new FeatureSet();
         const featuresSupported = new FeatureSet();
 
-        const supported = supportedFeatures ? new Set([ ...supportedFeatures ].map(f => f.toLowerCase())) : undefined;
+        const supported = supportedFeatures ? new Set([...supportedFeatures].map(f => f.toLowerCase())) : undefined;
 
         for (const feature of featureMap.children) {
             featuresAvailable.add(feature.name);
             if (
-                supported?.has(feature.name.toLowerCase())
-                || (feature.description && supported?.has(feature.description.toLowerCase())
-            ) ) {
+                supported?.has(feature.name.toLowerCase()) ||
+                (feature.description && supported?.has(feature.description.toLowerCase()))
+            ) {
                 featuresSupported.add(feature.name);
             }
         }

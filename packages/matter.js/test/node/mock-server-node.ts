@@ -14,15 +14,15 @@ import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js"
 export class MockServerNode extends ServerNode {
     constructor() {
         const environment = new Environment("test");
-        
+
         const storage = environment.get(StorageService);
         storage.location = "(memory)";
         storage.factory = () => new StorageBackendMemory();
 
-        environment.set(Network, new NetworkFake(
-            "00:B0:D0:63:C2:26",
-            [ "fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe", "192.168.20.20" ]
-        ));
+        environment.set(
+            Network,
+            new NetworkFake("00:B0:D0:63:C2:26", ["fdce:7c65:b2dd:7d46:923f:8a53:eb6c:cafe", "192.168.20.20"]),
+        );
 
         super({ environment });
     }

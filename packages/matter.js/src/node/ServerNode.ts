@@ -18,7 +18,7 @@ import { ServerStore } from "./server/storage/ServerStore.js";
 
 /**
  * A server-side Matter {@link Node}.
- * 
+ *
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
@@ -32,33 +32,20 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     protected override async initialize(agent: Agent.Instance<T>) {
         // Load the environment with node-specific services
-        const serverStore = await ServerStore.create(
-            this.env,
-            this.id,
-        );
+        const serverStore = await ServerStore.create(this.env, this.id);
 
         this.env.set(ServerStore, serverStore);
 
-        this.env.set(
-            PartInitializer,
-            new ServerPartInitializer(this.env),
-        )
-        
-        this.env.set(
-            IdentityService,
-            new IdentityService(this),
-        );
+        this.env.set(PartInitializer, new ServerPartInitializer(this.env));
+
+        this.env.set(IdentityService, new IdentityService(this));
 
         return super.initialize(agent);
     }
 }
 
 export namespace ServerNode {
-    export const RootEndpoint = BaseRootEndpoint.with(
-        CommissioningBehavior,
-        NetworkServer,
-        ProductDescriptionServer,
-    )
+    export const RootEndpoint = BaseRootEndpoint.with(CommissioningBehavior, NetworkServer, ProductDescriptionServer);
 
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}
 }

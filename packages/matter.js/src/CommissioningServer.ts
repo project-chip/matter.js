@@ -7,6 +7,7 @@
 import { MatterDevice } from "./MatterDevice.js";
 import { MatterNode } from "./MatterNode.js";
 import { DeviceCertification } from "./behavior/definitions/operational-credentials/DeviceCertification.js";
+import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
 import { Ble } from "./ble/Ble.js";
 import { AttestationCertificateManager } from "./certificate/AttestationCertificateManager.js";
 import { CertificationDeclarationManager } from "./certificate/CertificationDeclarationManager.js";
@@ -39,9 +40,7 @@ import {
 } from "./cluster/server/ClusterServerTypes.js";
 import { GeneralCommissioningClusterHandler } from "./cluster/server/GeneralCommissioningServer.js";
 import { GroupKeyManagementClusterHandler } from "./cluster/server/GroupKeyManagementServer.js";
-import {
-    OperationalCredentialsClusterHandler,
-} from "./cluster/server/OperationalCredentialsServer.js";
+import { OperationalCredentialsClusterHandler } from "./cluster/server/OperationalCredentialsServer.js";
 import { ImplementationError, InternalError, NoProviderError } from "./common/MatterError.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { EndpointNumber } from "./datatype/EndpointNumber.js";
@@ -56,6 +55,7 @@ import { Logger } from "./log/Logger.js";
 import { MdnsBroadcaster } from "./mdns/MdnsBroadcaster.js";
 import { MdnsInstanceBroadcaster } from "./mdns/MdnsInstanceBroadcaster.js";
 import { MdnsScanner } from "./mdns/MdnsScanner.js";
+import { Network } from "./net/Network.js";
 import { UdpInterface } from "./net/UdpInterface.js";
 import { EventHandler } from "./protocol/interaction/EventHandler.js";
 import { InteractionEndpointStructure } from "./protocol/interaction/InteractionEndpointStructure.js";
@@ -74,8 +74,6 @@ import { StorageContext } from "./storage/StorageContext.js";
 import { SupportedStorageTypes } from "./storage/StringifyTools.js";
 import { ByteArray } from "./util/ByteArray.js";
 import { NamedHandler } from "./util/NamedHandler.js";
-import { ProductDescription } from "./behavior/system/product-description/ProductDescription.js";
-import { Network } from "./net/Network.js";
 
 const logger = Logger.get("CommissioningServer");
 
@@ -180,7 +178,7 @@ export interface CommissioningServerOptions {
         deviceCertificate: ByteArray;
         deviceIntermediateCertificate: ByteArray;
         certificationDeclaration: ByteArray;
-    }
+    };
 
     /**
      * Optional configuration for the GeneralCommissioning cluster. If not set the default values are used.
@@ -314,8 +312,8 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(basicInformationCluster);
 
         if (reachabilitySupported) {
-            basicInformationCluster.subscribeReachableAttribute(newValue =>
-                basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
+            basicInformationCluster.subscribeReachableAttribute(
+                newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
             );
         }
 
@@ -490,15 +488,10 @@ export class CommissioningServer extends MatterNode {
 
             for (const endpoint of this.endpointStructure.endpoints.values()) {
                 for (const cluster of endpoint.getAllClusterServers()) {
-                    new CommissioningServerClusterDatasource(
-                        endpoint,
-                        cluster,
-                        this.storage,
-                        this.eventHandler
-                    );
+                    new CommissioningServerClusterDatasource(endpoint, cluster, this.storage, this.eventHandler);
                 }
             }
-        })
+        });
     }
 
     /**
@@ -626,7 +619,7 @@ export class CommissioningServer extends MatterNode {
                 maxIntervalSeconds: this.options.subscriptionMaxIntervalSeconds,
                 minIntervalSeconds: this.options.subscriptionMinIntervalSeconds,
                 randomizationWindowSeconds: this.options.subscriptionRandomizationWindowSeconds,
-            }
+            },
         });
 
         this.nextEndpointId = this.endpointStructureStorage.get("nextEndpointId", this.nextEndpointId);
@@ -680,7 +673,9 @@ export class CommissioningServer extends MatterNode {
             },
             (fabricIndex: FabricIndex) => this.options.activeSessionsChangedCallback?.(fabricIndex),
         )
-            .addTransportInterface(await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6))
+            .addTransportInterface(
+                await UdpInterface.create(Network.get(), "udp6", this.port, this.options.listeningAddressIpv6),
+            )
             .addScanner(this.mdnsScanner)
             .addProtocolHandler(this.interactionServer);
         if (!this.ipv4Disabled) {
@@ -1050,12 +1045,12 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
     #clusterDescription: string;
     #storage: StorageContext;
     #eventHandler: EventHandler;
-    
+
     constructor(
         endpoint: EndpointInterface,
         cluster: ClusterServerObj<any, any>,
         storage: StorageContext,
-        eventHandler: EventHandler
+        eventHandler: EventHandler,
     ) {
         this.#eventHandler = eventHandler;
         this.#clusterDescription = `cluster ${cluster.name} (${cluster.id})`;
@@ -1069,9 +1064,9 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
         }
 
         logger.debug(
-            `${storage.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${
-                this.#version
-            } in ${this.#clusterDescription}`,
+            `${storage.has("_clusterDataVersion") ? "Restore" : "Set"} cluster data version ${this.#version} in ${
+                this.#clusterDescription
+            }`,
         );
         storage.set("_clusterDataVersion", this.#version);
 
@@ -1084,9 +1079,7 @@ class CommissioningServerClusterDatasource implements ClusterDatasource {
             if (!this.#storage.has(attributeName)) continue;
             try {
                 const value = storage.get<any>(attributeName);
-                logger.debug(
-                    `Restoring attribute ${attributeName} (${attribute.id}) in ${this.#clusterDescription}`,
-                );
+                logger.debug(`Restoring attribute ${attributeName} (${attribute.id}) in ${this.#clusterDescription}`);
                 attribute.init(value);
             } catch (error) {
                 logger.warn(

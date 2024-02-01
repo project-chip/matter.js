@@ -18,7 +18,7 @@ export const logger = Logger.get("NodeStore");
 
 /**
  * Non-volatile state management for a {@link NodeServer}.
- * 
+ *
  * The default implementation for matter.js uses synchronous APIs for storage.
  * However, this will change in the future, and other implementations may be
  * backed by asynchronous storage.  So the public API is asynchronous.
@@ -38,7 +38,7 @@ export class ServerStore {
 
     /**
      * Create a new store.
-     * 
+     *
      * TODO - implement conversion from 0.7 format so people can change API
      * seamlessly
      */
@@ -49,20 +49,14 @@ export class ServerStore {
 
         let nextNumber = 1;
 
-        this.#construction = AsyncConstruction(
-            this,
-            async () => {
-                this.#storageManager = await environment.get(StorageService).open(nodeId);
-        
-                this.#rootStore = await asyncNew(
-                    PartStoreFactory,
-                    {
-                        storage: this.#storageManager.createContext("root"),
-                        nextNumber,
-                    }
-                );
-            }
-        )
+        this.#construction = AsyncConstruction(this, async () => {
+            this.#storageManager = await environment.get(StorageService).open(nodeId);
+
+            this.#rootStore = await asyncNew(PartStoreFactory, {
+                storage: this.#storageManager.createContext("root"),
+                nextNumber,
+            });
+        });
     }
 
     static async create(environment: Environment, nodeId: string) {

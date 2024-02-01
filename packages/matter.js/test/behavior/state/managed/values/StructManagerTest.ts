@@ -14,26 +14,26 @@ import { TestStruct } from "./value-utils.js";
 
 export type Nested = {
     substruct: {
-        foo: string
-    }
-}
+        foo: string;
+    };
+};
 
-function testNested(actor: (vars: { struct: TestStruct, cx: ActionContext, ref: Nested }) => MaybePromise): MaybePromise {
+function testNested(
+    actor: (vars: { struct: TestStruct; cx: ActionContext; ref: Nested }) => MaybePromise,
+): MaybePromise {
     const struct = TestStruct(
         {
             substruct: {
                 type: "struct",
 
-                children: [
-                    FieldElement({ name: "foo", type: "string" })
-                ],
-            }
+                children: [FieldElement({ name: "foo", type: "string" })],
+            },
         },
         {
             substruct: {
                 foo: "bar",
             },
-        }
+        },
     );
 
     return struct.online({ fabric: FabricIndex(1), subject: NodeId(1) }, (ref, cx) => {
@@ -46,25 +46,25 @@ describe("StructManager", () => {
         testNested(({ ref }) => {
             expect(typeof ref.substruct).equals("object");
             expect(ref.substruct.foo).equals("bar");
-        })
+        });
     });
 
     it("accepts nested changes", async () => {
-        await testNested(async ({cx, struct, ref}) => {
+        await testNested(async ({ cx, struct, ref }) => {
             ref.substruct.foo = "rab";
 
             expect(ref.substruct.foo).equals("rab");
-    
+
             await cx.transaction.commit();
-    
+
             const substruct = struct.fields.substruct as Val.Struct;
             expect(typeof substruct).equals("object");
-            expect(substruct.foo).equals("rab"); 
+            expect(substruct.foo).equals("rab");
         });
     });
 
     it("notifies on nested change", async () => {
-        await testNested(async ({cx, struct, ref}) => {
+        await testNested(async ({ cx, struct, ref }) => {
             ref.substruct.foo = "rab";
 
             expect(struct.notifies.length).equals(0);
@@ -72,7 +72,7 @@ describe("StructManager", () => {
             await cx.transaction.commit();
 
             expect(struct.notifies).deep.equal([
-                { index: "substruct", oldValue: { foo: "bar" }, newValue: { foo: "rab" } }
+                { index: "substruct", oldValue: { foo: "bar" }, newValue: { foo: "rab" } },
             ]);
         });
     });

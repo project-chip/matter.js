@@ -50,7 +50,7 @@ export function ManagedReference(
     let location = {
         ...parent.location,
         path: parent.location.path.at(index),
-    }
+    };
 
     const reference: Val.Reference = {
         owner: parent,

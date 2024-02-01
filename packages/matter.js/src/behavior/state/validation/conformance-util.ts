@@ -102,7 +102,10 @@ export function asBoolean(node: StaticNode) {
  */
 export function assertValue(location: SchemaErrorPath, node: DynamicNode, where: string): asserts node is ValueNode {
     if (node.code !== Code.Value) {
-        throw new SchemaImplementationError(location, `Expected a value for ${where} but conformance node is "${node.code}"`);
+        throw new SchemaImplementationError(
+            location,
+            `Expected a value for ${where} but conformance node is "${node.code}"`,
+        );
     }
 }
 

@@ -6,5 +6,5 @@
 
 import "./testing/global-declarations.js";
 export * from "./testing/mocharc.cjs";
-export * from "./util/wtf.js";
 export * from "./util/package.js";
+export * from "./util/wtf.js";

@@ -93,7 +93,9 @@ export class PaseServer implements ProtocolHandler<MatterDevice> {
 
         logger.info(`Received pairing request from ${messenger.getChannelName()}.`);
 
-        this.pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () => this.cancelPairing(messenger)).start();
+        this.pairingTimer = Time.getTimer("PASE pairing timeout", PASE_PAIRING_TIMEOUT_MS, () =>
+            this.cancelPairing(messenger),
+        ).start();
 
         // Read pbkdfRequest and send pbkdfResponse
         const {

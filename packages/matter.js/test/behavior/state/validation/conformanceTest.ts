@@ -411,8 +411,7 @@ const AllTests = Tests({
                     "disallows no fields": {
                         error: {
                             type: ConformanceError,
-                            message:
-                                'Validating Test: Conformance choice "a": Too few fields present (0 of min 2)',
+                            message: 'Validating Test: Conformance choice "a": Too few fields present (0 of min 2)',
                         },
                     },
 
@@ -420,8 +419,7 @@ const AllTests = Tests({
                         record: { test1: 1 },
                         error: {
                             type: ConformanceError,
-                            message:
-                                'Validating Test: Conformance choice "a": Too few fields present (1 of min 2)',
+                            message: 'Validating Test: Conformance choice "a": Too few fields present (1 of min 2)',
                         },
                     },
 
@@ -429,8 +427,7 @@ const AllTests = Tests({
                         record: { test1: 1, test2: 2, test3: 3 },
                         error: {
                             type: ConformanceError,
-                            message:
-                                'Validating Test: Conformance choice "a": Too many fields present (3 of max 2)',
+                            message: 'Validating Test: Conformance choice "a": Too many fields present (3 of max 2)',
                         },
                     },
                 },
@@ -446,8 +443,7 @@ const AllTests = Tests({
                     "requires one field": {
                         error: {
                             type: ConformanceError,
-                            message:
-                                'Validating Test: Conformance choice "a": Too few fields present (0 of min 1)',
+                            message: 'Validating Test: Conformance choice "a": Too few fields present (0 of min 1)',
                         },
                     },
 

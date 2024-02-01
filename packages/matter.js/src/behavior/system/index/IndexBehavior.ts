@@ -15,7 +15,7 @@ import { OfflineContext } from "../../context/server/OfflineContext.js";
 
 /**
  * This behavior indexes all descendents of a {@link Part} by number.
- * 
+ *
  * IndexBehavior should only be present on root and aggregator parts as its presence causes the endpoint's PartsList
  * attribute to reflect a flat namespace as required by the Matter standard.
  */
@@ -30,10 +30,7 @@ export class IndexBehavior extends Behavior {
             this.#add(part);
         }
 
-        this.reactTo(
-            this.part.lifecycle.changed,
-            this.#handleChange
-        );
+        this.reactTo(this.part.lifecycle.changed, this.#handleChange);
     }
 
     override [Symbol.asyncDispose]() {
@@ -51,7 +48,7 @@ export class IndexBehavior extends Behavior {
 
     /**
      * Retrieve a {@link Part} by number.
-     * 
+     *
      * Note that {@link state.partsByNumber} does not include {@link part} but this method will return it if the number
      * matches.
      */
@@ -98,7 +95,7 @@ export class IndexBehavior extends Behavior {
         if (part.number !== undefined && this.internal.partsByNumber[part.number] === part) {
             delete this.internal.partsByNumber[part.number];
         }
-        
+
         for (const child of part.parts) {
             this.#remove(child);
         }

@@ -39,14 +39,14 @@ export class Reactors {
         }
 
         if (this.#backings.size) {
-            return new Promise<void>(resolve => this.#destructionComplete = resolve);
+            return new Promise<void>(resolve => (this.#destructionComplete = resolve));
         }
     }
 
     add<O extends Observable<any[], any>>(
         observable: O,
         reactor: Reactor<Parameters<O["emit"]>, ReturnType<O["emit"]>>,
-        options?: Reactor.Options
+        options?: Reactor.Options,
     ) {
         // Deduplicate reactors
         for (const backing of this.#backings) {
@@ -97,9 +97,9 @@ class ReactorBacking<T extends any[], R> {
 
         if (lock) {
             if (lock === true) {
-                lock = [ reactors.resource ];
+                lock = [reactors.resource];
             } else if (!Array.isArray(lock)) {
-                lock = [ lock ];
+                lock = [lock];
             }
             this.#lock = lock as Resource[];
         }
@@ -121,8 +121,8 @@ class ReactorBacking<T extends any[], R> {
 
                     // Normal mode -- just react
                     return this.#react(args);
-                }
-            )
+                },
+            );
             if (MaybePromise.is(result)) {
                 this.#reaction = result as Promise<unknown>;
             }
@@ -143,13 +143,10 @@ class ReactorBacking<T extends any[], R> {
         }
 
         this.#destroying = true;
-        return MaybePromise.finally(
-            this.#reaction,
-            () => {
-                this.#observable.off(this.#handler);
-                this.#reactors.remove(this);
-            }
-        )
+        return MaybePromise.finally(this.#reaction, () => {
+            this.#observable.off(this.#handler);
+            this.#reactors.remove(this);
+        });
     }
 
     #react(args: T) {
@@ -162,19 +159,18 @@ class ReactorBacking<T extends any[], R> {
         if (context) {
             return MaybePromise.catch(
                 () => this.#reactWithContext(context as ActionContext, this.#reactors.backing, args),
-                error => { throw this.#augmentError(error) },
+                error => {
+                    throw this.#augmentError(error);
+                },
             );
         }
 
         // Otherwise run in independent context and errors do not interfere with emitter
         return MaybePromise.catch(
-            () => OfflineContext.act(this.toString(), context =>
-                this.#reactWithContext(
-                    context as ActionContext,
-                    this.#reactors.backing,
-                    args
-                )
-            ),
+            () =>
+                OfflineContext.act(this.toString(), context =>
+                    this.#reactWithContext(context as ActionContext, this.#reactors.backing, args),
+                ),
 
             error => {
                 logger.error(this.#augmentError(error));

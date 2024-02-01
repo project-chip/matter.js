@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Datasource } from "../../behavior/state/managed/Datasource.js";
 import { Val } from "../../behavior/state/Val.js";
+import { Datasource } from "../../behavior/state/managed/Datasource.js";
 import { Participant } from "../../behavior/state/transaction/Participant.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
 import { MaybePromise } from "../../util/Promises.js";
@@ -17,13 +17,10 @@ interface StorageParticipant extends Participant {
 
 /**
  * Factory function for the default implementation of {@link Datasource.Store}.
- * 
+ *
  * Performs read & write for non-volatile values for a single behavior via the {@link PartStore} interface.
  */
-export function DatasourceStore(
-    partStore: PartStore,
-    behaviorId: string,
-): Datasource.Store {
+export function DatasourceStore(partStore: PartStore, behaviorId: string): Datasource.Store {
     return {
         initialValues: partStore.initialValues[behaviorId],
 
@@ -38,7 +35,7 @@ export function DatasourceStore(
             } else {
                 participant.mutations[behaviorId] = { ...values };
             }
-        }
+        },
     };
 }
 

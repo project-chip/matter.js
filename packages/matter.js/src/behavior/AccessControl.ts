@@ -165,7 +165,7 @@ export namespace AccessControl {
          * Tracks "offline" rather than "online" because this makes the safer mode (full enforcement) the default.
          */
         offline?: boolean;
-    };
+    }
 }
 
 Object.freeze(AccessControl);
@@ -265,7 +265,11 @@ function dataEnforcerFor(schema: Schema): AccessControl {
 
             if (session.fabricFiltered) {
                 if (session.fabric === undefined) {
-                    throw new ReadError(location, "Permission denied: No accessing fabric", StatusCode.UnsupportedAccess);
+                    throw new ReadError(
+                        location,
+                        "Permission denied: No accessing fabric",
+                        StatusCode.UnsupportedAccess,
+                    );
                 }
 
                 if (location?.owningFabric && location.owningFabric !== session.fabric) {

@@ -53,8 +53,9 @@ export type DiscoverableDevice<SA extends ServerAddress> = DiscoveryData & {
     addresses: SA[];
 };
 
-export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> =
-    D extends DiscoverableDevice<infer SA> ? SA : never;
+export type AddressTypeFromDevice<D extends DiscoverableDevice<any>> = D extends DiscoverableDevice<infer SA>
+    ? SA
+    : never;
 
 export type OperationalDevice = DiscoverableDevice<ServerAddressIp> & {
     deviceIdentifier: string;

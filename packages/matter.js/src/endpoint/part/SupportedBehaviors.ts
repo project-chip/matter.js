@@ -83,7 +83,7 @@ export namespace SupportedBehaviors {
      */
     export type EventsOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]: Behavior.EventsOf<SB[K]>;
-    }
+    };
 
     /**
      * Input version of {@link StateOf}.

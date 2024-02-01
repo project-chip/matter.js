@@ -60,7 +60,7 @@ describe("SecureSession", () => {
                 /* do nothing */
             },
             isInitiator: true,
-        })
+        });
     }
 
     describe("decrypt", () => {

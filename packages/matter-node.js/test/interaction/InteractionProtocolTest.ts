@@ -925,7 +925,11 @@ describe("InteractionProtocol", () => {
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 1 });
             basicInfoClusterServer.triggerStartUpEvent({ softwareVersion: 2 });
 
-            const result = await interactionProtocol.handleReadRequest(await getDummyMessageExchange(), READ_REQUEST, {} as Message);
+            const result = await interactionProtocol.handleReadRequest(
+                await getDummyMessageExchange(),
+                READ_REQUEST,
+                {} as Message,
+            );
 
             assert.deepEqual(result, READ_RESPONSE);
         });

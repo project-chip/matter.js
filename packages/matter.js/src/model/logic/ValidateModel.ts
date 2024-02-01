@@ -96,7 +96,10 @@ export namespace ValidateModel {
             if (this.errors.length) {
                 logger.error("*** Validation error summary ***");
                 this.errors.forEach(error =>
-                    logger.error(error.message, Diagnostic.dict({ code: error.code, xref: error.xref, src: error.source })),
+                    logger.error(
+                        error.message,
+                        Diagnostic.dict({ code: error.code, xref: error.xref, src: error.source }),
+                    ),
                 );
 
                 logger.error("Error counts by code:");
