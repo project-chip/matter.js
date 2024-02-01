@@ -5,11 +5,11 @@
  */
 
 import { Diagnostic } from "../../src/log/Diagnostic.js";
-import { Logger, consoleLogger } from "../../src/log/Logger.js";
 import { Format } from "../../src/log/Format.js";
+import { Level } from "../../src/log/Level.js";
+import { Logger, consoleLogger } from "../../src/log/Logger.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { captureLog } from "../support/logging.js";
-import { Level } from "../../src/log/Level.js";
 
 const LOGGER_NAME = "UnitTest";
 
@@ -233,7 +233,7 @@ describe("Logger", () => {
                 logger.error("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
             expect(result?.message).equals("xxxx-xx-xx xx:xx:xx.xxx ERROR UnitTest THIS IS *VERY* IMPORTANT");
-        })
+        });
     });
 
     describe("ansiFormat", () => {
@@ -247,9 +247,9 @@ describe("Logger", () => {
 
         it("formats keys correctly", () => {
             const result = logTestDict({ method: "notice", format: Format.ANSI });
-            
+
             expect(result?.message).equal(
-                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mdict test \u001b[34mfoo: \u001b[2;39mbar \u001b[0;34mbiz: \u001b[2;39m1\u001b[0m"
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mdict test \u001b[34mfoo: \u001b[2;39mbar \u001b[0;34mbiz: \u001b[2;39m1\u001b[0m",
             );
         });
 
@@ -270,11 +270,11 @@ describe("Logger", () => {
                 Logger.format = Format.ANSI;
                 logger.notice("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
-            
+
             expect(result?.message).equals(
-                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m"
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx NOTICE \u001b[0;1;90mUnitTest             \u001b[0;32mTHIS IS \u001b[1mVERY \u001b[0;32mIMPORTANT\u001b[0m",
             );
-        })
+        });
 
         it("indents properly", () => {
             const result = captureLog(() => {
@@ -285,22 +285,18 @@ describe("Logger", () => {
                     "and more",
                     Diagnostic.list([
                         "indented\nnext line",
-                        Diagnostic.list([
-                            "indented deeper\nand more",
-                        ]),
+                        Diagnostic.list(["indented deeper\nand more"]),
                         "up again",
-                        Diagnostic.list([
-                            "and down",
-                        ])
+                        Diagnostic.list(["and down"]),
                     ]),
                     "and all the way up",
-                )
+                );
             });
 
             expect(result?.message).equals(
-                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m"
+                "\u001b[2mxxxx-xx-xx xx:xx:xx.xxx INFO   \u001b[0;1;90mUnitTest             \u001b[0mstart same line\nnext line\nand more \nand more\n    indented\n    next line\n        indented deeper\n        and more\n    up again\n        and down\nand all the way up\u001b[0m",
             );
-        })
+        });
     });
 
     describe("htmlFormat", () => {
@@ -325,8 +321,10 @@ describe("Logger", () => {
                 Logger.format = Format.HTML;
                 logger.fatal("THIS IS", Diagnostic.strong("VERY"), "IMPORTANT");
             });
-            expect(result?.message).equals('<span class="matter-log-line fatal"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> THIS IS <em>VERY</em> IMPORTANT</span>');
-        })
+            expect(result?.message).equals(
+                '<span class="matter-log-line fatal"><span class="matter-log-time">xxxx-xx-xx xx:xx:xx.xxx</span> <span class="matter-log-level">FATAL</span> <span class="matter-log-facility">UnitTest</span> THIS IS <em>VERY</em> IMPORTANT</span>',
+            );
+        });
     });
 
     describe("setFormat", () => {

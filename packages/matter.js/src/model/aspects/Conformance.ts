@@ -96,9 +96,8 @@ export class Conformance extends Aspect<Conformance.Definition> {
      */
     isApplicable(features: Iterable<string>, supportedFeatures: Iterable<string>) {
         const fset = features instanceof Set ? (features as Set<string>) : new Set(features);
-        const sfset = supportedFeatures instanceof Set
-            ? (supportedFeatures as Set<string>)
-            : new Set(supportedFeatures);
+        const sfset =
+            supportedFeatures instanceof Set ? (supportedFeatures as Set<string>) : new Set(supportedFeatures);
         return computeApplicability(fset, sfset, this.ast) !== false;
     }
 

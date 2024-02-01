@@ -26,7 +26,7 @@ export function fieldOf(name: string, definition: string | Partial<FieldElement>
     return FieldElement({
         ...definition,
         name,
-    })
+    });
 }
 
 /**
@@ -39,9 +39,8 @@ export function structOf(fields: Record<string, string | Partial<FieldElement>>,
 
         ...structType,
 
-        children:
-            Object.entries(fields).map(([name, definition]) => fieldOf(name, definition))
-    })
+        children: Object.entries(fields).map(([name, definition]) => fieldOf(name, definition)),
+    });
 }
 
 /**
@@ -54,17 +53,15 @@ export function listOf(entryType: string | Partial<FieldElement>, listType?: Par
 
         ...listType,
 
-        children: [
-            fieldOf("entry", entryType)
-        ]
-    })
+        children: [fieldOf("entry", entryType)],
+    });
 }
 
 export interface Online2 {
-    cx1: ActionContext,
-    cx2: ActionContext,
-    ref1: Val.Struct,
-    ref2: Val.Struct,
+    cx1: ActionContext;
+    cx2: ActionContext;
+    ref1: Val.Struct;
+    ref2: Val.Struct;
 }
 
 class TestState {}
@@ -75,13 +72,15 @@ class TestState {}
 export function TestStruct(fields: Record<string, string | Partial<FieldElement>>, defaults: Val.Struct = {}) {
     const supervisor = new RootSupervisor(new DatatypeModel(structOf(fields)));
 
-    const notifies: { index: string | undefined, oldValue: Val, newValue: Val }[] = [];
+    const notifies: { index: string | undefined; oldValue: Val; newValue: Val }[] = [];
 
     const events = {} as Record<string, Observable>;
     for (const index in fields) {
         const observable = Observable();
         events[`${camelize(index)}$Change`] = observable;
-        observable.on((newValue: Val, oldValue: Val) => { notifies.push({ index, oldValue, newValue }) })
+        observable.on((newValue: Val, oldValue: Val) => {
+            notifies.push({ index, oldValue, newValue });
+        });
     }
 
     const datasource = Datasource({
@@ -90,10 +89,12 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
         supervisor,
         defaults,
         events,
-    })
+    });
 
     return {
-        get fields() { return datasource.view as Val.Struct },
+        get fields() {
+            return datasource.view as Val.Struct;
+        },
         notifies,
 
         expect(expected: Val.Struct) {
@@ -101,23 +102,17 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
         },
 
         online(cx: OnlineContext.Options, actor: (ref: Val.Struct, cx: ActionContext) => MaybePromise) {
-            return OnlineContext(cx).act(cx =>
-                actor(this.reference(cx), cx)
-            )
+            return OnlineContext(cx).act(cx => actor(this.reference(cx), cx));
         },
 
         online2(cx1: OnlineContext.Options, cx2: OnlineContext.Options, actor: (online: Online2) => MaybePromise) {
-            return this.online(cx1, (ref1, cx1) =>
-                this.online(cx2, (ref2, cx2) =>
-                    actor({ cx1, cx2, ref1, ref2 })
-                )
-            )
+            return this.online(cx1, (ref1, cx1) => this.online(cx2, (ref2, cx2) => actor({ cx1, cx2, ref1, ref2 })));
         },
 
         reference(context: ValueSupervisor.Session) {
             return datasource.reference(context) as Val.Struct;
-        }
-    }
+        },
+    };
 }
 
 export type TestStruct = Identity<ReturnType<typeof TestStruct>>;

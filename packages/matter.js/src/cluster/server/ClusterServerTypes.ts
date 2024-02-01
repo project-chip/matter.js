@@ -153,14 +153,16 @@ export type CommandServers<C extends Commands> = Merge<
 >;
 
 type OptionalAttributeConf<T extends Attributes> = { [K in OptionalAttributeNames<T>]?: true };
-type MakeAttributeMandatory<A extends Attribute<any, any>> =
-    A extends OptionalWritableFabricScopedAttribute<infer T, any>
-        ? WritableFabricScopedAttribute<T, any>
-        : A extends OptionalWritableAttribute<infer T, any>
-          ? WritableAttribute<T, any>
-          : A extends OptionalAttribute<infer T, any>
-            ? Attribute<T, any>
-            : A;
+type MakeAttributeMandatory<A extends Attribute<any, any>> = A extends OptionalWritableFabricScopedAttribute<
+    infer T,
+    any
+>
+    ? WritableFabricScopedAttribute<T, any>
+    : A extends OptionalWritableAttribute<infer T, any>
+      ? WritableAttribute<T, any>
+      : A extends OptionalAttribute<infer T, any>
+        ? Attribute<T, any>
+        : A;
 type MakeAttributesMandatory<T extends Attributes, C extends OptionalAttributeConf<T>> = {
     [K in keyof T]: K extends keyof C ? MakeAttributeMandatory<T[K]> : T[K];
 };
@@ -212,8 +214,9 @@ export type NonFixedAttributeNames<A extends Attributes> = {
           : K;
 }[keyof A];
 
-type GetterTypeFromSpec<A extends Attribute<any, any>> =
-    A extends OptionalAttribute<infer T, any> ? T | undefined : AttributeJsType<A>;
+type GetterTypeFromSpec<A extends Attribute<any, any>> = A extends OptionalAttribute<infer T, any>
+    ? T | undefined
+    : AttributeJsType<A>;
 type ServerAttributeGetters<A extends Attributes> = {
     [P in MandatoryAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]: () => GetterTypeFromSpec<A[P]>;
 } & { [P in OptionalAttributeNames<A> as `get${Capitalize<string & P>}Attribute`]?: () => GetterTypeFromSpec<A[P]> } & {

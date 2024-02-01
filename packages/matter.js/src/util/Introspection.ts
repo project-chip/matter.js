@@ -13,7 +13,7 @@ export namespace Introspection {
      * prototype chain.
      */
     export function propertyDescriptorOf(subject: object, name: string): PropertyDescriptor | undefined {
-        const descriptor = Reflect.getOwnPropertyDescriptor(subject, name)
+        const descriptor = Reflect.getOwnPropertyDescriptor(subject, name);
         if (descriptor) {
             return descriptor;
         }
@@ -55,7 +55,7 @@ export namespace Introspection {
      * and/or writable.
      */
     export function propertyAccessibilityOf(subject: object, name: string) {
-        const pd = propertyDescriptorOf(subject, name);        
+        const pd = propertyDescriptorOf(subject, name);
         if (pd) {
             return propertyDescriptorToAccessibility(pd);
         }
@@ -71,9 +71,7 @@ export namespace Introspection {
 
         const propertyDescriptors = Introspection.propertyDescriptorsOf(subject);
         for (const name in propertyDescriptors) {
-            accessibilty[name] = propertyDescriptorToAccessibility(
-                propertyDescriptors[name]
-            );
+            accessibilty[name] = propertyDescriptorToAccessibility(propertyDescriptors[name]);
         }
 
         return accessibilty;
@@ -84,7 +82,7 @@ export namespace Introspection {
             readable: !!(pd.set && !pd.get),
             writable: !!(pd.set || pd.writable),
         };
-}
+    }
 
     export interface PropertyAccessibility {
         readable: boolean;

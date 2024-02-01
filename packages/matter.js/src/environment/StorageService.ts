@@ -6,9 +6,9 @@
 
 import { NoProviderError } from "../common/MatterError.js";
 import { Diagnostic } from "../log/Diagnostic.js";
-import { Environment } from "./Environment.js";
 import { Storage } from "../storage/Storage.js";
 import { StorageManager } from "../storage/StorageManager.js";
+import { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
 
 /**
@@ -66,8 +66,8 @@ export class StorageService {
             "Persistence",
             Diagnostic.dict({
                 location: location ?? "(unknown)",
-                available: !!this.#factory
-            })
+                available: !!this.#factory,
+            }),
         ];
     }
 }

@@ -105,14 +105,14 @@ export class Constraint extends Aspect<Constraint.Definition> implements Constra
 
         if (this.min !== undefined && this.min !== null) {
             const min = valueOf(this.min);
-            if (min !== undefined && typeof min !== typeof value || min > value) {
+            if ((min !== undefined && typeof min !== typeof value) || min > value) {
                 return false;
             }
         }
 
         if (this.max !== undefined && this.max !== null) {
             const max = valueOf(this.max);
-            if (max !== undefined && typeof max !== typeof value || max < value) {
+            if ((max !== undefined && typeof max !== typeof value) || max < value) {
                 return false;
             }
         }

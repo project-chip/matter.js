@@ -10,7 +10,7 @@ import { DiagnosticSource } from "../log/DiagnosticSource.js";
 
 export type TimerCallback = () => any;
 
-const registry = new Set<Timer>;
+const registry = new Set<Timer>();
 
 export abstract class Time {
     static get: () => Time = () => DefaultTime;
@@ -100,14 +100,15 @@ DiagnosticSource.add({
 
     get [Diagnostic.value]() {
         return Diagnostic.list(
-            [ ...registry ].map(
-                timer => [ timer.name, Diagnostic.dict({
+            [...registry].map(timer => [
+                timer.name,
+                Diagnostic.dict({
                     periodic: timer.isPeriodic,
                     interval: Diagnostic.interval(timer.intervalMs),
                     system: timer.systemId,
                     elapsed: timer.elapsed,
-                })
-            ])
-        )
-    }
+                }),
+            ]),
+        );
+    },
 });

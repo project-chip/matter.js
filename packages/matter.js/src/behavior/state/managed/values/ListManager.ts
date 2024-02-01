@@ -12,8 +12,8 @@ import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
 import { SchemaPath } from "../../../supervision/SchemaPath.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { ManagedReference } from "../ManagedReference.js";
 import { Val } from "../../Val.js";
+import { ManagedReference } from "../ManagedReference.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 import { InternalCollection, REF } from "./internals.js";
 
@@ -82,11 +82,7 @@ interface ListConfig {
     authorizeWrite: AccessControl["authorizeWrite"];
 }
 
-function createProxy(
-    config: ListConfig,
-    reference: Val.Reference<Val.List>,
-    session: ValueSupervisor.Session,
-) {
+function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, session: ValueSupervisor.Session) {
     const { manageEntry, validateEntry, authorizeRead, authorizeWrite } = config;
 
     let getListLength = () => reference.value.length;
@@ -106,11 +102,11 @@ function createProxy(
     const sublocation = {
         ...reference.location,
         path: reference.location.path.at(-1),
-    }
+    };
 
     if (config.manageEntries) {
         // Base reader produces managed containers
-        readEntry = (index) => {
+        readEntry = index => {
             authorizeRead(session, reference.location);
 
             if (index < 0 || index >= reference.value.length) {
@@ -141,8 +137,8 @@ function createProxy(
                         Array.isArray(val)
                             ? [...(val as Val.List)]
                             : typeof val === "object" && val !== null
-                            ? { ...val }
-                            : val
+                              ? { ...val }
+                              : val,
                 );
 
                 subref.owner = manageEntry(subref, session);
@@ -243,11 +239,7 @@ function createProxy(
                     reference.value.splice(valueIndex, 1);
                 } else {
                     if (typeof value !== "object") {
-                        throw new WriteError(
-                            location,
-                            `Fabric scoped list value is not an object`,
-                            StatusCode.Failure,
-                        );
+                        throw new WriteError(location, `Fabric scoped list value is not an object`, StatusCode.Failure);
                     }
                     (value as { fabricIndex?: number }).fabricIndex ??= session.fabric;
                     nextWriteEntry(mapScopedToActual(index, false), value, location);
@@ -260,17 +252,14 @@ function createProxy(
                     const entry = reference.value[i] as undefined | { fabricIndex?: number };
                     if (
                         typeof entry === "object" &&
-                        (
-                            session.offline
-                            || (!entry.fabricIndex || entry.fabricIndex === session.fabric)
-                        )
+                        (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                     ) {
                         length++;
                     }
                 }
                 return length;
             };
-            
+
             setListLength = (length: number) => {
                 const formerLength = getListLength();
 
@@ -279,10 +268,7 @@ function createProxy(
                         const entry = reference.value[i] as undefined | { fabricIndex?: number };
                         if (
                             typeof entry === "object" &&
-                            (
-                                session.offline
-                                || (!entry.fabricIndex || entry.fabricIndex === session.fabric)
-                            )
+                            (session.offline || !entry.fabricIndex || entry.fabricIndex === session.fabric)
                         ) {
                             reference.value.splice(mapScopedToActual(i, false), 1);
                         } else {

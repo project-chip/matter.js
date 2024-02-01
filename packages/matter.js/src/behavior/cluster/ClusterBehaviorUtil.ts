@@ -21,7 +21,7 @@ import type { ClusterBehavior } from "./ClusterBehavior.js";
  * Create a non-functional instance of a {@link Behavior} for introspection purposes.
  */
 export function introspectionInstanceOf(type: Behavior.Type) {
-    return new (type as unknown as new () => Record<string, Function>);
+    return new (type as unknown as new () => Record<string, Function>)();
 }
 
 /**
@@ -127,12 +127,12 @@ function createDerivedState(cluster: ClusterType, schema: Schema, base: Behavior
             }
             continue;
         }
-    
+
         // Attribute applies.  Make sure a default value is present
         defaults[name] = selectDefaultValue(
             oldDefaults[name],
             cluster.attributes[name],
-            schema.get(AttributeModel, camelize(name, true))
+            schema.get(AttributeModel, camelize(name, true)),
         );
     }
 
@@ -232,7 +232,7 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
         if (!instance[name]) {
             result[name] = {
                 value: Behavior.unimplemented,
-            }
+            };
         }
     }
 

@@ -5,14 +5,14 @@
  */
 
 import { Behavior } from "../../behavior/Behavior.js";
-import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
+import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { InternalError } from "../../common/MatterError.js";
 import { Part } from "../../endpoint/Part.js";
-import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
 import { PartServer } from "../../endpoint/PartServer.js";
-import { Logger } from "../../log/Logger.js";
+import { PartInitializer } from "../../endpoint/part/PartInitializer.js";
 import { Environment } from "../../environment/Environment.js";
+import { Logger } from "../../log/Logger.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
 const logger = Logger.get("BehaviorInit");
@@ -39,7 +39,7 @@ export class ServerPartInitializer extends PartInitializer {
      * If a {@link Part} does not yet have a {@link PartServer}, create one
      * now, then create a {@link BehaviorBacking} for a specific
      * {@link Behavior}.
-     * 
+     *
      * This is where we adapt parts and behaviors for a server role.
      */
     createBacking(part: Part, behavior: Behavior.Type): BehaviorBacking {
@@ -50,12 +50,13 @@ export class ServerPartInitializer extends PartInitializer {
      * Select an ID for a part automatically based on available metadata.
      */
     #identifyPart(part: Part) {
-        const basicInfo = part.behaviors.supported.basicInformation ?? part.behaviors.supported.bridgedDeviceBasicInformation;
+        const basicInfo =
+            part.behaviors.supported.basicInformation ?? part.behaviors.supported.bridgedDeviceBasicInformation;
         if (basicInfo) {
             const defaults = {
-                ...new basicInfo.State,
+                ...new basicInfo.State(),
                 ...part.behaviors.defaultsFor(basicInfo),
-            }
+            };
 
             let id = (defaults as Record<string, string>).uniqueId;
             if (id) {

@@ -19,8 +19,8 @@ const logger = Logger.get("Runtime");
  * Handles execution and lifecycle management of other components.
  */
 export class RuntimeService {
-    #workers = new Set<RuntimeService.Worker>;
-    #disposed = new Set<RuntimeService.Worker>;
+    #workers = new Set<RuntimeService.Worker>();
+    #disposed = new Set<RuntimeService.Worker>();
     #workerDeleted = Observable<[]>();
     #canceled = false;
     #started = Observable<[]>();
@@ -32,7 +32,7 @@ export class RuntimeService {
 
     /**
      * Add a {@link Worker}.
-     * 
+     *
      * The runtime considers itself "active" if there are one or more workers installed.  Workers that complete are
      * removed and optionally destroyed.
      */
@@ -62,7 +62,7 @@ export class RuntimeService {
                         this.#deleteWorker(worker);
                         break;
                 }
-            })
+            });
         } else if (worker.then) {
             Promise.resolve(worker).finally(() => this.#disposeWorker(worker));
         }
@@ -88,7 +88,7 @@ export class RuntimeService {
 
     /**
      * Cancel execution.
-     * 
+     *
      * On cancel the runtime destroys active workers.
      */
     cancel() {
@@ -117,7 +117,7 @@ export class RuntimeService {
                     this.#workerDeleted.off(listener);
                     resolve();
                 }
-            }
+            };
             this.#workerDeleted.on(listener);
         });
     }
@@ -135,7 +135,7 @@ export class RuntimeService {
         if (this.#disposed.has(worker)) {
             return;
         }
-        
+
         const dispose = () => {
             if (worker[Symbol.asyncDispose]) {
                 this.#disposed.add(worker);
@@ -147,7 +147,7 @@ export class RuntimeService {
             }
 
             this.#deleteWorker(worker);
-        }
+        };
 
         if (worker.construction) {
             return Promise.resolve(worker.construction).finally(dispose);
@@ -208,11 +208,11 @@ export namespace RuntimeService {
         /**
          * If the worker supports {@link Symbol.asyncDispose} the runtime will invoke when the worker is no longer
          * needed.  This happens if:
-         * 
+         *
          *   - The worker is a {@link PromiseLike} that resolves
-         * 
+         *
          *   - The worker's {@link construction} status changed as noted above
-         * 
+         *
          *   - The runtime is canceled via {@link RuntimeService.cancel}
          */
         [Symbol.asyncDispose]?: () => MaybePromise<void>;

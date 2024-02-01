@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { NetworkBehavior } from "./NetworkBehavior.js";
 import type { Node } from "../../../node/Node.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
+import { NetworkBehavior } from "./NetworkBehavior.js";
 
 /**
  * Base class for networking implementation.

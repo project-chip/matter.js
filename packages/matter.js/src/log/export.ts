@@ -5,7 +5,7 @@
  */
 
 export * from "./Diagnostic.js";
-export * from "./Level.js";
-export * from "./Format.js";
-export * from "./Logger.js";
 export * from "./DiagnosticSource.js";
+export * from "./Format.js";
+export * from "./Level.js";
+export * from "./Logger.js";

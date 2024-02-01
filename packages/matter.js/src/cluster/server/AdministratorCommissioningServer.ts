@@ -35,30 +35,27 @@ const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KE
  * handled as ConstraintError because we need to return a special error.
  * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
  */
-Object.assign(
-    AdministratorCommissioning.Base,
-    {
-        commands: {
-            ...AdministratorCommissioning.Cluster.commands,
-            openCommissioningWindow: Command(
-                0x0,
-                TlvObject({
-                    commissioningTimeout: TlvField(0, TlvUInt16),
-                    pakePasscodeVerifier: TlvField(1, TlvByteString),
-                    discriminator: TlvField(2, TlvUInt16.bound({ max: 4095 })),
-                    iterations: TlvField(3, TlvUInt32),
-                    salt: TlvField(4, TlvByteString),
-                }),
-                0x0,
-                TlvNoResponse,
-                {
-                    invokeAcl: AccessLevel.Administer,
-                    timed: true,
-                },
-            ),
-        }
-    }
-);
+Object.assign(AdministratorCommissioning.Base, {
+    commands: {
+        ...AdministratorCommissioning.Cluster.commands,
+        openCommissioningWindow: Command(
+            0x0,
+            TlvObject({
+                commissioningTimeout: TlvField(0, TlvUInt16),
+                pakePasscodeVerifier: TlvField(1, TlvByteString),
+                discriminator: TlvField(2, TlvUInt16.bound({ max: 4095 })),
+                iterations: TlvField(3, TlvUInt32),
+                salt: TlvField(4, TlvByteString),
+            }),
+            0x0,
+            TlvNoResponse,
+            {
+                invokeAcl: AccessLevel.Administer,
+                timed: true,
+            },
+        ),
+    },
+});
 
 // General:
 // TODO If any format or validity errors related to the PAKEPasscodeVerifier, Iterations or Salt arguments arise, this command SHALL fail with a cluster specific status code of PAKEParameterError.

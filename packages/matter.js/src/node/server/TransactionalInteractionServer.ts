@@ -35,17 +35,17 @@ export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
 
     constructor(part: Part<ServerRootEndpoint>) {
-        const structure = new InteractionEndpointStructure;
-        
+        const structure = new InteractionEndpointStructure();
+
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         structure.initializeFromEndpoint(PartServer.forPart(part));
-        part.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(part)))
+        part.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(part)));
 
         super({
             eventHandler: part.env.get(ServerStore).eventHandler,
             endpointStructure: structure,
             subscriptionOptions: part.state.network.subscriptionOptions,
-        })
+        });
         this.#endpointStructure = structure;
     }
 
@@ -67,7 +67,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 message,
                 session,
             },
-            () => super.readAttribute(attribute, session, fabricFiltered, message)
+            () => super.readAttribute(attribute, session, fabricFiltered, message),
         );
     }
 
@@ -83,7 +83,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 message,
                 session,
             },
-            () => super.writeAttribute(attribute, value, session, message)
+            () => super.writeAttribute(attribute, value, session, message),
         );
     }
 
@@ -101,7 +101,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 message,
                 session,
             },
-            () => super.invokeCommand(command, session, commandFields, message, endpoint)
+            () => super.invokeCommand(command, session, commandFields, message, endpoint),
         );
     }
 
@@ -115,8 +115,8 @@ export class TransactionalInteractionServer extends InteractionServer {
     async #transact<T extends Promise<any>>(
         why: "Read" | "Write" | "Invoke",
         options: OnlineContext.Options,
-        fn: () => T
+        fn: () => T,
     ) {
-        return OnlineContext(options).act(context => track(fn(), [ why, context.transaction.via ]));
+        return OnlineContext(options).act(context => track(fn(), [why, context.transaction.via]));
     }
 }

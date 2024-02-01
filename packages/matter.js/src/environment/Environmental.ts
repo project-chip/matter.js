@@ -12,7 +12,7 @@ export namespace Environmental {
 
     /**
      * An "environmental service" is an object available via {@link Environment.get}.
-     * 
+     *
      * Any object may be an environmental service.  This methods in this interface are optional.
      */
     export interface Service {
@@ -44,7 +44,7 @@ export namespace Environmental {
         new (...args: any[]): T;
 
         /**
-         * The environment will create the service automatically if the factory supports {@link create}. 
+         * The environment will create the service automatically if the factory supports {@link create}.
          */
         [create]?: (environment: Environment) => T;
     }

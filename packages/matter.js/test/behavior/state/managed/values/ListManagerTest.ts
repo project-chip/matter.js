@@ -13,10 +13,10 @@ import { TestStruct, listOf, structOf } from "./value-utils.js";
 export type ValueList = { value: number }[];
 
 export interface TwoLists {
-    cx1: ActionContext,
-    cx2: ActionContext,
-    list1: ValueList,
-    list2: ValueList,
+    cx1: ActionContext;
+    cx2: ActionContext;
+    list1: ValueList;
+    list2: ValueList;
 }
 
 export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLists) => MaybePromise) {
@@ -32,7 +32,7 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         },
         {
             list: [],
-        }
+        },
     );
 
     const cx1 = {
@@ -47,7 +47,7 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         subject: NodeId(2),
     };
 
-    return struct.online2(cx1, cx2, async ({cx1, cx2, ref1, ref2 }) => {
+    return struct.online2(cx1, cx2, async ({ cx1, cx2, ref1, ref2 }) => {
         const list1 = ref1.list as ValueList;
         const list2 = ref2.list as ValueList;
 
@@ -61,7 +61,7 @@ export async function testFabricScoped(actor: (struct: TestStruct, lists: TwoLis
         await cx2.transaction.commit();
 
         await actor(struct, { cx1, cx2, list1, list2 });
-    })
+    });
 }
 
 describe("ListManager", () => {
@@ -74,7 +74,7 @@ describe("ListManager", () => {
             list[0] = "hi";
             list[1] = "there";
             list[0] = "HI";
-    
+
             expect(list[0]).equals("HI");
             expect(list[1]).equals("there");
             expect(list.length).equals(2);
@@ -108,7 +108,7 @@ describe("ListManager", () => {
             expect(list.length).equals(1);
         });
 
-        struct.expect({ list: [ "HI" ]});
+        struct.expect({ list: ["HI"] });
     });
 
     it("fabric-scoped get/set", async () => {
@@ -121,20 +121,20 @@ describe("ListManager", () => {
                     { fabricIndex: 2, value: 4 },
                 ],
             });
-    
+
             expect(list1[0]).deep.equals({ fabricIndex: 1, value: 1 });
             expect(list2[0]).deep.equals({ fabricIndex: 2, value: 2 });
             expect(list1[1]).deep.equals({ fabricIndex: 1, value: 3 });
             expect(list2[1]).deep.equals({ fabricIndex: 2, value: 4 });
-    
+
             list1[0] = { value: 5 };
             await cx1.transaction.commit();
             list2[1] = { value: 6 };
             await cx2.transaction.commit();
-    
+
             expect(list1[0]).deep.equals({ fabricIndex: 1, value: 5 });
             expect(list2[1]).deep.equals({ fabricIndex: 2, value: 6 });
-    
+
             struct.expect({
                 list: [
                     { fabricIndex: 1, value: 5 },
@@ -143,10 +143,10 @@ describe("ListManager", () => {
                     { fabricIndex: 2, value: 6 },
                 ],
             });
-    
+
             list1[1].value = 7;
             await cx1.transaction.commit();
-    
+
             struct.expect({
                 list: [
                     { fabricIndex: 1, value: 5 },
@@ -155,10 +155,10 @@ describe("ListManager", () => {
                     { fabricIndex: 2, value: 6 },
                 ],
             });
-    
+
             expect(list1.length).equals(2);
             expect(list2.length).equals(2);
-        })
+        });
     });
 
     it("fabric-scoped basic array methods", async () => {
@@ -183,7 +183,7 @@ describe("ListManager", () => {
             await cx1.transaction.commit();
             list2.splice(1, 1);
             await cx2.transaction.commit();
-            
+
             struct.expect({
                 list: [
                     { fabricIndex: 1, value: 1 },

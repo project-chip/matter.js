@@ -1,20 +1,20 @@
 import { Val } from "../../../behavior/state/Val.js";
+import { Datasource } from "../../../behavior/state/managed/Datasource.js";
+import { ImplementationError } from "../../../common/MatterError.js";
+import { Part } from "../../../endpoint/Part.js";
+import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
+import { PartStore } from "../../../endpoint/storage/PartStore.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
-import { PartStore } from "../../../endpoint/storage/PartStore.js";
-import { logger } from "./ServerStore.js";
-import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
-import { Datasource } from "../../../behavior/state/managed/Datasource.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
-import { Part } from "../../../endpoint/Part.js";
-import { ImplementationError } from "../../../common/MatterError.js";
+import { logger } from "./ServerStore.js";
 
 const NUMBER_KEY = "__number__";
 const KNOWN_KEY = "__known__";
 
 /**
  * The server implementation of {@link PartStore}.
- * 
+ *
  * Manages storage for a specific endpoint.
  */
 export class ServerPartStore implements PartStore {
@@ -48,7 +48,7 @@ export class ServerPartStore implements PartStore {
 
     get number() {
         this.#construction.assert();
-        
+
         return this.#number;
     }
 
@@ -69,22 +69,19 @@ export class ServerPartStore implements PartStore {
         this.#childStorage = storage.createContext("parts");
         this.#isNew = isNew;
 
-        this.#construction = AsyncConstruction(
-            this,
-            () => {
-                if (isNew) {
-                    return;
-                }
-                return this.#load(partId);
+        this.#construction = AsyncConstruction(this, () => {
+            if (isNew) {
+                return;
             }
-        )
+            return this.#load(partId);
+        });
     }
 
     async #load(partId: string) {
         this.#knownBehaviors = new Set(this.#storage.get(KNOWN_KEY, Array<string>()));
 
         for (const behaviorId of this.#knownBehaviors) {
-            const behaviorValues = this.#initialValues[behaviorId] = {} as Val.Struct;
+            const behaviorValues = (this.#initialValues[behaviorId] = {} as Val.Struct);
             const behaviorStorage = this.#storage.createContext(behaviorId);
 
             for (const key of behaviorStorage.keys()) {
@@ -123,12 +120,12 @@ export class ServerPartStore implements PartStore {
             store = this.#childStores[partId] = new ServerPartStore(
                 partId,
                 this.#childStorage.createContext(partId),
-                true
+                true,
             );
 
             if (!this.#knownParts.has(partId)) {
                 this.#knownParts.add(partId);
-                this.#childStorage.set(KNOWN_KEY, [ ...this.#knownParts ]);
+                this.#childStorage.set(KNOWN_KEY, [...this.#knownParts]);
             }
         }
 
@@ -175,7 +172,7 @@ export class ServerPartStore implements PartStore {
         }
 
         if (persistKnown) {
-            this.#storage.set(KNOWN_KEY, [ ...this.#knownBehaviors ]);
+            this.#storage.set(KNOWN_KEY, [...this.#knownBehaviors]);
         }
     }
 
@@ -194,11 +191,7 @@ export class ServerPartStore implements PartStore {
     }
 
     async #loadKnownChildStores(partId: string) {
-        const partStore = new ServerPartStore(
-            partId,
-            this.#childStorage.createContext(partId),
-            false,
-        );
+        const partStore = new ServerPartStore(partId, this.#childStorage.createContext(partId), false);
         this.#childStores[partId] = partStore;
         await partStore.construction;
     }

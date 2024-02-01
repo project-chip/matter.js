@@ -12,7 +12,7 @@ import { Part } from "../../endpoint/Part.js";
 /**
  * Thrown when there is a part ID or number conflict.
  */
-export class IdentityConflictError extends ImplementationError {};
+export class IdentityConflictError extends ImplementationError {}
 
 /**
  * Provides NodeServer and Part identification.
@@ -26,7 +26,7 @@ export class IdentityService {
 
         const acquireIndex = () => {
             this.#partsById = OfflineContext.ReadOnly.agentFor(node).get(IndexBehavior).partsById;
-        }
+        };
 
         // Obtain the part index used for validating identity availability.  If the root part isn't yet initialized we
         // don't need to validate identities anyway
@@ -59,7 +59,7 @@ export class IdentityService {
             if (other.lifecycle.hasId) {
                 owner = `part ${other.id}`;
             } else {
-                owner = `another part`
+                owner = `another part`;
             }
             throw new IdentityConflictError(`Endpoint number ${number} is already assigned to ${owner}`);
         }

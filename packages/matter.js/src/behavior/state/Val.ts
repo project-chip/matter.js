@@ -62,7 +62,7 @@ export namespace Val {
          * reference.
          *
          * Then runs the specified mutator to make the actual changes.
-         * 
+         *
          * @param mutator the mutation logic, may freely modify {@link value}
          */
         change(mutator: () => void): void;
@@ -89,9 +89,6 @@ export namespace Val {
          * Obtain a context-aware property source (and sink).  Supervision will read/write properties from here if
          * present.  Otherwise they're read from static state as normal.
          */
-        [properties]<This extends Val.Struct>(
-            this: This,
-            session: ValueSupervisor.Session,
-        ): Partial<This>;
+        [properties]<This extends Val.Struct>(this: This, session: ValueSupervisor.Session): Partial<This>;
     }
 }

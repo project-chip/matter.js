@@ -80,7 +80,7 @@ export function ClusterServer<
     // a random version that will be overwritten when we receive a datasource
     const datasourceProxy: ClusterDatasource = {
         get version() {
-            return datasource?.version ?? 0
+            return datasource?.version ?? 0;
         },
 
         get eventHandler() {
@@ -93,7 +93,7 @@ export function ClusterServer<
 
         changed(key, value) {
             datasource?.changed(key, value);
-        }
+        },
     };
 
     const result: any = {
@@ -111,9 +111,7 @@ export function ClusterServer<
         set datasource(newDatasource: ClusterDatasource | undefined) {
             // This is not legal but TS requires setters to accept getter type
             if (newDatasource === undefined) {
-                throw new InternalError(
-                    "Cluster datasource cannot be unset"
-                )
+                throw new InternalError("Cluster datasource cannot be unset");
             }
 
             datasource = newDatasource;
@@ -123,7 +121,7 @@ export function ClusterServer<
                     "The Endpoint always needs to be existing before storage is initialized for an Endpoint.",
                 );
             }
-            
+
             if (typeof handlers.initializeClusterServer === "function") {
                 handlers.initializeClusterServer({
                     attributes,

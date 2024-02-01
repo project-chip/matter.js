@@ -44,7 +44,7 @@ export class ValidatedElements {
     /**
      * A list of implementation errors, if any.
      */
-    errors?: { element: string; message: string, fatal: boolean }[];
+    errors?: { element: string; message: string; fatal: boolean }[];
 
     #name: string;
     #type: Behavior.Type;
@@ -56,7 +56,7 @@ export class ValidatedElements {
         this.#cluster = type.cluster;
 
         if (typeof type !== "function") {
-            this.error(undefined, "Is not a class", true);            
+            this.error(undefined, "Is not a class", true);
         }
         if (this.#cluster === undefined) {
             this.error("cluster", "Property missing", true);
@@ -83,12 +83,7 @@ export class ValidatedElements {
         let incapacitated = false;
 
         for (const error of this.errors) {
-            const diagnostic = Diagnostic.squash(
-                "in ",
-                Diagnostic.strong(error.element),
-                ": ",
-                error.message,
-            );
+            const diagnostic = Diagnostic.squash("in ", Diagnostic.strong(error.element), ": ", error.message);
 
             if (error.fatal) {
                 incapacitated = true;
@@ -218,7 +213,7 @@ export class ValidatedElements {
 
         let emitters;
         try {
-            emitters = new constructor() as unknown as  Record<string, Observable>;
+            emitters = new constructor() as unknown as Record<string, Observable>;
         } catch (e) {
             this.error("Events", "Not constructable", true);
             return;

@@ -401,7 +401,10 @@ export const ScenesClusterHandler: () => ClusterServerHandlers<typeof ScenesClus
             assertSecureSession(session);
             const fabric = session.getAssociatedFabric();
 
-            if (groupIdentifierFrom !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupIdentifierFrom)) {
+            if (
+                groupIdentifierFrom !== 0 &&
+                !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupIdentifierFrom)
+            ) {
                 return { status: StatusCode.InvalidCommand, groupIdentifierFrom, sceneIdentifierFrom };
             }
             if (groupIdentifierTo !== 0 && !GroupsManager.hasGroup(fabric, endpoint.getNumber(), groupIdentifierTo)) {

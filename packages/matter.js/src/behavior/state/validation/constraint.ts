@@ -15,9 +15,10 @@ import { assertArray, assertNumeric, assertSequence } from "./assertions.js";
  * Creates a function that validates values based on the constraint in the
  * schema.
  */
-export function createConstraintValidator(constraint: Constraint, schema: ValueModel):
-    ValueSupervisor.Validate | undefined
-{
+export function createConstraintValidator(
+    constraint: Constraint,
+    schema: ValueModel,
+): ValueSupervisor.Validate | undefined {
     if (constraint.empty) {
         return;
     }
@@ -34,7 +35,7 @@ export function createConstraintValidator(constraint: Constraint, schema: ValueM
                     throw new ConstraintError(
                         schema,
                         location,
-                        `Value ${value} is not within bounds defined by constraint`
+                        `Value ${value} is not within bounds defined by constraint`,
                     );
                 }
             };
@@ -47,7 +48,7 @@ export function createConstraintValidator(constraint: Constraint, schema: ValueM
                     throw new ConstraintError(
                         schema,
                         location,
-                        `Value ${value} is not within bounds defined by constraint`
+                        `Value ${value} is not within bounds defined by constraint`,
                     );
                 }
             };
@@ -88,7 +89,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
             const sublocation = {
                 ...location,
                 path: location.path.at(""),
-            }
+            };
 
             let pos = 0;
             for (const e of value) {

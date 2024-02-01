@@ -209,7 +209,7 @@ export abstract class Behavior {
         this: This,
         observable: O,
         reactor: Reactor<Parameters<O["emit"]>, ReturnType<O["emit"]>>,
-        options?: Reactor.Options
+        options?: Reactor.Options,
     ) {
         (this as Internal)[BACKING].reactTo(observable, reactor, options);
     }
@@ -336,15 +336,13 @@ export namespace Behavior {
     /**
      * Initialization options.
      */
-    export type InitializationOptionsOf<B extends Type> =
-        Parameters<InstanceType<B>["initialize"]>[0] extends object
-            ? Parameters<InstanceType<B>["initialize"]>[0]
-            : {}
+    export type InitializationOptionsOf<B extends Type> = Parameters<InstanceType<B>["initialize"]>[0] extends object
+        ? Parameters<InstanceType<B>["initialize"]>[0]
+        : {};
 
     /**
      * Configuration options you may set when adding a {@link Behavior} to a Part.
      */
-    export type Options<T extends Behavior.Type = Behavior.Type> =
-        & Behavior.InputStateOf<T>
-        & Behavior.InitializationOptionsOf<T>;
+    export type Options<T extends Behavior.Type = Behavior.Type> = Behavior.InputStateOf<T> &
+        Behavior.InitializationOptionsOf<T>;
 }

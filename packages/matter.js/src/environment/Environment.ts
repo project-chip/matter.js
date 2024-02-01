@@ -33,16 +33,16 @@ export class Environment {
      */
     get<T extends object>(type: abstract new (...args: any[]) => T): T {
         let instance = this.#services?.get(type) ?? this.#parent?.get(type);
-        
+
         if (instance) {
             return instance as T;
         }
 
         if ((type as Environmental.Factory<T>)[Environmental.create]) {
-            this.set(type, instance = (type as any)[Environmental.create](this));
+            this.set(type, (instance = (type as any)[Environmental.create](this)));
             return instance as T;
         }
-        
+
         throw new UnsupportedDependencyError(`Required dependency ${type.name}`, "is not available");
     }
 

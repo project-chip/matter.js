@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export * from "./ServerPartStore.js";
 export * from "./PartStoreService.js";
+export * from "./ServerPartStore.js";
 export * from "./ServerStore.js";

@@ -56,14 +56,15 @@ export abstract class BehaviorBacking {
      */
     initialize(agent: Agent) {
         return MaybePromise.then(
-            () => this.construction.start(() => {
-                // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
-                // will throw if the behavior isn't initialized
-                const behavior = this.createBehavior(agent, this.#type);
+            () =>
+                this.construction.start(() => {
+                    // We use this behavior for initialization.  Do not use agent.get() to access the behavior because it
+                    // will throw if the behavior isn't initialized
+                    const behavior = this.createBehavior(agent, this.#type);
 
-                // Perform actual initialization
-                return this.invokeInitializer(behavior, this.#options);
-            }),
+                    // Perform actual initialization
+                    return this.invokeInitializer(behavior, this.#options);
+                }),
             undefined,
             e => logger.error(e),
         );
@@ -78,8 +79,8 @@ export abstract class BehaviorBacking {
             () => {
                 this.#internal = this.#events = this.#options = this.#datasource = undefined;
                 this.construction.setStatus(Lifecycle.Status.Destroyed);
-            }
-        )
+            },
+        );
     }
 
     /**
@@ -94,7 +95,7 @@ export abstract class BehaviorBacking {
 
     /**
      * Reset state during a reset.
-     * 
+     *
      * This is an optional extension point for derivatives.
      */
     factoryReset(_context: ActionContext): MaybePromise {}
@@ -236,14 +237,14 @@ export abstract class BehaviorBacking {
             },
             () => {
                 this.#reactors = undefined;
-            }
+            },
         );
 
         result = MaybePromise.then(
             result,
             () => behavior?.[Symbol.asyncDispose](),
             e => logger.error(`Destroying ${this}:`, e),
-        )
+        );
 
         return result;
     }

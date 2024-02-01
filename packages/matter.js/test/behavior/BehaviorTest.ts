@@ -49,7 +49,7 @@ describe("Behavior", () => {
         expect(behavior.state.valueOne).equals(1);
         expect(behavior.state.valueTwo).equals(2);
         expect(behavior.events.endpointValue$Change.constructor.name).equals("Emitter");
-    })
+    });
 
     test("instantiates with correct properties", behavior => {
         expect(behavior.agent.get(TestBehavior)).equals(behavior);

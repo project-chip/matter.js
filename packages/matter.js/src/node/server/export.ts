@@ -4,6 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export * from "./ServerPartInitializer.js";
 export * from "./ServerRootEndpoint.js";
 export * from "./TransactionalInteractionServer.js";
-export * from "./ServerPartInitializer.js";

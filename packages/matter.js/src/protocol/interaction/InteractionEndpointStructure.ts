@@ -116,7 +116,8 @@ export class InteractionEndpointStructure {
             }
         }
 
-        if (this.endpoints.has(endpoint.number)) throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
+        if (this.endpoints.has(endpoint.number))
+            throw new ImplementationError(`Endpoint ID ${endpoint.number} exists twice`);
 
         this.endpoints.set(endpoint.number, endpoint);
     }

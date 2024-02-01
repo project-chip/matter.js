@@ -80,18 +80,15 @@ export namespace ClusterInterface {
             : ApplicableComponents<R, S>
         : [];
 
-    export type MethodForCommand<C extends ClusterType.Command> =
-        (request: TypeFromSchema<C["requestSchema"]>) => MaybePromise<TypeFromSchema<C["responseSchema"]>>;
+    export type MethodForCommand<C extends ClusterType.Command> = (
+        request: TypeFromSchema<C["requestSchema"]>,
+    ) => MaybePromise<TypeFromSchema<C["responseSchema"]>>;
 
-
-    export type MappedMethodsOf<C extends Record<string, ClusterType.Command>> =
-        string extends keyof C ? {}
-        : (
-            & {
-                readonly [K in keyof C as C[K] extends { optional: true } ? never : K]: MethodForCommand<C[K]>;
-            }
-            & {
-                readonly [K in keyof C as C[K] extends { optional: true } ? K : never]?: MethodForCommand<C[K]>;
-            }
-        )
+    export type MappedMethodsOf<C extends Record<string, ClusterType.Command>> = string extends keyof C
+        ? {}
+        : {
+              readonly [K in keyof C as C[K] extends { optional: true } ? never : K]: MethodForCommand<C[K]>;
+          } & {
+              readonly [K in keyof C as C[K] extends { optional: true } ? K : never]?: MethodForCommand<C[K]>;
+          };
 }

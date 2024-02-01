@@ -160,23 +160,14 @@ export class RequirementGenerator {
             altered.value(requirements.alterations);
         }
 
-        const requiredOrMandatory = target === this.mandatoryBlock
-            ? "required by"
-            : "optional per";
+        const requiredOrMandatory = target === this.mandatoryBlock ? "required by" : "optional per";
 
-        let documentation =
-            `The {@link ${
-                detail.definition.name
-            }} cluster is ${
-                requiredOrMandatory
-            } the Matter specification`;
+        let documentation = `The {@link ${detail.definition.name}} cluster is ${requiredOrMandatory} the Matter specification`;
 
         if (specialized) {
-            documentation += `\nThis version of {@link ${
-                name
-            }} is specialized per the specification.`;
+            documentation += `\nThis version of {@link ${name}} is specialized per the specification.`;
         } else {
-            documentation += "\nWe provide this alias for convenience."
+            documentation += "\nWe provide this alias for convenience.";
         }
 
         definition.document(documentation);

@@ -9,16 +9,16 @@ import { MaybePromise } from "./Promises.js";
 
 /**
  * A callback function for observables.
- * 
+ *
  * The observer return value effects how an {@link Observable} emits:
- * 
+ *
  *   - If an observer returns undefined the {@link Observable} invokes the next observer immediately.
- * 
+ *
  *   - If an observer returns a {@link Promise}, the {@link Observable} awaits the return value then continues as
  *     described here.  The emitter must then await the {@link Promise} returned by {@link Observable.emit}.
  *
  *   - Any other return value is returned by {@link Observable.emit} and subsequent observers do not see emission.
- * 
+ *
  * @param payload a list of arguments to be emitted
  */
 export type Observer<T extends any[] = any[], R = void> = (...payload: T) => R | undefined;
@@ -52,7 +52,7 @@ export interface Observable<T extends any[] = any[], R = void> extends AsyncIter
 
     /**
      * Observable supports standard "for await (const value of observable").
-     * 
+     *
      * Using an observer in this manner limits your listener to the first parameter normally emitted and your observer
      * cannot return a value.
      */
@@ -114,7 +114,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             }
 
             return result;
-        }
+        };
 
         function emitNext(): R | undefined {
             for (let iteration = iterator.next(); !iteration.done; iteration = iterator.next()) {
@@ -184,7 +184,7 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
         let iteratorCount = 1;
 
         function newPromise() {
-            return new Promise<Next<T>>(r => resolve = r);
+            return new Promise<Next<T>>(r => (resolve = r));
         }
 
         let promise = newPromise();
@@ -200,24 +200,24 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
         this.#joinIteration = () => {
             iteratorCount++;
             return promise;
-        }
+        };
 
         this.#removeIterator = () => {
             if (!iteratorCount--) {
                 this.#stopIteration?.();
             }
-        }
+        };
 
         this.#stopIteration = () => {
             this.off(observer);
             resolve(undefined);
             this.#stopIteration = undefined;
             this.#removeIterator = undefined;
-        }
+        };
     }
 }
 
-type Next<T> = undefined | { value: T, promise: Promise<Next<T>> };
+type Next<T> = undefined | { value: T; promise: Promise<Next<T>> };
 
 function constructObservable(errorHandler?: ObserverErrorHandler) {
     return new Emitter(errorHandler);

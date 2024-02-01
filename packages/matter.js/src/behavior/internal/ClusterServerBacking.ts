@@ -10,10 +10,10 @@ import { AttributeServer, FabricScopedAttributeServer } from "../../cluster/serv
 import { ClusterServer } from "../../cluster/server/ClusterServer.js";
 import {
     ClusterServerObj,
+    ClusterServerObjInternal,
     asClusterServerInternal,
     type CommandHandler,
     type SupportedEventsList,
-    ClusterServerObjInternal,
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
@@ -30,12 +30,12 @@ import { Behavior } from "../Behavior.js";
 import type { ClusterBehavior } from "../cluster/ClusterBehavior.js";
 import { ClusterEvents } from "../cluster/ClusterEvents.js";
 import { ValidatedElements } from "../cluster/ValidatedElements.js";
+import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { ServerBehaviorBacking } from "./ServerBacking.js";
 import { SchemaPath } from "../supervision/SchemaPath.js";
-import { Contextual } from "../context/Contextual.js";
+import { ServerBehaviorBacking } from "./ServerBacking.js";
 
 const logger = Logger.get("Behavior");
 
@@ -71,7 +71,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         return {
             ...super.datasourceOptions,
             cluster: this.type.cluster.id,
-        }
+        };
     }
 
     #createClusterServer(behavior: Behavior) {
@@ -113,7 +113,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         const datasource = this.datasource;
         clusterServer.datasource = {
             get version() {
-                return datasource.version
+                return datasource.version;
             },
 
             get eventHandler() {
@@ -127,7 +127,7 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             increaseVersion() {
                 return datasource.version;
             },
-        }
+        };
 
         this.#clusterServer = clusterServer;
 
@@ -168,7 +168,7 @@ function withBehavior<T>(
 function createCommandHandler(backing: ClusterServerBehaviorBacking, name: string): CommandHandler<any, any, any> {
     const schema = backing.type.schema?.get(CommandModel, camelize(name, true));
     if (schema === undefined) {
-        throw new ImplementationError(`There is no metadata for command ${name}`)
+        throw new ImplementationError(`There is no metadata for command ${name}`);
     }
     const access = AccessControl(schema);
 
@@ -183,20 +183,17 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
         }
 
         return withBehavior(backing, message, behavior => {
-                logger.info(
-                    "Invoke",
-                    Diagnostic.strong(`${backing}.${name}`),
-                    behavior.context.transaction.via,
-                    requestDiagnostic,
-                );
-        
-                access.authorizeInvoke(
-                    behavior.context,
-                    {
-                        path: SchemaPath(`${behavior}.${name}`),
-                        cluster: behavior.cluster.id,
-                    }
-                );
+            logger.info(
+                "Invoke",
+                Diagnostic.strong(`${backing}.${name}`),
+                behavior.context.transaction.via,
+                requestDiagnostic,
+            );
+
+            access.authorizeInvoke(behavior.context, {
+                path: SchemaPath(`${behavior}.${name}`),
+                cluster: behavior.cluster.id,
+            });
 
             return (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
         });
@@ -207,8 +204,8 @@ function createAttributeAccessors(
     backing: ClusterServerBehaviorBacking,
     name: string,
 ): {
-    get: (params: { session?: Session<MatterDevice>, isFabricFiltered?: boolean, message?: Message }) => any;
-    set: (value: any, params: { session?: Session<MatterDevice>, message?: Message }) => boolean;
+    get: (params: { session?: Session<MatterDevice>; isFabricFiltered?: boolean; message?: Message }) => any;
+    set: (value: any, params: { session?: Session<MatterDevice>; message?: Message }) => boolean;
 } {
     return {
         get({ message }) {
@@ -240,7 +237,7 @@ function createAttributeAccessors(
                     Diagnostic.strong(`${backing}.state.${name}`),
                     "via",
                     behavior.context.transaction.via,
-                )
+                );
 
                 const state = behavior.state as Record<string, any>;
 

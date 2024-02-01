@@ -16,6 +16,6 @@ export class ClientBehaviorBacking extends BehaviorBacking {
     }
 
     get store(): Datasource.Store {
-        throw new NotImplementedError;
+        throw new NotImplementedError();
     }
 }

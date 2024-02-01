@@ -5,16 +5,16 @@
  */
 
 import { FieldValue } from "../../model/index.js";
+import { ServerStore } from "../../node/server/storage/ServerStore.js";
 import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
-import { BehaviorBacking } from "./BehaviorBacking.js";
-import { Datasource } from "../state/managed/Datasource.js";
-import { Val } from "../state/Val.js";
-import { Transaction } from "../state/transaction/Transaction.js";
 import { ActionContext } from "../context/ActionContext.js";
-import { ServerStore } from "../../node/server/storage/ServerStore.js";
+import { Val } from "../state/Val.js";
+import { Datasource } from "../state/managed/Datasource.js";
+import { Transaction } from "../state/transaction/Transaction.js";
+import { BehaviorBacking } from "./BehaviorBacking.js";
 
 /**
  * This class backs the server implementation of a behavior.
@@ -25,18 +25,14 @@ export class ServerBehaviorBacking extends BehaviorBacking {
 
     override get store() {
         if (!this.#store) {
-            this.#store = this.#serverStore
-                .partStores
-                .storeForPart(this.part)
-                .storeForBehavior(this.type.id);
+            this.#store = this.#serverStore.partStores.storeForPart(this.part).storeForBehavior(this.type.id);
         }
         return this.#store;
     }
 
     get eventHandler() {
         if (!this.#eventHandler) {
-            this.#eventHandler = this.#serverStore
-                .eventHandler;
+            this.#eventHandler = this.#serverStore.eventHandler;
         }
         return this.#eventHandler;
     }
@@ -52,8 +48,8 @@ export class ServerBehaviorBacking extends BehaviorBacking {
                 // because the behavior likely has uncommitted changes
                 const context = behavior.context;
                 this.datasource.validate(context, behavior.state);
-            }
-        )
+            },
+        );
     }
 
     override async factoryReset(context: ActionContext) {
@@ -108,12 +104,12 @@ export class ServerBehaviorBacking extends BehaviorBacking {
             if (state[name] === undefined) {
                 const referenced = FieldValue.referenced(member.default);
                 if (referenced) {
-                    const val = state[camelize(referenced)]
+                    const val = state[camelize(referenced)];
                     if (val !== undefined) {
                         state[name] = val;
                     }
                 }
             }
-        }        
+        }
     }
 }

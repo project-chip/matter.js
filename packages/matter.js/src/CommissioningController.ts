@@ -181,7 +181,9 @@ export class CommissioningController extends MatterNode {
 
         return await MatterController.create(
             mdnsScanner,
-            this.ipv4Disabled ? undefined : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
+            this.ipv4Disabled
+                ? undefined
+                : await UdpInterface.create(Network.get(), "udp4", localPort, this.listeningAddressIpv4),
             await UdpInterface.create(Network.get(), "udp6", localPort, this.listeningAddressIpv6),
             storage,
             peerNodeId => {

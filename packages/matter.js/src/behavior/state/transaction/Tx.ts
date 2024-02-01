@@ -23,7 +23,10 @@ const MAX_CHAINED_COMMITS = 5;
 /**
  * This is the only public interface to this file.
  */
-export function executeTransaction<T>(via: string, actor: (transaction: Transaction) => MaybePromise<T>): MaybePromise<T> {
+export function executeTransaction<T>(
+    via: string,
+    actor: (transaction: Transaction) => MaybePromise<T>,
+): MaybePromise<T> {
     const tx = new Tx(via);
     let commits = 0;
 
@@ -33,7 +36,9 @@ export function executeTransaction<T>(via: string, actor: (transaction: Transact
         commits++;
 
         if (commits > MAX_CHAINED_COMMITS) {
-            throw new TransactionFlowError(`Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates a logic error`);
+            throw new TransactionFlowError(
+                `Transaction commits have cascaded ${MAX_CHAINED_COMMITS} times which likely indicates a logic error`,
+            );
         }
 
         return MaybePromise.then(
@@ -42,53 +47,51 @@ export function executeTransaction<T>(via: string, actor: (transaction: Transact
                 if (tx.status === Transaction.Status.Exclusive) {
                     return commit();
                 }
-            }
-        )
+            },
+        );
     }
 
     return MaybePromise.finally(
-        () => MaybePromise.then(
-            () => actor(tx),
+        () =>
+            MaybePromise.then(
+                () => actor(tx),
 
-            result => {
-                return MaybePromise.then(
-                    () => commit(),
-                    () => result, 
-                )
-            },
+                result => {
+                    return MaybePromise.then(
+                        () => commit(),
+                        () => result,
+                    );
+                },
 
-            error => {
-                // If we've committed, error happened during commit and we've already logged and cleaned up
-                if (commits) {
-                    throw error;
-                }
-
-                let promise = MaybePromise.then(
-                    () => {
-                        logger.warn("Rolling back", tx.via, "due to error:", error);
-                        return tx.rollback();
-                    },
-                    undefined,
-                    error2 => {
-                        logger.error("Secondary error in", tx.via, "rollback:", error2);
-                    }
-                )
-
-                promise = MaybePromise.finally(
-                    promise,
-                    () => {
-                        tx.destroy();
+                error => {
+                    // If we've committed, error happened during commit and we've already logged and cleaned up
+                    if (commits) {
                         throw error;
                     }
-                )
 
-                return promise as MaybePromise<T>;
-            },
-        ),
+                    let promise = MaybePromise.then(
+                        () => {
+                            logger.warn("Rolling back", tx.via, "due to error:", error);
+                            return tx.rollback();
+                        },
+                        undefined,
+                        error2 => {
+                            logger.error("Secondary error in", tx.via, "rollback:", error2);
+                        },
+                    );
+
+                    promise = MaybePromise.finally(promise, () => {
+                        tx.destroy();
+                        throw error;
+                    });
+
+                    return promise as MaybePromise<T>;
+                },
+            ),
 
         () => {
             tx.destroy();
-        }
+        },
     );
 }
 
@@ -159,7 +162,7 @@ class Tx implements Transaction {
             return Promise.resolve();
         }
         if (this.#destroyed === undefined) {
-            this.#destroyed = new Promise(resolve => this.#resolveDestroyed = resolve);
+            this.#destroyed = new Promise(resolve => (this.#resolveDestroyed = resolve));
         }
         return this.#destroyed;
     }
@@ -178,7 +181,7 @@ class Tx implements Transaction {
 
     addResourcesSync(...resources: Resource[]) {
         this.#assertAvailable();
-        
+
         if (this.#status === Status.Exclusive) {
             const set = new ResourceSet(this, resources);
             const locked = set.acquireLocksSync();
@@ -195,7 +198,7 @@ class Tx implements Transaction {
 
     async begin() {
         this.#assertAvailable();
-        
+
         if (this.status === Status.Exclusive) {
             return;
         }
@@ -217,7 +220,7 @@ class Tx implements Transaction {
 
     beginSync() {
         this.#assertAvailable();
-        
+
         if (this.status === Status.Exclusive) {
             return;
         }
@@ -238,7 +241,7 @@ class Tx implements Transaction {
 
     addParticipants(...participants: Participant[]) {
         this.#assertAvailable();
-        
+
         for (const participant of participants) {
             if (this.#participants.has(participant)) {
                 continue;
@@ -256,19 +259,19 @@ class Tx implements Transaction {
 
     getParticipant(role: {}) {
         this.#assertAvailable();
-        
+
         return this.#roles.get(role);
     }
 
     commit() {
         this.#assertAvailable();
-        
+
         if (this.#status === Status.Shared) {
             // Use rollback() to reset state
             return this.rollback();
         }
 
-        const participants = [ ...this.#participants ];
+        const participants = [...this.#participants];
 
         // Perform the actual commit
         return MaybePromise.then(
@@ -279,13 +282,13 @@ class Tx implements Transaction {
 
     rollback() {
         this.#assertAvailable();
-        
+
         return this.#finalize(Status.RollingBack, "rolled back", () => this.#executeRollback());
     }
 
     async waitFor(others: Iterable<Transaction>) {
         this.#assertAvailable();
-        
+
         if (this.waitingOn) {
             throw new TransactionFlowError("Attempted wait on a transaction that is already waiting");
         }
@@ -327,7 +330,7 @@ class Tx implements Transaction {
             this.#promise = undefined;
             this.#resolve = undefined;
             resolve?.();
-        }
+        };
 
         // Perform the commit or rollback
         return MaybePromise.finally(
@@ -335,7 +338,7 @@ class Tx implements Transaction {
                 this.#status = status;
                 return finalizer();
             },
-            () => cleanup()
+            () => cleanup(),
         );
     }
 
@@ -347,7 +350,7 @@ class Tx implements Transaction {
         return MaybePromise.then(
             () => this.#executeCommit1(),
             () => this.#executeCommit2(),
-        )
+        );
     }
 
     #executeCommit1(): MaybePromise {
@@ -378,7 +381,7 @@ class Tx implements Transaction {
                     });
                 },
             );
-        }
+        };
 
         return commitNextParticipant();
     }
@@ -393,24 +396,21 @@ class Tx implements Transaction {
                 () => participant.commit2(),
                 undefined,
                 error => {
-                    logger.error(
-                        `Error committing (phase two) ${participant}, state inconsistency possible:`,
-                        error,
-                    );
+                    logger.error(`Error committing (phase two) ${participant}, state inconsistency possible:`, error);
 
                     if (errored) {
                         errored.push(participant);
                     } else {
-                        errored = [ participant ];
+                        errored = [participant];
                     }
-               },
-            )
+                },
+            );
 
             if (MaybePromise.is(promise)) {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    ongoing = [ promise as Promise<void> ];
+                    ongoing = [promise as Promise<void>];
                 }
             }
         }
@@ -443,7 +443,7 @@ class Tx implements Transaction {
                     logger.error(`Error post-commit of ${participant}:`, error);
                 },
             );
-        }
+        };
 
         return postCommitNextParticipant();
     }
@@ -468,7 +468,7 @@ class Tx implements Transaction {
                     if (errored) {
                         errored.push(participant);
                     } else {
-                        errored = [ participant ];
+                        errored = [participant];
                     }
                 },
             );
@@ -478,7 +478,7 @@ class Tx implements Transaction {
                 if (ongoing) {
                     ongoing.push(promise as Promise<void>);
                 } else {
-                    ongoing = [ promise as Promise<void> ];
+                    ongoing = [promise as Promise<void>];
                 }
             }
         }
@@ -486,7 +486,7 @@ class Tx implements Transaction {
         const finished = () => {
             this.#status = Status.Shared;
             throwIfErrored(errored, "in commit phase 2");
-        }
+        };
 
         if (ongoing) {
             // Async commit
@@ -506,10 +506,7 @@ class Tx implements Transaction {
             return;
         }
 
-        this.#log(
-            how,
-            Diagnostic.strong(describeList("and", ...[...resources].map(r => r.toString())))
-        );
+        this.#log(how, Diagnostic.strong(describeList("and", ...[...resources].map(r => r.toString()))));
     }
 
     #assertAvailable() {
@@ -527,7 +524,7 @@ class Tx implements Transaction {
     }
 }
 
-export const ReadOnlyTransaction = new Tx("readonly", true)
+export const ReadOnlyTransaction = new Tx("readonly", true);
 
 function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
     if (!errored?.length) {
@@ -535,6 +532,9 @@ function throwIfErrored(errored: undefined | Array<Participant>, when: string) {
     }
     const suffix = errored.length > 1 ? "s" : "";
     throw new FinalizationError(
-        `Unhandled error${suffix} ${when} participant${suffix} ${describeList("and", ...errored.map(p => p.toString()))}`,
+        `Unhandled error${suffix} ${when} participant${suffix} ${describeList(
+            "and",
+            ...errored.map(p => p.toString()),
+        )}`,
     );
 }

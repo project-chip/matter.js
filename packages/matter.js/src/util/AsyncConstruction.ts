@@ -4,22 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../common/MatterError.js";
 import { Lifecycle } from "../common/Lifecycle.js";
-import { Tracker, MaybePromise } from "./Promises.js";
+import { ImplementationError } from "../common/MatterError.js";
 import { Observable } from "./Observable.js";
+import { MaybePromise, Tracker } from "./Promises.js";
 
 /**
  * Create an instance of a class implementing the {@link AsyncConstructable} pattern.
  */
-export async function asyncNew<
-    const A extends any[],
-    const C extends new(...args: A) => AsyncConstructable<any>
->(constructable: C, ...args: A) {
+export async function asyncNew<const A extends any[], const C extends new (...args: A) => AsyncConstructable<any>>(
+    constructable: C,
+    ...args: A
+) {
     return await new constructable(...args).construction;
 }
 
-/** 
+/**
  * AsyncConstructable implements a pattern for asynchronous object initialization.
  *
  * Async construction happens in the initializer parameter of {@link AsyncConstruction}.  You invoke in your constructor
@@ -69,7 +69,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
     /**
      * Notifications of state change.  Normally you just await construction but this offers more granular events.
      */
-    readonly change: Observable<[ status: Lifecycle.Status, subject: T ]>;
+    readonly change: Observable<[status: Lifecycle.Status, subject: T]>;
 
     /**
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
@@ -97,10 +97,10 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * Asserts construction is complete and that an object is defined.
      */
     assert<T>(description: string, dependency: T | undefined): T;
-    
+
     /**
      * Manually force a specific {@link status}.
-     * 
+     *
      * This offers flexibility in component lifecycle management including resetting component to inactive state and
      * broadcasting lifecycle changes.
      *
@@ -120,7 +120,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let ready = false;
     let canceled = false;
     let placeholderResolve: undefined | (() => void);
-    let placeholderReject: undefined | ((error: any) => void)
+    let placeholderReject: undefined | ((error: any) => void);
     let status = Lifecycle.Status.Initializing;
     let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
 
@@ -146,7 +146,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
         get change() {
             if (change === undefined) {
-                change = new Observable;
+                change = new Observable();
             }
             return change;
         },
@@ -188,7 +188,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                             setStatus(Lifecycle.Status.Incapacitated);
                         }
                         throw e;
-                    }
+                    },
                 );
                 if (promise) {
                     initialization.then(placeholderResolve, placeholderReject);
@@ -237,7 +237,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 }
             } catch (e) {
                 if (!(e instanceof Error)) {
-                    e = new ImplementationError((e ?? "(unknown error)").toString())
+                    e = new ImplementationError((e ?? "(unknown error)").toString());
                 }
                 if (e instanceof Error) {
                     e.message = `Cannot access ${description}: ${e.message}`;
@@ -246,27 +246,26 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
             return dependency;
         },
-        
+
         then<TResult1 = T, TResult2 = never>(
             onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
-            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+            onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
         ): Promise<TResult1 | TResult2> {
             if (!started) {
                 // Initialization has not started so we need to create a
                 // placeholder promise
-                
+
                 promise = new Promise((resolve, reject) => {
                     placeholderResolve = resolve;
                     placeholderReject = reject;
                 });
 
-                promise = Tracker.global.track(
-                    promise,
-                    `${subject.constructor.name} construction`
-                );
+                promise = Tracker.global.track(promise, `${subject.constructor.name} construction`);
             }
             if (promise) {
-                return Promise.resolve(promise).then(() => subject).then(onfulfilled, onrejected);
+                return Promise.resolve(promise)
+                    .then(() => subject)
+                    .then(onfulfilled, onrejected);
             }
 
             if (error) {
@@ -274,11 +273,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             } else {
                 onfulfilled?.(subject);
             }
-            
+
             return this;
         },
 
-        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult> {
+        catch<TResult = never>(
+            onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+        ): Promise<T | TResult> {
             return this.then(undefined, onrejected);
         },
 
@@ -291,11 +292,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             promise = MaybePromise.finally(
                 promise,
 
-                () => MaybePromise.finally(
-                    destructor(),
-                    () => setStatus(Lifecycle.Status.Destroyed),
-                )
-            )
+                () => MaybePromise.finally(destructor(), () => setStatus(Lifecycle.Status.Destroyed)),
+            );
 
             return this;
         },
@@ -310,7 +308,9 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 error =>
                     MaybePromise.then(
                         () => onfinally(),
-                        () => { throw error },
+                        () => {
+                            throw error;
+                        },
                     ),
             );
         },
@@ -333,7 +333,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
 
                 case Lifecycle.Status.Initializing:
                     throw new ImplementationError("Cannot change status because initialization is ongoing");
-                
+
                 case Lifecycle.Status.Active:
                     promise = undefined;
                     started = ready = true;

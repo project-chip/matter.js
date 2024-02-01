@@ -22,7 +22,7 @@ export class PartsBehavior extends Behavior implements MutableSet<Part, Part | A
     delete(child: Part | Agent) {
         return this.part.parts.delete(child);
     }
- 
+
     clear() {
         this.part.parts.clear();
     }

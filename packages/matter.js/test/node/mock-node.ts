@@ -5,26 +5,26 @@
  */
 
 import { Behavior } from "../../src/behavior/Behavior.js";
-import { Part } from "../../src/endpoint/Part.js";
-import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
-import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
-import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
-import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
-import { StorageManager } from "../../src/storage/StorageManager.js";
-import { PartStore } from "../../src/endpoint/storage/PartStore.js";
-import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
 import { Val } from "../../src/behavior/state/Val.js";
 import { Datasource } from "../../src/behavior/state/managed/Datasource.js";
 import { Transaction } from "../../src/behavior/state/transaction/Transaction.js";
-import { ServerBehaviorBacking } from "../../src/behavior/internal/ServerBacking.js";
-import { Environment } from "../../src/environment/Environment.js";
-import { Node } from "../../src/node/Node.js";
-import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
-import { StorageService } from "../../src/environment/StorageService.js";
-import { IdentityService } from "../../src/node/server/IdentityService.js";
+import { EndpointNumber } from "../../src/datatype/EndpointNumber.js";
 import { Agent } from "../../src/endpoint/Agent.js";
-import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
+import { Part } from "../../src/endpoint/Part.js";
+import { PartInitializer } from "../../src/endpoint/part/PartInitializer.js";
+import { PartStore } from "../../src/endpoint/storage/PartStore.js";
+import { EndpointType } from "../../src/endpoint/type/EndpointType.js";
+import { Environment } from "../../src/environment/Environment.js";
+import { StorageService } from "../../src/environment/StorageService.js";
+import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
+import { IdentityService } from "../../src/node/server/IdentityService.js";
+import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
+import { PartStoreService } from "../../src/node/server/storage/PartStoreService.js";
+import { ServerStore } from "../../src/node/server/storage/ServerStore.js";
+import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
+import { StorageManager } from "../../src/storage/StorageManager.js";
 
 export class MockPartInitializer extends PartInitializer {
     #nextId = 1;
@@ -88,10 +88,10 @@ class MockPartStore implements PartStore {
                         }
                     },
 
-                    rollback() {}
-                })
-            }
-        }
+                    rollback() {},
+                });
+            },
+        };
     }
 }
 
@@ -108,7 +108,7 @@ class MockPartStoreService extends PartStoreService {
             return this.#stores[part.number];
         }
 
-        return this.#stores[part.number] = new MockPartStore(part);
+        return (this.#stores[part.number] = new MockPartStore(part));
     }
 }
 
@@ -117,7 +117,7 @@ export class MockServerStore extends ServerStore {
 
     override get partStores() {
         if (!this.#partStores) {
-            this.#partStores = new MockPartStoreService;
+            this.#partStores = new MockPartStoreService();
         }
         return this.#partStores;
     }
@@ -140,9 +140,9 @@ export class MockNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends
 
     override initialize(agent: Agent.Instance<T>) {
         this.env.set(StorageService, new StorageService(this.env, () => new StorageBackendMemory()));
-        this.env.set(PartInitializer, new MockPartInitializer())
+        this.env.set(PartInitializer, new MockPartInitializer());
         this.env.set(ServerStore, new MockServerStore(this.env, "test"));
-        this.env.set(PartStoreService, new MockPartStoreService);
+        this.env.set(PartStoreService, new MockPartStoreService());
         this.env.set(IdentityService, new IdentityService(this));
         return super.initialize(agent);
     }

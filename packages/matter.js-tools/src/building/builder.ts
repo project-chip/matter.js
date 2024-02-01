@@ -31,9 +31,8 @@ export class Builder {
     unconditional: boolean;
 
     constructor(private options: Options = {}) {
-        this.unconditional = options.clean || (
-            options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1
-        );
+        this.unconditional =
+            options.clean || (options.targets !== undefined && options.targets?.indexOf(Target.clean) !== -1);
     }
 
     public async build(project: Project) {

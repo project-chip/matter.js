@@ -220,7 +220,7 @@ let testStorageManager: StorageManager;
 let endpointStorage: StorageContext;
 let rootEndpoint: EndpointInterface;
 
-async function commissioningServer({ storage, values }: { storage?: boolean, values?: Record<string, any> } = {}) {
+async function commissioningServer({ storage, values }: { storage?: boolean; values?: Record<string, any> } = {}) {
     const testStorage = new StorageBackendMemory();
     testStorageManager = new StorageManager(testStorage);
     await testStorageManager.initialize();
@@ -451,8 +451,8 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - no uniqueid, use index, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0": 10 }
-            })
+                values: { "serial_node-matter-0000-index_0": 10 },
+            });
 
             const onoffDevice = new OnOffPluginUnitDevice();
 
@@ -504,7 +504,7 @@ describe("Endpoint Structures", () => {
 
         it("One device with one Light endpoints - with uniqueid, from storage", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-custom_test-unique-id": 10 }
+                values: { "serial_node-matter-0000-custom_test-unique-id": 10 },
             });
 
             const onoffDevice = new OnOffPluginUnitDevice(undefined, { uniqueStorageKey: "test-unique-id" });
@@ -1329,7 +1329,7 @@ describe("Endpoint Structures", () => {
 
         it("Device Structure with two aggregators and three Light/Composed endpoints and all partly auto-assigned endpoint IDs and removing adding devices", async () => {
             const node = await commissioningServer({
-                values: { "serial_node-matter-0000-index_0-custom_3333": 3 }
+                values: { "serial_node-matter-0000-index_0-custom_3333": 3 },
             });
 
             const aggregator1 = new Aggregator([], { endpointId: EndpointNumber(37) });

@@ -70,10 +70,7 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         },
 
         reference(session: ValueSupervisor.Session) {
-            return options.supervisor.manage(
-                createRootReference(this, internals, session),
-                session,
-            ) as InstanceType<T>;
+            return options.supervisor.manage(createRootReference(this, internals, session), session) as InstanceType<T>;
         },
 
         get version() {
@@ -81,14 +78,16 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
         },
 
         validate(session: ValueSupervisor.Session, values?: Val.Struct) {
-            internals.supervisor.validate(values ?? internals.values, session, { path: internals.path })
+            internals.supervisor.validate(values ?? internals.values, session, { path: internals.path });
         },
 
         get view() {
             if (!readOnlyView) {
                 const session: ValueSupervisor.Session = {
                     offline: true,
-                    accessLevelFor() { return AccessLevel.View },
+                    accessLevelFor() {
+                        return AccessLevel.View;
+                    },
                     transaction: ReadOnlyTransaction,
                 };
                 readOnlyView = options.supervisor.manage(
@@ -119,7 +118,7 @@ export namespace Datasource {
         /**
          * Name used in diagnostic messages.
          */
-        name: string,
+        name: string;
 
         /**
          * The manager used to manage and validate values.
@@ -179,7 +178,7 @@ export namespace Datasource {
 }
 
 interface Internals extends Datasource.Options {
-    path: SchemaPath,
+    path: SchemaPath;
     values: Val.Struct;
     version: number;
     persistedVersion?: number;
@@ -199,8 +198,8 @@ function configure(options: Datasource.Options): Internals {
 
     const initialValues = {
         ...options.defaults,
-        ...options.store?.initialValues
-    }
+        ...options.store?.initialValues,
+    };
 
     let version: number | undefined;
     let persistedVersion: number | undefined;
@@ -238,18 +237,14 @@ function configure(options: Datasource.Options): Internals {
  *
  * This reference provides external access to the {@link Val.Struct} in the context of a specific session.
  */
-function createRootReference(
-    resource: Resource,
-    internals: Internals,
-    session: ValueSupervisor.Session,
-) {
+function createRootReference(resource: Resource, internals: Internals, session: ValueSupervisor.Session) {
     let values = internals.values;
     let changes: Changes | undefined;
     let expired = false;
 
     const participant = {
         toString() {
-            return internals.name; 
+            return internals.name;
         },
         commit1,
         commit2,
@@ -266,7 +261,7 @@ function createRootReference(
             values = internals.values;
             refreshSubrefs();
         }
-    }
+    };
     if (!internals.changed) {
         internals.changed = Observable();
     }
@@ -289,7 +284,9 @@ function createRootReference(
             startWrite();
         } catch (e) {
             if (e instanceof SynchronousTransactionConflictError) {
-                logger.warn(`Datasource ${internals.name} lock unavailable for persisting version number, will retry on next write`);
+                logger.warn(
+                    `Datasource ${internals.name} lock unavailable for persisting version number, will retry on next write`,
+                );
             } else {
                 throw e;
             }
@@ -337,7 +334,7 @@ function createRootReference(
 
             // Upgrade transaction if not already exclusive
             transaction.beginSync();
-    
+
             // Clone values if we haven't already
             if (values === internals.values) {
                 const old = values;

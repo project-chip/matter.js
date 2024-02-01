@@ -14,8 +14,8 @@ import { PhantomReferenceError, SchemaImplementationError } from "../../../error
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import type { Schema } from "../../../supervision/Schema.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
-import { ManagedReference } from "../ManagedReference.js";
 import { Val } from "../../Val.js";
+import { ManagedReference } from "../ManagedReference.js";
 import { PrimitiveManager } from "./PrimitiveManager.js";
 import { InternalCollection, REF } from "./internals.js";
 
@@ -25,11 +25,7 @@ const AUTHORIZE_READ = Symbol("authorize-read");
 /**
  * For structs we generate a class with accessors for each property in the schema.
  */
-export function StructManager(
-    owner: RootSupervisor,
-    schema: Schema,
-    _managed?: new () => Val
-): ValueSupervisor.Manage {
+export function StructManager(owner: RootSupervisor, schema: Schema, _managed?: new () => Val): ValueSupervisor.Manage {
     const instanceDescriptors = {} as PropertyDescriptorMap;
     const propertyAccessControls = {} as Record<string, AccessControl>;
     let hasFabricIndex = false;
@@ -58,14 +54,13 @@ export function StructManager(
         // Inheriting from managed class increases complexity with little benefit
         // base: managed,
 
-        initialize(
-            this: Wrapper,
-            ref: Val.Reference,
-            session: ValueSupervisor.Session,
-        ) {
+        initialize(this: Wrapper, ref: Val.Reference, session: ValueSupervisor.Session) {
             // Only objects are acceptable
             if (typeof ref.value !== "object" || Array.isArray(ref.value)) {
-                throw new SchemaImplementationError(ref.location, `Cannot manage ${typeof ref.value} because it is not a struct`);
+                throw new SchemaImplementationError(
+                    ref.location,
+                    `Cannot manage ${typeof ref.value} because it is not a struct`,
+                );
             }
 
             // If we have a fabric index, update the context
@@ -145,10 +140,7 @@ interface Wrapper extends Val.Struct, InternalCollection {
     [AUTHORIZE_READ]: (index: string) => void;
 }
 
-function configureProperty(
-    manager: RootSupervisor,
-    schema: ValueModel,
-) {
+function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
     let { access, manage, validate } = manager.get(schema);
 
@@ -226,7 +218,7 @@ function configureProperty(
         // For collections we create a managed value
         let cloneContainer: (container: Val) => Val;
         if (schema.effectiveMetatype === Metatype.array) {
-            cloneContainer = (container: Val) => [ ...(container as Val.List) ];
+            cloneContainer = (container: Val) => [...(container as Val.List)];
         } else {
             cloneContainer = (container: Val) => ({ ...(container as Val.Struct) });
         }
@@ -271,19 +263,14 @@ function configureProperty(
                 // Note - this needs to mirror behavior in the setter above
                 access.authorizeWrite(this[SESSION], this[REF].location);
                 validate(value, this[SESSION], {
-                    path: this[REF].location.path, 
-                    siblings: this[REF].value
+                    path: this[REF].location.path,
+                    siblings: this[REF].value,
                 });
             };
 
             // If we have a transaction we will clone the container before
             // write.  Otherwise we update the property directly
-            const ref = ManagedReference(
-                this[REF],
-                name,
-                assertWriteOk,
-                cloneContainer,
-            );
+            const ref = ManagedReference(this[REF], name, assertWriteOk, cloneContainer);
 
             ref.owner = manage(ref, this[SESSION]);
 

@@ -29,25 +29,29 @@ export namespace ClusterState {
      */
     export type PropertiesOf<C> = PropertiesOfAttributes<ClusterType.AttributesOf<C>>;
 
-    export type PropertiesOfAttributes<A extends Record<string, ClusterType.Attribute>> =
-        & {
-            -readonly [N in keyof A
-                as A[N] extends { fixed: true } ? never : A[N] extends { optional: true } ? never : N
-            ]: TypeFromSchema<A[N]["schema"]>;
-        }
-        & {
-            -readonly [N in keyof A
-                as A[N] extends { fixed: true } ? never : A[N] extends { optional: true } ? N : never
-            ]?: TypeFromSchema<A[N]["schema"]>;
-        }
-        & {
-            -readonly [N in keyof A
-                as A[N] extends { fixed: true } ? A[N] extends { optional: true } ? never : N : never
-            ]: TypeFromSchema<A[N]["schema"]>;
-        }
-        & {
-            -readonly [N in keyof A
-                as A[N] extends { fixed: true } ? A[N] extends { optional: true } ? N : never : never
-            ]?: TypeFromSchema<A[N]["schema"]>;
-        };
+    export type PropertiesOfAttributes<A extends Record<string, ClusterType.Attribute>> = {
+        -readonly [N in keyof A as A[N] extends { fixed: true }
+            ? never
+            : A[N] extends { optional: true }
+              ? never
+              : N]: TypeFromSchema<A[N]["schema"]>;
+    } & {
+        -readonly [N in keyof A as A[N] extends { fixed: true }
+            ? never
+            : A[N] extends { optional: true }
+              ? N
+              : never]?: TypeFromSchema<A[N]["schema"]>;
+    } & {
+        -readonly [N in keyof A as A[N] extends { fixed: true }
+            ? A[N] extends { optional: true }
+                ? never
+                : N
+            : never]: TypeFromSchema<A[N]["schema"]>;
+    } & {
+        -readonly [N in keyof A as A[N] extends { fixed: true }
+            ? A[N] extends { optional: true }
+                ? N
+                : never
+            : never]?: TypeFromSchema<A[N]["schema"]>;
+    };
 }

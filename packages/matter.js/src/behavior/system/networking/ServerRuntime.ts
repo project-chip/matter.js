@@ -6,18 +6,18 @@
 
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
-import { FabricIndex } from "../../../datatype/FabricIndex.js";
-import { PartServer } from "../../../endpoint/PartServer.js";
-import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
-import { UdpInterface } from "../../../net/UdpInterface.js";
-import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
+import { FabricIndex } from "../../../datatype/FabricIndex.js";
+import { PartServer } from "../../../endpoint/PartServer.js";
+import { MdnsService } from "../../../environment/MdnsService.js";
+import { MdnsInstanceBroadcaster } from "../../../mdns/MdnsInstanceBroadcaster.js";
+import { Network } from "../../../net/Network.js";
+import { UdpInterface } from "../../../net/UdpInterface.js";
+import type { ServerNode } from "../../../node/ServerNode.js";
+import { TransactionalInteractionServer } from "../../../node/server/TransactionalInteractionServer.js";
 import { ServerStore } from "../../../node/server/storage/ServerStore.js";
 import { NetworkRuntime } from "./NetworkRuntime.js";
-import { MdnsService } from "../../../environment/MdnsService.js";
-import { Network } from "../../../net/Network.js";
-import type { ServerNode } from "../../../node/ServerNode.js";
 
 /**
  * Handles network functionality for {@link NodeServer}.
@@ -56,7 +56,7 @@ export class ServerRuntime extends NetworkRuntime {
         if (!this.#mdnsBroadcaster) {
             this.#mdnsBroadcaster = new MdnsInstanceBroadcaster(
                 this.owner.state.network.operationalPort,
-                this.owner.env.get(MdnsService).broadcaster
+                this.owner.env.get(MdnsService).broadcaster,
             );
         }
         return this.#mdnsBroadcaster;
@@ -76,7 +76,7 @@ export class ServerRuntime extends NetworkRuntime {
                 this.owner.env.get(Network),
                 "udp6",
                 this.owner.state.network.port,
-                this.owner.state.network.listeningAddressIpv6
+                this.owner.state.network.listeningAddressIpv6,
             );
         }
         return this.#primaryNetInterface;
@@ -107,7 +107,7 @@ export class ServerRuntime extends NetworkRuntime {
      * Add transports to the {@link MatterDevice}.
      */
     protected async addTransports(device: MatterDevice) {
-        device.addTransportInterface(await this.getPrimaryNetInterface())
+        device.addTransportInterface(await this.getPrimaryNetInterface());
 
         const netconf = this.owner.state.network;
 
@@ -117,7 +117,7 @@ export class ServerRuntime extends NetworkRuntime {
                     this.owner.env.get(Network),
                     "udp4",
                     netconf.port,
-                    netconf.listeningAddressIpv4
+                    netconf.listeningAddressIpv4,
                 ),
             );
         }
@@ -144,22 +144,17 @@ export class ServerRuntime extends NetworkRuntime {
         }
 
         if (discoveryCapabilities.ble) {
-            device.addBroadcaster(
-                this.bleBroadcaster,
-            );
+            device.addBroadcaster(this.bleBroadcaster);
         }
     }
 
     /**
      * On commission we turn off bluetooth and join the IP network if we haven't already.
-     * 
+     *
      * On decommission we're destroyed so don't need to handle that case.
      */
     enterCommissionedMode() {
-        if (
-            this.#mdnsBroadcaster !== undefined &&
-            !this.#matterDevice?.hasBroadcaster(this.#mdnsBroadcaster)
-        ) {
+        if (this.#mdnsBroadcaster !== undefined && !this.#matterDevice?.hasBroadcaster(this.#mdnsBroadcaster)) {
             this.#matterDevice?.addBroadcaster(this.#mdnsBroadcaster);
         }
 
@@ -175,7 +170,7 @@ export class ServerRuntime extends NetworkRuntime {
     }
 
     get #commissionedFabrics() {
-        return this.owner.state.operationalCredentials.commissionedFabrics
+        return this.owner.state.operationalCredentials.commissionedFabrics;
     }
 
     protected override get operationalPort() {
@@ -204,7 +199,7 @@ export class ServerRuntime extends NetworkRuntime {
             },
             (_fabricIndex: FabricIndex) => {
                 // TODO - this is "sessionChangeCallback" - add root behavior for managing sessions
-            }
+            },
         )
             .addProtocolHandler(this.#interactionServer)
             .addScanner(mdnsScanner);

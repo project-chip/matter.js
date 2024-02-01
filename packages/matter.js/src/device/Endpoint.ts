@@ -260,7 +260,9 @@ export class Endpoint implements EndpointInterface {
         }
 
         if (endpoint.number !== undefined && this.getChildEndpoint(endpoint.number) !== undefined) {
-            throw new ImplementationError(`Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`);
+            throw new ImplementationError(
+                `Endpoint with id ${endpoint.number} already exists as child from ${this.number}.`,
+            );
         }
 
         this.childEndpoints.push(endpoint);

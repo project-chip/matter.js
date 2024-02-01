@@ -6,9 +6,9 @@
 
 // Can't import Mocha in the browser so just import type here
 import type MochaType from "mocha";
+import { wtf } from "../util/wtf.js";
 import { TestOptions } from "./options.js";
 import { ConsoleProxyReporter, FailureDetail, Reporter } from "./reporter.js";
-import { wtf } from "../util/wtf.js";
 
 export function generalSetup(Mocha: typeof MochaType) {
     // White text, 16-bit and 256-bit green background

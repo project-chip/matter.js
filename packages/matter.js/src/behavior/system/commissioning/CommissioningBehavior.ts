@@ -4,27 +4,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Behavior } from "../../Behavior.js";
-import type { PartServer } from "../../../endpoint/PartServer.js";
-import { CommissioningOptions } from "./CommissioningOptions.js";
-import { DatatypeModel, FieldElement } from "../../../model/index.js";
-import { Logger } from "../../../log/Logger.js";
-import { QrCode } from "../../../schema/QrCodeSchema.js";
-import { CommissioningFlowType, DiscoveryCapabilitiesSchema, ManualPairingCodeCodec, QrPairingCodeCodec } from "../../../schema/PairingCodeSchema.js";
-import { ByteArray } from "../../../util/ByteArray.js";
 import { ImplementationError } from "../../../common/MatterError.js";
-import { PaseClient } from "../../../session/pase/PaseClient.js";
+import type { PartServer } from "../../../endpoint/PartServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
-import { NetworkServer } from "../networking/NetworkServer.js";
-import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
-import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
+import { Logger } from "../../../log/Logger.js";
+import { DatatypeModel, FieldElement } from "../../../model/index.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
+import {
+    CommissioningFlowType,
+    DiscoveryCapabilitiesSchema,
+    ManualPairingCodeCodec,
+    QrPairingCodeCodec,
+} from "../../../schema/PairingCodeSchema.js";
+import { QrCode } from "../../../schema/QrCodeSchema.js";
+import { PaseClient } from "../../../session/pase/PaseClient.js";
+import { ByteArray } from "../../../util/ByteArray.js";
+import { Behavior } from "../../Behavior.js";
+import { BasicInformationBehavior } from "../../definitions/basic-information/BasicInformationBehavior.js";
+import { OperationalCredentialsBehavior } from "../../definitions/operational-credentials/OperationalCredentialsBehavior.js";
+import { NetworkServer } from "../networking/NetworkServer.js";
+import { CommissioningOptions } from "./CommissioningOptions.js";
 
 const logger = Logger.get("Commissioning");
 
 /**
  * Server functionality related to commissioning used by {@link PartServer}.
- * 
+ *
  * Better name would be CommissioningServer but we already have one of those.
  */
 export class CommissioningBehavior extends Behavior {
@@ -33,7 +38,7 @@ export class CommissioningBehavior extends Behavior {
     declare state: CommissioningBehavior.State;
 
     static override early = true;
- 
+
     override initialize() {
         if (this.state.passcode === -1) {
             this.state.passcode = PaseClient.generateRandomPasscode();
@@ -45,15 +50,12 @@ export class CommissioningBehavior extends Behavior {
             this.state.discriminator = PaseClient.generateRandomDiscriminator();
         }
 
-        this.reactTo(
-            (this.part.lifecycle as NodeLifecycle).ready,
-            this.#nodeReady,
-        );
+        this.reactTo((this.part.lifecycle as NodeLifecycle).ready, this.#nodeReady);
 
         this.reactTo(
             this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,
             this.#updateCommissioningStatus,
-        )
+        );
     }
 
     async #updateCommissioningStatus() {
@@ -81,7 +83,9 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            "Node", Diagnostic.strong(this.part.toString()), "is uncommissioned",
+            "Node",
+            Diagnostic.strong(this.part.toString()),
+            "is uncommissioned",
             Diagnostic.dict({
                 passcode,
                 discriminator,
@@ -130,7 +134,7 @@ export class CommissioningBehavior extends Behavior {
         children: [
             FieldElement({ name: "passcode", type: "uint32", quality: "N" }),
             FieldElement({ name: "discriminator", type: "uint16", quality: "N" }),
-        ]
+        ],
     });
 
     #nodeReady() {

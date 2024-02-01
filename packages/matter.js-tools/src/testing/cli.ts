@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import "../util/node-shims.js";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { Project } from "../building/project.js";
-import { TestRunner } from "./runner.js";
-import { Graph } from "../building/graph.js";
 import { Builder } from "../building/builder.js";
+import { Graph } from "../building/graph.js";
+import { Project } from "../building/project.js";
+import "../util/node-shims.js";
+import { TestRunner } from "./runner.js";
 
 enum TestType {
     esm = "esm",

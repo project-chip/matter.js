@@ -9,7 +9,9 @@ import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";
+import { SchemaPath } from "../../supervision/SchemaPath.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
+import { Val } from "../Val.js";
 import {
     assertArray,
     assertBoolean,
@@ -22,8 +24,6 @@ import {
 import { createConformanceValidator } from "./conformance.js";
 import { createConstraintValidator } from "./constraint.js";
 import { ValidationLocation } from "./location.js";
-import { Val } from "../Val.js";
-import { SchemaPath } from "../../supervision/SchemaPath.js";
 
 /**
  * Generate a function that performs data validation.
@@ -78,10 +78,16 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
             if (schema.type === undefined) {
                 throw new SchemaImplementationError(SchemaPath(schema.path), `No type defined`);
             }
-            throw new SchemaImplementationError(SchemaPath(schema.path), `Cannot determine metatype for type ${schema.type}`);
+            throw new SchemaImplementationError(
+                SchemaPath(schema.path),
+                `Cannot determine metatype for type ${schema.type}`,
+            );
 
         default:
-            throw new SchemaImplementationError(SchemaPath((schema as Schema).path), `Unsupported validation metatype ${metatype}`);
+            throw new SchemaImplementationError(
+                SchemaPath((schema as Schema).path),
+                `Unsupported validation metatype ${metatype}`,
+            );
     }
 
     validator = createNullValidator(schema, validator);
@@ -218,7 +224,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
         for (const name in sublocation.choices) {
             const choice = sublocation.choices[name];
-            
+
             if (choice.count < choice.target) {
                 throw new ConformanceError(
                     schema,
@@ -254,7 +260,7 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
             let index = 0;
             const sublocation = {
                 path: location.path.at(""),
-            }
+            };
             for (const e of list as Iterable<unknown>) {
                 if (e === undefined || e === null) {
                     // Accept nullish

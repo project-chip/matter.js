@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Node } from "./Node.js";
+import { NotImplementedError } from "../common/MatterError.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { Identity } from "../util/Type.js";
-import { NotImplementedError } from "../common/MatterError.js";
+import { Node } from "./Node.js";
 
 /**
  * A client-side Matter {@link Node}.
@@ -25,8 +25,9 @@ export class ClientNode<T extends ClientNode.RootEndpoint> extends Node<T> {
 }
 
 export namespace ClientNode {
-    export const RootEndpoint = BaseRootEndpoint.with(
+    export const RootEndpoint = BaseRootEndpoint
+        .with
         // TODO
-    );
+        ();
     export interface RootEndpoint extends Identity<typeof RootEndpoint> {}
 }

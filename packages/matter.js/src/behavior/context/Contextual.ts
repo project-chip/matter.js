@@ -10,7 +10,7 @@ import { ActionContext } from "./ActionContext.js";
  * Components may implement this interface to convey any associated {@link ActionContext}.
  */
 export interface Contextual {
-    [Contextual.context]?: ActionContext,
+    [Contextual.context]?: ActionContext;
 }
 
 export namespace Contextual {

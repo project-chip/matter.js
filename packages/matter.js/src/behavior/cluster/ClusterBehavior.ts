@@ -110,7 +110,10 @@ export class ClusterBehavior extends Behavior {
         This extends ClusterBehavior.Type,
         const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
     >(this: This, ...features: FeaturesT) {
-        const newCluster = new ClusterComposer(this.cluster).compose(features) as ClusterComposer.WithFeatures<This["cluster"], FeaturesT>;
+        const newCluster = new ClusterComposer(this.cluster).compose(features) as ClusterComposer.WithFeatures<
+            This["cluster"],
+            FeaturesT
+        >;
         return this.for(newCluster);
     }
 
@@ -215,32 +218,37 @@ export namespace ClusterBehavior {
         // - set: typeof ClusterBehavior.set;
         // - enable: typeof ClusterBehavior.enable;
 
-        for<
-            This extends ClusterBehavior.Type,
-            const ClusterT extends ClusterType
-        >(this: This, cluster: ClusterT, schema?: Schema):
-            ClusterBehavior.Type<ClusterT, This>;
+        for<This extends ClusterBehavior.Type, const ClusterT extends ClusterType>(
+            this: This,
+            cluster: ClusterT,
+            schema?: Schema,
+        ): ClusterBehavior.Type<ClusterT, This>;
 
         with<
             This extends ClusterBehavior.Type,
             const FeaturesT extends ClusterComposer.FeatureSelection<This["cluster"]>,
-        >(this: This, ...features: FeaturesT):
-            ClusterBehavior.Type<ClusterComposer.WithFeatures<This["cluster"], FeaturesT>, This>;
+        >(
+            this: This,
+            ...features: FeaturesT
+        ): ClusterBehavior.Type<ClusterComposer.WithFeatures<This["cluster"], FeaturesT>, This>;
 
         alter<
             This extends ClusterBehavior.Type,
             const AlterationsT extends ElementModifier.Alterations<This["cluster"]>,
-        >(this: This, alterations: AlterationsT):
-            ClusterBehavior.Type<ElementModifier.WithAlterations<This["cluster"], AlterationsT>, This>;
-        
-        set<This extends Behavior.Type>(this: This, defaults: Behavior.InputStateOf<This>):
-            This;
+        >(
+            this: This,
+            alterations: AlterationsT,
+        ): ClusterBehavior.Type<ElementModifier.WithAlterations<This["cluster"], AlterationsT>, This>;
 
-        enable<
-            This extends ClusterBehavior.Type,
-            const FlagsT extends ElementModifier.ElementFlags<This["cluster"]>,
-        >(this: This, flags: FlagsT):
-            ClusterBehavior.Type<ElementModifier.WithAlterations<This["cluster"], ElementModifier.ElementFlagAlterations<FlagsT>>, This>;
+        set<This extends Behavior.Type>(this: This, defaults: Behavior.InputStateOf<This>): This;
+
+        enable<This extends ClusterBehavior.Type, const FlagsT extends ElementModifier.ElementFlags<This["cluster"]>>(
+            this: This,
+            flags: FlagsT,
+        ): ClusterBehavior.Type<
+            ElementModifier.WithAlterations<This["cluster"], ElementModifier.ElementFlagAlterations<FlagsT>>,
+            This
+        >;
     }
 
     /**
@@ -249,49 +257,45 @@ export namespace ClusterBehavior {
      */
     export type Instance<C extends ClusterType, B extends Behavior.Type, I extends ClusterInterface> =
         // Base class
-        & ClusterBehavior
+        ClusterBehavior &
+            // Bring extensions of old class forward
+            Omit<
+                InstanceType<B>,
+                | "cluster"
+                | "state"
+                | "events"
+                | "initialize"
 
-        // Bring extensions of old class forward
-        & Omit<
-            InstanceType<B>,
-            | "cluster"
-            | "state"
-            | "events"
-            | "initialize"
+                // Typescript 5.3 gets confused and thinks this is an instance property if we don't omit and then add (as
+                // we do below)
+                | typeof Symbol.asyncDispose
 
-            // Typescript 5.3 gets confused and thinks this is an instance property if we don't omit and then add (as
-            // we do below)
-            | typeof Symbol.asyncDispose
+                // Omit command methods of old cluster
+                | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
+            > &
+            // Add command methods
+            ClusterInterface.MethodsOf<I, C> & // Cluster-specific members
+            {
+                /**
+                 * The implemented cluster.
+                 */
+                cluster: C;
 
-            // Omit command methods of old cluster
-            | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
-        >
+                /**
+                 * State values for the behavior.
+                 */
+                state: ClusterState<C, B>;
 
-        // Add command methods
-        & ClusterInterface.MethodsOf<I, C>
-        
-        // Cluster-specific members
-        & {
-            /**
-             * The implemented cluster.
-             */
-            cluster: C;
+                /**
+                 * Observables for cluster events and attribute changes.
+                 */
+                events: ClusterEvents<C, B>;
 
-            /**
-             * State values for the behavior.
-             */
-            state: ClusterState<C, B>;
+                /**
+                 * Supported features as a flag object.
+                 */
+                features: C["supportedFeatures"];
 
-            /**
-             * Observables for cluster events and attribute changes.
-             */
-            events: ClusterEvents<C, B>;
-
-            /**
-             * Supported features as a flag object.
-             */
-            features: C["supportedFeatures"],
-
-            [Symbol.asyncDispose](): MaybePromise<void>;
-        };
+                [Symbol.asyncDispose](): MaybePromise<void>;
+            };
 }

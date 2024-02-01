@@ -5,15 +5,15 @@
  */
 
 import { Behavior } from "../../../src/behavior/Behavior.js";
-import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
+import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
+import { ClusterModel } from "../../../src/model/index.js";
 import { Observable } from "../../../src/util/Observable.js";
 import { MaybePromise } from "../../../src/util/Promises.js";
 import { MockPart } from "../../endpoint/mock-part.js";
 import { My, MyBehavior, MyCluster } from "./cluster-behavior-test-util.js";
-import { ClusterModel } from "../../../src/model/index.js";
 
 describe("ClusterBehavior", () => {
     type Match<Input, Type> = Input extends Type ? true : false;
@@ -75,7 +75,7 @@ describe("ClusterBehavior", () => {
         it("maintains ID after second for", () => {
             const ForBehavior = MyBehavior.for(MyCluster);
             ForBehavior.id satisfies "myCluster";
-        })
+        });
 
         it("exposes optional properties for disabled cluster elements", () => {
             undefined satisfies MyBehavior["state"]["optAttr"];
@@ -95,7 +95,7 @@ describe("ClusterBehavior", () => {
                 expect(behavior.reqCmd).is.a("function");
                 expect(behavior.events.reqAttr$Change.constructor.name).equals("Emitter");
                 expect(behavior.events.reqEv.constructor.name).equals("Emitter");
-            })
+            });
         });
 
         it("instance does not expose values for disabled cluster elements", async () => {
@@ -105,7 +105,7 @@ describe("ClusterBehavior", () => {
                 expect(behavior.state.optAttr).undefined;
                 expect(behavior.events.optAttr$Change?.constructor.name).equals("Emitter");
                 expect(behavior.events.optEv).undefined;
-            })
+            });
         });
 
         it("instance allows standard method override", () => {
@@ -137,7 +137,7 @@ describe("ClusterBehavior", () => {
 
             const AlteredCluster = new ElementModifier(MyCluster).alter({});
             AlteredCluster.name satisfies "MyCluster";
-            
+
             const BehaviorForAlteredCluster = MyBehavior.for(AlteredCluster);
             BehaviorForAlteredCluster.id satisfies "myCluster";
 
@@ -145,7 +145,7 @@ describe("ClusterBehavior", () => {
             const AlteredBehavior = MyBehavior.alter({});
             AlteredBehavior.id satisfies "myCluster";
             expect(AlteredBehavior.id).equals("myCluster");
-        })
+        });
     });
 
     describe("with", () => {
@@ -153,26 +153,26 @@ describe("ClusterBehavior", () => {
             const AwesomeBehavior = MyBehavior.with("Awesome");
             AwesomeBehavior.id satisfies "myCluster";
             expect(AwesomeBehavior.id).equals("myCluster");
-        })
+        });
 
         it("adds feature elements", () => {
             const AwesomeBehavior = MyBehavior.with(My.Feature.Awesome);
 
             ({}) as InstanceType<typeof AwesomeBehavior> satisfies {
                 state: {
-                    awesomeSauce: number,
+                    awesomeSauce: number;
                 };
 
                 becomeAwesome(value: number): void;
 
                 events: {
-                    becameAwesome: Observable<[ number, ActionContext ]>
+                    becameAwesome: Observable<[number, ActionContext]>;
                 };
-            }
+            };
 
             expect(AwesomeBehavior.cluster.supportedFeatures).deep.equals({ awesome: true });
             expect((AwesomeBehavior.schema as ClusterModel).supportedFeatures).deep.equals(new Set(["awesome"]));
-        })
+        });
 
         it("allows extension and base command overrides", () => {
             const AwesomeBehavior = MyBehavior.with(My.Feature.Awesome);
@@ -180,10 +180,10 @@ describe("ClusterBehavior", () => {
                 override reqCmd(): string {
                     return "hi";
                 }
-                
+
                 override becomeAwesome(_value: number) {}
             }
-            AwesomeServer
-        })
-    })
+            AwesomeServer;
+        });
+    });
 });

@@ -5,8 +5,10 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
-import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
 import { ClusterBehavior } from "../behavior/cluster/ClusterBehavior.js";
+import { BehaviorBacking } from "../behavior/internal/BehaviorBacking.js";
+import { ClusterServerBehaviorBacking } from "../behavior/internal/ClusterServerBacking.js";
+import { ServerBehaviorBacking } from "../behavior/internal/ServerBacking.js";
 import { Attributes, Commands, Events } from "../cluster/Cluster.js";
 import { ClusterType } from "../cluster/ClusterType.js";
 import { ClusterClientObj } from "../cluster/client/ClusterClientTypes.js";
@@ -16,11 +18,9 @@ import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
+import { ServerStore } from "../node/server/storage/ServerStore.js";
 import { EndpointInterface } from "./EndpointInterface.js";
 import { Part } from "./Part.js";
-import { ClusterServerBehaviorBacking } from "../behavior/internal/ClusterServerBacking.js";
-import { ServerBehaviorBacking } from "../behavior/internal/ServerBacking.js";
-import { ServerStore } from "../node/server/storage/ServerStore.js";
 
 const logger = Logger.get("PartServer");
 
@@ -36,7 +36,7 @@ export class PartServer implements EndpointInterface {
     #part: Part;
     #name = "";
     #structureChangedCallback?: () => void;
-    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>;
+    readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
 
     get part() {
         return this.#part;
@@ -64,9 +64,7 @@ export class PartServer implements EndpointInterface {
 
             // Sanity check
             if (this.#clusterServers.has(cluster.id)) {
-                throw new InternalError(
-                    `${this.#part}.${cluster.id} cluster ${cluster.id} initialized multiple times`,
-                );
+                throw new InternalError(`${this.#part}.${cluster.id} cluster ${cluster.id} initialized multiple times`);
             }
 
             backing = new ClusterServerBehaviorBacking(this, type as ClusterBehavior.Type);
@@ -206,11 +204,11 @@ export class PartServer implements EndpointInterface {
      * Hierarchical diagnostics of part and children.
      */
     get [Diagnostic.value]() {
-        const diagnostics = [ "Part", Diagnostic.strong(this.#part.id), this.#diagnosticDict ];
+        const diagnostics = ["Part", Diagnostic.strong(this.#part.id), this.#diagnosticDict];
         if (this.#part.parts.size) {
-            diagnostics.push(Diagnostic.list(
-                [ ...this.#part.parts ].map(part => PartServer.forPart(part)[Diagnostic.value])
-            ));
+            diagnostics.push(
+                Diagnostic.list([...this.#part.parts].map(part => PartServer.forPart(part)[Diagnostic.value])),
+            );
         }
         return diagnostics as unknown;
     }
@@ -219,25 +217,17 @@ export class PartServer implements EndpointInterface {
      * Log details of fully initialized part.
      */
     #logPart() {
-        logger.info(
-            Diagnostic.strong(this.#part),
-            "ready",
-            this.#diagnosticDict,
-        );
+        logger.info(Diagnostic.strong(this.#part), "ready", this.#diagnosticDict);
     }
 
     get #diagnosticDict() {
-        const isNew = this.#part.env
-            .get(ServerStore)
-            .partStores
-            .storeForPart(this.#part)
-            .isNew;
+        const isNew = this.#part.env.get(ServerStore).partStores.storeForPart(this.#part).isNew;
 
         return Diagnostic.dict({
             "endpoint#": this.#part.number,
             type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
-            "known": !isNew,
-            "behaviors": this.#part.behaviors,
-        })
+            known: !isNew,
+            behaviors: this.#part.behaviors,
+        });
     }
 }

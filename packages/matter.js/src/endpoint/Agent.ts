@@ -93,7 +93,7 @@ export class Agent {
 
     /**
      * Trigger initialization of a supported {@link Behavior.Type}.
-     * 
+     *
      * Functionally identical to {@link load} but has no return value.
      */
     activate(type: Behavior.Type) {

@@ -177,13 +177,12 @@ export namespace ClusterType {
      */
     export type AttributesOf<C> = C extends { attributes: infer E extends { [K in string]: ClusterType.Attribute } }
         ? {
-            -readonly [
-                K in keyof E as
-                    string extends K ? never
-                    : K extends keyof GlobalAttributes<any> ? never
-                    : K
-                ]: C["attributes"][K]
-        }
+              -readonly [K in keyof E as string extends K
+                  ? never
+                  : K extends keyof GlobalAttributes<any>
+                    ? never
+                    : K]: C["attributes"][K];
+          }
         : EmptyElementSet<Attribute>;
 
     /**
@@ -191,12 +190,8 @@ export namespace ClusterType {
      */
     export type CommandsOf<C> = C extends { commands: infer E extends { [K in string]: ClusterType.Command } }
         ? {
-            -readonly [
-                K in keyof E as
-                    string extends K ? never
-                    : K
-            ]: E[K]
-        }
+              -readonly [K in keyof E as string extends K ? never : K]: E[K];
+          }
         : EmptyElementSet<Command>;
 
     /**
@@ -204,12 +199,8 @@ export namespace ClusterType {
      */
     export type EventsOf<C> = C extends { events: infer E extends { [K in string]: ClusterType.Event } }
         ? {
-            -readonly [
-                K in keyof E as
-                    string extends K ? never
-                    : K
-            ]: E[K]
-        }
+              -readonly [K in keyof E as string extends K ? never : K]: E[K];
+          }
         : EmptyElementSet<Event>;
 
     /**
@@ -223,21 +214,19 @@ export namespace ClusterType {
      */
     export type AttributeValues<T> = ValuesOfAttributes<ClusterType.AttributesOf<T>>;
 
-    export type ValuesOfAttributes<AttrsT extends { [K: string]: Attribute }> =
-        & {
-            [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? never : K]: AttrsT[K] extends {
-                schema: TlvSchema<infer T>;
-            }
-                ? T
-                : never;
+    export type ValuesOfAttributes<AttrsT extends { [K: string]: Attribute }> = {
+        [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? never : K]: AttrsT[K] extends {
+            schema: TlvSchema<infer T>;
         }
-        & {
-            [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? K : never]?: AttrsT[K] extends {
-                schema: TlvSchema<infer T>;
-            }
-                ? T
-                : never;
-        };
+            ? T
+            : never;
+    } & {
+        [K in keyof AttrsT as [AttrsT[K]] extends [never | { optional: true }] ? K : never]?: AttrsT[K] extends {
+            schema: TlvSchema<infer T>;
+        }
+            ? T
+            : never;
+    };
 
     export type RelaxTypes<V> = V extends number
         ? number
@@ -270,11 +259,11 @@ export namespace ClusterType {
          * Flags indicating the features for which this extension applies.
          *
          * For each feature the flag is a tri-state component:
-         * 
+         *
          *   - true = feature is required to enable extension
-         * 
+         *
          *   - false = extension cannot be enabled if feature is enabled
-         * 
+         *
          *   - undefined = feature is not irrelevant for the extension
          */
         flags: TypeFromPartialBitSchema<F>;

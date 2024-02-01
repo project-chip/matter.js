@@ -177,7 +177,7 @@ export function astToFunction(
                 // Throw at runtime
                 throw new SchemaImplementationError(
                     SchemaPath(schema.path),
-                    `Unsupported conformance AST node type ${(ast as any).type}`
+                    `Unsupported conformance AST node type ${(ast as any).type}`,
                 );
         }
     }
@@ -238,7 +238,7 @@ export function astToFunction(
         if (!Array.isArray(param)) {
             throw new SchemaImplementationError(
                 SchemaPath(schema.path),
-                "Conformance AST group parameter is not an array"
+                "Conformance AST group parameter is not an array",
             );
         }
 
@@ -485,7 +485,7 @@ export function astToFunction(
             default:
                 throw new SchemaImplementationError(
                     SchemaPath(schema.path),
-                    `Unknown logical binary operator ${operator}`
+                    `Unknown logical binary operator ${operator}`,
                 );
         }
     }

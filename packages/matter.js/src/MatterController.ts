@@ -530,25 +530,29 @@ export class MatterController {
             if (timeoutSeconds === undefined) {
                 const { promise, resolver, rejecter } = createPromise<MessageChannel<MatterController>>();
 
-                reconnectionPollingTimer = Time.getPeriodicTimer("Controller reconnect", RECONNECTION_POLLING_INTERVAL, async () => {
-                    try {
-                        logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
-                        const result = await this.reconnectLastKnownAddress(
-                            peerNodeId,
-                            operationalAddress,
-                            discoveryData,
-                        );
-                        if (result !== undefined && reconnectionPollingTimer?.isRunning) {
-                            reconnectionPollingTimer?.stop();
-                            resolver(result);
+                reconnectionPollingTimer = Time.getPeriodicTimer(
+                    "Controller reconnect",
+                    RECONNECTION_POLLING_INTERVAL,
+                    async () => {
+                        try {
+                            logger.debug(`Polling for device at ${serverAddressToString(operationalAddress)} ...`);
+                            const result = await this.reconnectLastKnownAddress(
+                                peerNodeId,
+                                operationalAddress,
+                                discoveryData,
+                            );
+                            if (result !== undefined && reconnectionPollingTimer?.isRunning) {
+                                reconnectionPollingTimer?.stop();
+                                resolver(result);
+                            }
+                        } catch (error) {
+                            if (reconnectionPollingTimer?.isRunning) {
+                                reconnectionPollingTimer?.stop();
+                                rejecter(error);
+                            }
                         }
-                    } catch (error) {
-                        if (reconnectionPollingTimer?.isRunning) {
-                            reconnectionPollingTimer?.stop();
-                            rejecter(error);
-                        }
-                    }
-                }).start();
+                    },
+                ).start();
 
                 discoveryPromises.push(() => promise);
             }
