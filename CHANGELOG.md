@@ -20,6 +20,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Improved Standalone Ack handling for messages to match Matter 1.2 specification
   * Fix: Adjusted commands GoToLiftPercentage and GoToTiltPercentage to match with Matter SDK and work around specification issue
   * Fix: Fixed BLE commissioning for Controller
+  * Fix: Makes sure to validate the data when invoking a command from a cluster client
   * Fix: Only set session active timestamp if we create a session based on an incoming message and not when we are the creator of the session to prevent too fast resubmissions
   * Fix: Correctly handle CASE Resumptions without known resumption records and fallback to a full CASE session establishment
   * Fix: Enhanced commissioning flow based on latest Matter SDK test cases and match with specification
