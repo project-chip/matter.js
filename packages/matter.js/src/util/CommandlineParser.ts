@@ -30,7 +30,6 @@ class StringReader {
     public current: string | undefined;
 
     constructor(private readonly str: string) {
-        this.str = str;
         this.pos = -1;
     }
 
