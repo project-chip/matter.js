@@ -226,7 +226,7 @@ function doWifiCredentials(
                 `Current Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword", ""))}"`,
+                )}", Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword", ""))}"`,
             );
             break;
         case "set":
@@ -240,7 +240,7 @@ function doWifiCredentials(
                 `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "WiFiSsid",
                     "-",
-                )}, Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword"))}"`,
+                )}", Password="${Logger.maskString(theNode.Store.get<string>("WiFiPassword"))}"`,
             );
             break;
         case "delete":
@@ -267,7 +267,7 @@ function doThreadCredentials(
                 `Current Thread network credentials: name="${theNode.Store.get<string>(
                     "ThreadName",
                     "-",
-                )}, Operational-Dataset="${Logger.maskString(
+                )}", Operational-Dataset="${Logger.maskString(
                     theNode.Store.get<string>("ThreadOperationalDataset", ""),
                 )}"`,
             );
@@ -283,7 +283,7 @@ function doThreadCredentials(
                 `New Wifi-Credentials: SSID="${theNode.Store.get<string>(
                     "ThreadName",
                     "-",
-                )}, OperationalDataset="${Logger.maskString(theNode.Store.get<string>("ThreadOperationalDataset"))}"`,
+                )}", OperationalDataset="${Logger.maskString(theNode.Store.get<string>("ThreadOperationalDataset"))}"`,
             );
             break;
         case "delete":
