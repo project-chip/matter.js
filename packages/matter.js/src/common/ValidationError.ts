@@ -11,7 +11,10 @@ import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusC
  * We encode this as StatusResponseError because in most places we want to return a StatusResponseError anyway.
  */
 export class ValidationError extends StatusResponseError {
-    public constructor(message: string) {
+    public constructor(
+        message: string,
+        public fieldName?: string,
+    ) {
         super(message, StatusCode.ConstraintError);
 
         this.message = `(Validation/${StatusCode.ConstraintError}) ${message}`;
