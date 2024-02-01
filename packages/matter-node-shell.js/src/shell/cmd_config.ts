@@ -15,12 +15,57 @@ export default function commands(theNode: MatterNode) {
         describe: "Manage global configuration",
         builder: (yargs: Argv) =>
             yargs
-                // LogLevel
-                .command("loglevel", "Manage LogLevel", yargs => {
+                // Console LogLevel
+                .command("loglevel", "Manage Console and File LogLevels", yargs => {
+                    return yargs
+                        .command(
+                            ["* [action]", "* [type] [ action]"],
+                            "get/delete console or file log level",
+                            yargs => {
+                                return yargs
+                                    .positional("type", {
+                                        describe: "type to set the loglevel for",
+                                        choices: ["console", "file"] as const,
+                                        default: "console",
+                                        type: "string",
+                                    })
+                                    .positional("action", {
+                                        describe: "get/delete",
+                                        choices: ["get", "delete"] as const,
+                                        default: "get",
+                                        type: "string",
+                                    });
+                            },
+                            argv => void doLogLevel(theNode, argv),
+                        )
+                        .command(
+                            "set <value>",
+                            "set console log level",
+                            yargs => {
+                                return yargs
+                                    .positional("type", {
+                                        describe: "type to set the loglevel for",
+                                        choices: ["console", "file"] as const,
+                                        default: "console",
+                                        type: "string",
+                                    })
+                                    .positional("value", {
+                                        describe: "log level to set",
+                                        type: "string",
+                                        choices: ["fatal", "error", "warn", "info", "debug"] as const,
+                                        demandOption: true,
+                                    });
+                            },
+                            argv => void doLogLevel(theNode, { action: "set", ...argv }),
+                        );
+                })
+
+                // LogFile name
+                .command("logfile", "Manage Logfile path", yargs => {
                     return yargs
                         .command(
                             "* [action]",
-                            "get/delete log level",
+                            "get/delete logfile path",
                             yargs => {
                                 return yargs.positional("action", {
                                     describe: "get/delete",
@@ -29,20 +74,19 @@ export default function commands(theNode: MatterNode) {
                                     type: "string",
                                 });
                             },
-                            argv => void doLogLevel(theNode, argv),
+                            argv => void doLogfilePath(theNode, argv),
                         )
                         .command(
                             "set <value>",
-                            "set log level",
+                            "set logfile path",
                             yargs => {
                                 return yargs.positional("value", {
-                                    describe: "log level to set",
+                                    describe: "logfile path to set",
                                     type: "string",
-                                    choices: ["fatal", "error", "warn", "info", "debug"] as const,
                                     demandOption: true,
                                 });
                             },
-                            argv => void doLogLevel(theNode, { action: "set", ...argv }),
+                            argv => void doLogfilePath(theNode, { action: "set", ...argv }),
                         );
                 })
 
@@ -157,27 +201,58 @@ function doLogLevel(
     theNode: MatterNode,
     args: {
         action: string;
+        type: string;
+        value?: string;
+    },
+) {
+    const { action, value } = args;
+    const storageKey = args.type === "console" ? "LogLevel" : "LogLevelFile";
+    const logtype = args.type === "console" ? "Console" : "File";
+    switch (action) {
+        case "get":
+            console.log(`Current Loglevel for ${logtype}: ${theNode.Store.get<string>(storageKey, "info")}`);
+            break;
+        case "set":
+            if (value === undefined) {
+                console.log(`Can not change Loglevel for ${logtype}: New Loglevel value not provided`);
+                return 1;
+            }
+            theNode.Store.set(storageKey, value);
+            console.log(`New Loglevel for ${logtype}:" ${value}"`);
+            setLogLevel(args.type === "console" ? "default" : "file", value);
+            break;
+        case "delete":
+            theNode.Store.delete(storageKey);
+            console.log(`Loglevel for ${logtype}: Reset to "info"`);
+            setLogLevel(args.type === "console" ? "default" : "file", "info");
+            break;
+    }
+    return 0;
+}
+
+function doLogfilePath(
+    theNode: MatterNode,
+    args: {
+        action: string;
         value?: string;
     },
 ) {
     const { action, value } = args;
     switch (action) {
         case "get":
-            console.log(`Current Loglevel: ${theNode.Store.get<string>("LogLevel", "info")}`);
+            console.log(`Current Logfile Path: ${theNode.Store.get<string>("LogFile", "-")}`);
             break;
         case "set":
             if (value === undefined) {
-                console.log(`Can not change Loglevel: New Loglevel value not provided`);
+                console.log(`Can not change Logfile path: new path not provided`);
                 return 1;
             }
-            theNode.Store.set("LogLevel", value);
-            console.log(`New Loglevel:" ${value}"`);
-            setLogLevel(value);
+            theNode.Store.set("LogFile", value);
+            console.log(`New LogFile path:" ${value}". Please restart the shell for teh changes to take effect.`);
             break;
         case "delete":
-            theNode.Store.delete("LogLevel");
-            console.log(`Loglevel Reset to "info"`);
-            setLogLevel("info");
+            theNode.Store.delete("LogFile");
+            console.log(`LogFile path removed. Please restart the shell for teh changes to take effect.`);
             break;
     }
     return 0;
