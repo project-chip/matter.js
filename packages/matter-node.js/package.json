@@ -158,12 +158,12 @@
         },
         "./log": {
             "require": {
-                "types": "./dist/cjs/exports/log.d.ts",
-                "default": "./dist/cjs/exports/log.js"
+                "types": "./dist/cjs/log/export.d.ts",
+                "default": "./dist/cjs/log/export.js"
             },
             "import": {
-                "types": "./dist/esm/exports/log.d.ts",
-                "default": "./dist/esm/exports/log.js"
+                "types": "./dist/esm/log/export.d.ts",
+                "default": "./dist/esm/log/export.js"
             }
         },
         "./math": {
@@ -297,7 +297,7 @@
                 "/dist/cjs/exports/interaction.d.ts"
             ],
             "log": [
-                "/dist/cjs/exports/log.d.ts"
+                "/dist/cjs/log/export.d.ts"
             ],
             "math": [
                 "/dist/cjs/exports/math.d.ts"

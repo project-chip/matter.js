@@ -5,3 +5,4 @@
  */
 
 export * from "@project-chip/matter.js/log";
+export * from "./FileLogger.js";
