@@ -14,6 +14,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Implemented handling for session interval parameters as defined by Matter 1.2 specification
   * Enhancement: Improved discovery data handling and use MDNS data for Pase/Case connections session interval parameters
   * Enhancement: Storing session parameter with session resumption details to reuse on session restores
+  * Enhancement: Enhanced encoding of fabricIndex field in write interactions and optimized validation for such cases 
   * Enhancement: Prevented resending the same MDNS scanner queries
   * Enhancement: Optimized MDNS Scanner queries to prevent resending of queries that are already in progress
   * Enhancement: Optimized Commissioning error handling for Controller
