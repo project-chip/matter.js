@@ -17,6 +17,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Prevented resending the same MDNS scanner queries
   * Enhancement: Optimized MDNS Scanner queries to prevent resending of queries that are already in progress
   * Enhancement: Optimized Commissioning error handling for Controller
+  * Enhancement: Enhanced ValidationError to provide the affected structure-aware fieldname in case of an error
   * Fix: Improved Standalone Ack handling for messages to match Matter 1.2 specification
   * Fix: Adjusted commands GoToLiftPercentage and GoToTiltPercentage to match with Matter SDK and work around specification issue
   * Fix: Fixed BLE commissioning for Controller
@@ -39,6 +40,9 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Enhancement: Adjusted logic to output detailed node information on nodes command
   * Enhancement: Do not subscribe all attributes when connecting a node for administrative actions (unpair, open commissioning windows)
   * Enhancement: Allowed to specify the BLE HCI id as shell start parameter and store in settings
+  * Enhancement: Added attribute, event and command actions in the shell based on the Cluster model (all known Matter 1.1 clusters are supported)
+  * Enhancement: Enhanced the Shell Readme with many information and examples
+  * Fix: Correctly quote when showing configuration values for wifi- and thread-credentials
 
 ## 0.7.4 (2023-12-31)
 * Matter-Core functionality:
