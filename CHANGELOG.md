@@ -11,6 +11,7 @@ The main work (all changes without a GitHub username in brackets in the below li
 
 ## __WORK IN PROGRESS__
 * Matter-Core functionality:
+  * Feature: Allowed multiple Loggers and log targets to be registered. Logging to console is still default
   * Enhancement: Implemented handling for session interval parameters as defined by Matter 1.2 specification
   * Enhancement: Improved discovery data handling and use MDNS data for Pase/Case connections session interval parameters
   * Enhancement: Storing session parameter with session resumption details to reuse on session restores
@@ -36,6 +37,7 @@ The main work (all changes without a GitHub username in brackets in the below li
   * Fix: Adjusted the Group limits in GroupKeyManagement cluster to 1 because we do not support groups yet
   * Fix: (Luligu) Corrected the Device type for bridged nodes with Power source information
 * matter.js shell:
+  * Feature: Added support for Debug logging into a Logfile additionally to e.g. Info logging in console
   * Enhancement: Adjusted logic to output detailed node information on nodes command
   * Enhancement: Do not subscribe all attributes when connecting a node for administrative actions (unpair, open commissioning windows)
   * Enhancement: Allowed to specify the BLE HCI id as shell start parameter and store in settings
