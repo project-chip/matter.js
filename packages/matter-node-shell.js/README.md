@@ -77,6 +77,8 @@ In order to pair a device you need to specify the pairing-code which is printed 
 For development devices that use the matter standard discriminator and pin code the parameter con be omitted or more details can be provided as parameters (see `commission pair --help` for more details).
 
 If the device should be commissioned via BLE because it is not yet in the IP network you can add the `--ble` parameter. This will start the BLE advertisement and the device can be paired via BLE. BLE is only available when the shell was started with the `--ble` parameter!
+When commissioning a device via BLE you also need to setup wifi or thread credentials (based on the device type) that are then used in the commissioning process. This can be done using the `config wifi-credentials` or `config thread-credentials` commands.
+IMPORTANT: These credentials are stored unencrypted in the filesystem!
 
 You can also define the node id to pair the device by providing this ID as parameter `commission pair 5000`.
 
