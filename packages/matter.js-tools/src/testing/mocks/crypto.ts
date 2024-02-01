@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-const subtle = global.crypto.subtle;
+const subtle = globalThis.crypto.subtle;
 
 /**
  * An extremely minimal Crypto mock.
@@ -15,9 +15,6 @@ const TheCrypto = {
     getRandomData: (length: number) => {
         // Make random data deterministic
         const bytes = new Uint8Array(length);
-        
-        // Elliptic can crash with pure-zero data
-        //bytes[bytes.length - 1] = 1;
 
         return bytes;
     },

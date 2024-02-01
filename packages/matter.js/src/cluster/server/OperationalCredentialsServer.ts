@@ -11,7 +11,7 @@ import {
     TlvAttestation,
     TlvCertSigningRequest,
 } from "../../behavior/definitions/operational-credentials/OperationalCredentialsTypes.js";
-import { MatterFabricConflictError } from "../../common/FailSafeManager.js";
+import { MatterFabricConflictError } from "../../common/FailsafeManager.js";
 import { MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";

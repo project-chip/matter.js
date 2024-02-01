@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "../util/node-shims.js";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { Project } from "../building/project.js";

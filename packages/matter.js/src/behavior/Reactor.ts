@@ -16,7 +16,7 @@ import { Resource } from "./state/transaction/Resource.js";
  * A reactor is similar to a normal handler installed with {@link Observable.on}.  It provides several benefits over
  * installing an observer directly:
  *
- *   - The behavior uninstalls {@link reactor} on destruction
+ *   - The behavior uninstalls {@link reactor} when the part is destroyed
  *
  *   - If {@link reactor} is asynchronous, the behavior tracks the resulting promise.  It provides error handling and
  *     ensures the promise completes before Part destruction

@@ -49,6 +49,8 @@ function TestParticipant(options?: Partial<Participant>) {
             return options?.commit2?.();
         },
 
+        postCommit: options?.postCommit,
+
         rollback(): MaybePromise {
             this.invoked.push("rollback");
             return options?.rollback?.();
@@ -66,6 +68,7 @@ let transaction3: Transaction;
 
 export interface JoinOptions extends Partial<Participant> {
     transaction?: Transaction;
+    postCommit?: () => MaybePromise;
 }
 
 /**
@@ -198,7 +201,7 @@ describe("Transaction", () => {
     });
 
     test("flows through commit correctly", async () => {
-        const p = join();
+        const p = join({ postCommit: () => { p.invoked.push("postCommit") } });
 
         expect(transaction.status).equals(Status.Shared);
         await transaction.begin();
@@ -206,7 +209,7 @@ describe("Transaction", () => {
         await transaction.commit();
         expect(transaction.status).equals(Status.Shared);
 
-        p.expect("commit1", "commit2");
+        p.expect("commit1", "commit2", "postCommit");
     });
 
     test("flows through rollback correctly", async () => {

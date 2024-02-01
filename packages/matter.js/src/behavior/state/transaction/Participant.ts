@@ -32,6 +32,11 @@ export interface Participant {
     commit2(): MaybePromise;
 
     /**
+     * Post-commit logic.
+     */
+    postCommit?: () => MaybePromise;
+
+    /**
      * Drop isolated writes and revert to original canonical source.
      */
     rollback(): MaybePromise;

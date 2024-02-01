@@ -113,6 +113,7 @@ export class VariableService {
             if (Number.isNaN(value)) {
                 return;
             }
+            return value;
         }
     }
 

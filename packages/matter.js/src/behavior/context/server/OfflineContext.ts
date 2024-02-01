@@ -32,7 +32,7 @@ export namespace OfflineContext {
     export function act<T>(purpose: string, actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
         const id = nextInternalId;
         nextInternalId = (nextInternalId + 1) % 65535;
-        const via = Diagnostic.via(`${purpose};${id.toString(16)}`);
+        const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
 
         return Transaction.act(via, (transaction) => {
             const context = createOfflineContext(transaction);

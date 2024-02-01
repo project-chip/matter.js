@@ -5,12 +5,13 @@
  */
 
 import { AccessLevel } from "../../../cluster/Cluster.js";
-import { InternalError } from "../../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
 import { Logger } from "../../../log/Logger.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
+import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { SchemaPath } from "../../supervision/SchemaPath.js";
@@ -252,6 +253,7 @@ function createRootReference(
         },
         commit1,
         commit2,
+        postCommit,
         rollback,
     };
 
@@ -302,6 +304,7 @@ function createRootReference(
 
         get value() {
             if (expired) {
+                debugger;
                 throw new ExpiredReferenceError(this.location);
             }
 
@@ -318,6 +321,10 @@ function createRootReference(
 
         get location() {
             return { path: internals.path };
+        },
+
+        set location(_loc: AccessControl.Location) {
+            throw new ImplementationError("Root reference location is immutable");
         },
 
         change(mutator) {
@@ -425,14 +432,14 @@ function createRootReference(
         }
 
         if (changes) {
-            if (changes.persistent === undefined) {
-                changes.persistent = {};
-            }
-
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 
             if (internals.versioning) {
+                if (changes.persistent === undefined) {
+                    changes.persistent = {};
+                }
+
                 changes.persistent[VERSION_KEY] = internals.version;
             }
         }
@@ -470,11 +477,15 @@ function createRootReference(
         if (!changes) {
             return;
         }
+    }
 
-        if (internals.events) {
-            for (const notification of changes.notifications) {
-                notification.event.emit(...notification.params);
-            }
+    function postCommit() {
+        if (!changes || !internals.events) {
+            return;
+        }
+
+        for (const notification of changes.notifications) {
+            notification.event.emit(...notification.params);
         }
     }
 

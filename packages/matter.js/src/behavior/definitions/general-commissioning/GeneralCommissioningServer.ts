@@ -7,7 +7,7 @@
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
-import { PartServer } from "../../../endpoint/PartServer.js";
+import { PartStructuralAdapter } from "../../../endpoint/PartStructuralAdapter.js";
 import { Logger } from "../../../log/Logger.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
@@ -63,7 +63,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 expiryLengthSeconds,
                 this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
                 this.session.getFabric(),
-                this.endpoint,
+                PartStructuralAdapter(this.part, this.context),
             );
 
             if (device.isFailsafeArmed()) {
@@ -195,10 +195,6 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         logger.info(`Commissioning completed on fabric #${fabric.fabricId} as node #${fabric.nodeId}.`);
 
         return SuccessResponse;
-    }
-
-    private get endpoint() {
-        return PartServer.forPart(this.part);
     }
 }
 

@@ -6,6 +6,7 @@
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
+import { EndpointStructuralAdapter } from "../../device/EndpointStructuralAdapter.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
@@ -55,7 +56,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 expiryLengthSeconds,
                 basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
                 session.getFabric(),
-                endpoint,
+                EndpointStructuralAdapter(endpoint),
             );
 
             if (device.isFailsafeArmed()) {

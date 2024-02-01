@@ -89,7 +89,7 @@ export class Behaviors {
      */
     initialize(agent: Agent): MaybePromise {
         for (const type of Object.values(this.supported)) {
-            if (type.immediate) {
+            if (type.early) {
                 this.activate(type, agent);
             }
         }
@@ -145,7 +145,7 @@ export class Behaviors {
 
         this.#part.lifecycle.change(PartLifecycle.Change.ServersChanged);
 
-        if (type.immediate && this.#part.lifecycle.isInstalled) {
+        if (type.early && this.#part.lifecycle.isInstalled) {
             this.#activateLate(type);
         }
     }

@@ -69,7 +69,7 @@ export class ClusterBehavior extends Behavior {
     /**
      * All ClusterBehavior initialization currently runs as part of {@link Part} initialization.
      */
-    static override readonly immediate = true;
+    static override readonly early = true;
 
     /**
      * Cluster data must be versioned.
@@ -197,7 +197,7 @@ export namespace ClusterBehavior {
         readonly Interface: I;
 
         readonly schema?: Schema;
-        readonly immediate: boolean;
+        readonly early: boolean;
         readonly versioning: boolean;
         readonly defaults: ClusterState.Type<C, B>;
         readonly supervisor: RootSupervisor;

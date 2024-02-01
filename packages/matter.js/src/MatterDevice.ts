@@ -18,7 +18,7 @@ import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioning
 import { OperationalCredentials } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "./cluster/server/AdministratorCommissioningServer.js";
 import { Channel } from "./common/Channel.js";
-import { FailSafeManager } from "./common/FailSafeManager.js";
+import { FailsafeManager } from "./common/FailsafeManager.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
@@ -26,7 +26,7 @@ import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { EndpointInterface } from "./endpoint/EndpointInterface.js";
+import { EndpointStructuralAdapter } from "./endpoint/StructuralAdapter.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
 import { Diagnostic } from "./log/Diagnostic.js";
@@ -65,7 +65,7 @@ export class MatterDevice {
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
     private isClosing = false;
-    private failSafeContext?: FailSafeManager;
+    private failSafeContext?: FailsafeManager;
 
     constructor(
         private readonly commissioningOptions: CommissioningOptions.Configuration,
@@ -340,15 +340,15 @@ export class MatterDevice {
         );
     }
 
-    private async failSafeExpired() {
+    private async failSafeExpired(rootEndpoint: EndpointStructuralAdapter) {
         if (this.failSafeContext === undefined) return;
-        const failSafeContext = this.failSafeContext;
+        const failsafeContext = this.failSafeContext;
         this.failSafeContext = undefined;
 
         logger.info("Failsafe timer expired, Reset fabric builder.");
-        if (failSafeContext.fabricIndex !== undefined && !failSafeContext.forUpdateNoc) {
-            logger.debug(`Revoking fabric with index ${failSafeContext.fabricIndex}`);
-            await this.fabricManager.revokeFabric(failSafeContext.fabricIndex);
+        if (failsafeContext.fabricIndex !== undefined && !failsafeContext.forUpdateNoc) {
+            logger.debug(`Revoking fabric with index ${failsafeContext.fabricIndex}`);
+            await this.fabricManager.revokeFabric(failsafeContext.fabricIndex);
         }
 
         // On expiry of the fail-safe timer, the following actions SHALL be performed in order:
@@ -359,8 +359,8 @@ export class MatterDevice {
 
         // 3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see Section 11.9.6.2, “ArmFailSafe Command”) by clearing any associated Secure Session Context at the Server.
         let fabric: Fabric | undefined = undefined;
-        if (failSafeContext.fabricIndex !== undefined) {
-            const fabricIndex = failSafeContext.fabricIndex;
+        if (failsafeContext.fabricIndex !== undefined) {
+            const fabricIndex = failsafeContext.fabricIndex;
             fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
             if (fabric !== undefined) {
                 const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
@@ -372,52 +372,52 @@ export class MatterDevice {
 
         // 4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
         //    Fail-Safe being armed.
-        failSafeContext.restoreEndpointState();
+        await failsafeContext.restoreEndpointState(rootEndpoint);
 
         // 5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
         //    ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that was
         //    the subject of the UpdateNOC command.
-        if (failSafeContext.associatedFabric !== undefined) {
-            if (failSafeContext.forUpdateNoc) {
+        if (failsafeContext.associatedFabric !== undefined) {
+            if (failsafeContext.forUpdateNoc) {
                 // update FabricManager and Resumption records but leave current session intact
-                this.updateFabric(failSafeContext.associatedFabric);
+                this.updateFabric(failsafeContext.associatedFabric);
             }
 
-            const operationalCredentialsCluster = failSafeContext.rootEndpoint.getClusterServer(
+            const operationalCredentialsCluster = rootEndpoint.getCluster(
                 OperationalCredentials.Cluster,
             );
-            operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(failSafeContext.associatedFabric);
-            operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(failSafeContext.associatedFabric);
+            operationalCredentialsCluster?.refresh("nocs", fabric);
+            operationalCredentialsCluster?.refresh("fabrics", fabric);
         }
 
         // 6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that was the subject of the AddNOC command. This SHALL remove all associations to that Fabric including all fabric-scoped data, and MAY possibly factory-reset the device depending on current device state. This SHALL only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
         // 7. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any entry in the Fabrics attribute.
         if (fabric !== undefined) {
-            const fabricIndex = failSafeContext.fabricBuilder.getFabricIndex();
+            const fabricIndex = failsafeContext.fabricBuilder.getFabricIndex();
             if (fabricIndex !== undefined) {
                 const fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
                 if (fabric !== undefined) {
-                    const basicInformationCluster = failSafeContext.rootEndpoint.getClusterServer(
+                    const basicInformationCluster = rootEndpoint.getCluster(
                         BasicInformation.Cluster,
                     );
-                    basicInformationCluster?.triggerLeaveEvent?.({ fabricIndex });
+                    basicInformationCluster?.trigger("leave", { fabricIndex });
 
                     await fabric.remove();
 
-                    const operationalCredentialsCluster = failSafeContext.rootEndpoint.getClusterServer(
+                    const operationalCredentialsCluster = rootEndpoint.getCluster(
                         OperationalCredentials.Cluster,
                     );
-                    operationalCredentialsCluster?.attributes.nocs.updatedLocalForFabric(fabric);
-                    operationalCredentialsCluster?.attributes.commissionedFabrics.updatedLocal();
-                    operationalCredentialsCluster?.attributes.fabrics.updatedLocalForFabric(fabric);
-                    operationalCredentialsCluster?.attributes.trustedRootCertificates.updatedLocal();
+                    operationalCredentialsCluster?.refresh("nocs", fabric);
+                    operationalCredentialsCluster?.refresh("commissionedFabrics", fabric);
+                    operationalCredentialsCluster?.refresh("fabrics", fabric);
+                    operationalCredentialsCluster?.refresh("trustedRootCertificates", fabric);
                 }
             }
         }
 
         // 8. Reset the Breadcrumb attribute to zero.
-        const generalCommissioningCluster = failSafeContext.rootEndpoint.getClusterServer(GeneralCommissioning.Cluster);
-        generalCommissioningCluster?.setBreadcrumbAttribute(0);
+        const generalCommissioningCluster = rootEndpoint.getCluster(GeneralCommissioning.Cluster);
+        await generalCommissioningCluster?.set("breadcrumb", 0);
 
         // TODO 9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the
         //  Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
@@ -427,7 +427,7 @@ export class MatterDevice {
         expiryLengthSeconds: number,
         maxCumulativeFailsafeSeconds: number,
         associatedFabric: Fabric | undefined,
-        endpoint: EndpointInterface,
+        rootEndpoint: EndpointStructuralAdapter,
     ) {
         if (this.failSafeContext === undefined) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
@@ -436,13 +436,13 @@ export class MatterDevice {
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
             // timer SHALL be armed for that duration.
-            this.failSafeContext = new FailSafeManager(
+            this.failSafeContext = new FailsafeManager(
                 this,
                 associatedFabric,
                 expiryLengthSeconds,
                 maxCumulativeFailsafeSeconds,
-                () => this.failSafeExpired(),
-                endpoint,
+                () => this.failSafeExpired(rootEndpoint),
+                rootEndpoint,
             );
             logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
         } else {
