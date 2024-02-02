@@ -48,7 +48,11 @@ function loadVariables(env: Environment) {
 function configureSignals(env: Environment) {
     const runtime = env.get(RuntimeService);
 
-    const interrupt = (): void => runtime.cancel();
+    const interrupt = (): void =>
+        void runtime
+            .cancel()
+            .then(() => process.exit(0))
+            .catch(() => process.exit(1));
     const diagnose = (): void => {
         process.on("SIGUSR2", env.diagnose);
         env.diagnose();

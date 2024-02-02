@@ -549,7 +549,12 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         readonly cluster: Cluster<any, any, any, any, any>,
         datasource: ClusterDatasource,
         getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
-        setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => boolean,
+        setter?: (
+            value: T,
+            session?: Session<MatterDevice>,
+            endpoint?: EndpointInterface,
+            message?: Message,
+        ) => boolean,
         validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
     ) {
         if (

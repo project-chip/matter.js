@@ -71,7 +71,7 @@ export namespace ClusterEvents {
               : never]?: EventObservable<E[K]>;
     };
 
-    export type EventObservable<E extends ClusterType.Event> = Observable<
+    export type EventObservable<E extends ClusterType.Event = ClusterType.Event> = Observable<
         [payload: TypeFromSchema<E["schema"]>, context: ActionContext]
     >;
 }

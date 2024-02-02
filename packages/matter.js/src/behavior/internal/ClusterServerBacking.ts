@@ -137,6 +137,11 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
             createChangeHandler(this, name);
         }
 
+        for (const name of elements.events) {
+            console.log("Register event", name);
+            createEventHandler(this, name);
+        }
+
         // Disable redundant command logging
         const commandServers = (clusterServer as ClusterServerObjInternal<any, any, any>)._commands;
         for (const name in commandServers) {
@@ -283,4 +288,26 @@ function createChangeHandler(backing: ClusterServerBehaviorBacking, name: string
             }
         });
     }
+}
+
+function createEventHandler(backing: ClusterServerBehaviorBacking, name: string) {
+    // Change handler requires an event source
+    const observable = (backing.events as any)[name] as ClusterEvents.EventObservable;
+    if (!observable) {
+        return;
+    }
+
+    if (backing.clusterServer === undefined) {
+        return;
+    }
+
+    // Also requires an attribute server
+    const eventServer = asClusterServerInternal(backing.clusterServer)._events[name];
+    if (!eventServer) {
+        return;
+    }
+
+    observable.on((payload, _context) => {
+        eventServer.triggerEvent(payload);
+    });
 }

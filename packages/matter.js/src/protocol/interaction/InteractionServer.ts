@@ -554,7 +554,13 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         );
                     }
 
-                    await this.writeAttribute(attribute, value, exchange.session, message);
+                    await this.writeAttribute(
+                        attribute,
+                        value,
+                        exchange.session,
+                        message,
+                        receivedWithinTimedInteraction,
+                    );
                 } catch (error: any) {
                     if (attributes.length === 1) {
                         // For Multi-Attribute-Writes we ignore errors
@@ -628,6 +634,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         value: any,
         session: Session<MatterDevice>,
         message: Message,
+        _receivedWithinTimedInteraction?: boolean,
     ) {
         attribute.set(value, session, message);
     }
@@ -741,7 +748,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger, message);
+            await subscriptionHandler.sendInitialReport(messenger, attribute =>
+                this.readAttribute(attribute, session, false, message),
+            );
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,
@@ -922,6 +931,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                                 commandFields ?? TlvNoArguments.encodeTlv(commandFields),
                                 message,
                                 endpoint,
+                                receivedWithinTimedInteraction,
                             ),
                         StatusResponseError,
                         async error => {
@@ -969,6 +979,7 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
         commandFields: any,
         message: Message,
         endpoint: EndpointInterface,
+        _receivedWithinTimedInteraction = false,
     ) {
         return command.invoke(session, commandFields, message, endpoint);
     }

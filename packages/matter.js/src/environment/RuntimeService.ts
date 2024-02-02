@@ -55,7 +55,7 @@ export class RuntimeService {
                             error = new Error("Unknown initialization error");
                         }
                         logger.error(error);
-                        this.cancel();
+                        this.cancel().catch(logger.error);
                         break;
 
                     case Lifecycle.Status.Destroyed:
@@ -91,7 +91,7 @@ export class RuntimeService {
      *
      * On cancel the runtime destroys active workers.
      */
-    cancel() {
+    async cancel() {
         if (this.#canceled) {
             return;
         }
@@ -99,7 +99,7 @@ export class RuntimeService {
         logger.notice("Shutting down");
 
         for (const worker of this.#workers) {
-            this.#disposeWorker(worker);
+            await this.#disposeWorker(worker);
         }
     }
 
@@ -123,7 +123,7 @@ export class RuntimeService {
     }
 
     async [Symbol.asyncDispose]() {
-        this.cancel();
+        await this.cancel();
         await this.inactive;
     }
 
@@ -174,8 +174,7 @@ export class RuntimeService {
         }
 
         // No workers except helpers; cancel helpers and exit
-        this.cancel();
-        this.inactive.then(() => this.#stopped.emit());
+        this.cancel().then(() => this.inactive.then(() => this.#stopped.emit()));
     }
 }
 
