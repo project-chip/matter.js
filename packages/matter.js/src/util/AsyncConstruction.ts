@@ -324,6 +324,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 error = newError;
             }
 
+            if (status === Lifecycle.Status.Destroyed) {
+                throw new ImplementationError("Cannot change status because destruction is final");
+            }
+
             switch (newStatus) {
                 case Lifecycle.Status.Inactive:
                     promise = undefined;
@@ -342,10 +346,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     break;
 
                 case Lifecycle.Status.Destroying:
-                    throw new ImplementationError("Cannot change status because destruction is ongoing");
+                    break;
 
                 case Lifecycle.Status.Destroyed:
-                    throw new ImplementationError("Cannot change status because destruction is final");
+                    break;
 
                 default:
                     started = ready = true;
