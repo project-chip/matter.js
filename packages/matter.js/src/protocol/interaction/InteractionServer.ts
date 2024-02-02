@@ -748,7 +748,9 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
 
         try {
             // Send initial data report to prime the subscription with initial data
-            await subscriptionHandler.sendInitialReport(messenger, message);
+            await subscriptionHandler.sendInitialReport(messenger, attribute =>
+                this.readAttribute(attribute, session, false, message),
+            );
         } catch (error: any) {
             logger.error(
                 `Subscription ${subscriptionId} for Session ${session.getId()}: Error while sending initial data reports`,

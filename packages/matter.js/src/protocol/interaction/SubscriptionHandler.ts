@@ -7,7 +7,6 @@
 import { MatterDevice } from "../../MatterDevice.js";
 import { AnyAttributeServer, FabricScopedAttributeServer } from "../../cluster/server/AttributeServer.js";
 import { EventServer } from "../../cluster/server/EventServer.js";
-import { Message } from "../../codec/MessageCodec.js";
 import { InternalError } from "../../common/MatterError.js";
 import { tryCatch, tryCatchAsync } from "../../common/TryCatchHandler.js";
 import { NodeId } from "../../datatype/NodeId.js";
@@ -465,7 +464,10 @@ export class SubscriptionHandler {
         }
     }
 
-    async sendInitialReport(messenger: InteractionServerMessenger, message: Message) {
+    async sendInitialReport(
+        messenger: InteractionServerMessenger,
+        readAttribute: (attribute: AnyAttributeServer<any>) => Promise<any>,
+    ) {
         this.updateTimer.stop();
 
         const { newAttributes, attributeErrors } = this.registerNewAttributes();
@@ -474,10 +476,16 @@ export class SubscriptionHandler {
             this.dataVersionFilters?.map(({ path, dataVersion }) => [clusterPathToId(path), dataVersion]) ?? [],
         );
 
-        const attributes = newAttributes.flatMap(({ path, attribute }) => {
+        const attributes = new Array<{
+            path: TypeFromSchema<typeof TlvAttributePath>;
+            value: any;
+            version: number;
+            schema: TlvSchema<any>;
+        }>();
+        for (const { path, attribute } of newAttributes) {
             // TODO: Maybe add try/catch when we add ACL handling and ignore the update if we can not get the value?
-            const { value, version } = attribute.getWithVersion(this.session, this.isFabricFiltered, message);
-            if (value === undefined) return [];
+            const { value, version } = await readAttribute(attribute);
+            if (value === undefined) continue;
 
             const { nodeId, endpointId, clusterId } = path;
 
@@ -485,10 +493,10 @@ export class SubscriptionHandler {
                 endpointId !== undefined && clusterId !== undefined
                     ? dataVersionFilterMap.get(clusterPathToId({ nodeId, endpointId, clusterId }))
                     : undefined;
-            if (versionFilterValue !== undefined && versionFilterValue === version) return [];
+            if (versionFilterValue !== undefined && versionFilterValue === version) continue;
 
-            return [{ path, value, version, schema: attribute.schema }];
-        });
+            attributes.push({ path, value, version, schema: attribute.schema });
+        }
         const attributeReportsPayload: AttributeReportPayload[] = attributes.map(
             ({ path, schema, value, version }) => ({
                 attributeData: {
