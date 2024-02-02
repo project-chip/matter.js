@@ -111,6 +111,9 @@ class ValanceLight extends OnOffLightRequirements.OnOffServer {
 const node = new ServerNode({
     id: "excelsior1000",
 
+    productDescription: {
+    },
+
     commissioning: {
         passcode: 20202021,
         discriminator: 3840,
@@ -138,3 +141,5 @@ const node = new ServerNode({
 });
 
 await node.run();
+
+node.offline("extract pairing code", agent => agent.commissioning.pairingCodes);
