@@ -97,6 +97,7 @@ export function OnlineContext(options: OnlineContext.Options) {
 export namespace OnlineContext {
     export type Options = {
         command?: boolean;
+        timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
     } & (
