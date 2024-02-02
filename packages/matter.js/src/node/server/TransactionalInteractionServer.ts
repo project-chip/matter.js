@@ -76,14 +76,16 @@ export class TransactionalInteractionServer extends InteractionServer {
         value: any,
         session: Session<MatterDevice>,
         message: Message,
+        timed = false,
     ) {
         return this.#transact(
             "Write",
             {
+                timed,
                 message,
                 session,
             },
-            () => super.writeAttribute(attribute, value, session, message),
+            () => super.writeAttribute(attribute, value, session, message, timed),
         );
     }
 
@@ -93,15 +95,17 @@ export class TransactionalInteractionServer extends InteractionServer {
         commandFields: any,
         message: Message,
         endpoint: EndpointInterface,
+        timed = false,
     ) {
         return this.#transact(
             "Invoke",
             {
                 command: true,
+                timed,
                 message,
                 session,
             },
-            () => super.invokeCommand(command, session, commandFields, message, endpoint),
+            () => super.invokeCommand(command, session, commandFields, message, endpoint, timed),
         );
     }
 
