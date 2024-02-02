@@ -367,7 +367,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         authorizeWrite,
         mayWrite,
 
-        authorizeInvoke(_session, location) {
+        authorizeInvoke(_session: AccessControl.Session, location: AccessControl.Location) {
             throw new SchemaImplementationError(location, "Permission denied: Invoke request but non-command schema");
         },
 
