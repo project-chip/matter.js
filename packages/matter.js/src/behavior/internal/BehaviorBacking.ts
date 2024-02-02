@@ -74,13 +74,7 @@ export abstract class BehaviorBacking {
      * Perform final teardown.  We might invoke {@link Behavior.destroy} multiple times but this method is final.
      */
     destroy(agent: Agent) {
-        return MaybePromise.then(
-            () => this.#invokeDestroy(agent),
-            () => {
-                this.#internal = this.#events = this.#options = this.#datasource = undefined;
-                this.construction.setStatus(Lifecycle.Status.Destroyed);
-            },
-        );
+        return this.construction.destroy(() => this.#invokeDestroy(agent));
     }
 
     /**

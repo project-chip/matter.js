@@ -29,7 +29,7 @@ export function NodeJsEnvironment() {
     const env = new Environment("default");
 
     loadVariables(env);
-    configureSignals(env);
+    configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
 
@@ -45,14 +45,10 @@ function loadVariables(env: Environment) {
     vars.addConfigStyle(loadConfigFile(vars));
 }
 
-function configureSignals(env: Environment) {
+function configureRuntime(env: Environment) {
     const runtime = env.get(RuntimeService);
 
-    const interrupt = (): void =>
-        void runtime
-            .cancel()
-            .then(() => process.exit(0))
-            .catch(() => process.exit(1));
+    const interrupt = (): void => void runtime.cancel();
     const diagnose = (): void => {
         process.on("SIGUSR2", env.diagnose);
         env.diagnose();
@@ -66,6 +62,14 @@ function configureSignals(env: Environment) {
     runtime.stopped.on(() => {
         process.off("SIGINT", interrupt);
         process.off("SIGUSR2", diagnose);
+
+        if (process.exitCode === undefined) {
+            process.exitCode = 0;
+        }
+    });
+
+    runtime.crashed.on(() => {
+        process.exitCode = 1;
     });
 }
 

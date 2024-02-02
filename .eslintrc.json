@@ -96,6 +96,9 @@
         // dependencies (elliptic and ansi-colors are two examples)
         "import/default": "off",
 
+        // TS I believe takes care of this for us, and the plugin does not understand TS object/namespace merges
+        "import/export": "off",
+
         // Related to import/default, this generates warnings when we use properties of the default export when eslint
         // thinks we should be using the named export.  In some cases it isn't even possible to do it the way eslint
         // wants us to (e.g. you can't do "import { static } from express because "static" is a reserved word.).  In

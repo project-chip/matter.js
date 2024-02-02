@@ -240,7 +240,7 @@ export class Behaviors {
      * Destroy all behaviors that are initialized (have backings present).
      */
     async [Symbol.asyncDispose]() {
-        this.#part.offline("dispose-behaviors", async agent => {
+        await this.#part.offline("dispose-behaviors", async agent => {
             for (const id in this.#backings) {
                 await this.#backings[id].destroy(agent);
             }

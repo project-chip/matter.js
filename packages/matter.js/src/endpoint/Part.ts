@@ -334,7 +334,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     async [Symbol.asyncDispose]() {
         await this.construction.destroy(async () => {
             await this.behaviors[Symbol.asyncDispose]();
-            this.lifecycle.change(PartLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
     }

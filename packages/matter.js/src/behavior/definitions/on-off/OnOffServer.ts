@@ -63,7 +63,7 @@ export class OnOffServer extends Base {
             this.state.globalSceneControl = false;
         }
         this.off();
-    };
+    }
 
     override onWithRecallGlobalScene() {
         if (this.state.globalSceneControl) {
@@ -74,7 +74,7 @@ export class OnOffServer extends Base {
         if (this.state.onTime === 0) {
             this.state.offWaitTime = 0;
         }
-    };
+    }
 
     /**
      * This method in the default implementation is implemented to use the on/off methods when timed actions should
@@ -98,7 +98,7 @@ export class OnOffServer extends Base {
             this.timedOnTimer.start();
         }
         this.on();
-    };
+    }
 
     protected get timedOnTimer() {
         let timer = this.internal.timedOnTimer;

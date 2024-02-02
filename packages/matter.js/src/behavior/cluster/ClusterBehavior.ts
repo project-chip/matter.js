@@ -274,8 +274,8 @@ export namespace ClusterBehavior {
                 | keyof ClusterInterface.MethodsOf<ClusterInterface.InterfaceOf<B>, ClusterOf<B>>
             > &
             // Add command methods
-            ClusterInterface.MethodsOf<I, C> & // Cluster-specific members
-            {
+            ClusterInterface.MethodsOf<I, C> & {
+                // Cluster-specific members
                 /**
                  * The implemented cluster.
                  */

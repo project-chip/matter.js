@@ -17,24 +17,20 @@ describe("GeneratedClass", () => {
     });
 
     it("sets static property", () => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect((GeneratedClass({ staticProperties: { foo: "bar" } }) as any).foo).equals("bar");
     });
 
     it("sets static descriptor", () => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect((GeneratedClass({ staticDescriptors: { foo: { value: "bar" } } }) as any).foo).equals("bar");
     });
 
     it("inherits static property", () => {
         const Base = GeneratedClass({ staticProperties: { foo: "bar" } });
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect((GeneratedClass({ base: Base }) as any).foo).equals("bar");
     });
 
     it("inherits static descriptor", () => {
         const Base = GeneratedClass({ staticDescriptors: { foo: { value: "bar" } } });
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect((GeneratedClass({ base: Base }) as any).foo).equals("bar");
     });
 
@@ -47,7 +43,6 @@ describe("GeneratedClass", () => {
 
     it("requires new", () => {
         const Klass = GeneratedClass({});
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         expect(() => (Klass as any)()).throws();
     });
 

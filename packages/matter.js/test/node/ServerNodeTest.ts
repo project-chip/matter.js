@@ -39,4 +39,8 @@ describe("ServerNode", () => {
     it("decommissions", () => {
         // TODO
     });
+
+    it("advertises correctly", () => {
+        // TODO
+    });
 });
