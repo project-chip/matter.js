@@ -108,9 +108,6 @@ export class RuntimeService {
         logger.notice("Shutting down");
 
         for (const worker of this.#workers) {
-            // This may be a better way to go, need to
-            // await this.#disposeWorker(worker);
-
             const disposal = this.#disposeWorker(worker);
             if (disposal) {
                 this.addWorker(disposal);
@@ -146,7 +143,7 @@ export class RuntimeService {
         return "Runtime";
     }
 
-    async #disposeWorker(worker: RuntimeService.Worker) {
+    #disposeWorker(worker: RuntimeService.Worker) {
         if (this.#disposed.has(worker)) {
             return;
         }
