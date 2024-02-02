@@ -21,7 +21,7 @@ import type { ClusterBehavior } from "./ClusterBehavior.js";
  * Create a non-functional instance of a {@link Behavior} for introspection purposes.
  */
 export function introspectionInstanceOf(type: Behavior.Type) {
-    return new (type as unknown as new () => Record<string, Function>)();
+    return new (type as unknown as new () => Record<string, (...args: any[]) => any>)();
 }
 
 /**

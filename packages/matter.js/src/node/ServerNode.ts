@@ -24,7 +24,7 @@ import { ServerStore } from "./server/storage/ServerStore.js";
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
     constructor(type?: T, options?: Node.Options<T>);
 
-    constructor(config: Node.Options<T>);
+    constructor(config: Partial<Node.Configuration<T>>);
 
     constructor(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
         super(Node.nodeConfigFor(ServerNode.RootEndpoint as T, definition, options));

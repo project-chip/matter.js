@@ -230,7 +230,7 @@ describe("Transaction", () => {
         p.expect("rollback");
     });
 
-    describe("keeps its promises", async () => {
+    describe("keeps its promises", () => {
         test("after commit", async () => {
             join();
 
@@ -284,8 +284,8 @@ describe("Transaction", () => {
         });
     });
 
-    describe("locks and unlocks resource", async () => {
-        describe("asynchronously", async () => {
+    describe("locks and unlocks resource", () => {
+        describe("asynchronously", () => {
             test("on becoming exclusive & committing", async () => {
                 join();
 
@@ -315,7 +315,7 @@ describe("Transaction", () => {
             });
         });
 
-        describe("synchronously", async () => {
+        describe("synchronously", () => {
             test("on becoming exclusive & rolling back", async () => {
                 join();
 
@@ -346,8 +346,8 @@ describe("Transaction", () => {
         });
     });
 
-    describe("blocking locks", async () => {
-        describe("synchronously", async () => {
+    describe("blocking locks", () => {
+        describe("synchronously", () => {
             test2("throws on becoming exclusive", async () => {
                 const resource = new TestResource();
 
@@ -375,7 +375,7 @@ describe("Transaction", () => {
             });
         });
 
-        describe("asynchronously", async () => {
+        describe("asynchronously", () => {
             test2("waits on becoming exclusive", async () => {
                 const resource = new TestResource();
 

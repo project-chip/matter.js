@@ -374,7 +374,7 @@ function dataEnforcerFor(schema: Schema): AccessControl {
         mayInvoke() {
             return false;
         },
-    });
+    } satisfies AccessControl);
 }
 
 function commandEnforcerFor(schema: Schema): AccessControl {

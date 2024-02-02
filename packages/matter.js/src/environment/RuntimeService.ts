@@ -25,6 +25,7 @@ export class RuntimeService {
     #canceled = false;
     #started = Observable<[]>();
     #stopped = Observable<[]>();
+    #crashed = Observable<[cause: any]>();
 
     constructor(environment: Environment) {
         environment.set(RuntimeService, this);
@@ -54,8 +55,7 @@ export class RuntimeService {
                         if (!error) {
                             error = new Error("Unknown initialization error");
                         }
-                        logger.error(error);
-                        this.cancel().catch(logger.error);
+                        this.#crash(error);
                         break;
 
                     case Lifecycle.Status.Destroyed:
@@ -64,7 +64,9 @@ export class RuntimeService {
                 }
             });
         } else if (worker.then) {
-            Promise.resolve(worker).finally(() => this.#disposeWorker(worker));
+            Promise.resolve(worker)
+                .catch(error => this.#crash(error))
+                .finally(() => this.#disposeWorker(worker));
         }
     }
 
@@ -82,6 +84,13 @@ export class RuntimeService {
         return this.#stopped;
     }
 
+    /**
+     * Emits when a worker experiences an unhandled error.
+     */
+    get crashed() {
+        return this.#crashed;
+    }
+
     static [Environmental.create](environment: Environment) {
         return new this(environment);
     }
@@ -91,7 +100,7 @@ export class RuntimeService {
      *
      * On cancel the runtime destroys active workers.
      */
-    async cancel() {
+    cancel() {
         if (this.#canceled) {
             return;
         }
@@ -99,7 +108,13 @@ export class RuntimeService {
         logger.notice("Shutting down");
 
         for (const worker of this.#workers) {
-            await this.#disposeWorker(worker);
+            // This may be a better way to go, need to
+            // await this.#disposeWorker(worker);
+
+            const disposal = this.#disposeWorker(worker);
+            if (disposal) {
+                this.addWorker(disposal);
+            }
         }
     }
 
@@ -123,7 +138,7 @@ export class RuntimeService {
     }
 
     async [Symbol.asyncDispose]() {
-        await this.cancel();
+        this.cancel();
         await this.inactive;
     }
 
@@ -137,6 +152,8 @@ export class RuntimeService {
         }
 
         const dispose = () => {
+            this.#disposed.add(worker);
+
             if (worker[Symbol.asyncDispose]) {
                 this.#disposed.add(worker);
                 return Promise.resolve(worker[Symbol.asyncDispose]?.()).finally(() => this.#deleteWorker(worker));
@@ -144,9 +161,11 @@ export class RuntimeService {
 
             if (worker[Symbol.dispose]) {
                 worker[Symbol.dispose]?.();
+                this.#deleteWorker(worker);
+                return;
             }
 
-            this.#deleteWorker(worker);
+            // No means of cancellation so we just need to wait for worker to exit
         };
 
         if (worker.construction) {
@@ -174,7 +193,14 @@ export class RuntimeService {
         }
 
         // No workers except helpers; cancel helpers and exit
-        this.cancel().then(() => this.inactive.then(() => this.#stopped.emit()));
+        this.cancel();
+        this.inactive.then(() => this.#stopped.emit());
+    }
+
+    #crash(cause: Error) {
+        logger.error(cause);
+        this.crashed.emit(cause);
+        this.cancel();
     }
 }
 

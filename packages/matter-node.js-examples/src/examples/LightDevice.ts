@@ -46,9 +46,8 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 // Physical devices appear as "nodes" on a Matter network.  As a device implementer you use a NodeServer to bring a
 // device online.
 //
-// Note there are a large number of options to NodeServer that we are allowing to take default values here.
-//
-// TODO - reference more verbose example
+// Note there are a large number of options to NodeServer that we are allowing to take default values here.  See
+// CompositeWindowCovering.ts for a more detailed example.
 const server = new ServerNode();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.

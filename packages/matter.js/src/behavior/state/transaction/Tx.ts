@@ -187,7 +187,6 @@ class Tx implements Transaction {
             const locked = set.acquireLocksSync();
             this.#locksChanged(locked);
         } else if (this.#status !== Status.Shared) {
-            debugger;
             throw new TransactionFlowError(`Cannot add resources to transaction that is ${this.status}`);
         }
 
