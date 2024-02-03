@@ -246,6 +246,14 @@ export abstract class Behavior {
         }) as unknown as This;
     }
 
+    /**
+     * Explicitly reference other {@link Behavior}s as dependencies, ensuring this behavior is destroyed first.
+     *
+     * This probably won't be commonly necessary.  If it is we can instrument Agent to collect dependencies
+     * automatically.
+     */
+    static dependencies?: Iterable<Behavior.Type>;
+
     get [Resource.reference]() {
         return (this as unknown as Internal)[BACKING].datasource;
     }
@@ -305,6 +313,7 @@ export namespace Behavior {
         readonly early: boolean;
         readonly versioning: boolean;
         readonly supervisor: RootSupervisor;
+        readonly dependencies?: Iterable<Behavior.Type>;
         readonly State: new () => {};
         readonly Internal: new () => {};
         readonly Events: typeof EventEmitter;

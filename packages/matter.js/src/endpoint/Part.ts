@@ -190,7 +190,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         }
 
         if (this.lifecycle.isInstalled && this.owner instanceof Part) {
-            this.owner.parts.assertIdAvailable(id);
+            this.owner.parts.assertIdAvailable(id, this);
         }
 
         this.#id = id;
@@ -371,7 +371,11 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     #initialize() {
         return MaybePromise.then(
             // Initialize myself and behaviors in a single offline transaction
-            () => this.offline(`initialize<${this}>`, agent => this.initialize(agent)),
+            () => OfflineContext.act(
+                `initialize<${this}>`,
+                context => this.initialize(context.agentFor(this)),
+                { unversionedVolatiles: true },
+            ),
 
             // Update lifecycle indicating initialization is complete
             () => this.lifecycle.change(PartLifecycle.Change.Ready),

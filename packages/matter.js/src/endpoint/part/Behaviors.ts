@@ -7,6 +7,7 @@
 import { Behavior } from "../../behavior/Behavior.js";
 import type { ClusterBehavior } from "../../behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../behavior/context/ActionContext.js";
+import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { DescriptorServer } from "../../behavior/definitions/descriptor/DescriptorServer.js";
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Val } from "../../behavior/state/Val.js";
@@ -240,19 +241,47 @@ export class Behaviors {
      * Destroy all behaviors that are initialized (have backings present).
      */
     async [Symbol.asyncDispose]() {
-        await this.#part.offline("dispose-behaviors", async agent => {
-            for (const id in this.#backings) {
-                await this.#backings[id].destroy(agent);
+        const dispose = async (context: ActionContext) => {
+            const agent = context.agentFor(this.#part);
+
+            let destroyNow = new Set(Object.keys(this.#backings));
+            while (destroyNow.size) {
+                for (const key in this.#backings) {
+                    const dependencies = this.#backings[key].type.dependencies;
+
+                    if (!dependencies) {
+                        continue;
+                    }
+
+                    for (const type of dependencies) {
+                        destroyNow.delete(type.id);
+                    }
+
+                    if (!destroyNow.size) {
+                        throw new ImplementationError("Cannot destroy behaviors due to circular dependency");
+                    }
+
+                    for (const id in destroyNow) {
+                        await this.#backings[id].destroy(agent);
+                        delete this.#backings[id];
+                    }
+                }
+
+                destroyNow = new Set(Object.keys(this.#backings));
             }
 
-            this.#backings = {};
-
-            // Commit any state changes that occurred during destructino
+            // Commit any state changes that occurred during destruction
             const transaction = agent.context.transaction;
             if (transaction.status !== Transaction.Status.Exclusive) {
                 await transaction.commit();
             }
-        });
+        }
+
+        await OfflineContext.act(
+            "dispose-behaviors",
+            dispose,
+            { unversionedVolatiles: true },
+        );
     }
 
     /**
@@ -305,7 +334,11 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        this.#part.offline("behavior-offline-activation", agent => this.activate(type, agent));
+        OfflineContext.act(
+            "behavior-offline-activation",
+            context => this.activate(type, context.agentFor(this.#part)),
+            { unversionedVolatiles: true }
+        );
     }
 
     /**

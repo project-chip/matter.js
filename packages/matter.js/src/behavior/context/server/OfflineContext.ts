@@ -29,13 +29,13 @@ export namespace OfflineContext {
      *
      * Offline context is very permissive.  You should use carefully.
      */
-    export function act<T>(purpose: string, actor: (context: ActionContext) => MaybePromise<T>): MaybePromise<T> {
+    export function act<T>(purpose: string, actor: (context: ActionContext) => MaybePromise<T>, options?: OfflineContext.Options): MaybePromise<T> {
         const id = nextInternalId;
         nextInternalId = (nextInternalId + 1) % 65535;
         const via = Diagnostic.via(`${purpose}#${id.toString(16)}`);
 
         return Transaction.act(via, transaction => {
-            const context = createOfflineContext(transaction);
+            const context = createOfflineContext(transaction, options);
 
             return actor(context);
         });
@@ -51,12 +51,21 @@ export namespace OfflineContext {
      * Write operations will throw an error with this context.
      */
     export const ReadOnly = createOfflineContext(ReadOnlyTransaction);
+
+    /**
+     * {@link OfflineContext} configuration options.
+     */
+    export interface Options {
+        unversionedVolatiles?: boolean;
+    }
 }
 
-function createOfflineContext(transaction: Transaction) {
+function createOfflineContext(transaction: Transaction, options?: OfflineContext.Options) {
     let agents: undefined | ContextAgents;
 
     const context = Object.freeze({
+        ...options,
+
         // Disable access level enforcement
         offline: true,
 

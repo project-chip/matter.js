@@ -65,6 +65,12 @@ export namespace ValueSupervisor {
          * The transaction used for isolating state changes associated with this session.
          */
         transaction: Transaction;
+
+        /**
+         * If this is true, only changes to non-volatile values trigger version updates.  This is used for setup and
+         * teardown where there is no visibility to peers.
+         */
+        unversionedVolatiles?: boolean;
     }
 
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;
