@@ -428,7 +428,8 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             }
         }
 
-        if (changes) {
+        // Increment version if necessary
+        if (changes && (!session.unversionedVolatiles || changes.persistent)) {
             // We don't revert the version number on rollback.  Should be OK
             incrementVersion();
 

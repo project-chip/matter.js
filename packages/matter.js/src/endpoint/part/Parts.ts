@@ -102,9 +102,9 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     /**
      * Confirm availability of an ID amongst the part's children.
      */
-    assertIdAvailable(id: string) {
+    assertIdAvailable(id: string, part: Part) {
         const other = this.get(id);
-        if (other) {
+        if (other && other !== part) {
             throw new IdentityConflictError(`${other} is already defined; part IDs must be unique within parent`);
         }
     }
@@ -114,7 +114,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
      */
     #adoptPart(child: Part) {
         if (child.lifecycle.hasId) {
-            this.assertIdAvailable(child.id);
+            this.assertIdAvailable(child.id, child);
         }
 
         // Insertion validation is only possible in a fully configured node.

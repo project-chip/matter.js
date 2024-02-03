@@ -14,6 +14,7 @@ import { Behavior } from "../Behavior.js";
 import type { BehaviorBacking } from "../internal/BehaviorBacking.js";
 import type { RootSupervisor } from "../supervision/RootSupervisor.js";
 import { Schema } from "../supervision/Schema.js";
+import { NetworkBehavior } from "../system/networking/NetworkBehavior.js";
 import { createType, type ClusterOf } from "./ClusterBehaviorUtil.js";
 import type { ClusterEvents } from "./ClusterEvents.js";
 import { ClusterInterface } from "./ClusterInterface.js";
@@ -75,6 +76,11 @@ export class ClusterBehavior extends Behavior {
      * Cluster data must be versioned.
      */
     static override readonly versioning = true;
+
+    /**
+     * Keep networking alive until I'm destroyed.
+     */
+    static override readonly dependencies = [ NetworkBehavior ];
 
     constructor(agent: Agent, backing: BehaviorBacking) {
         super(agent, backing);
@@ -204,6 +210,7 @@ export namespace ClusterBehavior {
         readonly versioning: boolean;
         readonly defaults: ClusterState.Type<C, B>;
         readonly supervisor: RootSupervisor;
+        readonly dependencies?: Iterable<Behavior.Type>;
         supports: typeof ClusterBehavior.supports;
 
         // Prior to TS 5.4 could do this.  Sadly typing no longer carries through on these...  This["cluster"] reverts

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "@project-chip/matter-node.js";
 import { WindowCovering } from "@project-chip/matter-node.js/cluster";
 import { StatusCode, StatusResponseError } from "@project-chip/matter-node.js/interaction";
 import { GoToLiftPercentageRequest, WindowCoveringServer } from "@project-chip/matter.js/behaviors/window-covering";
