@@ -23,18 +23,6 @@ export class IdentityService {
 
     constructor(node: Part) {
         this.#node = node;
-
-        const acquireIndex = () => {
-            this.#partsById = OfflineContext.ReadOnly.agentFor(node).get(IndexBehavior).partsById;
-        };
-
-        // Obtain the part index used for validating identity availability.  If the root part isn't yet initialized we
-        // don't need to validate identities anyway
-        if (node.lifecycle.isReady) {
-            acquireIndex();
-        } else {
-            node.lifecycle.ready.on(acquireIndex);
-        }
     }
 
     /**
@@ -52,6 +40,9 @@ export class IdentityService {
         if (this.#node.lifecycle.hasNumber && this.#node.number === number) {
             other = this.#node;
         } else {
+            if (this.#partsById === undefined) {
+                this.#partsById = OfflineContext.ReadOnly.agentFor(this.#node).get(IndexBehavior).partsById;
+            }
             other = this.#partsById?.[number];
         }
         if (other && other !== part) {

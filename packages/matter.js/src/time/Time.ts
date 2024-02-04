@@ -66,6 +66,9 @@ export interface Timer {
     /** Name (diagnostics) */
     name: string;
 
+    /** Set to true to indicate the timer should not prevent program exit */
+    utility: boolean;
+
     /** System ID (diagnostics) */
     systemId: unknown;
 

@@ -610,17 +610,6 @@ export class CommissioningServer extends MatterNode {
 
         // TODO adjust later and refactor MatterDevice
         this.deviceInstance = new MatterDevice(
-            {
-                productDescription: this.productDescription,
-                passcode: this.passcode,
-                discriminator: this.discriminator,
-                flowType: this.flowType,
-                additionalBleAdvertisementData: this.options.additionalBleAdvertisementData,
-                automaticAnnouncement: !this.options.delayedAnnouncement,
-
-                // We don't use this
-                ble: false,
-            },
             // this.options.deviceName,
             // DeviceTypeId(this.options.deviceType),
             // vendorId,
@@ -629,6 +618,16 @@ export class CommissioningServer extends MatterNode {
             // this.passcode,
             this.storage.createContext("SessionManager"),
             this.storage.createContext("FabricManager"),
+            () => ({
+                productDescription: this.productDescription,
+                passcode: this.passcode,
+                discriminator: this.discriminator,
+                flowType: this.flowType,
+                additionalBleAdvertisementData: this.options.additionalBleAdvertisementData,
+
+                // We don't use this
+                ble: false,
+            }),
             (fabricIndex: FabricIndex) => {
                 const fabricsCount = this.deviceInstance?.getFabrics().length ?? 0;
                 if (fabricsCount === 1) {

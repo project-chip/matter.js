@@ -16,7 +16,7 @@ export namespace Lifecycle {
         Inactive = "inactive",
         Initializing = "initializing",
         Active = "active",
-        Incapacitated = "incapacitated",
+        Crashed = "crashed",
         Destroying = "destroying",
         Destroyed = "destroyed",
     }
@@ -44,8 +44,11 @@ export namespace Lifecycle {
             case Status.Initializing:
                 throw new UninitializedDependencyError(description, "is still initializing");
 
-            case Status.Incapacitated:
-                throw new IncapacitatedDependencyError(description, "initialization failed");
+            case Status.Crashed:
+                throw new CrashedDependencyError(description, "initialization failed");
+
+            case Status.Destroying:
+                throw new DestroyedDependencyError(description, "is undergoing destruction");
 
             case Status.Destroyed:
                 throw new DestroyedDependencyError(description, "was destroyed");
@@ -78,9 +81,9 @@ export class UnsupportedDependencyStatusError extends DependencyLifecycleError {
 export class UninitializedDependencyError extends DependencyLifecycleError {}
 
 /**
- * Thrown for actions that cannot be performed because dependency is incapacitated.
+ * Thrown for actions that cannot be performed because dependency crashed.
  */
-export class IncapacitatedDependencyError extends DependencyLifecycleError {}
+export class CrashedDependencyError extends DependencyLifecycleError {}
 
 /**
  * Thrown for actions that cannot be performed because a dependency has been destroyed.

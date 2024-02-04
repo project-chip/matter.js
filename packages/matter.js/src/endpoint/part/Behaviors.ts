@@ -94,7 +94,7 @@ export class Behaviors {
                 this.activate(type, agent);
             }
         }
-
+console.log(`>>> ${this.#part}`);
         // If all behaviors are initialized then we complete synchronously
         const initializing = this.#initializing;
         if (!initializing?.size) {
@@ -157,11 +157,13 @@ export class Behaviors {
      */
     createSync(type: Behavior.Type, agent: Agent) {
         const behavior = this.createMaybeAsync(type, agent);
+
         if (MaybePromise.is(behavior)) {
             throw new ImplementationError(
                 `Synchronous access to ${this.#part}.${type.id} is impossible because it is still initializing`,
             );
         }
+
         return behavior;
     }
 
@@ -173,7 +175,7 @@ export class Behaviors {
             () => this.createMaybeAsync(type, agent),
             undefined,
             e => {
-                // We log the actual error produced by the backing.  Here we want the error to present as incapacitated
+                // We log the actual error produced by the backing.  Here we want the error to present as crashed
                 // access with a proper stack trace
                 const backing = this.#backings[type.id];
                 if (!backing) {
@@ -198,8 +200,7 @@ export class Behaviors {
             return backing.construction
                 .then(() => backing.createBehavior(agent, type))
                 .catch(() => {
-                    // The backing logs the actual error so here the error should just throw "unavailable due to
-                    // initialization error"
+                    // The backing logs the actual error so here the error should just throw "unavailable due to crash"
                     backing.construction.assert(backing.toString());
 
                     // Shouldn't get here but catch result type needs to be a behavior
@@ -217,7 +218,7 @@ export class Behaviors {
      *
      * Semantically identical to createAsync() but does not return a {@link Promise} or throw an error.
      *
-     * Behaviors that fail initialization will be marked as incapacitated in {@link status}.
+     * Behaviors that fail initialization will be marked with crashed {@link status}.
      */
     activate(type: Behavior.Type, agent: Agent) {
         let backing = this.#backings[type.id];
@@ -260,11 +261,11 @@ export class Behaviors {
                     if (!destroyNow.size) {
                         throw new ImplementationError("Cannot destroy behaviors due to circular dependency");
                     }
+                }
 
-                    for (const id in destroyNow) {
-                        await this.#backings[id].destroy(agent);
-                        delete this.#backings[id];
-                    }
+                for (const id of destroyNow) {
+                    await this.#backings[id].destroy(agent);
+                    delete this.#backings[id];
                 }
 
                 destroyNow = new Set(Object.keys(this.#backings));
@@ -272,7 +273,7 @@ export class Behaviors {
 
             // Commit any state changes that occurred during destruction
             const transaction = agent.context.transaction;
-            if (transaction.status !== Transaction.Status.Exclusive) {
+            if (transaction.status === Transaction.Status.Exclusive) {
                 await transaction.commit();
             }
         }
@@ -335,7 +336,7 @@ export class Behaviors {
 
     #activateLate(type: Behavior.Type) {
         OfflineContext.act(
-            "behavior-offline-activation",
+            "behavior-late-activation",
             context => this.activate(type, context.agentFor(this.#part)),
             { unversionedVolatiles: true }
         );
@@ -346,6 +347,10 @@ export class Behaviors {
      * otherwise.
      */
     #backingFor(type: Behavior.Type) {
+        if (this.#part.construction.status !== Lifecycle.Status.Initializing) {
+            this.#part.construction.assert(`Cannot access ${this.#part}.${type.id} because part is`);
+        }
+
         let backing = this.#backings[type.id];
         if (!backing) {
             this.#activateLate(type);

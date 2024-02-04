@@ -7,6 +7,7 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
+import { InternalError } from "../../../common/MatterError.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { PartServer } from "../../../endpoint/PartServer.js";
@@ -62,8 +63,18 @@ export class ServerRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
-    advertise() {
-        this.#matterDevice?.announce();
+    async startAdvertising() {
+        if (!this.#matterDevice) {
+            throw new InternalError("Server runtime device instance is missing");
+        }
+        await this.#matterDevice.startAnnouncement();
+    }
+
+    async advertiseNow() {
+        if (!this.#matterDevice) {
+            throw new InternalError("Server runtime device instance is missing");
+        }
+        await this.#matterDevice.announce(true);
     }
 
     /**
@@ -173,7 +184,7 @@ export class ServerRuntime extends NetworkRuntime {
         return this.owner.state.operationalCredentials.commissionedFabrics;
     }
 
-    protected override get operationalPort() {
+    override get operationalPort() {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
@@ -182,18 +193,16 @@ export class ServerRuntime extends NetworkRuntime {
 
         this.#interactionServer = new TransactionalInteractionServer(this.owner);
 
-        const commissioningConfig = {
-            ...this.owner.state.commissioning,
-            productDescription: this.owner.state.productDescription,
-            ble: !!this.owner.state.network.ble,
-        };
-
         const { sessionStorage, fabricStorage } = this.owner.env.get(ServerStore);
 
         this.#matterDevice = new MatterDevice(
-            commissioningConfig,
             sessionStorage,
             fabricStorage,
+            () => ({
+                ...this.owner.state.commissioning,
+                productDescription: this.owner.state.productDescription,
+                ble: !!this.owner.state.network.ble,
+            }),
             () => {
                 // "commissioningChangeCallback" - CommissioningBehavior handles this
             },
@@ -206,7 +215,6 @@ export class ServerRuntime extends NetworkRuntime {
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
-        await this.#matterDevice.start();
     }
 
     override async [Symbol.asyncDispose]() {

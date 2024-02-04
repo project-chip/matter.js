@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../../common/Lifecycle.js";
-import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import type { Part } from "../../endpoint/Part.js";
 import { Logger } from "../../log/Logger.js";
@@ -81,7 +80,7 @@ export abstract class BehaviorBacking {
      * Set state from options and invoke {@link Behavior.initialize}.
      *
      * This is an optional extension point for derivatives.  Errors thrown here are recorded and place the behavior into
-     * incapacitated state.
+     * crashed state.
      */
     protected invokeInitializer(behavior: Behavior, options?: Behavior.Options) {
         return behavior.initialize(options);
@@ -205,25 +204,8 @@ export abstract class BehaviorBacking {
      * Invoke {@link Behavior.destroy} to clean up application logic.
      */
     #invokeDestroy(agent: Agent): MaybePromise {
-        switch (this.#construction.status) {
-            case Lifecycle.Status.Active:
-                break;
-
-            case Lifecycle.Status.Initializing:
-                // If the behavior is still initializing its probably stuck.  Throwing isn't a solution but probably
-                // better than destroying while still initializing
-                throw new InternalError(`Behavior ${this} destroyed while still initializing`);
-
-            case Lifecycle.Status.Destroyed:
-                // Destroyed state is permanent; we can't recover
-                throw new InternalError(`Behavior ${this} already destroyed`);
-
-            default:
-                // A little sketchy if incapacitated (previous initialization error) but we'll take our chances
-                return;
-        }
-
-        const behavior = (agent as unknown as Record<string, Behavior>)[this.type.id];
+        // Do not use Agent.get because backing is in "destroying" state
+        const behavior = this.createBehavior(agent, this.type);
 
         let result = MaybePromise.then(
             () => {

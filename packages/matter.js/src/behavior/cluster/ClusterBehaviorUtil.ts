@@ -232,6 +232,7 @@ function createDefaultCommandDescriptors(cluster: ClusterType, base: Behavior.Ty
         if (!instance[name]) {
             result[name] = {
                 value: Behavior.unimplemented,
+                writable: true,
             };
         }
     }

@@ -58,8 +58,3 @@ server.add(ExampleLight);
 // Note that you may serve multiple nodes from a single process.  We only have one, however, so we can use the run()
 // method of the node.
 await server.run();
-
-// TODO - Networking needs reference counting on internal caches or something. Currently process won't exit without
-// manually closing because cache timer will remain resident.
-import { Network } from "@project-chip/matter.js/net";
-Network.get().close();

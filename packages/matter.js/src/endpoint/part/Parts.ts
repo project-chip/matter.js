@@ -27,8 +27,8 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
 
     constructor(part: Part) {
         this.#part = part;
-        const change = this.#part.lifecycle.changed;
-        this.#bubbleChange = (type, part) => change.emit(type, part);
+        const lifecycle = this.#part.lifecycle;
+        this.#bubbleChange = (type, part) => lifecycle.bubble(type, part);
 
         // Update state in response to mutation of state.parts
         this.#children.added.on(child => this.#adoptPart(child));
@@ -69,6 +69,10 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         return this.#children.has(this.#partFor(child));
     }
 
+    get areReady() {
+        return [ ...this.#children ].findIndex(child => !child.lifecycle.isTreeReady) === -1;
+    }
+
     indexOf(child: Part | Agent) {
         const part = this.#partFor(child);
         let index = 0;
@@ -106,6 +110,12 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         const other = this.get(id);
         if (other && other !== part) {
             throw new IdentityConflictError(`${other} is already defined; part IDs must be unique within parent`);
+        }
+    }
+
+    async [Symbol.asyncDispose]() {
+        for (const part of this) {
+            await part[Symbol.asyncDispose]();
         }
     }
 

@@ -7,14 +7,11 @@
 import { ImplementationError } from "../../../common/MatterError.js";
 import { Environment } from "../../../environment/Environment.js";
 import { StorageService } from "../../../environment/StorageService.js";
-import { Logger } from "../../../log/Logger.js";
 import { EventHandler } from "../../../protocol/interaction/EventHandler.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { StorageManager } from "../../../storage/StorageManager.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { PartStoreFactory, PartStoreService } from "./PartStoreService.js";
-
-export const logger = Logger.get("NodeStore");
 
 /**
  * Non-volatile state management for a {@link NodeServer}.

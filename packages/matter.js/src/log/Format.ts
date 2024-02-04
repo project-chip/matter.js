@@ -72,7 +72,7 @@ const LifecycleIcons = {
     [Lifecycle.Status.Inactive]: "💤",
     [Lifecycle.Status.Initializing]: "⌛",
     [Lifecycle.Status.Active]: "✔",
-    [Lifecycle.Status.Incapacitated]: "✘",
+    [Lifecycle.Status.Crashed]: "✘",
     [Lifecycle.Status.Destroying]: "☠︎",
     [Lifecycle.Status.Destroyed]: "☠︎",
 };
@@ -188,7 +188,7 @@ const Styles = {
     inactive: { color: "gray" },
     initializing: { color: "yellow" },
     active: { color: "green" },
-    incapacitated: { color: "red" },
+    crashed: { color: "red" },
     destroying: { color: "gray" },
     destroyed: { color: "gray" },
     via: { color: "magenta" },
@@ -529,7 +529,7 @@ function renderDiagnostic(value: unknown, formatter: Formatter): string {
         case Lifecycle.Status.Inactive:
         case Lifecycle.Status.Initializing:
         case Lifecycle.Status.Active:
-        case Lifecycle.Status.Incapacitated:
+        case Lifecycle.Status.Crashed:
         case Lifecycle.Status.Destroyed:
             return formatter.status(presentation, () => renderDiagnostic(value, formatter));
 
