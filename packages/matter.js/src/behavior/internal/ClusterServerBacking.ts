@@ -138,7 +138,6 @@ export class ClusterServerBehaviorBacking extends ServerBehaviorBacking {
         }
 
         for (const name of elements.events) {
-            console.log("Register event", name);
             createEventHandler(this, name);
         }
 

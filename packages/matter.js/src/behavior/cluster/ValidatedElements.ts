@@ -80,20 +80,20 @@ export class ValidatedElements {
             return;
         }
 
-        let incapacitated = false;
+        let crashed = false;
 
         for (const error of this.errors) {
             const diagnostic = Diagnostic.squash("in ", Diagnostic.strong(error.element), ": ", error.message);
 
             if (error.fatal) {
-                incapacitated = true;
+                crashed = true;
                 logger.error("Error", diagnostic);
             } else {
                 logger.info("Non-fatal error", diagnostic);
             }
         }
 
-        if (incapacitated) {
+        if (crashed) {
             throw new ImplementationError(
                 `There ${
                     this.errors.length > 1 ? `are ${this.errors.length} errors` : `is 1 error`

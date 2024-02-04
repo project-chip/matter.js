@@ -23,6 +23,7 @@ export class Cache<T> {
         this.periodicTimer = Time.getPeriodicTimer(`${name} cache expiration`, expirationMs, () =>
             this.expire(),
         ).start();
+        this.periodicTimer.utility = true;
     }
 
     get(...params: any[]) {

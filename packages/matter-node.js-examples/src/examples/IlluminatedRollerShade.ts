@@ -132,6 +132,7 @@ const node = new ServerNode({
         {
             type: WindowCoveringDevice.with(RollerShade),
             id: "shade",
+            number: 1,
         },
 
         {
@@ -142,5 +143,3 @@ const node = new ServerNode({
 });
 
 await node.run();
-
-node.offline("extract pairing code", agent => agent.commissioning.pairingCodes);

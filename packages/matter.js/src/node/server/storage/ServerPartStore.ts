@@ -4,13 +4,15 @@ import { ImplementationError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
 import { DatasourceStore } from "../../../endpoint/storage/DatasourceStore.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
+import { Logger } from "../../../log/Logger.js";
 import { StorageContext } from "../../../storage/StorageContext.js";
 import { SupportedStorageTypes } from "../../../storage/StringifyTools.js";
 import { AsyncConstruction } from "../../../util/AsyncConstruction.js";
-import { logger } from "./ServerStore.js";
 
 const NUMBER_KEY = "__number__";
 const KNOWN_KEY = "__known__";
+
+const logger = Logger.get("ServerPartStore");
 
 /**
  * The server implementation of {@link PartStore}.

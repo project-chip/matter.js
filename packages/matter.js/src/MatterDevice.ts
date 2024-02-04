@@ -68,9 +68,9 @@ export class MatterDevice {
     private failSafeContext?: FailsafeManager;
 
     constructor(
-        private readonly commissioningOptions: CommissioningOptions.Configuration,
         readonly sessionStorage: StorageContext,
         readonly fabricStorage: StorageContext,
+        private readonly getCommissioningConfig: () => CommissioningOptions.Configuration,
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
@@ -221,12 +221,13 @@ export class MatterDevice {
         mode: AdministratorCommissioning.CommissioningWindowStatus,
         discriminator?: number,
     ) {
+        const commissioningConfig = this.getCommissioningConfig();
         for (const broadcaster of this.broadcasters) {
             await broadcaster.setCommissionMode(
                 mode === AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen ? 2 : 1,
                 {
-                    ...this.commissioningOptions.productDescription,
-                    discriminator: discriminator ?? this.commissioningOptions.discriminator,
+                    ...commissioningConfig.productDescription,
+                    discriminator: discriminator ?? commissioningConfig.discriminator,
                 },
             );
         }
@@ -515,7 +516,7 @@ export class MatterDevice {
         }
 
         this.secureChannelProtocol.setPaseCommissioner(
-            await PaseServer.fromPin(this.commissioningOptions.passcode, {
+            await PaseServer.fromPin(this.getCommissioningConfig().passcode, {
                 iterations: 1000,
                 salt: Crypto.get().getRandomData(32),
             }),

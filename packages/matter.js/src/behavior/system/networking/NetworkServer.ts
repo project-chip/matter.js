@@ -27,9 +27,7 @@ export class NetworkServer extends NetworkBehavior {
     declare state: NetworkServer.State;
     declare internal: NetworkServer.Internal;
 
-    override initialize() {
-        super.initialize();
-
+    override async initialize() {
         if (this.state.ble === undefined) {
             this.state.ble = Ble.enabled;
         } else if (this.state.ble && !Ble.enabled) {
@@ -58,7 +56,10 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
+        this.reactTo(this.part.lifecycle.treeReady, this.#treeReady, { once: true });
         this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
+
+        await super.initialize();
     }
 
     protected override createRuntime() {
@@ -66,15 +67,32 @@ export class NetworkServer extends NetworkBehavior {
     }
 
     /**
-     * Immediately broadcast presence to the network.
+     * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
+     * advertising, the advertisement timeout resets.
      *
-     * Announcements normally occur automatically at startup and at regular intervals for a limited period.
+     * Advertising begins at startup unless you set {@link NetworkServer.State.advertiseOnStartup} to false.
      */
-    advertise() {
+    async startAdvertising() {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.internal.runtime.advertise();
+        await this.internal.runtime.startAdvertising();
+    }
+
+    /**
+     * Immediately broadcast presence to the network.
+     */
+    async advertiseNow() {
+        if (!this.internal.runtime) {
+            throw new ImplementationError("Cannot advertise offline server");
+        }
+        await this.internal.runtime.advertiseNow();
+    }
+
+    #treeReady() {
+        if (this.state.advertiseOnStartup) {
+            return this.internal.runtime.startAdvertising();
+        }
     }
 
     async #enterCommissionedMode() {
@@ -88,6 +106,7 @@ export namespace NetworkServer {
     }
 
     export class State extends NetworkBehavior.State {
+        advertiseOnStartup = true;
         announceInterface?: string;
         discoverInterface?: string;
         listeningAddressIpv4?: string;

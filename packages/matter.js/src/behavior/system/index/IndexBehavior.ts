@@ -25,11 +25,9 @@ export class IndexBehavior extends Behavior {
     declare internal: IndexBehavior.Internal;
     declare events: IndexBehavior.Events;
 
-    override initialize() {
-        for (const part of this.part.parts) {
-            this.#add(part);
-        }
+    static override readonly early = true;
 
+    override initialize() {
         this.reactTo(this.part.lifecycle.changed, this.#handleChange);
     }
 
@@ -63,7 +61,7 @@ export class IndexBehavior extends Behavior {
         switch (type) {
             case PartLifecycle.Change.IdAssigned:
             case PartLifecycle.Change.NumberAssigned:
-            case PartLifecycle.Change.Ready:
+            case PartLifecycle.Change.Installed:
                 this.#add(part);
                 break;
 

@@ -5,9 +5,8 @@
  */
 
 import { NoProviderError } from "../../../common/MatterError.js";
-import { EventEmitter, Observable } from "../../../util/Observable.js";
+import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { Behavior } from "../../Behavior.js";
-import { ActionContext } from "../../context/ActionContext.js";
 import type { NetworkRuntime } from "./NetworkRuntime.js";
 
 /**
@@ -18,17 +17,20 @@ import type { NetworkRuntime } from "./NetworkRuntime.js";
 export class NetworkBehavior extends Behavior {
     static override readonly id = "network";
 
+    static override readonly early = true;
+
     declare internal: NetworkBehavior.Internal;
     declare state: NetworkBehavior.State;
-    declare events: NetworkBehavior.Events;
 
-    override initialize() {
-        this.state.operationalPort = this.state.port;
-        this.state.online = false;
+    override async initialize() {
         this.internal.runtime = this.createRuntime();
+        await this.internal.runtime.construction;
+        this.state.operationalPort = this.internal.runtime.operationalPort;
+        (this.part.lifecycle as NodeLifecycle).online?.emit(this.context);
     }
 
     async [Symbol.asyncDispose]() {
+        (this.part.lifecycle as NodeLifecycle).offline?.emit(this.context);
         await this.internal.runtime?.[Symbol.asyncDispose]();
     }
 
@@ -46,12 +48,7 @@ export namespace NetworkBehavior {
     }
 
     export class State {
-        online = false;
         port = 5540;
         operationalPort = 5540;
-    }
-
-    export class Events extends EventEmitter {
-        online$Change = Observable<[value: boolean, oldValue: boolean, context: ActionContext]>();
     }
 }

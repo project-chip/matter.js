@@ -50,7 +50,7 @@ export class CommissioningBehavior extends Behavior {
             this.state.discriminator = PaseClient.generateRandomDiscriminator();
         }
 
-        this.reactTo((this.part.lifecycle as NodeLifecycle).ready, this.#nodeReady);
+        this.reactTo(this.part.lifecycle.treeReady, this.#nodeReady);
 
         this.reactTo(
             this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,

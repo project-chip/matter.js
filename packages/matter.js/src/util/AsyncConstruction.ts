@@ -106,13 +106,18 @@ export interface AsyncConstruction<T> extends Promise<T> {
      *
      * This method fails if initialization is ongoing; await completion first.
      */
-    setStatus(status: Lifecycle.Status, error?: any): void;
+    setStatus(status: Lifecycle.Status): void;
+
+    /**
+     * Force "crashed" state with the specified error.
+     */
+    crashed(cause: any): void;
 }
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
     subject: T,
     initializer?: () => MaybePromise,
-    cancel?: () => void,
+    options?: AsyncConstruction.Options,
 ): AsyncConstruction<T> {
     let promise: MaybePromise;
     let error: any;
@@ -161,9 +166,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             try {
                 initialization = initializer();
             } catch (e) {
-                error = e;
+                this.crashed(e);
                 ready = true;
-                setStatus(Lifecycle.Status.Incapacitated);
                 if (placeholderReject) {
                     const reject = placeholderReject;
                     placeholderResolve = placeholderReject = undefined;
@@ -182,10 +186,9 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                         }
                     },
                     e => {
-                        error = e;
                         ready = true;
                         if (status !== Lifecycle.Status.Destroying && status !== Lifecycle.Status.Destroyed) {
-                            setStatus(Lifecycle.Status.Incapacitated);
+                            this.crashed(e);
                         }
                         throw e;
                     },
@@ -215,12 +218,12 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             if (ready || canceled) {
                 return;
             }
-            if (cancel) {
+            if (options?.cancel) {
                 canceled = true;
                 if (status === Lifecycle.Status.Initializing) {
                     setStatus(Lifecycle.Status.Destroyed);
                 }
-                cancel?.();
+                options.cancel();
             }
         },
 
@@ -292,36 +295,24 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             promise = MaybePromise.finally(
                 promise,
 
-                () => MaybePromise.finally(destructor(), () => setStatus(Lifecycle.Status.Destroyed)),
+                () => MaybePromise.finally(() => destructor(), () => setStatus(Lifecycle.Status.Destroyed)),
             );
 
             return this;
         },
 
         finally(onfinally: () => void): Promise<T> {
-            return this.then(
-                result =>
-                    MaybePromise.then(
-                        () => onfinally(),
-                        () => result,
-                    ),
-                error =>
-                    MaybePromise.then(
-                        () => onfinally(),
-                        () => {
-                            throw error;
-                        },
-                    ),
-            );
+            return Promise.prototype.finally.call(this, onfinally);
         },
 
-        setStatus(newStatus: Lifecycle.Status, newError?: any) {
+        crashed(cause: any) {
+            setStatus(Lifecycle.Status.Crashed);
+            error = cause;
+        },
+
+        setStatus(newStatus: Lifecycle.Status) {
             if (this.status === newStatus) {
                 return;
-            }
-
-            if (arguments.length > 1) {
-                error = newError;
             }
 
             if (status === Lifecycle.Status.Destroyed) {
@@ -369,4 +360,18 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     }
 
     return self;
+}
+
+export namespace AsyncConstruction {
+    export interface Options {
+        /**
+         * Cancellation callback if the subject supports cancellation.
+         */
+        cancel?: () => void;
+
+        /**
+         * If the subject contributes to a composite object, crashes propagate to parent indicated here.
+         */
+        parent?: AsyncConstruction<any>;
+    }
 }

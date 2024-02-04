@@ -12,6 +12,7 @@ import { Message } from "../../codec/MessageCodec.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Part } from "../../endpoint/Part.js";
 import { PartServer } from "../../endpoint/PartServer.js";
+import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { Session } from "../../session/Session.js";
@@ -33,23 +34,40 @@ import { ServerStore } from "./storage/ServerStore.js";
  */
 export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
+    #changeListener: (type: PartLifecycle.Change) => void;
+    #part: Part;
 
     constructor(part: Part<ServerRootEndpoint>) {
         const structure = new InteractionEndpointStructure();
-
-        // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
-        structure.initializeFromEndpoint(PartServer.forPart(part));
-        part.lifecycle.changed.on(() => structure.initializeFromEndpoint(PartServer.forPart(part)));
 
         super({
             eventHandler: part.env.get(ServerStore).eventHandler,
             endpointStructure: structure,
             subscriptionOptions: part.state.network.subscriptionOptions,
         });
+
+        this.#part = part;
+
+        // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
+        this.#updateStructure();
+        this.#changeListener = type => {
+            switch (type) {
+                case PartLifecycle.Change.TreeReady:
+                case PartLifecycle.Change.ClientsChanged:
+                case PartLifecycle.Change.ServersChanged:
+                case PartLifecycle.Change.Destroyed:
+                    this.#updateStructure();
+                    break;                    
+            }
+        };
+
+        part.lifecycle.changed.on(this.#changeListener);
+
         this.#endpointStructure = structure;
     }
 
     async [Symbol.asyncDispose]() {
+        this.#part.lifecycle.changed.off(this.#changeListener);
         await this.close();
         this.#endpointStructure.destroy();
     }
@@ -122,5 +140,11 @@ export class TransactionalInteractionServer extends InteractionServer {
         fn: () => T,
     ) {
         return OnlineContext(options).act(context => track(fn(), [why, context.transaction.via]));
+    }
+
+    #updateStructure() {
+        if (this.#part.lifecycle.isTreeReady) {
+            this.#endpointStructure.initializeFromEndpoint(PartServer.forPart(this.#part));
+        }
     }
 }

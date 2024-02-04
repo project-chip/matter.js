@@ -7,7 +7,7 @@
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
-import { NetworkServer } from "../../system/networking/NetworkServer.js";
+import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { BasicInformationBehavior } from "./BasicInformationBehavior.js";
 
 const logger = Logger.get("BasicInformationServer");
@@ -48,24 +48,25 @@ export class BasicInformationServer extends BasicInformationBehavior {
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
 
-        this.reactTo(
-            this.agent.get(NetworkServer).events.online$Change,
-            this.#emitLifecycleEvent,
-        );
+        const lifecycle = this.part.lifecycle as NodeLifecycle;
+
+        if (lifecycle.online) {
+            this.reactTo(lifecycle.online, this.#online);
+        }
     }
 
-    #emitLifecycleEvent(online: boolean) {
-        if (online) {
-            this.events.startUp.emit(
-                { softwareVersion: this.state.softwareVersion },
-                this.context,
-            );
-        } else {
-            this.events.shutDown?.emit(
-                undefined,
-                this.context,
-            )
-        }
+    [Symbol.asyncDispose]() {
+        this.events.shutDown?.emit(
+            undefined,
+            this.context,
+        )
+    }
+
+    #online() {
+        this.events.startUp.emit(
+            { softwareVersion: this.state.softwareVersion },
+            this.context,
+        );
     }
 }
 

@@ -310,6 +310,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      * This should only be used for local purposes.  All network interaction should use OnlineContext.
      */
     offline<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+        this.construction.assert(`Cannot ${purpose} because part`);
+
         return OfflineContext.act(purpose, context => {
             return actor(context.agentFor(this));
         });
@@ -333,6 +335,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     async [Symbol.asyncDispose]() {
         await this.construction.destroy(async () => {
+            await this.parts[Symbol.asyncDispose]();
             await this.behaviors[Symbol.asyncDispose]();
             this.#owner = undefined;
         });

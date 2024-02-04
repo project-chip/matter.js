@@ -8,11 +8,12 @@ import { ImplementationError } from "@project-chip/matter.js/common";
 import { Time, Timer, TimerCallback } from "@project-chip/matter.js/time";
 
 class TimerNode implements Timer {
-    private timerId: NodeJS.Timeout | undefined;
+    #timerId: NodeJS.Timeout | undefined;
+    #utility = false;
     isRunning = false;
 
     get systemId() {
-        return Number(this.timerId);
+        return Number(this.#timerId);
     }
 
     constructor(
@@ -28,11 +29,29 @@ class TimerNode implements Timer {
         }
     }
 
+    get utility() {
+        return this.#utility;
+    }
+
+    set utility(utility: boolean) {
+        if (utility === this.#utility) {
+            return;
+        }
+
+        if (utility) {
+            this.#timerId?.unref();
+        } else {
+            this.#timerId?.ref();
+        }
+
+        this.#utility = utility;
+    }
+
     start() {
         if (this.isRunning) this.stop();
         Time.register(this);
         this.isRunning = true;
-        this.timerId = (this.isPeriodic ? setInterval : setTimeout)(() => {
+        this.#timerId = (this.isPeriodic ? setInterval : setTimeout)(() => {
             if (!this.isPeriodic) {
                 Time.unregister(this);
                 this.isRunning = false;
@@ -43,7 +62,7 @@ class TimerNode implements Timer {
     }
 
     stop() {
-        (this.isPeriodic ? clearInterval : clearTimeout)(this.timerId);
+        (this.isPeriodic ? clearInterval : clearTimeout)(this.#timerId);
         Time.unregister(this);
         this.isRunning = false;
         return this;

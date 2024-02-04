@@ -7,12 +7,15 @@
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Part } from "../../../endpoint/Part.js";
 import { PartStore } from "../../../endpoint/storage/PartStore.js";
+import { Logger } from "../../../log/Logger.js";
 import type { StorageContext } from "../../../storage/StorageContext.js";
 import { AsyncConstruction, asyncNew } from "../../../util/AsyncConstruction.js";
 import { IdentityConflictError } from "../IdentityService.js";
 import { ServerPartStore } from "./ServerPartStore.js";
 
 const NEXT_NUMBER_KEY = "__nextNumber__";
+
+const logger = Logger.get("PartStoreService");
 
 /**
  * Manages all {@link ServerPartStore}s for a {@link NodeServer}.
@@ -113,8 +116,12 @@ export class PartStoreFactory extends PartStoreService {
             // Allocate number
             const knownNumber = store.number;
             if (knownNumber) {
-                part.number = knownNumber;
-                return;
+                if (this.#allocatedNumbers.has(knownNumber)) {
+                    logger.warn(`Stored number ${knownNumber} is already allocated to another endpoint, ignoring`);
+                } else {
+                    part.number = knownNumber;
+                    return;
+                }
             }
 
             const startNumber = this.#nextNumber;
@@ -128,10 +135,9 @@ export class PartStoreFactory extends PartStoreService {
 
             const number = this.#nextNumber++;
             part.number = number;
-
-            this.#allocatedNumbers.add(number);
         }
 
+        this.#allocatedNumbers.add(part.number);
         store.number = part.number;
         this.#persistNumber(part);
     }

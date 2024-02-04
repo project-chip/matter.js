@@ -279,7 +279,11 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
     // If the version number is dirty, immediately join the transaction.  But we don't want this to prevent generation
     // of the reference so just log a warning if the resource cannot be locked
-    if (internals.versioning && internals.version !== internals.persistedVersion) {
+    if (
+        session.transaction !== Transaction.ReadOnly
+        && internals.versioning
+        && internals.version !== internals.persistedVersion
+    ) {
         try {
             startWrite();
         } catch (e) {
@@ -301,7 +305,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
         get value() {
             if (expired) {
-                debugger;
                 throw new ExpiredReferenceError(this.location);
             }
 

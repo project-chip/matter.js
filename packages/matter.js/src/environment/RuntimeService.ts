@@ -20,7 +20,7 @@ const logger = Logger.get("Runtime");
  */
 export class RuntimeService {
     #workers = new Set<RuntimeService.Worker>();
-    #disposed = new Set<RuntimeService.Worker>();
+    #cancelled = new Set<RuntimeService.Worker>();
     #workerDeleted = Observable<[]>();
     #canceled = false;
     #started = Observable<[]>();
@@ -50,7 +50,7 @@ export class RuntimeService {
         if (worker.construction?.change) {
             worker.construction.change.on(status => {
                 switch (status) {
-                    case Lifecycle.Status.Incapacitated:
+                    case Lifecycle.Status.Crashed:
                         let error = worker.construction?.error;
                         if (!error) {
                             error = new Error("Unknown initialization error");
@@ -66,7 +66,7 @@ export class RuntimeService {
         } else if (worker.then) {
             Promise.resolve(worker)
                 .catch(error => this.#crash(error))
-                .finally(() => this.#disposeWorker(worker));
+                .finally(() => this.#deleteWorker(worker));
         }
     }
 
@@ -108,7 +108,7 @@ export class RuntimeService {
         logger.notice("Shutting down");
 
         for (const worker of this.#workers) {
-            const disposal = this.#disposeWorker(worker);
+            const disposal = this.#cancelWorker(worker);
             if (disposal) {
                 this.addWorker(disposal);
             }
@@ -143,16 +143,16 @@ export class RuntimeService {
         return "Runtime";
     }
 
-    #disposeWorker(worker: RuntimeService.Worker) {
-        if (this.#disposed.has(worker)) {
+    #cancelWorker(worker: RuntimeService.Worker) {
+        if (this.#cancelled.has(worker)) {
             return;
         }
 
-        const dispose = () => {
-            this.#disposed.add(worker);
+        const cancel = () => {
+            this.#cancelled.add(worker);
 
             if (worker[Symbol.asyncDispose]) {
-                this.#disposed.add(worker);
+                this.#cancelled.add(worker);
                 return Promise.resolve(worker[Symbol.asyncDispose]?.()).finally(() => this.#deleteWorker(worker));
             }
 
@@ -166,10 +166,10 @@ export class RuntimeService {
         };
 
         if (worker.construction) {
-            return Promise.resolve(worker.construction).finally(dispose);
+            return Promise.resolve(worker.construction).finally(cancel);
         }
 
-        return dispose();
+        return cancel();
     }
 
     #deleteWorker(worker: RuntimeService.Worker) {
@@ -179,7 +179,7 @@ export class RuntimeService {
 
         // Remove the worker
         this.#workers.delete(worker);
-        this.#disposed.delete(worker);
+        this.#cancelled.delete(worker);
         this.#workerDeleted.emit();
 
         // If there are still non-helper workers, remain in active state
@@ -220,8 +220,8 @@ export namespace RuntimeService {
         /**
          * If the worker supports {@link AsyncConstruction}, the runtime will monitor the worker's lifecycle:
          *
-         *   - If the worker is incapacitated (e.g. experiences an error during initialization) the runtime will cancel
-         *     all workers and exit
+         *   - If the worker crashed (e.g. experiences an error during initialization) the runtime will cancel all
+         *     workers and exit
          *
          *   - If the worker is destroyed deletes it from the set of known workers
          */
