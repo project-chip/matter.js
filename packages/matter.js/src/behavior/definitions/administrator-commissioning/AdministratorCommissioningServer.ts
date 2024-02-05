@@ -12,7 +12,6 @@ import { OpenBasicCommissioningWindowRequest, OpenCommissioningWindowRequest } f
 import { InternalError } from "../../../common/MatterError.js";
 import { PaseServer } from "../../../session/pase/PaseServer.js";
 import { MatterDevice } from "../../../MatterDevice.js";
-import { Part } from "../../../endpoint/Part.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
 import { MAXIMUM_COMMISSIONING_TIMEOUT_S, MINIMUM_COMMISSIONING_TIMEOUT_S } from "./AdministratorCommissioningConstants.js";
 
@@ -27,10 +26,6 @@ const logger = Logger.get("AdministratorCommissioningServer");
 export class AdministratorCommissioningServer extends AdministratorCommissioningBehavior {
     declare internal: AdministratorCommissioningServer.Internal;
     declare state: AdministratorCommissioningServer.State;
-
-    override initialize() {
-        this.internal.part = this.part;
-    }
 
     /**
      * This method opens an Enhanced Commissioning Window (A dynamic passcode is used which was provided by the caller).
@@ -54,10 +49,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         await device.allowEnhancedCommissioning(
             discriminator,
             PaseServer.fromVerificationValue(pakePasscodeVerifier, { iterations, salt }),
-            () => {
-                this.session.getAssociatedFabric().deleteRemoveCallback(this.internal.fabricRemoveHandler);
-                this.#endCommissioning();
-            },
+            this.callback(this.#endCommissioning),
         );
     }
 
@@ -73,10 +65,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen
         );
 
-        await device.allowBasicCommissioning(() => {
-            this.session.getAssociatedFabric().deleteRemoveCallback(this.internal.fabricRemoveHandler);
-            this.#endCommissioning();
-        });
+        await device.allowBasicCommissioning(this.callback(this.#endCommissioning));
     }
 
     /** This method is used to revoke a commissioning window. */
@@ -108,16 +97,27 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.internal.commissioningWindowTimeout = Time.getTimer(
             "Commissioning timeout",
             commissioningTimeout * 1000,
-            async () => await this.#closeCommissioningWindow(),
+            this.callback(this.#commissioningTimeout),
         ).start();
 
-        this.asAdmin(() => {
-            this.state.windowStatus = windowStatus;
-            this.state.adminFabricIndex = this.session.getAssociatedFabric().fabricIndex;
-            this.state.adminVendorId = this.session.getAssociatedFabric().rootVendorId;
+        const adminFabric = this.session.getAssociatedFabric();
+
+        this.state.windowStatus = windowStatus;
+        this.state.adminFabricIndex = adminFabric.fabricIndex;
+        this.state.adminVendorId = adminFabric.rootVendorId;
+
+        const internal = this.internal;
+
+        const removeCallback = this.callback(() => {
+            this.state.adminFabricIndex = null;
+            internal.stopMonitoringFabricForRemoval?.();
         });
 
-        this.session.getAssociatedFabric().addRemoveCallback(this.internal.fabricRemoveHandler);
+        this.internal.stopMonitoringFabricForRemoval = () => {
+            adminFabric.deleteRemoveCallback(removeCallback);
+        }
+
+        this.session.getAssociatedFabric().addRemoveCallback(removeCallback);
     }
 
     /**
@@ -160,22 +160,29 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     #endCommissioning() {
         logger.debug("End commissioning window.");
+
+        this.internal.stopMonitoringFabricForRemoval?.();
+        this.state.adminFabricIndex = null;
+
         if (this.internal.commissioningWindowTimeout !== undefined) {
             this.internal.commissioningWindowTimeout.stop();
             this.internal.commissioningWindowTimeout = undefined;
         }
 
-        this.asAdmin(() => {
-            this.state.windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
-            this.state.adminFabricIndex = null;
-            this.state.adminVendorId = null;
-        });
+        this.state.windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
+        this.state.adminFabricIndex = null;
+        this.state.adminVendorId = null;
     }
 
     /** This method is used to close a commissioning window. */
     async #closeCommissioningWindow() {
         this.#endCommissioning();
         await this.session.getContext().endCommissioning();
+    }
+
+    /** Close commissioning window on timeout when there's nobody to await the resulting promise */
+    #commissioningTimeout() {
+        this.part.env.runtime.addWorker(this.#closeCommissioningWindow());
     }
 
     /** Cleanup resources and stop the timer when the behavior is destroyed. */
@@ -189,19 +196,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
 export namespace AdministratorCommissioningServer {
     export class Internal {
-        part?: Part;
         commissioningWindowTimeout?: Timer;
-        fabricRemoveHandler = () => {
-            if (!this.part) {
-                throw new InternalError(
-                    "AdministratorCommissioningServer part not initialized"
-                );
-            }
-
-            this.part.offline("clear-admin-fabric", agent => {
-                agent.get(AdministratorCommissioningServer).state.adminFabricIndex = null;
-            });
-        }
+        stopMonitoringFabricForRemoval?: () => void;
     }
 
     export class State extends AdministratorCommissioningBehavior.State {

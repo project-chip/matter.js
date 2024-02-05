@@ -130,10 +130,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
         // Insertion validation is only possible in a fully configured node.
         // If we are not yet installed then an ancestor will handle validation
         // when we are installed
-        //
-        // TODO - It's an edge case but we may miss the case where a part is
-        // owned but the parent is not yet initialized
-        if (this.#part.lifecycle.isInstalled) {
+        if (this.#part.lifecycle.isReady) {
             this.#validateInsertion(child, child);
         }
 

@@ -75,13 +75,25 @@ export class DependencyLifecycleError extends ImplementationError {
  * Standard interface for objects that have a primary task that may initiate after construction.
  */
 export interface Startable {
+    /**
+     * Commence with the object's primary activity.
+     * 
+     * Start should have no effect if the object is already started.
+     */
     start(): void;
 }
 
 /**
  * Standard interface for objects supporting a task that may be aborted or stopped prior to destruction.
+ * 
+ * Cancellation have no effect if the object is cancelled or otherwise in a state where cancellation is irrelevant.
  */
 export interface Cancellable {
+    /**
+     * Stop the object's primary activity.  This should result in termination as quickly as possible.
+     *  
+     * Start should have no effect if the object is already started.
+     */
     cancel(): void;
 }
 
