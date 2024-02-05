@@ -14,11 +14,9 @@ import { PaseServer } from "../../../session/pase/PaseServer.js";
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Part } from "../../../endpoint/Part.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
+import { MAXIMUM_COMMISSIONING_TIMEOUT_S, MINIMUM_COMMISSIONING_TIMEOUT_S } from "./AdministratorCommissioningConstants.js";
 
 const logger = Logger.get("AdministratorCommissioningServer");
-
-export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
-export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
 
 /**
  * This is the default server implementation of AdministratorCommissioningBehavior.
@@ -140,6 +138,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
                 StatusCode.InvalidCommand,
             );
         }
+
         if (commissioningTimeout < MINIMUM_COMMISSIONING_TIMEOUT_S) {
             throw new StatusResponseError(
                 `Commissioning timeout must not be lower then ${MINIMUM_COMMISSIONING_TIMEOUT_S} seconds.`,

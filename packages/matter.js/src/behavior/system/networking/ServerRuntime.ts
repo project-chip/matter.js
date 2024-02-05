@@ -63,18 +63,24 @@ export class ServerRuntime extends NetworkRuntime {
         return this.#mdnsBroadcaster;
     }
 
-    async startAdvertising() {
+    startAdvertising() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
-        await this.#matterDevice.startAnnouncement();
+
+        // TODO - probably startAnnouncement should not return a promise because 1.) travel of the UDP packet is unknown
+        // so confirming it was sent doesn't tell us much, and 2.) MatterDevice currently drops tertiary (timed)
+        // announcement promises on the floor so it needs internal tracking anyway
+        this.owner.env.runtime.addWorker(this.#matterDevice.startAnnouncement());
     }
 
-    async advertiseNow() {
+    advertiseNow() {
         if (!this.#matterDevice) {
             throw new InternalError("Server runtime device instance is missing");
         }
-        await this.#matterDevice.announce(true);
+
+        // TODO - see comment in startAdvertising
+        this.owner.env.runtime.addWorker(this.#matterDevice.announce(true));
     }
 
     /**
@@ -188,7 +194,7 @@ export class ServerRuntime extends NetworkRuntime {
         return this.#primaryNetInterface?.port ?? 0;
     }
 
-    protected override async startup() {
+    protected override async start() {
         const mdnsScanner = (await this.owner.env.load(MdnsService)).scanner;
 
         this.#interactionServer = new TransactionalInteractionServer(this.owner);

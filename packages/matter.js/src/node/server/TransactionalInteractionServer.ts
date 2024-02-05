@@ -47,6 +47,7 @@ export class TransactionalInteractionServer extends InteractionServer {
         });
 
         this.#part = part;
+        this.#endpointStructure = structure;
 
         // TODO - rewrite element lookup so we don't need to build the secondary endpoint structure cache
         this.#updateStructure();
@@ -62,8 +63,6 @@ export class TransactionalInteractionServer extends InteractionServer {
         };
 
         part.lifecycle.changed.on(this.#changeListener);
-
-        this.#endpointStructure = structure;
     }
 
     async [Symbol.asyncDispose]() {

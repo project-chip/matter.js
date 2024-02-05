@@ -29,7 +29,7 @@ export type Observer<T extends any[] = any[], R = void> = (...payload: T) => R |
  *
  * @param T arguments, should be a named tuple
  */
-export interface Observable<T extends any[] = any[], R = void> extends AsyncIterable<T> {
+export interface Observable<T extends any[] = any[], R = void> extends AsyncIterable<T>, PromiseLike<T> {
     /**
      * Notify observers.
      */
@@ -157,6 +157,15 @@ class Emitter<T extends any[] = any[], R = void> implements Observable<T, R> {
             this.#once = new Set();
         }
         this.#once.add(observer);
+    }
+
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>
+    {
+        return new Promise<T>(resolve => {
+            this.once((...payload): undefined => {
+                resolve(payload);
+            });
+        }).then(onfulfilled, onrejected);
     }
 
     async *[Symbol.asyncIterator](): AsyncIterator<T[0]> {

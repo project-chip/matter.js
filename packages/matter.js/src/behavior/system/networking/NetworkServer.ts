@@ -27,7 +27,7 @@ export class NetworkServer extends NetworkBehavior {
     declare state: NetworkServer.State;
     declare internal: NetworkServer.Internal;
 
-    override async initialize() {
+    override initialize() {
         if (this.state.ble === undefined) {
             this.state.ble = Ble.enabled;
         } else if (this.state.ble && !Ble.enabled) {
@@ -56,10 +56,9 @@ export class NetworkServer extends NetworkBehavior {
             logger.warn("Soft access point commissioning is not supported yet");
         }
 
-        this.reactTo(this.part.lifecycle.treeReady, this.#treeReady, { once: true });
         this.reactTo((this.part.lifecycle as NodeLifecycle).commissioned, this.#enterCommissionedMode);
 
-        await super.initialize();
+        super.initialize();
     }
 
     protected override createRuntime() {
@@ -72,31 +71,36 @@ export class NetworkServer extends NetworkBehavior {
      *
      * Advertising begins at startup unless you set {@link NetworkServer.State.advertiseOnStartup} to false.
      */
-    async startAdvertising() {
+    startAdvertising() {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        await this.internal.runtime.startAdvertising();
+
+        this.internal.runtime.startAdvertising();
     }
 
     /**
-     * Immediately broadcast presence to the network.
+     * Immediately broadcast presence to the network regardless of whether the advertisement window is active.
      */
-    async advertiseNow() {
+    advertiseNow() {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        await this.internal.runtime.advertiseNow();
+        this.internal.runtime.advertiseNow();
     }
 
-    #treeReady() {
+    protected override enterOnlineMode(runtime: ServerRuntime) {
+        super.enterOnlineMode(runtime);
+
         if (this.state.advertiseOnStartup) {
-            return this.internal.runtime.startAdvertising();
+            this.internal.runtime.startAdvertising();
         }
     }
 
     async #enterCommissionedMode() {
-        () => (this.internal.runtime as ServerRuntime).enterCommissionedMode();
+        if (this.internal.runtime) {
+            this.internal.runtime.enterCommissionedMode();
+        }
     }
 }
 

@@ -80,7 +80,7 @@ class RollerShade extends LiftingWindowCovering {
 
     protected async writeTargetToMotor() {
         // For this contrived example we just log the target position and don't actually animate our fake roller shade
-        console.log("Window covering target position is now", this.targetPos);
+        console.log("Window covering target position is now", `${(this.targetPos / 100)}%`);
     }
 
     protected async readTargetFromMotor() {

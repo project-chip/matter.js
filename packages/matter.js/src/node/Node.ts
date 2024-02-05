@@ -11,7 +11,6 @@ import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
 import { EndpointType } from "../endpoint/type/EndpointType.js";
 import { Environment } from "../environment/Environment.js";
-import { RuntimeService } from "../environment/RuntimeService.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { NodeLifecycle } from "./NodeLifecycle.js";
@@ -101,7 +100,7 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
      * If you are implementing a single node this is the most convenient way to bring it online.
      */
     async run() {
-        const runtime = this.env.get(RuntimeService);
+        const runtime = this.env.runtime;
 
         runtime.addWorker(this);
 

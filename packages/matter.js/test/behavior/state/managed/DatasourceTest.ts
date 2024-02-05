@@ -237,7 +237,7 @@ describe("Datasource", () => {
 
     it("triggers events after transaction commit", async () => {
         const events = {
-            foo$Change: Observable(),
+            foo$Change: Observable<any>(),
         };
 
         let changed = false;
