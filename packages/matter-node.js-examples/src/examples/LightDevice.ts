@@ -51,8 +51,7 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 const server = new ServerNode();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
-//server.add(ExampleLight);
-server.add({ type: ExampleLight, number: 4 });
+server.add(ExampleLight);
 
 // Our device is now built and we can bring the node online.
 //

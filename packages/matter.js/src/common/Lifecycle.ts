@@ -85,14 +85,12 @@ export interface Startable {
 
 /**
  * Standard interface for objects supporting a task that may be aborted or stopped prior to destruction.
- * 
- * Cancellation have no effect if the object is cancelled or otherwise in a state where cancellation is irrelevant.
  */
 export interface Cancellable {
     /**
      * Stop the object's primary activity.  This should result in termination as quickly as possible.
      *  
-     * Start should have no effect if the object is already started.
+     * Cancellation have no effect if the object is cancelled or otherwise in a state where cancellation is irrelevant.
      */
     cancel(): void;
 }
