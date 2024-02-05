@@ -69,32 +69,45 @@ export class NetworkServer extends NetworkBehavior {
      * Advertise and continue advertising at regular intervals until timeout per Matter specification.  If already
      * advertising, the advertisement timeout resets.
      *
-     * Advertising begins at startup unless you set {@link NetworkServer.State.advertiseOnStartup} to false.
+     * If the node is uncommissioned it announces as commissionable on all available transports. Commissioned devices
+     * only advertise for operational discovery via DNS-SD.
+     *
+     * Advertisement begins at startup unless you set {@link NetworkServer.State.openAdvertisementWindowOnStartup} to
+     * false.
      */
-    startAdvertising() {
+    openAdvertisementWindow() {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
 
-        this.internal.runtime.startAdvertising();
+        this.internal.runtime.openAdvertisementWindow();
     }
 
     /**
-     * Immediately broadcast presence to the network regardless of whether the advertisement window is active.
+     * Immediately broadcast presence to the network regardless of whether the advertisement window is open.
      */
     advertiseNow() {
         if (!this.internal.runtime) {
             throw new ImplementationError("Cannot advertise offline server");
         }
-        this.internal.runtime.advertiseNow();
+        this.part.env.runtime.addWorker(this.internal.runtime.announceNow());
     }
 
-    protected override enterOnlineMode(runtime: ServerRuntime) {
-        super.enterOnlineMode(runtime);
-
-        if (this.state.advertiseOnStartup) {
-            this.internal.runtime.startAdvertising();
+    protected override enterOnlineMode(runtime: ServerRuntime, announcementWindowOpen = false) {
+        if (announcementWindowOpen || !this.state.openAdvertisementWindowOnStartup) {
+            super.enterOnlineMode(runtime);
+            return;
         }
+
+        const part = this.part;
+        part.env.runtime.addWorker(
+            this.internal.runtime.openAdvertisementWindow().then(
+                () => part.offline(
+                    "open discovery window",
+                    agent => agent.get(NetworkServer).enterOnlineMode(runtime, true)
+                )
+            )
+        );
     }
 
     async #enterCommissionedMode() {
@@ -110,7 +123,7 @@ export namespace NetworkServer {
     }
 
     export class State extends NetworkBehavior.State {
-        advertiseOnStartup = true;
+        openAdvertisementWindowOnStartup = true;
         announceInterface?: string;
         discoverInterface?: string;
         listeningAddressIpv4?: string;

@@ -17,10 +17,24 @@ export class NodeLifecycle extends PartLifecycle {
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
+    #isOnline = false;
+    #isCommissioned = false;
 
     constructor(part: Part) {
         super(part);
+        this.#online.on(() => { this.#isOnline = true });
+        this.#offline.on(() => { this.#isOnline = false });
+        this.#commissioned.on(() => { this.#isCommissioned = true });
+        this.#decommissioned.on(() => { this.#isCommissioned = false });
     }
+
+    /**
+     * True when the node is connected to the network.
+     */
+    get isOnline() {
+        return this.#isOnline;
+    }
+
 
     /**
      * Emits when the node is first online.
@@ -37,14 +51,21 @@ export class NodeLifecycle extends PartLifecycle {
     }
 
     /**
-     * Emits when node is first commissioned by a controller.
+     * True when the node is part of at least one fabric.
+     */
+    get isCommissioned() {
+        return this.#isCommissioned;
+    }
+
+    /**
+     * Emits when node is first commissioned.
      */
     get commissioned() {
         return this.#commissioned;
     }
 
     /**
-     * Emits when node is no longer comissioned by known controller.
+     * Emits when node is no longer comissioned.
      */
     get decommissioned() {
         return this.#decommissioned;
