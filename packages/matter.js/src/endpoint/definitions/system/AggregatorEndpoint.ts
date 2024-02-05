@@ -30,7 +30,7 @@ export namespace AggregatorRequirements {
         mandatory: { Parts: PartsBehavior, Index: IndexBehavior },
         optional: { Actions: ActionsServer }
     };
-}
+} 
 
 export const AggregatorEndpointDefinition = MutableEndpoint({
     name: "Aggregator",
