@@ -94,7 +94,7 @@ export class Behaviors {
                 this.activate(type, agent);
             }
         }
-console.log(`>>> ${this.#part}`);
+
         // If all behaviors are initialized then we complete synchronously
         const initializing = this.#initializing;
         if (!initializing?.size) {

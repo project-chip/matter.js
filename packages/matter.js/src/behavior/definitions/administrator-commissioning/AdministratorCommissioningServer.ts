@@ -106,12 +106,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminFabricIndex = adminFabric.fabricIndex;
         this.state.adminVendorId = adminFabric.rootVendorId;
 
-        const internal = this.internal;
-
-        const removeCallback = this.callback(() => {
-            this.state.adminFabricIndex = null;
-            internal.stopMonitoringFabricForRemoval?.();
-        });
+        const removeCallback = this.callback(this.#fabricRemovedCallback);
 
         this.internal.stopMonitoringFabricForRemoval = () => {
             adminFabric.deleteRemoveCallback(removeCallback);
@@ -174,18 +169,32 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         this.state.adminVendorId = null;
     }
 
-    /** This method is used to close a commissioning window. */
+    /**
+     * Closes the commissioning window per the matter specification.
+     */
     async #closeCommissioningWindow() {
         this.#endCommissioning();
         await this.session.getContext().endCommissioning();
     }
 
-    /** Close commissioning window on timeout when there's nobody to await the resulting promise */
+    /**
+     * Close commissioning window on timeout when there's nobody to await the resulting promise
+     * */
     #commissioningTimeout() {
         this.part.env.runtime.addWorker(this.#closeCommissioningWindow());
     }
 
-    /** Cleanup resources and stop the timer when the behavior is destroyed. */
+    /**
+     * Invoked when fabric is removed.
+     */
+    #fabricRemovedCallback() {
+        this.state.adminFabricIndex = null;
+        this.internal.stopMonitoringFabricForRemoval?.();
+    }
+
+    /**
+     * Clean up resources and stop the timer when the behavior is destroyed. 
+     */
     override [Symbol.asyncDispose]() {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             this.internal.commissioningWindowTimeout.stop();

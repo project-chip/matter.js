@@ -103,34 +103,46 @@ export class OnOffServer extends Base {
     protected get timedOnTimer() {
         let timer = this.internal.timedOnTimer;
         if (timer === undefined) {
-            timer = this.internal.timedOnTimer = Time.getPeriodicTimer("Timed on", 100, () => {
-                let time = (this.state.onTime ?? 0) - 1;
-                if (time <= 0) {
-                    time = 0;
-                    timer?.stop();
-                    this.state.offWaitTime = 0;
-                    this.off();
-                } else {
-                    this.state.onTime = time;
-                }
-            });
+            timer = this.internal.timedOnTimer = Time.getPeriodicTimer(
+                "Timed on",
+                100,
+                this.callback(this.#timedOnTick)
+            );
         }
         return timer;
+    }
+
+    #timedOnTick() {
+        let time = (this.state.onTime ?? 0) - 1;
+        if (time <= 0) {
+            time = 0;
+            this.internal.timedOnTimer?.stop();
+            this.state.offWaitTime = 0;
+            this.off();
+        } else {
+            this.state.onTime = time;
+        }
     }
 
     protected get delayedOffTimer() {
         let timer = this.internal.delayedOffTimer;
         if (timer === undefined) {
-            timer = this.internal.delayedOffTimer = Time.getTimer("Delayed off", 100, () => {
-                let time = (this.state.offWaitTime ?? 0) - 1;
-                if (time <= 0) {
-                    time = 0;
-                    timer?.stop(); // Delayed off ended
-                }
-                this.state.offWaitTime = time;
-            });
+            timer = this.internal.delayedOffTimer = Time.getTimer(
+                "Delayed off",
+                100,
+                this.callback(this.#delayedOffTick)
+            );
         }
         return timer;
+    }
+
+    #delayedOffTick() {
+        let time = (this.state.offWaitTime ?? 0) - 1;
+        if (time <= 0) {
+            time = 0;
+            this.internal.delayedOffTimer?.stop(); // Delayed off ended
+        }
+        this.state.offWaitTime = time;
     }
 }
 
