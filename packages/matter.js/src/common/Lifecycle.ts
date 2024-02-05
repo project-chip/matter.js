@@ -5,6 +5,7 @@
  */
 
 import { Diagnostic } from "../log/Diagnostic.js";
+import { MaybePromise } from "../util/Promises.js";
 import { ImplementationError } from "./MatterError.js";
 
 export namespace Lifecycle {
@@ -68,6 +69,31 @@ export class DependencyLifecycleError extends ImplementationError {
             Diagnostic.squash(Diagnostic.strong(what), " ", why);
         }) as string;
     }
+}
+
+/**
+ * Standard interface for objects that have a primary task that may initiate after construction.
+ */
+export interface Startable {
+    start(): void;
+}
+
+/**
+ * Standard interface for objects supporting a task that may be aborted or stopped prior to destruction.
+ */
+export interface Cancellable {
+    cancel(): void;
+}
+
+/**
+ * Standard interface for disposing of object resources.
+ */
+export interface Destructable {
+    destroy(): void | Promise<void>;
+
+    [Symbol.dispose]?: () => void;
+
+    [Symbol.asyncDispose]?: () => MaybePromise<void>;
 }
 
 /**

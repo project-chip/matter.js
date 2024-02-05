@@ -22,7 +22,7 @@ export abstract class NetworkRuntime {
         this.#owner = owner;
 
         this.#construction = AsyncConstruction(this, async () => {
-            await this.startup();
+            await this.start();
         });
     }
 
@@ -32,7 +32,7 @@ export abstract class NetworkRuntime {
 
     abstract operationalPort: number;
 
-    protected abstract startup(): Promise<void>;
+    protected abstract start(): Promise<void>;
 
     protected get owner() {
         return this.#owner;

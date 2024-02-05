@@ -306,8 +306,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
         },
 
         crashed(cause: any) {
-            setStatus(Lifecycle.Status.Crashed);
             error = cause;
+            setStatus(Lifecycle.Status.Crashed);
         },
 
         setStatus(newStatus: Lifecycle.Status) {

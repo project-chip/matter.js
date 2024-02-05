@@ -5,8 +5,8 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { MAXIMUM_COMMISSIONING_TIMEOUT_S, MINIMUM_COMMISSIONING_TIMEOUT_S, PAKE_PASSCODE_VERIFIER_LENGTH } from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { InternalError } from "../../common/MatterError.js";
-import { CRYPTO_GROUP_SIZE_BYTES, CRYPTO_PUBLIC_KEY_SIZE_BYTES } from "../../crypto/CryptoConstants.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";
 import { Logger } from "../../log/Logger.js";
@@ -24,11 +24,6 @@ import { AttributeServer } from "./AttributeServer.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
 
 const logger = Logger.get("AdministratorCommissioningServer");
-
-export const MAXIMUM_COMMISSIONING_TIMEOUT_S = 15 * 60; // 900 seconds/15 minutes
-export const MINIMUM_COMMISSIONING_TIMEOUT_S = 3 * 60; // 180 seconds/3 minutes
-
-const PAKE_PASSCODE_VERIFIER_LENGTH = CRYPTO_GROUP_SIZE_BYTES + CRYPTO_PUBLIC_KEY_SIZE_BYTES;
 
 /**
  * Monkey patching Tlv Structure of openCommissioningWindow command to prevent data validation of the fields to be

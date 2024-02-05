@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../common/Lifecycle.js";
+import { Cancellable, Destructable, Lifecycle, Startable } from "../common/Lifecycle.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { Observable } from "../util/Observable.js";
-import { MaybePromise } from "../util/Promises.js";
 import type { Environment } from "./Environment.js";
 import { Environmental } from "./Environmental.js";
 
@@ -34,8 +33,10 @@ export class RuntimeService {
     /**
      * Add a {@link Worker}.
      *
-     * The runtime considers itself "active" if there are one or more workers installed.  Workers that complete are
-     * removed and optionally destroyed.
+     * The runtime considers itself "active" if there are one or more workers installed.
+     * 
+     * A worker must either be {@link PromiseLike} or {@link AsyncConstructable} for the runtime to detect completion.
+     * On completion the worker is removed and destroyed if the worker is {@link Destructable}.
      */
     addWorker(worker: RuntimeService.Worker) {
         if (this.#workers.has(worker)) {
@@ -47,9 +48,30 @@ export class RuntimeService {
             this.#started.emit();
         }
 
+        // For PromiseLike just track until resolution
+        if (worker.then) {
+            Promise.resolve(worker)
+                .catch(error => this.#crash(error))
+                .finally(() => this.#deleteWorker(worker));
+            return;
+        }
+
         if (worker.construction?.change) {
+            // AsyncCostructable
+            let started = false;
+            if (worker.construction.status === Lifecycle.Status.Active) {
+                started = true;
+                worker.start?.();
+            }
             worker.construction.change.on(status => {
                 switch (status) {
+                    case Lifecycle.Status.Active:
+                        if (!started) {
+                            started = true;
+                            worker.start?.();
+                        }
+                       break;
+
                     case Lifecycle.Status.Crashed:
                         let error = worker.construction?.error;
                         if (!error) {
@@ -63,10 +85,14 @@ export class RuntimeService {
                         break;
                 }
             });
-        } else if (worker.then) {
-            Promise.resolve(worker)
-                .catch(error => this.#crash(error))
-                .finally(() => this.#deleteWorker(worker));
+        } else {
+            // PromiseLike or no termination tracking
+            worker.start?.();
+            if (worker.then) {
+                Promise.resolve(worker)
+                    .catch(error => this.#crash(error))
+                    .finally(() => this.#deleteWorker(worker));
+            }
         }
     }
 
@@ -98,7 +124,7 @@ export class RuntimeService {
     /**
      * Cancel execution.
      *
-     * On cancel the runtime destroys active workers.
+     * On cancel the runtime destroys all workers.
      */
     cancel() {
         if (this.#canceled) {
@@ -162,7 +188,12 @@ export class RuntimeService {
                 return;
             }
 
-            // No means of cancellation so we just need to wait for worker to exit
+            if (worker.cancel) {
+                worker.cancel();
+                return;
+            }
+
+            // No means of cancellation so we just need to wait for the worker to exit
         };
 
         if (worker.construction) {
@@ -208,9 +239,16 @@ export namespace RuntimeService {
      * The state of the runtime is dependent on installed workers.  Any JS object may be a worker but the runtime's
      * interaction with workers varies as documented here.
      *
-     * If a worker is a {@link PromiseLike} the runtime will delete and/or destroy it when it completes.
+     * If a worker is a {@link PromiseLike} the runtime will delete and/or destroy it on completion.
      */
-    export interface Worker extends Partial<PromiseLike<any>> {
+    export interface Worker extends Partial<PromiseLike<any>>, Partial<Startable>, Partial<Cancellable>, Partial<Destructable> {
+        /**
+         * If present, {@link RuntimeService} will invoke when the worker is added.
+         * 
+         * If the worker also supports {@link construction} the runtime will invoke once construction completes.
+         */
+        start?: () => void;
+
         /**
          * If this is true, the worker is considered a "helper".  When the last non-helper worker departs the runtime
          * cancels helpers and emits {@link RuntimeService.stopped}.
@@ -237,7 +275,7 @@ export namespace RuntimeService {
          *
          *   - The runtime is canceled via {@link RuntimeService.cancel}
          */
-        [Symbol.asyncDispose]?: () => MaybePromise<void>;
+        [Symbol.asyncDispose]?: () => void | Promise<void>;
 
         /**
          * Workers may implement {@link Symbol.dispose} to handle disposal.  Works the same as the async equivalent.

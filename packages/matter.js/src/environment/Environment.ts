@@ -9,6 +9,7 @@ import { DiagnosticSource } from "../log/DiagnosticSource.js";
 import { Logger } from "../log/Logger.js";
 import { Time } from "../time/Time.js";
 import { Environmental } from "./Environmental.js";
+import { RuntimeService } from "./RuntimeService.js";
 import { VariableService } from "./VariableService.js";
 
 const logger = Logger.get("Environment");
@@ -99,6 +100,13 @@ export class Environment {
      */
     get vars() {
         return this.get(VariableService);
+    }
+
+    /**
+     * Shortcut for accessing {@link RuntimeService}.
+     */
+    get runtime() {
+        return this.get(RuntimeService);
     }
 
     /**

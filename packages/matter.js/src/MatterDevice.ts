@@ -10,13 +10,16 @@
  * @deprecated
  */
 
+import {
+    DEVICE_ANNOUNCEMENT_DURATION_MS,
+    DEVICE_ANNOUNCEMENT_INTERVAL_MS
+} from "./behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
 import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
 import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
 import { OperationalCredentials } from "./cluster/definitions/OperationalCredentialsCluster.js";
-import { MAXIMUM_COMMISSIONING_TIMEOUT_S } from "./cluster/server/AdministratorCommissioningServer.js";
 import { Channel } from "./common/Channel.js";
 import { FailsafeManager } from "./common/FailsafeManager.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
@@ -47,9 +50,6 @@ import { Time, Timer } from "./time/Time.js";
 import { ByteArray } from "./util/ByteArray.js";
 
 const logger = Logger.get("MatterDevice");
-
-const DEVICE_ANNOUNCEMENT_DURATION_MS = MAXIMUM_COMMISSIONING_TIMEOUT_S * 1000; /** 15 minutes */
-const DEVICE_ANNOUNCEMENT_INTERVAL_MS = 60 * 1000;
 
 export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
@@ -88,6 +88,7 @@ export class MatterDevice {
         this.addProtocolHandler(this.secureChannelProtocol);
 
         this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
+            // TODO - this promise is not awaited
             this.announce(),
         );
     }
