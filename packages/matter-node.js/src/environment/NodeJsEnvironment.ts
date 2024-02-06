@@ -4,26 +4,31 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Environment, RuntimeService, StorageService, VariableService } from "@project-chip/matter.js/environment";
+import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
 import { Network } from "@project-chip/matter.js/net";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
 import { NetworkNode } from "../net/NetworkNode.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
+import { ProcessManager } from "./ProcessManager.js";
 
 /**
- * This is the default environment implementation for Node:
+ * This is the default environment implementation for Node.js:
  *
- * - Sets variables using extraordinarily rudimentary command line, environemnt
- *   and configuration file parsers.
- * - Hooks SIGINT to abort each registered task.  The handler only runs once;
- *   subsequent interrupts will hard exit.
- * - Hooks SIGUSR2 for writing diagnostic information.
- * - Creates a default storage pool using the loaded configuration.
+ *   - Sets variables using rudimentary command line, environment and configuration file parsers.
+ * 
+ *   - Processes UNIX-style signals and sets process exit codes via {@link ProcessManager}
+ * 
+ *   - Creates a default storage pool using the loaded configuration.
  *
- * You can modify any of the functionality by overriding or replacing the
- * environment altogether.
+ * You can modify this behavior:
+ * 
+ *   - Via configuration
+ * 
+ *   - By modifying {@link Environment.default}
+ * 
+ *   - By providing an {@link Environment} to your components other than {@link Environment.default}
  */
 export function NodeJsEnvironment() {
     const env = new Environment("default");
@@ -46,31 +51,8 @@ function loadVariables(env: Environment) {
 }
 
 function configureRuntime(env: Environment) {
-    const runtime = env.get(RuntimeService);
-
-    const interrupt = (): void => void runtime.cancel();
-    const diagnose = (): void => {
-        process.on("SIGUSR2", env.diagnose);
-        env.diagnose();
-    };
-
-    runtime.started.on(() => {
-        process.on("SIGINT", interrupt);
-        process.on("SIGUSR2", diagnose);
-    });
-
-    runtime.stopped.on(() => {
-        process.off("SIGINT", interrupt);
-        process.off("SIGUSR2", diagnose);
-
-        if (process.exitCode === undefined) {
-            process.exitCode = 0;
-        }
-    });
-
-    runtime.crashed.on(() => {
-        process.exitCode = 1;
-    });
+    const processManager = new ProcessManager(env);
+    env.set(ProcessManager, processManager);
 }
 
 function configureStorage(env: Environment) {
@@ -135,5 +117,9 @@ export function getDefaults(vars: VariableService) {
             root: rootPath,
             config: configPath,
         },
+        runtime: {
+            signals: true,
+            exitcode: true,
+        }
     };
 }

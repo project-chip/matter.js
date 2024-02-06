@@ -91,6 +91,8 @@ export class VariableService {
         const value = this.get(name);
         switch (value) {
             case undefined:
+                return value;
+
             case null:
             case 0:
             case false:
