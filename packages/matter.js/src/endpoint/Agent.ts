@@ -45,6 +45,16 @@ export class Agent {
     }
 
     /**
+     * Access an {@link Agent} for this agent's owner.
+     */
+    get owner(): Agent | undefined {
+        if (this.#part.owner === undefined) {
+            return undefined;
+        }
+        return this.context.agentFor(this.#part.owner);
+    }
+
+    /**
      * Access the agent's {@link ActionContext}.
      */
     get context() {
@@ -105,6 +115,10 @@ export class Agent {
      */
     require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
         this.#part.behaviors.require(type, options);
+    }
+
+    toString() {
+        return this.#part.toString();
     }
 
     /**
