@@ -6,6 +6,7 @@
 
 import { Descriptor } from "../../../cluster/definitions/DescriptorCluster.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
+import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../datatype/EndpointNumber.js";
 import { Part } from "../../../endpoint/Part.js";
 import { PartLifecycle } from "../../../endpoint/part/PartLifecycle.js";
@@ -68,6 +69,13 @@ export class DescriptorServer extends DescriptorBehavior {
             list.push(newDeviceType);
         }
         this.state.deviceTypeList = list;
+    }
+
+    /**
+     * Check for presence of a device type.
+     */
+    hasDeviceType(type: DeviceTypeId) {
+        return this.state.deviceTypeList.findIndex(dt => dt.deviceType === type) !== -1;
     }
 
     /**
