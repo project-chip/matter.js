@@ -330,15 +330,16 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     async destroy() {
-        await this[Symbol.asyncDispose]();
-    }
-
-    async [Symbol.asyncDispose]() {
         await this.construction.destroy(async () => {
             await this.parts[Symbol.asyncDispose]();
             await this.behaviors[Symbol.asyncDispose]();
+            this.lifecycle.change(PartLifecycle.Change.Destroyed);
             this.#owner = undefined;
         });
+    }
+
+    async [Symbol.asyncDispose]() {
+        await this.destroy();
     }
 
     toString() {
