@@ -11,7 +11,7 @@ import { DeviceTypeId } from "../../../../src/datatype/DeviceTypeId.js";
 import { EndpointNumber } from "../../../../src/datatype/EndpointNumber.js";
 import { MutableEndpoint } from "../../../../src/endpoint/type/MutableEndpoint.js";
 import { MockPart } from "../../../endpoint/mock-part.js";
-import { MockEndpoint, triggered } from "../../mock-behavior.js";
+import { MockEndpoint } from "../../mock-behavior.js";
 
 async function createFamily() {
     const parent = await MockPart.create({
@@ -71,13 +71,15 @@ describe("DescriptorServer", () => {
 
         device.behaviors.require(OnOffServer);
 
-        await triggered(device.events.descriptor.serverList$Change);
+        await device.events.descriptor.serverList$Change;
 
         expect(device.state.descriptor.serverList).deep.equals([29, 6]);
     });
 
     it("adds parts automatically", async () => {
         const { parent } = await createFamily();
+
+        await parent.events.descriptor.partsList$Change;
 
         const partsList = parent.state.descriptor.partsList;
         expect(partsList).deep.equals([2]);
@@ -86,12 +88,14 @@ describe("DescriptorServer", () => {
     it("removes parts automatically", async () => {
         const { parent, child } = await createFamily();
 
+        await parent.events.descriptor.partsList$Change;
+
         const partsState = parent.state.descriptor;
         expect(partsState.partsList).deep.equals([2]);
 
         await child.destroy();
 
-        await triggered(parent.events.descriptor.partsList$Change);
+        await parent.events.descriptor.partsList$Change;
 
         expect(partsState.partsList).deep.equals([]);
     });

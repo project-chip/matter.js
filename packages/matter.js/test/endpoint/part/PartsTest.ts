@@ -69,7 +69,11 @@ describe("Parts", () => {
         child.parts.add(grandchild);
         await grandchild.construction;
 
-        expect(bubbled).deep.equals([PartLifecycle.Change.Installed, PartLifecycle.Change.Ready]);
+        expect(bubbled).deep.equals([
+            PartLifecycle.Change.Installed,
+            PartLifecycle.Change.TreeReady,
+            PartLifecycle.Change.Ready
+        ]);
     });
 
     it("bubbles destruction", async () => {
