@@ -7,7 +7,7 @@
 import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
-import { SchemaPath } from "../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
 import {
@@ -98,7 +98,7 @@ export function astToFunction(
 
                     default:
                         throw new SchemaImplementationError(
-                            SchemaPath(schema.path),
+                            DataModelPath(schema.path),
                             `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
                         );
                 }
@@ -106,7 +106,7 @@ export function astToFunction(
 
         default:
             throw new SchemaImplementationError(
-                SchemaPath(schema.path),
+                DataModelPath(schema.path),
                 `Unknown or unsupported top-level conformance node type ${compiledNode.code}`,
             );
     }
@@ -176,7 +176,7 @@ export function astToFunction(
 
                 // Throw at runtime
                 throw new SchemaImplementationError(
-                    SchemaPath(schema.path),
+                    DataModelPath(schema.path),
                     `Unsupported conformance AST node type ${(ast as any).type}`,
                 );
         }
@@ -237,7 +237,7 @@ export function astToFunction(
     function createGroup(param: Conformance.Ast.Group): DynamicNode {
         if (!Array.isArray(param)) {
             throw new SchemaImplementationError(
-                SchemaPath(schema.path),
+                DataModelPath(schema.path),
                 "Conformance AST group parameter is not an array",
             );
         }
@@ -484,7 +484,7 @@ export function astToFunction(
 
             default:
                 throw new SchemaImplementationError(
-                    SchemaPath(schema.path),
+                    DataModelPath(schema.path),
                     `Unknown logical binary operator ${operator}`,
                 );
         }

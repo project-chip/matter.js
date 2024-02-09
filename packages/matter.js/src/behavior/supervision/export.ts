@@ -7,5 +7,5 @@
 export * from "./BehaviorSupervisor.js";
 export * from "./RootSupervisor.js";
 export * from "./Schema.js";
-export * from "./SchemaPath.js";
+export * from "../../endpoint/DataModelPath.js";
 export * from "./ValueSupervisor.js";

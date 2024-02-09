@@ -7,9 +7,9 @@
 import { ValueModel } from "../model/index.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
-import { SchemaPath } from "./supervision/SchemaPath.js";
+import { DataModelPath } from "../endpoint/DataModelPath.js";
 
-export type SchemaErrorPath = (SchemaPath & { path?: undefined }) | { path: SchemaPath };
+export type SchemaErrorPath = (DataModelPath & { path?: undefined }) | { path: DataModelPath };
 
 /**
  * Thrown due to schema violations.

@@ -37,7 +37,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     start() {
         this.construction.then(() =>
-            this.offline("start network", agent => agent.get(NetworkServer).start())
+            this.offline(agent => agent.get(NetworkServer).start())
         );
     }
 
@@ -48,7 +48,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     cancel() {
         this.construction.then(() =>
-            this.offline("stop network", agent => agent.get(NetworkServer).cancel())
+            this.offline(agent => agent.get(NetworkServer).cancel())
         );
     }
 

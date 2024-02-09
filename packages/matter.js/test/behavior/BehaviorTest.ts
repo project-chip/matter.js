@@ -34,7 +34,7 @@ namespace TestBehavior {
 function test(what: string, fn: (behavior: TestBehavior) => void) {
     it(what, async () => {
         const part = await MockPart.createWith(TestBehavior);
-        part.offline("test-behavior", agent => {
+        part.offline(agent => {
             const behavior = agent.test;
             fn(behavior);
         });
@@ -73,7 +73,7 @@ describe("Behavior", () => {
         NewBehavior.id satisfies "test";
 
         const part = await MockPart.createWith(NewBehavior);
-        part.offline("test-behavior", agent => {
+        part.offline(agent => {
             const behavior = agent.test;
 
             const state = behavior.state;

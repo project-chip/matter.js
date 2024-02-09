@@ -10,7 +10,7 @@ import { AccessControl } from "../../../AccessControl.js";
 import { ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
-import { SchemaPath } from "../../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { Val } from "../../Val.js";
 import { ManagedReference } from "../ManagedReference.js";
@@ -48,7 +48,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
 function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
     const entry = schema instanceof ValueModel ? schema.listEntry : undefined;
     if (entry === undefined) {
-        throw new SchemaImplementationError(SchemaPath(schema.path), `List schema has no entry definition`);
+        throw new SchemaImplementationError(DataModelPath(schema.path), `List schema has no entry definition`);
     }
 
     const entryManager = owner.get(entry);
@@ -287,7 +287,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
     return new Proxy([], {
         get(_target, property, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                sublocation.path.name = property;
+                sublocation.path.id = property;
                 return readEntry(Number.parseInt(property), sublocation);
             } else if (property === "length") {
                 return getListLength();
@@ -301,7 +301,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
         // On write we enter a transaction
         set(_target, property, newValue, receiver) {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                sublocation.path.name = property;
+                sublocation.path.id = property;
                 validateEntry(newValue, session, sublocation);
                 writeEntry(Number.parseInt(property), newValue, sublocation);
                 return true;
@@ -323,7 +323,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
         deleteProperty: (_target, property) => {
             if (typeof property === "string" && property.match(/^[0-9]+/)) {
-                sublocation.path.name = property;
+                sublocation.path.id = property;
                 writeEntry(Number.parseInt(property), undefined, sublocation);
                 return true;
             }

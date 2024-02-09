@@ -14,6 +14,7 @@ import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
 import { Agent } from "./Agent.js";
+import { DataModelPath } from "./DataModelPath.js";
 import { RootEndpoint } from "./definitions/system/RootEndpoint.js";
 import { Behaviors } from "./part/Behaviors.js";
 import { PartInitializer } from "./part/PartInitializer.js";
@@ -309,10 +310,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      *
      * This should only be used for local purposes.  All network interaction should use OnlineContext.
      */
-    offline<R>(purpose: string, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
-        this.construction.assert(`Cannot ${purpose} because part`);
+    offline<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+        this.construction.assert("Part");
 
-        return OfflineContext.act(purpose, context => {
+        return OfflineContext.act("offline", context => {
             return actor(context.agentFor(this));
         });
     }
@@ -343,23 +344,27 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     toString() {
-        let owner;
-        if (this.#owner instanceof Part) {
-            owner = `${this.#owner}.`;
-        } else {
-            owner = "";
-        }
+        return this.path.toString();
+    }
 
-        let id;
+    /**
+     * Path identifying the part in the Matter data model.
+     */
+    get path(): DataModelPath {
+        let ident;
         if (this.lifecycle.hasId) {
-            id = this.id;
+            ident = this.id;
         } else if (this.lifecycle.hasNumber) {
-            id = `${this.number}`;
+            ident = this.number;
         } else {
-            id = "?";
+            ident = "?";
         }
 
-        return `${owner}${this.#type.name}#${id}`;
+        if (this.#owner) {
+            return this.#owner.path.at(ident, this.#type.name);
+        }
+
+        return DataModelPath(ident, this.type.name);
     }
 
     /**
@@ -376,7 +381,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         return MaybePromise.then(
             // Initialize myself and behaviors in a single offline transaction
             () => OfflineContext.act(
-                `initialize<${this}>`,
+                `initialize`,
                 context => this.initialize(context.agentFor(this)),
                 { unversionedVolatiles: true },
             ),

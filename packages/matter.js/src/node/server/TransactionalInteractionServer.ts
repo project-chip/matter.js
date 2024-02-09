@@ -5,6 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { ActionTracer } from "../../behavior/context/ActionTracer.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
 import { CommandServer } from "../../cluster/server/CommandServer.js";
@@ -15,6 +16,7 @@ import { PartServer } from "../../endpoint/PartServer.js";
 import { PartLifecycle } from "../../endpoint/part/PartLifecycle.js";
 import { InteractionEndpointStructure } from "../../protocol/interaction/InteractionEndpointStructure.js";
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
+import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
 import { track } from "../../util/Promises.js";
 import { ServerRootEndpoint } from "./ServerRootEndpoint.js";
@@ -36,6 +38,7 @@ export class TransactionalInteractionServer extends InteractionServer {
     #endpointStructure: InteractionEndpointStructure;
     #changeListener: (type: PartLifecycle.Change) => void;
     #part: Part;
+    #tracer?: ActionTracer;
 
     constructor(part: Part<ServerRootEndpoint>) {
         const structure = new InteractionEndpointStructure();
@@ -45,6 +48,10 @@ export class TransactionalInteractionServer extends InteractionServer {
             endpointStructure: structure,
             subscriptionOptions: part.state.network.subscriptionOptions,
         });
+
+        if (part.env.has(ActionTracer)) {
+            this.#tracer = part.env.get(ActionTracer);
+        }
 
         this.#part = part;
         this.#endpointStructure = structure;
@@ -138,7 +145,27 @@ export class TransactionalInteractionServer extends InteractionServer {
         options: OnlineContext.Options,
         fn: () => T,
     ) {
-        return OnlineContext(options).act(context => track(fn(), [why, context.transaction.via]));
+        let traceAction: ActionTracer.Action | undefined = undefined;
+        if (this.#tracer) {
+            options.trace = traceAction = {
+                type: why.toLowerCase() as ActionTracer.ActionType,
+            };
+        }
+
+        try {
+            return OnlineContext(options).act(context => track(fn(), [why, context.transaction.via]));
+        } catch (e) {
+            if (traceAction) {
+                const status = (e as StatusResponseError).code;
+                if (typeof status === "number") {
+                    traceAction.status = status;
+                }
+            }
+        } finally {
+            if (traceAction) {
+                await this.#tracer?.record(traceAction);
+            }
+        }
     }
 
     #updateStructure() {

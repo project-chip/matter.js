@@ -6,7 +6,7 @@
 
 import { OfflineContext } from "../../../../src/behavior/context/server/OfflineContext.js";
 import { RootSupervisor } from "../../../../src/behavior/supervision/RootSupervisor.js";
-import { SchemaPath } from "../../../../src/behavior/supervision/SchemaPath.js";
+import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
 import { AttributeModel, ClusterModel, FeatureSet, FieldModel, Globals } from "../../../../src/model/index.js";
 import { StatusResponseError } from "../../../../src/protocol/interaction/StatusCode.js";
 import { Properties } from "../../../../src/util/Type.js";
@@ -71,7 +71,7 @@ function validate({ fields, features }: ClusterStructure, { supports, record, er
 
     // Perform validation
     try {
-        manager.validate(record ?? {}, OfflineContext.ReadOnly, { path: SchemaPath(cluster.path) });
+        manager.validate(record ?? {}, OfflineContext.ReadOnly, { path: DataModelPath(cluster.path) });
         expect(error).undefined;
     } catch (e) {
         if (!error || (e as any).constructor.name === "AssertionError") {

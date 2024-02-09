@@ -103,7 +103,6 @@ export class NetworkServer extends NetworkBehavior {
         part.env.runtime.addWorker(
             this.internal.runtime.openAdvertisementWindow().then(
                 () => part.offline(
-                    "open discovery window",
                     agent => agent.get(NetworkServer).enterOnlineMode(runtime, true)
                 )
             )

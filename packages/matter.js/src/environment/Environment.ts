@@ -30,6 +30,13 @@ export class Environment {
     }
 
     /**
+     * Determine if an environmental service is available.
+     */
+    has(type: abstract new (...args: any[]) => any) {
+        return this.#services?.get(type) !== undefined;
+    }
+
+    /**
      * Access an environmental service.
      */
     get<T extends object>(type: abstract new (...args: any[]) => T): T {

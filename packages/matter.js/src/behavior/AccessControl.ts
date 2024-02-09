@@ -14,7 +14,7 @@ import { Model, ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";
-import { SchemaPath } from "./supervision/SchemaPath.js";
+import { DataModelPath } from "../endpoint/DataModelPath.js";
 
 const cache = new WeakMap<Schema, AccessControl>();
 
@@ -108,7 +108,7 @@ export namespace AccessControl {
         /**
          * The diagnostic path to the location.
          */
-        path: SchemaPath;
+        path: DataModelPath;
 
         /**
          * The owning behavior.

@@ -15,6 +15,7 @@ import { AccessControl } from "../../AccessControl.js";
 import { Transaction } from "../../state/transaction/Transaction.js";
 import { ActionContext } from "../ActionContext.js";
 import { Contextual } from "../Contextual.js";
+import { ActionTracer } from "../ActionTracer.js";
 import { ContextAgents } from "./ContextAgents.js";
 
 /**
@@ -100,6 +101,7 @@ export namespace OnlineContext {
         timed?: boolean;
         fabricFiltered?: boolean;
         message?: Message;
+        trace?: ActionTracer.Action;
     } & (
         | { session: Session<MatterDevice>; fabric?: undefined; subject?: undefined }
         | { session?: undefined; fabric: FabricIndex; subject: SubjectId }

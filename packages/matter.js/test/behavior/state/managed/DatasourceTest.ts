@@ -11,6 +11,7 @@ import { Val } from "../../../../src/behavior/state/Val.js";
 import { Datasource } from "../../../../src/behavior/state/managed/Datasource.js";
 import { BehaviorSupervisor } from "../../../../src/behavior/supervision/BehaviorSupervisor.js";
 import { ValueSupervisor } from "../../../../src/behavior/supervision/ValueSupervisor.js";
+import { DataModelPath } from "../../../../src/endpoint/DataModelPath.js";
 import { DatatypeModel, FieldElement } from "../../../../src/model/index.js";
 import { Observable } from "../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../src/util/Promises.js";
@@ -51,7 +52,7 @@ function createDatasource<const T extends StateType = typeof MyState>(
     options: Partial<Datasource.Options<T>> = {},
 ): Datasource<T> {
     return Datasource({
-        name: "test.state",
+        path: DataModelPath("TestDatasource"),
         type: (options.type ?? MyState) as T,
         supervisor,
         ...options,
