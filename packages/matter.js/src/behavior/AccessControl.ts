@@ -8,13 +8,13 @@ import { AccessLevel } from "../cluster/Cluster.js";
 import { ClusterId } from "../datatype/ClusterId.js";
 import { FabricIndex } from "../datatype/FabricIndex.js";
 import { SubjectId } from "../datatype/SubjectId.js";
+import { DataModelPath } from "../endpoint/DataModelPath.js";
 import { Access } from "../model/aspects/index.js";
 import { ElementTag } from "../model/index.js";
 import { Model, ValueModel } from "../model/models/index.js";
 import { StatusCode } from "../protocol/interaction/StatusCode.js";
 import { InvokeError, ReadError, SchemaImplementationError, WriteError } from "./errors.js";
 import { Schema } from "./supervision/Schema.js";
-import { DataModelPath } from "../endpoint/DataModelPath.js";
 
 const cache = new WeakMap<Schema, AccessControl>();
 

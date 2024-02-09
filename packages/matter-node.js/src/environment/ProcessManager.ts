@@ -12,7 +12,7 @@ import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
  * ProcessManager watches Node.js signals SIGINT and SIGUSR2 to interrupt the Matter.js runtime and trigger Matter.js
  * diagnostics respectively.  It sets the process exit code to 0 if the runtime completes without error and to 1 if the
  * runtime crashes.
- * 
+ *
  * If enabled, SIGINT will perform a soft interrupt of the runtime once.  ProcessManager will not process subsequent
  * interrupts so they will result in forced exit if no other handler exists.
  *
@@ -34,7 +34,7 @@ export class ProcessManager implements Destructable {
 
     constructor(protected env: Environment) {
         this.runtime = env.get(RuntimeService);
-    
+
         this.runtime.started.on(this.startListener);
         this.runtime.stopped.on(this.stopListener);
         this.runtime.crashed.on(this.crashListener);
@@ -64,32 +64,32 @@ export class ProcessManager implements Destructable {
             process.on("SIGINT", this.interruptHandler);
             process.on("SIGUSR2", this.diagnosticHandler);
         }
-    }
+    };
 
     protected stopListener = () => {
         this.#ignoreSignals();
-    
+
         if (this.hasExitCodeSupport && process.exitCode === undefined) {
             process.exitCode = 0;
         }
-    }
+    };
 
     protected crashListener = () => {
         if (this.hasExitCodeSupport) {
             process.exitCode = 1;
         }
-    }
+    };
 
     protected interruptHandler = () => {
         this.runtime.cancel();
-    }
+    };
 
     protected diagnosticHandler = () => {
         if (this.env.vars.get("runtime.signals", true)) {
             process.on("SIGUSR2", this.env.diagnose);
         }
         this.env.diagnose();
-    }
+    };
 
     #ignoreSignals() {
         process.off("SIGINT", this.interruptHandler);

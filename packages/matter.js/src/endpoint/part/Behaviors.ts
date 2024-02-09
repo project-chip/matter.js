@@ -276,13 +276,9 @@ export class Behaviors {
             if (transaction.status === Transaction.Status.Exclusive) {
                 await transaction.commit();
             }
-        }
+        };
 
-        await OfflineContext.act(
-            "dispose-behaviors",
-            dispose,
-            { unversionedVolatiles: true },
-        );
+        await OfflineContext.act("dispose-behaviors", dispose, { unversionedVolatiles: true });
     }
 
     /**
@@ -335,11 +331,9 @@ export class Behaviors {
     }
 
     #activateLate(type: Behavior.Type) {
-        OfflineContext.act(
-            "behavior-late-activation",
-            context => this.activate(type, context.agentFor(this.#part)),
-            { unversionedVolatiles: true }
-        );
+        OfflineContext.act("behavior-late-activation", context => this.activate(type, context.agentFor(this.#part)), {
+            unversionedVolatiles: true,
+        });
     }
 
     /**

@@ -8,20 +8,20 @@ import { AccessLevel } from "../../../cluster/Cluster.js";
 import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { Crypto } from "../../../crypto/Crypto.js";
 import { ClusterId } from "../../../datatype/ClusterId.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Logger } from "../../../log/Logger.js";
 import { isDeepEqual } from "../../../util/DeepEqual.js";
 import { Observable } from "../../../util/Observable.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
-import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
+import type { Val } from "../Val.js";
 import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
 import { Resource } from "../transaction/Resource.js";
 import { Transaction } from "../transaction/Transaction.js";
 import { ReadOnlyTransaction } from "../transaction/Tx.js";
-import type { Val } from "../Val.js";
 
 const VERSION_KEY = "__version__";
 
@@ -280,9 +280,9 @@ function createRootReference(resource: Resource, internals: Internals, session: 
     // If the version number is dirty, immediately join the transaction.  But we don't want this to prevent generation
     // of the reference so just log a warning if the resource cannot be locked
     if (
-        session.transaction !== Transaction.ReadOnly
-        && internals.versioning
-        && internals.version !== internals.persistedVersion
+        session.transaction !== Transaction.ReadOnly &&
+        internals.versioning &&
+        internals.version !== internals.persistedVersion
     ) {
         try {
             startWrite();

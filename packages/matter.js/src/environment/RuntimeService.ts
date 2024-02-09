@@ -34,7 +34,7 @@ export class RuntimeService {
      * Add a {@link Worker}.
      *
      * The runtime considers itself "active" if there are one or more workers installed.
-     * 
+     *
      * A worker must either be {@link PromiseLike} or {@link AsyncConstructable} for the runtime to detect completion.
      * On completion the worker is removed and destroyed if the worker is {@link Destructable}.
      */
@@ -70,7 +70,7 @@ export class RuntimeService {
                             started = true;
                             worker.start?.();
                         }
-                       break;
+                        break;
 
                     case Lifecycle.Status.Crashed:
                         let error = worker.construction?.error;
@@ -241,10 +241,14 @@ export namespace RuntimeService {
      *
      * If a worker is a {@link PromiseLike} the runtime will delete and/or destroy it on completion.
      */
-    export interface Worker extends Partial<PromiseLike<any>>, Partial<Startable>, Partial<Cancellable>, Partial<Destructable> {
+    export interface Worker
+        extends Partial<PromiseLike<any>>,
+            Partial<Startable>,
+            Partial<Cancellable>,
+            Partial<Destructable> {
         /**
          * If present, {@link RuntimeService} will invoke when the worker is added.
-         * 
+         *
          * If the worker also supports {@link construction} the runtime will invoke once construction completes.
          */
         start?: () => void;

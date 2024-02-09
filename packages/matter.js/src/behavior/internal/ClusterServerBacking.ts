@@ -17,6 +17,7 @@ import {
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
+import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
@@ -34,7 +35,6 @@ import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import { ServerBehaviorBacking } from "./ServerBacking.js";
 
 const logger = Logger.get("Behavior");
@@ -213,10 +213,10 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
                 result = MaybePromise.then(
                     result,
 
-                    (output) => {
+                    output => {
                         trace.output = result;
                         return output;
-                    }
+                    },
                 );
             }
 

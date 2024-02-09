@@ -28,7 +28,7 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
             return;
         }
 
-        const runtime = this.internal.runtime = this.createRuntime();
+        const runtime = (this.internal.runtime = this.createRuntime());
         const part = this.part;
         runtime.construction.then(
             () => {
@@ -41,8 +41,8 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
 
             error => {
                 part.construction.crashed(error);
-            }
-        )
+            },
+        );
     }
 
     cancel() {

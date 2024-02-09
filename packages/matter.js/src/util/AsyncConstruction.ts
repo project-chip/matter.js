@@ -295,7 +295,11 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             promise = MaybePromise.finally(
                 promise,
 
-                () => MaybePromise.finally(() => destructor(), () => setStatus(Lifecycle.Status.Destroyed)),
+                () =>
+                    MaybePromise.finally(
+                        () => destructor(),
+                        () => setStatus(Lifecycle.Status.Destroyed),
+                    ),
             );
 
             return this;

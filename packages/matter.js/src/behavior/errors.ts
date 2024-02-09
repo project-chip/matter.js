@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DataModelPath } from "../endpoint/DataModelPath.js";
 import { ValueModel } from "../model/index.js";
 import { StatusCode, StatusResponseError } from "../protocol/interaction/StatusCode.js";
 import { Schema } from "./supervision/Schema.js";
-import { DataModelPath } from "../endpoint/DataModelPath.js";
 
 export type SchemaErrorPath = (DataModelPath & { path?: undefined }) | { path: DataModelPath };
 

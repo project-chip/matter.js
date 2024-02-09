@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
 import { Access, ValueModel } from "../../../../model/index.js";
 import { StatusCode } from "../../../../protocol/interaction/StatusCode.js";
 import { AccessControl } from "../../../AccessControl.js";
 import { ReadError, SchemaImplementationError, WriteError } from "../../../errors.js";
 import type { RootSupervisor } from "../../../supervision/RootSupervisor.js";
 import { Schema } from "../../../supervision/Schema.js";
-import { DataModelPath } from "../../../../endpoint/DataModelPath.js";
 import type { ValueSupervisor } from "../../../supervision/ValueSupervisor.js";
 import { Val } from "../../Val.js";
 import { ManagedReference } from "../ManagedReference.js";

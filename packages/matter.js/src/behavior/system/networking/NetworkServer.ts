@@ -101,11 +101,9 @@ export class NetworkServer extends NetworkBehavior {
 
         const part = this.part;
         part.env.runtime.addWorker(
-            this.internal.runtime.openAdvertisementWindow().then(
-                () => part.offline(
-                    agent => agent.get(NetworkServer).enterOnlineMode(runtime, true)
-                )
-            )
+            this.internal.runtime
+                .openAdvertisementWindow()
+                .then(() => part.offline(agent => agent.get(NetworkServer).enterOnlineMode(runtime, true))),
         );
     }
 

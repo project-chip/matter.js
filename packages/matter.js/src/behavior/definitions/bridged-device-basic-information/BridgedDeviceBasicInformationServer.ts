@@ -5,10 +5,13 @@
  */
 
 import { ImplementationError } from "../../../common/MatterError.js";
+import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { AggregatorEndpoint } from "../../../endpoint/definitions/system/AggregatorEndpoint.js";
-import { BridgedNodeEndpoint } from "../../../endpoint/definitions/system/BridgedNodeEndpoint.js";
 import { DescriptorServer } from "../descriptor/DescriptorServer.js";
 import { BridgedDeviceBasicInformationBehavior } from "./BridgedDeviceBasicInformationBehavior.js";
+
+const BRIDGED_NODE_DEVICE_TYPE = DeviceTypeId(0x13);
+const BRIDGED_NODE_REVISION = 1;
 
 /**
  * This is the default server implementation of BridgedDeviceBasicInformationBehavior.
@@ -53,8 +56,8 @@ export class BridgedDeviceBasicInformationServer extends BridgedDeviceBasicInfor
 
         // Ensure part is a bridged node
         this.agent.get(DescriptorServer).addDeviceTypes({
-            deviceType: BridgedNodeEndpoint.deviceType,
-            revision: BridgedNodeEndpoint.deviceRevision
+            deviceType: BRIDGED_NODE_DEVICE_TYPE,
+            revision: BRIDGED_NODE_REVISION,
         });
     }
 }

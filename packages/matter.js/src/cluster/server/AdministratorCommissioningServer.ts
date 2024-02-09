@@ -5,7 +5,11 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
-import { MAXIMUM_COMMISSIONING_TIMEOUT_S, MINIMUM_COMMISSIONING_TIMEOUT_S, PAKE_PASSCODE_VERIFIER_LENGTH } from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
+import {
+    MAXIMUM_COMMISSIONING_TIMEOUT_S,
+    MINIMUM_COMMISSIONING_TIMEOUT_S,
+    PAKE_PASSCODE_VERIFIER_LENGTH,
+} from "../../behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { InternalError } from "../../common/MatterError.js";
 import { FabricIndex } from "../../datatype/FabricIndex.js";
 import { VendorId } from "../../datatype/VendorId.js";

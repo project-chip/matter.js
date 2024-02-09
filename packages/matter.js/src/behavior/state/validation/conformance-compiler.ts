@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Conformance, FeatureSet, FieldValue, ValueModel } from "../../../model/index.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ConformanceError, SchemaImplementationError } from "../../errors.js";
-import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
 import {

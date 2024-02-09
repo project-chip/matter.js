@@ -12,7 +12,7 @@ import { Val } from "../state/Val.js";
 /**
  * This is an instrumentation interface that allows for recording of attribute I/O, commands, events and state
  * mutation.
- * 
+ *
  * Implemented as abstract class to allow for lookup by type in Environment.
  */
 export abstract class ActionTracer {
