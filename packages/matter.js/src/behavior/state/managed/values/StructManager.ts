@@ -170,7 +170,7 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
 
                 // Unwrap if incoming value is managed
                 if (value && (value as InternalCollection)[REF]) {
-                    value = (value as InternalCollection)[REF];
+                    value = (value as InternalCollection)[REF].value;
                 }
 
                 // Modify the value

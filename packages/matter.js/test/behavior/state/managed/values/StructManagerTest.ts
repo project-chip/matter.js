@@ -18,6 +18,11 @@ export type Nested = {
     };
 };
 
+const TestContext = {
+    fabric: FabricIndex(1),
+    subject: NodeId(1),
+}
+
 function testNested(
     actor: (vars: { struct: TestStruct; cx: ActionContext; ref: Nested }) => MaybePromise,
 ): MaybePromise {
@@ -36,7 +41,7 @@ function testNested(
         },
     );
 
-    return struct.online({ fabric: FabricIndex(1), subject: NodeId(1) }, (ref, cx) => {
+    return struct.online(TestContext, (ref, cx) => {
         return actor({ struct, cx, ref: ref as Nested });
     });
 }
@@ -74,6 +79,65 @@ describe("StructManager", () => {
             expect(struct.notifies).deep.equal([
                 { index: "substruct", oldValue: { foo: "bar" }, newValue: { foo: "rab" } },
             ]);
+        });
+    });
+
+    it("accepts insert of mutated primitive array", async () => {
+        const struct = TestStruct({
+            array: { 
+                type: "list",
+
+                children: [
+                    FieldElement({ name: "entry", type: "uint8" })
+                ]
+            }
+        });
+
+        await struct.online(TestContext, ref => {
+            ref.array = [ 1, 2, 3 ];
+            
+            const array = ref.array as number[];
+            expect(array).deep.equals([ 1, 2, 3 ]);
+
+            array.push(4);
+
+            ref.array = array;
+
+            const array2 = ref.array;
+            expect(array2).deep.equals([ 1, 2, 3, 4 ]);
+        });
+    });
+
+    it("accepts insert of mutated object array", async() => {
+        const struct = TestStruct({
+            array: { 
+                type: "list",
+
+                children: [
+                    FieldElement({
+                        name: "entry",
+                        type: "struct",
+                        children: [
+                            FieldElement({ name: "num", type: "uint8" }),
+                            FieldElement({ name: "str", type: "string" })
+                        ]
+                    })
+                ]
+            }
+        });
+
+        await struct.online(TestContext, ref => {
+            const input = [ { num: 1, str: "foo" }, { num: 2, str: "bar" } ];
+
+            ref.array = [ ...input ];
+            let array = ref.array as { num: number, str: string }[];
+            expect(array).deep.equals(input);
+
+            array.push({ num: 3, str: "baz" });
+            ref.array = array;
+
+            array = ref.array as { num: number, str: string }[];
+            expect(array).deep.equals([ ...input, { num: 3, str: "baz" }]);
         });
     });
 });
