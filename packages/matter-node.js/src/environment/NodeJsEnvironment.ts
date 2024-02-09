@@ -12,6 +12,7 @@ import { ImplementationError } from "../exports/common.js";
 import { NetworkNode } from "../net/NetworkNode.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
 import { ProcessManager } from "./ProcessManager.js";
+import { NodeJsActionTracer } from "./NodeJsActionTracer.js";
 
 /**
  * This is the default environment implementation for Node.js:
@@ -37,6 +38,8 @@ export function NodeJsEnvironment() {
     configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
+    
+    NodeJsActionTracer.configure(env);
 
     return env;
 }

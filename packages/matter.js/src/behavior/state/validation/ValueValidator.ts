@@ -9,7 +9,7 @@ import { camelize } from "../../../util/String.js";
 import { ConformanceError, DatatypeError, SchemaImplementationError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
 import { Schema } from "../../supervision/Schema.js";
-import { SchemaPath } from "../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import type { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { Val } from "../Val.js";
 import {
@@ -76,16 +76,16 @@ export function ValueValidator(schema: Schema, factory: RootSupervisor): ValueSu
 
         case undefined:
             if (schema.type === undefined) {
-                throw new SchemaImplementationError(SchemaPath(schema.path), `No type defined`);
+                throw new SchemaImplementationError(DataModelPath(schema.path), `No type defined`);
             }
             throw new SchemaImplementationError(
-                SchemaPath(schema.path),
+                DataModelPath(schema.path),
                 `Cannot determine metatype for type ${schema.type}`,
             );
 
         default:
             throw new SchemaImplementationError(
-                SchemaPath((schema as Schema).path),
+                DataModelPath((schema as Schema).path),
                 `Unsupported validation metatype ${metatype}`,
             );
     }
@@ -218,7 +218,7 @@ function createStructValidator(schema: Schema, factory: RootSupervisor): ValueSu
                 value = struct[name];
             }
 
-            sublocation.path.name = name;
+            sublocation.path.id = name;
             validators[name](value, session, sublocation);
         }
 
@@ -267,7 +267,7 @@ function createListValidator(schema: ValueModel, factory: RootSupervisor): Value
                     continue;
                 }
 
-                sublocation.path.name = index;
+                sublocation.path.id = index;
                 entryValidator(e, session, sublocation);
 
                 index++;

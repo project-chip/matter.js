@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { SchemaPath } from "../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Val } from "../Val.js";
 
 /**
@@ -14,7 +14,7 @@ export interface ValidationLocation {
     /**
      * The path to scrutinize, used for diagnostic messages.
      */
-    path: SchemaPath;
+    path: DataModelPath;
 
     /**
      * To validate conformance and constraints we require access to sibling

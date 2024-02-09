@@ -45,7 +45,11 @@ export abstract class BehaviorBacking {
     }
 
     toString() {
-        return `${this.part}.${this.type.id}`;
+        return this.path.toString();
+    }
+
+    get path() {
+        return this.part.path.at(this.type.id);
     }
 
     /**
@@ -134,9 +138,9 @@ export abstract class BehaviorBacking {
         return this.#datasource;
     }
 
-    protected get datasourceOptions() {
+    protected get datasourceOptions(): Datasource.Options {
         return {
-            name: `${this.part}.${this.type.id}.state`,
+            path: this.part.path.at("state"),
             supervisor: this.type.supervisor,
             type: this.type.State,
             events: this.events as unknown as Datasource.Events,

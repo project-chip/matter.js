@@ -7,7 +7,7 @@
 import { Conformance } from "../../../model/index.js";
 import { SchemaErrorPath, SchemaImplementationError } from "../../errors.js";
 import { Schema } from "../../supervision/Schema.js";
-import { SchemaPath } from "../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { Val } from "../Val.js";
 import { ValidationLocation } from "./location.js";
 
@@ -181,7 +181,7 @@ function performComparison(
 ): StaticNode {
     const operator = ComparisonOperators[operatorName];
     if (operator === undefined) {
-        throw new SchemaImplementationError(SchemaPath(schema.path), `Unknown binary operator ${operatorName}`);
+        throw new SchemaImplementationError(DataModelPath(schema.path), `Unknown binary operator ${operatorName}`);
     }
 
     assertValue(location, lhs, `Left-hand side of "${operatorName}"`);
@@ -211,7 +211,7 @@ export function createComparison(
 ): DynamicNode {
     // If both sides are static evaluate statically
     if (isStatic(lhs) && isStatic(rhs)) {
-        return performComparison(operatorName, lhs, rhs, schema, SchemaPath(schema.path));
+        return performComparison(operatorName, lhs, rhs, schema, DataModelPath(schema.path));
     }
 
     // Evaluate at runtime

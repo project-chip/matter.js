@@ -98,7 +98,7 @@ function createArrayConstraintValidator(constraint: Constraint, schema: ValueMod
                     continue;
                 }
 
-                sublocation.path.name = pos;
+                sublocation.path.id = pos;
                 validateEntryConstraint(e, session, sublocation);
             }
         }

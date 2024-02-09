@@ -14,7 +14,7 @@ import { Observable } from "../../../util/Observable.js";
 import { AccessControl } from "../../AccessControl.js";
 import { ExpiredReferenceError } from "../../errors.js";
 import { RootSupervisor } from "../../supervision/RootSupervisor.js";
-import { SchemaPath } from "../../supervision/SchemaPath.js";
+import { DataModelPath } from "../../../endpoint/DataModelPath.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
 import { StateType } from "../StateType.js";
 import { SynchronousTransactionConflictError } from "../transaction/Errors.js";
@@ -66,7 +66,7 @@ export function Datasource<const T extends StateType = StateType>(options: Datas
 
     return {
         toString() {
-            return internals.name;
+            return internals.path.toString();
         },
 
         reference(session: ValueSupervisor.Session) {
@@ -116,14 +116,14 @@ export namespace Datasource {
         type: T;
 
         /**
-         * Name used in diagnostic messages.
-         */
-        name: string;
-
-        /**
          * The manager used to manage and validate values.
          */
         supervisor: RootSupervisor;
+
+        /**
+         * Path used in diagnostic messages.
+         */
+        path: DataModelPath;
 
         /**
          * Events of the form "fieldName$Change", if present, emit after field changes commit.
@@ -178,7 +178,7 @@ export namespace Datasource {
 }
 
 interface Internals extends Datasource.Options {
-    path: SchemaPath;
+    path: DataModelPath;
     values: Val.Struct;
     version: number;
     persistedVersion?: number;
@@ -186,6 +186,7 @@ interface Internals extends Datasource.Options {
 }
 
 interface Changes {
+    all?: Val.Struct;
     persistent?: Val.Struct;
     notifications: Array<{
         event: Observable;
@@ -225,7 +226,6 @@ function configure(options: Datasource.Options): Internals {
 
     return {
         ...options,
-        path: SchemaPath(options.name),
         version,
         persistedVersion,
         values: values,
@@ -244,7 +244,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
 
     const participant = {
         toString() {
-            return internals.name;
+            return internals.path.toString();
         },
         commit1,
         commit2,
@@ -289,7 +289,7 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         } catch (e) {
             if (e instanceof SynchronousTransactionConflictError) {
                 logger.warn(
-                    `Datasource ${internals.name} lock unavailable for persisting version number, will retry on next write`,
+                    `Datasource ${internals.path} lock unavailable for persisting version number, will retry on next write`,
                 );
             } else {
                 throw e;
@@ -428,6 +428,13 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                         params: [values[name], internals.values[name], session],
                     });
                 }
+
+                if (session.trace) {
+                    if (!changes.all) {
+                        changes.all = {};
+                    }
+                    changes.all[name] = values[name];
+                }
             }
         }
 
@@ -471,12 +478,23 @@ function createRootReference(resource: Resource, internals: Internals, session: 
             delete values[VERSION_KEY];
         }
 
+        if (!changes) {
+            return;
+        }
+
         const oldValues = internals.values;
         internals.values = values;
         internals.changed?.emit(oldValues);
 
-        if (!changes) {
-            return;
+        if (session.trace) {
+            let mutations = session.trace.mutations;
+            if (!mutations) {
+                mutations = session.trace.mutations = [];
+            }
+            mutations.push({
+                path: internals.path.toArray(),
+                values: internals.values,
+            });
         }
     }
 

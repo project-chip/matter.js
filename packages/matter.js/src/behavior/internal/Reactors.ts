@@ -168,7 +168,7 @@ class ReactorBacking<T extends any[], R> {
         // Otherwise run in independent context and errors do not interfere with emitter
         return MaybePromise.catch(
             () =>
-                OfflineContext.act(this.toString(), context =>
+                OfflineContext.act("react", context =>
                     this.#reactWithContext(context as ActionContext, this.#reactors.backing, args),
                 ),
 

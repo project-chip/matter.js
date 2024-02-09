@@ -34,7 +34,7 @@ import { Contextual } from "../context/Contextual.js";
 import { Val } from "../state/Val.js";
 import { StructManager } from "../state/managed/values/StructManager.js";
 import { Status } from "../state/transaction/Status.js";
-import { SchemaPath } from "../supervision/SchemaPath.js";
+import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import { ServerBehaviorBacking } from "./ServerBacking.js";
 
 const logger = Logger.get("Behavior");
@@ -187,19 +187,40 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
         }
 
         return withBehavior(backing, message, behavior => {
+            const path = backing.path.at(name);
+
+            const trace = behavior.context.trace;
+            if (trace) {
+                trace.path = backing.path.at(name);
+                trace.input = request;
+            }
+
             logger.info(
                 "Invoke",
-                Diagnostic.strong(`${backing}.${name}`),
+                Diagnostic.strong(path.toString()),
                 behavior.context.transaction.via,
                 requestDiagnostic,
             );
 
             access.authorizeInvoke(behavior.context, {
-                path: SchemaPath(`${behavior}.${name}`),
+                path: DataModelPath(`${behavior}.${name}`),
                 cluster: behavior.cluster.id,
             });
 
-            return (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
+            let result = (behavior as unknown as Record<string, (arg: any) => any>)[name](request);
+
+            if (trace) {
+                result = MaybePromise.then(
+                    result,
+
+                    (output) => {
+                        trace.output = result;
+                        return output;
+                    }
+                );
+            }
+
+            return result;
         });
     };
 }
@@ -230,6 +251,10 @@ function createAttributeAccessors(
 
                 StructManager.assertDirectReadAuthorized(state, name);
 
+                if (behavior.context.trace) {
+                    behavior.context.trace.output = state[name];
+                }
+
                 return state[name];
             });
         },
@@ -242,6 +267,10 @@ function createAttributeAccessors(
                     "via",
                     behavior.context.transaction.via,
                 );
+
+                if (behavior.context.trace) {
+                    behavior.context.trace.input = value;
+                }
 
                 const state = behavior.state as Record<string, any>;
 

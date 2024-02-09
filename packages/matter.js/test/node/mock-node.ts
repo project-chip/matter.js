@@ -123,6 +123,8 @@ export class MockServerStore extends ServerStore {
     }
 }
 
+// TODO - this was intended as client/server-independent node but ended up converting to server out of expediency.
+// Should probably either convert to extending directly from Node or just replace uses with MockServerNode
 export class MockNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends ServerNode<T> {
     #storage = new StorageManager(new StorageBackendMemory());
 

@@ -10,6 +10,7 @@ import { Datasource } from "../../../../../src/behavior/state/managed/Datasource
 import { Val } from "../../../../../src/behavior/state/Val.js";
 import { RootSupervisor } from "../../../../../src/behavior/supervision/RootSupervisor.js";
 import { ValueSupervisor } from "../../../../../src/behavior/supervision/ValueSupervisor.js";
+import { DataModelPath } from "../../../../../src/endpoint/DataModelPath.js";
 import { DatatypeModel, FieldElement } from "../../../../../src/model/index.js";
 import { Observable } from "../../../../../src/util/Observable.js";
 import { MaybePromise } from "../../../../../src/util/Promises.js";
@@ -84,7 +85,7 @@ export function TestStruct(fields: Record<string, string | Partial<FieldElement>
     }
 
     const datasource = Datasource({
-        name: "TestStruct",
+        path: DataModelPath("TestStruct"),
         type: TestState,
         supervisor,
         defaults,

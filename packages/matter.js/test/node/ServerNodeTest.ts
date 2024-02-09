@@ -9,17 +9,17 @@ import { MockServerNode } from "./mock-server-node.js";
 
 describe("ServerNode", () => {
     it("starts and stops", async () => {
-        const server = new MockServerNode();
+        const node = new MockServerNode();
 
         let disposal: Promise<void> | undefined;
 
-        server.lifecycle.ready.on(() => {
-            disposal = server[Symbol.asyncDispose]();
+        node.lifecycle.ready.on(() => {
+            disposal = node[Symbol.asyncDispose]();
         });
 
-        server.add(OnOffLightDevice);
+        node.add(OnOffLightDevice);
 
-        await server.run();
+        await node.run();
 
         expect(disposal).not.undefined;
 
@@ -27,13 +27,29 @@ describe("ServerNode", () => {
     });
 
     it("commissions", async () => {
-        const server = new MockServerNode();
+        const node = new MockServerNode();
 
-        server.add(OnOffLightDevice);
+        node.add(OnOffLightDevice);
 
-        await server.construction;
+        await node.construction;
 
-        // TODO
+        /*
+        node.online({}, agent => {
+            agent.generalCommissioning.armFailSafe({ expiryLengthSeconds: 60, breadcrumb: 4 });
+        });
+
+        node.online({}, agent => {
+            agent.generalCommissioning.setRegulatoryConfig({ newRegulatoryConfig: 2, countryCode: "XX", breadcrumb: 5 });
+        });
+
+        node.online({}, agent => {
+            agent.operationalCredentials.certificateChainRequest({ certificateType: 2 });
+        });
+
+        node.online({}, agent => {
+            agent.operationalCredentials.certificateChainRequest({ certificateType: 1 });
+        });
+        */
     });
 
     it("decommissions", () => {

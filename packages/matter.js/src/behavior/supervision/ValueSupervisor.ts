@@ -5,6 +5,7 @@
  */
 
 import type { AccessControl } from "../AccessControl.js";
+import { ActionTracer } from "../context/ActionTracer.js";
 import type { Val } from "../state/Val.js";
 import type { Transaction } from "../state/transaction/Transaction.js";
 import type { ValidationLocation } from "../state/validation/location.js";
@@ -65,6 +66,12 @@ export namespace ValueSupervisor {
          * The transaction used for isolating state changes associated with this session.
          */
         transaction: Transaction;
+
+        /**
+         * A target for instrumentation information.  If present, various components will populate with diagnostic
+         * information during the action.
+         */
+        trace?: ActionTracer.Action;
 
         /**
          * If this is true, only changes to non-volatile values trigger version updates.  This is used for setup and
