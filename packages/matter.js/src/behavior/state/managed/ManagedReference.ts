@@ -92,6 +92,9 @@ export function ManagedReference(
         },
 
         get original() {
+            if (!parent.original) {
+                return undefined;
+            }
             return (parent.original as Container)[index];
         },
 
