@@ -65,7 +65,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 case PartLifecycle.Change.ServersChanged:
                 case PartLifecycle.Change.Destroyed:
                     this.#updateStructure();
-                    break;                    
+                    break;
             }
         };
 

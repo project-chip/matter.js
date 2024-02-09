@@ -12,7 +12,7 @@
 
 import {
     DEVICE_ANNOUNCEMENT_DURATION_MS,
-    DEVICE_ANNOUNCEMENT_INTERVAL_MS
+    DEVICE_ANNOUNCEMENT_INTERVAL_MS,
 } from "./behavior/definitions/administrator-commissioning/AdministratorCommissioningConstants.js";
 import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";

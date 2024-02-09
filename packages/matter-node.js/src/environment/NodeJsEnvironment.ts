@@ -11,24 +11,24 @@ import { resolve } from "path";
 import { ImplementationError } from "../exports/common.js";
 import { NetworkNode } from "../net/NetworkNode.js";
 import { StorageBackendDisk } from "../storage/StorageBackendDisk.js";
-import { ProcessManager } from "./ProcessManager.js";
 import { NodeJsActionTracer } from "./NodeJsActionTracer.js";
+import { ProcessManager } from "./ProcessManager.js";
 
 /**
  * This is the default environment implementation for Node.js:
  *
  *   - Sets variables using rudimentary command line, environment and configuration file parsers.
- * 
+ *
  *   - Processes UNIX-style signals and sets process exit codes via {@link ProcessManager}
- * 
+ *
  *   - Creates a default storage pool using the loaded configuration.
  *
  * You can modify this behavior:
- * 
+ *
  *   - Via configuration
- * 
+ *
  *   - By modifying {@link Environment.default}
- * 
+ *
  *   - By providing an {@link Environment} to your components other than {@link Environment.default}
  */
 export function NodeJsEnvironment() {
@@ -38,7 +38,7 @@ export function NodeJsEnvironment() {
     configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
-    
+
     NodeJsActionTracer.configure(env);
 
     return env;
@@ -123,6 +123,6 @@ export function getDefaults(vars: VariableService) {
         runtime: {
             signals: true,
             exitcode: true,
-        }
+        },
     };
 }

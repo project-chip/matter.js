@@ -6,7 +6,7 @@
 
 /**
  * Utility for tracking location in the Matter data model used for diagnostics.
- * 
+ *
  * The path consists of a sequence of IDs, optionally with type information.
  */
 export interface DataModelPath {
@@ -29,7 +29,7 @@ export interface DataModelPath {
 export function DataModelPath(id: string | number, type?: string): DataModelPath {
     function identity(this: DataModelPath) {
         if (this.type) {
-            return `${this.type}#${this.id}`
+            return `${this.type}#${this.id}`;
         }
         return this.id;
     }
@@ -43,9 +43,9 @@ export function DataModelPath(id: string | number, type?: string): DataModelPath
 
     function toArray(this: DataModelPath): (string | number)[] {
         if (this.parent) {
-            return [ ...this.parent.toArray(), this.id ];
+            return [...this.parent.toArray(), this.id];
         }
-        return [ this.id ];
+        return [this.id];
     }
 
     function at(this: DataModelPath, id: string | number, type?: string): DataModelPath {

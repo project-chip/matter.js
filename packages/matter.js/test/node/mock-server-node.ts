@@ -12,11 +12,11 @@ import { Environment } from "../../src/environment/Environment.js";
 import { StorageService } from "../../src/environment/StorageService.js";
 import { Network } from "../../src/net/Network.js";
 import { NetworkFake } from "../../src/net/fake/NetworkFake.js";
+import { Node } from "../../src/node/Node.js";
 import { ServerNode } from "../../src/node/ServerNode.js";
 import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
 import { StorageBackendMemory } from "../../src/storage/StorageBackendMemory.js";
 import { MaybePromise } from "../../src/util/Promises.js";
-import { Node } from "../../src/node/Node.js";
 
 export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> extends ServerNode<T> {
     constructor(type: T = ServerRootEndpoint as T) {

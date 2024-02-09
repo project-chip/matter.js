@@ -215,14 +215,11 @@ export abstract class Behavior {
 
     /**
      * Create a generic callback function that has the same properties as a {@link Reactor}.
-     * 
+     *
      * Like a reactor, the callback's "this" will be bound to an active Behavior instance.
      */
-    protected callback<A extends any[], R extends any>(
-        reactor: Reactor<A, R>,
-        options?: Reactor.Options,
-    ) {
-        const observable = new Observable<A, R>;
+    protected callback<A extends any[], R extends any>(reactor: Reactor<A, R>, options?: Reactor.Options) {
+        const observable = new Observable<A, R>();
 
         this.reactTo(observable, reactor, options);
 

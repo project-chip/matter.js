@@ -5,9 +5,9 @@
  */
 
 import { ActionTracer } from "@project-chip/matter.js/behavior/context";
-import { resolve } from "path";
-import { open, FileHandle } from "fs/promises";
 import { Environment } from "@project-chip/matter.js/environment";
+import { FileHandle, open } from "fs/promises";
+import { resolve } from "path";
 
 export class NodeJsActionTracer extends ActionTracer {
     #path: string;

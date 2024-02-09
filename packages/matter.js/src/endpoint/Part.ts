@@ -380,11 +380,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     #initialize() {
         return MaybePromise.then(
             // Initialize myself and behaviors in a single offline transaction
-            () => OfflineContext.act(
-                `initialize`,
-                context => this.initialize(context.agentFor(this)),
-                { unversionedVolatiles: true },
-            ),
+            () =>
+                OfflineContext.act(`initialize`, context => this.initialize(context.agentFor(this)), {
+                    unversionedVolatiles: true,
+                }),
 
             // Update lifecycle indicating initialization is complete
             () => this.lifecycle.change(PartLifecycle.Change.Ready),

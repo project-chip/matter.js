@@ -32,24 +32,20 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     /**
      * Bring the server online.
-     * 
+     *
      * If you add the server as a worker to {@link Environment.runtime} this happens automatically.
      */
     start() {
-        this.construction.then(() =>
-            this.offline(agent => agent.get(NetworkServer).start())
-        );
+        this.construction.then(() => this.offline(agent => agent.get(NetworkServer).start()));
     }
 
     /**
      * Take the server offline but leave state and structure intact.
-     * 
+     *
      * This happens automatically on destruction.
      */
     cancel() {
-        this.construction.then(() =>
-            this.offline(agent => agent.get(NetworkServer).cancel())
-        );
+        this.construction.then(() => this.offline(agent => agent.get(NetworkServer).cancel()));
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {

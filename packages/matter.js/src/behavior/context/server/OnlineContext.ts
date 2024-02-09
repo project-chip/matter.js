@@ -14,8 +14,8 @@ import { MaybePromise } from "../../../util/Promises.js";
 import { AccessControl } from "../../AccessControl.js";
 import { Transaction } from "../../state/transaction/Transaction.js";
 import { ActionContext } from "../ActionContext.js";
-import { Contextual } from "../Contextual.js";
 import { ActionTracer } from "../ActionTracer.js";
+import { Contextual } from "../Contextual.js";
 import { ContextAgents } from "./ContextAgents.js";
 
 /**

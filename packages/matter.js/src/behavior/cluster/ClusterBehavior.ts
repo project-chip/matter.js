@@ -80,7 +80,7 @@ export class ClusterBehavior extends Behavior {
     /**
      * Keep networking alive until I'm destroyed.
      */
-    static override readonly dependencies = [ NetworkBehavior ];
+    static override readonly dependencies = [NetworkBehavior];
 
     constructor(agent: Agent, backing: BehaviorBacking) {
         super(agent, backing);

@@ -22,10 +22,18 @@ export class NodeLifecycle extends PartLifecycle {
 
     constructor(part: Part) {
         super(part);
-        this.#online.on(() => { this.#isOnline = true });
-        this.#offline.on(() => { this.#isOnline = false });
-        this.#commissioned.on(() => { this.#isCommissioned = true });
-        this.#decommissioned.on(() => { this.#isCommissioned = false });
+        this.#online.on(() => {
+            this.#isOnline = true;
+        });
+        this.#offline.on(() => {
+            this.#isOnline = false;
+        });
+        this.#commissioned.on(() => {
+            this.#isCommissioned = true;
+        });
+        this.#decommissioned.on(() => {
+            this.#isCommissioned = false;
+        });
     }
 
     /**
@@ -34,7 +42,6 @@ export class NodeLifecycle extends PartLifecycle {
     get isOnline() {
         return this.#isOnline;
     }
-
 
     /**
      * Emits when the node is first online.

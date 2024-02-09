@@ -77,7 +77,7 @@ export class DependencyLifecycleError extends ImplementationError {
 export interface Startable {
     /**
      * Commence with the object's primary activity.
-     * 
+     *
      * Start should have no effect if the object is already started.
      */
     start(): void;
@@ -89,7 +89,7 @@ export interface Startable {
 export interface Cancellable {
     /**
      * Stop the object's primary activity.  This should result in termination as quickly as possible.
-     *  
+     *
      * Cancellation have no effect if the object is cancelled or otherwise in a state where cancellation is irrelevant.
      */
     cancel(): void;

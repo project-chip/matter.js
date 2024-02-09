@@ -70,7 +70,7 @@ export class Parts implements MutableSet<Part, Part | Agent>, ObservableSet<Part
     }
 
     get areReady() {
-        return [ ...this.#children ].findIndex(child => !child.lifecycle.isTreeReady) === -1;
+        return [...this.#children].findIndex(child => !child.lifecycle.isTreeReady) === -1;
     }
 
     indexOf(child: Part | Agent) {
