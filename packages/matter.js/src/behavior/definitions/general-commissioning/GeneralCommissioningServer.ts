@@ -7,6 +7,7 @@
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
+import { TimedOperation } from "../../../common/TimedOperation.js";
 import { PartStructuralAdapter } from "../../../endpoint/PartStructuralAdapter.js";
 import { Logger } from "../../../log/Logger.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
@@ -59,12 +60,22 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
-            await device.armFailSafe(
-                expiryLengthSeconds,
-                this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
-                this.session.getFabric(),
-                PartStructuralAdapter(this.part, this.context),
-            );
+            if (device.isFailsafeArmed()) {
+                device.timedOperation.extend(this.session.getFabric(), expiryLengthSeconds);
+            } else {
+                // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
+                // to a success response with no side effect against the fail-safe context.
+                if (expiryLengthSeconds === 0) return SuccessResponse;
+
+                await device.beginTimed(new TimedOperation({
+                    fabrics: device.fabricManager,
+                    sessions: device.sessionManager,
+                    expiryLengthSeconds,
+                    maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
+                    associatedFabric: this.session.getFabric(),
+                    rootEndpoint: PartStructuralAdapter(this.part, this.context),
+                }))
+            }
 
             if (device.isFailsafeArmed()) {
                 // If failsafe is armed after the command, set breadcrumb (not when expired)
@@ -163,6 +174,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }
+        const timedOp = device.timedOperation;
 
         assertSecureSession(this.session, "commissioningComplete can only be called on a secure session");
         const fabric = this.session.getFabric();
@@ -172,11 +184,12 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 debugText: "No Fabric associated with the session.",
             };
         }
-        const failSafeContext = device.getFailSafeContext();
-        if (fabric.fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
+
+        const timedFabric = timedOp.associatedFabric?.fabricIndex;
+        if (fabric.fabricIndex !== timedFabric) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
-                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${failSafeContext.associatedFabric?.fabricIndex}.`,
+                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${timedFabric}.`,
             };
         }
 
@@ -187,7 +200,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked
         //    (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
-        await device.completeCommission();
+        await timedOp.completeCommission();
 
         // 5. The Breadcrumb attribute SHALL be reset to zero.
         this.state.breadcrumb = BigInt(0);

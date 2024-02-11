@@ -17,7 +17,6 @@ import {
 } from "../../cluster/server/ClusterServerTypes.js";
 import { Message } from "../../codec/MessageCodec.js";
 import { ImplementationError, InternalError } from "../../common/MatterError.js";
-import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import type { PartServer } from "../../endpoint/PartServer.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
@@ -203,7 +202,7 @@ function createCommandHandler(backing: ClusterServerBehaviorBacking, name: strin
             );
 
             access.authorizeInvoke(behavior.context, {
-                path: DataModelPath(`${behavior}.${name}`),
+                path,
                 cluster: behavior.cluster.id,
             });
 
@@ -240,6 +239,11 @@ function createAttributeAccessors(
             }
 
             return withBehavior(backing, message, behavior => {
+                const trace = behavior.context.trace;
+                if (trace) {
+                    trace.path = backing.path.at(name);
+                }
+
                 logger.debug(
                     "Read",
                     Diagnostic.strong(`${backing}.state.${name}`),
@@ -251,8 +255,8 @@ function createAttributeAccessors(
 
                 StructManager.assertDirectReadAuthorized(state, name);
 
-                if (behavior.context.trace) {
-                    behavior.context.trace.output = state[name];
+                if (trace) {
+                    trace.output = state[name];
                 }
 
                 return state[name];
@@ -268,8 +272,10 @@ function createAttributeAccessors(
                     behavior.context.transaction.via,
                 );
 
-                if (behavior.context.trace) {
-                    behavior.context.trace.input = value;
+                const trace = behavior.context.trace;
+                if (trace) {
+                    trace.path = backing.path.at(name);
+                    trace.input = value;
                 }
 
                 const state = behavior.state as Record<string, any>;

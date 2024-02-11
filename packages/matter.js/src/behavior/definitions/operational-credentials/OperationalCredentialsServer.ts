@@ -30,18 +30,17 @@ import {
     UpdateNocRequest,
 } from "./OperationalCredentialsInterface.js";
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
+import { MatterDevice } from "../../../MatterDevice.js";
 
 const logger = Logger.get("OperationalCredentials");
 
 /**
  * This is the default server implementation of OperationalCredentialsBehavior.
  *
- * TODO - currently "source of truth" for fabric data is persisted by FabricManager.  I'd probably convert so we just
- * load fabrics from persisted OperationalCredentials state but right now we just sync the state
- *
- * TODO - we either need to change source of truth as mentioned above or sync state.  Perhaps just at startup but most
- * complete solution would be to hook fabric for all changes.  Right now this code assumes it's the only source of
- * fabric mutation
+ * TODO - currently "source of truth" for fabric data is persisted by FabricManager.  If we remove some legacy code
+ * paths we can move source of truth to here.  Right now we just sync fabrics with MatterDevice.  This sync is only as
+ * comprehensive as required by current use cases.  If fabrics are mutated directly on MatterDevice then this code will
+ * require update.
  */
 export class OperationalCredentialsServer extends OperationalCredentialsBehavior {
     declare internal: OperationalCredentialsServer.Internal;
@@ -75,18 +74,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 StatusCode.InvalidCommand,
             );
         }
-        const device = this.session.getContext();
-        device.assertFailSafeArmed("csrRequest received while failsafe is not armed.");
 
-        const failSafeContext = device.getFailSafeContext();
-        if (failSafeContext.fabricIndex !== undefined) {
+        const timedOp = this.part.env.get(MatterDevice).timedOperation;
+        if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `csrRequest received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `csrRequest received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        const certSigningRequest = failSafeContext.createCertificateSigningRequest(
+        const certSigningRequest = timedOp.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             this.session.getId(),
         );
@@ -119,33 +116,30 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
-        const device = this.session.getContext();
-        device.assertFailSafeArmed("addNoc received while failsafe is not armed.");
+        const timedOp = this.part.env.get(MatterDevice).timedOperation;
 
-        const failSafeContext = device.getFailSafeContext();
-
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `addNoc received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `addNoc received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!failSafeContext.fabricBuilder.hasRootCert()) {
+        if (!timedOp.hasRootCert) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
                 debugText: "Root certificate not found.",
             };
         }
 
-        if (failSafeContext.csrSessionId !== this.session.getId()) {
+        if (timedOp.csrSessionId !== this.session.getId()) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
                 debugText: "CSR not found in failsafe context.",
             };
         }
 
-        if (failSafeContext.forUpdateNoc) {
+        if (timedOp.forUpdateNoc) {
             throw new StatusResponseError(
                 `addNoc received after csr request was invoked for UpdateNOC.`,
                 StatusCode.ConstraintError,
@@ -153,7 +147,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         const state = this.state;
-        if (device.getFabrics().length >= state.supportedFabrics) {
+        if (state.commissionedFabrics >= state.supportedFabrics) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.TableFull,
                 debugText: `No more fabrics can be added because limit ${state.supportedFabrics} reached.`,
@@ -162,7 +156,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         let fabric: Fabric;
         try {
-            fabric = await failSafeContext.buildFabric({
+            fabric = await timedOp.buildFabric({
                 nocValue,
                 icacValue,
                 adminVendorId,
@@ -184,15 +178,16 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 throw error;
             }
         }
-        await device.addFabric(fabric);
 
-        if (this.session.isPase()) {
-            logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}.`);
-            this.session.addAssociatedFabric(fabric);
-        }
+        await timedOp.addFabric(fabric);
 
-        // Update attributes
-        this.asAdmin(() => {
+        try {
+            if (this.session.isPase()) {
+                logger.debug(`Add Fabric ${fabric.fabricIndex} to PASE session ${this.session.name}.`);
+                this.session.addAssociatedFabric(fabric);
+            }
+
+            // Update attributes
             const existingFabricIndex = this.state.fabrics.findIndex(f => f.fabricIndex === fabric.fabricIndex);
             const existingNocIndex = this.state.nocs.findIndex(n => n.fabricIndex === fabric.fabricIndex);
             if (existingFabricIndex !== -1 || existingNocIndex !== -1) {
@@ -219,7 +214,19 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             this.state.trustedRootCertificates.push(fabric.rootCert);
 
             this.state.commissionedFabrics = this.state.fabrics.length;
-        });
+
+            await this.context.transaction.commit();
+        } catch (e) {
+            // Fabric insertion into MatterDevice is not currently transactional so we need to remove manually
+            fabric.remove(this.session.getId());
+            throw e;
+        }
+
+        // Current method of detecting timeout expiration is to detect fabric removal, so monitor the fabric until
+        // commissioning completes
+        this.internal.commissionedFabric = fabric.fabricIndex;
+        this.internal.fabricRemovalCallback = this.callback(this.#commissioningTimeout);
+        fabric.addRemoveCallback(this.internal.fabricRemovalCallback);
 
         // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
         //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
@@ -246,36 +253,34 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const device = this.session.getContext();
 
-        device.assertFailSafeArmed("updateNoc received while failsafe is not armed.");
+        const timedOp = device.timedOperation;
 
-        const failSafeContext = device.getFailSafeContext();
-
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `updateNoc received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `updateNoc received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.forUpdateNoc) {
+        if (timedOp.forUpdateNoc) {
             throw new StatusResponseError(
                 `addNoc received after csr request was invoked for UpdateNOC.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.fabricBuilder.hasRootCert()) {
+        if (timedOp.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate added in this session which is now allowed for UpdateNOC.",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!failSafeContext.forUpdateNoc) {
+        if (!timedOp.forUpdateNoc) {
             throw new StatusResponseError("csrRequest not invoked for UpdateNOC.", StatusCode.ConstraintError);
         }
 
-        if (this.session.getAssociatedFabric().fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
+        if (this.session.getAssociatedFabric().fabricIndex !== timedOp.associatedFabric?.fabricIndex) {
             throw new StatusResponseError(
                 "Fabric of this session and the failsafe context do not match.",
                 StatusCode.ConstraintError,
@@ -283,10 +288,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         }
 
         // Build a new Fabric with the updated NOC and ICAC
-        const updateFabric = await failSafeContext.buildUpdatedFabric(nocValue, icacValue);
+        const updateFabric = await timedOp.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        device.updateFabric(updateFabric);
+        timedOp.updateFabric(updateFabric);
 
         const nocIndex = this.state.nocs.findIndex(n => n.fabricIndex === updateFabric.fabricIndex);
         if (nocIndex === -1) {
@@ -350,14 +355,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         bi.events.leave?.emit({ fabricIndex }, this.context);
 
         await fabric.remove(this.session.getId());
-        for (const array of [this.state.fabrics, this.state.nocs]) {
-            const index = array.findIndex(f => f.fabricIndex === fabricIndex);
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-        }
-        this.state.trustedRootCertificates = device.getFabrics().map(f => f.rootCert);
-        this.state.commissionedFabrics = this.state.fabrics.length;
+
+        this.#deleteFabric(fabricIndex);
 
         return {
             statusCode: OperationalCredentials.NodeOperationalCertStatus.Ok,
@@ -366,26 +365,41 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override addTrustedRootCertificate({ rootCaCertificate }: AddTrustedRootCertificateRequest) {
-        const device = this.session.getContext();
-
-        device.assertFailSafeArmed("addTrustedRootCertificate received while failsafe is not armed.");
-
-        const failSafeContext = device.getFailSafeContext();
-        if (failSafeContext.fabricBuilder.hasRootCert()) {
+        const device = this.part.env.get(MatterDevice);
+        const timedOp = device.timedOperation;
+        
+        if (timedOp.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate already added in this FailSafe context.",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `Can not add trusted root certificates after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                `Can not add trusted root certificates after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        this.session.getContext().getFailSafeContext().setRootCert(rootCaCertificate);
+        timedOp.setRootCert(rootCaCertificate);
+    }
+
+    #commissioningTimeout() {
+        if (this.internal.commissionedFabric !== undefined) {
+            this.#deleteFabric(this.internal.commissionedFabric);
+        }
+    }
+
+    #deleteFabric(fabricIndex: FabricIndex) {
+        for (const array of [this.state.fabrics, this.state.nocs]) {
+            const index = array.findIndex(f => f.fabricIndex === fabricIndex);
+            if (index !== -1) {
+                array.splice(index, 1);
+            }
+        }
+        this.state.trustedRootCertificates = this.part.env.get(MatterDevice).getFabrics().map(f => f.rootCert);
+        this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
     get #certification() {
@@ -404,6 +418,8 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 export namespace OperationalCredentialsServer {
     export class Internal {
         certification?: DeviceCertification;
+        fabricRemovalCallback?: () => void;
+        commissionedFabric?: FabricIndex;
     }
 
     export class State extends OperationalCredentialsBehavior.State {

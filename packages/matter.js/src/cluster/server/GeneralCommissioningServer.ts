@@ -5,6 +5,7 @@
  */
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
+import { TimedOperation } from "../../common/TimedOperation.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
 import { EndpointStructuralAdapter } from "../../device/EndpointStructuralAdapter.js";
 import { Logger } from "../../log/Logger.js";
@@ -52,12 +53,22 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 throw new MatterFlowError("Failed to arm failsafe using CASE while commissioning window is opened.");
             }
 
-            await device.armFailSafe(
-                expiryLengthSeconds,
-                basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
-                session.getFabric(),
-                EndpointStructuralAdapter(endpoint),
-            );
+            if (device.isFailsafeArmed()) {
+                device.timedOperation.extend(session.getFabric(), expiryLengthSeconds);
+            } else {
+                // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
+                // lead to a success response with no side effect against the fail-safe context.
+                if (expiryLengthSeconds === 0) return SuccessResponse;
+
+                await device.beginTimed(new TimedOperation({
+                    fabrics: device.fabricManager,
+                    sessions: device.sessionManager,
+                    expiryLengthSeconds,
+                    maxCumulativeFailsafeSeconds: basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
+                    associatedFabric: session.getFabric(),
+                    rootEndpoint: EndpointStructuralAdapter(endpoint),
+                }))
+            }
 
             if (device.isFailsafeArmed()) {
                 // If failsafe is armed after the command, set breadcrumb (not when expired)
@@ -172,11 +183,11 @@ export const GeneralCommissioningClusterHandler: (options?: {
 
         assertSecureSession(session, "commissioningComplete can only be called on a secure session");
 
-        const failSafeContext = device.getFailSafeContext();
-        if (fabric.fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
+        const timedOperationFabric = device.timedOperation.associatedFabric?.fabricIndex;
+        if (fabric.fabricIndex !== timedOperationFabric) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
-                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${failSafeContext.associatedFabric?.fabricIndex}.`,
+                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${timedOperationFabric}.`,
             };
         }
 
@@ -185,7 +196,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // 2. The commissioning window at the Server SHALL be closed.
         // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
-        await device.completeCommission();
+        await device.timedOperation.completeCommission();
 
         // 5. The Breadcrumb attribute SHALL be reset to zero.
         breadcrumb.setLocal(BigInt(0));

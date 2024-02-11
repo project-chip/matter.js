@@ -43,11 +43,16 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
      * Perform fake online activity
      */
     online(options: Partial<OnlineContext.Options>, actor: (agent: Agent.Instance<T>) => MaybePromise) {
-        OnlineContext({
-            fabric: FabricIndex.NO_FABRIC,
-            subject: NodeId(0),
-            ...options,
-            session: undefined,
-        }).act(context => actor(context.agentFor(this)));
+        if (!options.session) {
+            if (!options.fabric) {
+                options.fabric = FabricIndex.NO_FABRIC;
+            }
+            if (!options.subject) {
+                options.subject = NodeId(0);
+            }
+        }
+        return OnlineContext(
+            options as OnlineContext.Options
+        ).act(context => actor(context.agentFor(this)));
     }
 }

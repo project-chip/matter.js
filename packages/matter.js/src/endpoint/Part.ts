@@ -5,6 +5,7 @@
  */
 
 import { Behavior } from "../behavior/Behavior.js";
+import { ActionTracer } from "../behavior/context/ActionTracer.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
 import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
@@ -378,15 +379,29 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     #initialize() {
+        let trace: ActionTracer.Action;
+        if (this.env.has(ActionTracer)) {
+            trace = {
+                type: ActionTracer.ActionType.Initialize,
+            }            
+        }
+
         return MaybePromise.then(
             // Initialize myself and behaviors in a single offline transaction
             () =>
-                OfflineContext.act(`initialize`, context => this.initialize(context.agentFor(this)), {
+                OfflineContext.act(`initialize`,context => this.initialize(context.agentFor(this)), {
                     unversionedVolatiles: true,
+                    trace,
                 }),
 
             // Update lifecycle indicating initialization is complete
-            () => this.lifecycle.change(PartLifecycle.Change.Ready),
+            () => {
+                this.lifecycle.change(PartLifecycle.Change.Ready);
+                if (trace) {
+                    trace.path = this.path;
+                    this.env.get(ActionTracer).record(trace);
+                }
+            }
         );
     }
 }

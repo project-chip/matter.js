@@ -7,6 +7,7 @@ import { MaybePromise } from "../../../util/Promises.js";
 import { Transaction } from "../../state/transaction/Transaction.js";
 import { ReadOnlyTransaction } from "../../state/transaction/Tx.js";
 import { ActionContext } from "../ActionContext.js";
+import { ActionTracer } from "../ActionTracer.js";
 import { Contextual } from "../Contextual.js";
 import { ContextAgents } from "./ContextAgents.js";
 
@@ -61,6 +62,7 @@ export namespace OfflineContext {
      */
     export interface Options {
         unversionedVolatiles?: boolean;
+        trace?: ActionTracer.Action;
     }
 }
 

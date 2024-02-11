@@ -5,6 +5,7 @@
  */
 
 import { MatterDevice } from "../../MatterDevice.js";
+import { ActionContext } from "../../behavior/context/ActionContext.js";
 import { ActionTracer } from "../../behavior/context/ActionTracer.js";
 import { OnlineContext } from "../../behavior/context/server/OnlineContext.js";
 import { AnyAttributeServer, AttributeServer } from "../../cluster/server/AttributeServer.js";
@@ -18,7 +19,7 @@ import { InteractionEndpointStructure } from "../../protocol/interaction/Interac
 import { InteractionServer } from "../../protocol/interaction/InteractionServer.js";
 import { StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { Session } from "../../session/Session.js";
-import { track } from "../../util/Promises.js";
+import { MaybePromise, track } from "../../util/Promises.js";
 import { ServerRootEndpoint } from "./ServerRootEndpoint.js";
 import { ServerStore } from "./storage/ServerStore.js";
 
@@ -145,27 +146,31 @@ export class TransactionalInteractionServer extends InteractionServer {
         options: OnlineContext.Options,
         fn: () => T,
     ) {
-        let traceAction: ActionTracer.Action | undefined = undefined;
-        if (this.#tracer) {
-            options.trace = traceAction = {
-                type: why.toLowerCase() as ActionTracer.ActionType,
-            };
+        const actor = (context: ActionContext) =>  track(fn(), [why, context.transaction.via]);
+        if (!this.#tracer) {
+            return OnlineContext(options).act(actor);
         }
 
-        try {
-            return OnlineContext(options).act(context => track(fn(), [why, context.transaction.via]));
-        } catch (e) {
-            if (traceAction) {
-                const status = (e as StatusResponseError).code;
-                if (typeof status === "number") {
-                    traceAction.status = status;
-                }
-            }
-        } finally {
-            if (traceAction) {
-                await this.#tracer?.record(traceAction);
-            }
+        const trace: ActionTracer.Action = {
+            type: why.toLowerCase() as ActionTracer.ActionType,
         }
+        options.trace = trace;
+
+        return MaybePromise.then(
+            () => OnlineContext(options).act(actor),
+            result => {
+                this.#tracer?.record(trace);
+                return result;
+            },
+            error => {
+                const status = (error as StatusResponseError).code;
+                if (typeof status === "number") {
+                    trace.status = status;
+                }
+                this.#tracer?.record(trace);
+                throw error;
+            }
+        );
     }
 
     #updateStructure() {

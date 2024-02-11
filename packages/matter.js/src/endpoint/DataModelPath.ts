@@ -18,7 +18,7 @@ export interface DataModelPath {
 
     at(name: string | number, type?: string): DataModelPath;
 
-    toString(): string;
+    toString(includeType?: boolean): string;
 
     toArray(): (string | number)[];
 }
@@ -27,18 +27,18 @@ export interface DataModelPath {
  * Create a {@link DataModelPath} rooted at {@link id}.
  */
 export function DataModelPath(id: string | number, type?: string): DataModelPath {
-    function identity(this: DataModelPath) {
-        if (this.type) {
+    function identity(this: DataModelPath, includeType?: boolean) {
+        if (this.type && includeType) {
             return `${this.type}#${this.id}`;
         }
         return this.id;
     }
 
-    function toString(this: DataModelPath) {
+    function toString(this: DataModelPath, includeType?: boolean) {
         if (this.parent) {
-            return `${this.parent}.${identity.call(this)}`;
+            return `${this.parent}.${identity.call(this, includeType)}`;
         }
-        return identity.call(this).toString();
+        return identity.call(this, includeType).toString();
     }
 
     function toArray(this: DataModelPath): (string | number)[] {
