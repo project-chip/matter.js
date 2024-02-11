@@ -383,13 +383,13 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         if (this.env.has(ActionTracer)) {
             trace = {
                 type: ActionTracer.ActionType.Initialize,
-            }            
+            };
         }
 
         return MaybePromise.then(
             // Initialize myself and behaviors in a single offline transaction
             () =>
-                OfflineContext.act(`initialize`,context => this.initialize(context.agentFor(this)), {
+                OfflineContext.act(`initialize`, context => this.initialize(context.agentFor(this)), {
                     unversionedVolatiles: true,
                     trace,
                 }),
@@ -401,7 +401,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
                     trace.path = this.path;
                     this.env.get(ActionTracer).record(trace);
                 }
-            }
+            },
         );
     }
 }

@@ -126,7 +126,7 @@ export class MatterDevice {
             if (status === Lifecycle.Status.Destroyed) {
                 this.#timedOperation = undefined;
             }
-        })
+        });
     }
 
     assertFailSafeArmed(message?: string) {

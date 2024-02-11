@@ -146,14 +146,14 @@ export class TransactionalInteractionServer extends InteractionServer {
         options: OnlineContext.Options,
         fn: () => T,
     ) {
-        const actor = (context: ActionContext) =>  track(fn(), [why, context.transaction.via]);
+        const actor = (context: ActionContext) => track(fn(), [why, context.transaction.via]);
         if (!this.#tracer) {
             return OnlineContext(options).act(actor);
         }
 
         const trace: ActionTracer.Action = {
             type: why.toLowerCase() as ActionTracer.ActionType,
-        }
+        };
         options.trace = trace;
 
         return MaybePromise.then(
@@ -169,7 +169,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 }
                 this.#tracer?.record(trace);
                 throw error;
-            }
+            },
         );
     }
 

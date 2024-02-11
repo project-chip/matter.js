@@ -52,7 +52,7 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
         }
     }
 
-     #cancel() {
+    #cancel() {
         if (this.internal.runtime) {
             const promise = this.internal.runtime[Symbol.asyncDispose]();
             (this.part.lifecycle as NodeLifecycle).offline?.emit(this.context);

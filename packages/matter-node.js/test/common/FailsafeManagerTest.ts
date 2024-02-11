@@ -13,12 +13,7 @@ describe("FailSafeManager Test", () => {
     describe("Verify Expiry handling", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
-            new FailsafeManager(
-                undefined,
-                1,
-                100,
-                async () => resolver(),
-            );
+            new FailsafeManager(undefined, 1, 100, async () => resolver());
 
             await MockTime.advance(1000);
 
@@ -27,14 +22,9 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called when failsafe expires after being rearmed (extended)", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(
-                undefined,
-                3,
-                100,
-                async () => {
-                    expired = true;
-                },
-            );
+            const failSafe = new FailsafeManager(undefined, 3, 100, async () => {
+                expired = true;
+            });
 
             await MockTime.advance(1500);
             assert.equal(expired, false);
@@ -50,14 +40,9 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(
-                undefined,
-                3,
-                100,
-                async () => {
-                    expired = true;
-                },
-            );
+            const failSafe = new FailsafeManager(undefined, 3, 100, async () => {
+                expired = true;
+            });
 
             await MockTime.advance(1500);
             assert.equal(expired, false);
@@ -67,14 +52,9 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(
-                undefined,
-                3,
-                2,
-                async () => {
-                    expired = true;
-                },
-            );
+            const failSafe = new FailsafeManager(undefined, 3, 2, async () => {
+                expired = true;
+            });
 
             await MockTime.advance(1500);
             assert.equal(expired, false);
@@ -86,14 +66,9 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is not called when failsafe was completed", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(
-                undefined,
-                3,
-                2,
-                async () => {
-                    expired = true;
-                },
-            );
+            const failSafe = new FailsafeManager(undefined, 3, 2, async () => {
+                expired = true;
+            });
 
             await MockTime.advance(1500);
             assert.equal(expired, false);

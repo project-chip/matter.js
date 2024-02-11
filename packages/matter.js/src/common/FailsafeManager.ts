@@ -22,7 +22,7 @@ export class FailsafeManager {
         public associatedFabric: Fabric | undefined,
         expiryLengthSeconds: number,
         maxCumulativeFailsafeSeconds: number,
-        private readonly expiryCallback: () => Promise<void>
+        private readonly expiryCallback: () => Promise<void>,
     ) {
         // TODO - need to track expiration promise
         this.failsafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();

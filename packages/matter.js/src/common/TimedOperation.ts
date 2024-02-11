@@ -4,29 +4,29 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { MatterDevice } from "../MatterDevice.js";
+import { NodeId } from "../datatype/NodeId.js";
+import { VendorId } from "../datatype/VendorId.js";
+import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
 import { FabricManager } from "../fabric/FabricManager.js";
 import { Logger } from "../log/Logger.js";
-import { SessionManager } from "../session/SessionManager.js";
-import { FailsafeManager, MatterFabricConflictError } from "./FailsafeManager.js";
-import type { MatterDevice } from "../MatterDevice.js";
-import { Fabric, FabricBuilder } from "../fabric/Fabric.js";
-import { MatterFlowError } from "./MatterError.js";
 import { SecureSession } from "../session/SecureSession.js";
+import { SessionManager } from "../session/SessionManager.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
-import { Observable } from "../util/Observable.js";
 import { ByteArray } from "../util/ByteArray.js";
-import { VendorId } from "../datatype/VendorId.js";
-import { NodeId } from "../datatype/NodeId.js";
+import { Observable } from "../util/Observable.js";
+import { FailsafeManager, MatterFabricConflictError } from "./FailsafeManager.js";
+import { MatterFlowError } from "./MatterError.js";
 
 const logger = Logger.get("TimedOperation");
 
 /**
  * A "timed operation" is a command or sequence of commands that operate with a failsafe timer that will abort the
  * operation if it does not complete within a specific window.
- * 
+ *
  * TimedOperation maintains the failsafe timer and tracks information required to rollback state if the operation
  * aborts.
- * 
+ *
  * Timed operations are exclusive for a node.
  */
 export abstract class TimedOperation {
@@ -227,21 +227,20 @@ export abstract class TimedOperation {
 
         const { nocValue, icacValue, adminVendorId, ipkValue, caseAdminSubject } = nocData;
         builder.setOperationalCert(nocValue);
-        const fabricAlreadyExisting = this.#fabrics
-            .getFabrics()
-            .find(fabric => builder.matchesToFabric(fabric));
-        
+        const fabricAlreadyExisting = this.#fabrics.getFabrics().find(fabric => builder.matchesToFabric(fabric));
+
         if (fabricAlreadyExisting) {
             throw new MatterFabricConflictError(
                 `Fabric with Id ${builder.getFabricId()} and Node Id ${builder.getNodeId()} already exists.`,
             );
         }
-        
+
         if (icacValue && icacValue.length > 0) {
             builder.setIntermediateCACert(icacValue);
         }
-        
-        return builder.setRootVendorId(adminVendorId)
+
+        return builder
+            .setRootVendorId(adminVendorId)
             .setIdentityProtectionKey(ipkValue)
             .setRootNodeId(caseAdminSubject)
             .build(this.#fabrics.getNextFabricIndex());
@@ -329,8 +328,8 @@ export namespace TimedOperation {
     export interface Options {
         sessions: SessionManager<MatterDevice>;
         fabrics: FabricManager;
-        expiryLengthSeconds: number,
-        maxCumulativeFailsafeSeconds: number,
-        associatedFabric: Fabric | undefined,
+        expiryLengthSeconds: number;
+        maxCumulativeFailsafeSeconds: number;
+        associatedFabric: Fabric | undefined;
     }
 }

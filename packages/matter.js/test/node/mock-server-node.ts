@@ -42,7 +42,10 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
     /**
      * Perform fake online activity
      */
-    online<R>(options: Partial<OnlineContext.Options>, actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+    online<R>(
+        options: Partial<OnlineContext.Options>,
+        actor: (agent: Agent.Instance<T>) => MaybePromise<R>,
+    ): MaybePromise<R> {
         if (!options.session) {
             if (!options.fabric) {
                 options.fabric = FabricIndex.NO_FABRIC;
@@ -51,8 +54,6 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
                 options.subject = NodeId(0);
             }
         }
-        return OnlineContext(
-            options as OnlineContext.Options
-        ).act(context => actor(context.agentFor(this)));
+        return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
     }
 }

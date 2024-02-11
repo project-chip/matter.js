@@ -427,7 +427,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                         params: [values[name], internals.values[name], session],
                     });
                 }
-
             }
         }
 
