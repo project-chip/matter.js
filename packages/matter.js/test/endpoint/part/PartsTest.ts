@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { IndexBehavior } from "../../../src/behavior/system/index/IndexBehavior.js";
 import { Part } from "../../../src/endpoint/Part.js";
 import { PartLifecycle } from "../../../src/endpoint/part/PartLifecycle.js";
 import { MockEndpoint } from "../../behavior/mock-behavior.js";
@@ -19,6 +20,20 @@ function createParentAndChild() {
 
 function createChild() {
     return new MockPart(MockEndpoint, { number: 3, owner: undefined });
+}
+
+async function assembleIncrementally(assemble: (child: Part, parent: Part, grandparent: Part) => Promise<void>) {
+    const grandparent = new MockPart(MockEndpoint);
+    const parent = new MockPart(MockEndpoint, { owner: undefined });
+    const child = new MockPart(MockEndpoint, { owner: undefined });
+
+    await assemble(child, parent, grandparent);
+
+    await child.construction;
+
+    expect(grandparent.number).equals(1);
+    expect(parent.number).equals(2);
+    expect(child.number).equals(3);
 }
 
 describe("Parts", () => {
@@ -98,5 +113,35 @@ describe("Parts", () => {
         await grandchild.destroy();
 
         expect(bubbled).equals(grandchild);
+    });
+
+    it("supports incremental descendant-first tree assembly", async () => {
+        await assembleIncrementally(async (child, parent, grandparent) => {
+            parent.parts.add(child);
+            grandparent.parts.add(parent);
+        });
+    });
+
+    it("supports incremental descendant-first tree assembly", async () => {
+        await assembleIncrementally(async (child, parent, grandparent) => {
+            parent.parts.add(child);
+            grandparent.parts.add(parent);
+        });
+    });
+
+    it("supports incremental ancestor-first tree assembly with index", async () => {
+        await assembleIncrementally(async (child, parent, grandparent) => {
+            parent.behaviors.require(IndexBehavior);
+            grandparent.parts.add(parent);
+            parent.parts.add(child);
+        });
+    });
+
+    it("supports incremental descendant-first tree assembly with index", async () => {
+        await assembleIncrementally(async (child, parent, grandparent) => {
+            parent.behaviors.require(IndexBehavior);
+            parent.parts.add(child);
+            grandparent.parts.add(parent);
+        });
     });
 });

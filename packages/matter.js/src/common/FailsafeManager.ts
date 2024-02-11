@@ -15,7 +15,7 @@ export class MatterFabricConflictError extends MatterFlowError {}
  * Manages the failsafe timer associated with a {@link TimedOperation}.
  */
 export class FailsafeManager {
-    public failSafeTimer: Timer;
+    public failsafeTimer: Timer;
     private maxCumulativeFailsafeTimer: Timer;
 
     constructor(
@@ -25,7 +25,7 @@ export class FailsafeManager {
         private readonly expiryCallback: () => Promise<void>
     ) {
         // TODO - need to track expiration promise
-        this.failSafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();
+        this.failsafeTimer = Time.getTimer("Failsafe", expiryLengthSeconds * 1000, () => this.expire()).start();
         this.maxCumulativeFailsafeTimer = Time.getTimer(
             "Max cumulative failsafe",
             maxCumulativeFailsafeSeconds * 1000,
@@ -33,9 +33,15 @@ export class FailsafeManager {
         ).start();
     }
 
+    destroy() {
+        if (this.failsafeTimer.isRunning) {
+            this.failsafeTimer.stop();
+        }
+    }
+
     /** Handle "Re-Arming" an existing FailSafe context to extend the timer, expire or fail if not allowed. */
     async reArm(associatedFabric: Fabric | undefined, expiryLengthSeconds: number) {
-        if (!this.failSafeTimer.isRunning) {
+        if (!this.failsafeTimer.isRunning) {
             throw new MatterFlowError("FailSafe already expired.");
         }
 
@@ -45,7 +51,7 @@ export class FailsafeManager {
             );
         }
 
-        this.failSafeTimer.stop();
+        this.failsafeTimer.stop();
 
         if (expiryLengthSeconds === 0) {
             // If ExpiryLengthSeconds is 0 and the fail-safe timer was already armed and the accessing fabric matches
@@ -56,7 +62,7 @@ export class FailsafeManager {
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was currently armed, and the accessing Fabric
             // matches the fail-safe context’s associated Fabric, then the fail-safe timer SHALL be re- armed to expire
             // in ExpiryLengthSeconds.
-            this.failSafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () =>
+            this.failsafeTimer = Time.getTimer("Failsafe expiration", expiryLengthSeconds * 1000, () =>
                 this.expire(),
             ).start();
         }
@@ -70,7 +76,7 @@ export class FailsafeManager {
 
     /** Complete the FailSafe context. This is called when the commissioning is completed. */
     complete() {
-        this.failSafeTimer.stop();
+        this.failsafeTimer.stop();
         this.maxCumulativeFailsafeTimer.stop();
     }
 }

@@ -28,8 +28,6 @@ Crypto.get().hkdf = async () => {
     return new ByteArray(16);
 }
 
-Error.stackTraceLimit = 50;
-
 describe("ServerNode", () => {
     it("starts and stops", async () => {
         const node = new MockServerNode();
@@ -50,14 +48,14 @@ describe("ServerNode", () => {
     });
 
     it("commissions", async () => {
-        const node = await commission();
+        const { node } = await commission();
 
         node.cancel();
 
         if (node.lifecycle.isOnline) {
             await node.lifecycle.offline;
         }
-    
+
         await node.destroy();
     });
 
@@ -76,13 +74,25 @@ describe("ServerNode", () => {
 
         expect(opcreds.commissionedFabrics).equals(0);
 
-        throw("oops")
+        await node.destroy();
     });
 
     it("decommissions", async () => {
-        //const node = await commission();
+        const { node, context } = await commission();
 
-        // TODO
+        const fabricIndex = await node.online(context, async agent =>
+            agent.operationalCredentials.state.currentFabricIndex
+        );
+
+        await node.online(context, async agent => {
+            await agent.operationalCredentials.removeFabric({ fabricIndex });
+        });
+
+        if (node.lifecycle.isCommissioned) {
+            await node.lifecycle.decommissioned;
+        }
+
+        await node.destroy();
     });
 
     it("advertises correctly", () => {
@@ -170,14 +180,17 @@ async function commission() {
     const { node, context } = await almostCommission();
 
     await node.online(context, async agent => {
-        await agent.generalCommissioning.commissioningComplete();
+        // Need to wait for broadcaster cleanup here
+        await MockTime.resolve(
+            agent.generalCommissioning.commissioningComplete()
+        );
     });
 
     if (!node.lifecycle.isCommissioned) {
         await node.lifecycle.commissioned;
     }
 
-    return node;
+    return { node, context };
 }
 
 namespace Fixtures {

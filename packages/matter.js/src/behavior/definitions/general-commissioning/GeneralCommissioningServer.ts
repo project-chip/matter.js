@@ -7,14 +7,14 @@
 import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
-import { TimedOperation } from "../../../common/TimedOperation.js";
-import { PartStructuralAdapter } from "../../../endpoint/PartStructuralAdapter.js";
 import { Logger } from "../../../log/Logger.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ArmFailSafeRequest, SetRegulatoryConfigRequest } from "./GeneralCommissioningInterface.js";
+import { PartTimedOperation } from "./PartTimedOperation.js";
+import type { Node } from "../../../node/Node.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -67,14 +67,16 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 // to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(new TimedOperation({
-                    fabrics: device.fabricManager,
-                    sessions: device.sessionManager,
-                    expiryLengthSeconds,
-                    maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
-                    associatedFabric: this.session.getFabric(),
-                    rootEndpoint: PartStructuralAdapter(this.part, this.context),
-                }))
+                await device.beginTimed(new PartTimedOperation(
+                    this.part as Node,
+                    {
+                        fabrics: device.fabricManager,
+                        sessions: device.sessionManager,
+                        expiryLengthSeconds,
+                        maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
+                        associatedFabric: this.session.getFabric(),
+                    }
+                ));
             }
 
             if (device.isFailsafeArmed()) {
