@@ -5,7 +5,7 @@
  */
 
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
-import { MatterFabricConflictError } from "../../../common/FailsafeManager.js";
+import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { Fabric } from "../../../fabric/Fabric.js";
@@ -75,7 +75,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             );
         }
 
-        const timedOp = this.part.env.get(MatterDevice).timedOperation;
+        const timedOp = this.part.env.get(MatterDevice).failsafeContext;
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
                 `csrRequest received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
@@ -116,7 +116,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         //        SHALL be InvalidNodeOpId if the matter-node-id attribute in the subject DN of the NOC has a value
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
-        const timedOp = this.part.env.get(MatterDevice).timedOperation;
+        const timedOp = this.part.env.get(MatterDevice).failsafeContext;
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -253,7 +253,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
         const device = this.session.getContext();
 
-        const timedOp = device.timedOperation;
+        const timedOp = device.failsafeContext;
 
         if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
@@ -366,7 +366,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 
     override addTrustedRootCertificate({ rootCaCertificate }: AddTrustedRootCertificateRequest) {
         const device = this.part.env.get(MatterDevice);
-        const timedOp = device.timedOperation;
+        const timedOp = device.failsafeContext;
         
         if (timedOp.hasRootCert) {
             throw new StatusResponseError(

@@ -293,14 +293,24 @@ export class Behaviors {
         for (const requirement of Object.values(requirements)) {
             let name = camelize(requirement.name, true);
 
+            if (this.#part.behaviors.has(requirement)) {
+                continue;
+            }
+
+            // For ClusterBehaviors, accept any behavior that supports the cluster.  Could confirm features too but
+            // doesn't currently
             const cluster = (requirement as ClusterBehavior.Type).cluster;
             if (cluster) {
+                const other = this.#part.behaviors.supported[cluster.id];
+
+                if ((other as ClusterBehavior.Type).cluster?.id === cluster.id) {
+                    continue;
+                }
+
                 name = `${name} (0x${cluster.id.toString(16)})`;
             }
 
-            if (!this.#part.behaviors.has(requirement)) {
-                missing.push(name);
-            }
+            missing.push(name);
         }
 
         if (missing.length) {

@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FailsafeManager } from "@project-chip/matter.js/common";
+import { FailsafeTimer } from "@project-chip/matter.js/common";
 import { createPromise } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
 // TODO identify more cases that are not handled by chip tool tests
-describe("FailSafeManager Test", () => {
+describe("FailSafeTimer Test", () => {
     describe("Verify Expiry handling", () => {
         it("Expiry callback is called when failsafe expires", async () => {
             const { promise, resolver } = createPromise<void>();
-            new FailsafeManager(undefined, 1, 100, async () => resolver());
+            new FailsafeTimer(undefined, 1, 100, async () => resolver());
 
             await MockTime.advance(1000);
 
@@ -22,7 +22,7 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called when failsafe expires after being rearmed (extended)", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(undefined, 3, 100, async () => {
+            const failSafe = new FailsafeTimer(undefined, 3, 100, async () => {
                 expired = true;
             });
 
@@ -40,7 +40,7 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called directly when failsafe expires after being rearmed (with 0)", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(undefined, 3, 100, async () => {
+            const failSafe = new FailsafeTimer(undefined, 3, 100, async () => {
                 expired = true;
             });
 
@@ -52,7 +52,7 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is called when max cumulative failsafe expires", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(undefined, 3, 2, async () => {
+            const failSafe = new FailsafeTimer(undefined, 3, 2, async () => {
                 expired = true;
             });
 
@@ -66,7 +66,7 @@ describe("FailSafeManager Test", () => {
 
         it("Expiry callback is not called when failsafe was completed", async () => {
             let expired = false;
-            const failSafe = new FailsafeManager(undefined, 3, 2, async () => {
+            const failSafe = new FailsafeTimer(undefined, 3, 2, async () => {
                 expired = true;
             });
 

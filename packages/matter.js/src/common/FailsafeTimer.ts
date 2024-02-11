@@ -7,14 +7,14 @@
 import { Fabric } from "../fabric/Fabric.js";
 import { Time, Timer } from "../time/Time.js";
 import { MatterFlowError } from "./MatterError.js";
-import type { TimedOperation } from "./TimedOperation.js";
+import type { FailsafeContext } from "./FailsafeContext.js";
 
 export class MatterFabricConflictError extends MatterFlowError {}
 
 /**
- * Manages the failsafe timer associated with a {@link TimedOperation}.
+ * Manages the failsafe timer associated with a {@link FailsafeContext}.
  */
-export class FailsafeManager {
+export class FailsafeTimer {
     public failsafeTimer: Timer;
     private maxCumulativeFailsafeTimer: Timer;
 

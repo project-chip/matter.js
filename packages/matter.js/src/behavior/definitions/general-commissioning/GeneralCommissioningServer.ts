@@ -13,7 +13,7 @@ import { AdministratorCommissioningServer } from "../administrator-commissioning
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ArmFailSafeRequest, SetRegulatoryConfigRequest } from "./GeneralCommissioningInterface.js";
-import { PartTimedOperation } from "./PartTimedOperation.js";
+import { PartFailsafeContext } from "./PartFailsafeContext.js";
 import type { Node } from "../../../node/Node.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
@@ -61,13 +61,13 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             }
 
             if (device.isFailsafeArmed()) {
-                device.timedOperation.extend(this.session.getFabric(), expiryLengthSeconds);
+                device.failsafeContext.extend(this.session.getFabric(), expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
                 // to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(new PartTimedOperation(
+                await device.beginTimed(new PartFailsafeContext(
                     this.part as Node,
                     {
                         fabrics: device.fabricManager,
@@ -176,7 +176,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
         }
-        const timedOp = device.timedOperation;
+        const timedOp = device.failsafeContext;
 
         assertSecureSession(this.session, "commissioningComplete can only be called on a secure session");
         const fabric = this.session.getFabric();

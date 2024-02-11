@@ -4,16 +4,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TimedOperation } from "../../../common/TimedOperation.js";
+import { FailsafeContext } from "../../../common/FailsafeContext.js";
 import { Fabric } from "../../../fabric/Fabric.js";
 import { NetworkCommissioningBehavior } from "../network-commissioning/NetworkCommissioningBehavior.js";
 import { Node } from "../../../node/Node.js";
 import { OperationalCredentialsBehavior } from "../operational-credentials/OperationalCredentialsBehavior.js";
 
 /**
- * {@link TimedOperation} for {@link Node} API.
+ * {@link FailsafeContext} for {@link Node} API.
  */
-export class PartTimedOperation extends TimedOperation {
+export class PartFailsafeContext extends FailsafeContext {
     #node: Node;
     #operationalCredentialsRestored = false;
     #storedState?: {
@@ -23,7 +23,7 @@ export class PartTimedOperation extends TimedOperation {
         trustedRootCertificates: OperationalCredentialsBehavior.State["trustedRootCertificates"];
     }
 
-    constructor(node: Node, options: TimedOperation.Options) {
+    constructor(node: Node, options: FailsafeContext.Options) {
         super(options);
         this.#node = node;
     }

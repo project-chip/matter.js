@@ -15,25 +15,25 @@ import { SessionManager } from "../session/SessionManager.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { ByteArray } from "../util/ByteArray.js";
 import { Observable } from "../util/Observable.js";
-import { FailsafeManager, MatterFabricConflictError } from "./FailsafeManager.js";
+import { FailsafeTimer, MatterFabricConflictError } from "./FailsafeTimer.js";
 import { MatterFlowError } from "./MatterError.js";
 
-const logger = Logger.get("TimedOperation");
+const logger = Logger.get("FailsafeContext");
 
 /**
  * A "timed operation" is a command or sequence of commands that operate with a failsafe timer that will abort the
  * operation if it does not complete within a specific window.
  *
- * TimedOperation maintains the failsafe timer and tracks information required to rollback state if the operation
+ * FailsafeContext maintains the failsafe timer and tracks information required to rollback state if the operation
  * aborts.
  *
  * Timed operations are exclusive for a node.
  */
-export abstract class TimedOperation {
+export abstract class FailsafeContext {
     #sessions: SessionManager<MatterDevice>;
     #fabrics: FabricManager;
-    #failsafe?: FailsafeManager;
-    #construction: AsyncConstruction<TimedOperation>;
+    #failsafe?: FailsafeTimer;
+    #construction: AsyncConstruction<FailsafeContext>;
     #associatedFabric?: Fabric;
     #csrSessionId?: number;
     #forUpdateNoc?: boolean;
@@ -45,7 +45,7 @@ export abstract class TimedOperation {
         commissioned: Observable<[], Promise<void>>(),
     };
 
-    constructor(options: TimedOperation.Options) {
+    constructor(options: FailsafeContext.Options) {
         const { expiryLengthSeconds, associatedFabric, maxCumulativeFailsafeSeconds } = options;
 
         this.#sessions = options.sessions;
@@ -60,7 +60,7 @@ export abstract class TimedOperation {
 
             // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
             // timer SHALL be armed for that duration.
-            this.#failsafe = new FailsafeManager(
+            this.#failsafe = new FailsafeTimer(
                 associatedFabric,
                 expiryLengthSeconds,
                 maxCumulativeFailsafeSeconds,
@@ -324,7 +324,7 @@ export abstract class TimedOperation {
     abstract restoreBreadcrumb(): Promise<void>;
 }
 
-export namespace TimedOperation {
+export namespace FailsafeContext {
     export interface Options {
         sessions: SessionManager<MatterDevice>;
         fabrics: FabricManager;

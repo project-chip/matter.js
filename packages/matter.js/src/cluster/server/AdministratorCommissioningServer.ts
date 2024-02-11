@@ -228,7 +228,7 @@ class AdministratorCommissioningManager {
 
         const device = session.getContext();
         if (device.isFailsafeArmed()) {
-            await device.timedOperation.destroy();
+            await device.failsafeContext.destroy();
         }
     }
 

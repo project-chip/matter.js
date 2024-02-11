@@ -22,7 +22,7 @@ import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Lifecycle } from "./common/Lifecycle.js";
 import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
-import { TimedOperation } from "./common/TimedOperation.js";
+import { FailsafeContext } from "./common/FailsafeContext.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -61,7 +61,7 @@ export class MatterDevice {
     private isClosing = false;
     readonly #fabricManager;
     readonly #sessionManager;
-    #timedOperation?: TimedOperation;
+    #failsafeContext?: FailsafeContext;
 
     constructor(
         readonly sessionStorage: StorageContext,
@@ -97,17 +97,17 @@ export class MatterDevice {
         return this.#sessionManager;
     }
 
-    get timedOperation() {
+    get failsafeContext() {
         this.assertFailSafeArmed();
-        return this.#timedOperation as TimedOperation;
+        return this.#failsafeContext as FailsafeContext;
     }
 
-    async beginTimed(timedOperation: TimedOperation) {
-        await timedOperation.construction;
+    async beginTimed(failsafeContext: FailsafeContext) {
+        await failsafeContext.construction;
 
-        this.#timedOperation = timedOperation;
+        this.#failsafeContext = failsafeContext;
 
-        timedOperation.events.fabricAdded.on(fabric => {
+        failsafeContext.events.fabricAdded.on(fabric => {
             this.commissioningChangedCallback(fabric.fabricIndex);
             const fabrics = this.#fabricManager.getFabrics();
             this.sendFabricAnnouncements(fabrics, true).catch(error =>
@@ -116,15 +116,15 @@ export class MatterDevice {
             logger.info("Announce done", Diagnostic.dict({ fabric: fabric.fabricId, fabricIndex: fabric.fabricIndex }));
         });
 
-        timedOperation.events.fabricUpdated.on(fabric => {
+        failsafeContext.events.fabricUpdated.on(fabric => {
             this.commissioningChangedCallback(fabric.fabricIndex);
         });
 
-        timedOperation.events.commissioned.on(async () => await this.endCommissioning());
+        failsafeContext.events.commissioned.on(async () => await this.endCommissioning());
 
-        timedOperation.construction.change.on(status => {
+        failsafeContext.construction.change.on(status => {
             if (status === Lifecycle.Status.Destroyed) {
-                this.#timedOperation = undefined;
+                this.#failsafeContext = undefined;
             }
         });
     }
@@ -138,7 +138,7 @@ export class MatterDevice {
     }
 
     isFailsafeArmed() {
-        return this.#timedOperation !== undefined;
+        return this.#failsafeContext !== undefined;
     }
 
     addScanner(scanner: Scanner) {
@@ -451,9 +451,9 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireAllAnnouncements();
         }
-        if (this.#timedOperation) {
-            await this.#timedOperation.destroy();
-            this.#timedOperation = undefined;
+        if (this.#failsafeContext) {
+            await this.#failsafeContext.destroy();
+            this.#failsafeContext = undefined;
         }
         await this.exchangeManager.close();
         await this.#sessionManager.close();
