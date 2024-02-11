@@ -186,7 +186,6 @@ interface Internals extends Datasource.Options {
 }
 
 interface Changes {
-    all?: Val.Struct;
     persistent?: Val.Struct;
     notifications: Array<{
         event: Observable;
@@ -429,12 +428,6 @@ function createRootReference(resource: Resource, internals: Internals, session: 
                     });
                 }
 
-                if (session.trace) {
-                    if (!changes.all) {
-                        changes.all = {};
-                    }
-                    changes.all[name] = values[name];
-                }
             }
         }
 
@@ -486,14 +479,14 @@ function createRootReference(resource: Resource, internals: Internals, session: 
         internals.values = values;
         internals.changed?.emit(oldValues);
 
-        if (session.trace) {
+        if (session.trace && changes.persistent) {
             let mutations = session.trace.mutations;
             if (!mutations) {
                 mutations = session.trace.mutations = [];
             }
             mutations.push({
-                path: internals.path.toArray(),
-                values: internals.values,
+                path: internals.path,
+                values: changes.persistent,
             });
         }
     }

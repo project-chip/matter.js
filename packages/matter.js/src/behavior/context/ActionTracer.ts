@@ -6,7 +6,6 @@
 
 import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import { StatusCode } from "../../protocol/interaction/StatusCode.js";
-import { MaybePromise } from "../../util/Promises.js";
 import { Val } from "../state/Val.js";
 
 /**
@@ -16,12 +15,10 @@ import { Val } from "../state/Val.js";
  * Implemented as abstract class to allow for lookup by type in Environment.
  */
 export abstract class ActionTracer {
-    abstract record(action: ActionTracer.Action): MaybePromise<void>;
+    abstract record(action: ActionTracer.Action): void;
 }
 
 export namespace ActionTracer {
-    export type ActionPath = (string | number)[];
-
     export enum ActionType {
         Initialize = "initialize",
         Read = "read",
@@ -31,7 +28,7 @@ export namespace ActionTracer {
     }
 
     export interface Mutation {
-        path: ActionPath;
+        path: DataModelPath;
         values: Record<string, unknown>;
     }
 

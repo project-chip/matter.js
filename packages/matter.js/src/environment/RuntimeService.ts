@@ -38,7 +38,11 @@ export class RuntimeService {
      * A worker must either be {@link PromiseLike} or {@link AsyncConstructable} for the runtime to detect completion.
      * On completion the worker is removed and destroyed if the worker is {@link Destructable}.
      */
-    addWorker(worker: RuntimeService.Worker) {
+    addWorker(worker: RuntimeService.Worker | void) {
+        if (!worker) {
+            return;
+        }
+
         if (this.#workers.has(worker)) {
             return;
         }

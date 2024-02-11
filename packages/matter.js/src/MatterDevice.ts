@@ -17,19 +17,16 @@ import {
 import { CommissioningOptions } from "./behavior/system/commissioning/CommissioningOptions.js";
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
-import { BasicInformation } from "./cluster/definitions/BasicInformationCluster.js";
-import { GeneralCommissioning } from "./cluster/definitions/GeneralCommissioningCluster.js";
-import { OperationalCredentials } from "./cluster/definitions/OperationalCredentialsCluster.js";
 import { Channel } from "./common/Channel.js";
-import { FailsafeManager } from "./common/FailsafeManager.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
+import { Lifecycle } from "./common/Lifecycle.js";
 import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
+import { TimedOperation } from "./common/TimedOperation.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
 import { NodeId } from "./datatype/NodeId.js";
-import { EndpointStructuralAdapter } from "./endpoint/StructuralAdapter.js";
 import { Fabric } from "./fabric/Fabric.js";
 import { FabricManager } from "./fabric/FabricManager.js";
 import { Diagnostic } from "./log/Diagnostic.js";
@@ -41,7 +38,6 @@ import { ExchangeManager } from "./protocol/ExchangeManager.js";
 import { ProtocolHandler } from "./protocol/ProtocolHandler.js";
 import { StatusCode, StatusResponseError } from "./protocol/interaction/StatusCode.js";
 import { SecureChannelProtocol } from "./protocol/securechannel/SecureChannelProtocol.js";
-import { SecureSession } from "./session/SecureSession.js";
 import { Session, SessionParameterOptions } from "./session/Session.js";
 import { ResumptionRecord, SessionManager } from "./session/SessionManager.js";
 import { PaseServer } from "./session/pase/PaseServer.js";
@@ -55,8 +51,6 @@ export class MatterDevice {
     private readonly scanners = new Array<Scanner>();
     private readonly broadcasters = new Array<InstanceBroadcaster>();
     private readonly transportInterfaces = new Array<TransportInterface | NetInterface>();
-    private readonly fabricManager;
-    private readonly sessionManager;
     private readonly channelManager = new ChannelManager();
     private readonly exchangeManager;
     private readonly secureChannelProtocol = new SecureChannelProtocol(() => this.endCommissioning());
@@ -65,7 +59,9 @@ export class MatterDevice {
     private announceInterval: Timer;
     private announcementStartedTime: number | null = null;
     private isClosing = false;
-    private failSafeContext?: FailsafeManager;
+    readonly #fabricManager;
+    readonly #sessionManager;
+    #timedOperation?: TimedOperation;
 
     constructor(
         readonly sessionStorage: StorageContext,
@@ -74,16 +70,16 @@ export class MatterDevice {
         private readonly commissioningChangedCallback: (fabricIndex: FabricIndex) => void,
         private readonly sessionChangedCallback: (fabricIndex: FabricIndex) => void,
     ) {
-        this.fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
+        this.#fabricManager = new FabricManager(fabricStorage, (fabricIndex: FabricIndex, peerNodeId: NodeId) => {
             // When fabric is removed, also remove the resumption record
-            this.sessionManager.removeResumptionRecord(peerNodeId);
+            this.#sessionManager.removeResumptionRecord(peerNodeId);
             this.commissioningChangedCallback(fabricIndex);
         });
 
-        this.sessionManager = new SessionManager(this, sessionStorage);
-        this.sessionManager.initFromStorage(this.fabricManager.getFabrics());
+        this.#sessionManager = new SessionManager(this, sessionStorage);
+        this.#sessionManager.initFromStorage(this.#fabricManager.getFabrics());
 
-        this.exchangeManager = new ExchangeManager<MatterDevice>(this.sessionManager, this.channelManager);
+        this.exchangeManager = new ExchangeManager<MatterDevice>(this.#sessionManager, this.channelManager);
 
         this.addProtocolHandler(this.secureChannelProtocol);
 
@@ -91,6 +87,58 @@ export class MatterDevice {
             // TODO - this promise is not awaited
             this.announce(),
         );
+    }
+
+    get fabricManager() {
+        return this.#fabricManager;
+    }
+
+    get sessionManager() {
+        return this.#sessionManager;
+    }
+
+    get timedOperation() {
+        this.assertFailSafeArmed();
+        return this.#timedOperation as TimedOperation;
+    }
+
+    async beginTimed(timedOperation: TimedOperation) {
+        await timedOperation.construction;
+
+        this.#timedOperation = timedOperation;
+
+        timedOperation.events.fabricAdded.on(fabric => {
+            this.commissioningChangedCallback(fabric.fabricIndex);
+            const fabrics = this.#fabricManager.getFabrics();
+            this.sendFabricAnnouncements(fabrics, true).catch(error =>
+                logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
+            );
+            logger.info("Announce done", Diagnostic.dict({ fabric: fabric.fabricId, fabricIndex: fabric.fabricIndex }));
+        });
+
+        timedOperation.events.fabricUpdated.on(fabric => {
+            this.commissioningChangedCallback(fabric.fabricIndex);
+        });
+
+        timedOperation.events.commissioned.on(async () => await this.endCommissioning());
+
+        timedOperation.construction.change.on(status => {
+            if (status === Lifecycle.Status.Destroyed) {
+                this.#timedOperation = undefined;
+            }
+        })
+    }
+
+    assertFailSafeArmed(message?: string) {
+        if (this.isFailsafeArmed()) return;
+        throw new StatusResponseError(
+            message ?? "Failsafe timer needs to be armed to execute this action.",
+            StatusCode.FailsafeRequired,
+        );
+    }
+
+    isFailsafeArmed() {
+        return this.#timedOperation !== undefined;
     }
 
     addScanner(scanner: Scanner) {
@@ -171,11 +219,11 @@ export class MatterDevice {
                 return;
             }
         }
-        const fabrics = this.fabricManager.getFabrics();
+        const fabrics = this.#fabricManager.getFabrics();
         if (fabrics.length) {
             let fabricsWithoutSessions = 0;
             for (const fabric of fabrics) {
-                const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
+                const session = this.#sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
                 if (session === undefined || !session.isSecure() || session.numberOfActiveSubscriptions === 0) {
                     fabricsWithoutSessions++;
                     logger.debug("Announcing", Diagnostic.dict({ fabric: fabric.fabricId }));
@@ -236,7 +284,7 @@ export class MatterDevice {
     }
 
     async getNextAvailableSessionId() {
-        return this.sessionManager.getNextAvailableSessionId();
+        return this.#sessionManager.getNextAvailableSessionId();
     }
 
     async createSecureSession(args: {
@@ -251,7 +299,7 @@ export class MatterDevice {
         sessionParameters?: SessionParameterOptions;
     }) {
         const { fabric } = args;
-        const session = await this.sessionManager.createSecureSession({
+        const session = await this.#sessionManager.createSecureSession({
             ...args,
             closeCallback: async () => {
                 logger.debug(`Remove ${session.isPase() ? "PASE" : "CASE"} session`, session.name);
@@ -279,31 +327,7 @@ export class MatterDevice {
     }
 
     findFabricFromDestinationId(destinationId: ByteArray, peerRandom: ByteArray) {
-        return this.fabricManager.findFabricFromDestinationId(destinationId, peerRandom);
-    }
-
-    updateFabric(fabric: Fabric) {
-        this.fabricManager.updateFabric(fabric);
-        this.sessionManager.updateFabricForResumptionRecords(fabric);
-        this.commissioningChangedCallback(fabric.fabricIndex);
-    }
-
-    getNextFabricIndex() {
-        return this.fabricManager.getNextFabricIndex();
-    }
-
-    async addFabric(fabric: Fabric) {
-        this.fabricManager.addFabric(fabric);
-        if (this.failSafeContext !== undefined) {
-            this.failSafeContext.associatedFabric = fabric;
-        }
-        this.commissioningChangedCallback(fabric.fabricIndex);
-        const fabrics = this.fabricManager.getFabrics();
-        this.sendFabricAnnouncements(fabrics, true).catch(error =>
-            logger.warn(`Error sending Fabric announcement for Index ${fabric.fabricIndex}`, error),
-        );
-        logger.info("Announce done", Diagnostic.dict({ fabric: fabric.fabricId, fabricIndex: fabric.fabricIndex }));
-        return fabric.fabricIndex;
+        return this.#fabricManager.findFabricFromDestinationId(destinationId, peerRandom);
     }
 
     async sendFabricAnnouncements(fabrics: Fabric[], expireCommissioningAnnouncement = false) {
@@ -314,7 +338,7 @@ export class MatterDevice {
     }
 
     getFabricByIndex(fabricIndex: FabricIndex) {
-        return this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
+        return this.#fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
     }
 
     initiateExchange(fabric: Fabric, nodeId: NodeId, protocolId: number) {
@@ -322,172 +346,19 @@ export class MatterDevice {
     }
 
     findResumptionRecordById(resumptionId: ByteArray) {
-        return this.sessionManager.findResumptionRecordById(resumptionId);
+        return this.#sessionManager.findResumptionRecordById(resumptionId);
     }
 
     saveResumptionRecord(resumptionRecord: ResumptionRecord) {
-        return this.sessionManager.saveResumptionRecord(resumptionRecord);
-    }
-
-    async removePaseSession() {
-        const session = this.sessionManager.getPaseSession();
-        if (session) {
-            await session.close(true);
-        }
-    }
-
-    assertFailSafeArmed(message?: string) {
-        if (this.isFailsafeArmed()) return;
-        throw new StatusResponseError(
-            message ?? "Failsafe timer needs to be armed to execute this action.",
-            StatusCode.FailsafeRequired,
-        );
-    }
-
-    private async failSafeExpired(rootEndpoint: EndpointStructuralAdapter) {
-        if (this.failSafeContext === undefined) return;
-        const failsafeContext = this.failSafeContext;
-        this.failSafeContext = undefined;
-
-        logger.info("Failsafe timer expired, Reset fabric builder.");
-        if (failsafeContext.fabricIndex !== undefined && !failsafeContext.forUpdateNoc) {
-            logger.debug(`Revoking fabric with index ${failsafeContext.fabricIndex}`);
-            await this.fabricManager.revokeFabric(failsafeContext.fabricIndex);
-        }
-
-        // On expiry of the fail-safe timer, the following actions SHALL be performed in order:
-        // 1. Terminate any open PASE secure session by clearing any associated Secure Session Context at the Server.
-        await this.removePaseSession();
-
-        // TODO 2. Revoke the temporary administrative privileges granted to any open PASE session (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”) at the Server.
-
-        // 3. If an AddNOC or UpdateNOC command has been successfully invoked, terminate all CASE sessions associated with the Fabric whose Fabric Index is recorded in the Fail-Safe context (see Section 11.9.6.2, “ArmFailSafe Command”) by clearing any associated Secure Session Context at the Server.
-        let fabric: Fabric | undefined = undefined;
-        if (failsafeContext.fabricIndex !== undefined) {
-            const fabricIndex = failsafeContext.fabricIndex;
-            fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
-            if (fabric !== undefined) {
-                const session = this.sessionManager.getSessionForNode(fabric, fabric.rootNodeId);
-                if (session !== undefined && session.isSecure()) {
-                    await (session as SecureSession<any>).close(false);
-                }
-            }
-        }
-
-        // 4. Reset the configuration of all Network Commissioning Networks attribute to their state prior to the
-        //    Fail-Safe being armed.
-        await failsafeContext.restoreEndpointState(rootEndpoint);
-
-        // 5. If an UpdateNOC command had been successfully invoked, revert the state of operational key pair, NOC and
-        //    ICAC for that Fabric to the state prior to the Fail-Safe timer being armed, for the Fabric Index that was
-        //    the subject of the UpdateNOC command.
-        if (failsafeContext.associatedFabric !== undefined) {
-            if (failsafeContext.forUpdateNoc) {
-                // update FabricManager and Resumption records but leave current session intact
-                this.updateFabric(failsafeContext.associatedFabric);
-            }
-
-            const operationalCredentialsCluster = rootEndpoint.getCluster(OperationalCredentials.Cluster);
-            operationalCredentialsCluster?.refresh("nocs", fabric);
-            operationalCredentialsCluster?.refresh("fabrics", fabric);
-        }
-
-        // 6. If an AddNOC command had been successfully invoked, achieve the equivalent effect of invoking the RemoveFabric command against the Fabric Index stored in the Fail-Safe Context for the Fabric Index that was the subject of the AddNOC command. This SHALL remove all associations to that Fabric including all fabric-scoped data, and MAY possibly factory-reset the device depending on current device state. This SHALL only apply to Fabrics added during the fail-safe period as the result of the AddNOC command.
-        // 7. Remove any RCACs added by the AddTrustedRootCertificate command that are not currently referenced by any entry in the Fabrics attribute.
-        if (fabric !== undefined) {
-            const fabricIndex = failsafeContext.fabricBuilder.getFabricIndex();
-            if (fabricIndex !== undefined) {
-                const fabric = this.fabricManager.getFabrics().find(fabric => fabric.fabricIndex === fabricIndex);
-                if (fabric !== undefined) {
-                    const basicInformationCluster = rootEndpoint.getCluster(BasicInformation.Cluster);
-                    basicInformationCluster?.trigger("leave", { fabricIndex });
-
-                    await fabric.remove();
-
-                    const operationalCredentialsCluster = rootEndpoint.getCluster(OperationalCredentials.Cluster);
-                    operationalCredentialsCluster?.refresh("nocs", fabric);
-                    operationalCredentialsCluster?.refresh("commissionedFabrics", fabric);
-                    operationalCredentialsCluster?.refresh("fabrics", fabric);
-                    operationalCredentialsCluster?.refresh("trustedRootCertificates", fabric);
-                }
-            }
-        }
-
-        // 8. Reset the Breadcrumb attribute to zero.
-        const generalCommissioningCluster = rootEndpoint.getCluster(GeneralCommissioning.Cluster);
-        await generalCommissioningCluster?.set("breadcrumb", 0);
-
-        // TODO 9. Optionally: if no factory-reset resulted from the previous steps, it is RECOMMENDED that the
-        //  Node rollback the state of all non fabric-scoped data present in the Fail-Safe context.
-    }
-
-    async armFailSafe(
-        expiryLengthSeconds: number,
-        maxCumulativeFailsafeSeconds: number,
-        associatedFabric: Fabric | undefined,
-        rootEndpoint: EndpointStructuralAdapter,
-    ) {
-        if (this.failSafeContext === undefined) {
-            // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
-            // to a success response with no side effect against the fail-safe context.
-            if (expiryLengthSeconds === 0) return;
-
-            // If ExpiryLengthSeconds is non-zero and the fail-safe timer was not currently armed, then the fail-safe
-            // timer SHALL be armed for that duration.
-            this.failSafeContext = new FailsafeManager(
-                this,
-                associatedFabric,
-                expiryLengthSeconds,
-                maxCumulativeFailsafeSeconds,
-                () => this.failSafeExpired(rootEndpoint),
-                rootEndpoint,
-            );
-            logger.debug(`Arm failSafe timer for ${expiryLengthSeconds}s.`);
-        } else {
-            await this.failSafeContext.reArm(associatedFabric, expiryLengthSeconds);
-            if (expiryLengthSeconds > 0) {
-                logger.debug(`Extend failSafe timer for ${expiryLengthSeconds}s.`);
-            }
-        }
-    }
-
-    isFailsafeArmed() {
-        return this.failSafeContext !== undefined;
-    }
-
-    getFailSafeContext() {
-        if (this.failSafeContext === undefined) throw new MatterFlowError("armFailSafe should be called first!");
-        return this.failSafeContext;
+        return this.#sessionManager.saveResumptionRecord(resumptionRecord);
     }
 
     getFabrics() {
-        return this.fabricManager.getFabrics();
-    }
-
-    async completeCommission() {
-        // 1. The Fail-Safe timer associated with the current Fail-Safe context SHALL be disarmed.
-        if (this.failSafeContext === undefined) {
-            throw new MatterFlowError("armFailSafe should be called first!"); // TODO
-        }
-        this.failSafeContext.complete();
-
-        if (this.failSafeContext.fabricIndex !== undefined) {
-            this.fabricManager.persistFabrics();
-        }
-
-        this.failSafeContext = undefined;
-
-        // 2. The commissioning window at the Server SHALL be closed.
-        await this.endCommissioning();
-
-        // TODO 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
-
-        // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
-        await this.removePaseSession();
+        return this.#fabricManager.getFabrics();
     }
 
     isCommissioned() {
-        return !!this.fabricManager.getFabrics().length;
+        return !!this.#fabricManager.getFabrics().length;
     }
 
     async allowEnhancedCommissioning(
@@ -553,7 +424,7 @@ export class MatterDevice {
     }
 
     existsOpenPaseSession() {
-        return !!this.sessionManager.getPaseSession();
+        return !!this.#sessionManager.getPaseSession();
     }
 
     async findDevice(
@@ -564,7 +435,7 @@ export class MatterDevice {
         // TODO: return the first not undefined answer or undefined
         const device = await this.scanners[0].findOperationalDevice(fabric, nodeId, timeOutSeconds);
         if (device === undefined) return undefined;
-        const session = this.sessionManager.getSessionForNode(fabric, nodeId);
+        const session = this.#sessionManager.getSessionForNode(fabric, nodeId);
         if (session === undefined) return undefined;
         // TODO: have the interface and scanner linked
         const networkInterface = this.transportInterfaces.find(netInterface => isNetworkInterface(netInterface));
@@ -580,12 +451,12 @@ export class MatterDevice {
         for (const broadcaster of this.broadcasters) {
             await broadcaster.expireAllAnnouncements();
         }
-        if (this.failSafeContext) {
-            await this.failSafeContext.expire();
-            this.failSafeContext = undefined;
+        if (this.#timedOperation) {
+            await this.#timedOperation.destroy();
+            this.#timedOperation = undefined;
         }
         await this.exchangeManager.close();
-        await this.sessionManager.close();
+        await this.#sessionManager.close();
         await this.channelManager.close();
         for (const transportInterface of this.transportInterfaces) {
             await transportInterface.close();
@@ -593,6 +464,6 @@ export class MatterDevice {
     }
 
     getActiveSessionInformation() {
-        return this.sessionManager.getActiveSessionInformation();
+        return this.#sessionManager.getActiveSessionInformation();
     }
 }

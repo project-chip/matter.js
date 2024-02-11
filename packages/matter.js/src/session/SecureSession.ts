@@ -218,7 +218,7 @@ export class SecureSession<T> extends Session<T> {
 
     addAssociatedFabric(fabric: Fabric) {
         if (this.fabric !== undefined) {
-            throw new MatterFlowError("Session already has an associated Fabric. Can not change this.");
+            throw new MatterFlowError("Session already has an associated Fabric. Cannot change this.");
         }
         this.fabric = fabric;
     }

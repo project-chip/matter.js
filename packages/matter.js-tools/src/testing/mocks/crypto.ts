@@ -33,6 +33,22 @@ const TheCrypto = {
         );
         return new Uint8Array(bits);
     },
+
+    async hkdf(secret: Uint8Array, salt: Uint8Array, info: Uint8Array, length: number = 16) {
+        const key = await subtle.importKey(
+            "raw",
+            secret,
+            "HKDF",
+            false,
+            [ "deriveBits" ]
+        );
+        return new Uint8Array(await subtle.deriveBits({
+            name: "HKDF",
+            hash: "SHA-256",
+            salt: salt,
+            info: info
+        }, key, length));
+    }
 };
 
 export function cryptoSetup(Crypto: any) {

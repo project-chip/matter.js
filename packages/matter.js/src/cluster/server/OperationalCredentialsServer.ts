@@ -49,15 +49,15 @@ export const OperationalCredentialsClusterHandler: (
         const device = session.getContext();
         device.assertFailSafeArmed("csrRequest received while failsafe is not armed.");
 
-        const failSafeContext = device.getFailSafeContext();
-        if (failSafeContext.fabricIndex !== undefined) {
+        const timedOp = device.timedOperation;
+        if (timedOp.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `csrRequest received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `csrRequest received after ${timedOp.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        const certSigningRequest = failSafeContext.createCertificateSigningRequest(
+        const certSigningRequest = timedOp.createCertificateSigningRequest(
             isForUpdateNoc ?? false,
             session.getId(),
         );
@@ -97,32 +97,31 @@ export const OperationalCredentialsClusterHandler: (
         //        outside the Operational Node ID range and InvalidNOC for all other failures.
 
         const device = session.getContext();
-        device.assertFailSafeArmed("addNoc received while failsafe is not armed.");
 
-        const failSafeContext = device.getFailSafeContext();
+        const timedOperation = device.timedOperation;
 
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOperation.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `addNoc received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `addNoc received after ${timedOperation.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!failSafeContext.fabricBuilder.hasRootCert()) {
+        if (!timedOperation.hasRootCert) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.InvalidNoc,
                 debugText: "Root certificate not found.",
             };
         }
 
-        if (failSafeContext.csrSessionId !== session.getId()) {
+        if (timedOperation.csrSessionId !== session.getId()) {
             return {
                 statusCode: OperationalCredentials.NodeOperationalCertStatus.MissingCsr,
                 debugText: "CSR not found in failsafe context.",
             };
         }
 
-        if (failSafeContext.forUpdateNoc) {
+        if (timedOperation.forUpdateNoc) {
             throw new StatusResponseError(
                 `addNoc received after csr request was invoked for UpdateNOC.`,
                 StatusCode.ConstraintError,
@@ -138,7 +137,7 @@ export const OperationalCredentialsClusterHandler: (
 
         let fabric;
         try {
-            fabric = await failSafeContext.buildFabric({
+            fabric = await timedOperation.buildFabric({
                 nocValue,
                 icacValue,
                 adminVendorId,
@@ -160,7 +159,7 @@ export const OperationalCredentialsClusterHandler: (
                 throw error;
             }
         }
-        await device.addFabric(fabric);
+        await timedOperation.addFabric(fabric);
 
         assertSecureSession(session);
         if (session.isPase()) {
@@ -245,36 +244,34 @@ export const OperationalCredentialsClusterHandler: (
 
         const device = session.getContext();
 
-        device.assertFailSafeArmed("updateNoc received while failsafe is not armed.");
+        const timedOperation = device.timedOperation;
 
-        const failSafeContext = device.getFailSafeContext();
-
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOperation.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `updateNoc received after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
+                `updateNoc received after ${timedOperation.forUpdateNoc ? "UpdateNOC" : "AddNOC"} already invoked.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.forUpdateNoc) {
+        if (timedOperation.forUpdateNoc) {
             throw new StatusResponseError(
                 `addNoc received after csr request was invoked for UpdateNOC.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.fabricBuilder.hasRootCert()) {
+        if (timedOperation.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate added in this session which is now allowed for UpdateNOC.",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (!failSafeContext.forUpdateNoc) {
+        if (!timedOperation.forUpdateNoc) {
             throw new StatusResponseError("csrRequest not invoked for UpdateNOC.", StatusCode.ConstraintError);
         }
 
-        if (session.getAssociatedFabric().fabricIndex !== failSafeContext.associatedFabric?.fabricIndex) {
+        if (session.getAssociatedFabric().fabricIndex !== timedOperation.associatedFabric?.fabricIndex) {
             throw new StatusResponseError(
                 "Fabric of this session and the failsafe context do not match.",
                 StatusCode.ConstraintError,
@@ -282,10 +279,10 @@ export const OperationalCredentialsClusterHandler: (
         }
 
         // Build a new Fabric with the updated NOC and ICAC
-        const updateFabric = await failSafeContext.buildUpdatedFabric(nocValue, icacValue);
+        const updateFabric = await timedOperation.buildUpdatedFabric(nocValue, icacValue);
 
         // update FabricManager and Resumption records but leave current session intact
-        device.updateFabric(updateFabric);
+        timedOperation.updateFabric(updateFabric);
 
         // Update connected attributes
         nocs.updated(session);
@@ -362,25 +359,22 @@ export const OperationalCredentialsClusterHandler: (
     },
 
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
-        const device = session.getContext();
-
-        device.assertFailSafeArmed("addTrustedRootCertificate received while failsafe is not armed.");
-
-        const failSafeContext = device.getFailSafeContext();
-        if (failSafeContext.fabricBuilder.hasRootCert()) {
+        const timedOperation = session.getContext().timedOperation;
+        
+        if (timedOperation.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate already added in this FailSafe context.",
                 StatusCode.ConstraintError,
             );
         }
 
-        if (failSafeContext.fabricIndex !== undefined) {
+        if (timedOperation.fabricIndex !== undefined) {
             throw new StatusResponseError(
-                `Can not add trusted root certificates after ${failSafeContext.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
+                `Can not add trusted root certificates after ${timedOperation.forUpdateNoc ? "UpdateNOC" : "AddNOC"}.`,
                 StatusCode.ConstraintError,
             );
         }
 
-        session.getContext().getFailSafeContext().setRootCert(rootCaCertificate);
+        timedOperation.setRootCert(rootCaCertificate);
     },
 });

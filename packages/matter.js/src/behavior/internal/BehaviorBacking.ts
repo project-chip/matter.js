@@ -140,7 +140,7 @@ export abstract class BehaviorBacking {
 
     protected get datasourceOptions(): Datasource.Options {
         return {
-            path: this.part.path.at("state"),
+            path: this.part.path.at(this.#type.id).at("state"),
             supervisor: this.type.supervisor,
             type: this.type.State,
             events: this.events as unknown as Datasource.Events,

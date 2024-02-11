@@ -207,14 +207,17 @@ export class ServerRuntime extends NetworkRuntime {
                 ble: !!this.owner.state.network.ble,
             }),
             () => {
-                // "commissioningChangeCallback" - CommissioningBehavior handles this
+                // commissioningChangeCallback - we don't use this
             },
             (_fabricIndex: FabricIndex) => {
-                // TODO - this is "sessionChangeCallback" - add root behavior for managing sessions
+                // TODO - this is "sessionChangeCallback" - add root behavior for accessing sessions
             },
         )
             .addProtocolHandler(this.#interactionServer)
             .addScanner(mdnsScanner);
+
+        // MatterDevice is the interface to a broad array of functionality that other modules require access to
+        this.owner.env.set(MatterDevice, this.#matterDevice);
 
         await this.addTransports(this.#matterDevice);
         await this.addBroadcasters(this.#matterDevice);
@@ -224,7 +227,10 @@ export class ServerRuntime extends NetworkRuntime {
         await super[Symbol.asyncDispose]();
 
         if (this.#matterDevice) {
+            this.owner.env.delete(MatterDevice);
+
             await this.#matterDevice.stop();
+
             this.#matterDevice = undefined;
             this.#primaryNetInterface = undefined;
         }

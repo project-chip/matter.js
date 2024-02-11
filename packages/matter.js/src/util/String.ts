@@ -136,7 +136,7 @@ export function serialize(value: any) {
             return value ? "true" : "false";
         }
         if (ArrayBuffer.isView(value)) {
-            const dv = new DataView(value.buffer);
+            const dv = new DataView(value.buffer, value.byteOffset, value.byteLength);
             const bytes = Array<string>();
             for (let i = 0; i < dv.byteLength; i++) {
                 bytes.push(dv.getUint8(i).toString(16).padStart(2, "0"));

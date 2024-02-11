@@ -32,8 +32,8 @@ export class Environment {
     /**
      * Determine if an environmental service is available.
      */
-    has(type: abstract new (...args: any[]) => any) {
-        return this.#services?.get(type) !== undefined;
+    has(type: abstract new (...args: any[]) => any): boolean {
+        return this.#services?.get(type) !== undefined || (this.#parent?.has(type) ?? false);
     }
 
     /**
@@ -52,6 +52,14 @@ export class Environment {
         }
 
         throw new UnsupportedDependencyError(`Required dependency ${type.name}`, "is not available");
+    }
+
+    /**
+     * Remove an environmental service.
+     */
+    delete(type: abstract new (...args: any[]) => any) {
+        this.#services?.delete(type);
+        this.#parent?.delete(type);
     }
 
     /**

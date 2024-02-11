@@ -77,8 +77,13 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
                 AdministratorCommissioning.StatusCode.WindowNotOpen,
             );
         }
-        logger.debug("Revoking commissioning window.");
+
         await this.#closeCommissioningWindow();
+
+        const device = this.part.env.get(MatterDevice);
+        if (device.isFailsafeArmed()) {
+            await device.timedOperation.destroy();
+        }
     }
 
     /**
