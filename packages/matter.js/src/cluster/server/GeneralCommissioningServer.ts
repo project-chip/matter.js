@@ -5,9 +5,7 @@
  */
 
 import { ImplementationError, MatterFlowError } from "../../common/MatterError.js";
-import { TimedOperation } from "../../common/TimedOperation.js";
 import { tryCatch } from "../../common/TryCatchHandler.js";
-import { EndpointStructuralAdapter } from "../../device/EndpointStructuralAdapter.js";
 import { Logger } from "../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { NoAssociatedFabricError, assertSecureSession } from "../../session/SecureSession.js";
@@ -15,6 +13,7 @@ import { AdministratorCommissioning } from "../definitions/AdministratorCommissi
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
+import { EndpointTimedOperation } from "./EndpointTimedOperation.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -60,14 +59,13 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 // lead to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(new TimedOperation({
+                await device.beginTimed(new EndpointTimedOperation(endpoint, {
                     fabrics: device.fabricManager,
                     sessions: device.sessionManager,
                     expiryLengthSeconds,
                     maxCumulativeFailsafeSeconds: basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
                     associatedFabric: session.getFabric(),
-                    rootEndpoint: EndpointStructuralAdapter(endpoint),
-                }))
+                }));
             }
 
             if (device.isFailsafeArmed()) {

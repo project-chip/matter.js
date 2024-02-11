@@ -7,9 +7,9 @@
 import * as assert from "assert";
 import { NetworkCommissioning, ClusterServer } from "@project-chip/matter.js/cluster";
 import { ByteArray } from "@project-chip/matter.js/util";
-import { Endpoint, DeviceTypes, EndpointStructuralAdapter } from "@project-chip/matter.js/device";
+import { Endpoint, DeviceTypes } from "@project-chip/matter.js/device";
 import { EndpointNumber } from "@project-chip/matter.js/datatype";
-import { TimedOperation } from "@project-chip/matter.js/common";
+import { EndpointTimedOperation } from "@project-chip/matter.js/cluster";
 
 describe("TimedOperation", () => {
     describe("Store and restore Endpoint data", () => {
@@ -47,14 +47,16 @@ describe("TimedOperation", () => {
             rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const timedOperation = new TimedOperation({
-                sessions: { getPaseSession() { return undefined } } as any,
-                fabrics: {} as any,
-                expiryLengthSeconds: 100,
-                maxCumulativeFailsafeSeconds: 100,
-                associatedFabric: undefined,
-                rootEndpoint: EndpointStructuralAdapter(rootEndpoint),
-            });
+            const timedOperation = await EndpointTimedOperation.create(
+                rootEndpoint,
+                {
+                    sessions: { getPaseSession() { return undefined } } as any,
+                    fabrics: {} as any,
+                    expiryLengthSeconds: 100,
+                    maxCumulativeFailsafeSeconds: 100,
+                    associatedFabric: undefined,
+                }
+            );
 
             // Now lets change network details
             const newNetworkId = new ByteArray(32);

@@ -96,6 +96,25 @@ export class MockTime {
     }
 
     /**
+     * Resolve a promise with time dependency.
+     * 
+     * Moves time forward until the promise resolves.
+     */
+    async resolve<T>(promise: Promise<T>) {
+        let resolved = false;
+
+        promise.then(() => resolved = true);
+
+        while (!resolved) {
+            await this.advance(60000);
+            await this.yield();
+        }
+
+        return await promise;
+    }
+
+
+    /**
      * Move time forward.  Runs tasks scheduled during this interval.
      */
     async advance(ms: number) {

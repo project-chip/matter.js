@@ -18,6 +18,8 @@ enum TestType {
     web = "web",
 }
 
+Error.stackTraceLimit = 50;
+
 export async function main(argv = process.argv) {
     const testTypes = new Set<TestType>();
 
