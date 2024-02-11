@@ -13,7 +13,7 @@ import { AdministratorCommissioning } from "../definitions/AdministratorCommissi
 import { BasicInformationCluster } from "../definitions/BasicInformationCluster.js";
 import { GeneralCommissioning, GeneralCommissioningCluster } from "../definitions/GeneralCommissioningCluster.js";
 import { ClusterServerHandlers } from "./ClusterServerTypes.js";
-import { EndpointTimedOperation } from "./EndpointTimedOperation.js";
+import { EndpointFailsafeContext } from "./EndpointFailsafeContext.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -53,14 +53,14 @@ export const GeneralCommissioningClusterHandler: (options?: {
             }
 
             if (device.isFailsafeArmed()) {
-                device.timedOperation.extend(session.getFabric(), expiryLengthSeconds);
+                device.failsafeContext.extend(session.getFabric(), expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
                 // lead to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
                 await device.beginTimed(
-                    new EndpointTimedOperation(endpoint, {
+                    new EndpointFailsafeContext(endpoint, {
                         fabrics: device.fabricManager,
                         sessions: device.sessionManager,
                         expiryLengthSeconds,
@@ -183,11 +183,11 @@ export const GeneralCommissioningClusterHandler: (options?: {
 
         assertSecureSession(session, "commissioningComplete can only be called on a secure session");
 
-        const timedOperationFabric = device.timedOperation.associatedFabric?.fabricIndex;
-        if (fabric.fabricIndex !== timedOperationFabric) {
+        const failsafeFabric = device.failsafeContext.associatedFabric?.fabricIndex;
+        if (fabric.fabricIndex !== failsafeFabric) {
             return {
                 errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
-                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${timedOperationFabric}.`,
+                debugText: `Associated fabric ${fabric.fabricIndex} does not match the one from the failsafe context ${failsafeFabric}.`,
             };
         }
 
@@ -196,7 +196,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
         // 2. The commissioning window at the Server SHALL be closed.
         // 3. Any temporary administrative privileges automatically granted to any open PASE session SHALL be revoked (see Section 6.6.2.8, “Bootstrapping of the Access Control Cluster”).
         // 4. The Secure Session Context of any PASE session still established at the Server SHALL be cleared.
-        await device.timedOperation.completeCommission();
+        await device.failsafeContext.completeCommission();
 
         // 5. The Breadcrumb attribute SHALL be reset to zero.
         breadcrumb.setLocal(BigInt(0));

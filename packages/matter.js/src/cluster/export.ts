@@ -26,7 +26,7 @@ export * from "./server/ClusterServer.js";
 // Export all Server classes
 export * from "./server/ClusterServerTypes.js";
 export * from "./server/CommandServer.js";
-export * from "./server/EndpointTimedOperation.js";
+export * from "./server/EndpointFailsafeContext.js";
 export * from "./server/EventServer.js";
 export * from "./server/GeneralCommissioningServer.js";
 export * from "./server/GroupKeyManagementServer.js";

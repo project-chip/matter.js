@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ClusterServer, EndpointTimedOperation, NetworkCommissioning } from "@project-chip/matter.js/cluster";
+import { ClusterServer, EndpointFailsafeContext, NetworkCommissioning } from "@project-chip/matter.js/cluster";
 import { EndpointNumber } from "@project-chip/matter.js/datatype";
 import { DeviceTypes, Endpoint } from "@project-chip/matter.js/device";
 import { ByteArray } from "@project-chip/matter.js/util";
 import * as assert from "assert";
 
-describe("TimedOperation", () => {
+describe("FailsafeContext", () => {
     describe("Store and restore Endpoint data", () => {
         it("2 Network cluster data are restored", async () => {
             const networkId = new ByteArray(32);
@@ -46,7 +46,7 @@ describe("TimedOperation", () => {
             rootEndpoint.addChildEndpoint(otherEndpoint);
 
             // Open FailSafe context and store network data
-            const timedOperation = await EndpointTimedOperation.create(rootEndpoint, {
+            const failsafeContext = await EndpointFailsafeContext.create(rootEndpoint, {
                 sessions: {
                     getPaseSession() {
                         return undefined;
@@ -65,7 +65,7 @@ describe("TimedOperation", () => {
             networkServer2.setNetworksAttribute([{ networkId: newNetworkId, connected: true }]);
 
             // Restore network data
-            await timedOperation.destroy();
+            await failsafeContext.destroy();
 
             // Check if network data is restored
             assert.deepEqual(networkServer1.getNetworksAttribute(), [{ networkId: networkId, connected: true }]);

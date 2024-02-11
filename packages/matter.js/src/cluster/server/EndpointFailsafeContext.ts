@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { TimedOperation } from "../../common/TimedOperation.js";
+import { FailsafeContext } from "../../common/FailsafeContext.js";
 import { EndpointNumber } from "../../datatype/EndpointNumber.js";
 import { EndpointInterface } from "../../endpoint/EndpointInterface.js";
 import { Fabric } from "../../fabric/Fabric.js";
@@ -16,24 +16,24 @@ import { GeneralCommissioning } from "../definitions/GeneralCommissioningCluster
 import { NetworkCommissioning } from "../definitions/NetworkCommissioningCluster.js";
 import { OperationalCredentials } from "../definitions/OperationalCredentialsCluster.js";
 
-const logger = Logger.get("ClusterServerTimedOperation");
+const logger = Logger.get("ClusterServerFailsafeContext");
 
 /**
- * TimedOperation implementation for {@link EndpointInterface} API.
+ * {@link FailsafeContext} implementation for {@link EndpointInterface} API.
  */
-export class EndpointTimedOperation extends TimedOperation {
+export class EndpointFailsafeContext extends FailsafeContext {
     #rootEndpoint: EndpointInterface;
     #storedNetworkClusterState = new Map<
         EndpointNumber,
         TypeFromSchema<typeof NetworkCommissioning.TlvNetworkInfoStruct>[]
     >();
 
-    constructor(rootEndpoint: EndpointInterface, options: TimedOperation.Options) {
+    constructor(rootEndpoint: EndpointInterface, options: FailsafeContext.Options) {
         super(options);
         this.#rootEndpoint = rootEndpoint;
     }
 
-    static async create(rootEndpoint: EndpointInterface, options: TimedOperation.Options) {
+    static async create(rootEndpoint: EndpointInterface, options: FailsafeContext.Options) {
         return asyncNew(this, rootEndpoint, options);
     }
 
