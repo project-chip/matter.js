@@ -57,10 +57,7 @@ export const OperationalCredentialsClusterHandler: (
             );
         }
 
-        const certSigningRequest = timedOp.createCertificateSigningRequest(
-            isForUpdateNoc ?? false,
-            session.getId(),
-        );
+        const certSigningRequest = timedOp.createCertificateSigningRequest(isForUpdateNoc ?? false, session.getId());
         const nocsrElements = TlvCertSigningRequest.encode({ certSigningRequest, csrNonce });
         return { nocsrElements, attestationSignature: cert.sign(session, nocsrElements) };
     },
@@ -360,7 +357,7 @@ export const OperationalCredentialsClusterHandler: (
 
     addTrustedRootCertificate: async ({ request: { rootCaCertificate }, session }) => {
         const timedOperation = session.getContext().timedOperation;
-        
+
         if (timedOperation.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate already added in this FailSafe context.",

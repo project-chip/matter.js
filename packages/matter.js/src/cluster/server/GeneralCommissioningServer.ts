@@ -59,13 +59,15 @@ export const GeneralCommissioningClusterHandler: (options?: {
                 // lead to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(new EndpointTimedOperation(endpoint, {
-                    fabrics: device.fabricManager,
-                    sessions: device.sessionManager,
-                    expiryLengthSeconds,
-                    maxCumulativeFailsafeSeconds: basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
-                    associatedFabric: session.getFabric(),
-                }));
+                await device.beginTimed(
+                    new EndpointTimedOperation(endpoint, {
+                        fabrics: device.fabricManager,
+                        sessions: device.sessionManager,
+                        expiryLengthSeconds,
+                        maxCumulativeFailsafeSeconds: basicCommissioningInfo.getLocal().maxCumulativeFailsafeSeconds,
+                        associatedFabric: session.getFabric(),
+                    }),
+                );
             }
 
             if (device.isFailsafeArmed()) {

@@ -6,9 +6,9 @@
 
 import { ActionTracer } from "@project-chip/matter.js/behavior/context";
 import { Environment } from "@project-chip/matter.js/environment";
+import { MaybePromise, serialize } from "@project-chip/matter.js/util";
 import { FileHandle, open } from "fs/promises";
 import { resolve } from "path";
-import { MaybePromise, serialize } from "@project-chip/matter.js/util";
 
 export class NodeJsActionTracer extends ActionTracer {
     #path: string;
@@ -33,22 +33,18 @@ export class NodeJsActionTracer extends ActionTracer {
     }
 
     [Symbol.asyncDispose]() {
-        MaybePromise.then(
-            this.#write,
-            () => this.#output?.close(),
-        )
+        MaybePromise.then(this.#write, () => this.#output?.close());
     }
 
     override record(action: ActionTracer.Action) {
         const raw = {
             ...action,
             path: action.path?.toString(false),
-            mutations: action.mutations ? action.mutations.map(m => ({ ...m, path: m.path.toString(false) })) : undefined
-        }
-        this.#write = MaybePromise.then(
-            this.#write,
-            () => this.#record(raw)
-        )
+            mutations: action.mutations
+                ? action.mutations.map(m => ({ ...m, path: m.path.toString(false) }))
+                : undefined,
+        };
+        this.#write = MaybePromise.then(this.#write, () => this.#record(raw));
     }
 
     async #record(action: object) {
