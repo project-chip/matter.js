@@ -39,6 +39,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     start() {
         const startNetwork = () => this.offline(agent => agent.get(NetworkServer).start());
+
         if (this.lifecycle.isTreeReady) {
             startNetwork();
         } else {

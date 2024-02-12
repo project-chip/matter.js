@@ -75,35 +75,38 @@ describe("ServerNode", () => {
         expect(opcreds.commissionedFabrics).equals(0);
 
         await node.destroy();
-    }).timeout(8640000);
+    });
 
-    // it("decommissions", async () => {
-    //     const { node, context } = await commission();
+    it("decommissions and recommissions", async () => {
+        const { node, context } = await commission();
 
-    //     const fabricIndex = await node.online(
-    //         context,
-    //         async agent => agent.operationalCredentials.state.currentFabricIndex,
-    //     );
+        const fabricIndex = await node.online(
+            context,
+            async agent => agent.operationalCredentials.state.currentFabricIndex,
+        );
 
-    //     await node.online(context, async agent => {
-    //         await agent.operationalCredentials.removeFabric({ fabricIndex });
-    //     });
+        await node.online(context, async agent => {
+            await agent.operationalCredentials.removeFabric({ fabricIndex });
+        });
 
-    //     // Node should decommission...
-    //     if (node.lifecycle.isCommissioned) {
-    //         await node.lifecycle.decommissioned;
-    //     }
+        // Node should decommission...
+        if (node.lifecycle.isCommissioned) {
+            await node.lifecycle.decommissioned;
+        }
 
-    //     // ...then go offline...
-    //     if (node.lifecycle.isOnline) {
-    //         await node.lifecycle.offline;
-    //     }
+        // ...then go offline...
+        if (node.lifecycle.isOnline) {
+            await node.lifecycle.offline;
+        }
 
-    //     // ...then go back online
-    //     await MockTime.resolve(node.lifecycle.online);
+        // ...then go back online
+        // TODO - need fixes in MatterDevice for following steps to work
+        // await MockTime.resolve(node.lifecycle.online);
 
-    //     await node.destroy();
-    // });
+        // await commission(node);
+
+        await node.destroy();
+    });
 
     it("advertises correctly", () => {
         // TODO
@@ -138,8 +141,10 @@ async function createNode() {
     return node;
 }
 
-async function almostCommission() {
-    const node = await createNode();
+async function almostCommission(node?: MockServerNode) {
+    if (!node) {
+        node = await createNode();
+    }
 
     const session = await createSession(node);
 
@@ -190,8 +195,8 @@ async function almostCommission() {
     return { node, context };
 }
 
-async function commission() {
-    const { node, context } = await almostCommission();
+async function commission(existingNode?: MockServerNode) {
+    const { node, context } = await almostCommission(existingNode);
 
     await node.online(context, async agent => {
         // Need to wait for broadcaster cleanup here

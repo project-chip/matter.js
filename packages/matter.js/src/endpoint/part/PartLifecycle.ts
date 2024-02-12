@@ -152,7 +152,7 @@ export class PartLifecycle {
     bubble(type: PartLifecycle.Change, part: Part) {
         this.#changed.emit(type, part);
 
-        if (type === PartLifecycle.Change.Ready) {
+        if (type === PartLifecycle.Change.TreeReady) {
             this.#checkTreeReadiness();
         }
     }
