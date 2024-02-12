@@ -29,10 +29,6 @@ export class PartFailsafeContext extends FailsafeContext {
     }
 
     override async storeEndpointState() {
-        if (!this.#node.behaviors.has(NetworkCommissioningBehavior)) {
-            return;
-        }
-
         this.#node.offline(agent => {
             this.#storedState = {
                 nocs: agent.operationalCredentials.state.nocs.map(noc => ({ ...noc })),
@@ -40,11 +36,13 @@ export class PartFailsafeContext extends FailsafeContext {
                 trustedRootCertificates: [ ...agent.operationalCredentials.state.trustedRootCertificates ],
             }
 
-            const network = agent.get(NetworkCommissioningBehavior);
-            if (network) {
-                this.#storedState.networks = network.state.networks;
+            if (!agent.has(NetworkCommissioningBehavior)) {
+                return;
             }
-        })
+
+            const network = agent.get(NetworkCommissioningBehavior);
+            this.#storedState.networks = network.state.networks;
+        });
     }
 
     override async restoreFabric() {

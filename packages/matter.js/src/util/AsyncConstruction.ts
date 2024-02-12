@@ -75,7 +75,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * If you omit the initializer parameter to {@link AsyncConstruction} execution is deferred until you invoke this
      * method.
      */
-    start(initializer: () => MaybePromise): this;
+    start(initializer?: () => MaybePromise): this;
 
     /**
      * Invoke destruction logic then move to destroyed status.
@@ -112,6 +112,8 @@ export interface AsyncConstruction<T> extends Promise<T> {
      * Force "crashed" state with the specified error.
      */
     crashed(cause: any): void;
+
+    toString(): string;
 }
 
 export function AsyncConstruction<T extends AsyncConstructable<any>>(
@@ -137,6 +139,10 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     }
 
     const self: AsyncConstruction<any> = {
+        toString() {
+            return `construction<${subject}>`;
+        },
+
         get ready() {
             return ready;
         },
@@ -156,10 +162,18 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             return change;
         },
 
-        start(initializer: () => MaybePromise) {
+        start(init?: () => MaybePromise) {
             if (started) {
                 throw new ImplementationError(`Initialization of ${subject} has already started`);
             }
+
+            if (init) {
+                initializer = init;
+            }
+            if (!initializer) {
+                throw new ImplementationError(`No initializer available for ${subject}`);
+            }
+
             started = true;
 
             let initialization;

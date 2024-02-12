@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ActionContext } from "../../behavior/context/ActionContext.js";
-import { OfflineContext } from "../../behavior/context/server/OfflineContext.js";
 import { Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
@@ -32,7 +30,7 @@ export class PartLifecycle {
     #treeReady = new Observable<[]>(error => this.emitError("treeReady", error));
     #destroyed = new Observable<[]>(error => this.emitError("destroyed", error));
     #changed = new Observable<[type: PartLifecycle.Change, part: Part]>(error => this.emitError("changed", error));
-    #reset = new Observable<[context: ActionContext], MaybePromise>();
+    #reset = new Observable<[], MaybePromise>();
     #queuedUpdates?: Array<PartLifecycle.Change>;
 
     /**
@@ -129,23 +127,23 @@ export class PartLifecycle {
         // Run reset once cancelled
         this.#isReady = this.#isTreeReady = this.#isInstalled = false;
 
-        await OfflineContext.act("factory-reset", async context => {
-            await this.#factoryReset(context);
-        });
+        await this.#factoryReset();
 
         this.#part.construction.setStatus(Lifecycle.Status.Inactive);
-        this.change(PartLifecycle.Change.Installed);
+
+        // The part will defer construction until it is notified of installation by the node
+        this.#part.construction.start();
     }
 
     /**
      * Reset child parts and behaviors as part of factory reset.
      */
-    async #factoryReset(context: ActionContext) {
+    async #factoryReset() {
         for (const part of this.#part.parts) {
-            await part.lifecycle.#factoryReset(context);
+            await part.lifecycle.#factoryReset();
         }
 
-        await this.#reset.emit(context);
+        await this.#reset.emit();
     }
 
     /**

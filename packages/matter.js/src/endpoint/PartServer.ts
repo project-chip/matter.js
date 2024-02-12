@@ -17,12 +17,8 @@ import { ImplementationError, InternalError, NotImplementedError } from "../comm
 import { ClusterId } from "../datatype/ClusterId.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Diagnostic } from "../log/Diagnostic.js";
-import { Logger } from "../log/Logger.js";
-import { ServerStore } from "../node/server/storage/ServerStore.js";
 import { EndpointInterface } from "./EndpointInterface.js";
 import { Part } from "./Part.js";
-
-const logger = Logger.get("PartServer");
 
 const SERVER = Symbol("server");
 interface ServerPart extends Part {
@@ -35,7 +31,6 @@ interface ServerPart extends Part {
 export class PartServer implements EndpointInterface {
     #part: Part;
     #name = "";
-    #structureChangedCallback?: () => void;
     readonly #clusterServers = new Map<ClusterId, ClusterServerObj<Attributes, Events>>();
 
     get part() {
@@ -44,17 +39,7 @@ export class PartServer implements EndpointInterface {
 
     constructor(part: Part) {
         (part as ServerPart)[SERVER] = this;
-
         this.#part = part;
-
-        // We listen to ready continuously because it will recur after factory reset
-        part.lifecycle.ready.on(() => this.#logPart());
-
-        if (part.lifecycle.isReady) {
-            this.#logPart();
-        }
-
-        part.lifecycle.changed.on(() => this.#structureChangedCallback?.());
     }
 
     createBacking(type: Behavior.Type): BehaviorBacking {
@@ -90,8 +75,7 @@ export class PartServer implements EndpointInterface {
     }
 
     removeFromStructure(): void {
-        //this.destroy();
-        this.#structureChangedCallback = undefined;
+        // Unused
     }
 
     updatePartsList(): EndpointNumber[] {
@@ -124,12 +108,15 @@ export class PartServer implements EndpointInterface {
         this.#clusterServers.clear();
         delete (this.#part as ServerPart)[SERVER];
         for (const part of this.#part.parts) {
-            await part[Symbol.asyncDispose]();
+            const server = (part as ServerPart)[SERVER];
+            if (server) {
+                await server[Symbol.asyncDispose]();
+            }
         }
     }
 
-    setStructureChangedCallback(callback: () => void): void {
-        this.#structureChangedCallback = callback;
+    setStructureChangedCallback(): void {
+        // Unused, should move out of EndpointInterface
     }
 
     addClusterServer<A extends Attributes, E extends Events>(server: ClusterServerObj<A, E>): void {
@@ -204,30 +191,12 @@ export class PartServer implements EndpointInterface {
      * Hierarchical diagnostics of part and children.
      */
     get [Diagnostic.value]() {
-        const diagnostics = ["Part", Diagnostic.strong(this.#part.id), this.#diagnosticDict];
+        const diagnostics = ["Part", Diagnostic.strong(this.#part.id), this.#part.diagnosticDict];
         if (this.#part.parts.size) {
             diagnostics.push(
                 Diagnostic.list([...this.#part.parts].map(part => PartServer.forPart(part)[Diagnostic.value])),
             );
         }
         return diagnostics as unknown;
-    }
-
-    /**
-     * Log details of fully initialized part.
-     */
-    #logPart() {
-        logger.info(Diagnostic.strong(this.#part), "ready", this.#diagnosticDict);
-    }
-
-    get #diagnosticDict() {
-        const isNew = this.#part.env.get(ServerStore).partStores.storeForPart(this.#part).isNew;
-
-        return Diagnostic.dict({
-            "endpoint#": this.#part.number,
-            type: `${this.#part.type.name} (0x${this.#part.type.deviceType.toString(16)})`,
-            known: !isNew,
-            behaviors: this.#part.behaviors,
-        });
     }
 }

@@ -69,23 +69,23 @@ export function executeTransaction<T>(
                         throw error;
                     }
 
-                    let promise = MaybePromise.then(
+                    return MaybePromise.then(
                         () => {
                             logger.warn("Rolling back", tx.via, "due to error:", error);
                             return tx.rollback();
                         },
-                        undefined,
+                        () => {
+                            tx.destroy();
+                            throw error;
+                        },
                         error2 => {
-                            logger.error("Secondary error in", tx.via, "rollback:", error2);
+                            if (error !== error2) {
+                                logger.error("Secondary error in", tx.via, "rollback:", error2);
+                                tx.destroy();
+                            }
+                            throw error;
                         },
                     );
-
-                    promise = MaybePromise.finally(promise, () => {
-                        tx.destroy();
-                        throw error;
-                    });
-
-                    return promise as MaybePromise<T>;
                 },
             ),
 

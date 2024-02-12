@@ -8,8 +8,10 @@ import { CommissioningBehavior } from "../behavior/system/commissioning/Commissi
 import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { Agent } from "../endpoint/Agent.js";
+import { PartServer } from "../endpoint/PartServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartInitializer } from "../endpoint/part/PartInitializer.js";
+import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
@@ -36,7 +38,12 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * If you add the server as a worker to {@link Environment.runtime} this happens automatically.
      */
     start() {
-        this.construction.then(() => this.offline(agent => agent.get(NetworkServer).start()));
+        const startNetwork = () => this.offline(agent => agent.get(NetworkServer).start());
+        if (this.lifecycle.isTreeReady) {
+            startNetwork();
+        } else {
+            this.lifecycle.treeReady.then(startNetwork);
+        }
     }
 
     /**
@@ -46,6 +53,40 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      */
     cancel() {
         this.construction.then(() => this.offline(agent => agent.get(NetworkServer).cancel()));
+    }
+
+    /**
+     * Perform a factory reset of the node.
+     */
+    async factoryReset() {
+        // Do not reset until constructed
+        await this.construction;
+
+        // Inform user
+        this.statusUpdate("resetting to factory defaults");
+
+        // Do not reset whilst online, but note online state and restart after reset
+        const isOnline = this.lifecycle.isOnline;
+        if (isOnline) {
+            this.cancel();
+        }
+        if (this.lifecycle.isOnline) {
+            await this.lifecycle.offline;
+        }
+
+        // Destroy the PartServer hierarchy
+        await PartServer.forPart(this)[Symbol.asyncDispose]();
+
+        // Perform the factory reset
+        await this.lifecycle.factoryReset();
+
+        // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
+        this.lifecycle.change(PartLifecycle.Change.Installed);
+
+        // Go back online if we were online at time of reset
+        if (isOnline) {
+            this.start();
+        }
     }
 
     protected override async initialize(agent: Agent.Instance<T>) {

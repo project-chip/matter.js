@@ -100,13 +100,14 @@ export class MockTime {
      *
      * Moves time forward until the promise resolves.
      */
-    async resolve<T>(promise: Promise<T>) {
+    async resolve<T>(promise: PromiseLike<T>) {
         let resolved = false;
 
         promise.then(() => (resolved = true));
 
         while (!resolved) {
-            await this.advance(60000);
+            await this.yield();
+            await this.advance(5000);
             await this.yield();
         }
 

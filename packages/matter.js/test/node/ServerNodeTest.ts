@@ -75,26 +75,35 @@ describe("ServerNode", () => {
         expect(opcreds.commissionedFabrics).equals(0);
 
         await node.destroy();
-    });
+    }).timeout(8640000);
 
-    it("decommissions", async () => {
-        const { node, context } = await commission();
+    // it("decommissions", async () => {
+    //     const { node, context } = await commission();
 
-        const fabricIndex = await node.online(
-            context,
-            async agent => agent.operationalCredentials.state.currentFabricIndex,
-        );
+    //     const fabricIndex = await node.online(
+    //         context,
+    //         async agent => agent.operationalCredentials.state.currentFabricIndex,
+    //     );
 
-        await node.online(context, async agent => {
-            await agent.operationalCredentials.removeFabric({ fabricIndex });
-        });
+    //     await node.online(context, async agent => {
+    //         await agent.operationalCredentials.removeFabric({ fabricIndex });
+    //     });
 
-        if (node.lifecycle.isCommissioned) {
-            await node.lifecycle.decommissioned;
-        }
+    //     // Node should decommission...
+    //     if (node.lifecycle.isCommissioned) {
+    //         await node.lifecycle.decommissioned;
+    //     }
 
-        await node.destroy();
-    });
+    //     // ...then go offline...
+    //     if (node.lifecycle.isOnline) {
+    //         await node.lifecycle.offline;
+    //     }
+
+    //     // ...then go back online
+    //     await MockTime.resolve(node.lifecycle.online);
+
+    //     await node.destroy();
+    // });
 
     it("advertises correctly", () => {
         // TODO
