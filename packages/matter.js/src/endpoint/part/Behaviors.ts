@@ -166,6 +166,15 @@ export class Behaviors {
     }
 
     /**
+     * True if any behaviors failed to initialized
+     */
+    get hasCrashed() {
+        return Object
+            .values(this.#backings)
+            .findIndex(behavior => behavior.construction.status === Lifecycle.Status.Crashed) !== -1;
+    }
+
+    /**
      * Create a behavior asynchronously.  Waits for the behavior to complete initialization.
      */
     async createAsync(type: Behavior.Type, agent: Agent) {

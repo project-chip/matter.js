@@ -7,7 +7,7 @@
 import { Behavior } from "../behavior/Behavior.js";
 import { ActionTracer } from "../behavior/context/ActionTracer.js";
 import { OfflineContext } from "../behavior/context/server/OfflineContext.js";
-import { UninitializedDependencyError } from "../common/Lifecycle.js";
+import { CrashedDependencyError, UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
@@ -382,6 +382,27 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         return this.behaviors.initialize(agent);
     }
 
+    /**
+     * Invoked if one or more behaviors crashed during initialization.
+     * 
+     * The default implementation crashes the part.
+     */
+    protected behaviorCrash() {
+        this.construction.then(() => {
+            logger.info("Part", Diagnostic.strong(this.toString()), "initialization failed because of errors in behaviors");
+
+            this.#construction.crashed(
+                new CrashedDependencyError(
+                    this.toString(),
+                    "unavailable due to behavior initialization failure"
+                ),
+
+                // We do not want this error logged
+                false
+            );
+        })
+    }
+
     #initialize() {
         let trace: ActionTracer.Action;
         if (this.env.has(ActionTracer)) {
@@ -404,6 +425,10 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
                 if (trace) {
                     trace.path = this.path;
                     this.env.get(ActionTracer).record(trace);
+                }
+
+                if (this.behaviors.hasCrashed) {
+                    this.behaviorCrash();
                 }
             },
         );

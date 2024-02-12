@@ -56,6 +56,12 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
         this.lifecycle.offline.on(() => {
             this.statusUpdate("is offline");
         });
+
+        this.lifecycle.changed.on((type, part) => {
+            if (type === PartLifecycle.Change.Crashed) {
+                this.partCrashed(part);
+            }
+        });
     }
 
     override get env() {
@@ -96,6 +102,10 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
 
     protected statusUpdate(message: string) {
         logger.notice(Diagnostic.strong(this.toString()), message);
+    }
+
+    protected partCrashed(part: Part) {
+        return this.lifecycle.partError.emit(part, part.construction.error ?? new Error("Unknown error"));
     }
 }
 

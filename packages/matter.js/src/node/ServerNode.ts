@@ -8,15 +8,20 @@ import { CommissioningBehavior } from "../behavior/system/commissioning/Commissi
 import { NetworkServer } from "../behavior/system/networking/NetworkServer.js";
 import { ProductDescriptionServer } from "../behavior/system/product-description/ProductDescriptionServer.js";
 import { Agent } from "../endpoint/Agent.js";
+import { Part } from "../endpoint/Part.js";
 import { PartServer } from "../endpoint/PartServer.js";
 import { RootEndpoint as BaseRootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartInitializer } from "../endpoint/part/PartInitializer.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { Identity } from "../util/Type.js";
 import { Node } from "./Node.js";
 import { IdentityService } from "./server/IdentityService.js";
 import { ServerPartInitializer } from "./server/ServerPartInitializer.js";
 import { ServerStore } from "./server/storage/ServerStore.js";
+
+const logger = Logger.get("ServerNode");
 
 /**
  * A server-side Matter {@link Node}.
@@ -24,6 +29,8 @@ import { ServerStore } from "./server/storage/ServerStore.js";
  * The Matter specification often refers to server-side nodes as "devices".
  */
 export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint> extends Node<T> {
+    #crashed = false;
+
     constructor(type?: T, options?: Node.Options<T>);
 
     constructor(config: Partial<Node.Configuration<T>>);
@@ -38,13 +45,21 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * If you add the server as a worker to {@link Environment.runtime} this happens automatically.
      */
     start() {
-        const startNetwork = () => this.offline(agent => agent.get(NetworkServer).start());
+        this.construction.then(() => {
+            if (this.#crashed) {
+                this.#crashed = false;
+                this.#reportCrashTermination();
+                return;
+            }
 
-        if (this.lifecycle.isTreeReady) {
-            startNetwork();
-        } else {
-            this.lifecycle.treeReady.then(startNetwork);
-        }
+            const startNetwork = () => this.offline(agent => agent.get(NetworkServer).start());
+
+            if (this.lifecycle.isTreeReady) {
+                startNetwork();
+            } else {
+                this.lifecycle.treeReady.then(startNetwork);
+            }
+        });
     }
 
     /**
@@ -101,6 +116,24 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         this.env.set(IdentityService, new IdentityService(this));
 
         return super.initialize(agent);
+    }
+
+    protected override partCrashed(part: Part) {
+        // Part crashes may be disabled by event handlers except for the node
+        if (super.partCrashed(part) === false && part !== this) {
+            return false;
+        }
+
+        if (this.lifecycle.isOnline) {
+            this.#reportCrashTermination();
+        } else {
+            this.#crashed = true;
+        }
+    }
+
+    #reportCrashTermination() {
+        logger.info("Aborting", Diagnostic.strong(this.toString()), "due to endpoint error");
+        this.construction.then(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false))
     }
 }
 

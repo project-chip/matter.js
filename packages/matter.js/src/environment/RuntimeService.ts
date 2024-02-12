@@ -77,11 +77,7 @@ export class RuntimeService {
                         break;
 
                     case Lifecycle.Status.Crashed:
-                        let error = worker.construction?.error;
-                        if (!error) {
-                            error = new Error("Unknown initialization error");
-                        }
-                        this.#crash(error);
+                        this.#crash();
                         break;
 
                     case Lifecycle.Status.Destroyed:
@@ -229,8 +225,10 @@ export class RuntimeService {
         this.inactive.then(() => this.#stopped.emit());
     }
 
-    #crash(cause: Error) {
-        logger.error(cause);
+    #crash(cause?: Error) {
+        if (cause) {
+            logger.error(cause);
+        }
         this.crashed.emit(cause);
         this.cancel();
     }

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { CrashedDependencyError, Lifecycle } from "../../common/Lifecycle.js";
 import { ImplementationError } from "../../common/MatterError.js";
 import type { Agent } from "../../endpoint/Agent.js";
 import type { Part } from "../../endpoint/Part.js";
@@ -68,15 +69,39 @@ export abstract class BehaviorBacking {
                     return this.invokeInitializer(behavior, this.#options);
                 }),
             undefined,
-            e => logger.error(e),
+            e => {
+                // This is the only error we should see here...
+                if (!(e instanceof CrashedDependencyError)) {
+                    // ...but if not, log
+                    logger.error("Unhandled error initializing behavior", e)
+                }
+            }
         );
     }
 
     /**
-     * Perform final teardown.  We might invoke {@link Behavior.destroy} multiple times but this method is final.
+     * Destroy the backing.
      */
     destroy(agent: Agent) {
-        return this.construction.destroy(() => this.#invokeDestroy(agent));
+        const initialized = this.construction.status === Lifecycle.Status.Active;
+
+        return this.construction.destroy(() => {
+            let result = MaybePromise.then(
+                () => this.#reactors?.destroy(),
+                () => {
+                    this.#reactors = undefined;
+                },
+            );
+
+            if (initialized) {
+                result = MaybePromise.then(
+                    result,
+                    () => this.#invokeDestroy(agent),
+                )
+            }
+
+            return result;
+        });
     }
 
     /**
@@ -209,24 +234,14 @@ export abstract class BehaviorBacking {
      * Invoke {@link Behavior.destroy} to clean up application logic.
      */
     #invokeDestroy(agent: Agent): MaybePromise {
+
         // Do not use Agent.get because backing is in "destroying" state
         const behavior = this.createBehavior(agent, this.type);
 
-        let result = MaybePromise.then(
-            () => {
-                this.#reactors?.destroy();
-            },
-            () => {
-                this.#reactors = undefined;
-            },
-        );
-
-        result = MaybePromise.then(
-            result,
+        return MaybePromise.then(
             () => behavior?.[Symbol.asyncDispose](),
+            undefined,
             e => logger.error(`Destroying ${this}:`, e),
         );
-
-        return result;
     }
 }
