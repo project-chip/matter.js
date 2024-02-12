@@ -63,7 +63,6 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
 
     async destroy() {
         await this.#cancel();
-        (this.part.lifecycle as NodeLifecycle).offline?.emit(this.context);
         await this.internal.runtime?.[Symbol.asyncDispose]();
     }
 

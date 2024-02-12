@@ -11,6 +11,8 @@ import { UninitializedDependencyError } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
 import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
+import { Diagnostic } from "../log/Diagnostic.js";
+import { Logger } from "../log/Logger.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
@@ -23,6 +25,8 @@ import { PartLifecycle } from "./part/PartLifecycle.js";
 import { Parts } from "./part/Parts.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
+
+const logger = Logger.get("Part");
 
 /**
  * Endpoints consist of a hierarchy of parts.  This class manages the current state of a single part.
@@ -138,6 +142,8 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
         this.#type = config.type;
         this.#lifecycle = this.createLifecycle();
+
+        this.#lifecycle.ready.on(() => this.#logReady());
 
         this.#behaviors = new Behaviors(this, this.#type.behaviors, config as Record<string, object | undefined>);
 
@@ -403,6 +409,21 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
                 }
             },
         );
+    }
+
+    #logReady() {
+        logger.info(Diagnostic.strong(this.toString()), "ready", this.diagnosticDict);
+    }
+
+    /**
+     * Diagnostic information regarding part state.
+     */
+    get diagnosticDict() {
+        return Diagnostic.dict({
+            "endpoint#": this.number,
+            type: `${this.type.name} (0x${this.type.deviceType.toString(16)})`,
+            behaviors: this.behaviors,
+        });
     }
 }
 

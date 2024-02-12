@@ -269,7 +269,7 @@ export namespace RuntimeService {
          *   - If the worker crashed (e.g. experiences an error during initialization) the runtime will cancel all
          *     workers and exit
          *
-         *   - If the worker is destroyed deletes it from the set of known workers
+         *   - If the worker is destroyed the runtime deletes it from the set of known workers
          */
         construction?: AsyncConstruction<any>;
 

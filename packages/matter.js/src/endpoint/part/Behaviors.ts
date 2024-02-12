@@ -81,7 +81,7 @@ export class Behaviors {
             this.#augmentPartShortcuts(type);
         }
 
-        this.#part.lifecycle.reset.on(async context => await this.#factoryReset(context));
+        this.#part.lifecycle.reset.on(async () => await this.#factoryReset());
     }
 
     /**
@@ -123,8 +123,7 @@ export class Behaviors {
     }
 
     /**
-     * Add behavior support dynamically at runtime.  Typically called via
-     * {@link Agent.require}.
+     * Add behavior support dynamically at runtime.  Typically called via {@link Agent.require}.
      */
     require<T extends Behavior.Type>(type: T, options?: Behavior.Options<T>) {
         if (options) {
@@ -152,8 +151,7 @@ export class Behaviors {
     }
 
     /**
-     * Create a behavior synchronously.  Fails if the behavior is not fully
-     * initialized.
+     * Create a behavior synchronously.  Fails if the behavior is not fully initialized.
      */
     createSync(type: Behavior.Type, agent: Agent) {
         const behavior = this.createMaybeAsync(type, agent);
@@ -303,7 +301,7 @@ export class Behaviors {
             if (cluster) {
                 const other = this.#part.behaviors.supported[cluster.id];
 
-                if ((other as ClusterBehavior.Type).cluster?.id === cluster.id) {
+                if ((other as ClusterBehavior.Type | undefined)?.cluster?.id === cluster.id) {
                     continue;
                 }
 
@@ -440,13 +438,14 @@ export class Behaviors {
         });
     }
 
-    async #factoryReset(context: ActionContext) {
-        const agent = context.agentFor(this.#part);
+    async #factoryReset() {
         for (const type of Object.values(this.#supported)) {
             try {
-                const backing = await this.activate(type, agent);
-                await backing.createBehavior(agent, type)[Symbol.asyncDispose]();
-                await backing.factoryReset(context);
+                await this.#part.offline(async agent => {
+                    const backing = await this.activate(type, agent);
+                    await backing.createBehavior(agent, type)[Symbol.asyncDispose]();
+                    await backing.factoryReset();
+                });
             } catch (e) {
                 logger.error(`Error during factory reset of ${this.#part}.${type.id}:`, e);
             }

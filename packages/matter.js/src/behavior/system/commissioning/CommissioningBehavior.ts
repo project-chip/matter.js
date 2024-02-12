@@ -10,6 +10,7 @@ import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { DatatypeModel, FieldElement } from "../../../model/index.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
+import { ServerNode } from "../../../node/ServerNode.js";
 import {
     CommissioningFlowType,
     DiscoveryCapabilitiesSchema,
@@ -68,7 +69,8 @@ export class CommissioningBehavior extends Behavior {
             (this.part.lifecycle as NodeLifecycle).commissioned.emit(this.context);
         } else {
             (this.part.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
-            this.part.lifecycle.factoryReset();
+
+            this.part.env.runtime.addWorker((this.part as ServerNode).factoryReset());
         }
     }
 
@@ -83,7 +85,6 @@ export class CommissioningBehavior extends Behavior {
         const { qrPairingCode, manualPairingCode } = this.pairingCodes;
 
         logger.notice(
-            "Node",
             Diagnostic.strong(this.part.toString()),
             "is uncommissioned",
             Diagnostic.dict({

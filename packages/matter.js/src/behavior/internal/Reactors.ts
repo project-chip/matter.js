@@ -33,7 +33,7 @@ export class Reactors {
         return this.#backing;
     }
 
-    [Symbol.asyncDispose]() {
+    async destroy() {
         for (const reactor of this.#backings) {
             reactor.destroy();
         }

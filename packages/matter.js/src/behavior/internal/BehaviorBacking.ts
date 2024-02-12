@@ -13,7 +13,6 @@ import { EventEmitter, Observable } from "../../util/Observable.js";
 import { MaybePromise } from "../../util/Promises.js";
 import type { Behavior } from "../Behavior.js";
 import { Reactor } from "../Reactor.js";
-import { ActionContext } from "../context/ActionContext.js";
 import { Datasource } from "../state/managed/Datasource.js";
 import { Reactors } from "./Reactors.js";
 
@@ -95,7 +94,9 @@ export abstract class BehaviorBacking {
      *
      * This is an optional extension point for derivatives.
      */
-    factoryReset(_context: ActionContext): MaybePromise {}
+    factoryReset(): MaybePromise {
+        return this.#reactors?.destroy();
+    }
 
     /**
      * The {@link Part} that owns the behavior.
@@ -213,7 +214,7 @@ export abstract class BehaviorBacking {
 
         let result = MaybePromise.then(
             () => {
-                this.#reactors?.[Symbol.asyncDispose]();
+                this.#reactors?.destroy();
             },
             () => {
                 this.#reactors = undefined;

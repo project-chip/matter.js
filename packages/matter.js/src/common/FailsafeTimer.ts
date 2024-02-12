@@ -6,8 +6,8 @@
 
 import { Fabric } from "../fabric/Fabric.js";
 import { Time, Timer } from "../time/Time.js";
-import { MatterFlowError } from "./MatterError.js";
 import type { FailsafeContext } from "./FailsafeContext.js";
+import { MatterFlowError } from "./MatterError.js";
 
 export class MatterFabricConflictError extends MatterFlowError {}
 

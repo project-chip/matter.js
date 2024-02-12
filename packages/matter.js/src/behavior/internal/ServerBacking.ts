@@ -10,10 +10,8 @@ import { EventHandler } from "../../protocol/interaction/EventHandler.js";
 import { MaybePromise } from "../../util/Promises.js";
 import { camelize } from "../../util/String.js";
 import { Behavior } from "../Behavior.js";
-import { ActionContext } from "../context/ActionContext.js";
 import { Val } from "../state/Val.js";
 import { Datasource } from "../state/managed/Datasource.js";
-import { Transaction } from "../state/transaction/Transaction.js";
 import { BehaviorBacking } from "./BehaviorBacking.js";
 
 /**
@@ -52,37 +50,9 @@ export class ServerBehaviorBacking extends BehaviorBacking {
         );
     }
 
-    override async factoryReset(context: ActionContext) {
-        const members = this.type.schema?.members;
-        if (!members) {
-            // Without metadata this is not relevant
-            return;
-        }
-
-        const defaults = this.part.behaviors.defaultsFor(this.type) ?? {};
-
-        const state = this.datasource.reference(context) as Val.Struct;
-
-        const transaction = context.transaction;
-
-        for (const member of this.type.schema?.members) {
-            // Minor optimization
-            const name = camelize(member.name);
-            if (state[name] === defaults[name]) {
-                continue;
-            }
-
-            // For nonvolatile values, ensure transaction is active before we enter sync code
-            if (member.effectiveQuality.nonvolatile) {
-                if (transaction.status !== Transaction.Status.Exclusive) {
-                    transaction.addResources(this.datasource);
-                    await transaction.begin();
-                }
-            }
-
-            // Set the value
-            state[name] = defaults[name];
-        }
+    override async factoryReset() {
+        await this.datasource.factoryReset();
+        await super.factoryReset();
     }
 
     get #serverStore() {

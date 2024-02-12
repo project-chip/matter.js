@@ -16,4 +16,4 @@ describe("Behaviors", () => {
 
         light.behaviors.validateRequirements();
     });
-})
+});

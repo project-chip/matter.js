@@ -18,11 +18,11 @@ import { CommissioningOptions } from "./behavior/system/commissioning/Commission
 import { AdministratorCommissioning } from "./cluster/definitions/AdministratorCommissioningCluster.js";
 
 import { Channel } from "./common/Channel.js";
+import { FailsafeContext } from "./common/FailsafeContext.js";
 import { InstanceBroadcaster } from "./common/InstanceBroadcaster.js";
 import { Lifecycle } from "./common/Lifecycle.js";
 import { InternalError, MatterFlowError } from "./common/MatterError.js";
 import { Scanner } from "./common/Scanner.js";
-import { FailsafeContext } from "./common/FailsafeContext.js";
 import { TransportInterface } from "./common/TransportInterface.js";
 import { Crypto } from "./crypto/Crypto.js";
 import { FabricIndex } from "./datatype/FabricIndex.js";
@@ -85,6 +85,8 @@ export class MatterDevice {
 
         this.announceInterval = Time.getPeriodicTimer("Server node announcement", DEVICE_ANNOUNCEMENT_INTERVAL_MS, () =>
             // TODO - this promise is not awaited
+            // Announcement needs to await a previous announcement because otherwise in testing at least announcement
+            // may crash if started simultaneously
             this.announce(),
         );
     }

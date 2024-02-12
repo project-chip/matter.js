@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { ImplementationError } from "../../../common/MatterError.js";
 import { DeviceTypeId } from "../../../datatype/DeviceTypeId.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { DeviceClasses } from "../../../device/DeviceTypes.js";
@@ -42,21 +41,35 @@ export class ProductDescriptionServer extends Behavior {
             pd.productId = bi.productId;
         }
 
-        if (pd.deviceType === -1) {
-            const deviceType = inferDeviceType(this.agent);
+        this.#setDeviceType();
+    }
 
-            if (!deviceType) {
-                throw new ImplementationError(
-                    "Cannot infer announcement device type because no device part is present; please set ProductDescription.deviceType",
-                );
-            }
-
-            pd.deviceType = deviceType;
+    #setDeviceType() {
+        if (this.state.deviceType !== ProductDescriptionServer.UNKNOWN_DEVICE_TYPE) {
+            return;
         }
+
+        const deviceType = inferDeviceType(this.agent);
+
+        if (deviceType !== undefined) {
+            this.state.deviceType = deviceType;
+            return;
+        }
+
+        // Continually react to tree mutations until we discover a device part
+        this.reactTo(
+            this.part.lifecycle.changed,
+
+            this.#setDeviceType,
+
+            { once: true },
+        );
     }
 }
 
 export namespace ProductDescriptionServer {
+    export const UNKNOWN_DEVICE_TYPE = DeviceTypeId(-1);
+
     export class State implements ProductDescription {
         /**
          * The device name for commissioning announcements.
@@ -66,7 +79,7 @@ export namespace ProductDescriptionServer {
         /**
          * The device type for commissioning announcements.
          */
-        deviceType = -1;
+        deviceType: DeviceTypeId = UNKNOWN_DEVICE_TYPE;
 
         /**
          * The vendor ID for commissioning announcements.

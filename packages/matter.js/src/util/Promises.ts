@@ -93,6 +93,8 @@ export const MaybePromise = {
         resolve?: ((input: I) => MaybePromise<O1>) | null,
         reject?: ((error: any) => MaybePromise<O2>) | null,
     ): MaybePromise<O1 | O2> {
+        let rejected = false;
+
         try {
             let value;
             if (producer instanceof Function) {
@@ -101,13 +103,24 @@ export const MaybePromise = {
                 value = producer;
             }
             if (MaybePromise.is(value)) {
-                return value.then(resolve, reject);
+                return value.then(
+                    resolve,
+                    reject
+                        ? error => {
+                              // If reject() is not async then we will catch rejection errors below but should not reject
+                              // again
+                              rejected = true;
+
+                              return reject?.(error);
+                          }
+                        : undefined,
+                );
             }
             if (resolve) {
                 return resolve(value);
             }
         } catch (e) {
-            if (reject) {
+            if (reject && !rejected) {
                 return reject(e);
             }
             throw e;
@@ -163,6 +176,10 @@ export const MaybePromise = {
             }
         }
         return producer;
+    },
+
+    toString() {
+        return "MaybePromise";
     },
 };
 

@@ -222,12 +222,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
             throw e;
         }
 
-        // Current method of detecting timeout expiration is to detect fabric removal, so monitor the fabric until
-        // commissioning completes
-        this.internal.commissionedFabric = fabric.fabricIndex;
-        this.internal.fabricRemovalCallback = this.callback(this.#commissioningTimeout);
-        fabric.addRemoveCallback(this.internal.fabricRemovalCallback);
-
         // TODO: The receiver SHALL create and add a new Access Control Entry using the CaseAdminSubject field to grant
         //  subsequent Administer access to an Administrator member of the new Fabric. It is RECOMMENDED that the
         //  Administrator presented in CaseAdminSubject exist within the same entity that is currently invoking the
@@ -385,12 +379,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
         timedOp.setRootCert(rootCaCertificate);
     }
 
-    #commissioningTimeout() {
-        if (this.internal.commissionedFabric !== undefined) {
-            this.#deleteFabric(this.internal.commissionedFabric);
-        }
-    }
-
     #deleteFabric(fabricIndex: FabricIndex) {
         for (const array of [this.state.fabrics, this.state.nocs]) {
             const index = array.findIndex(f => f.fabricIndex === fabricIndex);
@@ -418,7 +406,6 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
 export namespace OperationalCredentialsServer {
     export class Internal {
         certification?: DeviceCertification;
-        fabricRemovalCallback?: () => void;
         commissionedFabric?: FabricIndex;
     }
 

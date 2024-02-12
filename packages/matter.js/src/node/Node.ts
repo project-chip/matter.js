@@ -24,7 +24,6 @@ const logger = Logger.get("Node");
  */
 export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     #environment: Environment;
-    #online = false;
 
     constructor(config: Node.Configuration<T>) {
         const parentEnvironment = config.environment ?? Environment.default;
@@ -50,30 +49,13 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
         // initialization
         this.lifecycle.change(PartLifecycle.Change.Installed);
 
-        this.lifecycle.ready.on(() => {
-            if (this.#online) {
-                return;
-            }
-
-            this.#online = true;
-            logger.notice(Diagnostic.strong(this.toString()), "is online");
+        this.lifecycle.online.on(() => {
+            this.statusUpdate("is online");
         });
 
-        this.lifecycle.reset.on(() => this.#goingOffline());
-    }
-
-    override async [Symbol.asyncDispose]() {
-        this.#goingOffline();
-        return super[Symbol.asyncDispose]();
-    }
-
-    #goingOffline() {
-        if (!this.#online) {
-            return;
-        }
-
-        this.#online = false;
-        logger.notice(Diagnostic.strong(this.toString()), "going offline");
+        this.lifecycle.offline.on(() => {
+            this.statusUpdate("is offline");
+        });
     }
 
     override get env() {
@@ -110,6 +92,10 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     override get lifecycle(): NodeLifecycle {
         // We only have to override the lifecycle getter so
         return super.lifecycle as NodeLifecycle;
+    }
+
+    protected statusUpdate(message: string) {
+        logger.notice(Diagnostic.strong(this.toString()), message);
     }
 }
 
