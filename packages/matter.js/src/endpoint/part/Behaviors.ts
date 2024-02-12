@@ -12,7 +12,7 @@ import { DescriptorServer } from "../../behavior/definitions/descriptor/Descript
 import { BehaviorBacking } from "../../behavior/internal/BehaviorBacking.js";
 import { Val } from "../../behavior/state/Val.js";
 import { Transaction } from "../../behavior/state/transaction/Transaction.js";
-import { Lifecycle } from "../../common/Lifecycle.js";
+import { Lifecycle, UninitializedDependencyError } from "../../common/Lifecycle.js";
 import { ImplementationError, InternalError, ReadOnlyError } from "../../common/MatterError.js";
 import { Diagnostic } from "../../log/Diagnostic.js";
 import { Logger } from "../../log/Logger.js";
@@ -299,7 +299,7 @@ export class Behaviors {
             // doesn't currently
             const cluster = (requirement as ClusterBehavior.Type).cluster;
             if (cluster) {
-                const other = this.#part.behaviors.supported[cluster.id];
+                const other = this.#part.behaviors.supported[requirement.id];
 
                 if ((other as ClusterBehavior.Type | undefined)?.cluster?.id === cluster.id) {
                     continue;
@@ -345,17 +345,24 @@ export class Behaviors {
     }
 
     /**
-     * Forcefully obtain a backing regardless of initialization state.  Intended for part shortcuts, shouldn't be used
-     * otherwise.
+     * Obtain a backing for a part shortcut.
      */
-    #backingFor(type: Behavior.Type) {
+    #backingFor(container: string, type: Behavior.Type) {
         if (this.#part.construction.status !== Lifecycle.Status.Initializing) {
             this.#part.construction.assert(`Cannot access ${this.#part}.${type.id} because part is`);
         }
 
         let backing = this.#backings[type.id];
         if (!backing) {
-            this.#activateLate(type);
+            try {
+                this.#activateLate(type);
+            } catch (e) {
+                logger.warn(`Cannot initialize ${container}.${type.id} until node is initialized: ${e}`);
+                throw new UninitializedDependencyError(
+                    `${container}.${type.id}`,
+                    "is not available until node is initialized, you may await node.construction to avoid this error",
+                );
+            }
             backing = this.#backings[type.id];
             if (backing === undefined) {
                 throw new InternalError(`Behavior ${this.#part}.${type.id} late activation did not create backing`);
@@ -415,7 +422,7 @@ export class Behaviors {
     #augmentPartShortcuts(type: Behavior.Type) {
         Object.defineProperty(this.#part.state, type.id, {
             get: () => {
-                return this.#backingFor(type).stateView;
+                return this.#backingFor("state", type).stateView;
             },
 
             set() {
@@ -427,7 +434,7 @@ export class Behaviors {
 
         Object.defineProperty(this.#part.events, type.id, {
             get: () => {
-                return this.#backingFor(type).events;
+                return this.#backingFor("events", type).events;
             },
 
             set() {

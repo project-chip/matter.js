@@ -9,6 +9,7 @@ import type { PartServer } from "../../../endpoint/PartServer.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
 import { DatatypeModel, FieldElement } from "../../../model/index.js";
+import type { Node } from "../../../node/Node.js";
 import { NodeLifecycle } from "../../../node/NodeLifecycle.js";
 import { ServerNode } from "../../../node/ServerNode.js";
 import {
@@ -51,7 +52,7 @@ export class CommissioningBehavior extends Behavior {
             this.state.discriminator = PaseClient.generateRandomDiscriminator();
         }
 
-        this.reactTo(this.part.lifecycle.treeReady, this.#nodeReady);
+        this.reactTo((this.part as Node).lifecycle.online, this.#nodeOnline);
 
         this.reactTo(
             this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,
@@ -138,7 +139,7 @@ export class CommissioningBehavior extends Behavior {
         ],
     });
 
-    #nodeReady() {
+    #nodeOnline() {
         if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
             this.initiateCommissioning();
         }

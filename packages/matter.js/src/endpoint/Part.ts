@@ -112,8 +112,6 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Current state values for all behaviors.  This view is read-only.
-     *
-     * If a behavior is not fully initalized its state may be incomplete.
      */
     get state() {
         return this.#stateView;
