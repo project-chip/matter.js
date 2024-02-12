@@ -86,6 +86,7 @@ describe("Parts", () => {
 
         expect(bubbled).deep.equals([
             PartLifecycle.Change.Installed,
+            PartLifecycle.Change.IdAssigned,
             PartLifecycle.Change.TreeReady,
             PartLifecycle.Change.Ready,
         ]);
