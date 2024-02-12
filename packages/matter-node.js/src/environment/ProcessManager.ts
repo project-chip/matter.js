@@ -7,6 +7,9 @@
 import { Destructable } from "@project-chip/matter.js/common";
 import { Environment, RuntimeService, VariableService } from "@project-chip/matter.js/environment";
 import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
+import { Logger } from "@project-chip/matter.js/log";
+
+const logger = Logger.get("ProcessManager");
 
 /**
  * ProcessManager watches Node.js signals SIGINT and SIGUSR2 to interrupt the Matter.js runtime and trigger Matter.js
@@ -63,6 +66,7 @@ export class ProcessManager implements Destructable {
         if (this.hasSignalSupport) {
             process.on("SIGINT", this.interruptHandler);
             process.on("SIGUSR2", this.diagnosticHandler);
+            process.on("exit", this.exitHandler);
         }
     };
 
@@ -84,6 +88,12 @@ export class ProcessManager implements Destructable {
         this.runtime.cancel();
     };
 
+    protected exitHandler = () => {
+        if (process.exitCode === 13) {
+            logger.error("Internal error: Premature process exit because ongoing work has stalled");
+        }
+    }
+
     protected diagnosticHandler = () => {
         if (this.env.vars.get("runtime.signals", true)) {
             process.on("SIGUSR2", this.env.diagnose);
@@ -94,5 +104,6 @@ export class ProcessManager implements Destructable {
     #ignoreSignals() {
         process.off("SIGINT", this.interruptHandler);
         process.off("SIGUSR2", this.diagnosticHandler);
+        process.off("exit", this.exitHandler);
     }
 }
