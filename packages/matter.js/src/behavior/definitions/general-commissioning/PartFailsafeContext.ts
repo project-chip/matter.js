@@ -70,7 +70,9 @@ export class PartFailsafeContext extends FailsafeContext {
     }
 
     override async restoreBreadcrumb() {
-        this.#node.state.generalCommissioning.breadcrumb = 0;
+        await this.#node.offline(agent => {
+            agent.generalCommissioning.state.breadcrumb = 0;
+        });
     }
 
     async #restoreOperationalCredentials() {
