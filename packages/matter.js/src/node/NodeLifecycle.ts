@@ -17,11 +17,13 @@ export class NodeLifecycle extends PartLifecycle {
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
+    #partError = Observable<[part: Part, error: Error], boolean | undefined>();
     #isOnline = false;
     #isCommissioned = false;
 
     constructor(part: Part) {
         super(part);
+
         this.#online.on(() => {
             this.#isOnline = true;
         });
@@ -76,5 +78,16 @@ export class NodeLifecycle extends PartLifecycle {
      */
     get decommissioned() {
         return this.#decommissioned;
+    }
+
+    /**
+     * Emits for unhandled errors in {@link Part} initialization.
+     *
+     * By default these errors causes node activity to terminate.  This may not be desirable for nodes with many parts
+     * that function independently.  If you install a listener here returning false the node will will treat the part
+     * that crashed as incapacitated but otherwise continue operation.
+     */
+    get partError() {
+        return this.#partError;
     }
 }

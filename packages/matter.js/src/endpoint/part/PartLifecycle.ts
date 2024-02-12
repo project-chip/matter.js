@@ -112,6 +112,13 @@ export class PartLifecycle {
 
     constructor(part: Part) {
         this.#part = part;
+
+        // Bubble crash events
+        part.construction.change.on(status => {
+            if (status === Lifecycle.Status.Crashed) {
+                this.change(PartLifecycle.Change.Crashed);
+            }
+        });
     }
 
     /**
@@ -239,6 +246,7 @@ export namespace PartLifecycle {
         Installed = "installed",
         Ready = "ready",
         TreeReady = "treeReady",
+        Crashed = "crashed",
         Destroyed = "destroyed",
         ServersChanged = "serversChanged",
         ClientsChanged = "clientsChanged",

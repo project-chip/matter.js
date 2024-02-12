@@ -112,7 +112,7 @@ export interface AsyncConstruction<T> extends Promise<T> {
     /**
      * Force "crashed" state with the specified error.
      */
-    crashed(cause: any): this;
+    crashed(cause: any, invokeDefaultHandler?: boolean): this;
 
     toString(): string;
 }
@@ -324,6 +324,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                 return this;
             }
 
+            error = undefined;
             status = Lifecycle.Status.Destroying;
             promise = MaybePromise.finally(
                 promise,
