@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Lifecycle } from "../common/Lifecycle.js";
+import { CrashedDependencyError, Lifecycle } from "../common/Lifecycle.js";
 import { ImplementationError } from "../common/MatterError.js";
+import { Logger } from "../log/Logger.js";
 import { Observable } from "./Observable.js";
 import { MaybePromise, Tracker } from "./Promises.js";
 
@@ -106,12 +107,12 @@ export interface AsyncConstruction<T> extends Promise<T> {
      *
      * This method fails if initialization is ongoing; await completion first.
      */
-    setStatus(status: Lifecycle.Status): void;
+    setStatus(status: Lifecycle.Status): this;
 
     /**
      * Force "crashed" state with the specified error.
      */
-    crashed(cause: any): void;
+    crashed(cause: any): this;
 
     toString(): string;
 }
@@ -130,6 +131,24 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let placeholderReject: undefined | ((error: any) => void);
     let status = Lifecycle.Status.Initializing;
     let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
+
+    const onerror = options?.onerror ?? ((error: Error) => {
+        const logger = Logger.get(subject.constructor.name);
+        logger.error(error);
+    });
+
+    // As a PromiseLike, rejections have the stack trace of the original error.  This can be confusing.  So instead we
+    // log the error (or pass to options.onerror) and throw a new CrashedDependencyError for each listener.  This
+    // captures the original error but also the trace for the secondary error.
+    function crashedError() {
+        let what;
+        if (subject.toString === Object.toString) {
+            what = subject.constructor.name;
+        } else {
+            what = subject.toString();
+        }
+        throw new CrashedDependencyError(what, "unavailable due to initialization error");
+    }
 
     function setStatus(newStatus: Lifecycle.Status) {
         status = newStatus;
@@ -187,7 +206,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                     placeholderResolve = placeholderReject = undefined;
                     reject(e);
                 }
-                throw e;
+                throw crashedError();
             }
 
             if (MaybePromise.is(initialization)) {
@@ -204,7 +223,7 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
                         if (status !== Lifecycle.Status.Destroying && status !== Lifecycle.Status.Destroyed) {
                             this.crashed(e);
                         }
-                        throw e;
+                        throw crashedError();
                     },
                 );
                 if (promise) {
@@ -326,11 +345,13 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
         crashed(cause: any) {
             error = cause;
             setStatus(Lifecycle.Status.Crashed);
+            onerror(error);
+            return this;
         },
 
         setStatus(newStatus: Lifecycle.Status) {
             if (this.status === newStatus) {
-                return;
+                return this;
             }
 
             if (status === Lifecycle.Status.Destroyed) {
@@ -366,6 +387,8 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
             }
 
             setStatus(status);
+
+            return this;
         },
 
         get [Symbol.toStringTag]() {
@@ -391,5 +414,10 @@ export namespace AsyncConstruction {
          * If the subject contributes to a composite object, crashes propagate to parent indicated here.
          */
         parent?: AsyncConstruction<any>;
+
+        /**
+         * By default unhandled initialization errors are logged.  You can override by supplying an error handler here.
+         */
+        onerror?: (error: Error) => void;
     }
 }
