@@ -210,8 +210,6 @@ export class PartLifecycle {
                 if (observable) {
                     observable.emit();
                 }
-
-                this.#queuedUpdates.shift();
             }
         } finally {
             this.#queuedUpdates = undefined;
