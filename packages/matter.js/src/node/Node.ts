@@ -5,7 +5,6 @@
  */
 
 import { ImplementationError } from "../common/MatterError.js";
-import { Agent } from "../endpoint/Agent.js";
 import { Part } from "../endpoint/Part.js";
 import { RootEndpoint } from "../endpoint/definitions/system/RootEndpoint.js";
 import { PartLifecycle } from "../endpoint/part/PartLifecycle.js";
@@ -66,13 +65,6 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
 
     override get env() {
         return this.#environment;
-    }
-
-    /**
-     * Add a top-level endpoint.
-     */
-    add(definition: Part.Definition | Agent) {
-        this.parts.add(definition);
     }
 
     /**
