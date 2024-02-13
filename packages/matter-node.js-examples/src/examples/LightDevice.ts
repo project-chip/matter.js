@@ -48,13 +48,13 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 //
 // Note there are a large number of options to NodeServer that we are allowing to take default values here.  See
 // CompositeWindowCovering.ts for a more detailed example.
-const server = new ServerNode();
+const node = await ServerNode.create();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.
-server.add(ExampleLight);
+await node.add(ExampleLight);
 
 // Our device is now built and we can bring the node online.
 //
 // Note that you may serve multiple nodes from a single process.  We only have one, however, so we can use the run()
 // method of the node.
-await server.run();
+await node.run();

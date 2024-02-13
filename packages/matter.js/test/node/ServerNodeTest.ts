@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { MatterDevice } from "../../src/MatterDevice.js";
 import { Crypto } from "../../src/crypto/Crypto.js";
 import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
-import { ServerNode } from "../../src/node/ServerNode.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
 
@@ -131,40 +129,12 @@ describe("ServerNode", () => {
     });
 });
 
-async function createSession(node: ServerNode, options?: Partial<Parameters<MatterDevice["createSecureSession"]>[0]>) {
-    return await node.env.get(MatterDevice).createSecureSession({
-        sessionId: 1,
-        fabric: undefined,
-        peerNodeId: NodeId(0),
-        peerSessionId: 1,
-        sharedSecret: new ByteArray(),
-        salt: new ByteArray(),
-        isInitiator: false,
-        isResumption: false,
-        ...options,
-    });
-}
-
-async function createNode() {
-    const node = new MockServerNode();
-
-    node.add(OnOffLightDevice);
-
-    node.start();
-
-    if (!node.lifecycle.isOnline) {
-        await node.lifecycle.online;
-    }
-
-    return node;
-}
-
 async function almostCommission(node?: MockServerNode) {
     if (!node) {
-        node = await createNode();
+        node = await MockServerNode.createOnline();
     }
 
-    const session = await createSession(node);
+    const session = await node.createSession();
 
     const context = { session, command: true };
 

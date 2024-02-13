@@ -25,6 +25,7 @@ import { PartLifecycle } from "./part/PartLifecycle.js";
 import { Parts } from "./part/Parts.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
+import type { Node } from "../node/Node.js";
 
 const logger = Logger.get("Part");
 
@@ -128,8 +129,24 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
         return this.#construction;
     }
 
+    /**
+     * Create new endpoint.
+     * 
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
+     * and initialize a {@link Part} in one step.
+     * 
+     * @param config 
+     */
     constructor(config: Part.Configuration<T> | T);
 
+    /**
+     * Create new endpoint.
+     * 
+     * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
+     * and initialize a {@link Part} in one step.
+     * 
+     * @param config 
+     */
     constructor(type: T, options?: Part.Options<T>);
 
     constructor(definition: T | Part.Configuration<T>, options?: Part.Options<T>) {
@@ -263,6 +280,36 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
             this.#owner = undefined;
             throw e;
         }
+    }
+
+    /**
+     * Add a child endpoint.
+     * 
+     * @param config the {@link Part} or {@link Part.Configuration}
+     */
+    async add<T extends EndpointType>(part: Part<T> | Part.Configuration<T> | T): Promise<Part<T>>;
+
+    /**
+     * Add a child endpoint.
+     * 
+     * @param type the {@link EndpointType} of the child endpoint
+     * @param options settings for the new part
+     */
+    async add<T extends EndpointType>(type: T, options?: Part.Options<T>): Promise<Part<T>>;
+
+    async add<T extends EndpointType>(definition: T | Part<T> | Part.Configuration<T>, options?: Part.Options<T>) {
+        let part;
+        if (definition instanceof Part) {
+            part = definition;
+        } else {
+            part = new Part(definition as any, options);
+        }
+
+        this.parts.add(part);
+
+        await part.construction;
+
+        return part;
     }
 
     /**
