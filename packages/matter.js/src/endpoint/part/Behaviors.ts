@@ -169,9 +169,11 @@ export class Behaviors {
      * True if any behaviors failed to initialized
      */
     get hasCrashed() {
-        return Object
-            .values(this.#backings)
-            .findIndex(behavior => behavior.construction.status === Lifecycle.Status.Crashed) !== -1;
+        return (
+            Object.values(this.#backings).findIndex(
+                behavior => behavior.construction.status === Lifecycle.Status.Crashed,
+            ) !== -1
+        );
     }
 
     /**

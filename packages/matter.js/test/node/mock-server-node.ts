@@ -61,13 +61,13 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         return OnlineContext(options as OnlineContext.Options).act(context => actor(context.agentFor(this)));
     }
 
-    static async createOnline(options: { online?: boolean, device?: Part.Definition } = { device: OnOffLightDevice }) {
+    static async createOnline(options: { online?: boolean; device?: Part.Definition } = { device: OnOffLightDevice }) {
         const node = new MockServerNode<ServerRootEndpoint>();
-    
+
         if (options.device !== undefined) {
             node.add(OnOffLightDevice);
         }
-    
+
         if (options.online === false) {
             await node.construction;
             return node;
@@ -78,7 +78,7 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         if (!node.lifecycle.isOnline) {
             await node.lifecycle.online;
         }
-    
+
         return node;
     }
 

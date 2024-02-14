@@ -188,7 +188,7 @@ export class RootSupervisor implements ValueSupervisor {
                 access: AccessControl(schema),
                 validate: deferGeneration("validate", ValueValidator),
                 manage: deferGeneration("manage", ValueManager),
-                patch: deferGeneration("patch", ValuePatcher)
+                patch: deferGeneration("patch", ValuePatcher),
             };
         } else {
             try {

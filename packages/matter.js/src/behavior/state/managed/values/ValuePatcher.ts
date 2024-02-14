@@ -19,17 +19,18 @@ import { Val } from "../../Val.js";
  */
 export function ValuePatcher(schema: Schema, owner: RootSupervisor) {
     switch (schema.effectiveMetatype) {
+        case Metatype.any:
+            // "any" means the schema defines no type.  Assume it's an object since ValuePatcher is only invoked where
+            // an object is expected naturally
+
         case Metatype.object:
             return StructPatcher(schema as ValueModel, owner);
 
         case Metatype.array:
             return ListPatcher(schema as ValueModel, owner);
 
-        // TODO - for completeness we should either make ByteArray immutable
-        // in state or wrap here but meh
-
         default:
-            throw new ImplementationError(`Cannot generate patcher for ${schema.name} because does not define not a collection`);
+            return PrimitivePatcher();
     }
 }
 
@@ -76,12 +77,12 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
             //   - Existing field is null or undefined
             const subpatch = memberPatchers[key];
             if (
-                !subpatch
-                || typeof newValue !== "object"
-                || newValue === null
-                || Array.isArray(newValue)
-                || target[key] === undefined
-                || target[key] === null
+                !subpatch ||
+                typeof newValue !== "object" ||
+                newValue === null ||
+                Array.isArray(newValue) ||
+                target[key] === undefined ||
+                target[key] === null
             ) {
                 target[key] = newValue;
                 continue;
@@ -91,7 +92,7 @@ function StructPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervis
             // subpatcher for validation
             subpatch(newValue as Val.Collection, target[key] as Val.Collection, path.at(key));
         }
-    }
+    };
 }
 
 /**
@@ -111,19 +112,19 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
     }
 
     return (changes, target, path) => {
-        // Validate chagnes
+        // Validate changes
         if (typeof changes !== "object" || changes === null) {
             throw new WriteError(path, `patch definition ${changes} is not an object`);
         }
 
         // Validate target
         if (!Array.isArray(target)) {
-            throw new WriteError(path, `patch definition ${changes} is not an object`)
+            throw new WriteError(path, `patch definition ${changes} is not an object`);
         }
 
         for (const indexStr in changes) {
             const index = Number.parseInt(indexStr);
-            
+
             if (index < 0 || Number.isNaN(index)) {
                 throw new WriteError(path, `key ${index} is not a valid array index`);
             }
@@ -141,5 +142,13 @@ function ListPatcher(schema: ValueModel, owner: RootSupervisor): ValueSupervisor
                 target[index] = newValue;
             }
         }
+    };
+}
+
+function PrimitivePatcher(): ValueSupervisor.Patch {
+    return (_changes, _target, path) => {
+        throw new ImplementationError(
+            `Cannot generate patch ${path} because it does not define not a collection`,
+        );
     }
 }

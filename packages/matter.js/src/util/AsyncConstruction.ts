@@ -132,10 +132,12 @@ export function AsyncConstruction<T extends AsyncConstructable<any>>(
     let status = Lifecycle.Status.Initializing;
     let change: Observable<[status: Lifecycle.Status, subject: T]> | undefined;
 
-    const onerror = options?.onerror ?? ((error: Error) => {
-        const logger = Logger.get(subject.constructor.name);
-        logger.error(error);
-    });
+    const onerror =
+        options?.onerror ??
+        ((error: Error) => {
+            const logger = Logger.get(subject.constructor.name);
+            logger.error(error);
+        });
 
     // As a PromiseLike, rejections have the stack trace of the original error.  This can be confusing.  So instead we
     // log the error (or pass to options.onerror) and throw a new CrashedDependencyError for each listener.  This

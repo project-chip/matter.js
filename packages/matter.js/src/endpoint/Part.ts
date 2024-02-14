@@ -13,6 +13,7 @@ import { EndpointNumber } from "../datatype/EndpointNumber.js";
 import { Environment } from "../environment/Environment.js";
 import { Diagnostic } from "../log/Diagnostic.js";
 import { Logger } from "../log/Logger.js";
+import type { Node } from "../node/Node.js";
 import { IdentityService } from "../node/server/IdentityService.js";
 import { AsyncConstruction } from "../util/AsyncConstruction.js";
 import { MaybePromise } from "../util/Promises.js";
@@ -25,9 +26,6 @@ import { PartLifecycle } from "./part/PartLifecycle.js";
 import { Parts } from "./part/Parts.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
-import type { Node } from "../node/Node.js";
-import { ActionContext } from "../behavior/context/ActionContext.js";
-import { Val } from "../behavior/state/Val.js";
 
 const logger = Logger.get("Part");
 
@@ -122,16 +120,16 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Update state values.  This is a patch operation; it only modifies properties in {@link values}.
-     * 
+     *
      * {@link values} is an object with a {@link Behavior.id} as the key and state values as sub-objects.
-     * 
+     *
      * Input values must adhere to the {@link Behavior.schema} of the target {@link Behavior}.  If the part will throw
      * an error.
-     * 
+     *
      * This is a transactional operation.  Any errors will result in no change.  The part will wait for exclusive access
      * before applying changes.
-     * 
-     * @param values the values to change  
+     *
+     * @param values the values to change
      */
     async set(values: Partial<SupportedBehaviors.StateOf<T["behaviors"]>>) {
         await this.offline(async agent => {
@@ -144,7 +142,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
                 if (!(behavior instanceof Behavior)) {
                     throw new ImplementationError(`Behavior ID ${behaviorId} does not exist`);
                 }
-                
+
                 const vals = values[behaviorId];
                 if (vals === undefined) {
                     continue;
@@ -172,21 +170,21 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Create new endpoint.
-     * 
+     *
      * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
      * and initialize a {@link Part} in one step.
-     * 
-     * @param config 
+     *
+     * @param config
      */
     constructor(config: Part.Configuration<T> | T);
 
     /**
      * Create new endpoint.
-     * 
+     *
      * The endpoint will not initialize fully until added to a {@link Node}.  You can use {@link Part.add} to construct
      * and initialize a {@link Part} in one step.
-     * 
-     * @param config 
+     *
+     * @param config
      */
     constructor(type: T, options?: Part.Options<T>);
 
@@ -325,14 +323,14 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Add a child endpoint.
-     * 
+     *
      * @param config the {@link Part} or {@link Part.Configuration}
      */
     async add<T extends EndpointType>(part: Part<T> | Part.Configuration<T> | T): Promise<Part<T>>;
 
     /**
      * Add a child endpoint.
-     * 
+     *
      * @param type the {@link EndpointType} of the child endpoint
      * @param options settings for the new part
      */
@@ -472,23 +470,24 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
     /**
      * Invoked if one or more behaviors crashed during initialization.
-     * 
+     *
      * The default implementation crashes the part.
      */
     protected behaviorCrash() {
         this.construction.then(() => {
-            logger.info("Part", Diagnostic.strong(this.toString()), "initialization failed because of errors in behaviors");
+            logger.info(
+                "Part",
+                Diagnostic.strong(this.toString()),
+                "initialization failed because of errors in behaviors",
+            );
 
             this.#construction.crashed(
-                new CrashedDependencyError(
-                    this.toString(),
-                    "unavailable due to behavior initialization failure"
-                ),
+                new CrashedDependencyError(this.toString(), "unavailable due to behavior initialization failure"),
 
                 // We do not want this error logged
-                false
+                false,
             );
-        })
+        });
     }
 
     #initialize() {

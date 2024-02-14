@@ -33,9 +33,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     /**
      * Construct a new ServerNode.
-     * 
+     *
      * You can use {@link create} to construct the node and wait for it to initialize fully.
-     * 
+     *
      * @param type the variation of {@link RootEndpoint} that defines the root endpoint's behavior
      * @param options root endpoint options and the node's environment
      */
@@ -43,9 +43,9 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     /**
      * Construct a new ServerNode.
-     * 
+     *
      * You can use {@link create} to construct the node and wait for it to initialize fully.
-     * 
+     *
      * @param config a {@link Part.Configuration} for the root endpoint
      */
     constructor(config: Partial<Node.Configuration<T>>);
@@ -56,25 +56,28 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     /**
      * Create a new ServerNode.
-     * 
+     *
      * @param type the variation of {@link RootEndpoint} that defines the root endpoint's behavior
      * @param options root endpoint configuration and, optionally, the node's environment
      */
     static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
         type?: T,
-        options?: Node.Options<T>
+        options?: Node.Options<T>,
     ): Promise<ServerNode<T>>;
 
     /**
      * Create a new ServerNode.
-     * 
+     *
      * @param config root endpoint configuration and, optionally, the node's {@link Environment}
      */
     static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
-        config: Partial<Node.Configuration<T>>
+        config: Partial<Node.Configuration<T>>,
     ): Promise<ServerNode<T>>;
 
-    static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(definition?: T | Node.Configuration<T>, options?: Node.Options<T>) {
+    static async create<T extends ServerNode.RootEndpoint = ServerNode.RootEndpoint>(
+        definition?: T | Node.Configuration<T>,
+        options?: Node.Options<T>,
+    ) {
         const node = new ServerNode<T>(definition as any, options);
 
         await node.construction;
@@ -176,7 +179,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
 
     #reportCrashTermination() {
         logger.info("Aborting", Diagnostic.strong(this.toString()), "due to endpoint error");
-        this.construction.then(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false))
+        this.construction.then(() => this.construction.crashed(new Error(`Aborted ${this} due to error`), false));
     }
 }
 
