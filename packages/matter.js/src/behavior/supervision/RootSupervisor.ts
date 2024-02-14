@@ -10,6 +10,7 @@ import { camelize } from "../../util/String.js";
 import { AccessControl } from "../AccessControl.js";
 import { Val } from "../state/Val.js";
 import { ValueManager } from "../state/managed/values/ValueManager.js";
+import { ValuePatcher } from "../state/managed/values/ValuePatcher.js";
 import { ValueValidator } from "../state/validation/ValueValidator.js";
 import { Schema } from "./Schema.js";
 import { ValueSupervisor } from "./ValueSupervisor.js";
@@ -74,6 +75,10 @@ export class RootSupervisor implements ValueSupervisor {
 
     get manage() {
         return this.#root.manage;
+    }
+
+    get patch() {
+        return this.#root.patch;
     }
 
     /**
@@ -183,6 +188,7 @@ export class RootSupervisor implements ValueSupervisor {
                 access: AccessControl(schema),
                 validate: deferGeneration("validate", ValueValidator),
                 manage: deferGeneration("manage", ValueManager),
+                patch: deferGeneration("patch", ValuePatcher)
             };
         } else {
             try {
@@ -193,6 +199,7 @@ export class RootSupervisor implements ValueSupervisor {
                     access: AccessControl(schema),
                     validate: ValueValidator(schema, this),
                     manage: ValueManager(schema, this, managed),
+                    patch: ValuePatcher(schema, this),
                 };
             } finally {
                 this.#generating.delete(schema);

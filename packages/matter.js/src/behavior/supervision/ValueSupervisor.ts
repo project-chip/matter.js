@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DataModelPath } from "../../endpoint/DataModelPath.js";
 import type { AccessControl } from "../AccessControl.js";
 import { ActionTracer } from "../context/ActionTracer.js";
 import type { Val } from "../state/Val.js";
@@ -55,6 +56,11 @@ export interface ValueSupervisor {
      * Create a managed instance of a value.
      */
     readonly manage: ValueSupervisor.Manage;
+
+    /**
+     * Apply changes.  Does not validate perform validation.
+     */
+    readonly patch: ValueSupervisor.Patch;
 }
 
 export namespace ValueSupervisor {
@@ -83,4 +89,6 @@ export namespace ValueSupervisor {
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;
 
     export type Manage = (reference: Val.Reference, session: Session) => Val;
+
+    export type Patch = (changes: Val.Collection, target: Val.Collection, path: DataModelPath) => Val;
 }

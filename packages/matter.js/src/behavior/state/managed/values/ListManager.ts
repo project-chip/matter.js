@@ -48,7 +48,7 @@ export function ListManager(owner: RootSupervisor, schema: Schema): ValueSupervi
 function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
     const entry = schema instanceof ValueModel ? schema.listEntry : undefined;
     if (entry === undefined) {
-        throw new SchemaImplementationError(DataModelPath(schema.path), `List schema has no entry definition`);
+        throw new SchemaImplementationError(DataModelPath(schema.path), "List schema has no entry definition");
     }
 
     const entryManager = owner.get(entry);
