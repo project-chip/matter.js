@@ -67,4 +67,8 @@ describe("Part", () => {
             expect(part.state.windowCovering.physicalClosedLimitLift).equals(200);
         });
     });
+
+    describe("set", () => {
+        // TODO
+    });
 });

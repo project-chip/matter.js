@@ -73,9 +73,9 @@ export abstract class BehaviorBacking {
                 // This is the only error we should see here...
                 if (!(e instanceof CrashedDependencyError)) {
                     // ...but if not, log
-                    logger.error("Unhandled error initializing behavior", e)
+                    logger.error("Unhandled error initializing behavior", e);
                 }
-            }
+            },
         );
     }
 
@@ -94,10 +94,7 @@ export abstract class BehaviorBacking {
             );
 
             if (initialized) {
-                result = MaybePromise.then(
-                    result,
-                    () => this.#invokeDestroy(agent),
-                )
+                result = MaybePromise.then(result, () => this.#invokeDestroy(agent));
             }
 
             return result;
@@ -234,7 +231,6 @@ export abstract class BehaviorBacking {
      * Invoke {@link Behavior.destroy} to clean up application logic.
      */
     #invokeDestroy(agent: Agent): MaybePromise {
-
         // Do not use Agent.get because backing is in "destroying" state
         const behavior = this.createBehavior(agent, this.type);
 

@@ -30,11 +30,11 @@ describe("ServerNode", () => {
     it("starts and stops and emits correct lifecycle changes", async () => {
         const node = new MockServerNode();
 
-        const changes = new Array<[ string, string ]>;
+        const changes = new Array<[string, string]>();
 
         node.lifecycle.changed.on((type, part) => {
             changes.push([type, part.toString()]);
-        })
+        });
 
         let disposal: Promise<void> | undefined;
 
@@ -51,15 +51,15 @@ describe("ServerNode", () => {
         await disposal;
 
         expect(changes).deep.equals([
-            [ "ready", "node0" ],
-            [ "installed", "node0.?" ],
-            [ "idAssigned", "node0.part0" ],
-            [ "numberAssigned", "node0.part0" ],
-            [ "treeReady", "node0.part0" ],
-            [ "treeReady", "node0" ],
-            [ "ready", "node0.part0" ],
-            [ "destroyed", "node0.part0" ],
-            [ "destroyed", "node0" ],
+            ["ready", "node0"],
+            ["installed", "node0.?"],
+            ["idAssigned", "node0.part0"],
+            ["numberAssigned", "node0.part0"],
+            ["treeReady", "node0.part0"],
+            ["treeReady", "node0"],
+            ["ready", "node0.part0"],
+            ["destroyed", "node0.part0"],
+            ["destroyed", "node0"],
         ]);
     });
 

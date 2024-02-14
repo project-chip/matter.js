@@ -6,8 +6,8 @@
 
 import { Destructable } from "@project-chip/matter.js/common";
 import { Environment, RuntimeService, VariableService } from "@project-chip/matter.js/environment";
-import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 import { Logger } from "@project-chip/matter.js/log";
+import type { NodeJsEnvironment } from "./NodeJsEnvironment.js";
 
 const logger = Logger.get("ProcessManager");
 
@@ -92,7 +92,7 @@ export class ProcessManager implements Destructable {
         if (process.exitCode === 13) {
             logger.error("Internal error: Premature process exit because ongoing work has stalled");
         }
-    }
+    };
 
     protected diagnosticHandler = () => {
         if (this.env.vars.get("runtime.signals", true)) {
