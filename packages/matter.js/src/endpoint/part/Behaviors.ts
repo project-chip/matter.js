@@ -459,7 +459,7 @@ export class Behaviors {
     async #factoryReset() {
         for (const type of Object.values(this.#supported)) {
             try {
-                await this.#part.offline(async agent => {
+                await this.#part.act(async agent => {
                     const backing = await this.activate(type, agent);
                     await backing.createBehavior(agent, type)[Symbol.asyncDispose]();
                     await backing.factoryReset();

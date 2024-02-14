@@ -98,7 +98,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
                 return;
             }
 
-            const startNetwork = () => this.offline(agent => agent.get(NetworkServer).start());
+            const startNetwork = () => this.act(agent => agent.get(NetworkServer).start());
 
             if (this.lifecycle.isTreeReady) {
                 startNetwork();
@@ -114,7 +114,7 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
      * This happens automatically on destruction.
      */
     cancel() {
-        this.construction.then(() => this.offline(agent => agent.get(NetworkServer).cancel()));
+        this.construction.then(() => this.act(agent => agent.get(NetworkServer).cancel()));
     }
 
     /**
