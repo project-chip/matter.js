@@ -132,7 +132,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      * @param values the values to change
      */
     async set(values: Partial<SupportedBehaviors.StateOf<T["behaviors"]>>) {
-        await this.offline(async agent => {
+        await this.act(async agent => {
             const tx = agent.context.transaction;
 
             await tx.begin();
@@ -397,11 +397,17 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
     }
 
     /**
-     * Perform offline work on the part.  When offline, ACLs are ignored and all state is read/write.
-     *
-     * This should only be used for local purposes.  All network interaction should use OnlineContext.
+     * Execute a function against an {@link Agent} for the part.
+     * 
+     * Agents provide the highest-leve API for interacting with parts.  The agent is a composite object with properties
+     * for each supported behavior.
+     * 
+     * State changes made by {@link actor} are atomic and made permanent only when the actor exits unless you commit the
+     * transaction manually.
+     * 
+     * {@link actor} runs in an "offline" context where ACLs are ignored and all state is read/write.
      */
-    offline<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
+    act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
         this.construction.assert("Part");
 
         return OfflineContext.act("offline", context => {

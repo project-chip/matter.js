@@ -89,7 +89,7 @@ describe("ClusterBehavior", () => {
 
         it("instance exposes values for enabled cluster elements", async () => {
             const part = await MockPart.createWith(MyBehavior);
-            part.offline(agent => {
+            part.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.reqAttr).equals("hello");
                 expect(behavior.reqCmd).is.a("function");
@@ -100,7 +100,7 @@ describe("ClusterBehavior", () => {
 
         it("instance does not expose values for disabled cluster elements", async () => {
             const part = await MockPart.createWith(MyBehavior);
-            part.offline(agent => {
+            part.act(agent => {
                 const behavior = agent.myCluster;
                 expect(behavior.state.optAttr).undefined;
                 expect(behavior.events.optAttr$Change?.constructor.name).equals("Emitter");

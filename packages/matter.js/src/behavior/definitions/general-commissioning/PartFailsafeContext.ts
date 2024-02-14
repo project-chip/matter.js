@@ -29,7 +29,7 @@ export class PartFailsafeContext extends FailsafeContext {
     }
 
     override async storeEndpointState() {
-        this.#node.offline(agent => {
+        this.#node.act(agent => {
             this.#storedState = {
                 nocs: agent.operationalCredentials.state.nocs.map(noc => ({ ...noc })),
                 fabrics: agent.operationalCredentials.state.fabrics.map(fabric => ({ ...fabric })),
@@ -52,7 +52,7 @@ export class PartFailsafeContext extends FailsafeContext {
     override async restoreNetworkState() {
         const networks = this.#storedState?.networks;
         if (networks) {
-            await this.#node.offline(agent => {
+            await this.#node.act(agent => {
                 const networkCommissioning = agent.get(NetworkCommissioningBehavior);
                 networkCommissioning.state.networks = networks;
             })
@@ -60,7 +60,7 @@ export class PartFailsafeContext extends FailsafeContext {
     }
 
     override async revokeFabric(fabric: Fabric) {
-        await this.#node.offline(agent => {
+        await this.#node.act(agent => {
             agent.basicInformation.events.leave?.emit({ fabricIndex: fabric.fabricIndex }, agent.context);
         })
 
@@ -70,7 +70,7 @@ export class PartFailsafeContext extends FailsafeContext {
     }
 
     override async restoreBreadcrumb() {
-        await this.#node.offline(agent => {
+        await this.#node.act(agent => {
             agent.generalCommissioning.state.breadcrumb = 0;
         });
     }
@@ -82,7 +82,7 @@ export class PartFailsafeContext extends FailsafeContext {
 
         const state = this.#storedState;
         if (state) {
-            await this.#node.offline(agent => {
+            await this.#node.act(agent => {
                 const opcreds = agent.operationalCredentials.state;
                 opcreds.nocs = state.nocs;
                 opcreds.fabrics = state.fabrics;

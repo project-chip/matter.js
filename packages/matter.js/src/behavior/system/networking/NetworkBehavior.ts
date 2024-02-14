@@ -32,7 +32,7 @@ export class NetworkBehavior extends Behavior implements Startable, Cancellable 
         const part = this.part;
         runtime.construction.then(
             () => {
-                part.offline(agent => {
+                part.act(agent => {
                     if (runtime.construction.status === Lifecycle.Status.Active) {
                         agent.get(NetworkBehavior).enterOnlineMode(runtime);
                     }

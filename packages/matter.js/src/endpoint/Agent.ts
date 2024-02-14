@@ -13,19 +13,17 @@ import type { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 
 /**
- * An Agent offers interaction with a single endpoint.  This is the operational
- * interface to endpoints.  It is separate from the {@link Part} because the
- * agent is context-aware with access to at most one fabric.
+ * An Agent offers interaction with a single endpoint.  This is the operational interface to endpoints.  It is separate
+ * from the {@link Part} because the agent is context-aware and may be bound to a specific fabric.
  *
- * An endpoint agent manages one or more {@link Behavior} instances that
- * implement a discrete subset of the agent's functionality.
+ * An endpoint agent manages one or more {@link Behavior} instances that implement a discrete subset of the agent's
+ * functionality.
  *
- * Each endpoint agent has an associated {@link Agent.Type} that
- * defines each {@link Behavior.Type} the endpoint supports.
+ * Each endpoint agent has an associated {@link Agent.Type} that defines each {@link Behavior.Type} the endpoint
+ * supports.
  *
- * {@link Agent.Type} is a permanent feature of an endpoint but agent instances
- * themselves are transitory and there is no guarantee they will exist beyond
- * the lifecycle of a single transaction.
+ * {@link Agent.Type} is a permanent feature of an endpoint but agent instances themselves are transitory and there is
+ * no guarantee they will exist beyond the lifecycle of a single transaction.
  */
 export class Agent {
     #part: Part;
