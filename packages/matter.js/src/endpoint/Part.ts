@@ -26,6 +26,8 @@ import { Parts } from "./part/Parts.js";
 import { SupportedBehaviors } from "./part/SupportedBehaviors.js";
 import { EndpointType } from "./type/EndpointType.js";
 import type { Node } from "../node/Node.js";
+import { ActionContext } from "../behavior/context/ActionContext.js";
+import { Val } from "../behavior/state/Val.js";
 
 const logger = Logger.get("Part");
 
@@ -116,6 +118,45 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      */
     get state() {
         return this.#stateView;
+    }
+
+    /**
+     * Update state values.  This is a patch operation; it only modifies properties in {@link values}.
+     * 
+     * {@link values} is an object with a {@link Behavior.id} as the key and state values as sub-objects.
+     * 
+     * Input values must adhere to the {@link Behavior.schema} of the target {@link Behavior}.  If the part will throw
+     * an error.
+     * 
+     * This is a transactional operation.  Any errors will result in no change.  The part will wait for exclusive access
+     * before applying changes.
+     * 
+     * @param values the values to change  
+     */
+    async set(values: Partial<SupportedBehaviors.StateOf<T["behaviors"]>>) {
+        await this.offline(async agent => {
+            const tx = agent.context.transaction;
+
+            await tx.begin();
+
+            for (const behaviorId in values) {
+                const behavior = agent[behaviorId];
+                if (!(behavior instanceof Behavior)) {
+                    throw new ImplementationError(`Behavior ID ${behaviorId} does not exist`);
+                }
+                
+                const vals = values[behaviorId];
+                if (vals === undefined) {
+                    continue;
+                }
+
+                await tx.addResources(behavior);
+
+                const patch = (behavior.constructor as Behavior.Type).supervisor.patch;
+
+                patch(values, behavior.state, this.path);
+            }
+        });
     }
 
     /**
