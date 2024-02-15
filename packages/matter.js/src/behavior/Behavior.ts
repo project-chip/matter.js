@@ -350,6 +350,11 @@ export namespace Behavior {
     export type InputStateOf<B extends Type> = Partial<ClusterType.RelaxTypes<StateOf<B>>>;
 
     /**
+     * Patch variant of StateOf.
+     */
+    export type PatchStateOf<B extends Type> = ClusterType.PatchType<StateOf<B>>;
+
+    /**
      * The events type of a behavior {@link Type}.
      */
     export type EventsOf<B extends Type> = InstanceType<B["Events"]>;

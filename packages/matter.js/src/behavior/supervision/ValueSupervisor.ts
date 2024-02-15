@@ -84,6 +84,12 @@ export namespace ValueSupervisor {
          * teardown where there is no visibility to peers.
          */
         unversionedVolatiles?: boolean;
+
+        /**
+         * If this is true, data validation is disabled.  This should only be used in contexts where data validation is
+         * deferred.
+         */
+        acceptInvalid?: boolean;
     }
 
     export type Validate = (value: Val, session: Session, location: ValidationLocation) => void;

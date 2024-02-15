@@ -71,14 +71,19 @@ export class CommissioningBehavior extends Behavior {
         } else {
             (this.part.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
 
-            this.part.env.runtime.addWorker((this.part as ServerNode).factoryReset());
+            this.part.env.runtime.addWorker(
+                (this.part as ServerNode).factoryReset()
+                    .then(this.callback(this.initiateCommissioning))
+            );
         }
     }
 
     /**
-     * The server invokes this method if the node is not yet commissioned.
+     * The server invokes this method when the node is active but not yet commissioned.
      *
      * An uncommissioned node is not yet associated with fabrics.  It cannot be used until commissioned by a controller.
+     * 
+     * The default implementation logs the QR code and credentials.
      */
     initiateCommissioning() {
         const { passcode, discriminator } = this.state;

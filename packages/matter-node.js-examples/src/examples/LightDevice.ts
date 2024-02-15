@@ -47,7 +47,7 @@ const ExampleLight = OnOffLightDevice.with(ReportingOnOffServer);
 // device online.
 //
 // Note there are a large number of options to NodeServer that we are allowing to take default values here.  See
-// CompositeWindowCovering.ts for a more detailed example.
+// IlluminatedRollerShade.ts for a more detailed example.
 const node = await ServerNode.create();
 
 // Nodes are a composition of endpoints.  Add a single endpoint to the node, our example light device.

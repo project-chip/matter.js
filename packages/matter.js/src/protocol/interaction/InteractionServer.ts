@@ -567,7 +567,8 @@ export class InteractionServer implements ProtocolHandler<MatterDevice> {
                         logger.error(
                             `Error while handling write request from ${
                                 exchange.channel.name
-                            } to ${this.#endpointStructure.resolveAttributeName(path)}: ${error.message}`,
+                            } to ${this.#endpointStructure.resolveAttributeName(path)}:`,
+                            error instanceof StatusResponseError ? error.message : error
                         );
                         if (error instanceof StatusResponseError) {
                             writeResults.push({ path, statusCode: error.code, clusterStatusCode: error.clusterCode });

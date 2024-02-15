@@ -4,27 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Crypto } from "../../src/crypto/Crypto.js";
-import { Key, PrivateKey } from "../../src/crypto/Key.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
-
-// These are temporary until we get proper crypto.subtle support
-Crypto.get().sign = () => {
-    return new ByteArray(32);
-};
-Crypto.get().hash = () => {
-    return new ByteArray(32);
-};
-Crypto.get().createKeyPair = () => {
-    return Key({ sec1: Fixtures.sec1Key }) as PrivateKey;
-};
-Crypto.get().hkdf = async () => {
-    return new ByteArray(16);
-};
 
 describe("ServerNode", () => {
     it("starts and stops and emits correct lifecycle changes", async () => {
@@ -208,10 +192,6 @@ namespace Fixtures {
     export const attestationNonce = u("2cfd6a1c253a03e0f5a9135d841bb443cee50be270ab122ee24b6b0775f53cc6");
 
     export const csrNonce = u("92c333f220a57c8178863176aeebf1a3ef4d8d45f2d4bd1cb5d1b63a29b8eb3e");
-
-    export const sec1Key = u(
-        "30770201010420aef3484116e9481ec57be0472df41bf499064e5024ad869eca5e889802d48075a00a06082a8648ce3d030107a144034200043c398922452b55caf389c25bd1bca4656952ccb90e8869249ad8474653014cbf95d687965e036b521c51037e6b8cedefca1eb44046694fa08882eed6519decba",
-    );
 
     export const caCert = u(
         "1530010101240201370324140118260480228127260580254d3a370624140118240701240801300941048786311b1347352b08216bc91ecd9e03b1b791ad57f42587b8d62478b853a27414dd7816bbd657b241b3bcc2759998187d10e7e7668fce709bb6611318c19939370a3501290118240260300414898211523c4f998d57c940be9bd24360f503d356300514898211523c4f998d57c940be9bd24360f503d35618300b400d1c064fc9269b4309259f4cbed23f7f10059e29c9a5c728c73b492e8e495af264a4b5338fb2eaefdb3012eeb965eb9eb67f36562a3859c190574929f73eac6a18",

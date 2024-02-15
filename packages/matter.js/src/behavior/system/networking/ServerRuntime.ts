@@ -7,7 +7,7 @@
 import { MatterDevice } from "../../../MatterDevice.js";
 import { Ble } from "../../../ble/Ble.js";
 import { InstanceBroadcaster } from "../../../common/InstanceBroadcaster.js";
-import { InternalError } from "../../../common/MatterError.js";
+import { ImplementationError, InternalError } from "../../../common/MatterError.js";
 import { TransportInterface } from "../../../common/TransportInterface.js";
 import { FabricIndex } from "../../../datatype/FabricIndex.js";
 import { PartServer } from "../../../endpoint/PartServer.js";
@@ -181,6 +181,16 @@ export class ServerRuntime extends NetworkRuntime {
             this.#matterDevice?.deleteTransportInterface(this.#bleTransport);
             this.#bleTransport = undefined;
         }
+    }
+
+    /**
+     * Expose the internal InteractionServer for testing.
+     */
+    get interactionServer() {
+        if (this.#interactionServer === undefined) {
+            throw new ImplementationError("Interaction server is not available yet");
+        }
+        return this.#interactionServer;
     }
 
     get #commissionedFabrics() {

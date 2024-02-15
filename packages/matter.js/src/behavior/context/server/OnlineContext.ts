@@ -49,7 +49,7 @@ export function OnlineContext(options: OnlineContext.Options) {
             let via;
             const message = options.message;
             via = Diagnostic.via(
-                `online#${message?.packetHeader.messageId.toString(16) ?? "?"}@${subject.toString(16)}`,
+                `online#${message?.packetHeader?.messageId?.toString(16) ?? "?"}@${subject.toString(16)}`,
             );
 
             return Transaction.act(via, transaction => {

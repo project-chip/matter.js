@@ -91,6 +91,13 @@ export namespace SupportedBehaviors {
     export type InputStateOf<SB extends SupportedBehaviors> = {
         [K in keyof SB]?: Behavior.InputStateOf<SB[K]>;
     };
+
+    /**
+     * Patch input version of {@link StateOf}.
+     */
+    export type StatePatchOf<SB extends SupportedBehaviors> = {
+        [K in keyof SB]?: Behavior.PatchStateOf<SB[K]>;
+    }
 }
 
 function addBehaviors(target: SupportedBehaviors, types: SupportedBehaviors.List) {
