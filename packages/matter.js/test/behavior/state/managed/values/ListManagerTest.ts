@@ -111,6 +111,26 @@ describe("ListManager", () => {
         struct.expect({ list: ["HI"] });
     });
 
+    it("basic array iteration", async () => {
+        const struct = TestStruct({ list: listOf("string") }, { list: [] });
+
+        await struct.online({ subject: NodeId(1), fabric: FabricIndex(1) }, async (ref) => {
+            const list = ref.list as string[];
+
+            list[0] = "hi",
+            list[1] = "there";
+            list[2] = "aaaaand goodbye";
+
+            const list2 = Array<string>();
+
+            for (const value of list) {
+                list2.push(value);
+            }
+
+            expect(list2).deep.equals([ "hi", "there", "aaaaand goodbye"]);
+        });
+    });
+
     it("fabric-scoped get/set", async () => {
         await testFabricScoped(async (struct, { cx1, cx2, list1, list2 }) => {
             struct.expect({
@@ -204,6 +224,32 @@ describe("ListManager", () => {
                     { fabricIndex: 2, value: 6 },
                 ],
             });
+        });
+    });
+
+    it("fabric scoped array iteration", async () => {
+        await testFabricScoped(async (_struct, { cx1, cx2, list1, list2 }) => {
+            list1.push({ value: 5 });
+            await cx1.transaction.commit();
+            list2.push({ value: 6 });
+            await cx2.transaction.commit();
+
+            list1.push({ value: 7 });
+            await cx1.transaction.commit();
+            list2.push({ value: 8 });
+            await cx2.transaction.commit();
+
+            const list1b = [] as typeof list1;
+            for (const value of list1) {
+                list1b.push(value);
+            }
+
+            expect(list1b).deep.equals([
+                { fabricIndex: 1, value: 1 },
+                { fabricIndex: 1, value: 3 },
+                { fabricIndex: 1, value: 5 },
+                { fabricIndex: 1, value: 7 }
+            ]);
         });
     });
 });

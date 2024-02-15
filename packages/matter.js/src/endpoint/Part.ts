@@ -131,7 +131,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      *
      * @param values the values to change
      */
-    async set(values: Partial<SupportedBehaviors.StateOf<T["behaviors"]>>) {
+    async set(values: SupportedBehaviors.StatePatchOf<T["behaviors"]>) {
         await this.act(async agent => {
             const tx = agent.context.transaction;
 
@@ -152,7 +152,7 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
 
                 const patch = (behavior.constructor as Behavior.Type).supervisor.patch;
 
-                patch(values, behavior.state, this.path);
+                patch(vals, behavior.state, this.path);
             }
         });
     }
@@ -406,6 +406,9 @@ export class Part<T extends EndpointType = EndpointType.Empty> {
      * transaction manually.
      * 
      * {@link actor} runs in an "offline" context where ACLs are ignored and all state is read/write.
+     * 
+     * The {@link Agent} is destroyed after {@link actor} exits so you should not maintain references to the agent,
+     * its behaviors or associated state.
      */
     act<R>(actor: (agent: Agent.Instance<T>) => MaybePromise<R>): MaybePromise<R> {
         this.construction.assert("Part");

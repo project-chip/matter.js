@@ -6,7 +6,7 @@
 
 import { ImplementationError } from "../../../../common/MatterError.js";
 import { FabricIndex } from "../../../../datatype/FabricIndex.js";
-import { Metatype, ValueModel } from "../../../../model/index.js";
+import { Access, Metatype, ValueModel } from "../../../../model/index.js";
 import { GeneratedClass } from "../../../../util/GeneratedClass.js";
 import { camelize } from "../../../../util/String.js";
 import { AccessControl } from "../../../AccessControl.js";
@@ -142,7 +142,12 @@ interface Wrapper extends Val.Struct, InternalCollection {
 
 function configureProperty(manager: RootSupervisor, schema: ValueModel) {
     const name = camelize(schema.name);
+
     let { access, manage, validate } = manager.get(schema);
+
+    const fabricScopedList =
+        schema.effectiveAccess.fabric === Access.Fabric.Scoped
+        && schema.effectiveMetatype === Metatype.array;
 
     let descriptor: PropertyDescriptor = {
         enumerable: true,
@@ -151,6 +156,8 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
             access.authorizeWrite(this[SESSION], this[REF].location);
 
             const oldValue = this[REF].value[name];
+
+            const self = this;
 
             this[REF].change(() => {
                 const struct = this[REF].value;
@@ -174,23 +181,36 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 }
 
                 // Modify the value
-                target[name] = value;
+                if (fabricScopedList && Array.isArray(value) && Array.isArray(target[name])) {
+                    // In the case of fabric-scoped write to established list we use the managed proxy to perform update
+                    // as it will sort through values and only modify those with correct fabricIndex
+                    const proxy = self[name] as Val.List;
+                    for (let i = 0; i < value.length; i++) {
+                        proxy[i] = value[i];
+                    }
+                    proxy.length = value.length;
+                } else {
+                    // Direct assignment
+                    target[name] = value;
+                }
 
-                // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
-                // conformance may be violated temporarily as individual fields change.
-                //
-                // Also, validating fully would require us to validate across all properties for every property write.
-                //
-                // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
-                // validation step that is performed on commit when choice conformance is in play.
-                try {
-                    validate(value, this[SESSION], { path: this[REF].location.path, siblings: struct });
-                } catch (e) {
-                    // Undo our change on error.  Rollback will take care of this when transactional but this handles
-                    // the cases of 1.) no transaction, and 2.) error is caught within transaction
-                    target[name] = oldValue;
+                if (!this[SESSION].acceptInvalid) {
+                    // Note: We validate fully for nested structs but *not* for the current struct.  This is because choice
+                    // conformance may be violated temporarily as individual fields change.
+                    //
+                    // Also, validating fully would require us to validate across all properties for every property write.
+                    //
+                    // I think this is OK for now.  If it becomes an issue we'll probably want to wire in a separate
+                    // validation step that is performed on commit when choice conformance is in play.
+                    try {
+                        validate(value, this[SESSION], { path: this[REF].location.path, siblings: struct });
+                    } catch (e) {
+                        // Undo our change on error.  Rollback will take care of this when transactional but this handles
+                        // the cases of 1.) no transaction, and 2.) error is caught within transaction
+                        target[name] = oldValue;
 
-                    throw e;
+                        throw e;
+                    }
                 }
             });
         },
@@ -268,8 +288,7 @@ function configureProperty(manager: RootSupervisor, schema: ValueModel) {
                 });
             };
 
-            // If we have a transaction we will clone the container before
-            // write.  Otherwise we update the property directly
+            // Clone the container before write
             const ref = ManagedReference(this[REF], name, assertWriteOk, cloneContainer);
 
             ref.owner = manage(ref, this[SESSION]);

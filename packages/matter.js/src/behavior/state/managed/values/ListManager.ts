@@ -98,6 +98,13 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
     // Create the base entry reader.  The reader is different for containers vs. primitive values
     let readEntry: (index: number, location: AccessControl.Location) => Val;
 
+    // Iteration is different for fabric-scoped read but otherwise 
+    let getIteratorFn = () => reference.value[Symbol.iterator];
+
+    // These two are needed to support "for in" loops.  And good for completeness
+    let ownKeys = () => Reflect.ownKeys(reference.value);
+    let getOwnPropertyDescriptor = (_target: object, key: PropertyKey) => Reflect.getOwnPropertyDescriptor(reference.value, key);
+
     // Template used to convey sub-location information
     const sublocation = {
         ...reference.location,
@@ -281,6 +288,70 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                     }
                 });
             };
+
+            // Create a function that returns an iterator that skips entries from non-associated fabrics.  The base
+            // Array[Symbol.iterator] does the right thing because it uses indices and length.  So this is only an
+            // optimization
+            getIteratorFn = () => () => {
+                // The iterator for the actual collection
+                const iterator = reference.value[Symbol.iterator]();
+                
+                // An iterator that skips inapplicable entries
+                return {
+                    next() {
+                        while (true) {
+                            // Iterate through source
+                            const next = iterator.next();
+
+                            // Skip iteration if the result would have incorrect fabricIndex
+                            if (
+                                !next.done
+                                && typeof next.value === "object"
+                                && (next.value as { fabricIndex?: number }).fabricIndex !== session.fabric
+                            ) {
+                                continue;
+                            }
+
+                            // Entry applies or we're done
+                            return next;
+                        }
+                    },
+
+                    [Symbol.iterator]() {
+                        return this;
+                    }
+                };
+            };
+
+            ownKeys = () => {
+                const length = getListLength();
+
+                const keys = Reflect.ownKeys(reference.value).filter(k => {
+                    if (typeof k !== "string") {
+                        return true;
+                    }
+                    if (!k.match(/^[0-9]+$/)) {
+                        return true;
+                    }
+                    if (Number.parseInt(k) < length) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                return keys;
+            };
+
+            getOwnPropertyDescriptor = (_target, key) => {
+                if (typeof key === "string" && key.match(/^[0-9]+$/)) {
+                    key = Number.parseInt(key);
+                }
+                if (typeof key !== "number") {
+                    return Reflect.getOwnPropertyDescriptor(reference.value, key);
+                }
+
+                return Reflect.getOwnPropertyDescriptor(reference.value, mapScopedToActual(key, true));
+            }
         }
     }
 
@@ -291,10 +362,11 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                 return readEntry(Number.parseInt(property), sublocation);
             } else if (property === "length") {
                 return getListLength();
+            } else if (property === Symbol.iterator) {
+                return getIteratorFn();
             } else if (property === REF) {
                 return reference;
             }
-
             return Reflect.get(reference.value, property, receiver);
         },
 
@@ -330,5 +402,8 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
             return Reflect.deleteProperty(reference.value, property);
         },
+
+        ownKeys,
+        getOwnPropertyDescriptor,
     });
 }

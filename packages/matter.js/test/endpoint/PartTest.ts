@@ -12,8 +12,11 @@ import { WindowCoveringCluster } from "../../src/cluster/definitions/WindowCover
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Part } from "../../src/endpoint/Part.js";
 import { WindowCoveringDevice } from "../../src/endpoint/definitions/device/WindowCoveringDevice.js";
+import { TemperatureSensorDevice } from "../../src/endpoint/definitions/device/TemperatureSensorDevice.js";
 import { RootEndpoint } from "../../src/endpoint/definitions/system/RootEndpoint.js";
 import { MockNode } from "../node/mock-node.js";
+import { BasicInformation } from "../../src/cluster/definitions/BasicInformationCluster.js";
+import { AccessControl } from "../../src/cluster/definitions/AccessControlCluster.js";
 
 const WindowCoveringLiftDevice = WindowCoveringDevice.with(
     WindowCoveringServer.for(WindowCoveringCluster.with("Lift", "PositionAwareLift", "AbsolutePosition")),
@@ -69,6 +72,105 @@ describe("Part", () => {
     });
 
     describe("set", () => {
-        // TODO
+        it("sets", async () => {
+            const node = new MockNode();
+            const sensor = await node.add(TemperatureSensorDevice);
+            
+            await sensor.set({
+                temperatureMeasurement: {
+                    measuredValue: 123
+                }
+            });
+
+            expect(sensor.state.temperatureMeasurement.measuredValue).equals(123);
+        });
+
+        it("deep sets object", async () => {
+            const node = new MockNode();
+            await node.construction;
+
+            await node.set({
+                basicInformation: {
+                    productAppearance: {
+                        finish: BasicInformation.ProductFinish.Matte,
+                        primaryColor: BasicInformation.Color.Red,
+                    }
+                }
+            });
+
+            expect(node.state.basicInformation.productAppearance).deep.equals({
+                finish: BasicInformation.ProductFinish.Matte,
+                primaryColor: BasicInformation.Color.Red,
+            });
+
+            await node.set({
+                basicInformation: {
+                    productAppearance: {
+                        primaryColor: BasicInformation.Color.Aqua,
+                    }
+                }
+            });
+
+            expect(node.state.basicInformation.productAppearance).deep.equals({
+                finish: BasicInformation.ProductFinish.Matte,
+                primaryColor: BasicInformation.Color.Aqua,
+            });
+        });
+
+        it("deep sets array", async () => {
+            const node = new MockNode();
+            await node.construction;
+
+            await node.set({
+                accessControl: {
+                    acl: [
+                        {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Pase,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                        }
+                    ]
+                }
+            });
+
+            await node.set({
+                accessControl: {
+                    acl: {
+                        1: {
+                            authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                            fabricIndex: 1,
+                            privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                        }
+                    }
+                }
+            });
+
+            await node.set({
+                accessControl: {
+                    acl: {
+                        0: {
+                            privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                        }
+                    }
+                }
+            });
+
+            expect(node.state.accessControl.acl).deep.equals([
+                {
+                    authMode: AccessControl.AccessControlEntryAuthMode.Pase,
+                    fabricIndex: 1,
+                    privilege: AccessControl.AccessControlEntryPrivilege.Administer,
+                    subjects: null,
+                    targets: null,
+                },
+                {
+                    authMode: AccessControl.AccessControlEntryAuthMode.Case,
+                    fabricIndex: 1,
+                    privilege: AccessControl.AccessControlEntryPrivilege.Manage,
+                    subjects: null,
+                    targets: null,
+                },
+            ])
+        })
     });
 });
