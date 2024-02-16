@@ -5,6 +5,7 @@
  */
 
 import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
+import { Format, Logger } from "@project-chip/matter.js/log";
 import { Network } from "@project-chip/matter.js/net";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
@@ -55,6 +56,13 @@ export function NodeJsEnvironment() {
     configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
+
+    // When no logger format is set, we still use the default, and the process is running in a TTY, use ANSI formatting
+    // If a user wants to change the log format he still can do after the environment was initialized (which should be
+    // first thing anyway)
+    if (!env.vars.has("logger.format") && Logger.format === Format.PLAIN && process.stdin?.isTTY) {
+        env.vars.set("logger.format", Format.ANSI);
+    }
 
     NodeJsActionTracer.configure(env);
 
