@@ -7,6 +7,7 @@
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
+import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
 import { ClusterModel } from "../../../src/model/index.js";
@@ -184,6 +185,14 @@ describe("ClusterBehavior", () => {
                 override becomeAwesome(_value: number) {}
             }
             AwesomeServer;
+        });
+
+        it("adds feature elements on NetworkCommissioningServer", () => {
+            const EthernetCommissioningServer = NetworkCommissioningServer.with("EthernetNetworkInterface");
+
+            expect(EthernetCommissioningServer.cluster.supportedFeatures.ethernetNetworkInterface).true;
+            expect(EthernetCommissioningServer.cluster.supportedFeatures.wiFiNetworkInterface).false;
+            expect(EthernetCommissioningServer.cluster.supportedFeatures.threadNetworkInterface).false;
         });
     });
 });
