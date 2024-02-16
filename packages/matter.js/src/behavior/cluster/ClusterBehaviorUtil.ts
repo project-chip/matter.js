@@ -28,7 +28,7 @@ export function introspectionInstanceOf(type: Behavior.Type) {
  * This is the actual implementation of ClusterBehavior.for().  The result must match {@link ClusterBehavior.Type}<C>.
  */
 export function createType<const C extends ClusterType>(cluster: C, base: Behavior.Type, schema?: Schema) {
-    const namesUsed = new Set<string>();
+    const namesUsed =  new Set<string>();
 
     if (!schema) {
         if (base.schema) {
