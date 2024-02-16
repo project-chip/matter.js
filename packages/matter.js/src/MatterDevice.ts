@@ -253,7 +253,9 @@ export class MatterDevice {
         discriminator?: number,
     ) {
         if (this.activeCommissioningMode !== AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen) {
-            throw new InternalError("Commissioning window already open with different mode!");
+            throw new InternalError(
+                `Commissioning window already open with different mode (${this.activeCommissioningMode})!`,
+            );
         }
         if (this.activeCommissioningEndCallback !== undefined) {
             throw new InternalError("Commissioning window already open with different callback!");
