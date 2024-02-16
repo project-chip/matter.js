@@ -6,6 +6,7 @@
 
 import { MatterError } from "../../common/MatterError.js";
 import { BitFlags } from "../../schema/BitmapSchema.js";
+import { isDeepEqual } from "../../util/DeepEqual.js";
 import { camelize, serialize } from "../../util/String.js";
 import { ClusterType } from "../ClusterType.js";
 
@@ -61,7 +62,18 @@ export class ClusterComposer<const T extends ClusterType> {
                 }
             }
         } else {
-            cluster = this.cluster;
+            const supportedFeatures = BitFlags(this.cluster.features, ...selection);
+            if (isDeepEqual(supportedFeatures, this.cluster.supportedFeatures)) {
+                cluster = this.cluster;
+            } else {
+                const base = this.cluster.base ?? this.cluster;
+
+                cluster = ClusterType({
+                    ...base,
+                    supportedFeatures,
+                    base,
+                });
+            }
         }
 
         return cluster as ClusterComposer.Of<T, SelectionT>;
