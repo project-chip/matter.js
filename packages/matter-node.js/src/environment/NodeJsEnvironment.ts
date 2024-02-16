@@ -47,10 +47,19 @@ export function NodeJsEnvironment() {
 function loadVariables(env: Environment) {
     const vars = env.vars;
 
+    // Install defaults
+    vars.addConfigStyle(getDefaults(vars));
+
+    // Preload environment and argv so we can use it to find config file
     vars.addUnixEnvStyle(process.env);
     vars.addArgvStyle(process.argv);
-    vars.addConfigStyle(getDefaults(vars));
+
+    // Load config files
     vars.addConfigStyle(loadConfigFile(vars));
+
+    // Reload environment and argv so they override config
+    vars.addUnixEnvStyle(process.env);
+    vars.addArgvStyle(process.argv);
 }
 
 function configureRuntime(env: Environment) {
