@@ -8,13 +8,13 @@ import { AdministratorCommissioning } from "../../../cluster/definitions/Adminis
 import { GeneralCommissioning } from "../../../cluster/definitions/GeneralCommissioningCluster.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
 import { Logger } from "../../../log/Logger.js";
+import type { Node } from "../../../node/Node.js";
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { AdministratorCommissioningServer } from "../administrator-commissioning/AdministratorCommissioningServer.js";
 import { BasicInformationServer } from "../basic-information/BasicInformationServer.js";
 import { GeneralCommissioningBehavior } from "./GeneralCommissioningBehavior.js";
 import { ArmFailSafeRequest, SetRegulatoryConfigRequest } from "./GeneralCommissioningInterface.js";
 import { PartFailsafeContext } from "./PartFailsafeContext.js";
-import type { Node } from "../../../node/Node.js";
 
 const SuccessResponse = { errorCode: GeneralCommissioning.CommissioningError.Ok, debugText: "" };
 const logger = Logger.get("GeneralCommissioningClusterHandler");
@@ -32,7 +32,7 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             // One minute
             bci.failSafeExpiryLengthSeconds = 60;
         }
-        
+
         if (bci.maxCumulativeFailsafeSeconds === undefined) {
             // 5 minutes, recommended by spec
             bci.maxCumulativeFailsafeSeconds = 900;
@@ -61,22 +61,21 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
             }
 
             if (device.isFailsafeArmed()) {
-                device.failsafeContext.extend(this.session.getFabric(), expiryLengthSeconds);
+                await device.failsafeContext.extend(this.session.getFabric(), expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL lead
                 // to a success response with no side effect against the fail-safe context.
                 if (expiryLengthSeconds === 0) return SuccessResponse;
 
-                await device.beginTimed(new PartFailsafeContext(
-                    this.part as Node,
-                    {
+                await device.beginTimed(
+                    new PartFailsafeContext(this.part as Node, {
                         fabrics: device.fabricManager,
                         sessions: device.sessionManager,
                         expiryLengthSeconds,
                         maxCumulativeFailsafeSeconds: this.state.basicCommissioningInfo.maxCumulativeFailsafeSeconds,
                         associatedFabric: this.session.getFabric(),
-                    }
-                ));
+                    }),
+                );
             }
 
             if (device.isFailsafeArmed()) {
@@ -113,8 +112,8 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
                 };
             }
             if (
-                this.state.countryCodeWhitelist !== undefined
-                && !this.state.countryCodeWhitelist.includes(countryCode)
+                this.state.countryCodeWhitelist !== undefined &&
+                !this.state.countryCodeWhitelist.includes(countryCode)
             ) {
                 return {
                     errorCode: GeneralCommissioning.CommissioningError.ValueOutsideRange,
@@ -172,6 +171,15 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
     }
 
     override async commissioningComplete() {
+        if (this.session.isPase()) {
+            return {
+                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
+                debugText: "Command not executed over CASE session.",
+            };
+        }
+
+        const fabric = this.session.getAssociatedFabric();
+
         const device = this.session.getContext();
         if (!device.isFailsafeArmed()) {
             return { errorCode: GeneralCommissioning.CommissioningError.NoFailSafe, debugText: "FailSafe not armed." };
@@ -179,13 +187,6 @@ export class GeneralCommissioningServer extends GeneralCommissioningBehavior {
         const timedOp = device.failsafeContext;
 
         assertSecureSession(this.session, "commissioningComplete can only be called on a secure session");
-        const fabric = this.session.getFabric();
-        if (fabric === undefined) {
-            return {
-                errorCode: GeneralCommissioning.CommissioningError.InvalidAuthentication,
-                debugText: "No Fabric associated with the session.",
-            };
-        }
 
         const timedFabric = timedOp.associatedFabric?.fabricIndex;
         if (fabric.fabricIndex !== timedFabric) {

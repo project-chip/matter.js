@@ -4,16 +4,52 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
-import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
-import { Logger } from "../../../log/Logger.js";
-import { Time, Timer } from "../../../time/Time.js";
-import { OpenBasicCommissioningWindowRequest, OpenCommissioningWindowRequest } from "./AdministratorCommissioningInterface.js";
-import { InternalError } from "../../../common/MatterError.js";
-import { PaseServer } from "../../../session/pase/PaseServer.js";
 import { MatterDevice } from "../../../MatterDevice.js";
+import { AccessLevel, Command, TlvNoResponse } from "../../../cluster/Cluster.js";
+import { AdministratorCommissioning } from "../../../cluster/definitions/AdministratorCommissioningCluster.js";
+import { InternalError } from "../../../common/MatterError.js";
+import { Logger } from "../../../log/Logger.js";
 import { StatusCode, StatusResponseError } from "../../../protocol/interaction/StatusCode.js";
-import { MAXIMUM_COMMISSIONING_TIMEOUT_S, MINIMUM_COMMISSIONING_TIMEOUT_S } from "./AdministratorCommissioningConstants.js";
+import { PaseServer } from "../../../session/pase/PaseServer.js";
+import { Time, Timer } from "../../../time/Time.js";
+import { TlvUInt16, TlvUInt32 } from "../../../tlv/TlvNumber.js";
+import { TlvField, TlvObject } from "../../../tlv/TlvObject.js";
+import { TlvByteString } from "../../../tlv/TlvString.js";
+import { AdministratorCommissioningBehavior } from "./AdministratorCommissioningBehavior.js";
+import {
+    MAXIMUM_COMMISSIONING_TIMEOUT_S,
+    MINIMUM_COMMISSIONING_TIMEOUT_S,
+    PAKE_PASSCODE_VERIFIER_LENGTH,
+} from "./AdministratorCommissioningConstants.js";
+import {
+    OpenBasicCommissioningWindowRequest,
+    OpenCommissioningWindowRequest,
+} from "./AdministratorCommissioningInterface.js";
+
+/**
+ * Monkey patching Tlv Structure of openCommissioningWindow command to prevent data validation of the fields to be
+ * handled as ConstraintError because we need to return a special error.
+ * We do this to leave the model in fact for other validations and only apply the change for our Schema-aware Tlv parsing.
+ */
+AdministratorCommissioning.Cluster.commands = {
+    ...AdministratorCommissioning.Cluster.commands,
+    openCommissioningWindow: Command(
+        0x0,
+        TlvObject({
+            commissioningTimeout: TlvField(0, TlvUInt16),
+            pakePasscodeVerifier: TlvField(1, TlvByteString),
+            discriminator: TlvField(2, TlvUInt16.bound({ max: 4095 })),
+            iterations: TlvField(3, TlvUInt32),
+            salt: TlvField(4, TlvByteString),
+        }),
+        0x0,
+        TlvNoResponse,
+        {
+            invokeAcl: AccessLevel.Administer,
+            timed: true,
+        },
+    ),
+};
 
 const logger = Logger.get("AdministratorCommissioningServer");
 
@@ -37,13 +73,36 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
         salt,
         commissioningTimeout,
     }: OpenCommissioningWindowRequest) {
+        // We monkey patched the Tlv definition above, so take care about correct error handling
+        if (pakePasscodeVerifier.length !== PAKE_PASSCODE_VERIFIER_LENGTH) {
+            throw new StatusResponseError(
+                "PAKE Passcode verifier length is invalid.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+        if (iterations < 1000 || iterations > 100_000) {
+            throw new StatusResponseError(
+                "PAKE iterations invalid.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+        if (salt.length < 16 || salt.length > 32) {
+            throw new StatusResponseError(
+                "PAKE salt has invalid length.",
+                StatusCode.Failure,
+                AdministratorCommissioning.StatusCode.PakeParameterError,
+            );
+        }
+
         const device = this.session?.getContext();
 
         this.#assertCommissioningWindowRequirements(commissioningTimeout, device);
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
-            AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen
+            AdministratorCommissioning.CommissioningWindowStatus.EnhancedWindowOpen,
         );
 
         await device.allowEnhancedCommissioning(
@@ -62,7 +121,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         this.#initializeCommissioningWindow(
             commissioningTimeout,
-            AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen
+            AdministratorCommissioning.CommissioningWindowStatus.BasicWindowOpen,
         );
 
         await device.allowBasicCommissioning(this.callback(this.#endCommissioning));
@@ -78,6 +137,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
             );
         }
 
+        logger.debug("Revoking commissioning window.");
+
         await this.#closeCommissioningWindow();
 
         const device = this.part.env.get(MatterDevice);
@@ -92,13 +153,15 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     #initializeCommissioningWindow(
         commissioningTimeout: number,
-        windowStatus: AdministratorCommissioning.CommissioningWindowStatus
+        windowStatus: AdministratorCommissioning.CommissioningWindowStatus,
     ) {
         if (this.internal.commissioningWindowTimeout !== undefined) {
             // Should never happen, but let's make sure
             throw new InternalError("Commissioning window already initialized.");
         }
-        logger.debug(`Commissioning window timer started for ${commissioningTimeout} seconds for ${this.context.session?.name}.`);
+        logger.debug(
+            `Commissioning window timer started for ${commissioningTimeout} seconds for ${this.context.session?.name}.`,
+        );
         this.internal.commissioningWindowTimeout = Time.getTimer(
             "Commissioning timeout",
             commissioningTimeout * 1000,
@@ -115,7 +178,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
 
         this.internal.stopMonitoringFabricForRemoval = () => {
             adminFabric.deleteRemoveCallback(removeCallback);
-        }
+        };
 
         this.session.getAssociatedFabric().addRemoveCallback(removeCallback);
     }
@@ -160,14 +223,13 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      */
     #endCommissioning() {
         logger.debug("End commissioning window.");
-
-        this.internal.stopMonitoringFabricForRemoval?.();
-        this.state.adminFabricIndex = null;
-
         if (this.internal.commissioningWindowTimeout !== undefined) {
             this.internal.commissioningWindowTimeout.stop();
             this.internal.commissioningWindowTimeout = undefined;
         }
+
+        this.internal.stopMonitoringFabricForRemoval?.();
+        this.state.adminFabricIndex = null;
 
         this.state.windowStatus = AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen;
         this.state.adminFabricIndex = null;
@@ -198,7 +260,7 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
     }
 
     /**
-     * Clean up resources and stop the timer when the behavior is destroyed. 
+     * Clean up resources and stop the timer when the behavior is destroyed.
      */
     override [Symbol.asyncDispose]() {
         if (this.internal.commissioningWindowTimeout !== undefined) {

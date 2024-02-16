@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MatterDevice } from "../../../MatterDevice.js";
 import { OperationalCredentials } from "../../../cluster/definitions/OperationalCredentialsCluster.js";
 import { MatterFabricConflictError } from "../../../common/FailsafeTimer.js";
 import { MatterFlowError } from "../../../common/MatterError.js";
@@ -15,8 +16,8 @@ import { StatusCode, StatusResponseError } from "../../../protocol/interaction/S
 import { assertSecureSession } from "../../../session/SecureSession.js";
 import { Val } from "../../state/Val.js";
 import { ValueSupervisor } from "../../supervision/ValueSupervisor.js";
-import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { ProductDescriptionServer } from "../../system/product-description/ProductDescriptionServer.js";
+import { BasicInformationBehavior } from "../basic-information/BasicInformationBehavior.js";
 import { DeviceCertification } from "./DeviceCertification.js";
 import { OperationalCredentialsBehavior } from "./OperationalCredentialsBehavior.js";
 import {
@@ -30,7 +31,6 @@ import {
     UpdateNocRequest,
 } from "./OperationalCredentialsInterface.js";
 import { TlvAttestation, TlvCertSigningRequest } from "./OperationalCredentialsTypes.js";
-import { MatterDevice } from "../../../MatterDevice.js";
 
 const logger = Logger.get("OperationalCredentials");
 
@@ -307,8 +307,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     }
 
     override updateFabricLabel({ label }: UpdateFabricLabelRequest) {
-        const fabric = this.session.getFabric();
-        if (fabric === undefined) throw new MatterFlowError("updateOperationalCert on a session linked to a fabric.");
+        const fabric = this.session.getAssociatedFabric();
 
         const currentFabricIndex = fabric.fabricIndex;
         const device = this.session.getContext();
@@ -361,7 +360,7 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
     override addTrustedRootCertificate({ rootCaCertificate }: AddTrustedRootCertificateRequest) {
         const device = this.part.env.get(MatterDevice);
         const timedOp = device.failsafeContext;
-        
+
         if (timedOp.hasRootCert) {
             throw new StatusResponseError(
                 "Trusted root certificate already added in this FailSafe context.",
@@ -386,7 +385,10 @@ export class OperationalCredentialsServer extends OperationalCredentialsBehavior
                 array.splice(index, 1);
             }
         }
-        this.state.trustedRootCertificates = this.part.env.get(MatterDevice).getFabrics().map(f => f.rootCert);
+        this.state.trustedRootCertificates = this.part.env
+            .get(MatterDevice)
+            .getFabrics()
+            .map(f => f.rootCert);
         this.state.commissionedFabrics = this.state.fabrics.length;
     }
 
