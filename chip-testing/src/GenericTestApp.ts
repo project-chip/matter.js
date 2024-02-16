@@ -6,6 +6,7 @@
  */
 
 import { getIntParameter, getParameter, hasParameter } from "@project-chip/matter-node.js/util";
+import { Environment } from "@project-chip/matter.js/environment";
 import { ClassExtends } from "@project-chip/matter.js/util";
 import { StorageBackendSyncJsonFile } from "./storage/StorageBackendSyncJsonFile.js";
 
@@ -38,12 +39,16 @@ export async function startTestApp(appName: string, testInstanceClass: ClassExte
         console.log(`======> Closing test instance because of ${signal} ...`);
         testInstance
             .stop()
-            .then(() =>
-                storage.close().then(() => {
-                    console.log(`======> Test instance successfully closed.`);
-                    process.exit(0);
-                }),
-            )
+            .then(() => {
+                const runtime = Environment.default.runtime;
+                runtime.cancel();
+                runtime.inactive.then(() => {
+                    storage.close().then(() => {
+                        console.log(`======> Test instance successfully closed.`);
+                        process.exit(0);
+                    });
+                });
+            })
             .catch(error => {
                 console.log(error.stack);
                 process.exit(1);
