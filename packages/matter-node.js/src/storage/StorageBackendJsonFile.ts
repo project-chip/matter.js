@@ -85,6 +85,7 @@ export class StorageBackendJsonFile extends StorageBackendMemory {
         this.commitTimer.stop();
         await this.commit();
         this.closed = true;
+        this.initialized = false;
     }
 
     private toJson(object: any): string {

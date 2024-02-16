@@ -61,6 +61,7 @@ export class StorageBackendSyncJsonFile extends StorageBackendMemory {
     override async close() {
         this.commit();
         this.closed = true;
+        this.initialized = false;
     }
 
     private toJson(object: any): string {
