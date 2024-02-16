@@ -40,6 +40,7 @@ export class PartServer implements EndpointInterface {
     constructor(part: Part) {
         (part as ServerPart)[SERVER] = this;
         this.#part = part;
+        this.#name = part.type.name;
     }
 
     createBacking(type: Behavior.Type): BehaviorBacking {
