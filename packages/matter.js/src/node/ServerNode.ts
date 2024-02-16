@@ -142,6 +142,10 @@ export class ServerNode<T extends ServerNode.RootEndpoint = ServerNode.RootEndpo
         // Perform the factory reset
         await this.lifecycle.factoryReset();
 
+        const serverStore = this.env.get(ServerStore);
+        this.env.delete(ServerStore);
+        await serverStore[Symbol.asyncDispose]();
+
         // Reset puts parts back into inactive state; set to "installed" to trigger re-initialization
         this.lifecycle.change(PartLifecycle.Change.Installed);
 
