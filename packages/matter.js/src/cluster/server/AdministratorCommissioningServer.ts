@@ -198,12 +198,12 @@ class AdministratorCommissioningManager {
      * This method is used internally when the commissioning window timer expires or the commissioning was completed.
      */
     private endCommissioning() {
-        if (this.commissioningWindowTimeout !== undefined) {
-            this.commissioningWindowTimeout.stop();
-            this.commissioningWindowTimeout = undefined;
-        } else {
+        if (this.commissioningWindowTimeout === undefined) {
             return;
         }
+        this.commissioningWindowTimeout.stop();
+        this.commissioningWindowTimeout = undefined;
+
         logger.debug("End commissioning window.");
         this.windowStatusAttribute.setLocal(AdministratorCommissioning.CommissioningWindowStatus.WindowNotOpen);
         this.adminFabricIndexAttribute.setLocal(null);

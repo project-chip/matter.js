@@ -28,15 +28,17 @@ export class IdentifyServer extends Base {
         );
 
         // So whenever the attribute OR the identify command was invoked we react to it.
-        this.events.identifyTime$Change.on(() => {
-            if (this.state.identifyTime === 0) {
-                if (this.internal.identifyTimer?.isRunning) {
-                    this.internal.identifyTimer?.stop();
-                }
-            } else {
-                this.internal.identifyTimer?.start();
+        this.reactTo(this.events.identifyTime$Change, this.#identifyTimeChangedHandler);
+    }
+
+    #identifyTimeChangedHandler() {
+        if (this.state.identifyTime === 0) {
+            if (this.internal.identifyTimer?.isRunning) {
+                this.internal.identifyTimer?.stop();
             }
-        });
+        } else {
+            this.internal.identifyTimer?.start();
+        }
     }
 
     override async [Symbol.asyncDispose]() {

@@ -57,7 +57,7 @@ export class NodeLifecycle extends PartLifecycle {
     }
 
     /**
-     * Emits when the node gets initialized
+     * Emits when the nodes part tree is ready/initialized and used to initialize the commissioning state
      */
     get initialized() {
         return this.#initialized;
