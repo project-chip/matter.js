@@ -17,6 +17,7 @@ export class NodeLifecycle extends PartLifecycle {
     #offline = Observable<[Context: ActionContext]>();
     #commissioned = Observable<[context: ActionContext]>();
     #decommissioned = Observable<[context: ActionContext]>();
+    #initialized = Observable<[isCommissioned: boolean]>();
     #partError = Observable<[part: Part, error: Error], boolean | undefined>();
     #isOnline = false;
     #isCommissioned = false;
@@ -36,6 +37,9 @@ export class NodeLifecycle extends PartLifecycle {
         this.#decommissioned.on(() => {
             this.#isCommissioned = false;
         });
+        this.#initialized.on(isCommissioned => {
+            this.#isCommissioned = isCommissioned;
+        });
     }
 
     /**
@@ -50,6 +54,13 @@ export class NodeLifecycle extends PartLifecycle {
      */
     get online() {
         return this.#online;
+    }
+
+    /**
+     * Emits when the node gets initialized
+     */
+    get initialized() {
+        return this.#initialized;
     }
 
     /**
