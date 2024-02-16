@@ -20,6 +20,26 @@ const Base = OnOffBehavior.with(OnOff.Feature.LevelControlForLighting);
 export class OnOffServer extends Base {
     protected declare internal: OnOffServer.Internal;
 
+    override initialize() {
+        const startUpOnOffValue = this.state.startUpOnOff ?? null;
+        const currentOnOffStatus = this.state.onOff;
+        if (startUpOnOffValue !== null) {
+            const targetOnOffValue =
+                startUpOnOffValue === OnOff.StartUpOnOff.Toggle
+                    ? !currentOnOffStatus
+                    : startUpOnOffValue === OnOff.StartUpOnOff.On;
+            if (targetOnOffValue !== currentOnOffStatus) {
+                this.state.onOff = targetOnOffValue;
+            }
+        }
+    }
+
+    override async [Symbol.asyncDispose]() {
+        this.internal.timedOnTimer?.stop();
+        this.internal.delayedOffTimer?.stop();
+        super[Symbol.asyncDispose]?.();
+    }
+
     override on() {
         this.state.onOff = true;
         if (this.features.levelControlForLighting) {
@@ -106,7 +126,7 @@ export class OnOffServer extends Base {
             timer = this.internal.timedOnTimer = Time.getPeriodicTimer(
                 "Timed on",
                 100,
-                this.callback(this.#timedOnTick)
+                this.callback(this.#timedOnTick),
             );
         }
         return timer;
@@ -130,7 +150,7 @@ export class OnOffServer extends Base {
             timer = this.internal.delayedOffTimer = Time.getTimer(
                 "Delayed off",
                 100,
-                this.callback(this.#delayedOffTick)
+                this.callback(this.#delayedOffTick),
             );
         }
         return timer;
