@@ -33,10 +33,10 @@ import { ProcessManager } from "./ProcessManager.js";
  *   - By providing an {@link Environment} to your components other than {@link Environment.default}
  *
  * The settings are applied in this order (the higher numbers overwrite lower numbers):
- * 1. Environment variables (MATTER_*)
- * 2. Command line parameters
- * 3. Some internal Defaults (mainly Loglevel and such)
- * 4. Config file (always wins if used/present)
+ * 1. Some internal Defaults (mainly Loglevel and such)
+ * 2. Config file
+ * 3. Environment variables (MATTER_*)
+ * 4. Command line parameters
  *
  * The following variables are defined by this class additionally to {@link Environment}:
  * * `environment` - Name of the environment, Default "default"
