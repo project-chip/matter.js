@@ -4,19 +4,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BasicInformationBehavior } from "../../src/behavior/definitions/basic-information/BasicInformationBehavior.js";
 import { BasicInformationServer } from "../../src/behavior/definitions/basic-information/BasicInformationServer.js";
 import { WindowCoveringServer } from "../../src/behavior/definitions/window-covering/WindowCoveringServer.js";
 import { IndexBehavior } from "../../src/behavior/system/index/IndexBehavior.js";
+import { AccessControl } from "../../src/cluster/definitions/AccessControlCluster.js";
+import { BasicInformation } from "../../src/cluster/definitions/BasicInformationCluster.js";
 import { WindowCoveringCluster } from "../../src/cluster/definitions/WindowCoveringCluster.js";
 import { Agent } from "../../src/endpoint/Agent.js";
 import { Part } from "../../src/endpoint/Part.js";
-import { WindowCoveringDevice } from "../../src/endpoint/definitions/device/WindowCoveringDevice.js";
 import { TemperatureSensorDevice } from "../../src/endpoint/definitions/device/TemperatureSensorDevice.js";
+import { WindowCoveringDevice } from "../../src/endpoint/definitions/device/WindowCoveringDevice.js";
 import { RootEndpoint } from "../../src/endpoint/definitions/system/RootEndpoint.js";
 import { MockNode } from "../node/mock-node.js";
-import { BasicInformation } from "../../src/cluster/definitions/BasicInformationCluster.js";
-import { AccessControl } from "../../src/cluster/definitions/AccessControlCluster.js";
 
 const WindowCoveringLiftDevice = WindowCoveringDevice.with(
     WindowCoveringServer.for(WindowCoveringCluster.with("Lift", "PositionAwareLift", "AbsolutePosition")),
@@ -27,18 +26,15 @@ describe("Part", () => {
         it("supports behaviors", () => {
             // RootEndpoint
             RootEndpoint.behaviors satisfies { index: typeof IndexBehavior };
-            RootEndpoint.behaviors satisfies { basicInformation: typeof BasicInformationBehavior };
             RootEndpoint.behaviors satisfies { basicInformation: typeof BasicInformationServer };
 
             // Agent.Instance
             const agent1 = {} as Agent.Instance<RootEndpoint>;
             agent1.index satisfies IndexBehavior;
-            agent1.basicInformation satisfies BasicInformationBehavior;
 
             // Part.agentType
             const agent2 = {} as InstanceType<Part<RootEndpoint>["agentType"]>;
             agent2.index satisfies IndexBehavior;
-            agent2.basicInformation satisfies BasicInformationBehavior;
         });
     });
 
@@ -75,11 +71,11 @@ describe("Part", () => {
         it("sets", async () => {
             const node = new MockNode();
             const sensor = await node.add(TemperatureSensorDevice);
-            
+
             await sensor.set({
                 temperatureMeasurement: {
-                    measuredValue: 123
-                }
+                    measuredValue: 123,
+                },
             });
 
             expect(sensor.state.temperatureMeasurement.measuredValue).equals(123);
@@ -94,8 +90,8 @@ describe("Part", () => {
                     productAppearance: {
                         finish: BasicInformation.ProductFinish.Matte,
                         primaryColor: BasicInformation.Color.Red,
-                    }
-                }
+                    },
+                },
             });
 
             expect(node.state.basicInformation.productAppearance).deep.equals({
@@ -107,8 +103,8 @@ describe("Part", () => {
                 basicInformation: {
                     productAppearance: {
                         primaryColor: BasicInformation.Color.Aqua,
-                    }
-                }
+                    },
+                },
             });
 
             expect(node.state.basicInformation.productAppearance).deep.equals({
@@ -128,9 +124,9 @@ describe("Part", () => {
                             authMode: AccessControl.AccessControlEntryAuthMode.Pase,
                             fabricIndex: 1,
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
-                        }
-                    ]
-                }
+                        },
+                    ],
+                },
             });
 
             await node.set({
@@ -140,9 +136,9 @@ describe("Part", () => {
                             authMode: AccessControl.AccessControlEntryAuthMode.Case,
                             fabricIndex: 1,
                             privilege: AccessControl.AccessControlEntryPrivilege.Manage,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             });
 
             await node.set({
@@ -150,9 +146,9 @@ describe("Part", () => {
                     acl: {
                         0: {
                             privilege: AccessControl.AccessControlEntryPrivilege.Administer,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             });
 
             expect(node.state.accessControl.acl).deep.equals([
@@ -170,7 +166,7 @@ describe("Part", () => {
                     subjects: null,
                     targets: null,
                 },
-            ])
-        })
+            ]);
+        });
     });
 });

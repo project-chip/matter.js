@@ -53,16 +53,12 @@ function createConfig(owner: RootSupervisor, schema: Schema): ListConfig {
 
     const entryManager = owner.get(entry);
 
-    // The spec doesn't contemplate fabric-sensitive lists but if we somehow get one we treat as permanently fabric
-    // scoped for reads
-    const fabricSensitive = schema.effectiveAccess.fabric == Access.Fabric.Scoped;
-
     const access = AccessControl(schema);
 
     return {
         schema,
-        fabricScoped: schema.effectiveAccess.fabric == Access.Fabric.Scoped || fabricSensitive,
-        fabricSensitive,
+        fabricScoped: schema.effectiveAccess.fabric == Access.Fabric.Scoped,
+        fabricSensitive: schema.effectiveAccess.fabric == Access.Fabric.Sensitive,
         manageEntries: entryManager.manage !== PrimitiveManager,
         manageEntry: entryManager.manage,
         validateEntry: entryManager.validate,
@@ -98,12 +94,13 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
     // Create the base entry reader.  The reader is different for containers vs. primitive values
     let readEntry: (index: number, location: AccessControl.Location) => Val;
 
-    // Iteration is different for fabric-scoped read but otherwise 
+    // Iteration is different for fabric-scoped read but otherwise
     let getIteratorFn = () => reference.value[Symbol.iterator];
 
     // These two are needed to support "for in" loops.  And good for completeness
     let ownKeys = () => Reflect.ownKeys(reference.value);
-    let getOwnPropertyDescriptor = (_target: object, key: PropertyKey) => Reflect.getOwnPropertyDescriptor(reference.value, key);
+    let getOwnPropertyDescriptor = (_target: object, key: PropertyKey) =>
+        Reflect.getOwnPropertyDescriptor(reference.value, key);
 
     // Template used to convey sub-location information
     const sublocation = {
@@ -295,7 +292,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
             getIteratorFn = () => () => {
                 // The iterator for the actual collection
                 const iterator = reference.value[Symbol.iterator]();
-                
+
                 // An iterator that skips inapplicable entries
                 return {
                     next() {
@@ -305,9 +302,9 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
                             // Skip iteration if the result would have incorrect fabricIndex
                             if (
-                                !next.done
-                                && typeof next.value === "object"
-                                && (next.value as { fabricIndex?: number }).fabricIndex !== session.fabric
+                                !next.done &&
+                                typeof next.value === "object" &&
+                                (next.value as { fabricIndex?: number }).fabricIndex !== session.fabric
                             ) {
                                 continue;
                             }
@@ -319,7 +316,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
 
                     [Symbol.iterator]() {
                         return this;
-                    }
+                    },
                 };
             };
 
@@ -351,7 +348,7 @@ function createProxy(config: ListConfig, reference: Val.Reference<Val.List>, ses
                 }
 
                 return Reflect.getOwnPropertyDescriptor(reference.value, mapScopedToActual(key, true));
-            }
+            };
         }
     }
 

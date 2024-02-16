@@ -201,6 +201,11 @@ export const OperationalCredentialsClusterHandler: (
         }));
     },
 
+    // Needed because FabricScopedAttributeServer clas requires both getter and setter if custom
+    fabricsAttributeSetter: () => {
+        throw new MatterFlowError("fabrics attribute is read-only.");
+    },
+
     nocsAttributeGetter: ({ session, isFabricFiltered }) => {
         if (session === undefined || !session.isSecure()) return []; // ???
         const fabrics = isFabricFiltered ? [session.getAssociatedFabric()] : session.getContext().getFabrics();
@@ -209,6 +214,11 @@ export const OperationalCredentialsClusterHandler: (
             icac: fabric.intermediateCACert ?? null,
             fabricIndex: fabric.fabricIndex,
         }));
+    },
+
+    // Needed because FabricScopedAttributeServer clas requires both getter and setter if custom
+    nocsAttributeSetter: () => {
+        throw new MatterFlowError("fabrics attribute is read-only.");
     },
 
     commissionedFabricsAttributeGetter: ({ session }) => {

@@ -26,7 +26,7 @@ Matter.children.push(Cluster({
         Attribute({ name: "ClusterRevision", id: 0xfffd, type: "ClusterRevision", default: 1 }),
 
         Attribute({
-            name: "Nocs", id: 0x0, type: "list", access: "R U A", conformance: "M",
+            name: "Nocs", id: 0x0, type: "list", access: "R F A", conformance: "M",
             constraint: "max supportedFabrics", quality: "N C",
 
             details: "This attribute contains all NOCs applicable to this Node, encoded as a read-only list of NOCStruct." +
@@ -43,7 +43,7 @@ Matter.children.push(Cluster({
         }),
 
         Attribute({
-            name: "Fabrics", id: 0x1, type: "list", access: "R U V", conformance: "M",
+            name: "Fabrics", id: 0x1, type: "list", access: "R F V", conformance: "M",
             constraint: "max supportedFabrics", quality: "N",
 
             details: "This attribute describes all fabrics to which this Node is commissioned, encoded as a read-only " +

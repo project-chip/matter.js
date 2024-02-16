@@ -95,7 +95,7 @@ export class ProcessManager implements Destructable {
     };
 
     protected diagnosticHandler = () => {
-        if (this.env.vars.get("runtime.signals", true)) {
+        if (this.hasSignalSupport) {
             process.on("SIGUSR2", this.env.diagnose);
         }
         this.env.diagnose();

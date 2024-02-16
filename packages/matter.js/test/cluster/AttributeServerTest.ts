@@ -49,6 +49,7 @@ interface CreateOptions<T> {
     isWritable: boolean;
     isSubscribable: boolean;
     requiresTimedInteraction: boolean;
+    initValue: T;
     defaultValue: T;
     readonly datasource: ClusterDatasource;
     getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T;
@@ -64,7 +65,8 @@ function withDefaults(options: Partial<CreateOptions<number>>) {
         isWritable: false,
         isSubscribable: false,
         requiresTimedInteraction: false,
-        defaultValue: 3,
+        initValue: 3,
+        defaultValue: 4,
         datasource: new MockClusterDatasource(),
         ...options,
     } as CreateOptions<number>;
@@ -85,6 +87,7 @@ describe("AttributeServerTest", () => {
                 config.isWritable,
                 config.isSubscribable,
                 config.requiresTimedInteraction,
+                config.initValue,
                 config.defaultValue,
                 config.datasource,
                 config.getter,
@@ -123,6 +126,7 @@ describe("AttributeServerTest", () => {
                 config.isWritable,
                 config.isSubscribable,
                 config.requiresTimedInteraction,
+                config.initValue,
                 config.defaultValue,
                 config.datasource,
                 config.getter,
@@ -131,9 +135,15 @@ describe("AttributeServerTest", () => {
             );
         }
 
-        it("should return the value set in the constructor", () => {
+        it("should return the value set as initValue in the constructor", () => {
             const server = create();
             expect(server.getLocal()).equal(3);
+        });
+
+        it("should return the value set as defaultValue in the constructor when initValue is invalid", () => {
+            // @ts-expect-error Test case
+            const server = create({ initValue: "foo" });
+            expect(server.getLocal()).equal(4);
         });
 
         it("should set the value locally and trigger listeners on change", () => {
@@ -382,9 +392,15 @@ describe("AttributeServerTest", () => {
             expect(setterCalled).equal(false);
         });
 
-        it("should throw an error if default value is invalid", () => {
+        it("should throw an error if init value is invalid and no default specified", () => {
+            expect(() => create({ defaultValue: undefined, schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
+                "Attribute value to initialize for test can not be undefined.",
+            );
+        });
+
+        it("should throw an error if init value and default value is invalid", () => {
             expect(() => create({ schema: TlvUInt8.bound({ min: 0, max: 2 }) })).throws(
-                'Validation error for attribute "test": (Validation/135) Invalid value: 3 is above the maximum, 2.',
+                'Validation error for attribute "test": (Validation/135) Invalid value: 4 is above the maximum, 2.',
             );
         });
 
@@ -440,6 +456,7 @@ describe("AttributeServerTest", () => {
                 config.isWritable,
                 config.isSubscribable,
                 config.requiresTimedInteraction,
+                config.initValue,
                 config.defaultValue,
                 BasicInformationCluster,
                 config.datasource,

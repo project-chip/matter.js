@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { MATTER_DATAMODEL_VERSION } from "../../../CommissioningServer.js";
 import { VendorId } from "../../../datatype/VendorId.js";
 import { Diagnostic } from "../../../log/Diagnostic.js";
 import { Logger } from "../../../log/Logger.js";
@@ -15,7 +16,9 @@ const logger = Logger.get("BasicInformationServer");
 /**
  * This is the default server implementation of BasicInformationBehavior.
  */
-export class BasicInformationServer extends BasicInformationBehavior {
+export class BasicInformationServer extends BasicInformationBehavior.enable({
+    events: { startUp: true, shutDown: true, leave: true },
+}) {
     override initialize() {
         const state = this.state;
 
@@ -44,7 +47,7 @@ export class BasicInformationServer extends BasicInformationBehavior {
         // These defaults are appropriate for development or production so do not warn
         setDefault("productLabel", state.productName);
         setDefault("nodeLabel", state.productName);
-        setDefault("dataModelRevision", 1);
+        setDefault("dataModelRevision", MATTER_DATAMODEL_VERSION);
         setDefault("hardwareVersionString", state.hardwareVersion.toString());
         setDefault("softwareVersionString", state.softwareVersion.toString());
 
@@ -56,17 +59,11 @@ export class BasicInformationServer extends BasicInformationBehavior {
     }
 
     [Symbol.asyncDispose]() {
-        this.events.shutDown?.emit(
-            undefined,
-            this.context,
-        )
+        this.events.shutDown?.emit(undefined, this.context);
     }
 
     #online() {
-        this.events.startUp.emit(
-            { softwareVersion: this.state.softwareVersion },
-            this.context,
-        );
+        this.events.startUp.emit({ softwareVersion: this.state.softwareVersion }, this.context);
     }
 }
 

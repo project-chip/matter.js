@@ -87,7 +87,7 @@ export const FORBIDDEN_PASSCODES = [
  *
  * @see {@link MatterCoreSpecificationV1_1} § 7.1.1
  */
-const MATTER_DATAMODEL_VERSION = 16;
+export const MATTER_DATAMODEL_VERSION = 16;
 
 /**
  * Represents device pairing information.
@@ -312,8 +312,8 @@ export class CommissioningServer extends MatterNode {
         this.rootEndpoint.addClusterServer(basicInformationCluster);
 
         if (reachabilitySupported) {
-            basicInformationCluster.subscribeReachableAttribute(
-                newValue => basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
+            basicInformationCluster.subscribeReachableAttribute(newValue =>
+                basicInformationCluster.triggerReachableChangedEvent?.({ reachableNewValue: newValue }),
             );
         }
 

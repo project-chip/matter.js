@@ -60,6 +60,10 @@ export const OnOffClusterDefaultHandler: () => ClusterServerHandlers<typeof OnOf
                 }
             }
         },
+        destroyClusterServer: () => {
+            timedOnTimer?.stop();
+            delayedOffTimer?.stop();
+        },
         on: async ({ attributes: { onOff } }) => {
             onOff.setLocal(true);
         },
