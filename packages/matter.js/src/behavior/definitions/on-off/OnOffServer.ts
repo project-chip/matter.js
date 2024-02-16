@@ -139,9 +139,8 @@ export class OnOffServer extends Base {
             this.internal.timedOnTimer?.stop();
             this.state.offWaitTime = 0;
             this.off();
-        } else {
-            this.state.onTime = time;
         }
+        this.state.onTime = time;
     }
 
     protected get delayedOffTimer() {
