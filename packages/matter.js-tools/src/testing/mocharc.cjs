@@ -8,7 +8,10 @@
 // running tests in IDE with Mocha support.  Utilize by importing into
 // .mocharc.cjs as a sibling of package.json in the package to test
 
-require("../util/node-shims.js");
+// Required for Node < 19 (see node-shims.ts)
+if (globalThis.crypto === undefined) {
+    Object.assign(globalThis, { crypto: webcrypto });
+}
 
 function mocharc(format = "cjs") {
     const { resolve } = require("path");
