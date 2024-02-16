@@ -66,12 +66,10 @@ export class ClusterComposer<const T extends ClusterType> {
             if (isDeepEqual(supportedFeatures, this.cluster.supportedFeatures)) {
                 cluster = this.cluster;
             } else {
-                const base = this.cluster.base ?? this.cluster;
-
                 cluster = ClusterType({
-                    ...base,
+                    ...this.cluster,
                     supportedFeatures,
-                    base,
+                    base: this.cluster.base ?? this.cluster,
                 });
             }
         }
