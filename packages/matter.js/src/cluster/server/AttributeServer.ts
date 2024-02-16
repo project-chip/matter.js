@@ -12,6 +12,7 @@ import { ValidationError } from "../../common/ValidationError.js";
 import { AttributeId } from "../../datatype/AttributeId.js";
 import { Endpoint as EndpointInterface } from "../../device/Endpoint.js";
 import { Fabric } from "../../fabric/Fabric.js";
+import { Logger } from "../../log/Logger.js";
 import { Globals } from "../../model/index.js";
 import { StatusCode, StatusResponseError } from "../../protocol/interaction/StatusCode.js";
 import { BitSchema, TypeFromPartialBitSchema } from "../../schema/BitmapSchema.js";
@@ -21,6 +22,8 @@ import { TlvSchema } from "../../tlv/TlvSchema.js";
 import { isDeepEqual } from "../../util/DeepEqual.js";
 import { Attribute, Attributes, Cluster, Commands, Events } from "../Cluster.js";
 import { ClusterDatasource } from "./ClusterServerTypes.js";
+
+const logger = Logger.get("AttributeServer");
 
 /**
  * Thrown when an operation cannot complete because fabric information is
@@ -44,7 +47,7 @@ export function createAttributeServer<
     clusterDef: Cluster<F, SF, A, C, E>,
     attributeDef: Attribute<T, F>,
     attributeName: string,
-    defaultValue: T,
+    initValue: T,
     datasource: ClusterDatasource,
     getter?: (
         session?: Session<MatterDevice>,
@@ -55,7 +58,7 @@ export function createAttributeServer<
     setter?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface, message?: Message) => boolean,
     validator?: (value: T, session?: Session<MatterDevice>, endpoint?: EndpointInterface) => void,
 ) {
-    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed } = attributeDef;
+    const { id, schema, writable, fabricScoped, fixed, omitChanges, timed, default: defaultValue } = attributeDef;
 
     if (fixed) {
         return new FixedAttributeServer(
@@ -65,6 +68,7 @@ export function createAttributeServer<
             writable,
             false,
             timed,
+            initValue,
             defaultValue,
             datasource,
             getter,
@@ -79,6 +83,7 @@ export function createAttributeServer<
             writable,
             !omitChanges,
             timed,
+            initValue,
             defaultValue,
             clusterDef,
             datasource,
@@ -95,6 +100,7 @@ export function createAttributeServer<
         writable,
         !omitChanges,
         timed,
+        initValue,
         defaultValue,
         datasource,
         getter,
@@ -112,6 +118,7 @@ export abstract class BaseAttributeServer<T> {
      */
     protected value: T | undefined = undefined;
     protected endpoint?: EndpointInterface;
+    readonly defaultValue: T;
 
     constructor(
         readonly id: AttributeId,
@@ -120,10 +127,23 @@ export abstract class BaseAttributeServer<T> {
         readonly isWritable: boolean,
         readonly isSubscribable: boolean,
         readonly requiresTimedInteraction: boolean,
-        readonly defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
     ) {
-        this.validateWithSchema(defaultValue);
-        this.value = defaultValue;
+        try {
+            this.validateWithSchema(initValue);
+            this.value = initValue;
+        } catch (error) {
+            logger.warn(
+                `Attribute value to initialize for ${name} has an invalid value ${Logger.toJSON(initValue)}. Restore to default ${Logger.toJSON(defaultValue)}`,
+            );
+            if (defaultValue === undefined) {
+                throw new ImplementationError(`Attribute value to initialize for ${name} can not be undefined.`);
+            }
+            this.validateWithSchema(defaultValue);
+            this.value = defaultValue;
+        }
+        this.defaultValue = this.value;
     }
 
     validateWithSchema(value: T) {
@@ -168,7 +188,8 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
         protected readonly datasource: ClusterDatasource,
 
         /**
@@ -186,7 +207,7 @@ export class FixedAttributeServer<T> extends BaseAttributeServer<T> {
             message?: Message,
         ) => T,
     ) {
-        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue); // Fixed attributes do not change, so are not subscribable
+        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, initValue, defaultValue); // Fixed attributes do not change, so are not subscribable
 
         if (getter === undefined) {
             this.getter = () => {
@@ -307,7 +328,8 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
         datasource: ClusterDatasource,
         getter?: (
             session?: Session<MatterDevice>,
@@ -356,7 +378,18 @@ export class AttributeServer<T> extends FixedAttributeServer<T> {
             );
         }
 
-        super(id, name, schema, isWritable, isSubscribable, requiresTimedInteraction, defaultValue, datasource, getter);
+        super(
+            id,
+            name,
+            schema,
+            isWritable,
+            isSubscribable,
+            requiresTimedInteraction,
+            initValue,
+            defaultValue,
+            datasource,
+            getter,
+        );
 
         if (setter === undefined) {
             this.setter = value => {
@@ -545,7 +578,8 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
         isWritable: boolean,
         isSubscribable: boolean,
         requiresTimedInteraction: boolean,
-        defaultValue: T,
+        initValue: T,
+        defaultValue: T | undefined,
         readonly cluster: Cluster<any, any, any, any, any>,
         datasource: ClusterDatasource,
         getter?: (session?: Session<MatterDevice>, endpoint?: EndpointInterface, isFabricFiltered?: boolean) => T,
@@ -563,7 +597,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             !(getter === undefined && setter === undefined)
         ) {
             throw new ImplementationError(
-                `Getter and setter must be implemented together writeable fabric scoped attribute "${name}".`,
+                `Getter and setter must be implemented together for writeable fabric scoped attribute "${name}".`,
             );
         }
 
@@ -623,6 +657,7 @@ export class FabricScopedAttributeServer<T> extends AttributeServer<T> {
             isWritable,
             isSubscribable,
             requiresTimedInteraction,
+            initValue,
             defaultValue,
             datasource,
             getter,
