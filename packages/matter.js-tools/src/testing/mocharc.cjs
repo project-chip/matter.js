@@ -9,6 +9,7 @@
 // .mocharc.cjs as a sibling of package.json in the package to test
 
 // Required for Node < 19 (see node-shims.ts)
+const webcrypto = require("node:crypto").webcrypto;
 if (globalThis.crypto === undefined) {
     Object.assign(globalThis, { crypto: webcrypto });
 }
