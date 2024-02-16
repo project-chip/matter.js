@@ -75,9 +75,21 @@ export class Node<T extends RootEndpoint = RootEndpoint> extends Part<T> {
     }
 
     /**
-     * Run the node in standalone mode.
+     * Starts the node and resolve when the node enters his online state. Use `cancel()` to stop the node.
+     */
+    async startUp() {
+        const runtime = this.env.runtime;
+
+        runtime.addWorker(this);
+
+        await this.lifecycle.online;
+    }
+
+    /**
+     * Run the node in standalone mode and resolve when the node goes offline again.
      *
-     * If you are implementing a single node this is the most convenient way to bring it online.
+     * If you are implementing a single node and all logic is handled by registered change handlers and cluster
+     * implementations this is the most convenient way to bring it online.
      */
     async run() {
         const runtime = this.env.runtime;

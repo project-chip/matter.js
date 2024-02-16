@@ -5,6 +5,7 @@
  */
 
 import { Environment, StorageService, VariableService } from "@project-chip/matter.js/environment";
+import { Format, Logger } from "@project-chip/matter.js/log";
 import { Network } from "@project-chip/matter.js/net";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
@@ -30,6 +31,23 @@ import { ProcessManager } from "./ProcessManager.js";
  *   - By modifying {@link Environment.default}
  *
  *   - By providing an {@link Environment} to your components other than {@link Environment.default}
+ *
+ * The settings are applied in this order (the higher numbers overwrite lower numbers):
+ * 1. Environment variables (MATTER_*)
+ * 2. Command line parameters
+ * 3. Some internal Defaults (mainly Loglevel and such)
+ * 4. Config file (always wins if used/present)
+ *
+ * The following variables are defined by this class additionally to {@link Environment}:
+ * * `environment` - Name of the environment, Default "default"
+ * * `path.root` - Path considered as root for any files to store, Fallback: ".", Default: APPDATA/.matter (Windows), HOME/.matter else (or .matter-<envname>)
+ * * `path.config` - Path to config file, Default: "config.json"
+ * * `trace.path` - Path of the trace file to write, Default: "trace.jsonl" relative to path.root
+ * * `trace.enable` - Enable writing a trace file
+ * * `storage.path` - Where to store storage files, Default: "path.root"
+ * * `storage.clear` - Clear storage on start? Default: false
+ * * `runtime.signals` - By default register SIGINT and SUGUSR2 (diag) handlers, set to false if not wanted
+ * * `runtime.exitcode` - by default we set the process.exitcode to 0 (ok) or 1 (crash), set to false if not wanted
  */
 export function NodeJsEnvironment() {
     const env = new Environment("default");
@@ -38,6 +56,13 @@ export function NodeJsEnvironment() {
     configureRuntime(env);
     configureStorage(env);
     configureNetwork(env);
+
+    // When no logger format is set, we still use the default, and the process is running in a TTY, use ANSI formatting
+    // If a user wants to change the log format he still can do after the environment was initialized (which should be
+    // first thing anyway)
+    if (!env.vars.has("logger.format") && Logger.format === Format.PLAIN && process.stdin?.isTTY) {
+        env.vars.set("logger.format", Format.ANSI);
+    }
 
     NodeJsActionTracer.configure(env);
 

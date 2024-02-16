@@ -54,6 +54,8 @@ export class CommissioningBehavior extends Behavior {
 
         this.reactTo((this.part as Node).lifecycle.online, this.#nodeOnline);
 
+        this.reactTo((this.part as Node).lifecycle.treeReady, this.#initializeNode);
+
         this.reactTo(
             this.agent.get(OperationalCredentialsBehavior).events.commissionedFabrics$Change,
             this.#updateCommissioningStatus,
@@ -66,7 +68,7 @@ export class CommissioningBehavior extends Behavior {
             return;
         }
         this.state.commissioned = commissioned;
-        if (this.state.commissioned) {
+        if (commissioned) {
             (this.part.lifecycle as NodeLifecycle).commissioned.emit(this.context);
         } else {
             (this.part.lifecycle as NodeLifecycle).decommissioned.emit(this.context);
@@ -148,6 +150,11 @@ export class CommissioningBehavior extends Behavior {
         if (!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics) {
             this.initiateCommissioning();
         }
+    }
+
+    #initializeNode() {
+        const isCommissioned = !!this.agent.get(OperationalCredentialsBehavior).state.commissionedFabrics;
+        (this.part.lifecycle as NodeLifecycle).initialized.emit(isCommissioned);
     }
 }
 

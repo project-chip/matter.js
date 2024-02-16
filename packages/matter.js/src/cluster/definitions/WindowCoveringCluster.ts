@@ -18,10 +18,10 @@ import {
     WritableAttribute,
     AccessLevel
 } from "../../cluster/Cluster.js";
-import { TlvUInt16, TlvPercent, TlvPercent100ths, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
+import { TlvUInt16, TlvPercent100ths, TlvPercent, TlvEnum, TlvUInt8, TlvBitmap } from "../../tlv/TlvNumber.js";
 import { MatterApplicationClusterSpecificationV1_1 } from "../../spec/Specifications.js";
 import { TlvNullable } from "../../tlv/TlvNullable.js";
-import { TlvObject, TlvOptionalField, TlvField } from "../../tlv/TlvObject.js";
+import { TlvObject, TlvField } from "../../tlv/TlvObject.js";
 import { TypeFromSchema } from "../../tlv/TlvSchema.js";
 import { BitFlag, BitsFromPartial, BitFieldEnum } from "../../schema/BitmapSchema.js";
 import { TlvNoArguments } from "../../tlv/TlvNoArguments.js";
@@ -34,10 +34,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.5
      */
-    export const TlvGoToLiftPercentageRequest = TlvObject({
-        liftPercentageValue: TlvOptionalField(0, TlvPercent),
-        liftPercent100thsValue: TlvOptionalField(1, TlvPercent100ths)
-    });
+    export const TlvGoToLiftPercentageRequest = TlvObject({ liftPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToLiftPercentage command
@@ -51,10 +48,7 @@ export namespace WindowCovering {
      *
      * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.3.6.7
      */
-    export const TlvGoToTiltPercentageRequest = TlvObject({
-        tiltPercentageValue: TlvOptionalField(0, TlvPercent),
-        tiltPercent100thsValue: TlvOptionalField(1, TlvPercent100ths)
-    });
+    export const TlvGoToTiltPercentageRequest = TlvObject({ tiltPercent100thsValue: TlvField(0, TlvPercent100ths) });
 
     /**
      * Input to the WindowCovering goToTiltPercentage command

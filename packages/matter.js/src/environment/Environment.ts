@@ -17,6 +17,13 @@ const logger = Logger.get("Environment");
 /**
  * Access to general platform-dependent features.
  *
+ * The following variables are defined by this class:
+ * * `log.level` - Log level to use {@link Logger.LEVEL}
+ * * `log.format` - Log format to use {@link Logger.FORMAT}
+ * * `log.stack.limit` - Stack trace limit, see https://nodejs.org/api/errors.html#errorstacktracelimit
+ * * `mdns.networkInterface` - Network interface to use for MDNS broadcasts and scanning, default are all available interfaces
+ * * `mdns.ipv4` - Also announce/scan on IPv4 interfaces
+ *
  * TODO - could remove global singletons by moving here
  */
 export class Environment {

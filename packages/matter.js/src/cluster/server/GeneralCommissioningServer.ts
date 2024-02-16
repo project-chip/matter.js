@@ -53,7 +53,7 @@ export const GeneralCommissioningClusterHandler: (options?: {
             }
 
             if (device.isFailsafeArmed()) {
-                device.failsafeContext.extend(session.getFabric(), expiryLengthSeconds);
+                await device.failsafeContext.extend(session.getFabric(), expiryLengthSeconds);
             } else {
                 // If ExpiryLengthSeconds is 0 and the fail-safe timer was not armed, then this command invocation SHALL
                 // lead to a success response with no side effect against the fail-safe context.
