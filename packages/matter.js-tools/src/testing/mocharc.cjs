@@ -8,6 +8,8 @@
 // running tests in IDE with Mocha support.  Utilize by importing into
 // .mocharc.cjs as a sibling of package.json in the package to test
 
+require("../util/node-shims.js");
+
 function mocharc(format = "cjs") {
     const { resolve } = require("path");
     const cli = require("mocha/lib/cli/cli");
