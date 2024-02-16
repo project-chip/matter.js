@@ -123,8 +123,6 @@ export namespace NetworkServer {
 
     export class State extends NetworkBehavior.State {
         openAdvertisementWindowOnStartup = true;
-        announceInterface?: string;
-        discoverInterface?: string;
         listeningAddressIpv4?: string;
         listeningAddressIpv6?: string;
         ipv4 = true;
