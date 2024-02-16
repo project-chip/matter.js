@@ -25,7 +25,9 @@ export class AttributeModel extends PropertyModel implements AttributeElement {
     }
 
     override get isGlobalAttribute() {
-        return AttributeModel.isGlobal(this.id);
+        if (AttributeModel.isGlobal(this.id)) {
+            return true;
+        }
     }
 
     get writable() {
