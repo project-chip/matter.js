@@ -80,7 +80,9 @@ export class NetworkServer extends NetworkBehavior {
             throw new ImplementationError("Cannot advertise offline server");
         }
 
-        this.internal.runtime.openAdvertisementWindow();
+        this.internal.runtime
+            .openAdvertisementWindow()
+            .catch(error => logger.error("Failed to open advertisement window", error));
     }
 
     /**
