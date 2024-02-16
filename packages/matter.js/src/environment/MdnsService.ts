@@ -32,15 +32,16 @@ export class MdnsService {
             const vars = environment.get(VariableService);
             const network = environment.get(Network);
 
-            const enableIpv4 = options?.ipv4 ?? environment.get(VariableService).boolean("mdns.ipv4") ?? true;
+            const netInterface = vars.get("mdns.networkInterface", options?.networkInterface);
+            const enableIpv4 = vars.boolean("mdns.ipv4") ?? options?.ipv4 ?? true;
             this.#broadcaster = await MdnsBroadcaster.create(network, {
                 enableIpv4,
-                multicastInterface: vars.get("mdns.discoverInterface", options?.discoverInterface),
+                multicastInterface: netInterface,
             });
 
             this.#scanner = await MdnsScanner.create(network, {
                 enableIpv4,
-                netInterface: vars.get("mdns.announceInterface", options?.announceInterface),
+                netInterface: netInterface,
             });
         });
     }
@@ -85,8 +86,7 @@ export class MdnsService {
 
 export namespace MdnsService {
     export interface Options {
-        discoverInterface?: string;
-        announceInterface?: string;
+        networkInterface?: string;
         ipv4?: boolean;
     }
 }
