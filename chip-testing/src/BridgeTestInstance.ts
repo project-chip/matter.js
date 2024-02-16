@@ -176,7 +176,7 @@ export class BridgeTestInstance implements TestInstance {
 
         const aggregator = new Part(AggregatorEndpoint, { id: "aggregator", number: 1 });
 
-        serverNode.add(aggregator);
+        await serverNode.add(aggregator);
 
         aggregator.parts.add(bridgedLight);
 

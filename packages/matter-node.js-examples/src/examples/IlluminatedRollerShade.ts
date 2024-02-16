@@ -6,7 +6,6 @@
 
 import "@project-chip/matter-node.js";
 import { WindowCovering } from "@project-chip/matter-node.js/cluster";
-import { StatusCode, StatusResponseError } from "@project-chip/matter-node.js/interaction";
 import { GoToLiftPercentageRequest, WindowCoveringServer } from "@project-chip/matter.js/behaviors/window-covering";
 import { OnOffLightDevice, OnOffLightRequirements } from "@project-chip/matter.js/devices/OnOffLightDevice";
 import { WindowCoveringDevice } from "@project-chip/matter.js/devices/WindowCoveringDevice";
@@ -66,16 +65,7 @@ class RollerShade extends LiftingWindowCovering {
 
     // TODO - grr, interface not working right here so have to define as instance member for TS
     override goToLiftPercentage = function (this: RollerShade, request: GoToLiftPercentageRequest) {
-        let target = request.liftPercent100thsValue;
-        if (request.liftPercent100thsValue) {
-            target = request.liftPercent100thsValue;
-        } else if (request.liftPercentageValue) {
-            target = request.liftPercentageValue * 100;
-        } else {
-            throw new StatusResponseError("Go-to without target value", StatusCode.ConstraintError);
-        }
-
-        this.targetPos = target;
+        this.targetPos = request.liftPercent100thsValue;
     };
 
     protected async writeTargetToMotor() {
