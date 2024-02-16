@@ -240,8 +240,8 @@ export class AdministratorCommissioningServer extends AdministratorCommissioning
      * Closes the commissioning window per the matter specification.
      */
     async #closeCommissioningWindow() {
-        this.#endCommissioning();
-        await this.session.getContext().endCommissioning();
+        this.callback(this.#endCommissioning);
+        await this.part.env.get(MatterDevice).endCommissioning();
     }
 
     /**
