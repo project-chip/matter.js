@@ -57,6 +57,10 @@ export class VariableService {
         return value ?? fallback;
     }
 
+    has(name: string) {
+        return this.get(name) !== undefined;
+    }
+
     set(name: string, value: VariableService.Value) {
         const segments = name.toLowerCase().split(".");
         const key = segments.pop() as string;
