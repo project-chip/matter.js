@@ -11,5 +11,5 @@ import { ValueModel } from "./ValueModel.js";
  * subvalues of logical structs.
  */
 export abstract class PropertyModel extends ValueModel {
-    abstract isGlobalAttribute: boolean;
+    abstract isGlobalAttribute?: boolean;
 }
