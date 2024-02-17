@@ -9,7 +9,7 @@
 import { LeafWetnessMeasurementBehavior } from "./LeafWetnessMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of LeafWetnessMeasurementBehavior.
+ * This is the default server implementation of {@link LeafWetnessMeasurementBehavior}.
  */
 export class LeafWetnessMeasurementServer extends LeafWetnessMeasurementBehavior {
 }

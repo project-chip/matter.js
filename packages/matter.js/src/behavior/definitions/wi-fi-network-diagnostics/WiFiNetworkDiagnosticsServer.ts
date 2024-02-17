@@ -8,13 +8,8 @@
 
 import { WiFiNetworkDiagnosticsBehavior } from "./WiFiNetworkDiagnosticsBehavior.js";
 
-const Base = WiFiNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts");
-
 /**
- * This is the default server implementation of WiFiNetworkDiagnosticsBehavior.
- *
- * This implementation includes all features of WiFiNetworkDiagnostics.Cluster. You should use
- * WiFiNetworkDiagnosticsServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link WiFiNetworkDiagnosticsBehavior}.
  */
-export class WiFiNetworkDiagnosticsServer extends Base {
+export class WiFiNetworkDiagnosticsServer extends WiFiNetworkDiagnosticsBehavior {
 }

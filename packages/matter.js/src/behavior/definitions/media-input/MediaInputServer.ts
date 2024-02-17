@@ -8,13 +8,8 @@
 
 import { MediaInputBehavior } from "./MediaInputBehavior.js";
 
-const Base = MediaInputBehavior.with("NameUpdates");
-
 /**
- * This is the default server implementation of MediaInputBehavior.
- *
- * This implementation includes all features of MediaInput.Cluster. You should use MediaInputServer.with to specialize
- * the class for the features your implementation supports.
+ * This is the default server implementation of {@link MediaInputBehavior}.
  */
-export class MediaInputServer extends Base {
+export class MediaInputServer extends MediaInputBehavior {
 }

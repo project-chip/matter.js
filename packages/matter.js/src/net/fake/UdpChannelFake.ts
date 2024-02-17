@@ -55,6 +55,10 @@ export class UdpChannelFake implements UdpChannel {
         this.netListeners.length = 0;
     }
 
+    async [Symbol.asyncDispose]() {
+        return this.close();
+    }
+
     get port() {
         return this.listeningPort;
     }

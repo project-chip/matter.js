@@ -8,13 +8,8 @@
 
 import { ScenesBehavior } from "./ScenesBehavior.js";
 
-const Base = ScenesBehavior.with("SceneNames");
-
 /**
- * This is the default server implementation of ScenesBehavior.
- *
- * This implementation includes all features of Scenes.Cluster. You should use ScenesServer.with to specialize the
- * class for the features your implementation supports.
+ * This is the default server implementation of {@link ScenesBehavior}.
  */
-export class ScenesServer extends Base {
+export class ScenesServer extends ScenesBehavior {
 }

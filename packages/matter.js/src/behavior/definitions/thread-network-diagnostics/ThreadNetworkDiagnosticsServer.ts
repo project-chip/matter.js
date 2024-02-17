@@ -8,13 +8,8 @@
 
 import { ThreadNetworkDiagnosticsBehavior } from "./ThreadNetworkDiagnosticsBehavior.js";
 
-const Base = ThreadNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts", "MleCounts", "MacCounts");
-
 /**
- * This is the default server implementation of ThreadNetworkDiagnosticsBehavior.
- *
- * This implementation includes all features of ThreadNetworkDiagnostics.Cluster. You should use
- * ThreadNetworkDiagnosticsServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link ThreadNetworkDiagnosticsBehavior}.
  */
-export class ThreadNetworkDiagnosticsServer extends Base {
+export class ThreadNetworkDiagnosticsServer extends ThreadNetworkDiagnosticsBehavior {
 }

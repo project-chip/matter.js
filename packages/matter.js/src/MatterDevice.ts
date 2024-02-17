@@ -265,6 +265,7 @@ export class MatterDevice {
             this.activeCommissioningEndCallback = activeCommissioningEndCallback;
         }
         // MDNS is sent in parallel
+        // TODO - untracked promise
         this.sendCommissionableAnnouncement(mode, discriminator).catch(error =>
             logger.warn("Error sending announcement", error),
         );

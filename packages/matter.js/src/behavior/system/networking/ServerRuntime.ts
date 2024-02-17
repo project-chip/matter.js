@@ -86,10 +86,11 @@ export class ServerRuntime extends NetworkRuntime {
      */
     protected async getPrimaryNetInterface() {
         if (this.#primaryNetInterface === undefined) {
+            const port = this.owner.state.network.port;
             this.#primaryNetInterface = await UdpInterface.create(
                 this.owner.env.get(Network),
                 "udp6",
-                this.owner.state.network.port,
+                port ? port : undefined,
                 this.owner.state.network.listeningAddressIpv6,
             );
         }

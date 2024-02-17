@@ -8,13 +8,11 @@
 
 import { SwitchBehavior } from "./SwitchBehavior.js";
 
-const Base = SwitchBehavior.with("MomentarySwitchRelease", "MomentarySwitchLongPress", "MomentarySwitchMultiPress");
-
 /**
- * This is the default server implementation of SwitchBehavior.
+ * This is the default server implementation of {@link SwitchBehavior}.
  *
- * This implementation includes all features of Switch.Cluster. You should use SwitchServer.with to specialize the
- * class for the features your implementation supports.
+ * The Matter specification requires the Switch cluster to support features we do not enable by default. You should use
+ * {@link SwitchServer.with} to specialize the class for the features your implementation supports.
  */
-export class SwitchServer extends Base {
+export class SwitchServer extends SwitchBehavior {
 }

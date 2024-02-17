@@ -8,13 +8,8 @@
 
 import { GroupKeyManagementBehavior } from "./GroupKeyManagementBehavior.js";
 
-const Base = GroupKeyManagementBehavior.with("CacheAndSync");
-
 /**
- * This is the default server implementation of GroupKeyManagementBehavior.
- *
- * This implementation includes all features of GroupKeyManagement.Cluster. You should use
- * GroupKeyManagementServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link GroupKeyManagementBehavior}.
  */
-export class GroupKeyManagementServer extends Base {
+export class GroupKeyManagementServer extends GroupKeyManagementBehavior {
 }

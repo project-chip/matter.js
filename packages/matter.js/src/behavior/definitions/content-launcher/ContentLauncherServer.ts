@@ -8,13 +8,8 @@
 
 import { ContentLauncherBehavior } from "./ContentLauncherBehavior.js";
 
-const Base = ContentLauncherBehavior.with("ContentSearch", "UrlPlayback");
-
 /**
- * This is the default server implementation of ContentLauncherBehavior.
- *
- * This implementation includes all features of ContentLauncher.Cluster. You should use ContentLauncherServer.with to
- * specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link ContentLauncherBehavior}.
  */
-export class ContentLauncherServer extends Base {
+export class ContentLauncherServer extends ContentLauncherBehavior {
 }

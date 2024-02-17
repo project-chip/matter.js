@@ -9,7 +9,7 @@
 import { BooleanStateBehavior } from "./BooleanStateBehavior.js";
 
 /**
- * This is the default server implementation of BooleanStateBehavior.
+ * This is the default server implementation of {@link BooleanStateBehavior}.
  */
 export class BooleanStateServer extends BooleanStateBehavior {
 }

@@ -87,6 +87,6 @@ export namespace NetworkBehavior {
 
     export class State {
         port = 5540;
-        operationalPort = 5540;
+        operationalPort = -1;
     }
 }

@@ -9,7 +9,7 @@
 import { SoilMoistureMeasurementBehavior } from "./SoilMoistureMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of SoilMoistureMeasurementBehavior.
+ * This is the default server implementation of {@link SoilMoistureMeasurementBehavior}.
  */
 export class SoilMoistureMeasurementServer extends SoilMoistureMeasurementBehavior {
 }

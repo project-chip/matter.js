@@ -9,7 +9,7 @@
 import { UserLabelBehavior } from "./UserLabelBehavior.js";
 
 /**
- * This is the default server implementation of UserLabelBehavior.
+ * This is the default server implementation of {@link UserLabelBehavior}.
  */
 export class UserLabelServer extends UserLabelBehavior {
 }

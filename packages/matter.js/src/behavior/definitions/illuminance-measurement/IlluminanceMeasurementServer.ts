@@ -9,7 +9,7 @@
 import { IlluminanceMeasurementBehavior } from "./IlluminanceMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of IlluminanceMeasurementBehavior.
+ * This is the default server implementation of {@link IlluminanceMeasurementBehavior}.
  */
 export class IlluminanceMeasurementServer extends IlluminanceMeasurementBehavior {
 }

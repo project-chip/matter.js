@@ -9,7 +9,7 @@
 import { BindingBehavior } from "./BindingBehavior.js";
 
 /**
- * This is the default server implementation of BindingBehavior.
+ * This is the default server implementation of {@link BindingBehavior}.
  */
 export class BindingServer extends BindingBehavior {
 }

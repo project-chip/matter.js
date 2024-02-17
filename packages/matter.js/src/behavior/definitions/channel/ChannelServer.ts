@@ -8,13 +8,8 @@
 
 import { ChannelBehavior } from "./ChannelBehavior.js";
 
-const Base = ChannelBehavior.with("ChannelList", "LineupInfo");
-
 /**
- * This is the default server implementation of ChannelBehavior.
- *
- * This implementation includes all features of Channel.Cluster. You should use ChannelServer.with to specialize the
- * class for the features your implementation supports.
+ * This is the default server implementation of {@link ChannelBehavior}.
  */
-export class ChannelServer extends Base {
+export class ChannelServer extends ChannelBehavior {
 }

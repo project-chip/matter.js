@@ -9,7 +9,7 @@
 import { ValidProxiesBehavior } from "./ValidProxiesBehavior.js";
 
 /**
- * This is the default server implementation of ValidProxiesBehavior.
+ * This is the default server implementation of {@link ValidProxiesBehavior}.
  */
 export class ValidProxiesServer extends ValidProxiesBehavior {
 }

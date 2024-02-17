@@ -4,9 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DnsCodec, DnsMessage, DnsRecordType } from "../../src/codec/DnsCodec.js";
 import { NodeId } from "../../src/datatype/NodeId.js";
 import { VendorId } from "../../src/datatype/VendorId.js";
 import { OnOffLightDevice } from "../../src/endpoint/definitions/device/OnOffLightDevice.js";
+import { UdpChannelFake } from "../../src/net/fake/UdpChannelFake.js";
+import { ServerRootEndpoint } from "../../src/node/server/ServerRootEndpoint.js";
 import { ByteArray } from "../../src/util/ByteArray.js";
 import { MockServerNode } from "./mock-server-node.js";
 
@@ -45,6 +48,73 @@ describe("ServerNode", () => {
             ["destroyed", "node0.part0"],
             ["destroyed", "node0"],
         ]);
+    });
+
+    it.only("announces and expires correctly", async () => {
+        const scannerChannel = await UdpChannelFake.create(MockServerNode.createNetwork(2), {
+            listeningPort: 5353,
+            listeningAddress: "ff02::fb",
+            type: "udp6",
+        });
+
+        const advertisementReceived = new Promise<ByteArray>(resolve =>
+            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) =>
+                resolve(data),
+            )
+        );
+
+        const node = await MockServerNode.createOnline({
+            config: { type: ServerRootEndpoint,
+                network: { port: 0 },
+                commissioning: { discriminator: 2002 },
+                basicInformation: { vendorId: 65501 },
+            }
+        });
+
+        const operationalPort = node.state.network.operationalPort;
+        expect(operationalPort).greaterThan(0);
+        expect(operationalPort).not.equal(5540);
+
+        const advertisement = DnsCodec.decode(await advertisementReceived);
+
+        expect(advertisement?.answers[0]?.ttl).equals(120);
+
+        function answer(name: string) {
+            for (const answer of (advertisement as DnsMessage).answers) {
+                if (answer.value.startsWith(name)) {
+                    return answer.value.split(".")[0].substring(name.length);
+                }
+            }
+        }
+
+        function additional(recordType: DnsRecordType) {
+            for (const additional of (advertisement as DnsMessage).additionalRecords) {
+                if (additional.recordType === recordType) {
+                    return additional.value;
+                }
+            }
+        }
+
+        expect(answer("_L")).equals("2002");
+        expect(answer("_S")).equals(`${2002 % 0xf}`);
+        expect(answer("_V")).equals("65501");
+        expect(answer("_T")).equals("256");
+        expect(answer("_CM")).equals("");
+
+        expect(additional(DnsRecordType.AAAA)).equals("1111:2222:3333:4444:5555:6666:7777:8801");
+        expect(additional(DnsRecordType.A)).equals("10.10.10.1");
+        expect(additional(DnsRecordType.SRV)?.port).equals(operationalPort.toString());
+
+        const expirationReceived = new Promise<ByteArray>(resolve =>
+            scannerChannel.onData((_netInterface, _peerAddress, _peerPort, data) => 
+                resolve(data)
+            )
+        );
+
+        await node.destroy();
+
+        const expiration = DnsCodec.decode(await expirationReceived);
+        expect(expiration?.answers[0]?.ttl).equals(0);
     });
 
     it("commissions", async () => {

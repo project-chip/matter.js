@@ -9,7 +9,7 @@
 import { ElectricalMeasurementBehavior } from "./ElectricalMeasurementBehavior.js";
 
 /**
- * This is the default server implementation of ElectricalMeasurementBehavior.
+ * This is the default server implementation of {@link ElectricalMeasurementBehavior}.
  */
 export class ElectricalMeasurementServer extends ElectricalMeasurementBehavior {
 }

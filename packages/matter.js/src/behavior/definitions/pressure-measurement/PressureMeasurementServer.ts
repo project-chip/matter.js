@@ -8,13 +8,8 @@
 
 import { PressureMeasurementBehavior } from "./PressureMeasurementBehavior.js";
 
-const Base = PressureMeasurementBehavior.with("Extended");
-
 /**
- * This is the default server implementation of PressureMeasurementBehavior.
- *
- * This implementation includes all features of PressureMeasurement.Cluster. You should use
- * PressureMeasurementServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link PressureMeasurementBehavior}.
  */
-export class PressureMeasurementServer extends Base {
+export class PressureMeasurementServer extends PressureMeasurementBehavior {
 }

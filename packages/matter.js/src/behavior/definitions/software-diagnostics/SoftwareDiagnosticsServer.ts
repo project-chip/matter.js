@@ -8,13 +8,8 @@
 
 import { SoftwareDiagnosticsBehavior } from "./SoftwareDiagnosticsBehavior.js";
 
-const Base = SoftwareDiagnosticsBehavior.with("Watermarks");
-
 /**
- * This is the default server implementation of SoftwareDiagnosticsBehavior.
- *
- * This implementation includes all features of SoftwareDiagnostics.Cluster. You should use
- * SoftwareDiagnosticsServer.with to specialize the class for the features your implementation supports.
+ * This is the default server implementation of {@link SoftwareDiagnosticsBehavior}.
  */
-export class SoftwareDiagnosticsServer extends Base {
+export class SoftwareDiagnosticsServer extends SoftwareDiagnosticsBehavior {
 }
