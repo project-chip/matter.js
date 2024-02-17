@@ -7,7 +7,9 @@
 import { Behavior } from "../../../src/behavior/Behavior.js";
 import { ClusterBehavior } from "../../../src/behavior/cluster/ClusterBehavior.js";
 import { ActionContext } from "../../../src/behavior/context/ActionContext.js";
+import { LevelControlServer } from "../../../src/behavior/definitions/level-control/LevelControlServer.js";
 import { NetworkCommissioningServer } from "../../../src/behavior/definitions/network-commissioning/NetworkCommissioningServer.js";
+import { OnOffServer } from "../../../src/behavior/definitions/on-off/OnOffServer.js";
 import { StateType } from "../../../src/behavior/state/StateType.js";
 import { ElementModifier } from "../../../src/cluster/mutation/ElementModifier.js";
 import { ClusterModel } from "../../../src/model/index.js";
@@ -193,6 +195,16 @@ describe("ClusterBehavior", () => {
             expect(EthernetCommissioningServer.cluster.supportedFeatures.ethernetNetworkInterface).true;
             expect(EthernetCommissioningServer.cluster.supportedFeatures.wiFiNetworkInterface).false;
             expect(EthernetCommissioningServer.cluster.supportedFeatures.threadNetworkInterface).false;
+        });
+    });
+
+    describe("enable", () => {
+        it("sets defaults for newly-enabled properties", () => {
+            const MyOnOffServer = OnOffServer.with("LevelControlForLighting").enable({ attributes: { onTime: true }});
+            expect((new MyOnOffServer.State).onTime).equals(0);
+
+            const MyLevelControl2 = LevelControlServer.with("Lighting");
+            expect((new MyLevelControl2.State).remainingTime).equals(0);
         });
     });
 });

@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { UnitLocalizationBehavior } from "./UnitLocalizationBehavior.js";
-import { UnitLocalization } from "../../../cluster/definitions/UnitLocalizationCluster.js";
 
-const Base = UnitLocalizationBehavior.for(UnitLocalization.Complete);
+const Base = UnitLocalizationBehavior.with("TemperatureUnit");
 
 /**
  * This is the default server implementation of UnitLocalizationBehavior.

@@ -190,8 +190,11 @@ export class ValidatedElements {
             }
 
             if (implementations[name] === Behavior.unimplemented) {
-                this.error(name, `Throws unimplemented exception`, false);
-                // This error does not incapacitate the endpoint
+                if (!command.optional) {
+                    // We treat this error as a warning
+                    this.error(name, `Throws unimplemented exception`, false);
+                }
+                continue;
             }
 
             this.commands.add(name);

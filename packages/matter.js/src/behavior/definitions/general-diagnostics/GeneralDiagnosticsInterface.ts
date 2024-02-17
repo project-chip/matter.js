@@ -34,7 +34,7 @@ export namespace GeneralDiagnosticsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.11.7.1
          */
-        testEventTrigger(request: TestEventTriggerRequest): MaybePromise<void>;
+        testEventTrigger(request: TestEventTriggerRequest): MaybePromise;
     }
 }
 

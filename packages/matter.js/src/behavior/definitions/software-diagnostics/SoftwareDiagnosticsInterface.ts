@@ -30,7 +30,7 @@ export namespace SoftwareDiagnosticsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.12.7.1
          */
-        resetWatermarks(): MaybePromise<void>;
+        resetWatermarks(): MaybePromise;
     }
 }
 

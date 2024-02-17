@@ -135,68 +135,68 @@ export namespace ColorControlInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.4
          */
-        moveToHue(request: MoveToHueRequest): MaybePromise<void>;
+        moveToHue(request: MoveToHueRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.5
          */
-        moveHue(request: MoveHueRequest): MaybePromise<void>;
+        moveHue(request: MoveHueRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.6
          */
-        stepHue(request: StepHueRequest): MaybePromise<void>;
+        stepHue(request: StepHueRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.7
          */
-        moveToSaturation(request: MoveToSaturationRequest): MaybePromise<void>;
+        moveToSaturation(request: MoveToSaturationRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.8
          */
-        moveSaturation(request: MoveSaturationRequest): MaybePromise<void>;
+        moveSaturation(request: MoveSaturationRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.9
          */
-        stepSaturation(request: StepSaturationRequest): MaybePromise<void>;
+        stepSaturation(request: StepSaturationRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.10
          */
-        moveToHueAndSaturation(request: MoveToHueAndSaturationRequest): MaybePromise<void>;
+        moveToHueAndSaturation(request: MoveToHueAndSaturationRequest): MaybePromise;
     }
 
     export interface Xy {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.11
          */
-        moveToColor(request: MoveToColorRequest): MaybePromise<void>;
+        moveToColor(request: MoveToColorRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.12
          */
-        moveColor(request: MoveColorRequest): MaybePromise<void>;
+        moveColor(request: MoveColorRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.13
          */
-        stepColor(request: StepColorRequest): MaybePromise<void>;
+        stepColor(request: StepColorRequest): MaybePromise;
     }
 
     export interface ColorTemperature {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.14
          */
-        moveToColorTemperature(request: MoveToColorTemperatureRequest): MaybePromise<void>;
+        moveToColorTemperature(request: MoveToColorTemperatureRequest): MaybePromise;
 
         /**
          * The MoveColorTemperature command allows the color temperature of a lamp to be moved at a specified rate.
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.21
          */
-        moveColorTemperature(request: MoveColorTemperatureRequest): MaybePromise<void>;
+        moveColorTemperature(request: MoveColorTemperatureRequest): MaybePromise;
 
         /**
          * The StepColorTemperature command allows the color temperature of a lamp to be stepped with a specified step
@@ -204,7 +204,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.22
          */
-        stepColorTemperature(request: StepColorTemperatureRequest): MaybePromise<void>;
+        stepColorTemperature(request: StepColorTemperatureRequest): MaybePromise;
     }
 
     export interface EnhancedHue {
@@ -214,7 +214,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.15
          */
-        enhancedMoveToHue(request: EnhancedMoveToHueRequest): MaybePromise<void>;
+        enhancedMoveToHue(request: EnhancedMoveToHueRequest): MaybePromise;
 
         /**
          * The EnhancedMoveHue command allows lamps to be moved in a continuous stepped transition from their current
@@ -222,7 +222,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.16
          */
-        enhancedMoveHue(request: EnhancedMoveHueRequest): MaybePromise<void>;
+        enhancedMoveHue(request: EnhancedMoveHueRequest): MaybePromise;
 
         /**
          * The EnhancedStepHue command allows lamps to be moved in a stepped transition from their current hue to a
@@ -230,7 +230,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.17
          */
-        enhancedStepHue(request: EnhancedStepHueRequest): MaybePromise<void>;
+        enhancedStepHue(request: EnhancedStepHueRequest): MaybePromise;
 
         /**
          * The EnhancedMoveToHueAndSaturation command allows lamps to be moved in a smooth continuous transition from
@@ -238,7 +238,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.18
          */
-        enhancedMoveToHueAndSaturation(request: EnhancedMoveToHueAndSaturationRequest): MaybePromise<void>;
+        enhancedMoveToHueAndSaturation(request: EnhancedMoveToHueAndSaturationRequest): MaybePromise;
     }
 
     export interface ColorLoop {
@@ -248,7 +248,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.19
          */
-        colorLoopSet(request: ColorLoopSetRequest): MaybePromise<void>;
+        colorLoopSet(request: ColorLoopSetRequest): MaybePromise;
     }
 
     export interface HueSaturationOrXyOrColorTemperature {
@@ -260,7 +260,7 @@ export namespace ColorControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 3.2.11.20
          */
-        stopMoveStep(request: StopMoveStepRequest): MaybePromise<void>;
+        stopMoveStep(request: StopMoveStepRequest): MaybePromise;
     }
 }
 

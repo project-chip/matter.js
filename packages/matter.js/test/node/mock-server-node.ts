@@ -86,7 +86,7 @@ export class MockServerNode<T extends ServerRootEndpoint = ServerRootEndpoint> e
         const node = new MockServerNode<ServerRootEndpoint>();
 
         if (options.device !== undefined) {
-            node.add(OnOffLightDevice);
+            node.add(options.device);
         }
 
         if (options.online === false) {

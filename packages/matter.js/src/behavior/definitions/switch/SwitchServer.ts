@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { SwitchBehavior } from "./SwitchBehavior.js";
-import { Switch } from "../../../cluster/definitions/SwitchCluster.js";
 
-const Base = SwitchBehavior.for(Switch.Complete);
+const Base = SwitchBehavior.with("MomentarySwitchRelease", "MomentarySwitchLongPress", "MomentarySwitchMultiPress");
 
 /**
  * This is the default server implementation of SwitchBehavior.

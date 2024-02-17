@@ -7,9 +7,21 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { DoorLockBehavior } from "./DoorLockBehavior.js";
-import { DoorLock } from "../../../cluster/definitions/DoorLockCluster.js";
 
-const Base = DoorLockBehavior.for(DoorLock.Complete);
+const Base = DoorLockBehavior.with(
+    "PinCredential",
+    "RfidCredential",
+    "FingerCredentials",
+    "Logging",
+    "WeekDayAccessSchedules",
+    "DoorPositionSensor",
+    "FaceCredentials",
+    "CredentialOverTheAirAccess",
+    "User",
+    "Notification",
+    "YearDayAccessSchedules",
+    "HolidaySchedules"
+);
 
 /**
  * This is the default server implementation of DoorLockBehavior.

@@ -156,7 +156,7 @@ export namespace ScenesInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.4.9.7
          */
-        recallScene(request: RecallSceneRequest): MaybePromise<void>;
+        recallScene(request: RecallSceneRequest): MaybePromise;
 
         /**
          * The GetSceneMembership command can be used to find an unused scene identifier within a certain group when no

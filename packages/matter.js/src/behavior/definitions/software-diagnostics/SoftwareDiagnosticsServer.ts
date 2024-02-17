@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { SoftwareDiagnosticsBehavior } from "./SoftwareDiagnosticsBehavior.js";
-import { SoftwareDiagnostics } from "../../../cluster/definitions/SoftwareDiagnosticsCluster.js";
 
-const Base = SoftwareDiagnosticsBehavior.for(SoftwareDiagnostics.Complete);
+const Base = SoftwareDiagnosticsBehavior.with("Watermarks");
 
 /**
  * This is the default server implementation of SoftwareDiagnosticsBehavior.

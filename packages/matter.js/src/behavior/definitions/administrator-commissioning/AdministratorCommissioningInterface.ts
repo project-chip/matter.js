@@ -111,7 +111,7 @@ export namespace AdministratorCommissioningInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.1
          */
-        openCommissioningWindow(request: OpenCommissioningWindowRequest): MaybePromise<void>;
+        openCommissioningWindow(request: OpenCommissioningWindowRequest): MaybePromise;
 
         /**
          * This command is used by a current Administrator to instruct a Node to revoke any active Open Commissioning
@@ -125,7 +125,7 @@ export namespace AdministratorCommissioningInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.3
          */
-        revokeCommissioning(): MaybePromise<void>;
+        revokeCommissioning(): MaybePromise;
     }
 
     export interface Basic {
@@ -161,7 +161,7 @@ export namespace AdministratorCommissioningInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.18.8.2
          */
-        openBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): MaybePromise<void>;
+        openBasicCommissioningWindow(request: OpenBasicCommissioningWindowRequest): MaybePromise;
     }
 }
 

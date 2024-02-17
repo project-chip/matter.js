@@ -136,31 +136,31 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        lockDoor(request: LockDoorRequest): MaybePromise<void>;
+        lockDoor(request: LockDoorRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        unlockDoor(request: UnlockDoorRequest): MaybePromise<void>;
+        unlockDoor(request: UnlockDoorRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        unlockWithTimeout(request: UnlockWithTimeoutRequest): MaybePromise<void>;
+        unlockWithTimeout(request: UnlockWithTimeoutRequest): MaybePromise;
     }
 
     export interface Logging {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        getLogRecord(): MaybePromise<void>;
+        getLogRecord(): MaybePromise;
     }
 
     export interface User {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setUser(request: SetUserRequest): MaybePromise<void>;
+        setUser(request: SetUserRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -170,7 +170,7 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearUser(request: ClearUserRequest): MaybePromise<void>;
+        clearUser(request: ClearUserRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -185,14 +185,14 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearCredential(request: ClearCredentialRequest): MaybePromise<void>;
+        clearCredential(request: ClearCredentialRequest): MaybePromise;
     }
 
     export interface WeekDayAccessSchedules {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setWeekDaySchedule(request: SetWeekDayScheduleRequest): MaybePromise<void>;
+        setWeekDaySchedule(request: SetWeekDayScheduleRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -202,14 +202,14 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearWeekDaySchedule(request: ClearWeekDayScheduleRequest): MaybePromise<void>;
+        clearWeekDaySchedule(request: ClearWeekDayScheduleRequest): MaybePromise;
     }
 
     export interface YearDayAccessSchedules {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setYearDaySchedule(request: SetYearDayScheduleRequest): MaybePromise<void>;
+        setYearDaySchedule(request: SetYearDayScheduleRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -219,14 +219,14 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearYearDaySchedule(request: ClearYearDayScheduleRequest): MaybePromise<void>;
+        clearYearDaySchedule(request: ClearYearDayScheduleRequest): MaybePromise;
     }
 
     export interface HolidaySchedules {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setHolidaySchedule(request: SetHolidayScheduleRequest): MaybePromise<void>;
+        setHolidaySchedule(request: SetHolidayScheduleRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
@@ -236,73 +236,73 @@ export namespace DoorLockInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearHolidaySchedule(request: ClearHolidayScheduleRequest): MaybePromise<void>;
+        clearHolidaySchedule(request: ClearHolidayScheduleRequest): MaybePromise;
     }
 
     export interface PinCredentialNotUser {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setPinCode(): MaybePromise<void>;
+        setPinCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        getPinCode(): MaybePromise<void>;
+        getPinCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearPinCode(): MaybePromise<void>;
+        clearPinCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearAllPinCodes(): MaybePromise<void>;
+        clearAllPinCodes(): MaybePromise;
     }
 
     export interface PinCredentialAndRfidCredentialAndFingerCredentialsNotUser {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setUserStatus(): MaybePromise<void>;
+        setUserStatus(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        getUserStatus(): MaybePromise<void>;
+        getUserStatus(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setUserType(): MaybePromise<void>;
+        setUserType(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        getUserType(): MaybePromise<void>;
+        getUserType(): MaybePromise;
     }
 
     export interface RfidCredentialNotUser {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        setRfidCode(): MaybePromise<void>;
+        setRfidCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        getRfidCode(): MaybePromise<void>;
+        getRfidCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearRfidCode(): MaybePromise<void>;
+        clearRfidCode(): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 5.2.4
          */
-        clearAllRfidCodes(): MaybePromise<void>;
+        clearAllRfidCodes(): MaybePromise;
     }
 }
 

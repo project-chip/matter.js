@@ -15,8 +15,8 @@ export type FailRandomlyAtFaultRequest = TypeFromSchema<typeof FaultInjection.Tl
 
 export namespace FaultInjectionInterface {
     export interface Base {
-        failAtFault(request: FailAtFaultRequest): MaybePromise<void>;
-        failRandomlyAtFault(request: FailRandomlyAtFaultRequest): MaybePromise<void>;
+        failAtFault(request: FailAtFaultRequest): MaybePromise;
+        failRandomlyAtFault(request: FailRandomlyAtFaultRequest): MaybePromise;
     }
 }
 

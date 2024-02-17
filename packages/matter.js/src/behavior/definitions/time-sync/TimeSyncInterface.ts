@@ -52,7 +52,7 @@ export namespace TimeSyncInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.16.9.1
          */
-        setUtcTime(request: SetUtcTimeRequest): MaybePromise<void>;
+        setUtcTime(request: SetUtcTimeRequest): MaybePromise;
     }
 }
 

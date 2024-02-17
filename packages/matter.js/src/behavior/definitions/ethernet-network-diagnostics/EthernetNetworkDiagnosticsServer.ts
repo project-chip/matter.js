@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { EthernetNetworkDiagnosticsBehavior } from "./EthernetNetworkDiagnosticsBehavior.js";
-import { EthernetNetworkDiagnostics } from "../../../cluster/definitions/EthernetNetworkDiagnosticsCluster.js";
 
-const Base = EthernetNetworkDiagnosticsBehavior.for(EthernetNetworkDiagnostics.Complete);
+const Base = EthernetNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts");
 
 /**
  * This is the default server implementation of EthernetNetworkDiagnosticsBehavior.

@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { MediaInputBehavior } from "./MediaInputBehavior.js";
-import { MediaInput } from "../../../cluster/definitions/MediaInputCluster.js";
 
-const Base = MediaInputBehavior.for(MediaInput.Complete);
+const Base = MediaInputBehavior.with("NameUpdates");
 
 /**
  * This is the default server implementation of MediaInputBehavior.

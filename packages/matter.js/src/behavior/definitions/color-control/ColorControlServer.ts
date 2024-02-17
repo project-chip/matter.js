@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ColorControlBehavior } from "./ColorControlBehavior.js";
-import { ColorControl } from "../../../cluster/definitions/ColorControlCluster.js";
 
-const Base = ColorControlBehavior.for(ColorControl.Complete);
+const Base = ColorControlBehavior.with("HueSaturation", "EnhancedHue", "ColorLoop", "Xy", "ColorTemperature");
 
 /**
  * This is the default server implementation of ColorControlBehavior.

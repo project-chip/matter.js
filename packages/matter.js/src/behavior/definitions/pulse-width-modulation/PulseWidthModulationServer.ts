@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { PulseWidthModulationBehavior } from "./PulseWidthModulationBehavior.js";
-import { PulseWidthModulation } from "../../../cluster/definitions/PulseWidthModulationCluster.js";
 
-const Base = PulseWidthModulationBehavior.for(PulseWidthModulation.Complete);
+const Base = PulseWidthModulationBehavior.with("OnOff", "Lighting", "Frequency");
 
 /**
  * This is the default server implementation of PulseWidthModulationBehavior.

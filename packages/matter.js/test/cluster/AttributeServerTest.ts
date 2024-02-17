@@ -535,7 +535,7 @@ describe("AttributeServerTest", () => {
 
         it("should throw an error if only getter is implemented but writable", () => {
             expect(() => create({ isWritable: true, getter: () => 7 })).throw(
-                'Getter and setter must be implemented together writeable fabric scoped attribute "test".',
+                'Getter and setter must be implemented together for writeable fabric scoped attribute "test".',
             );
         });
 

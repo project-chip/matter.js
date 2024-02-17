@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { TimeFormatLocalizationBehavior } from "./TimeFormatLocalizationBehavior.js";
-import { TimeFormatLocalization } from "../../../cluster/definitions/TimeFormatLocalizationCluster.js";
 
-const Base = TimeFormatLocalizationBehavior.for(TimeFormatLocalization.Complete);
+const Base = TimeFormatLocalizationBehavior.with("CalendarFormat");
 
 /**
  * This is the default server implementation of TimeFormatLocalizationBehavior.

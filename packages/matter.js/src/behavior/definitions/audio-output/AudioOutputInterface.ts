@@ -31,7 +31,7 @@ export namespace AudioOutputInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4
          */
-        selectOutput(request: SelectOutputRequest): MaybePromise<void>;
+        selectOutput(request: SelectOutputRequest): MaybePromise;
     }
 
     export interface NameUpdates {
@@ -43,7 +43,7 @@ export namespace AudioOutputInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.5.4.2
          */
-        renameOutput(request: RenameOutputRequest): MaybePromise<void>;
+        renameOutput(request: RenameOutputRequest): MaybePromise;
     }
 }
 

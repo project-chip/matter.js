@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { FanControlBehavior } from "./FanControlBehavior.js";
-import { FanControl } from "../../../cluster/definitions/FanControlCluster.js";
 
-const Base = FanControlBehavior.for(FanControl.Complete);
+const Base = FanControlBehavior.with("MultiSpeed", "Auto", "Rocking", "Wind");
 
 /**
  * This is the default server implementation of FanControlBehavior.

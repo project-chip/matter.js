@@ -51,8 +51,4 @@ export interface ActionContext extends ValueSupervisor.Session {
      * Obtain an agent for interacting with a part in this context.
      */
     agentFor<const T extends EndpointType>(part: Part<T>): Agent.Instance<T>;
-
-    /**
-     * If present, the action is instrumented and activity recorded here.
-     */
 }

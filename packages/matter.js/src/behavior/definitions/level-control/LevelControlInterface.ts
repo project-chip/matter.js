@@ -69,12 +69,12 @@ export namespace LevelControlInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.1
          */
-        moveToLevel(request: MoveToLevelRequest): MaybePromise<void>;
+        moveToLevel(request: MoveToLevelRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.2
          */
-        move(request: MoveRequest): MaybePromise<void>;
+        move(request: MoveRequest): MaybePromise;
 
         /**
          * The StepMode field shall be one of the non-reserved values in Values of the StepMode Field.
@@ -88,39 +88,39 @@ export namespace LevelControlInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.3
          */
-        step(request: StepRequest): MaybePromise<void>;
+        step(request: StepRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.4
          */
-        stop(request: StopRequest): MaybePromise<void>;
+        stop(request: StopRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
          */
-        moveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): MaybePromise<void>;
+        moveToLevelWithOnOff(request: MoveToLevelWithOnOffRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
          */
-        moveWithOnOff(request: MoveWithOnOffRequest): MaybePromise<void>;
+        moveWithOnOff(request: MoveWithOnOffRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
          */
-        stepWithOnOff(request: StepWithOnOffRequest): MaybePromise<void>;
+        stepWithOnOff(request: StepWithOnOffRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6
          */
-        stopWithOnOff(request: StopWithOnOffRequest): MaybePromise<void>;
+        stopWithOnOff(request: StopWithOnOffRequest): MaybePromise;
     }
 
     export interface Frequency {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.6.6.5
          */
-        moveToClosestFrequency(request: MoveToClosestFrequencyRequest): MaybePromise<void>;
+        moveToClosestFrequency(request: MoveToClosestFrequencyRequest): MaybePromise;
     }
 }
 

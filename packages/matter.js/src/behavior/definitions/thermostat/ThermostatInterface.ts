@@ -36,19 +36,19 @@ export namespace ThermostatInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
          */
-        setpointRaiseLower(request: SetpointRaiseLowerRequest): MaybePromise<void>;
+        setpointRaiseLower(request: SetpointRaiseLowerRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
          */
-        getRelayStatusLog(): MaybePromise<void>;
+        getRelayStatusLog(): MaybePromise;
     }
 
     export interface ScheduleConfiguration {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
          */
-        setWeeklySchedule(request: SetWeeklyScheduleRequest): MaybePromise<void>;
+        setWeeklySchedule(request: SetWeeklyScheduleRequest): MaybePromise;
 
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
@@ -58,7 +58,7 @@ export namespace ThermostatInterface {
         /**
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 4.3.8
          */
-        clearWeeklySchedule(): MaybePromise<void>;
+        clearWeeklySchedule(): MaybePromise;
     }
 }
 

@@ -109,6 +109,7 @@ export class TransactionalInteractionServer extends InteractionServer {
                 timed,
                 message,
                 session,
+                fabricFiltered: true,
             },
             () => super.writeAttribute(attribute, value, session, message, timed),
         );

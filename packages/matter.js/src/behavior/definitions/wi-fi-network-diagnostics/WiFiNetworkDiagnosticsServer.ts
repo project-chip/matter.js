@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { WiFiNetworkDiagnosticsBehavior } from "./WiFiNetworkDiagnosticsBehavior.js";
-import { WiFiNetworkDiagnostics } from "../../../cluster/definitions/WiFiNetworkDiagnosticsCluster.js";
 
-const Base = WiFiNetworkDiagnosticsBehavior.for(WiFiNetworkDiagnostics.Complete);
+const Base = WiFiNetworkDiagnosticsBehavior.with("PacketCounts", "ErrorCounts");
 
 /**
  * This is the default server implementation of WiFiNetworkDiagnosticsBehavior.

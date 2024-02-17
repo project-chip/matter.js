@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { WindowCoveringBehavior } from "./WindowCoveringBehavior.js";
-import { WindowCovering } from "../../../cluster/definitions/WindowCoveringCluster.js";
 
-const Base = WindowCoveringBehavior.for(WindowCovering.Complete);
+const Base = WindowCoveringBehavior.with("Lift", "Tilt", "PositionAwareLift", "AbsolutePosition", "PositionAwareTilt");
 
 /**
  * This is the default server implementation of WindowCoveringBehavior.

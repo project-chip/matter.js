@@ -30,7 +30,7 @@ export namespace WiFiNetworkDiagnosticsInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.14.7.1
          */
-        resetCounts(): MaybePromise<void>;
+        resetCounts(): MaybePromise;
     }
 }
 

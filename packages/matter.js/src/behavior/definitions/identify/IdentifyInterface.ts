@@ -44,7 +44,7 @@ export namespace IdentifyInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.1
          */
-        identify(request: IdentifyRequest): MaybePromise<void>;
+        identify(request: IdentifyRequest): MaybePromise;
 
         /**
          * This command allows the support of feedback to the user, such as a certain light effect. It is used to allow
@@ -55,7 +55,7 @@ export namespace IdentifyInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 1.2.6.3
          */
-        triggerEffect(request: TriggerEffectRequest): MaybePromise<void>;
+        triggerEffect(request: TriggerEffectRequest): MaybePromise;
     }
 
     export interface Query {

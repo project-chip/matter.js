@@ -156,7 +156,7 @@ export namespace GroupKeyManagementInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.1
          */
-        keySetWrite(request: KeySetWriteRequest): MaybePromise<void>;
+        keySetWrite(request: KeySetWriteRequest): MaybePromise;
 
         /**
          * This command is used by Administrators to read the state of a given Group Key Set.
@@ -196,7 +196,7 @@ export namespace GroupKeyManagementInterface {
          *
          * @see {@link MatterCoreSpecificationV1_1} § 11.2.8.4
          */
-        keySetRemove(request: KeySetRemoveRequest): MaybePromise<void>;
+        keySetRemove(request: KeySetRemoveRequest): MaybePromise;
 
         /**
          * This command is used by Administrators to query a list of all Group Key Sets associated with the accessing

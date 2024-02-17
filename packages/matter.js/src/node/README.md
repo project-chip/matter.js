@@ -40,7 +40,7 @@ classDiagram
     class ServerNode {
         async run()
         start()
-        stop()
+        cancel()
     }
     ServerNode --|> Node
 

@@ -34,21 +34,21 @@ export namespace MediaInputInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.1
          */
-        selectInput(request: SelectInputRequest): MaybePromise<void>;
+        selectInput(request: SelectInputRequest): MaybePromise;
 
         /**
          * Upon receipt, this shall display the active status of the input list on screen.
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.2
          */
-        showInputStatus(): MaybePromise<void>;
+        showInputStatus(): MaybePromise;
 
         /**
          * Upon receipt, this shall hide the input list from the screen.
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.3
          */
-        hideInputStatus(): MaybePromise<void>;
+        hideInputStatus(): MaybePromise;
     }
 
     export interface NameUpdates {
@@ -58,7 +58,7 @@ export namespace MediaInputInterface {
          *
          * @see {@link MatterApplicationClusterSpecificationV1_1} § 6.9.4.4
          */
-        renameInput(request: RenameInputRequest): MaybePromise<void>;
+        renameInput(request: RenameInputRequest): MaybePromise;
     }
 }
 

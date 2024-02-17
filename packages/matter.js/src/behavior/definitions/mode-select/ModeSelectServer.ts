@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { ModeSelectBehavior } from "./ModeSelectBehavior.js";
-import { ModeSelect } from "../../../cluster/definitions/ModeSelectCluster.js";
 
-const Base = ModeSelectBehavior.for(ModeSelect.Complete);
+const Base = ModeSelectBehavior.with("OnOff");
 
 /**
  * This is the default server implementation of ModeSelectBehavior.

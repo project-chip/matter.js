@@ -7,9 +7,8 @@
 /*** THIS FILE WILL BE REGENERATED IF YOU DO NOT REMOVE THIS MESSAGE ***/
 
 import { MediaPlaybackBehavior } from "./MediaPlaybackBehavior.js";
-import { MediaPlayback } from "../../../cluster/definitions/MediaPlaybackCluster.js";
 
-const Base = MediaPlaybackBehavior.for(MediaPlayback.Complete);
+const Base = MediaPlaybackBehavior.with("AdvancedSeek", "VariableSpeed");
 
 /**
  * This is the default server implementation of MediaPlaybackBehavior.
